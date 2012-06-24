@@ -18,21 +18,32 @@
 
 package org.dasein.cloud.compute;
 
-import java.io.Serializable;
+import org.dasein.util.uom.storage.Gigabyte;
+import org.dasein.util.uom.storage.Storage;
 
-public class Volume implements Serializable {
-    private static final long serialVersionUID = -4234782350607591612L;
-    
+/**
+ * Represents a block storage volume in the cloud.
+ * @author George Reese (george.reese@imaginary.com)
+ * @since unknown
+ * @version 2012-07 updated to match new volume enhancements, including UoM, type, and root volume awareness
+ */
+public class Volume {
     private long        creationTimestamp;
 	private VolumeState currentState;
     private String      providerDataCenterId;
+    private String      description;
     private String      deviceId;
+    private Platform    guestOperatingSystem;
+    private String      mediaLink;
     private String      name;
+    private String      providerProductId;
     private String      providerVolumeId;
     private String      providerRegionId;
     private String      providerVirtualMachineId;
-    private int         sizeInGigabytes;
+    private boolean     rootVolume;
+    private Storage<Gigabyte> size;
     private String      providerSnapshotId;
+    private VolumeType  type;
     
 	public Volume() { }
     
@@ -125,8 +136,16 @@ public class Volume implements Serializable {
         return providerVirtualMachineId;
     }
     
+    public Storage<Gigabyte> getSize() {
+        return size;
+    }
+    
+    public void setSize(Storage<?> size) {
+        this.size = (Storage<Gigabyte>)size.convertTo(Storage.GIGABYTE);
+    }
+    
     public int getSizeInGigabytes() {
-        return sizeInGigabytes;
+        return (size == null ? 0 : size.getQuantity().intValue());
     }
 
     public void setCurrentState(VolumeState currentState) {
@@ -178,10 +197,6 @@ public class Volume implements Serializable {
         this.providerVirtualMachineId = serverId;
     }
 
-    public void setSizeInGigabytes(int sizeInGigabytes) {
-        this.sizeInGigabytes = sizeInGigabytes;
-    }
-
 	public long getCreationTimestamp() {
 		return creationTimestamp;
 	}
@@ -190,7 +205,55 @@ public class Volume implements Serializable {
 		this.creationTimestamp = creationTimestamp;
 	}
 	
+    public VolumeType getType() {
+        return type;
+    }
+    
+    public void setType(VolumeType t) {
+        type = t;
+    }
+    
 	public String toString() {
 	    return (name + " [" + providerVolumeId + "]");
 	}
+
+    public String getProviderProductId() {
+        return providerProductId;
+    }
+
+    public void setProviderProductId(String providerProductId) {
+        this.providerProductId = providerProductId;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public boolean isRootVolume() {
+        return rootVolume;
+    }
+
+    public void setRootVolume(boolean rootVolume) {
+        this.rootVolume = rootVolume;
+    }
+
+    public String getMediaLink() {
+        return mediaLink;
+    }
+
+    public void setMediaLink(String mediaLink) {
+        this.mediaLink = mediaLink;
+    }
+
+    public Platform getGuestOperatingSystem() {
+        return guestOperatingSystem;
+    }
+
+    public void setGuestOperatingSystem(Platform guestOperatingSystem) {
+        this.guestOperatingSystem = guestOperatingSystem;
+    }
 }
