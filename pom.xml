@@ -32,7 +32,7 @@
     the specifics contained in implementations.
   </description>
   <inceptionYear>2009</inceptionYear>
-  <url>http://github.com/greese/dasein-cloud</url>
+  <url>http://github.com/greese/dasein-cloud-core</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -51,9 +51,9 @@
   </organization>
 
   <scm>
-    <connection>scm:git:git://github.com/greese/dasein-cloud.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/greese/dasein-cloud.git</developerConnection>
-    <url>http://github.com/greese/dasein-cloud</url>
+    <connection>scm:git:git://github.com/greese/dasein-cloud-core.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/greese/dasein-cloud-core.git</developerConnection>
+    <url>http://github.com/greese/dasein-cloud-core</url>
   </scm>
   
   <parent>

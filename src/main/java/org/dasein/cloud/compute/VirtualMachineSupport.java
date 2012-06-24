@@ -234,6 +234,14 @@ public interface VirtualMachineSupport extends AccessControlledService {
     public abstract boolean isSubscribed() throws CloudException, InternalException;
 
     /**
+     * Indicates whether or not the cloud allows bootstrapping with user data.
+     * @return true of user-data bootstrapping is supported
+     * @throws CloudException an error occurred querying the cloud for this kind of support
+     * @throws InternalException an error inside the Dasein Cloud implementation occurred determining support
+     */
+    public abstract boolean isUserDataSupported() throws CloudException, InternalException;
+
+    /**
      * Preferred mechanism for launching a virtual machine in the cloud. This method accepts a rich set of launch
      * configuration options that define what the virtual machine should look like once launched. These options may
      * include things that behave very differently in some clouds. It is expected that the method will return 
@@ -266,6 +274,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @deprecated use {@link #launch(VMLaunchOptions)}
      */
     public @Nonnull VirtualMachine launch(@Nonnull String fromMachineImageId, @Nonnull VirtualMachineProduct product, @Nonnull String dataCenterId, @Nonnull String name, @Nonnull String description, @Nullable String withKeypairId, @Nullable String inVlanId, boolean withAnalytics, boolean asSandbox, @Nullable String ... firewallIds) throws InternalException, CloudException;
+
     /**
      * Launches a virtual machine in the cloud. If the cloud supports persistent servers, this method will
      * first define a server and then boot it. The end result of this operation should be a server

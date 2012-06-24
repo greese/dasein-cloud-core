@@ -18,6 +18,7 @@ package org.dasein.cloud.compute;
 
 import org.dasein.cloud.network.NICCreateOptions;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -240,7 +241,7 @@ public class VMLaunchOptions {
     public @Nonnull VolumeAttachment[] getVolumes() {
         return (volumes == null ? new VolumeAttachment[0] : volumes);
     }
-
+    
     /**
      * Indicates which firewalls this configuration will support. This call adds to any configured firewall IDs.
      * You can therefore call it multiple times if it makes sense to your code logic.
