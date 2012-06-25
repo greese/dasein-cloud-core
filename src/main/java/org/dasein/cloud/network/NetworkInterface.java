@@ -22,6 +22,7 @@ package org.dasein.cloud.network;
 public class NetworkInterface {
     private NICState currentState;
     private String    description;
+    private String    dnsName;
     private String    ipAddress;
     private String    macAddress;
     private String    name;
@@ -55,6 +56,14 @@ public class NetworkInterface {
             }
         }
         return false;   
+    }
+
+    public String getDnsName() {
+        return dnsName;
+    }
+    
+    public void setDnsName(String dnsName) {
+        this.dnsName = dnsName;
     }
 
     public String getIpAddress() {
@@ -149,7 +158,7 @@ public class NetworkInterface {
         return currentState;
     }
 
-    public void setCurrentStatus(NICState currentState) {
+    public void setCurrentState(NICState currentState) {
         this.currentState = currentState;
     }
 
