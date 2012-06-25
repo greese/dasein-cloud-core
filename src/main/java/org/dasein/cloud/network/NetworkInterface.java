@@ -18,20 +18,19 @@
 
 package org.dasein.cloud.network;
 
-import java.io.Serializable;
-
-public class NetworkInterface implements Serializable {
-    private static final long serialVersionUID = 2920482312023383455L;
-    
-    private boolean defaultRoute;
-    private String  gatewayAddress;
-    private String  ipAddress;
-    private String  netmask;
-    private String  providerNetworkInterfaceId;
-    private String  providerOwnerId;
-    private String  providerRegionId;
-    private String  providerVirtualMachineId;
-    private String  providerVlanId;
+@SuppressWarnings("UnusedDeclaration")
+public class NetworkInterface {
+    private NICStatus currentStatus;
+    private String    description;
+    private String    ipAddress;
+    private String    name;
+    private String    providerDataCenterId;
+    private String    providerNetworkInterfaceId;
+    private String    providerOwnerId;
+    private String    providerRegionId;
+    private String    providerSubnetId;
+    private String    providerVirtualMachineId;
+    private String    providerVlanId;
     
     public NetworkInterface() { }
 
@@ -56,22 +55,6 @@ public class NetworkInterface implements Serializable {
         }
         return false;   
     }
-    
-    public boolean isDefaultRoute() {
-        return defaultRoute;
-    }
-
-    public void setDefaultRoute(boolean defaultRoute) {
-        this.defaultRoute = defaultRoute;
-    }
-
-    public String getGatewayAddress() {
-        return gatewayAddress;
-    }
-
-    public void setGatewayAddress(String gatewayAddress) {
-        this.gatewayAddress = gatewayAddress;
-    }
 
     public String getIpAddress() {
         return ipAddress;
@@ -79,14 +62,6 @@ public class NetworkInterface implements Serializable {
 
     public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
-    }
-
-    public String getNetmask() {
-        return netmask;
-    }
-
-    public void setNetmask(String netmask) {
-        this.netmask = netmask;
     }
 
     public String getProviderNetworkInterfaceId() {
@@ -113,6 +88,54 @@ public class NetworkInterface implements Serializable {
         this.providerVlanId = providerVlanId;
     }
     
+    public String getProviderDataCenterId() {
+        return providerDataCenterId;
+    }
+
+    public void setProviderDataCenterId(String providerDataCenterId) {
+        this.providerDataCenterId = providerDataCenterId;
+    }
+
+    public void setProviderOwnerId(String providerOwnerId) {
+        this.providerOwnerId = providerOwnerId;
+    }
+
+    public void setProviderRegionId(String providerRegionId) {
+        this.providerRegionId = providerRegionId;
+    }
+
+    public String getProviderSubnetId() {
+        return providerSubnetId;
+    }
+
+    public void setProviderSubnetId(String providerSubnetId) {
+        this.providerSubnetId = providerSubnetId;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public NICStatus getCurrentStatus() {
+        return currentStatus;
+    }
+
+    public void setCurrentStatus(NICStatus currentStatus) {
+        this.currentStatus = currentStatus;
+    }
+
     public String toString() {
         return (ipAddress + " [" + providerNetworkInterfaceId + "]");
     }
