@@ -20,9 +20,10 @@ package org.dasein.cloud.network;
 
 @SuppressWarnings("UnusedDeclaration")
 public class NetworkInterface {
-    private NICStatus currentStatus;
+    private NICState currentState;
     private String    description;
     private String    ipAddress;
+    private String    macAddress;
     private String    name;
     private String    providerDataCenterId;
     private String    providerNetworkInterfaceId;
@@ -64,6 +65,14 @@ public class NetworkInterface {
         this.ipAddress = ipAddress;
     }
 
+    public String getMacAddress() {
+        return macAddress;
+    }
+    
+    public void setMacAddress(String ma) {
+        macAddress = ma;
+    }
+    
     public String getProviderNetworkInterfaceId() {
         return providerNetworkInterfaceId;
     }
@@ -96,8 +105,16 @@ public class NetworkInterface {
         this.providerDataCenterId = providerDataCenterId;
     }
 
+    public String getProviderOwnerId() {
+        return providerOwnerId;
+    }
+    
     public void setProviderOwnerId(String providerOwnerId) {
         this.providerOwnerId = providerOwnerId;
+    }
+
+    public String getProviderRegionId() {
+        return providerRegionId;
     }
 
     public void setProviderRegionId(String providerRegionId) {
@@ -128,12 +145,12 @@ public class NetworkInterface {
         this.name = name;
     }
 
-    public NICStatus getCurrentStatus() {
-        return currentStatus;
+    public NICState getCurrentState() {
+        return currentState;
     }
 
-    public void setCurrentStatus(NICStatus currentStatus) {
-        this.currentStatus = currentStatus;
+    public void setCurrentStatus(NICState currentState) {
+        this.currentState = currentState;
     }
 
     public String toString() {

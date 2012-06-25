@@ -23,6 +23,6 @@ package org.dasein.cloud.network;
  * @since 2012-07
  * @version 2012-07 initial version
  */
-public enum NICStatus {
+public enum NICState {
     PENDING, AVAILABLE, IN_USE, DELETED;
 }
