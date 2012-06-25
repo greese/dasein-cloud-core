@@ -18,6 +18,7 @@
 
 package org.dasein.cloud.network;
 
+import java.util.Collection;
 import java.util.Locale;
 
 import javax.annotation.Nonnegative;
@@ -143,6 +144,15 @@ public interface VLANSupport extends AccessControlledService {
     public abstract boolean isVlanDataCenterConstrained() throws CloudException, InternalException;
 
     /**
+     * Lists the IDs of the firewalls protecting the specified network interface.
+     * @param nicId the network interface ID of the desired network interface
+     * @return the firewall/security group IDs of all firewalls supporting this network interface
+     * @throws CloudException an error occurred with the cloud providing fetching the firewall IDs
+     * @throws InternalException a local error occurred while attempting to communicate with the cloud
+     */
+    public abstract Collection<String> listFirewallIdsForNIC(@Nonnull String nicId) throws CloudException, InternalException;
+
+    /**
      * Lists all network interfaces currently provisioned in the current region.
      * @return a list of all provisioned network interfaces in the current region
      * @throws CloudException an error occurred with the cloud provider fetching the network interfaces
@@ -158,6 +168,24 @@ public interface VLANSupport extends AccessControlledService {
      * @throws InternalException a local error occurred listing the network interfaces attached to the specified virtual machine
      */
     public abstract @Nonnull Iterable<NetworkInterface> listNetworkInterfacesForVM(@Nonnull String forVmId) throws CloudException, InternalException;
+
+    /**
+     * Lists all network interfaces connected to a specific subnet. Valid only if the cloud provider supports subnets.
+     * @param subnetId the subnet ID for the subnet in which you are searching
+     * @return all interfaces within the specified subnet
+     * @throws CloudException an error occurred in the cloud identifying the matching network interfaces
+     * @throws InternalException a local error occurred constructing the cloud query
+     */
+    public abstract @Nonnull Iterable<NetworkInterface> listNetworkInterfacesInSubnet(@Nonnull String subnetId) throws CloudException, InternalException;
+
+    /**
+     * Lists all network interfaces connected to a specific VLAN. Valid only if the cloud provider supports VLANs.
+     * @param vlanId the VLAN ID for the VLAN in which you are searching
+     * @return all interfaces within the specified VLAN
+     * @throws CloudException an error occurred in the cloud identifying the matching network interfaces
+     * @throws InternalException a local error occurred constructing the cloud query
+     */
+    public abstract @Nonnull Iterable<NetworkInterface> listNetworkInterfacesInVLAN(@Nonnull String vlanId) throws CloudException, InternalException;
 
     public abstract @Nonnull Iterable<Subnet> listSubnets(@Nonnull String inVlanId) throws CloudException, InternalException;
     

@@ -18,6 +18,10 @@
 
 package org.dasein.cloud.network;
 
+import javax.annotation.Nonnull;
+import java.util.HashMap;
+import java.util.Map;
+
 @SuppressWarnings("UnusedDeclaration")
 public class NetworkInterface {
     private NICState currentState;
@@ -33,6 +37,7 @@ public class NetworkInterface {
     private String    providerSubnetId;
     private String    providerVirtualMachineId;
     private String    providerVlanId;
+    private Map<String,String> tags;
     
     public NetworkInterface() { }
 
@@ -160,6 +165,21 @@ public class NetworkInterface {
 
     public void setCurrentState(NICState currentState) {
         this.currentState = currentState;
+    }
+
+    public @Nonnull Map<String,String> getTags() {
+        return (tags == null ? new HashMap<String, String>() : tags);
+    }
+    
+    public void setTag(String key, String value) {
+        if( tags == null ) {
+            tags = new HashMap<String, String>();
+        }
+        tags.put(key, value);
+    }
+    
+    public void setTags(Map<String,String> tags) {
+        this.tags = tags;
     }
 
     public String toString() {
