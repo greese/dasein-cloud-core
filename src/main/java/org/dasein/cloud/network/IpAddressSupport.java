@@ -89,6 +89,15 @@ public interface IpAddressSupport extends AccessControlledService {
     public void assign(@Nonnull String addressId, @Nonnull String serverId) throws InternalException, CloudException;
 
     /**
+     * Assigns the specified address to the specified network interface.
+     * @param addressId the unique ID of the IP address to assign
+     * @param nicId the unique ID of the network interface to which the address is being assigned
+     * @throws InternalException an error occurred locally while performing the assignment
+     * @throws CloudException an error occurred in the cloud provider while performing the assignment
+     */
+    public void assignToNetworkInterface(@Nonnull String addressId, @Nonnull String nicId) throws InternalException, CloudException;
+
+    /**
      * Forwards the specified public IP address traffic on the specified public port over to the
      * specified private port on the specified server. If the server goes away, you will generally 
      * still have traffic being forwarded to the private IP formally associated with the server, so
@@ -239,7 +248,15 @@ public interface IpAddressSupport extends AccessControlledService {
      */
     @SuppressWarnings("unused")
     public @Nonnull String request(@Nonnull AddressType typeOfAddress) throws InternalException, CloudException;
-    
+
+    /**
+     * Requests a public IP address that may be used with a VLAN.
+     * @return the unique ID of a newly provisioned public IP address
+     * @throws InternalException an error occurred locally while attempting to provision the IP address
+     * @throws CloudException an error occurred in the cloud provider while provisioning the IP address
+     */
+    public @Nonnull String requestForVLAN() throws InternalException, CloudException;
+
     /**
      * Removes the specified forwarding rule from the address with which it is associated.
      * @param ruleId the rule to be removed
@@ -250,4 +267,12 @@ public interface IpAddressSupport extends AccessControlledService {
     @SuppressWarnings("unused")
     public void stopForward(@Nonnull String ruleId) throws InternalException, CloudException;
 
+    /**
+     * Indicates whether or not IP addresses can be allocated for VLAN use. Only makes sense when the cloud
+     * actually supports VLANS.
+     * @return true if an IP address may be allocated for use by VLANs
+     * @throws InternalException a local error occurred determining support
+     * @throws CloudException an error occurred with the cloud provider in determining support
+     */
+    public boolean supportsVLANAddresses() throws InternalException, CloudException;
 }

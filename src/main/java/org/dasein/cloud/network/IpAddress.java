@@ -33,6 +33,7 @@ public class IpAddress implements Comparable<IpAddress>, Serializable {
     
     private String      address;
     private AddressType addressType;
+    private boolean     forVlan;
     private String      providerIpAddressId;
     private String      providerLoadBalancerId;
     private String      regionId;
@@ -150,5 +151,13 @@ public class IpAddress implements Comparable<IpAddress>, Serializable {
 
     public void setAddressType(@Nonnull AddressType addressType) {
         this.addressType = addressType;
+    }
+    
+    public void setForVlan(boolean f) {
+        forVlan = f;
+    }
+
+    public boolean isForVlan() {
+        return forVlan;
     }
 }
