@@ -24,6 +24,9 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 
 import org.dasein.cloud.Tag;
+import org.dasein.cloud.Taggable;
+
+import javax.annotation.Nonnull;
 
 /**
  * <p>
@@ -33,7 +36,7 @@ import org.dasein.cloud.Tag;
  * @author George Reese @ enStratus (http://www.enstratus.com)
  * @version 2012-07 Altered product -> productId to minimize chattiness of any polling using Dasein Cloud
  */
-public class VirtualMachine implements Serializable {
+public class VirtualMachine implements Taggable {
     private Architecture          architecture;
     private boolean               clonable;
     private long                  creationTimestamp;
@@ -388,7 +391,14 @@ public class VirtualMachine implements Serializable {
         }
         return tags;
     }
-    
+
+    public void setTag(@Nonnull String key, @Nonnull String value) {
+        if( tags == null ) {
+            tags = new HashMap<String, String>();
+        }
+        tags.put(key, value);
+    }
+
     public synchronized void setTags(Map<String,String> properties) {
         getTags().clear();
         getTags().putAll(properties);

@@ -18,19 +18,20 @@
 
 package org.dasein.cloud.network;
 
-import java.io.Serializable;
+import org.dasein.cloud.Taggable;
+
+import javax.annotation.Nonnull;
+import java.util.HashMap;
 import java.util.Map;
 
-public class VPN implements Serializable {
-    private static final long serialVersionUID = 5679874407718228979L;
-    
+@SuppressWarnings("UnusedDeclaration")
+public class VPN implements Taggable {
     private VPNState           currentState;
     private String             description;
     private String             name;
     private VPNProtocol        protocol;
-    private String             providerDataCenterId;
     private String             providerRegionId;
-    private String             providerVlanId;
+    private String[]           providerVlanIds;
     private String             providerVpnId;
     private Map<String,String> tags;
     
@@ -68,28 +69,12 @@ public class VPN implements Serializable {
         this.protocol = protocol;
     }
 
-    public String getProviderDataCenterId() {
-        return providerDataCenterId;
-    }
-
-    public void setProviderDataCenterId(String providerDataCenterId) {
-        this.providerDataCenterId = providerDataCenterId;
-    }
-
     public String getProviderRegionId() {
         return providerRegionId;
     }
 
     public void setProviderRegionId(String providerRegionId) {
         this.providerRegionId = providerRegionId;
-    }
-
-    public String getProviderVlanId() {
-        return providerVlanId;
-    }
-
-    public void setProviderVlanId(String providerVlanId) {
-        this.providerVlanId = providerVlanId;
     }
 
     public String getProviderVpnId() {
@@ -100,14 +85,30 @@ public class VPN implements Serializable {
         this.providerVpnId = providerVpnId;
     }
 
-    public Map<String, String> getTags() {
+    public @Nonnull Map<String, String> getTags() {
+        if( tags == null ) {
+            tags = new HashMap<String, String>();
+        }
         return tags;
+    }
+
+    public void setTag(@Nonnull String key, @Nonnull String value) {
+        getTags().put(key, value);
     }
 
     public void setTags(Map<String, String> tags) {
         this.tags = tags;
     }
-    
+
+    public @Nonnull String[] getProviderVlanIds() {
+        return (providerVlanIds == null ? new String[0] : providerVlanIds);
+    }
+
+    public void setProviderVlanIds(String[] providerVlanIds) {
+        this.providerVlanIds = providerVlanIds;
+    }
+
+
     public String toString() {
         return providerVpnId;
     }

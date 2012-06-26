@@ -19,5 +19,5 @@
 package org.dasein.cloud.network;
 
 public enum VPNGatewayState {
-    PENDING;
+    PENDING, AVAILABLE, DELETING, DELETED;
 }

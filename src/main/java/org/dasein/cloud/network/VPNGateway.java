@@ -18,13 +18,17 @@
 
 package org.dasein.cloud.network;
 
+import org.dasein.cloud.Taggable;
+
+import javax.annotation.Nonnull;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
-public class VPNGateway implements Serializable {
-    private static final long serialVersionUID = 1560474008818354655L;
-    
+@SuppressWarnings("UnusedDeclaration")
+public class VPNGateway implements Taggable {
     private String      bgpAsn;
+    private VPNGatewayState currentState;
     private String      description;
     private String      endpoint;
     private String      name;
@@ -100,8 +104,15 @@ public class VPNGateway implements Serializable {
         this.providerVpnGatewayId = providerVPNGatewayId;
     }
 
-    public Map<String, String> getTags() {
-        return tags;
+    public @Nonnull Map<String, String> getTags() {
+        return (tags == null ? new HashMap<String, String>() : tags);
+    }
+
+    public void setTag(@Nonnull String key, @Nonnull String value) {
+        if( tags == null ) {
+            tags = new HashMap<String, String>();
+        }
+        tags.put(key, value);
     }
 
     public void setTags(Map<String, String> tags) {
@@ -111,4 +122,12 @@ public class VPNGateway implements Serializable {
     public String toString() {
         return (endpoint + " [" + providerOwnerId + "/" + providerVpnGatewayId + "]");
     }
-}   
+
+    public VPNGatewayState getCurrentState() {
+        return currentState;
+    }
+
+    public void setCurrentState(VPNGatewayState currentState) {
+        this.currentState = currentState;
+    }
+}

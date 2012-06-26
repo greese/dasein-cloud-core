@@ -18,8 +18,6 @@
 
 package org.dasein.cloud.network;
 
-import java.io.Serializable;
-
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -28,12 +26,11 @@ import javax.annotation.Nullable;
  * Represents an IP address that in some way belongs to a cloud account holder.
  * @author George Reese @ enStratus (http://www.enstratus.com)
  */
-public class IpAddress implements Comparable<IpAddress>, Serializable {
-    private static final long serialVersionUID = 4253666763509404379L;
-    
+public class IpAddress implements Comparable<IpAddress> {
     private String      address;
     private AddressType addressType;
     private boolean     forVlan;
+    private String      providerNetworkInterfaceId;
     private String      providerIpAddressId;
     private String      providerLoadBalancerId;
     private String      regionId;
@@ -159,5 +156,13 @@ public class IpAddress implements Comparable<IpAddress>, Serializable {
 
     public boolean isForVlan() {
         return forVlan;
+    }
+
+    public String getProviderNetworkInterfaceId() {
+        return providerNetworkInterfaceId;
+    }
+
+    public void setProviderNetworkInterfaceId(String providerNetworkInterfaceId) {
+        this.providerNetworkInterfaceId = providerNetworkInterfaceId;
     }
 }

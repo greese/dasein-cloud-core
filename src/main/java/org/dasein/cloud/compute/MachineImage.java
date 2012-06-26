@@ -23,8 +23,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.dasein.cloud.Tag;
+import org.dasein.cloud.Taggable;
 
-public class MachineImage implements Serializable {
+import javax.annotation.Nonnull;
+
+public class MachineImage implements Taggable {
     private static final long serialVersionUID = 3254097599257280038L;
     
     private Architecture       architecture;    
@@ -87,13 +90,17 @@ public class MachineImage implements Serializable {
         return getTags().get(tag);
     }
     
-    public synchronized Map<String,String> getTags() {
+    public synchronized @Nonnull Map<String,String> getTags() {
         if( tags == null ) {
             tags = new HashMap<String,String>();
         }
         return tags;
     }
-    
+
+    public void setTag(@Nonnull String key, @Nonnull String value) {
+        getTags().put(key, value);
+    }
+
     public synchronized void setTags(Map<String,String> properties) {
         getTags().clear();
         getTags().putAll(properties);

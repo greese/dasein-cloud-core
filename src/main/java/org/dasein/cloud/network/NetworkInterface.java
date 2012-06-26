@@ -18,12 +18,14 @@
 
 package org.dasein.cloud.network;
 
+import org.dasein.cloud.Taggable;
+
 import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 
 @SuppressWarnings("UnusedDeclaration")
-public class NetworkInterface {
+public class NetworkInterface implements Taggable {
     private NICState currentState;
     private String    description;
     private String    dnsName;
@@ -171,7 +173,7 @@ public class NetworkInterface {
         return (tags == null ? new HashMap<String, String>() : tags);
     }
     
-    public void setTag(String key, String value) {
+    public void setTag(@Nonnull String key, @Nonnull String value) {
         if( tags == null ) {
             tags = new HashMap<String, String>();
         }
