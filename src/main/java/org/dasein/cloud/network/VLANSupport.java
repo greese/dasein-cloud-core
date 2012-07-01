@@ -21,7 +21,6 @@ package org.dasein.cloud.network;
 import java.util.Collection;
 import java.util.Locale;
 
-import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -29,10 +28,24 @@ import org.dasein.cloud.AccessControlledService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.OperationNotSupportedException;
+import org.dasein.cloud.Requirement;
 import org.dasein.cloud.identity.ServiceAction;
 
+@SuppressWarnings("UnusedDeclaration")
 public interface VLANSupport extends AccessControlledService {
     static public final ServiceAction ANY               = new ServiceAction("NET:ANY");
+
+    static public final ServiceAction ADD_ROUTE               = new ServiceAction("NET:ADD_ROUTE");
+    static public final ServiceAction ASSIGN_ROUTE_TO_SUBNET  = new ServiceAction("NET:ASSIGN_ROUTE_TO_SUBNET");
+    static public final ServiceAction ASSIGN_ROUTE_TO_VLAN    = new ServiceAction("NET:ASSIGN_ROUTE_TO_VLAN");
+    static public final ServiceAction ATTACH_INTERNET_GATEWAY = new ServiceAction("NET:ATTACH_INTERNET_GATEWAY");
+    static public final ServiceAction CREATE_ROUTING_TABLE    = new ServiceAction("NET:CREATE_ROUTING_TABLE");
+    static public final ServiceAction CREATE_INTERNET_GATEWAY = new ServiceAction("NET:CREATE_INTERNET_GATEWAY");
+    static public final ServiceAction GET_ROUTING_TABLE       = new ServiceAction("NET:GET_ROUTING_TABLE");
+    static public final ServiceAction LIST_ROUTING_TABLE      = new ServiceAction("NET:LIST_ROUTING_TABLE");
+    static public final ServiceAction REMOVE_INTERNET_GATEWAY = new ServiceAction("NET:REMOVE_INTERNET_GATEWAY");
+    static public final ServiceAction REMOVE_ROUTE            = new ServiceAction("NET:REMOVE_ROUTE");
+    static public final ServiceAction REMOVE_ROUTING_TABLE    = new ServiceAction("NET:REMOVE_ROUTING_TABLE");
 
     static public final ServiceAction ATTACH_NIC        = new ServiceAction("NET:ATTACH_NIC");
     static public final ServiceAction CREATE_NIC        = new ServiceAction("NET:CREATE_NIC");
@@ -51,6 +64,50 @@ public interface VLANSupport extends AccessControlledService {
     static public final ServiceAction REMOVE_VLAN       = new ServiceAction("NET:REMOVE_VLAN");
 
     /**
+     * Adds the specified route to the specified routing table.
+     * @param toRoutingTableId the routing table to which the route will be added
+     * @param version ipv4 or ipv6
+     * @param destinationCidr the destination IP address or CIDR, or null if setting the default route
+     * @param address the IP address to which the traffic is being routed
+     * @throws CloudException an error occurred in the cloud while adding the route to the routing table
+     * @throws InternalException a local error occurred processing the request to add the route
+     */
+    public abstract void addRouteToAddress(@Nonnull String toRoutingTableId, @Nonnull IPVersion version, @Nullable String destinationCidr, @Nonnull String address) throws CloudException, InternalException;
+
+    /**
+     * Adds the specified route to the specified routing table.
+     * @param toRoutingTableId the routing table to which the route will be added
+     * @param version ipv4 or ipv6
+     * @param destinationCidr the destination IP address or CIDR, or null if setting the default route
+     * @param gatewayId the ID of a known gateway
+     * @throws CloudException an error occurred in the cloud while adding the route to the routing table
+     * @throws InternalException a local error occurred processing the request to add the route
+     */
+    public abstract void addRouteToGateway(@Nonnull String toRoutingTableId, @Nonnull IPVersion version, @Nullable String destinationCidr, @Nonnull String gatewayId) throws CloudException, InternalException;
+
+    /**
+     * Adds the specified route to the specified routing table.
+     * @param toRoutingTableId the routing table to which the route will be added
+     * @param version ipv4 or ipv6
+     * @param destinationCidr the destination IP address or CIDR, or null if setting the default route
+     * @param nicId the ID of a known network interface
+     * @throws CloudException an error occurred in the cloud while adding the route to the routing table
+     * @throws InternalException a local error occurred processing the request to add the route
+     */
+    public abstract void addRouteToNetworkInterface(@Nonnull String toRoutingTableId, @Nonnull IPVersion version, @Nullable String destinationCidr, @Nonnull String nicId) throws CloudException, InternalException;
+
+    /**
+     * Adds the specified route to the specified routing table.
+     * @param toRoutingTableId the routing table to which the route will be added
+     * @param version ipv4 or ipv6
+     * @param destinationCidr the destination IP address or CIDR, or null if setting the default route
+     * @param vmId the unique ID of the virtual machine to which traffic is being routed
+     * @throws CloudException an error occurred in the cloud while adding the route to the routing table
+     * @throws InternalException a local error occurred processing the request to add the route
+     */
+    public abstract void addRouteToVirtualMachine(@Nonnull String toRoutingTableId, @Nonnull IPVersion version, @Nullable String destinationCidr, @Nonnull String vmId) throws CloudException, InternalException;
+
+    /**
      * Indicates that users may self-provision network interfaces. If false, either network interfaces are not supported
      * or they cannot be self-provisioned
      * @return true if users can self-provision network interfaces
@@ -64,6 +121,24 @@ public interface VLANSupport extends AccessControlledService {
     public abstract boolean allowsNewSubnetCreation() throws CloudException, InternalException;
 
     /**
+     * Assigns the specified routing table to the target subnet.
+     * @param subnetId the unique ID of the subnet being assigned the routing table
+     * @param routingTableId the routing table to which the subnet is being assigned
+     * @throws CloudException an error occurred with the cloud provider assigning the routing table
+     * @throws InternalException a local error occurred while processing the request
+     */
+    public abstract void assignRoutingTableToSubnet(@Nonnull String subnetId, @Nonnull String routingTableId) throws CloudException, InternalException;
+
+    /**
+     * Assigns the specified routing table to the target VLAN (or makes it the main routing table among the routing tables)
+     * @param vlanId the VLAN to which the routing table is being assigned
+     * @param routingTableId the unique ID of the routing table being assigned
+     * @throws CloudException an error occurred with the cloud provider assigning the routing table
+     * @throws InternalException a local error occurred while processing the request
+     */
+    public abstract void assignRoutingTableToVlan(@Nonnull String vlanId, @Nonnull String routingTableId) throws CloudException, InternalException;
+
+    /**
      * Attaches a network interface to an existing virtual machine.
      * @param nicId the unique ID of the network interface to attach
      * @param vmId the virtual machine to which the network interface should be attached
@@ -73,6 +148,27 @@ public interface VLANSupport extends AccessControlledService {
      */
     public abstract void attachNetworkInterface(@Nonnull String nicId, @Nonnull String vmId, int index) throws CloudException, InternalException;
 
+    /**
+     * Creates an Internet gateway for the specified VLAN. This method makes sense only if the cloud supports enabling Internet routing from VLANs.
+     * @param forVlanId the unique ID of the VLAN to create an Internet gateway for
+     * @return an ID of the newly created gateway in clouds that allow gateway tracking, or null if gateways are not tracked
+     * @throws CloudException an error occurred in the cloud while setting up the Internet gateway
+     * @throws InternalException a local error occurred while setting up the Internet gateway
+     * @throws OperationNotSupportedException this cloud does not allow enabling Internet routing from VLANs either because all VLANs are automatically routed or are never routed
+     */
+    public abstract @Nullable String createInternetGateway(@Nonnull String forVlanId) throws CloudException, InternalException;
+
+    /**
+     * Creates a new routing table for the target VLAN.
+     * @param forVlanId the VLAN for which a routing table is being created
+     * @param name the name of the new routing table
+     * @param description a description for the new routing table
+     * @return a unique ID within the cloud for the specified routing table
+     * @throws CloudException an error occurred with the cloud provider while creating the routing table
+     * @throws InternalException a local error occurred creating the routing table
+     */
+    public abstract @Nonnull String createRoutingTable(@Nonnull String forVlanId, @Nonnull String name, @Nonnull String description) throws CloudException, InternalException;
+    
     /**
      * Provisions a new network interface in accordance with the specified create options. 
      * @param options the options to be used in creating the network interface
@@ -124,9 +220,45 @@ public interface VLANSupport extends AccessControlledService {
      * @throws InternalException a local error occurred while fetching the desired network interface
      */
     public abstract @Nullable NetworkInterface getNetworkInterface(@Nonnull String nicId) throws CloudException, InternalException;
-    
+
+    /**
+     * Identifies the routing table that contains the routes for the subnet.
+     * @param subnetId the unique ID of the subnet for which you are attempting to identify a routing table
+     * @return the matching routing table or <code>null</code> if the cloud doesn't support routing tables
+     * @throws CloudException an error occurred loading the routing table for the specified subnet
+     * @throws InternalException a local error occurred identifying the routing table
+     * @throws OperationNotSupportedException the cloud does not support subnets
+     */
+    public abstract @Nullable RoutingTable getRoutingTableForSubnet(@Nonnull String subnetId) throws CloudException, InternalException;
+
+    /**
+     * Indicates whether or not you may or must manage routing tables for your VLANs/subnets.
+     * @return the level of routing table management that is required
+     * @throws CloudException an error occurred in the cloud provider determining support
+     * @throws InternalException a local error occurred processing the request
+     */
+    public abstract @Nonnull Requirement getRoutingTableSupport() throws CloudException, InternalException;
+
+    /**
+     * Identifies the routing table that supports the routes for the VLAN (when subnets are not supported) or the
+     * main/default routing table for subnets within the VLAN (when subnets are supported).
+     * @param vlanId the VLAN ID of the VLAN whose routing table is being sought
+     * @return the matching routing table or <code>null</code> if the cloud doesn't support routing tables
+     * @throws CloudException an error occurred loading the routing table for the specified VLAN
+     * @throws InternalException a local error occurred identifying the routing table
+     */
+    public abstract @Nullable RoutingTable getRoutingTableForVlan(@Nonnull String vlanId) throws CloudException, InternalException;
+
     public abstract @Nullable Subnet getSubnet(@Nonnull String subnetId) throws CloudException, InternalException;
-    
+
+    /**
+     * Indicates whether subnets in VLANs are required, optional, or not supported.
+     * @return the level of support for subnets in this cloud
+     * @throws CloudException an error occurred in the cloud while determining the support level
+     * @throws InternalException a local error occurred determining subnet support level
+     */
+    public abstract @Nonnull Requirement getSubnetSupport() throws CloudException, InternalException;
+
     public abstract @Nullable VLAN getVlan(@Nonnull String vlanId) throws CloudException, InternalException;
 
     /**
@@ -187,9 +319,26 @@ public interface VLANSupport extends AccessControlledService {
      */
     public abstract @Nonnull Iterable<NetworkInterface> listNetworkInterfacesInVLAN(@Nonnull String vlanId) throws CloudException, InternalException;
 
+    /**
+     * Lists all routing tables associated with the specified VLAN. 
+     * @param inVlanId the VLAN ID whose routing tables are being sought
+     * @return a list of routing tables for the specified VLAN
+     * @throws CloudException an error occurred fetching the routing tables from the cloud provider
+     * @throws InternalException a local error occurred processing the routing tables
+     */
+    public abstract @Nonnull Iterable<RoutingTable> listRoutingTables(@Nonnull String inVlanId) throws CloudException, InternalException;
+    
     public abstract @Nonnull Iterable<Subnet> listSubnets(@Nonnull String inVlanId) throws CloudException, InternalException;
     
     public abstract @Nonnull Iterable<VLAN> listVlans() throws CloudException, InternalException;
+
+    /**
+     * Disconnects the specified VLAN from it's gateway and deletes it if no other VLANs are attached to it.
+     * @param forVlanId the VLAN to disconnect
+     * @throws CloudException an error occurred with the cloud provider while removing the gateway
+     * @throws InternalException a local error occurred while removing the gateway
+     */
+    public abstract void removeInternetGateway(@Nonnull String forVlanId) throws CloudException, InternalException;
 
     /**
      * De-provisions the specified network interface.
@@ -198,10 +347,42 @@ public interface VLANSupport extends AccessControlledService {
      * @throws InternalException a local error occurred while de-provisioning the network interface
      */
     public abstract void removeNetworkInterface(@Nonnull String nicId) throws CloudException, InternalException;
-    
+
+    /**
+     * Removes any routing to the specified destination from the specified routing table.
+     * @param inRoutingTableId the routing table from which the route is being removed
+     * @param destinationCidr the destination CIDR for the traffic being routed
+     * @throws CloudException an error occurred in the cloud while removing the route
+     * @throws InternalException a local error occurred processing the request to remove the route
+     */
+    public abstract void removeRoute(@Nonnull String inRoutingTableId, @Nonnull String destinationCidr) throws CloudException, InternalException;
+
+    /**
+     * Removes the specified routing table from the cloud.
+     * @param routingTableId the unique ID of the routing table to be removed
+     * @throws CloudException an error occurred in the cloud removing the routing table
+     * @throws InternalException a local error occurred while processing the request to remove the routing table
+     */
+    public abstract void removeRoutingTable(@Nonnull String routingTableId) throws CloudException, InternalException;
+
     public abstract void removeSubnet(String providerSubnetId) throws CloudException, InternalException;
     
-    public abstract void removeVlan(String vlanId) throws CloudException, InternalException; 
-    
-    public abstract boolean supportsVlansWithSubnets() throws CloudException, InternalException;
+    public abstract void removeVlan(String vlanId) throws CloudException, InternalException;
+
+    /**
+     * Indicates whether or not this cloud allows enabling of internet gateways for VLANs. This is not relevant if all VLANs are Internet
+     * routable or if they simply cannot be made routable.
+     * @return true if this cloud supports the optional enablement of Internet gateways for VLANS, false if all VLANs are either always or never Internet routable
+     * @throws CloudException an error occurred determining this capability from the cloud provider
+     * @throws InternalException a local error occurred determining this capability
+     */
+    public abstract boolean supportsInternetGatewayCreation() throws CloudException, InternalException;
+
+    /**
+     * Indicates whether you can specify a raw IP address as a target for your routing table.
+     * @return true if you can specify raw addresses, false if you need to specify other resources
+     * @throws CloudException an error occurred identifying support
+     * @throws InternalException a local error occurred identifying support
+     */
+    public abstract boolean supportsRawAddressRouting() throws CloudException, InternalException;
 }

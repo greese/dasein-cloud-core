@@ -1,0 +1,133 @@
+/**
+ * ========= CONFIDENTIAL =========
+ *
+ * Copyright (C) 2012 enStratus Networks Inc - ALL RIGHTS RESERVED
+ *
+ * ====================================================================
+ *  NOTICE: All information contained herein is, and remains the
+ *  property of enStratus Networks Inc. The intellectual and technical
+ *  concepts contained herein are proprietary to enStratus Networks Inc
+ *  and may be covered by U.S. and Foreign Patents, patents in process,
+ *  and are protected by trade secret or copyright law. Dissemination
+ *  of this information or reproduction of this material is strictly
+ *  forbidden unless prior written permission is obtained from
+ *  enStratus Networks Inc.
+ * ====================================================================
+ */
+package org.dasein.cloud.network;
+
+import org.dasein.cloud.Taggable;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Identifies a routing table associated with a VLAN.
+ * <p>Created by George Reese: 6/30/12 5:16 PM</p>
+ * @author George Reese (george.reese@imaginary.com)
+ * @since 2012.07
+ * @version 2012.07 initial version
+ */
+public class RoutingTable implements Taggable {
+    private String  description;
+    private String  name;
+    private String  providerOwnerId;
+    private String  providerRegionId;
+    private String  providerRoutingTableId;
+    private String  providerVlanId;
+    private Route[] routes;
+    private Map<String,String> tags;
+    
+    public RoutingTable() { }
+
+    @Override
+    public boolean equals(@Nullable Object other) {
+        if( other == null ) {
+            return false;
+        }
+        if( other == this ) {
+            return true;
+        }
+        if( other instanceof RoutingTable ) {
+            RoutingTable t = (RoutingTable)other;
+
+            return (providerOwnerId.equals(t.providerOwnerId) && providerRegionId.equals(t.providerRegionId) && providerRoutingTableId.equals(t.providerRoutingTableId));
+        }
+        return false;
+    }
+
+    public String getProviderOwnerId() {
+        return providerOwnerId;
+    }
+
+    public void setProviderOwnerId(String providerOwnerId) {
+        this.providerOwnerId = providerOwnerId;
+    }
+
+    public String getProviderRegionId() {
+        return providerRegionId;
+    }
+
+    public void setProviderRegionId(String providerRegionId) {
+        this.providerRegionId = providerRegionId;
+    }
+
+    public String getProviderRoutingTableId() {
+        return providerRoutingTableId;
+    }
+
+    public void setProviderRoutingTableId(String providerRoutingTableId) {
+        this.providerRoutingTableId = providerRoutingTableId;
+    }
+
+    public String getProviderVlanId() {
+        return providerVlanId;
+    }
+
+    public void setProviderVlanId(String providerVlanId) {
+        this.providerVlanId = providerVlanId;
+    }
+
+    public Route[] getRoutes() {
+        return routes;
+    }
+
+    public void setRoutes(Route[] routes) {
+        this.routes = routes;
+    }
+    
+    public String toString() {
+        return providerRoutingTableId;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public @Nonnull Map<String, String> getTags() {
+        if( tags == null ) {
+            tags = new HashMap<String, String>();
+        }
+        return tags;
+    }
+
+    @Override
+    public void setTag(@Nonnull String key, @Nonnull String value) {
+        getTags().put(key, value);
+    }
+}

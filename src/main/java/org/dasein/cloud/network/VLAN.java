@@ -21,21 +21,18 @@ package org.dasein.cloud.network;
 import java.io.Serializable;
 import java.util.Map;
 
-public class VLAN implements Serializable {
-    private static final long serialVersionUID = -6958694513309849814L;
-    
-    private String   cidr;
+public class VLAN {
+    private String    cidr;
     private VLANState currentState;
-    private String   description;
-    private String[] dnsServers;
-    private String   domainName;
-    private String   gateway;
-    private String   name;
-    private String[] ntpServers;
-    private String   providerDataCenterId;
-    private String   providerOwnerId;
-    private String   providerRegionId;
-    private String   providerVlanId;
+    private String    description;
+    private String[]  dnsServers;
+    private String    domainName;
+    private String    name;
+    private String[]  ntpServers;
+    private String    providerDataCenterId;
+    private String    providerOwnerId;
+    private String    providerRegionId;
+    private String    providerVlanId;
     private Map<String,String> tags;
     
     public VLAN() { }
@@ -130,14 +127,6 @@ public class VLAN implements Serializable {
         return dnsServers;
     }
 
-    public void setGateway(String gateway) {
-        this.gateway = gateway;
-    }
-
-    public String getGateway() {
-        return gateway;
-    }
-
     public void setTags(Map<String,String> tags) {
         this.tags = tags;
     }
@@ -169,5 +158,4 @@ public class VLAN implements Serializable {
     public VLANState getCurrentState() {
         return currentState;
     }
-
 }
