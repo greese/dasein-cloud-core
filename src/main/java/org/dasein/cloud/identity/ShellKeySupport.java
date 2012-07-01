@@ -24,6 +24,7 @@ import java.util.Locale;
 import org.dasein.cloud.AccessControlledService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
+import org.dasein.cloud.Requirement;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -68,6 +69,18 @@ public interface ShellKeySupport extends AccessControlledService {
      */
     public @Nullable String getFingerprint(@Nonnull String providerId) throws InternalException, CloudException;
 
+    /**
+     * Indicates to what degree key importing vs. creation is supported. If importing is not supported, then that
+     * means all keys must be created through the cloud provider via {@link #createKeypair(String)}. If importing is
+     * required, it means all key creation must be done by importing your keys through {@link #importKeypair(String, String)}.
+     * If optional, then you can either import or create keys. When you have the choice, it is always recommended that
+     * you import keys.
+     * @return the requirement state of importing key pairs
+     * @throws CloudException an error occurred with the cloud provider in determining support
+     * @throws InternalException a local error occurred while determining support
+     */
+    public Requirement getKeyImportSupport() throws CloudException, InternalException;
+    
     /**
      * Fetches the specified keypair from the cloud provider. The cloud provider may or may not know
      * about the public key at this time, so be prepared for a null {@link SSHKeypair#getPublicKey()}.
