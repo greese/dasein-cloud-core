@@ -18,9 +18,9 @@
 
 package org.dasein.cloud.network;
 
-import java.io.Serializable;
 import java.util.Map;
 
+@SuppressWarnings("UnusedDeclaration")
 public class VLAN {
     private String    cidr;
     private VLANState currentState;
@@ -33,6 +33,7 @@ public class VLAN {
     private String    providerOwnerId;
     private String    providerRegionId;
     private String    providerVlanId;
+    private IPVersion[]        supportedTraffic;
     private Map<String,String> tags;
     
     public VLAN() { }
@@ -157,5 +158,13 @@ public class VLAN {
 
     public VLANState getCurrentState() {
         return currentState;
+    }
+
+    public IPVersion[] getSupportedTraffic() {
+        return supportedTraffic;
+    }
+
+    public void setSupportedTraffic(IPVersion[] supportedTraffic) {
+        this.supportedTraffic = supportedTraffic;
     }
 }

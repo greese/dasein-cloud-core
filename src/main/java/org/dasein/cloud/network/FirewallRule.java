@@ -39,10 +39,10 @@ public class FirewallRule implements Serializable {
     }
     
     private String     cidr;
-    private Direction  direction = Direction.INGRESS;
+    private Direction  direction;
     private int        endPort;
     private String     firewallId;
-    private Permission permission = Permission.ALLOW;
+    private Permission permission;
     private Protocol   protocol;
     private String     providerRuleId;
     private int        startPort;
@@ -170,7 +170,7 @@ public class FirewallRule implements Serializable {
      */
     @SuppressWarnings("unused")
     public @Nullable Direction getDirection() {
-        return direction;
+        return (direction == null ? Direction.INGRESS : direction);
     }
 
     /**
@@ -187,7 +187,7 @@ public class FirewallRule implements Serializable {
      */
     @SuppressWarnings("unused")
     public Permission getPermission() {
-        return permission;
+        return (permission == null ? Permission.ALLOW : permission);
     }
 
     /**

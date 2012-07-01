@@ -61,18 +61,20 @@ import org.dasein.cloud.identity.ServiceAction;
  * @since 2009.01
  * @version 2009.01
  * @version 2012.02 - Added support for service actions
+ * @version 2012.07 - Began adding support for IPv6
  */
+@SuppressWarnings("UnusedDeclaration")
 public interface IpAddressSupport extends AccessControlledService {
-    @SuppressWarnings("unused") static public final ServiceAction ANY                 = new ServiceAction("IPADDR:ANY");
+    static public final ServiceAction ANY                 = new ServiceAction("IPADDR:ANY");
 
-    @SuppressWarnings("unused") static public final ServiceAction ASSIGN              = new ServiceAction("IPADDR:ASSIGN");
-    @SuppressWarnings("unused") static public final ServiceAction CREATE_IP_ADDRESS   = new ServiceAction("IPADDR:CREATE_IP_ADDRESS");
-    @SuppressWarnings("unused") static public final ServiceAction FORWARD             = new ServiceAction("IPADDR:FORWARD");
-    @SuppressWarnings("unused") static public final ServiceAction GET_IP_ADDRESS      = new ServiceAction("IPADDR:GET_IP_ADDRESS");
-    @SuppressWarnings("unused") static public final ServiceAction LIST_IP_ADDRESS     = new ServiceAction("IPADDR:LIST_IP_ADDRESS");
-    @SuppressWarnings("unused") static public final ServiceAction RELEASE             = new ServiceAction("IPADDR:RELEASE");
-    @SuppressWarnings("unused") static public final ServiceAction REMOVE_IP_ADDRESS   = new ServiceAction("IPADDR:REMOVE_IP_ADDRESS");
-    @SuppressWarnings("unused") static public final ServiceAction STOP_FORWARD        = new ServiceAction("IPADDR:STOP_FORWARD");
+    static public final ServiceAction ASSIGN              = new ServiceAction("IPADDR:ASSIGN");
+    static public final ServiceAction CREATE_IP_ADDRESS   = new ServiceAction("IPADDR:CREATE_IP_ADDRESS");
+    static public final ServiceAction FORWARD             = new ServiceAction("IPADDR:FORWARD");
+    static public final ServiceAction GET_IP_ADDRESS      = new ServiceAction("IPADDR:GET_IP_ADDRESS");
+    static public final ServiceAction LIST_IP_ADDRESS     = new ServiceAction("IPADDR:LIST_IP_ADDRESS");
+    static public final ServiceAction RELEASE             = new ServiceAction("IPADDR:RELEASE");
+    static public final ServiceAction REMOVE_IP_ADDRESS   = new ServiceAction("IPADDR:REMOVE_IP_ADDRESS");
+    static public final ServiceAction STOP_FORWARD        = new ServiceAction("IPADDR:STOP_FORWARD");
 
     /**
      * Assigns the specified address to the target server. This method should be called only if
@@ -85,7 +87,6 @@ public interface IpAddressSupport extends AccessControlledService {
      * @throws CloudException an error occurred processing the request in the cloud
      * @throws org.dasein.cloud.OperationNotSupportedException this cloud provider does not support address assignment of the specified address type
      */
-    @SuppressWarnings("unused")
     public void assign(@Nonnull String addressId, @Nonnull String serverId) throws InternalException, CloudException;
 
     /**
@@ -117,7 +118,6 @@ public interface IpAddressSupport extends AccessControlledService {
      * @throws CloudException an error occurred processing the request in the cloud
      * @throws org.dasein.cloud.OperationNotSupportedException this cloud provider does not support address forwarding
      */
-    @SuppressWarnings("unused")
     public @Nonnull String forward(@Nonnull String addressId, int publicPort, @Nonnull Protocol protocol, int privatePort, @Nonnull String onServerId) throws InternalException, CloudException;
         
     /**
@@ -127,7 +127,6 @@ public interface IpAddressSupport extends AccessControlledService {
      * @throws InternalException an internal error occurred inside the Dasein Cloud implementation
      * @throws CloudException an error occurred processing the request in the cloud
      */
-    @SuppressWarnings("unused")
     public @Nullable IpAddress getIpAddress(@Nonnull String addressId) throws InternalException, CloudException;
     
     /**
@@ -136,7 +135,6 @@ public interface IpAddressSupport extends AccessControlledService {
      * @param locale the locale into which the term should be translated
      * @return the cloud provider-specific term for an IP address
      */
-    @SuppressWarnings("unused")
     public @Nonnull String getProviderTermForIpAddress(@Nonnull Locale locale);
     
     /**
@@ -144,28 +142,56 @@ public interface IpAddressSupport extends AccessControlledService {
      * type.
      * @param type the type of address being checked (public or private)
      * @return <code>true</code> if addresses of the specified type are assignable to servers
+     * @deprecated use {@link #isAssigned(IPVersion)}
      */
-    @SuppressWarnings("unused")
     public boolean isAssigned(@Nonnull AddressType type);
-    
+
+    /**
+     * Indicates whether the underlying cloud supports the assignment of addresses of the specified version
+     * @param version the IP version being checked
+     * @return true if the addresses of the specified version are assignable to cloud resources for public routing
+     * @throws CloudException an error occurred with the cloud provider determining support
+     * @throws InternalException a local error occurred determining support
+     */
+    public boolean isAssigned(@Nonnull IPVersion version) throws CloudException, InternalException;
+
     /**
      * Indicates whether the underlying cloud supports the forwarding individual port traffic on 
      * public IP addresses to hosts private IPs. These addresses may also be used for load
      * balancers in some clouds as well.
      * @return <code>true</code> if public IPs may be forwarded on to private IPs
+     * @deprecated use {@link #isForwarding(IPVersion)}
      */
-    @SuppressWarnings("unused")
     public boolean isForwarding();
+
+    /**
+     * Indicates whether the underlying cloud supports the forwarding of traffic on individual ports
+     * targeted to addresses of the specified version on to resources in the cloud.
+     * @param version the IP version being checked
+     * @return true if forwarding is supported
+     * @throws CloudException an error occurred with the cloud provider determining support
+     * @throws InternalException a local error occurred determining support
+     */
+    public abstract boolean isForwarding(IPVersion version) throws CloudException, InternalException;
     
     /**
      * Indicates whether the underlying cloud allows you to make programmatic requests for
      * new IP addresses of the specified type
      * @param type the type of address being checked (public or private)
      * @return <code>true</code> if there are programmatic mechanisms for allocating new IPs of the specified type
+     * @deprecated use {@link #isRequestable(IPVersion)}
      */
-    @SuppressWarnings("unused")
     public boolean isRequestable(@Nonnull AddressType type);
 
+    /**
+     * Indicates whether or not you can request static IP addresses of the specified Internet Protocol version.
+     * @param version the IP version you may want to request
+     * @return true if you can make requests from the cloud provider to add addresses of this version to your pool
+     * @throws CloudException an error occurred with the cloud provider while determining if your account has support
+     * @throws InternalException a local exception occurred while determining support
+     */
+    public boolean isRequestable(@Nonnull IPVersion version) throws CloudException, InternalException;
+    
     /**
      * Indicates whether this account is subscribed to leverage IP address services in the
      * target cloud.
@@ -173,7 +199,6 @@ public interface IpAddressSupport extends AccessControlledService {
      * @throws InternalException an internal error occurred inside the Dasein Cloud implementation
      * @throws CloudException an error occurred processing the request in the cloud
      */
-    @SuppressWarnings("unused")
     public boolean isSubscribed() throws CloudException, InternalException;
     
     /**
@@ -184,8 +209,8 @@ public interface IpAddressSupport extends AccessControlledService {
      * @return all private IP addresses or the unassigned ones from the pool 
      * @throws InternalException an internal error occurred inside the Dasein Cloud implementation
      * @throws CloudException an error occurred processing the request in the cloud
+     * @deprecated private IP pools no longer make sense, use the {@link VLANSupport} class
      */
-    @SuppressWarnings("unused")
     public @Nonnull Iterable<IpAddress> listPrivateIpPool(boolean unassignedOnly) throws InternalException, CloudException;
     
     /**
@@ -196,9 +221,19 @@ public interface IpAddressSupport extends AccessControlledService {
      * @return all public IP addresses or the unassigned ones from the pool 
      * @throws InternalException an internal error occurred inside the Dasein Cloud implementation
      * @throws CloudException an error occurred processing the request in the cloud
+     * @deprecated use {@link #listIpPool(IPVersion, boolean)}
      */
-    @SuppressWarnings("unused")
     public @Nonnull Iterable<IpAddress> listPublicIpPool(boolean unassignedOnly) throws InternalException, CloudException;
+
+    /**
+     * Lists all IP addresses of the specified IP version that are allocated to the account holder's IP address pool.
+     * @param version the version of the IP protocol for which you are looking for IP addresses
+     * @param unassignedOnly show only IP addresses that have yet to be assigned to cloud resources
+     * @return all matching IP addresses from the IP address pool
+     * @throws InternalException a local error occurred loading the IP addresses
+     * @throws CloudException an error occurred with the cloud provider while requesting the IP addresses
+     */
+    public abstract @Nonnull Iterable<IpAddress> listIpPool(@Nonnull IPVersion version, boolean unassignedOnly) throws InternalException, CloudException;
     
     /**
      * Lists the IP forwarding rules associated with the specified public IP address. This method
@@ -209,8 +244,15 @@ public interface IpAddressSupport extends AccessControlledService {
      * @throws InternalException an internal error occurred inside the Dasein Cloud implementation
      * @throws CloudException an error occurred processing the request in the cloud
      */
-    @SuppressWarnings("unused")
     public @Nonnull Iterable<IpForwardingRule> listRules(@Nonnull String addressId) throws InternalException, CloudException;
+
+    /**
+     * Lists all IP protocol versions supported for static IP addresses in this cloud.
+     * @return a list of supported versions
+     * @throws CloudException an error occurred checking support for IP versions with the cloud provider
+     * @throws InternalException a local error occurred preparing the supported version
+     */
+    public abstract @Nonnull Iterable<IPVersion> listSupportedIPVersions() throws CloudException, InternalException;
 
     /**
      * When a cloud allows for programmatic requesting of new IP addresses, you may also programmaticall
@@ -221,7 +263,6 @@ public interface IpAddressSupport extends AccessControlledService {
      * @throws CloudException an error occurred processing the request in the cloud
      * @throws org.dasein.cloud.OperationNotSupportedException this cloud provider does not support address requests
      */
-    @SuppressWarnings("unused")
     public void releaseFromPool(@Nonnull String addressId) throws InternalException, CloudException;
     
     /**
@@ -233,7 +274,6 @@ public interface IpAddressSupport extends AccessControlledService {
      * @throws CloudException an error occurred processing the request in the cloud
      * @throws org.dasein.cloud.OperationNotSupportedException this cloud provider does not support address assignment for addresses of the specified type
      */
-    @SuppressWarnings("unused")
     public void releaseFromServer(@Nonnull String addressId) throws InternalException, CloudException;
     
     /**
@@ -245,17 +285,27 @@ public interface IpAddressSupport extends AccessControlledService {
      * @throws InternalException an internal error occurred inside the Dasein Cloud implementation
      * @throws CloudException an error occurred processing the request in the cloud
      * @throws org.dasein.cloud.OperationNotSupportedException this cloud provider does not support address requests
+     * @deprecated use {@link #request(IPVersion)}
      */
-    @SuppressWarnings("unused")
     public @Nonnull String request(@Nonnull AddressType typeOfAddress) throws InternalException, CloudException;
 
     /**
+     * Requests an IP address of the specified version for the flat (non-VLAN) network space.
+     * @param version the IP version of the address to be requested
+     * @return the unique ID of the newly provisioned static IP address
+     * @throws InternalException a local error occurred while preparing the request
+     * @throws CloudException an error occurred with the cloud while provisioning the new address
+     */
+    public @Nonnull String request(@Nonnull IPVersion version) throws InternalException, CloudException;
+    
+    /**
      * Requests a public IP address that may be used with a VLAN.
+     * @param version the IP version of the address to be requested
      * @return the unique ID of a newly provisioned public IP address
      * @throws InternalException an error occurred locally while attempting to provision the IP address
      * @throws CloudException an error occurred in the cloud provider while provisioning the IP address
      */
-    public @Nonnull String requestForVLAN() throws InternalException, CloudException;
+    public @Nonnull String requestForVLAN(IPVersion version) throws InternalException, CloudException;
 
     /**
      * Removes the specified forwarding rule from the address with which it is associated.
@@ -264,15 +314,15 @@ public interface IpAddressSupport extends AccessControlledService {
      * @throws CloudException an error occurred processing the request in the cloud
      * @throws org.dasein.cloud.OperationNotSupportedException this cloud provider does not support address forwarding
      */
-    @SuppressWarnings("unused")
     public void stopForward(@Nonnull String ruleId) throws InternalException, CloudException;
 
     /**
      * Indicates whether or not IP addresses can be allocated for VLAN use. Only makes sense when the cloud
      * actually supports VLANS.
+     * @param ofVersion the version of public IP address that might be routed to a VLAN resource
      * @return true if an IP address may be allocated for use by VLANs
      * @throws InternalException a local error occurred determining support
      * @throws CloudException an error occurred with the cloud provider in determining support
      */
-    public boolean supportsVLANAddresses() throws InternalException, CloudException;
+    public boolean supportsVLANAddresses(@Nonnull IPVersion ofVersion) throws InternalException, CloudException;
 }

@@ -35,6 +35,7 @@ public class IpAddress implements Comparable<IpAddress> {
     private String      providerLoadBalancerId;
     private String      regionId;
     private String      serverId;
+    private IPVersion   version;
     
     public IpAddress() { }
     
@@ -164,5 +165,13 @@ public class IpAddress implements Comparable<IpAddress> {
 
     public void setProviderNetworkInterfaceId(String providerNetworkInterfaceId) {
         this.providerNetworkInterfaceId = providerNetworkInterfaceId;
+    }
+
+    public @Nonnull IPVersion getVersion() {
+        return (version == null ? IPVersion.IPV4 : version);
+    }
+
+    public void setVersion(IPVersion version) {
+        this.version = version;
     }
 }

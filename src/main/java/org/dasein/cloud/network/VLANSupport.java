@@ -329,7 +329,15 @@ public interface VLANSupport extends AccessControlledService {
     public abstract @Nonnull Iterable<RoutingTable> listRoutingTables(@Nonnull String inVlanId) throws CloudException, InternalException;
     
     public abstract @Nonnull Iterable<Subnet> listSubnets(@Nonnull String inVlanId) throws CloudException, InternalException;
-    
+
+    /**
+     * Lists all IP protocol versions supported for VLANs in this cloud.
+     * @return a list of supported versions
+     * @throws CloudException an error occurred checking support for IP versions with the cloud provider
+     * @throws InternalException a local error occurred preparing the supported version
+     */
+    public abstract @Nonnull Iterable<IPVersion> listSupportedIPVersions() throws CloudException, InternalException;
+
     public abstract @Nonnull Iterable<VLAN> listVlans() throws CloudException, InternalException;
 
     /**

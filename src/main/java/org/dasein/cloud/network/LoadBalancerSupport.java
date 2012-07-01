@@ -54,7 +54,15 @@ public interface LoadBalancerSupport extends AccessControlledService {
     public String getProviderTermForLoadBalancer(Locale locale);
     
     public Iterable<LbAlgorithm> listSupportedAlgorithms() throws CloudException, InternalException;
-    
+
+    /**
+     * Lists all IP protocol versions supported for load balancers in this cloud.
+     * @return a list of supported versions
+     * @throws CloudException an error occurred checking support for IP versions with the cloud provider
+     * @throws InternalException a local error occurred preparing the supported version
+     */
+    public abstract @Nonnull Iterable<IPVersion> listSupportedIPVersions() throws CloudException, InternalException;
+
     public Iterable<LbProtocol> listSupportedProtocols() throws CloudException, InternalException;
     
     public boolean isAddressAssignedByProvider() throws CloudException, InternalException;

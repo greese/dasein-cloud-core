@@ -18,6 +18,7 @@
 
 package org.dasein.cloud.network;
 
+import javax.annotation.Nonnull;
 import java.io.Serializable;
 
 public class LoadBalancer implements Serializable {
@@ -36,6 +37,7 @@ public class LoadBalancer implements Serializable {
     private String                  providerRegionId;
     private String[]                providerServerIds;
     private int[]                   publicPorts;
+    private IPVersion[]             supportedTraffic;
     
     public LoadBalancer() { }
 
@@ -165,5 +167,13 @@ public class LoadBalancer implements Serializable {
 
     public long getCreationTimestamp() {
         return creationTimestamp;
+    }
+
+    public @Nonnull IPVersion[] getSupportedTraffic() {
+        return (supportedTraffic == null ? new IPVersion[] { IPVersion.IPV4 } : supportedTraffic);
+    }
+
+    public void setSupportedTraffic(IPVersion[] supportedTraffic) {
+        this.supportedTraffic = supportedTraffic;
     }
 }
