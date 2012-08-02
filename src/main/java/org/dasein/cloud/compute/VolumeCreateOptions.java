@@ -1,24 +1,27 @@
 /**
- * ========= CONFIDENTIAL =========
- *
- * Copyright (C) 2012 enStratus Networks Inc - ALL RIGHTS RESERVED
+ * Copyright (C) 2009-2012 enStratus Networks Inc.
  *
  * ====================================================================
- *  NOTICE: All information contained herein is, and remains the
- *  property of enStratus Networks Inc. The intellectual and technical
- *  concepts contained herein are proprietary to enStratus Networks Inc
- *  and may be covered by U.S. and Foreign Patents, patents in process,
- *  and are protected by trade secret or copyright law. Dissemination
- *  of this information or reproduction of this material is strictly
- *  forbidden unless prior written permission is obtained from
- *  enStratus Networks Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  * ====================================================================
  */
+
 package org.dasein.cloud.compute;
 
 import org.dasein.util.uom.storage.Gigabyte;
 import org.dasein.util.uom.storage.Storage;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -31,24 +34,25 @@ import javax.annotation.Nullable;
  */
 public class VolumeCreateOptions {
     static public VolumeCreateOptions getInstance(@Nonnull Storage<?> size, @Nonnull String name, @Nonnull String description) {
-        return new VolumeCreateOptions(null, null, size, name, description);
+        return new VolumeCreateOptions(null, null, size, name, description, 0);
     }
 
-    static public VolumeCreateOptions getInstance(@Nonnull String volumeProductId, @Nonnull Storage<?> size, @Nonnull String name, @Nonnull String description) {
-        return new VolumeCreateOptions(volumeProductId, null, size, name, description);
+    static public VolumeCreateOptions getInstance(@Nonnull String volumeProductId, @Nonnull Storage<?> size, @Nonnull String name, @Nonnull String description, @Nonnegative int iops) {
+        return new VolumeCreateOptions(volumeProductId, null, size, name, description, iops);
     }
 
     static public VolumeCreateOptions getInstanceForSnapshot(@Nonnull String snapshotId, @Nonnull Storage<?> size, @Nonnull String name, @Nonnull String description) {
-        return new VolumeCreateOptions(null, snapshotId, size, name, description);
+        return new VolumeCreateOptions(null, snapshotId, size, name, description, 0);
     }
 
-    static public VolumeCreateOptions getInstanceForSnapshot(@Nonnull String volumeProductId, @Nonnull String snapshotId, @Nonnull Storage<?> size, @Nonnull String name, @Nonnull String description) {
-        return new VolumeCreateOptions(volumeProductId, snapshotId, size, name, description);
+    static public VolumeCreateOptions getInstanceForSnapshot(@Nonnull String volumeProductId, @Nonnull String snapshotId, @Nonnull Storage<?> size, @Nonnull String name, @Nonnull String description, @Nonnegative int iops) {
+        return new VolumeCreateOptions(volumeProductId, snapshotId, size, name, description, iops);
     }
     
     private String            dataCenterId;
     private String            description;
     private String            deviceId;
+    private int               iops;
     private String            name;
     private String            snapshotId;
     private String            virtualMachineId;
@@ -58,12 +62,13 @@ public class VolumeCreateOptions {
     @SuppressWarnings("UnusedDeclaration")
     private VolumeCreateOptions() { }
 
-    private VolumeCreateOptions(@Nullable String volumeProductId, @Nullable String snapshotId, @Nonnull Storage<?> size, @Nonnull String name, @Nonnull String description) {
+    private VolumeCreateOptions(@Nullable String volumeProductId, @Nullable String snapshotId, @Nonnull Storage<?> size, @Nonnull String name, @Nonnull String description, @Nonnegative int iops) {
         this.volumeProductId = volumeProductId;
         this.snapshotId = snapshotId;
         volumeSize = (Storage<Gigabyte>)size.convertTo(Storage.GIGABYTE);
         this.name = name;
         this.description = description;
+        this.iops = iops;
     }
     
     public @Nullable String getDataCenterId() {
@@ -77,7 +82,11 @@ public class VolumeCreateOptions {
     public @Nullable String getDeviceId() {
         return deviceId;
     }
-    
+
+    public @Nonnegative int getIops() {
+        return iops;
+    }
+
     public @Nonnull String getName() {
         return name;
     }

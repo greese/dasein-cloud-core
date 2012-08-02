@@ -24,11 +24,12 @@ import java.util.Locale;
 import org.dasein.cloud.AccessControlledService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
-import org.dasein.cloud.encryption.Encryption;
+import org.dasein.cloud.NameRules;
 import org.dasein.cloud.identity.ServiceAction;
-import org.omg.CORBA.ServiceDetail;
+import org.dasein.util.uom.storage.Storage;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * <p>
@@ -48,43 +49,59 @@ public interface BlobStoreSupport extends AccessControlledService {
     static public final ServiceAction REMOVE_BUCKET           = new ServiceAction("BLOB:REMOVE_BUCKET");
     static public final ServiceAction UPLOAD                  = new ServiceAction("BLOB:UPLOAD");
 
-    public void clear(String directory) throws CloudException, InternalException;
+    public boolean allowsNestedBuckets() throws CloudException, InternalException;
+
+    public boolean allowsRootObjects() throws CloudException, InternalException;
+
+    public boolean allowsPublicSharing() throws CloudException, InternalException;
+
+    public void clearBucket(@Nonnull String bucket) throws CloudException, InternalException;
+
+    public @Nonnull Blob createBucket(@Nonnull String bucket, boolean findFreeName) throws InternalException, CloudException;
     
-    public String createDirectory(String baseName, boolean findFreeName) throws InternalException, CloudException;
+    public FileTransfer download(@Nullable String bucket, @Nonnull String objectName, @Nonnull File toFile) throws InternalException, CloudException;
     
-    public FileTransfer download(String directory, String fileName, File toFile, Encryption decryption) throws InternalException, CloudException;
+    public boolean exists(@Nonnull String bucket) throws InternalException, CloudException;
+
+    public Blob getBucket(@Nonnull String bucketName) throws InternalException, CloudException;
+
+    public Blob getObject(@Nullable String bucketName, @Nonnull String objectName) throws InternalException, CloudException;
+
+    public @Nullable Storage<org.dasein.util.uom.storage.Byte> getObjectSize(@Nullable String bucketName, @Nullable String objectName) throws InternalException, CloudException;
+
+    public int getMaxBuckets() throws CloudException, InternalException;
+
+    public Storage<org.dasein.util.uom.storage.Byte> getMaxObjectSize() throws InternalException, CloudException;
+
+    public int getMaxObjectsPerBucket() throws CloudException, InternalException;
+
+    public @Nonnull NameRules getBucketNameRules() throws CloudException, InternalException;
+
+    public @Nonnull NameRules getObjectNameRules() throws CloudException, InternalException;
+
+    public @Nonnull String getProviderTermForBucket(@Nonnull Locale locale);
     
-    public FileTransfer download(CloudStoreObject sourceFile, File toFile) throws CloudException, InternalException;
+    public @Nonnull String getProviderTermForObject(@Nonnull Locale locale);
     
-    public boolean exists(String directory) throws InternalException, CloudException;
-    
-    public long exists(String directory, String fileName, boolean multiPart) throws InternalException, CloudException;
-    
-    public long getMaxFileSizeInBytes() throws InternalException, CloudException;
-    
-    public String getProviderTermForDirectory(Locale locale);
-    
-    public String getProviderTermForFile(Locale locale);
-    
-    public boolean isPublic(String bucket, String object) throws CloudException, InternalException;
+    public boolean isPublic(@Nullable String bucket, @Nullable String object) throws CloudException, InternalException;
     
     public boolean isSubscribed() throws CloudException, InternalException;
-    
-    public Iterable<CloudStoreObject> listFiles(String parentDirectory) throws CloudException, InternalException;
-    
-    public void makePublic(String directory) throws InternalException, CloudException;
-    
-    public void makePublic(String directory, String fileName) throws InternalException, CloudException;
 
-    public void moveFile(String fromDirectory, String fileName, String toDirectory) throws InternalException, CloudException;
+    public @Nonnull Iterable<Blob> list(@Nullable String bucket) throws CloudException, InternalException;
     
-    public void removeDirectory(String directory) throws CloudException, InternalException;
+    public void makePublic(@Nonnull String bucket) throws InternalException, CloudException;
+    
+    public void makePublic(@Nullable String bucket, @Nonnull String object) throws InternalException, CloudException;
 
-    public void removeFile(String directory, String name, boolean multipartFile) throws CloudException, InternalException;
+    public void move(@Nullable String fromBucket, @Nullable String objectName, @Nullable String toBucket) throws InternalException, CloudException;
+    
+    public void removeBucket(@Nonnull String bucket) throws CloudException, InternalException;
 
-    public String renameDirectory(String oldName, String newName, boolean findFreeName) throws CloudException, InternalException;
+    public void removeObject(@Nullable String bucket, @Nonnull String object) throws CloudException, InternalException;
+
+    public @Nonnull String renameBucket(@Nonnull String oldName, @Nonnull String newName, boolean findFreeName) throws CloudException, InternalException;
         
-    public void renameFile(String directory, String oldName, String newName) throws CloudException, InternalException;
+    public void renameObject(@Nullable String bucket, @Nonnull String oldName, @Nonnull String newName) throws CloudException, InternalException;
         
-    public void upload(File sourceFile, String directory, String fileName, boolean multiPart, Encryption encryption) throws CloudException, InternalException;
+    public @Nonnull Blob upload(@Nonnull File sourceFile, @Nullable String bucket, @Nonnull String objectName) throws CloudException, InternalException;
 }

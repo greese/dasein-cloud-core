@@ -1,19 +1,21 @@
 /**
- * ========= CONFIDENTIAL =========
- *
- * Copyright (C) 2012 enStratus Networks Inc - ALL RIGHTS RESERVED
+ * Copyright (C) 2009-2012 enStratus Networks Inc.
  *
  * ====================================================================
- *  NOTICE: All information contained herein is, and remains the
- *  property of enStratus Networks Inc. The intellectual and technical
- *  concepts contained herein are proprietary to enStratus Networks Inc
- *  and may be covered by U.S. and Foreign Patents, patents in process,
- *  and are protected by trade secret or copyright law. Dissemination
- *  of this information or reproduction of this material is strictly
- *  forbidden unless prior written permission is obtained from
- *  enStratus Networks Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  * ====================================================================
  */
+
 package org.dasein.cloud.compute;
 
 import org.dasein.util.uom.storage.Gigabyte;
@@ -36,7 +38,7 @@ import javax.annotation.Nullable;
 public class VolumeProduct {
     /**
      * Instantiates a volume product with the minimal acceptable data under the Dasein Cloud model.
-     * @param id the provider ID for the produce
+     * @param id the provider ID for the product
      * @param name the name of the product
      * @param description a description of the produce
      * @param type the type of volume provisioned under the produce
@@ -44,6 +46,22 @@ public class VolumeProduct {
      */
     static public @Nonnull VolumeProduct getInstance(@Nonnull String id, @Nonnull String name, @Nonnull String description, @Nonnull VolumeType type) {
         return new VolumeProduct(id, name, description, type);
+    }
+
+    /**
+     * Instantiates a volume product with minimal data plus IOPS guarantees and costs.
+     * @param id the provider ID for the product
+     * @param name the name of the provider product
+     * @param description a description of the product offering
+     * @param type what kind of technology is behind the volume
+     * @param minIops the minimum number of provisionable guaranteed iops under this product offering
+     * @param maxIops the maximum number of provisionable guaranteed IOPS under this product offering or 0 if no guarantees
+     * @param monthlyCost the monthly cost per gigabyte
+     * @param iopsCost the monthly cost per IOPS
+     * @return a product instantiation with the specified daa
+     */
+    static public @Nonnull VolumeProduct getInstance(@Nonnull String id, @Nonnull String name, @Nonnull String description, @Nonnull VolumeType type, @Nonnegative int minIops, @Nonnegative int maxIops, @Nullable Float monthlyCost, @Nullable Float iopsCost) {
+        return new VolumeProduct(id, name, description, type, minIops, maxIops, monthlyCost, iopsCost);
     }
 
     /**
@@ -67,17 +85,23 @@ public class VolumeProduct {
      * @param type the type of volume provisioned under the produce
      * @param volumeSize the size of the volume that will be provisioned under this produce
      * @param currency the currency in which volumes are billed under this account
-     * @param cost the cost per gigabyte per month of volumes billed under this product
+     * @param minIops the minimum number of guaranteed IOPS for this product definition
+     * @param maxIops the maximum number of guaranteed IOPS for this product definition
+     * @param monthlyCost the cost per gigabyte per month of volumes billed under this product
+     * @param iopsCost the cost per IOPS per month of the volumes billed under this product
      * @return a product instantiation with the specified data
      */
-    static public @Nonnull VolumeProduct getInstance(@Nonnull String id, @Nonnull String name, @Nonnull String description, @Nonnull VolumeType type, @Nonnull Storage<?> volumeSize, @Nonnull String currency, @Nonnegative float cost) {
-        return new VolumeProduct(id, name, description, type, (Storage<Gigabyte>)volumeSize.convertTo(Storage.GIGABYTE), currency, cost);
+    static public @Nonnull VolumeProduct getInstance(@Nonnull String id, @Nonnull String name, @Nonnull String description, @Nonnull VolumeType type, @Nonnull Storage<?> volumeSize, @Nonnull String currency, @Nonnegative int minIops, @Nonnegative int maxIops, @Nullable Float monthlyCost, @Nullable Float iopsCost) {
+        return new VolumeProduct(id, name, description, type, (Storage<Gigabyte>)volumeSize.convertTo(Storage.GIGABYTE), currency, minIops, maxIops, monthlyCost, iopsCost);
     }
     
     private String                  currency;
     private String                  description;
-    private String                  name;
+    private Float                   iopsCost;
+    private int                     maxIops;
+    private int                     minIops;
     private Float                   monthlyGigabyteCost;
+    private String                  name;
     private String                  providerProductId;
     private Storage<Gigabyte>       volumeSize;
     private VolumeType              type;
@@ -89,26 +113,56 @@ public class VolumeProduct {
         this.name = name;
         this.description = description;
         this.type = type;
+        this.minIops = 0;
+        this.maxIops = 0;
     }
-    
+
+    private VolumeProduct(@Nonnull String id, @Nonnull String name, @Nonnull String description, @Nonnull VolumeType type, @Nonnegative int minIops, @Nonnegative int maxIops, @Nullable Float monthlyCost, @Nullable Float iopsCost) {
+        this.providerProductId = id;
+        this.name = name;
+        this.description = description;
+        this.type = type;
+        this.minIops = minIops;
+        this.maxIops = maxIops;
+        monthlyGigabyteCost = monthlyCost;
+        this.iopsCost = iopsCost;
+    }
+
     private VolumeProduct(@Nonnull String id, @Nonnull String name, @Nonnull String description, @Nonnull VolumeType type, @Nonnull Storage<Gigabyte> volumeSize) {
         this.providerProductId = id;
         this.name = name;
         this.description = description;
         this.volumeSize = volumeSize;
         this.type = type;
+        this.minIops = 0;
+        this.maxIops = 0;
     }
 
-    private VolumeProduct(@Nonnull String id, @Nonnull String name, @Nonnull String description, @Nonnull VolumeType type, @Nonnull Storage<Gigabyte> volumeSize, @Nonnull String currency, @Nonnegative float cost) {
+    private VolumeProduct(@Nonnull String id, @Nonnull String name, @Nonnull String description, @Nonnull VolumeType type, @Nonnull Storage<Gigabyte> volumeSize, @Nonnull String currency, @Nonnegative float monthlyCost) {
         this.providerProductId = id;
         this.name = name;
         this.description = description;
         this.type = type;
         this.volumeSize = volumeSize;
         this.currency = currency;
-        this.monthlyGigabyteCost = cost;
+        this.monthlyGigabyteCost = monthlyCost;
+        this.minIops = 0;
+        this.maxIops = 0;
     }
-    
+
+    private VolumeProduct(@Nonnull String id, @Nonnull String name, @Nonnull String description, @Nonnull VolumeType type, @Nonnull Storage<Gigabyte> volumeSize, @Nonnull String currency, @Nonnegative int minIops, @Nonnegative int maxIops, @Nullable Float monthlyCost, @Nullable Float iopsCost) {
+        this.providerProductId = id;
+        this.name = name;
+        this.description = description;
+        this.type = type;
+        this.volumeSize = volumeSize;
+        this.currency = currency;
+        this.monthlyGigabyteCost = monthlyCost;
+        this.minIops = minIops;
+        this.maxIops = maxIops;
+        this.iopsCost = iopsCost;
+    }
+
     public boolean equals(Object other) {
         if( other == null ) {
             return false;
@@ -131,7 +185,19 @@ public class VolumeProduct {
     public @Nonnull String getDescription() {
         return description;
     }
-    
+
+    public @Nonnegative int getMaxIops() {
+        return maxIops;
+    }
+
+    public @Nonnegative int getMinIops() {
+        return minIops;
+    }
+
+    public @Nullable Float getIopsCost() {
+        return iopsCost;
+    }
+
     public @Nonnull String getName() {
         return name;
     }
