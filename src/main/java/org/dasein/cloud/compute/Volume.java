@@ -34,6 +34,7 @@ public class Volume {
     private String      description;
     private String      deviceId;
     private Platform    guestOperatingSystem;
+    private int         iops;
     private String      mediaLink;
     private String      name;
     private String      providerProductId;
@@ -255,5 +256,13 @@ public class Volume {
 
     public void setGuestOperatingSystem(Platform guestOperatingSystem) {
         this.guestOperatingSystem = guestOperatingSystem;
+    }
+
+    public int getIops() {
+        return iops;
+    }
+
+    public void setIops(int iops) {
+        this.iops = iops;
     }
 }
