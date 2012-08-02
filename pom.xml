@@ -22,7 +22,7 @@
 
   <groupId>org.dasein</groupId>
   <artifactId>dasein-cloud-core</artifactId>
-  <version>2012.07</version>
+  <version>2012.07-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>dasein-cloud-core</name>
@@ -52,7 +52,7 @@
 
   <scm>
     <connection>scm:git:git://github.com/greese/dasein-cloud-core.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/greese/dasein-cloud-core.git</developerConnection>
+    <developerConnection>scm:git:git@github.com:greese/dasein-cloud-core.git</developerConnection>
     <url>http://github.com/greese/dasein-cloud-core</url>
   </scm>
   
