@@ -18,6 +18,9 @@
 
 package org.dasein.cloud.compute;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * <p>
  * An operating system associated with servers and images.
@@ -69,47 +72,46 @@ public enum Platform {
      * No clue
      */
     UNKNOWN;
-    
-    static public Platform guess(String name) {
-        
+
+    static public @Nonnull Platform guess(@Nullable String name) {
         if( name == null ) {
             return UNKNOWN;
         }
         name = name.toLowerCase();
-        if( name.indexOf("centos") > -1 ) {
+        if( name.contains("centos") ) {
             return CENT_OS;
         }
-        else if( name.indexOf("ubuntu") > -1 ) {
+        else if( name.contains("ubuntu") ) {
             return UBUNTU;
         }
-        else if( name.indexOf("fedora") > -1 ) {
+        else if( name.contains("fedora") ) {
             return FEDORA_CORE;
         }
-        else if( name.indexOf("windows") > -1 ) {
+        else if( name.contains("windows") ) {
             return WINDOWS;
         }
-        else if( name.indexOf("linux") > -1 ) {
-            return UNIX;
-        }
-        else if( name.indexOf("red hat") > -1 || name.indexOf("redhat") > -1  || name.indexOf("red-hat") > -1 || name.indexOf("rhel") > -1 ) {
+        else if( name.contains("red hat") || name.contains("redhat") || name.contains("red-hat") || name.contains("rhel") ) {
             return RHEL;
         }
-        else if( name.indexOf("debian") > -1 ) {
+        else if( name.contains("debian") ) {
             return DEBIAN;
         }
-        else if( name.indexOf("bsd") > -1 ) {
-            if( name.indexOf("free") > -1 ) {
+        else if( name.contains("bsd") ) {
+            if( name.contains("free") ) {
                 return FREE_BSD;
             }
-            else if( name.indexOf("open") > -1 ) {
+            else if( name.contains("open") ) {
                 return OPEN_BSD;
             }
             else {
                 return UNIX;
             }
         }
-        else if( name.indexOf("solaris") > -1 ) {
+        else if( name.contains("solaris") ) {
             return SOLARIS;
+        }
+        else if( name.contains("linux") ) {
+            return UNIX;
         }
         return Platform.UNKNOWN;
     }

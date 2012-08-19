@@ -22,7 +22,7 @@
 
   <groupId>org.dasein</groupId>
   <artifactId>dasein-cloud-core</artifactId>
-  <version>2012.07.2-SNAPSHOT</version>
+  <version>2012.07.3-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>dasein-cloud-core</name>
@@ -66,7 +66,7 @@
     <dependency>
         <groupId>org.dasein</groupId>
         <artifactId>dasein-util</artifactId>
-        <version>2012.02</version>
+        <version>2012.08</version>
         <scope>compile</scope>
         <optional>false</optional>
     </dependency>
