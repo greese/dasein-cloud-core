@@ -27,11 +27,15 @@ package org.dasein.cloud.compute;
  */
 public enum VmState {
     /**
-     * The server is paused and not currently running or scheduled to run.
+     * The server is paused with its CPU not scheduled to run, but it is still in operational memory.
      */
-    PAUSED, 
+    PAUSED,
     /**
-     * A request has been made to launch the server, but it is not currently fully operational.
+     * The virtual machine is in the process of being paused.
+     */
+    PAUSING,
+    /**
+     * The virtual machine is in a transitional state between known states, generally from {@link #STOPPED} to {@link #RUNNING}.
      */
     PENDING, 
     /**
@@ -41,12 +45,24 @@ public enum VmState {
     /**
      * The server is currently in the middle of a reboot and should be operational shortly.
      */
-    REBOOTING, 
+    REBOOTING,
     /**
-     * The server is currentlyin the middle of being terminated and should not be expected to be
+     * The virtual machine is currently in a stopped state with no current state information stored anywhere.
+     */
+    STOPPED,
+    /**
+     * The server is currently in the middle of being terminated and should not be expected to be
      * available ever again.
      */
-    STOPPING, 
+    STOPPING,
+    /**
+     * The virtual machine is currently suspended to disk and otherwise non-operational.
+     */
+    SUSPENDED,
+    /**
+     * The virtual machine is in the process of being suspended to disk.
+     */
+    SUSPENDING,
     /**
      * The server has been terminated and is thus entirely useless and all state information is lost.
      */

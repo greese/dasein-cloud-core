@@ -27,6 +27,7 @@ import javax.annotation.Nullable;
 import org.dasein.cloud.AccessControlledService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
+import org.dasein.cloud.OperationNotSupportedException;
 import org.dasein.cloud.Requirement;
 import org.dasein.cloud.Tag;
 import org.dasein.cloud.identity.ServiceAction;
@@ -55,15 +56,6 @@ public interface VirtualMachineSupport extends AccessControlledService {
     static public final ServiceAction TOGGLE_ANALYTICS  = new ServiceAction("VM:TOGGLE_ANALYTICS");
     static public final ServiceAction VIEW_ANALYTICS    = new ServiceAction("VM:VIEW_ANALYTICS");
     static public final ServiceAction VIEW_CONSOLE      = new ServiceAction("VM:VIEW_CONSOLE");
-    
-    /**
-     * Boots up a pre-defined virtual machine. This works only for systems that support persistent servers that
-     * can be paused.
-     * @param vmId the virtual machine to boot up
-     * @throws InternalException an error occurred within the Dasein Cloud API implementation
-     * @throws CloudException an error occurred within the cloud provider
-     */
-    public abstract void boot(@Nonnull String vmId) throws InternalException, CloudException;
     
     /**
      * Clones an existing virtual machine into a new copy.
@@ -334,14 +326,14 @@ public interface VirtualMachineSupport extends AccessControlledService {
     public @Nonnull Iterable<VirtualMachine> listVirtualMachines() throws InternalException, CloudException;
 
     /**
-     * Shuts down the target virtual machine. This method is a NO-OP in clouds that lack persistent
-     * servers. The result of this method should be either a) a server that is still runnning
-     * (for non-persistent server clouds) or b) paused and capable of being restarted (for persistent
-     * server clouds). In no case should this method cause a destructive event such as the loss
-     * of a server.
+     * Executes a hypervisor pause that essentially removes the virtual machine from the hypervisor scheduler.
+     * The virtual machine is considered active and volatile at this point, but it won't actually do anything
+     * from  CPU-perspective until it is {@link #unpause(String)}'ed.
      * @param vmId the provider ID for the server to pause
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      * @throws CloudException an error occurred within the cloud provider
+     * @throws OperationNotSupportedException pausing is not supported for the specified virtual machine
+     * @see #unpause(String)
      */
     public abstract void pause(@Nonnull String vmId) throws InternalException, CloudException;
     
@@ -354,13 +346,89 @@ public interface VirtualMachineSupport extends AccessControlledService {
     public abstract void reboot(@Nonnull String vmId) throws CloudException, InternalException;
 
     /**
+     * Resumes a previously suspended virtual machine and returns it to an operational state ({@link VmState#RUNNING}).
+     * @param vmId the virtual machine ID to be resumed
+     * @throws CloudException an error occurred with the cloud provider in attempting to resume the virtual machine
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     * @throws OperationNotSupportedException the target virtual machine cannot be suspended/resumed
+     * @see #suspend(String)
+     */
+    public abstract void resume(@Nonnull String vmId) throws CloudException, InternalException;
+
+    /**
+     * Starts up a virtual machine that was previously stopped (or a VM that is created in a {@link VmState#STOPPED} state).
+     * @param vmId the virtual machine to boot up
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException an error occurred within the cloud provider
+     * @throws OperationNotSupportedException starting/stopping is not supported for this virtual machine
+     * @see #stop(String)
+     */
+    public abstract void start(@Nonnull String vmId) throws InternalException, CloudException;
+
+    /**
+     * Shuts down a virtual machine with the capacity to boot it back up at a later time. The contents of volumes
+     * associated with this virtual machine are preserved, but the memory is not.
+     * @param vmId the virtual machine to be shut down
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException an error occurred within the cloud provider
+     * @throws OperationNotSupportedException starting/stopping is not supported for this virtual machine
+     * @see #start(String)
+     */
+    public abstract void stop(@Nonnull String vmId) throws InternalException, CloudException;
+
+    /**
      * Identifies whether or not this cloud supports hypervisor-based analytics around usage and performance.
      * @return true if this cloud supports hypervisor-based analytics
      * @throws CloudException an error occurred with the cloud provider determining analytics support
      * @throws InternalException an error occurred within the Dasein Cloud implementation determining analytics support
      */
     public abstract boolean supportsAnalytics() throws CloudException, InternalException;
-    
+
+    /**
+     * Indicates whether the ability to pause/unpause a virtual machine is supported for the specified VM.
+     * @param vm the virtual machine to verify
+     * @return true if pause/unpause is supported for this virtual machine
+     * @see #pause(String)
+     * @see #unpause(String)
+     * @see VmState#PAUSING
+     * @see VmState#PAUSED
+     */
+    public abstract boolean supportsPauseUnpause(@Nonnull VirtualMachine vm);
+
+    /**
+     * Indicates whether the ability to start/stop a virtual machine is supported for the specified VM.
+     * @param vm the virtual machine to verify
+     * @return true if start/stop operations are supported for this virtual machine
+     * @see #start(String)
+     * @see #stop(String)
+     * @see VmState#RUNNING
+     * @see VmState#STOPPING
+     * @see VmState#STOPPED
+     */
+    public abstract boolean supportsStartStop(@Nonnull VirtualMachine vm);
+
+    /**
+     * Indicates whether the ability to suspend/resume a virtual machine is supported for the specified VM.
+     * @param vm the virtual machine to verify
+     * @return true if suspend/resume operations are supported for this virtual machine
+     * @see #suspend(String)
+     * @see #resume(String)
+     * @see VmState#SUSPENDING
+     * @see VmState#SUSPENDED
+     */
+    public abstract boolean supportsSuspendResume(@Nonnull VirtualMachine vm);
+
+    /**
+     * Suspends a running virtual machine so that the memory is flushed to some kind of persistent storage for
+     * the purpose of later resuming the virtual machine in the exact same state.
+     * @param vmId the unique ID of the virtual machine to be suspended
+     * @throws CloudException an error occurred with the cloud provider suspending the virtual machine
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     * @throws OperationNotSupportedException suspending is not supported for this virtual machine
+     * @see #resume(String)
+     */
+    public abstract void suspend(@Nonnull String vmId) throws CloudException, InternalException;
+
     /**
      * TERMINATES AND DESTROYS the specified virtual machine. If it is running, it will be stopped. Once it is
      * stopped, all of its data will be destroyed and it will no longer be usable. This is a very 
@@ -369,5 +437,17 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      * @throws CloudException an error occurred within the cloud provider
      */
-    public abstract void terminate(@Nonnull String vmId) throws InternalException, CloudException;    
+    public abstract void terminate(@Nonnull String vmId) throws InternalException, CloudException;
+
+
+    /**
+     * Executes a hypervisor unpause operation on a currently paused virtual machine, adding it back into the
+     * hypervisor scheduler.
+     * @param vmId the unique ID of the virtual machine to be unpaused
+     * @throws CloudException an error occurred within the cloud provider while unpausing
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws OperationNotSupportedException pausing/unpausing is not supported for the specified virtual machine
+     * @see #pause(String)
+     */
+    public abstract void unpause(@Nonnull String vmId) throws CloudException, InternalException;
 }
