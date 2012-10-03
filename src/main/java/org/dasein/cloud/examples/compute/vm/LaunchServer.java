@@ -47,7 +47,18 @@ import javax.annotation.Nonnull;
 import java.util.Iterator;
 
 /**
- * Example for verifying a services supports virtual machine resources and listing out those resources.
+ * Example for launching a virtual machine in any cloud. This example identifies all minimum requirements for launching
+ * a virtual machine in your target cloud and executes that launch. You may, of course, add on extra launch functionality
+ * in your own code. This command expects two arguments:
+ * <ol>
+ *     <li>hostName</li>
+ *     <li>friendlyName</li>
+ * </ol>
+ * <p>
+ *     Note that this might sometimes fail in some clouds because it's particularly dumb about looking for a product,
+ *     architecture, machine image combo. In most real world examples, you would be specifying those from user
+ *     input or smarter algorithms rather than just random combos.
+ * </p>
  * <p>Created by George Reese: 10/3/12 12:16 PM</p>
  * @author George Reese
  * @version 2012.09 initial version
