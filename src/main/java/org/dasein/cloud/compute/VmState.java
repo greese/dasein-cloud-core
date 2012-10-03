@@ -51,8 +51,7 @@ public enum VmState {
      */
     STOPPED,
     /**
-     * The server is currently in the middle of being terminated and should not be expected to be
-     * available ever again.
+     * The server is currently being stopped.
      */
     STOPPING,
     /**

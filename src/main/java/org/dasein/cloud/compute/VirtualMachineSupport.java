@@ -244,7 +244,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws CloudException the cloud provider errored out when launching the virtual machine
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public @Nonnull VirtualMachine launch(VMLaunchOptions withLaunchOptions) throws CloudException, InternalException;
+    public @Nonnull VirtualMachine launch(@Nonnull VMLaunchOptions withLaunchOptions) throws CloudException, InternalException;
     
     /**
      * Launches a virtual machine in the cloud. If the cloud supports persistent servers, this method will
