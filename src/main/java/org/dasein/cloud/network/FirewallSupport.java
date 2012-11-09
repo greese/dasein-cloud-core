@@ -73,7 +73,6 @@ public interface FirewallSupport extends AccessControlledService {
      * @return the provider ID of the new rule
      * @throws CloudException an error occurred with the cloud provider establishing the rule
      * @throws InternalException an error occurred locally trying to establish the rule
-     * @deprecated use {@link #authorize(String, Direction, String, Protocol, int, int)}
      */
     public @Nonnull String authorize(@Nonnull String firewallId, @Nonnull Direction direction, @Nonnull String cidr, @Nonnull Protocol protocol, int beginPort, int endPort) throws CloudException, InternalException;
 

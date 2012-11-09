@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 import org.dasein.cloud.AccessControlledService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
+import org.dasein.cloud.OperationNotSupportedException;
 import org.dasein.cloud.identity.ServiceAction;
 
 /**
@@ -209,6 +210,7 @@ public interface IpAddressSupport extends AccessControlledService {
      * @return all private IP addresses or the unassigned ones from the pool 
      * @throws InternalException an internal error occurred inside the Dasein Cloud implementation
      * @throws CloudException an error occurred processing the request in the cloud
+     * @throws OperationNotSupportedException the requested version is not supported
      * @deprecated private IP pools no longer make sense, use the {@link VLANSupport} class
      */
     public @Nonnull Iterable<IpAddress> listPrivateIpPool(boolean unassignedOnly) throws InternalException, CloudException;
@@ -221,12 +223,14 @@ public interface IpAddressSupport extends AccessControlledService {
      * @return all public IP addresses or the unassigned ones from the pool 
      * @throws InternalException an internal error occurred inside the Dasein Cloud implementation
      * @throws CloudException an error occurred processing the request in the cloud
+     * @throws OperationNotSupportedException the requested version is not supported
      * @deprecated use {@link #listIpPool(IPVersion, boolean)}
      */
     public @Nonnull Iterable<IpAddress> listPublicIpPool(boolean unassignedOnly) throws InternalException, CloudException;
 
     /**
-     * Lists all IP addresses of the specified IP version that are allocated to the account holder's IP address pool.
+     * Lists all IP addresses of the specified IP version that are allocated to the account holder's IP address pool. If
+     * the specified version is not supported, an empty list should be returned.
      * @param version the version of the IP protocol for which you are looking for IP addresses
      * @param unassignedOnly show only IP addresses that have yet to be assigned to cloud resources
      * @return all matching IP addresses from the IP address pool
