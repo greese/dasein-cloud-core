@@ -46,44 +46,46 @@ public interface MachineImageSupport extends AccessControlledService {
     static public final ServiceAction UPLOAD_IMAGE      = new ServiceAction("IMAGE:UPLOAD_IMAGE");
 
     public abstract void downloadImage(@Nonnull String machineImageId, @Nonnull OutputStream toOutput) throws CloudException, InternalException;
-    
+
     public abstract @Nullable MachineImage getMachineImage(@Nonnull String machineImageId) throws CloudException, InternalException;
-    
+
     public abstract @Nonnull String getProviderTermForImage(@Nonnull Locale locale);
-    
+
     public abstract boolean hasPublicLibrary();
-    
+
     public abstract @Nonnull AsynchronousTask<String> imageVirtualMachine(String vmId, String name, String description) throws CloudException, InternalException;
-    
+
     public abstract @Nonnull AsynchronousTask<String> imageVirtualMachineToStorage(String vmId, String name, String description, String directory) throws CloudException, InternalException;
-    
+
+    public abstract @Nonnull String imageVirtualMachineSynchronously(String vmId, String name, String description) throws CloudException, InternalException;
+
     public abstract @Nonnull String installImageFromUpload(@Nonnull MachineImageFormat format, @Nonnull InputStream imageStream) throws CloudException, InternalException;
-    
+
     public abstract boolean isImageSharedWithPublic(@Nonnull String machineImageId) throws CloudException, InternalException;
-    
+
     public abstract boolean isSubscribed() throws CloudException, InternalException;
-    
+
     public abstract @Nonnull Iterable<MachineImage> listMachineImages() throws CloudException, InternalException;
-    
+
     public abstract @Nonnull Iterable<MachineImage> listMachineImagesOwnedBy(String accountId) throws CloudException, InternalException;
-    
+
     public abstract @Nonnull Iterable<MachineImageFormat> listSupportedFormats() throws CloudException, InternalException;
-    
+
     public abstract @Nonnull Iterable<String> listShares(@Nonnull String forMachineImageId) throws CloudException, InternalException;
 
     public abstract @Nonnull String registerMachineImage(String atStorageLocation) throws CloudException, InternalException;
-    
+
     public abstract void remove(@Nonnull String machineImageId) throws CloudException, InternalException;
-    
+
     public abstract @Nonnull Iterable<MachineImage> searchMachineImages(@Nullable String keyword, @Nullable Platform platform, @Nullable Architecture architecture) throws CloudException, InternalException;
 
     public abstract void shareMachineImage(@Nonnull String machineImageId, @Nonnull String withAccountId, boolean allow) throws CloudException, InternalException;
-    
+
     public abstract boolean supportsCustomImages();
-    
+
     public abstract boolean supportsImageSharing();
-    
+
     public abstract boolean supportsImageSharingWithPublic();
-    
+
     public abstract @Nonnull String transfer(@Nonnull CloudProvider fromCloud, @Nonnull String machineImageId) throws CloudException, InternalException;
 }
