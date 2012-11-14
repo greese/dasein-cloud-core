@@ -18,7 +18,6 @@
 
 package org.dasein.cloud.compute;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,12 +27,11 @@ import org.dasein.cloud.Taggable;
 import javax.annotation.Nonnull;
 
 public class MachineImage implements Taggable {
-    private static final long serialVersionUID = 3254097599257280038L;
-    
-    private Architecture       architecture;    
+    private Architecture       architecture;
     private MachineImageState  currentState;
     private Map<String,String> tags;
     private String             description;
+    private ImageClass         imageClass;
     private String             name;
     private Platform           platform;
     private String             providerMachineImageId;
@@ -176,5 +174,13 @@ public class MachineImage implements Taggable {
     
     public String toString() {
         return (name + " [" + providerMachineImageId + "]");
+    }
+
+    public ImageClass getImageClass() {
+        return imageClass;
+    }
+
+    public void setImageClass(ImageClass imageClass) {
+        this.imageClass = imageClass;
     }
 }

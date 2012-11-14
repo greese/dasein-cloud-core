@@ -27,6 +27,7 @@ import org.dasein.cloud.Tag;
 import org.dasein.cloud.Taggable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * <p>
@@ -55,8 +56,10 @@ public class VirtualMachine implements Taggable {
     private String                productId;
     private String                providerAssignedIpAddressId;
     private String                providerDataCenterId;
+    private String                providerKernelImageId;
     private String                providerMachineImageId;
     private String                providerOwnerId;
+    private String                providerRamdiskImageId;
     private String                providerRegionId;
     private String                providerSubnetId;
     private String                providerVirtualMachineId;
@@ -418,5 +421,21 @@ public class VirtualMachine implements Taggable {
 
     public String getProviderVlanId() {
         return providerVlanId;
+    }
+
+    public @Nullable String getProviderKernelImageId() {
+        return providerKernelImageId;
+    }
+
+    public void setProviderKernelImageId(@Nullable String providerKernelImageId) {
+        this.providerKernelImageId = providerKernelImageId;
+    }
+
+    public @Nullable String getProviderRamdiskImageId() {
+        return providerRamdiskImageId;
+    }
+
+    public void setProviderRamdiskImageId(@Nullable String providerRamdiskImageId) {
+        this.providerRamdiskImageId = providerRamdiskImageId;
     }
 }

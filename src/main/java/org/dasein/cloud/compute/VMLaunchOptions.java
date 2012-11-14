@@ -32,8 +32,10 @@ import java.util.Map;
  * a single API call, or they may require many underlying API calls. All of this will be hidden to the caller.
  * <p>Created by George Reese: 6/22/12 5:35 PM</p>
  * @author George Reese
- * @since 2012-07
- * @version 2012-07 Initial introduction
+ * @version 2012.07 Initial introduction
+ * @version 2013.01 George Reese Issue #2 Added static IP on launch support
+ * @version 2013.01 George Reese Issue #7 Added ramdisk ID and kernel ID options
+ * @since 2012.07
  */
 @SuppressWarnings("UnusedDeclaration")
 public class VMLaunchOptions {
@@ -82,11 +84,13 @@ public class VMLaunchOptions {
     private String[]           firewallIds;
     private String             friendlyName;
     private String             hostName;
+    private String             kernelId;
     private String             machineImageId;
     private Map<String,Object> metaData;
     private String             networkProductId;
     private NICConfig[]        networkInterfaces;
     private boolean            preventApiTermination;
+    private String             ramdiskId;
     private String             rootVolumeProductId;
     private String             standardProductId;
     private String[]           staticIpIds;
@@ -172,6 +176,13 @@ public class VMLaunchOptions {
     }
 
     /**
+     * @return the provider ID of the kernel image to use in launching the virtual machine
+     */
+    public String getKernelId() {
+        return kernelId;
+    }
+
+    /**
      * @return the unique cloud ID for the machine image to use in launching the virtual machine
      */
     public @Nonnull String getMachineImageId() {
@@ -206,6 +217,13 @@ public class VMLaunchOptions {
      */
     public NICConfig[] getNetworkInterfaces() {
         return networkInterfaces;
+    }
+
+    /**
+     * @return the provider ID of the ramdisk image to use in launching the virtual machine
+     */
+    public String getRamdiskId() {
+        return ramdiskId;
     }
 
     /**
@@ -426,6 +444,18 @@ public class VMLaunchOptions {
      */
     public @Nonnull VMLaunchOptions withExtendedAnalytics() {
         extendedAnalytics = true;
+        return this;
+    }
+
+    /**
+     * Specifies that a kernel and/or ramdisk image should be used in provisioning this virtual machine.
+     * @param providerKernelId the kernel ID, if any, to use during the launch
+     * @param providerRamdiskId the ramdisk ID, if any, to use during the launch
+     * @return this
+     */
+    public @Nonnull VMLaunchOptions withExtendedImages(@Nullable String providerKernelId, @Nullable String providerRamdiskId) {
+        kernelId = providerKernelId;
+        ramdiskId = providerRamdiskId;
         return this;
     }
 

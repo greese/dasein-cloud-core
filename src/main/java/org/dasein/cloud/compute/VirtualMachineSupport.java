@@ -38,8 +38,9 @@ import org.dasein.cloud.identity.ServiceAction;
  * machines in a cloud environment.
  * </p>
  * @author George Reese @ enStratus (http://www.enstratus.com)
- * @since unknown
  * @version 2012-07 Added new launch method with {@link VMLaunchOptions} as well as better meta-data
+ * @version 2013.01 George Reese Issue #7 Added meta-data for defining kernel and ramdisk image requirements
+ * @since unknown
  */
 @SuppressWarnings("UnusedDeclaration")
 public interface VirtualMachineSupport extends AccessControlledService {
@@ -156,6 +157,16 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws CloudException an error occurred within the cloud provider
      */
     public abstract @Nonnull Iterable<VmStatistics> getVMStatisticsForPeriod(@Nonnull String vmId, @Nonnegative long from, @Nonnegative long to) throws InternalException, CloudException;
+
+    /**
+     * Identifies whether images of the specified image class are required for launching a VM. This method should
+     * always return {@link Requirement#REQUIRED} when the image class chosen is {@link ImageClass#MACHINE}.
+     * @param cls the desired image class
+     * @return the requirements level of support for this image class
+     * @throws CloudException an error occurred in the cloud identifying this requirement
+     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this requirement
+     */
+    public abstract @Nonnull Requirement identifyImageRequirement(@Nonnull ImageClass cls) throws CloudException, InternalException;
 
     /**
      * Indicates the degree to which specifying a user name and password at launch is required.
