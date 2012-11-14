@@ -20,9 +20,9 @@ package org.dasein.cloud.compute;
 
 import org.dasein.cloud.network.NICCreateOptions;
 
-import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -222,6 +222,16 @@ public class VMLaunchOptions {
      */
     public @Nonnull String getStandardProductId() {
         return standardProductId;
+    }
+
+    /**
+     * @return the list of static IPs to assign to this VM when provisioned
+     */
+    public @Nonnull String[] getStaticIpIds() {
+        if( staticIpIds == null ) {
+            return new String[0];
+        }
+        return Arrays.copyOf(staticIpIds, staticIpIds.length);
     }
 
     /**

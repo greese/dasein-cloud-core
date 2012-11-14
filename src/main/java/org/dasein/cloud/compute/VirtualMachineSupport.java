@@ -182,6 +182,14 @@ public interface VirtualMachineSupport extends AccessControlledService {
     public abstract @Nonnull Requirement identifyShellKeyRequirement() throws CloudException, InternalException;
 
     /**
+     * Indicates the degree to which static IP addresses are required when launching a VM.
+     * @return the requirements level for static IP on launch
+     * @throws CloudException an error occurred in the cloud identifying this requirement
+     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this requirement
+     */
+    public abstract @Nonnull Requirement identifyStaticIPRequirement() throws CloudException, InternalException;
+
+    /**
      * Indicates whether or not specifying a VLAN in your VM launch options is required or optional.
      * @return the requirements level for a VLAN during launch
      * @throws CloudException an error occurred in the cloud identifying this requirement

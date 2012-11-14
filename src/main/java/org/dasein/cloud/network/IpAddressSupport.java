@@ -321,6 +321,15 @@ public interface IpAddressSupport extends AccessControlledService {
     public void stopForward(@Nonnull String ruleId) throws InternalException, CloudException;
 
     /**
+     * Identifies whether or not you can bind IPs to virtual machines after they have been provisioned.
+     * @param ipVersion the IP version you are testing
+     * @return true if an IP address may be assigned to a VM post-launch; false if it must be assigned at launch
+     * @throws InternalException an internal error occurred inside the Dasein Cloud implementation
+     * @throws CloudException an error occurred processing the request in the cloud
+     */
+    public boolean supportsRuntimeBinding(@Nonnull IPVersion ipVersion) throws InternalException, CloudException;
+
+    /**
      * Indicates whether or not IP addresses can be allocated for VLAN use. Only makes sense when the cloud
      * actually supports VLANS.
      * @param ofVersion the version of public IP address that might be routed to a VLAN resource
