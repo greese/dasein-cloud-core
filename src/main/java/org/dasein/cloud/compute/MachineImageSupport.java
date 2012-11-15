@@ -295,6 +295,14 @@ public interface MachineImageSupport extends AccessControlledService {
     public abstract @Nonnull Iterable<String> listShares(@Nonnull String providerImageId) throws CloudException, InternalException;
 
     /**
+     * Lists the image classes supported in this cloud.
+     * @return the supported image classes
+     * @throws CloudException an error occurred with the cloud provider
+     * @throws InternalException a local error occurred in the Dasein Cloud implementation
+     */
+    public abstract @Nonnull Iterable<ImageClass> listSupportedImageClasses() throws CloudException, InternalException;
+
+    /**
      * Enumerates the types of images supported in this cloud.
      * @return the list of supported image types
      * @throws CloudException an error occurred with the cloud provider
@@ -421,15 +429,6 @@ public interface MachineImageSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein cloud implementation while check this capability
      */
     public abstract boolean supportsImageCapture(@Nonnull MachineImageType type) throws CloudException, InternalException;
-
-    /**
-     * Identifies whether this cloud supports the specified kind of image.
-     * @param cls the image class being checked
-     * @return true if the cloud supports (at least) listing these kinds of images
-     * @throws CloudException an error occurred with the cloud provider when checking this capability
-     * @throws InternalException an error occurred within the Dasein cloud implementation while check this capability
-     */
-    public abstract boolean supportsImageClass(ImageClass cls) throws CloudException, InternalException;
 
     /**
      * Indicates whether or not this cloud supports sharing images with specific accounts.
