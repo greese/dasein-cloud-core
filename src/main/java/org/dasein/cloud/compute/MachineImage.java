@@ -38,6 +38,7 @@ public class MachineImage implements Taggable {
     private String             providerOwnerId;
     private String             providerRegionId;
     private String             software;
+    private MachineImageFormat storageFormat;
     private MachineImageType   type;
     
     public MachineImage() { }
@@ -182,5 +183,13 @@ public class MachineImage implements Taggable {
 
     public void setImageClass(ImageClass imageClass) {
         this.imageClass = imageClass;
+    }
+
+    public MachineImageFormat getStorageFormat() {
+        return storageFormat;
+    }
+
+    public void setStorageFormat(MachineImageFormat storageFormat) {
+        this.storageFormat = storageFormat;
     }
 }

@@ -20,9 +20,9 @@ package org.dasein.cloud.compute;
  * Defines what kind of image (machine, ramdisk, kernel) a "MachineImage" represents.
  * <p>Created by George Reese: 11/14/12 3:03 PM</p>
  * @author George Reese
- * @version 2013.01 initial version Issue #7
+ * @version 2013.01 initial version (Issue #7)
  * @since 2013.01
  */
 public enum ImageClass {
-    MACHINE, RAMDISK, KERNEL;
+    MACHINE, RAMDISK, KERNEL
 }
