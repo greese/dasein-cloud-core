@@ -270,19 +270,9 @@ public interface MachineImageSupport extends AccessControlledService {
      * @return the list of machine machine images belonging to the specified account owner
      * @throws CloudException an error occurred with the cloud provider
      * @throws InternalException a local error occurred in the Dasein Cloud implementation
-     * @deprecated Use {@link #listImages(ImageClass,String)} or {@link #listPublicImages(ImageClass)} with {@link ImageClass#MACHINE}
+     * @deprecated Use {@link #listImages(ImageClass,String)}
      */
     public abstract @Nonnull Iterable<MachineImage> listMachineImagesOwnedBy(String accountId) throws CloudException, InternalException;
-
-    /**
-     * Lists all publicly available images of the specified image class. {@link #supportsPublicLibrary(ImageClass)} must be true for this
-     * class of images if this method is to return a non-empty list.
-     * @param cls the class of image being listed
-     * @return a list of all publicly available images of the specified image class
-     * @throws CloudException an error occurred with the cloud provider
-     * @throws InternalException a local error occurred in the Dasein Cloud implementation
-     */
-    public abstract @Nonnull Iterable<MachineImage> listPublicImages(@Nonnull ImageClass cls) throws CloudException, InternalException;
 
     /**
      * Provides the account numbers for all accounts which which the specified machine image has been shared. This method
