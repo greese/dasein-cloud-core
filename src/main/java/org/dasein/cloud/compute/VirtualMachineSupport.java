@@ -29,6 +29,7 @@ import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.OperationNotSupportedException;
 import org.dasein.cloud.Requirement;
+import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.Tag;
 import org.dasein.cloud.identity.ServiceAction;
 
@@ -39,7 +40,8 @@ import org.dasein.cloud.identity.ServiceAction;
  * </p>
  * @author George Reese @ enStratus (http://www.enstratus.com)
  * @version 2012-07 Added new launch method with {@link VMLaunchOptions} as well as better meta-data
- * @version 2013.01 George Reese Issue #7 Added meta-data for defining kernel and ramdisk image requirements
+ * @version 2013.01 Added meta-data for defining kernel and ramdisk image requirements (Issue #7)
+ * @version 2013.01 Added status listing (Issue #4)
  * @since unknown
  */
 @SuppressWarnings("UnusedDeclaration")
@@ -335,6 +337,14 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws CloudException an error occurred fetching the list of supported architectures from the cloud
      */
     public Iterable<Architecture> listSupportedArchitectures() throws InternalException, CloudException;
+
+    /**
+     * Lists the status for all virtual machines in the current region.
+     * @return the status for all virtual machines in the current region
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     * @throws CloudException an error occurred with the cloud provider
+     */
+    public @Nonnull Iterable<ResourceStatus> listVirtualMachineStatus() throws InternalException, CloudException;
 
     /**
      * Lists all virtual machines belonging to the account owner currently in the cloud.

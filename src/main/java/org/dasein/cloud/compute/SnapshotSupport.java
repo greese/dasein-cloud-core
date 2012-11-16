@@ -23,8 +23,19 @@ import java.util.Locale;
 import org.dasein.cloud.AccessControlledService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
+import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.identity.ServiceAction;
 
+import javax.annotation.Nonnull;
+
+/**
+ * <p>
+ * Core interface for the snapshot access.
+ * </p>
+ * @author George Reese @ enStratus (http://www.enstratus.com)
+ * @version 2013.01 Added status listing (Issue #4)
+ * @since unknown
+ */
 public interface SnapshotSupport extends AccessControlledService {
     static public final ServiceAction ANY             = new ServiceAction("SNAPSHOT:ANY");
 
@@ -46,7 +57,15 @@ public interface SnapshotSupport extends AccessControlledService {
     public boolean isPublic(String snapshotId) throws InternalException, CloudException;
     
     public boolean isSubscribed() throws InternalException, CloudException;
-    
+
+    /**
+     * Lists the status for all snapshots in the current region.
+     * @return the status for all snapshots in the current region
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     * @throws CloudException an error occurred with the cloud provider
+     */
+    public @Nonnull Iterable<ResourceStatus> listSnapshotStatus() throws InternalException, CloudException;
+
     public Iterable<Snapshot> listSnapshots() throws InternalException, CloudException;
 
     public void remove(String snapshotId) throws InternalException, CloudException;

@@ -24,6 +24,7 @@ import org.dasein.cloud.AccessControlledService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.Requirement;
+import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.identity.ServiceAction;
 import org.dasein.util.uom.storage.Gigabyte;
 import org.dasein.util.uom.storage.Storage;
@@ -38,6 +39,7 @@ import javax.annotation.Nullable;
  * @author George Reese (george.reese@imaginary.com
  * @since unknown
  * @version 2012-07 Added extended meta-data, included support for new {@link VolumeCreateOptions}
+ * @version 2013.01 Added status listing (Issue #4)
  */
 @SuppressWarnings("UnusedDeclaration")
 public interface VolumeSupport extends AccessControlledService {
@@ -175,6 +177,14 @@ public interface VolumeSupport extends AccessControlledService {
      * @throws CloudException an error occurred fetching the product list from the cloud provider
      */
     public @Nonnull Iterable<VolumeProduct> listVolumeProducts() throws InternalException, CloudException;
+
+    /**
+     * Lists the status for all volumes in the current region.
+     * @return the status for all volumes in the current region
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     * @throws CloudException an error occurred with the cloud provider
+     */
+    public @Nonnull Iterable<ResourceStatus> listVolumeStatus() throws InternalException, CloudException;
 
     /**
      * Lists all volumes in the current region with the cloud provider.
