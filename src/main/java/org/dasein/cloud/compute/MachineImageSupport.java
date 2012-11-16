@@ -29,6 +29,7 @@ import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.OperationNotSupportedException;
 import org.dasein.cloud.Requirement;
+import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.identity.ServiceAction;
 
 /**
@@ -39,6 +40,7 @@ import org.dasein.cloud.identity.ServiceAction;
  * @author George Reese
  * @version 2013.01 Added support for ramdisk and kernel images (Issue #7)
  * @version 2013.01 Added synchronous bundling methods (Issue #12)
+ * @Version 2013.01 Added a resource lister (Issue #4)
  * @since unknown
  */
 @SuppressWarnings("UnusedDeclaration")
@@ -211,6 +213,16 @@ public interface MachineImageSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein cloud implementation
      */
     public abstract boolean isSubscribed() throws CloudException, InternalException;
+
+    /**
+     * Lists the current status for all images in my library. The images returned should be the same list provided by
+     * {@link #listImages(ImageClass)}, except that this method returns a list of {@link ResourceStatus} objects.
+     * @param cls the image class of the target images
+     * @return a list of status objects for the images in the library
+     * @throws CloudException an error occurred with the cloud provider
+     * @throws InternalException a local error occurred in the Dasein Cloud implementation
+     */
+    public abstract @Nonnull Iterable<ResourceStatus> listImageStatus(@Nonnull ImageClass cls) throws CloudException, InternalException;
 
     /**
      * Lists all images in my library. This generally includes all images belonging to me as well any explicitly shared
