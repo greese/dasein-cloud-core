@@ -23,19 +23,22 @@ import java.util.Locale;
 import org.dasein.cloud.AccessControlledService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
+import org.dasein.cloud.OperationNotSupportedException;
+import org.dasein.cloud.Requirement;
 import org.dasein.cloud.ResourceStatus;
+import org.dasein.cloud.Tag;
 import org.dasein.cloud.identity.ServiceAction;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
- * <p>
- * Core interface for the snapshot access.
- * </p>
+ * Core interfaces for snapshot management.
  * @author George Reese @ enStratus (http://www.enstratus.com)
  * @version 2013.01 Added status listing (Issue #4)
  * @since unknown
  */
+@SuppressWarnings("UnusedDeclaration")
 public interface SnapshotSupport extends AccessControlledService {
     static public final ServiceAction ANY             = new ServiceAction("SNAPSHOT:ANY");
 
@@ -45,34 +48,199 @@ public interface SnapshotSupport extends AccessControlledService {
     static public final ServiceAction MAKE_PUBLIC     = new ServiceAction("SNAPSHOT:MAKE_PUBLIC");
     static public final ServiceAction REMOVE_SNAPSHOT = new ServiceAction("SNAPSHOT:REMOVE_SNAPSHOT");
     static public final ServiceAction SHARE_SNAPSHOT  = new ServiceAction("SNAPSHOT:SHARE_SNAPSHOT");
-    
-    public String create(String ofVolume, String description) throws InternalException, CloudException;
-    
-    public String getProviderTermForSnapshot(Locale locale);
-    
-    public Snapshot getSnapshot(String snapshotId) throws InternalException, CloudException;
-    
-    public Iterable<String> listShares(String snapshotId) throws InternalException, CloudException;
-    
-    public boolean isPublic(String snapshotId) throws InternalException, CloudException;
-    
+
+    /**
+     * Adds the specified account number to the list of accounts with which this snapshot is shared.
+     * @param providerSnapshotId the unique ID of the snapshot to be shared
+     * @param accountNumber the account number with which the snapshot will be shared
+     * @throws CloudException an error occurred with the cloud provider
+     * @throws InternalException a local error occurred in the Dasein Cloud implementation
+     * @throws OperationNotSupportedException the cloud does not support sharing snapshots with other accounts
+     */
+    public abstract void addSnapshotShare(@Nonnull String providerSnapshotId, @Nonnull String accountNumber) throws CloudException, InternalException;
+
+    /**
+     * Shares the specified snapshot with the public.
+     * @param providerSnapshotId the unique ID of the snapshot to be made public
+     * @throws CloudException an error occurred with the cloud provider
+     * @throws InternalException a local error occurred in the Dasein Cloud implementation
+     * @throws OperationNotSupportedException the cloud does not support sharing snapshots with the public
+     */
+    public abstract void addPublicShare(@Nonnull String providerSnapshotId) throws CloudException, InternalException;
+
+    /**
+     * Creates a snapshot from the specified volume.
+     * @param ofVolume the unique ID of the volume to be snapshotted
+     * @param description the description of the snapshot
+     * @return the unique ID of the snapshot created (or null if no changes since last snapshot)
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     * @throws CloudException an error occurred with the cloud provider
+     * @deprecated Use {@link #snapshot(String, String, String, Tag...)}
+     */
+    public @Nullable String create(@Nonnull String ofVolume, @Nonnull String description) throws InternalException, CloudException;
+
+    /**
+     * Specifies the provider's term for snapshot in the specified locale.
+     * @param locale the locale for which the snapshot term should be translated
+     * @return the term for snapshot in the target cloud
+     */
+    public @Nonnull String getProviderTermForSnapshot(@Nonnull Locale locale);
+
+    /**
+     * Retrieves the full details of the specified snapshot as a Dasein Cloud snapshot object.
+     * @param snapshotId the unique ID of the snapshot being fetched
+     * @return the snapshot matching the target ID
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     * @throws CloudException an error occurred with the cloud provide
+     */
+    public @Nullable Snapshot getSnapshot(@Nonnull String snapshotId) throws InternalException, CloudException;
+
+    /**
+     * Indicates whether or not the cloud requires a volume to be attached when performing a snapshot. {@link Requirement#REQUIRED}
+     * means that a volume must be attached; {@link Requirement#OPTIONAL} means that it may be attached; {@link Requirement#NONE}
+     * means that the volume must be detached.
+     * @return the requirement associated with volume attachment in creating a snapshot
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     * @throws CloudException an error occurred with the cloud provide
+     */
+    public @Nonnull Requirement identifyAttachmentRequirement() throws InternalException, CloudException;
+
+    /**
+     * Identifies whether or not the specified snapshot is shared with the general public. If public sharing is not
+     * allowed, this method will return false.
+     * @param snapshotId the unique ID of the snapshot being checked
+     * @return true if the snapshot in question is publicly shared
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     * @throws CloudException an error occurred with the cloud provide
+     */
+    public boolean isPublic(@Nonnull String snapshotId) throws InternalException, CloudException;
+
+    /**
+     * Validates that the current user credentials are subscribed to snapshot services in the target cloud/region.
+     * @return true if the account is subscribed for snapshots
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     * @throws CloudException an error occurred with the cloud provide
+     */
     public boolean isSubscribed() throws InternalException, CloudException;
 
     /**
-     * Lists the status for all snapshots in the current region.
+     * Lists all accounts with which this snapshot is shared. If snapshot sharing is not supported, this method will
+     * return an empty list.
+     * @param snapshotId the unique ID of the snapshot being checked
+     * @return a list of accounts with which the snapshot is shared
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     * @throws CloudException an error occurred with the cloud provider
+     */
+    public @Nonnull Iterable<String> listShares(@Nonnull String snapshotId) throws InternalException, CloudException;
+
+    /**
+     * Lists the status for all snapshots belonging to me or explicitly shared with me in the current region. This status
+     * list should match the snapshots from {@link #listSnapshots()}.
      * @return the status for all snapshots in the current region
      * @throws InternalException an error occurred within the Dasein Cloud implementation
      * @throws CloudException an error occurred with the cloud provider
      */
-    public @Nonnull Iterable<ResourceStatus> listSnapshotStatus() throws InternalException, CloudException;
+    public abstract @Nonnull Iterable<ResourceStatus> listSnapshotStatus() throws InternalException, CloudException;
 
-    public Iterable<Snapshot> listSnapshots() throws InternalException, CloudException;
+    /**
+     * Lists snapshots belonging to me or explicitly shared with me in the current region.
+     * @return a list of snapshots in the current region
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     * @throws CloudException an error occurred with the cloud provider
+     */
+    public abstract @Nonnull Iterable<Snapshot> listSnapshots() throws InternalException, CloudException;
 
-    public void remove(String snapshotId) throws InternalException, CloudException;
-    
-    public void shareSnapshot(String snapshotId, String withAccountId, boolean affirmative) throws InternalException, CloudException;    
-    
-    public boolean supportsSnapshotSharing() throws InternalException, CloudException;    
-    
-    public boolean supportsSnapshotSharingWithPublic() throws InternalException, CloudException;    
+    /**
+     * Removes the specified snapshot permanently from the cloud.
+     * @param snapshotId the unique ID of the snapshot to be removed
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     * @throws CloudException an error occurred with the cloud provider
+     */
+    public abstract void remove(@Nonnull String snapshotId) throws InternalException, CloudException;
+
+    /**
+     * Removes ALL specific account shares for the specified snapshot. NOTE THAT THIS METHOD WILL NOT THROW AN EXCEPTION
+     * WHEN SNAPSHOT SHARING IS NOT SUPPORTED. IT IS A NO-OP IN THAT SCENARIO.
+     * @param providerSnapshotId the unique ID of the snapshot to be unshared
+     * @throws CloudException an error occurred with the cloud provider
+     * @throws InternalException a local error occurred in the Dasein Cloud implementation
+     */
+    public abstract void removeAllSnapshotShares(@Nonnull String providerSnapshotId) throws CloudException, InternalException;
+
+    /**
+     * Removes the specified account number from the list of accounts with which this snapshot is shared.
+     * @param providerSnapshotId the unique ID of the snapshot to be unshared
+     * @param accountNumber the account number with which the snapshot will be unshared
+     * @throws CloudException an error occurred with the cloud provider
+     * @throws InternalException a local error occurred in the Dasein Cloud implementation
+     * @throws OperationNotSupportedException the cloud does not support sharing snapshots with other accounts
+     */
+    public abstract void removeSnapshotShare(@Nonnull String providerSnapshotId, @Nonnull String accountNumber) throws CloudException, InternalException;
+
+    /**
+     * Unshares the specified snapshot with the public. This method may be safely called even if sharing is not supported.
+     * @param providerSnapshotId the unique ID of the snapshot to be removed from public sharing
+     * @throws CloudException an error occurred with the cloud provider
+     * @throws InternalException a local error occurred in the Dasein Cloud implementation
+     */
+    public abstract void removePublicShare(@Nonnull String providerSnapshotId) throws CloudException, InternalException;
+
+    /**
+     * Searches all snapshots for the snapshots matching the specified parameters.
+     * @param ownerId the optional owner of the target snapshots
+     * @param keyword the optional keyword to search on
+     * @return a list of matching snapshots
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     * @throws CloudException an error occurred with the cloud provider
+     */
+    public @Nonnull Iterable<Snapshot> searchSnapshots(@Nullable String ownerId, @Nullable String keyword) throws InternalException, CloudException;
+
+    /**
+     * Shares the specified snapshot with the specified account.
+     * @param snapshotId the unique ID of the snapshot to be shared
+     * @param withAccountId the account number with which it is being shared
+     * @param affirmative true if sharing is being enabled, false if being unshared
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     * @throws CloudException an error occurred with the cloud provider
+     */
+    public void shareSnapshot(@Nonnull String snapshotId, @Nullable String withAccountId, boolean affirmative) throws InternalException, CloudException;
+
+    /**
+     * Snapshots the specified volume with the resulting snapshot having the specified meta-data. Some clouds may not execute
+     * a snapshot if the most recent snapshot on the volume is synchronized with the volume (in other words, if nothing
+     * has changed). In such a case, this method should return null.
+     * @param volumeId the unique ID of the volume to be snapshotted
+     * @param name the name of the new snapshot
+     * @param description a description for the new snapshot
+     * @param tags any tags to associated with the new snapshot
+     * @return the snapshot resulting from the attempt or null if no changes have occurred and thus no snapshot is needed
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     * @throws CloudException an error occurred with the cloud provider
+     */
+    public @Nullable Snapshot snapshot(@Nonnull String volumeId, @Nonnull String name, @Nonnull String description, @Nullable Tag... tags) throws InternalException, CloudException;
+
+    /**
+     * Indicates whether or not you can snapshot volumes in this region. If false, that means you can browse
+     * only a public library of fixed snapshots.
+     * @return true if volume snapshotting is supported
+     * @throws CloudException an error occurred with the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     */
+    public boolean supportsSnapshotCreation() throws CloudException, InternalException;
+
+    /**
+     * Indicates whether or not a snapshot owner can explicitly share a snapshot with another account.
+     * @return true if snapshot sharing is supported
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     * @throws CloudException an error occurred with the cloud provider
+     */
+    public boolean supportsSnapshotSharing() throws InternalException, CloudException;
+
+    /**
+     * Indicates whether or not a snapshot owner can share a snapshot with the general public.
+     * @return true if public snapshot sharing is supported
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     * @throws CloudException an error occurred with the cloud provider
+     */
+    public boolean supportsSnapshotSharingWithPublic() throws InternalException, CloudException;
 }

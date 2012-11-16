@@ -18,7 +18,12 @@
 
 package org.dasein.cloud.compute;
 
+import org.dasein.cloud.Tag;
+
+import javax.annotation.Nonnull;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Snapshot implements Serializable {
     private static final long serialVersionUID = 1451559961429054236L;
@@ -32,6 +37,7 @@ public class Snapshot implements Serializable {
     private String        regionId;
     private int           sizeInGb;
     private long          snapshotTimestamp;
+    private Map<String,String> tags;
     private String        volumeId;
     
     public Snapshot() { }
@@ -136,8 +142,37 @@ public class Snapshot implements Serializable {
 	public void setSizeInGb(int sizeInGb) {
 		this.sizeInGb = sizeInGb;
 	}
-	
-	public String toString() {
+
+
+    public void addTag(Tag t) {
+        addTag(t.getKey(), t.getValue());
+    }
+
+    public void addTag(String key, String value) {
+        getTags().put(key, value);
+    }
+
+    public Object getTag(String tag) {
+        return getTags().get(tag);
+    }
+
+    public synchronized @Nonnull Map<String,String> getTags() {
+        if( tags == null ) {
+            tags = new HashMap<String,String>();
+        }
+        return tags;
+    }
+
+    public void setTag(@Nonnull String key, @Nonnull String value) {
+        getTags().put(key, value);
+    }
+
+    public synchronized void setTags(Map<String,String> properties) {
+        getTags().clear();
+        getTags().putAll(properties);
+    }
+
+    public String toString() {
 	    return (name + " [" + providerSnapshotId + "]");
 	}
 }

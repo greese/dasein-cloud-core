@@ -40,7 +40,7 @@ import org.dasein.cloud.identity.ServiceAction;
  * @author George Reese
  * @version 2013.01 Added support for ramdisk and kernel images (Issue #7)
  * @version 2013.01 Added synchronous bundling methods (Issue #12)
- * @Version 2013.01 Added a resource lister (Issue #4)
+ * @version 2013.01 Added a resource lister (Issue #4)
  * @since unknown
  */
 @SuppressWarnings("UnusedDeclaration")
