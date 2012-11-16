@@ -90,6 +90,16 @@ public interface VolumeSupport extends AccessControlledService {
     public void detach(@Nonnull String volumeId) throws InternalException, CloudException;
 
     /**
+     * Detaches the specified volume from any virtual machines to which it might be attached with the option to
+     * force the detachment when some cloud state is preventing it.
+     * @param volumeId the unique ID of the volume to be detached
+     * @param force indicate whether or not the detach should be forced even if the VM is not releasing it
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while performing the detachment
+     * @throws CloudException the detachment failed with the cloud provider
+     */
+    public void detach(@Nonnull String volumeId, boolean force) throws InternalException, CloudException;
+
+    /**
      * Indicates the maximum number of volumes that may be provisioned in this account.
      * @return the maximum number of volumes that may be provisioned, -1 for unlimited, or -2 for unknown
      * @throws InternalException an error occurred within the Dasein Cloud implementation determining the limit
