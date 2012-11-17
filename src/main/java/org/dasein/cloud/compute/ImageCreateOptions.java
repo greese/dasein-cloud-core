@@ -20,6 +20,7 @@ package org.dasein.cloud.compute;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,8 +53,20 @@ public class ImageCreateOptions {
         return options;
     }
 
+    static public @Nonnull ImageCreateOptions getInstance(@Nonnull MachineImageFormat bundleFormat, @Nonnull InputStream bundleSource, @Nonnull Platform platform, @Nonnull String name, @Nonnull String description) {
+        ImageCreateOptions options = new ImageCreateOptions();
+
+        options.bundleFormat = bundleFormat;
+        options.bundleSource = bundleSource;
+        options.name = name;
+        options.description = description;
+        options.platform = platform;
+        return options;
+    }
+
     private MachineImageFormat bundleFormat;
     private String             bundleLocation;
+    private InputStream        bundleSource;
     private String             description;
     private Map<String,Object> metaData;
     private String             name;
@@ -75,6 +88,13 @@ public class ImageCreateOptions {
      */
     public @Nullable String getBundleLocation() {
         return bundleLocation;
+    }
+
+    /**
+     * @return the source of the image for direct upload
+     */
+    public InputStream getBundleSource() {
+        return bundleSource;
     }
 
     /**

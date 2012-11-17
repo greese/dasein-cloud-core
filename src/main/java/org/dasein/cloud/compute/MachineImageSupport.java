@@ -18,6 +18,7 @@
 
 package org.dasein.cloud.compute;
 
+import java.io.InputStream;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
@@ -421,6 +422,15 @@ public interface MachineImageSupport extends AccessControlledService {
      * @deprecated Use {@link #supportsImageCapture(MachineImageType)}
      */
     public abstract boolean supportsCustomImages() throws CloudException, InternalException;
+
+    /**
+     * Supports the ability to directly upload an image into the cloud and have it registered as a new image. When
+     * doing this, you construct your create options using {@link ImageCreateOptions#getInstance(MachineImageFormat, InputStream, Platform, String, String)}.
+     * @return true if you can do direct uploads into the cloud
+     * @throws CloudException an error occurred with the cloud provider when checking this capability
+     * @throws InternalException an error occurred within the Dasein cloud implementation while check this capability
+     */
+    public abstract boolean supportsDirectImageUpload() throws CloudException, InternalException;
 
     /**
      * Indicates whether capturing a virtual machine as a custom image of type {@link ImageClass#MACHINE} is supported in
