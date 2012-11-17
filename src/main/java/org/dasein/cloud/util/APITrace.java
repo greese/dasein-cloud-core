@@ -342,14 +342,19 @@ public class APITrace {
     static private @Nonnull Map<String,Object> toJSON(@Nonnull CloudOperation operation) {
         HashMap<String,Object> map = new HashMap<String, Object>();
         String[] parts = operation.name.split(DELIMITER_REGEX);
+        String provider, cloud;
         String name;
 
         if( parts.length == 4 ) {
+            provider = parts[0];
+            cloud = parts[1];
             name = parts[3];
         }
-        else {
+        else if( parts.length > 4 ) {
             StringBuilder tmp = new StringBuilder();
 
+            provider = parts[0];
+            cloud = parts[1];
             for( int i=3; i<parts.length; i++ ) {
                 tmp.append(parts[i]);
                 if( i < parts.length-1 ) {
@@ -358,8 +363,18 @@ public class APITrace {
             }
             name = tmp.toString();
         }
+        else {
+            provider = (parts.length > 0 ? parts[0] : "");
+            cloud = (parts.length > 1 ? parts[1] : "");
+            name = operation.name;
+        }
         map.put("operation", name);
+        map.put("provider", provider);
+        map.put("cloud", cloud);
         map.put("apiCalls", operation.apiCalls == null ? new String[0] : operation.apiCalls);
+        if( operation.endTimestamp > 0L ) {
+            map.put("duration", operation.endTimestamp - operation.startTimestamp);
+        }
         if( operation.priorChildren != null ) {
             ArrayList<Map<String,Object>> children = new ArrayList<Map<String, Object>>();
 
@@ -533,7 +548,6 @@ public class APITrace {
                 for( String key : keys ) {
                     Map<String,Object> map = toJSON(operationTrace.get(key));
 
-                    logger.trace(prefix + "-> " + key);
                     logger.trace((new JSONObject(map)).toString());
                     logger.trace("");
                 }
@@ -551,6 +565,9 @@ public class APITrace {
         }
         synchronized( operationCount ) {
             operationCount.clear();
+        }
+        synchronized( operationTrace ) {
+            operationTrace.clear();
         }
         operations.clear();
     }
