@@ -17,6 +17,7 @@
 package org.dasein.cloud.util;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Implements the API JMX interface to provide access to data about Dasein Cloud interaction with underlying cloud
@@ -85,6 +86,11 @@ public class API implements APIMBean {
     @Override
     public @Nonnull String[] getProviders() {
         return APITrace.listProviders();
+    }
+
+    @Override
+    public @Nullable String getStackTrace(@Nonnull String provider, @Nonnull String cloud, @Nonnull String operation) {
+        return APITrace.getStackTrace(provider, cloud, operation);
     }
 
     @Override

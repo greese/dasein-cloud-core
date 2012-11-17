@@ -22,6 +22,7 @@ import org.dasein.cloud.compute.VirtualMachineSupport;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Interface defining the mechanisms for interacting with any Dasein Cloud deployment using JMX
@@ -35,8 +36,9 @@ import javax.annotation.Nonnull;
  *     that may be realized by 0 or more API calls</li>
  * </ul>
  * <p>
- *     For all of this to work, the log4j logging level for {@link APITrace} must be set to TRACE. Otherwise,
- *     no API tracing occurs.
+ *     For all of this to work, the log4j logging level for {@link APITrace} must be set to TRACE, DEBUG, or INFO
+ *     depending on the level of information you want. Note that TRACE is very expensive, DEBUG is somewhat expensive,
+ *     and INFO is largely innocuous. Unless otherwise specified, these methods require DEBUG.
  * </p>
  * <p>Created by George Reese: 11/17/12 9:55 AM</p>
  * @author George Reese
@@ -45,7 +47,8 @@ import javax.annotation.Nonnull;
  */
 public interface APIMBean {
     /**
-     * Lists all accounts in the specified cloud that have API calls associated with them.
+     * Lists all accounts in the specified cloud that have API calls associated with them. This method works when
+     * log4j is set to INFO.
      * @param provider the provider for the cloud
      * @param cloud the name of the cloud
      * @return a list of accounts in the target cloud for which at least one API call has been made
@@ -53,7 +56,8 @@ public interface APIMBean {
     public @Nonnull String[] getAccounts(@Nonnull String provider, @Nonnull String cloud);
 
     /**
-     * Lists all API calls that have had at least one call made against them.
+     * Lists all API calls that have had at least one call made against them. This method works when log4j is set to
+     * INFO.
      * @param provider the provider of the cloud
      * @param cloud the name of the cloud
      * @return a list of API calls with at least one call made to it
@@ -61,7 +65,8 @@ public interface APIMBean {
     public @Nonnull String[] getApis(@Nonnull String provider, @Nonnull String cloud);
 
     /**
-     * Provides the total number of API calls that have been made on behalf of the specified account.
+     * Provides the total number of API calls that have been made on behalf of the specified account. This method is
+     * available with log4j set to INFO.
      * @param provider the provider of the cloud
      * @param cloud the name of the cloud
      * @param account the account number of the account to count
@@ -70,7 +75,7 @@ public interface APIMBean {
     public @Nonnegative long getCallCountByAccount(@Nonnull String provider, @Nonnull String cloud, @Nonnull String account);
 
     /**
-     * The total number of calls from the specified account to the target API.
+     * The total number of calls from the specified account to the target API. This method works when log4j is set to INFO.
      * @param provider the provider of the cloud
      * @param cloud the name of the cloud
      * @param account the account number under which the target API call has been made
@@ -92,7 +97,8 @@ public interface APIMBean {
     public @Nonnegative long getCallCountByAccountOperation(@Nonnull String provider, @Nonnull String cloud, @Nonnull String account, @Nonnull String operation);
 
     /**
-     * The total number of calls made against a specific API across all accounts in a cloud.
+     * The total number of calls made against a specific API across all accounts in a cloud. This method works when
+     * log4j is set to INFO.
      * @param provider the cloud provider
      * @param cloud the name of the cloud
      * @param api the name of the API call to be counted
@@ -110,7 +116,7 @@ public interface APIMBean {
     public @Nonnegative long getCallCountByOperation(@Nonnull String provider, @Nonnull String cloud, @Nonnull String operation);
 
     /**
-     * A list of clouds associated with a specific provider.
+     * A list of clouds associated with a specific provider. This method works when log4j is set to INFO.
      * @param provider the name of the provider whose clouds you are listing
      * @return the list of clouds associated with the provider
      */
@@ -144,19 +150,31 @@ public interface APIMBean {
     public @Nonnull String[] getOperations(@Nonnull String provider, @Nonnull String cloud);
 
     /**
-     * A list of all providers that have had calls made against them.
+     * A list of all providers that have had calls made against them. This method works when log4j is set to INFO.
      * @return the list of providers with at least one call made against them
      */
     public @Nonnull String[] getProviders();
 
     /**
-     * Sends a report via log4j to the log class associated with {@link APITrace}.
+     * Provides a full API stack trace for the last invocation of the specified operation along with all child operations
+     * it triggered as a JSON object. Not the same thing as a Java stack trace. This method provides useful data
+     * only when the log4j level is set to TRACE. WARNING: Setting to TRACE is very expensive.
+     * @param provider the cloud provider
+     * @param cloud the name of the cloud
+     * @param operation the name of the operation for which a stack trace is being fetched
+     * @return JSON outlining the stack trace associated with the specified operation
+     */
+    public @Nullable String getStackTrace(@Nonnull String provider, @Nonnull String cloud, @Nonnull String operation);
+
+    /**
+     * Sends a report via log4j to the log class associated with {@link APITrace}. This method works when log4j is
+     * set to INFO.
      * @param prefix a prefix to prepend to report entries
      */
     public void report(@Nonnull String prefix);
 
     /**
-     * Resets all counters to zero.
+     * Resets all counters to zero. This method works when log4j is set to INFO.
      */
     public void reset();
 }

@@ -19,8 +19,10 @@ package org.dasein.cloud.util;
 import org.apache.log4j.Logger;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.ProviderContext;
+import org.json.JSONObject;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
 import java.lang.management.ManagementFactory;
@@ -32,7 +34,8 @@ import java.util.TreeSet;
 /**
  * A tool for tracing the load your Dasein Cloud usage is placing on a cloud provider. This class is used by
  * {@link API} to provide JMX integration. In order for any API tracing to be functional, you must set the
- * log level for org.dasein.cloud.util.APITrace to TRACE. To turn it off, set the level to anything else.
+ * log level for org.dasein.cloud.util.APITrace to TRACE, DEBUG, or INFO depending on the information you are seeking.
+ * To turn it off, set the level to WARN or higher.
  * <p>Created by George Reese: 11/16/12 7:20 PM</p>
  * @author George Reese
  * @version 2013.01 initial version (Issue #1)
@@ -50,15 +53,18 @@ public class APITrace {
         public int calls = 0;
         public CloudOperation currentChild;
         public ArrayList<CloudOperation> priorChildren;
+        public ArrayList<String> apiCalls;
 
         public CloudOperation(@Nonnull String name) { this.name = name; }
     }
 
-    static private final HashMap<String,Long>    apiCount       = new HashMap<String, Long>();
-    static private final HashMap<String,Long>    operationApis  = new HashMap<String, Long>();
-    static private final HashMap<String,Long>    operationCount = new HashMap<String, Long>();
+    static private final HashMap<String,Long>            apiCount       = new HashMap<String, Long>();
+    static private final HashMap<String,Long>            operationApis  = new HashMap<String, Long>();
+    static private final HashMap<String,Long>            operationCount = new HashMap<String, Long>();
+    static private final HashMap<String,CloudOperation>  operationTrace = new HashMap<String, CloudOperation>();
 
     static private HashMap<Long,CloudOperation> operations = new HashMap<Long, CloudOperation>();
+
 
     static {
         try {
@@ -75,7 +81,7 @@ public class APITrace {
     }
 
     static public void begin(@Nonnull CloudProvider provider, @Nonnull String operationName) {
-        if( logger.isTraceEnabled() ) {
+        if( logger.isDebugEnabled() ) {
             try {
                 ProviderContext ctx = provider.getContext();
                 String accountNumber = (ctx == null ? "---" : ctx.getAccountNumber());
@@ -121,7 +127,7 @@ public class APITrace {
     }
 
     static public void end() {
-        if( logger.isTraceEnabled() ) {
+        if( logger.isDebugEnabled() ) {
             try {
                 long thread = Thread.currentThread().getId();
                 CloudOperation current = operations.get(thread);
@@ -316,6 +322,58 @@ public class APITrace {
         return count;
     }
 
+    static public @Nullable String getStackTrace(@Nonnull String providerName, @Nonnull String cloudName, @Nonnull String operationName) {
+        CloudOperation operation = null;
+
+        synchronized( operationTrace ) {
+            for( Map.Entry<String,CloudOperation> entry : operationTrace.entrySet() ) {
+                if( entry.getKey().startsWith(providerName + DELIMITER + cloudName + DELIMITER) && entry.getKey().endsWith(DELIMITER + operationName) ) {
+                    operation = entry.getValue();
+                    break;
+                }
+            }
+        }
+        if( operation == null ) {
+            return null;
+        }
+        return (new JSONObject(toJSON(operation))).toString();
+    }
+
+    static private @Nonnull Map<String,Object> toJSON(@Nonnull CloudOperation operation) {
+        HashMap<String,Object> map = new HashMap<String, Object>();
+        String[] parts = operation.name.split(DELIMITER_REGEX);
+        String name;
+
+        if( parts.length == 4 ) {
+            name = parts[3];
+        }
+        else {
+            StringBuilder tmp = new StringBuilder();
+
+            for( int i=3; i<parts.length; i++ ) {
+                tmp.append(parts[i]);
+                if( i < parts.length-1 ) {
+                    tmp.append(DELIMITER);
+                }
+            }
+            name = tmp.toString();
+        }
+        map.put("operation", name);
+        map.put("apiCalls", operation.apiCalls == null ? new String[0] : operation.apiCalls);
+        if( operation.priorChildren != null ) {
+            ArrayList<Map<String,Object>> children = new ArrayList<Map<String, Object>>();
+
+            for( CloudOperation child : operation.priorChildren ) {
+                children.add(toJSON(child));
+            }
+            map.put("operationCalls", children);
+        }
+        else {
+            map.put("operationCalls", new String[0]);
+        }
+        return map;
+    }
+
     static public String[] listAccounts(@Nonnull String provider, @Nonnull String cloud) {
         TreeSet<String> list = new TreeSet<String>();
 
@@ -428,40 +486,60 @@ public class APITrace {
                 operationApis.put(operation.name, count);
             }
         }
+        if( logger.isTraceEnabled() ) {
+            operationTrace.put(operation.name, operation);
+        }
     }
 
     static public void report(@Nonnull String prefix) {
-        if( logger.isTraceEnabled() ) {
-            logger.trace("");
+        logger.info("");
+        if( logger.isInfoEnabled() ) {
             synchronized( apiCount ) {
                 TreeSet<String> keys = new TreeSet<String>();
 
                 keys.addAll(apiCount.keySet());
-                logger.trace(prefix + "-> API calls: ");
+                logger.debug(prefix + "-> API calls: ");
                 for( String key : keys ) {
-                    logger.trace(prefix + "->\t" + key + " = " + apiCount.get(key));
+                    logger.debug(prefix + "->\t" + key + " = " + apiCount.get(key));
                 }
             }
+        }
+        if( logger.isDebugEnabled() ) {
             synchronized( operationCount ) {
                 TreeSet<String> keys = new TreeSet<String>();
 
                 keys.addAll(operationCount.keySet());
-                logger.trace(prefix + "-> Operation calls:");
+                logger.debug(prefix + "-> Operation calls:");
                 for( String key : keys ) {
-                    logger.trace(prefix + "->\t" + key + " = " + operationCount.get(key));
+                    logger.debug(prefix + "->\t" + key + " = " + operationCount.get(key));
                 }
             }
             synchronized( operationApis ) {
                 TreeSet<String> keys = new TreeSet<String>();
 
                 keys.addAll(operationApis.keySet());
-                logger.trace(prefix + "-> API calls by operation:");
+                logger.debug(prefix + "-> API calls by operation:");
                 for( String key : keys ) {
-                    logger.trace(prefix + "->\t" + key + " = " + operationApis.get(key));
+                    logger.debug(prefix + "->\t" + key + " = " + operationApis.get(key));
                 }
             }
-            logger.trace("");
         }
+        if( logger.isTraceEnabled() ) {
+            synchronized( operationTrace ) {
+                TreeSet<String> keys = new TreeSet<String>();
+
+                keys.addAll(operationTrace.keySet());
+                logger.trace(prefix + "-> Stack trace:");
+                for( String key : keys ) {
+                    Map<String,Object> map = toJSON(operationTrace.get(key));
+
+                    logger.trace(prefix + "-> " + key);
+                    logger.trace((new JSONObject(map)).toString());
+                    logger.trace("");
+                }
+            }
+        }
+        logger.info("");
     }
 
     static public void reset() {
@@ -478,27 +556,39 @@ public class APITrace {
     }
 
     static public void trace(@Nonnull CloudProvider provider,  @Nonnull String apiCall) {
-        if( logger.isTraceEnabled() ) {
+        if( logger.isInfoEnabled() ) {
             ProviderContext ctx = provider.getContext();
             String accountNumber = (ctx == null ? "---" : ctx.getAccountNumber());
+            String callName = provider.getProviderName() + DELIMITER + provider.getCloudName() + DELIMITER + accountNumber + DELIMITER + apiCall;
 
-            apiCall = provider.getProviderName() + DELIMITER + provider.getCloudName() + DELIMITER + accountNumber + DELIMITER + apiCall;
             try {
-                long thread = Thread.currentThread().getId();
-                CloudOperation current = operations.get(thread);
+                CloudOperation current = null;
 
-                if( current != null ) {
-                    while( current.currentChild != null ) {
-                        current = current.currentChild;
+                if( logger.isDebugEnabled() ) {
+                    long thread = Thread.currentThread().getId();
+
+                    current = operations.get(thread);
+                    if( current != null ) {
+                        while( current.currentChild != null ) {
+                            current = current.currentChild;
+                        }
+                        current.calls++;
                     }
-                    current.calls++;
                 }
                 synchronized( apiCount ) {
-                    if( apiCount.containsKey(apiCall) ) {
-                        apiCount.put(apiCall, apiCount.get(apiCall) + 1);
+                    if( apiCount.containsKey(callName) ) {
+                        apiCount.put(callName, apiCount.get(callName) + 1);
                     }
                     else {
-                        apiCount.put(apiCall, 1L);
+                        apiCount.put(callName, 1L);
+                    }
+                }
+                if( logger.isTraceEnabled() ) {
+                    if( current != null ) {
+                        if( current.apiCalls == null ) {
+                            current.apiCalls = new ArrayList<String>();
+                        }
+                        current.apiCalls.add(apiCall);
                     }
                 }
             }
