@@ -23,6 +23,7 @@ package org.dasein.cloud.network;
  * A network protocol for firewall rules.
  * </p>
  * @author George Reese @ enStratus (http://www.enstratus.com)
+ * @version 2013.01 Added IPSec (Issue #15)
  */
 public enum Protocol {
     /**
@@ -36,5 +37,9 @@ public enum Protocol {
     /**
      * The ICMP protocol. 
      */
-    ICMP;
+    ICMP,
+    /**
+     * IPsec
+     */
+    IPSEC
 }

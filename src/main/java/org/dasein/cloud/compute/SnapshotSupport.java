@@ -202,6 +202,7 @@ public interface SnapshotSupport extends AccessControlledService {
      * @param affirmative true if sharing is being enabled, false if being unshared
      * @throws InternalException an error occurred within the Dasein Cloud implementation
      * @throws CloudException an error occurred with the cloud provider
+     * @deprecated Use {@link #addPublicShare(String)}, {@link #addSnapshotShare(String, String)}, {@link #removePublicShare(String)}, or {@link #removeSnapshotShare(String, String)}
      */
     public void shareSnapshot(@Nonnull String snapshotId, @Nullable String withAccountId, boolean affirmative) throws InternalException, CloudException;
 
