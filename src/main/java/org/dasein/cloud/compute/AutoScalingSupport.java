@@ -23,6 +23,7 @@ import java.util.Collection;
 import org.dasein.cloud.AccessControlledService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
+import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.identity.ServiceAction;
 
 public interface AutoScalingSupport extends AccessControlledService {
@@ -54,8 +55,12 @@ public interface AutoScalingSupport extends AccessControlledService {
 
     public boolean isSubscribed() throws CloudException, InternalException;
 
+    public Iterable<ResourceStatus> listScalingGroupStatus() throws CloudException, InternalException;
+
     public Collection<ScalingGroup> listScalingGroups() throws CloudException, InternalException;
-    
+
+    public Iterable<ResourceStatus> listLaunchConfigurationStatus() throws CloudException, InternalException;
+
     public Collection<LaunchConfiguration> listLaunchConfigurations() throws CloudException, InternalException;
 
     public void setDesiredCapacity(String scalingGroupId, int capacity) throws CloudException, InternalException;

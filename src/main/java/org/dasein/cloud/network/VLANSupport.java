@@ -29,6 +29,7 @@ import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.OperationNotSupportedException;
 import org.dasein.cloud.Requirement;
+import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.identity.ServiceAction;
 
 @SuppressWarnings("UnusedDeclaration")
@@ -285,6 +286,14 @@ public interface VLANSupport extends AccessControlledService {
     public abstract Collection<String> listFirewallIdsForNIC(@Nonnull String nicId) throws CloudException, InternalException;
 
     /**
+     * Lists the status of all network interfaces currently provisioned in the current region.
+     * @return a list of status for all provisioned network interfaces in the current region
+     * @throws CloudException an error occurred with the cloud provider fetching the network interfaces
+     * @throws InternalException a local error occurred fetching the network interfaces
+     */
+    public abstract @Nonnull Iterable<ResourceStatus> listNetworkInterfaceStatus() throws CloudException, InternalException;
+
+    /**
      * Lists all network interfaces currently provisioned in the current region.
      * @return a list of all provisioned network interfaces in the current region
      * @throws CloudException an error occurred with the cloud provider fetching the network interfaces
@@ -338,6 +347,20 @@ public interface VLANSupport extends AccessControlledService {
      */
     public abstract @Nonnull Iterable<IPVersion> listSupportedIPVersions() throws CloudException, InternalException;
 
+    /**
+     * Lists the status of all VLANs in the current region.
+     * @return the status of all VLANs in the current region
+     * @throws CloudException an error occurred communicating with the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     */
+    public abstract @Nonnull Iterable<ResourceStatus> listVlanStatus() throws CloudException, InternalException;
+
+    /**
+     * Lists all VLANs in the current region.
+     * @return all VLANs in the current region
+     * @throws CloudException an error occurred communicating with the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     */
     public abstract @Nonnull Iterable<VLAN> listVlans() throws CloudException, InternalException;
 
     /**

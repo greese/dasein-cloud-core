@@ -24,6 +24,7 @@ import java.util.Locale;
 import org.dasein.cloud.AccessControlledService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
+import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.TimeWindow;
 import org.dasein.cloud.identity.ServiceAction;
 
@@ -90,7 +91,9 @@ public interface RelationalDatabaseSupport extends AccessControlledService {
     public Iterable<String> listAccess(String toProviderDatabaseId) throws CloudException, InternalException;
     
     public Iterable<DatabaseConfiguration> listConfigurations() throws CloudException, InternalException;
-    
+
+    public @Nonnull Iterable<ResourceStatus> listDatabaseStatus() throws CloudException, InternalException;
+
     public Iterable<Database> listDatabases() throws CloudException, InternalException;
     
     public Collection<ConfigurationParameter> listParameters(String forProviderConfigurationId) throws CloudException, InternalException;

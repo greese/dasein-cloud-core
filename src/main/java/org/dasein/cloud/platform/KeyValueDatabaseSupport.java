@@ -25,6 +25,7 @@ import java.util.Set;
 import org.dasein.cloud.AccessControlledService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
+import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.identity.ServiceAction;
 
 import javax.annotation.Nonnull;
@@ -62,6 +63,8 @@ public interface KeyValueDatabaseSupport extends AccessControlledService {
     public boolean isSupportsKeyValueDatabases() throws CloudException, InternalException;
     
     public Iterable<String> list() throws CloudException, InternalException;
+
+    public @Nonnull Iterable<ResourceStatus> listKeyValueDatabaseStatus() throws CloudException, InternalException;
 
     public Map<String,Set<KeyValuePair>> query(String queryString, boolean consistentRead) throws CloudException, InternalException;
     

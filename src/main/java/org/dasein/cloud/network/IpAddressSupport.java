@@ -27,6 +27,7 @@ import org.dasein.cloud.AccessControlledService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.OperationNotSupportedException;
+import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.identity.ServiceAction;
 
 /**
@@ -238,7 +239,17 @@ public interface IpAddressSupport extends AccessControlledService {
      * @throws CloudException an error occurred with the cloud provider while requesting the IP addresses
      */
     public abstract @Nonnull Iterable<IpAddress> listIpPool(@Nonnull IPVersion version, boolean unassignedOnly) throws InternalException, CloudException;
-    
+
+    /**
+     * Lists the status of all IP addresses of the specified IP version that are allocated to the account holder's IP
+     * address pool. If the specified version is not supported, an empty list should be returned.
+     * @param version the version of the IP protocol for which you are looking for IP addresses
+     * @return the status of all matching IP addresses from the IP address pool
+     * @throws InternalException a local error occurred loading the IP addresses
+     * @throws CloudException an error occurred with the cloud provider while requesting the IP addresses
+     */
+    public abstract @Nonnull Iterable<ResourceStatus> listIpPoolStatus(@Nonnull IPVersion version) throws InternalException, CloudException;
+
     /**
      * Lists the IP forwarding rules associated with the specified public IP address. This method
      * is safe to call even when requested on a private IP address or when IP forwarding is not supported.

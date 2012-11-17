@@ -24,6 +24,7 @@ import java.util.Locale;
 import org.dasein.cloud.AccessControlledService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
+import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.identity.ServiceAction;
 
 import javax.annotation.Nonnull;
@@ -150,6 +151,14 @@ public interface FirewallSupport extends AccessControlledService {
      * @throws CloudException an error occurred with the cloud provider while performing the operation
      */
     public @Nonnull Collection<Firewall> list() throws InternalException, CloudException;
+
+    /**
+     * Lists the status for all firewalls in the current provider context.
+     * @return the status for all firewalls in the current account
+     * @throws InternalException an error occurred locally independent of any events in the cloud
+     * @throws CloudException an error occurred with the cloud provider while performing the operation
+     */
+    public @Nonnull Iterable<ResourceStatus> listFirewallStatus() throws InternalException, CloudException;
 
     /**
      * Revokes the specified ingress access from the named firewall.

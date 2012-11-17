@@ -25,6 +25,7 @@ import org.dasein.cloud.AccessControlledService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.DataFormat;
 import org.dasein.cloud.InternalException;
+import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.identity.ServiceAction;
 
 import javax.annotation.Nonnull;
@@ -52,7 +53,9 @@ public interface PushNotificationSupport extends AccessControlledService {
     public boolean isSubscribed() throws CloudException, InternalException;
     
     public Collection<Subscription> listSubscriptions(String optionalTopicId) throws CloudException, InternalException;
-    
+
+    public @Nonnull Iterable<ResourceStatus> listTopicStatus() throws CloudException, InternalException;
+
     public Collection<Topic> listTopics() throws CloudException, InternalException;
 
     public String publish(String providerTopicId, String subject, String message) throws CloudException, InternalException;

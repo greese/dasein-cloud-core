@@ -23,6 +23,7 @@ import java.util.Locale;
 import org.dasein.cloud.AccessControlledService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
+import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.identity.ServiceAction;
 
 import javax.annotation.Nonnull;
@@ -52,7 +53,17 @@ public interface LoadBalancerSupport extends AccessControlledService {
     public int getMaxPublicPorts() throws CloudException, InternalException;
     
     public String getProviderTermForLoadBalancer(Locale locale);
-    
+
+    /**
+     * Lists the current status of all load balancers associated with the account in the current region.
+     * @return the status of all load balancers associated with the account in the current region
+     * @throws CloudException an error occurred while communicating with the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     */
+    public Iterable<ResourceStatus> listLoadBalancerStatus() throws CloudException, InternalException;
+
+    public Iterable<LoadBalancer> listLoadBalancers() throws CloudException, InternalException;
+
     public Iterable<LbAlgorithm> listSupportedAlgorithms() throws CloudException, InternalException;
 
     /**
@@ -76,8 +87,6 @@ public interface LoadBalancerSupport extends AccessControlledService {
     public boolean isSubscribed() throws CloudException, InternalException;
 
     public boolean supportsMonitoring() throws CloudException, InternalException;
-    
-    public Iterable<LoadBalancer> listLoadBalancers() throws CloudException, InternalException;
     
     public void remove(String loadBalancerId) throws CloudException, InternalException;
     

@@ -28,6 +28,7 @@ import javax.annotation.Nullable;
 import org.dasein.cloud.AccessControlledService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
+import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.identity.ServiceAction;
 
 /**
@@ -35,13 +36,14 @@ import org.dasein.cloud.identity.ServiceAction;
  * to define distributions for content in different origins.
  * @author George Reese @ enStratus (http://www.enstratus.com)
  */
+@SuppressWarnings("UnusedDeclaration")
 public interface CDNSupport extends AccessControlledService {
-    @SuppressWarnings("unused") static public final ServiceAction ANY                 = new ServiceAction("CDN:ANY");
+    static public final ServiceAction ANY                 = new ServiceAction("CDN:ANY");
 
-    @SuppressWarnings("unused") static public final ServiceAction CREATE_DISTRIBUTION = new ServiceAction("CDN:CREATE_DISTRIBUTION");
-    @SuppressWarnings("unused") static public final ServiceAction GET_DISTRIBUTION    = new ServiceAction("CDN:GET_DISTRIBUTION");
-    @SuppressWarnings("unused") static public final ServiceAction LIST_DISTRIBUTION   = new ServiceAction("CDN:LIST_DISTRIBUTION");
-    @SuppressWarnings("unused") static public final ServiceAction REMOVE_DISTRIBUTION = new ServiceAction("CDN:REMOVE_DISTRIBUTION");
+    static public final ServiceAction CREATE_DISTRIBUTION = new ServiceAction("CDN:CREATE_DISTRIBUTION");
+    static public final ServiceAction GET_DISTRIBUTION    = new ServiceAction("CDN:GET_DISTRIBUTION");
+    static public final ServiceAction LIST_DISTRIBUTION   = new ServiceAction("CDN:LIST_DISTRIBUTION");
+    static public final ServiceAction REMOVE_DISTRIBUTION = new ServiceAction("CDN:REMOVE_DISTRIBUTION");
 
     /**
      * Creates a new CDN distribution using content from the specified origin storage repository.
@@ -53,7 +55,6 @@ public interface CDNSupport extends AccessControlledService {
      * @throws InternalException an error occurred inside the Dasein Cloud implementation
      * @throws CloudException an error occurred with the cloud provider
      */
-    @SuppressWarnings("unused")
     public @Nonnull String create(@Nonnull String origin, @Nonnull String name, boolean active, @CheckForNull String ... aliases) throws InternalException, CloudException;
     
     /**
@@ -62,7 +63,6 @@ public interface CDNSupport extends AccessControlledService {
      * @throws InternalException an error occurred inside the Dasein Cloud implementation
      * @throws CloudException an error occurred with the cloud provider
      */
-    @SuppressWarnings("unused")
     public void delete(@Nonnull String distributionId) throws InternalException, CloudException;
     
     /**
@@ -72,7 +72,6 @@ public interface CDNSupport extends AccessControlledService {
      * @throws InternalException an error occurred inside the Dasein Cloud implementation
      * @throws CloudException an error occurred with the cloud provider
      */
-    @SuppressWarnings("unused")
     public @Nullable Distribution getDistribution(@Nonnull String distributionId) throws InternalException, CloudException;
     
     /**
@@ -80,7 +79,6 @@ public interface CDNSupport extends AccessControlledService {
      * @param locale the language in which the term should be presented
      * @return the provider term for distributions
      */
-    @SuppressWarnings("unused")
     public @Nonnull String getProviderTermForDistribution(@Nonnull Locale locale);
     
     /**
@@ -89,7 +87,6 @@ public interface CDNSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud implementation 
      * @throws CloudException an error occurred with the cloud provider
      */
-    @SuppressWarnings("unused")
     public boolean isSubscribed() throws InternalException, CloudException;
     
     /**
@@ -98,8 +95,15 @@ public interface CDNSupport extends AccessControlledService {
      * @throws InternalException an error occurred inside the Dasein Cloud implementation
      * @throws CloudException an error occurred with the cloud provider
      */
-    @SuppressWarnings("unused")
     public @Nonnull Collection<Distribution> list() throws InternalException, CloudException;
+
+    /**
+     * Lists the status of all distributions.
+     * @return the status of all distributions
+     * @throws InternalException an error occurred inside the Dasein Cloud implementation
+     * @throws CloudException an error occurred with the cloud provider
+     */
+    public @Nonnull Iterable<ResourceStatus> listDistributionStatus() throws InternalException, CloudException;
 
     /**
      * Modifies the specified distribution with the specified attributes.
@@ -110,6 +114,5 @@ public interface CDNSupport extends AccessControlledService {
      * @throws InternalException an error occurred inside the Dasein Cloud implementation
      * @throws CloudException an error occurred with the cloud provider
      */
-    @SuppressWarnings("unused")
     public void update(@Nonnull String distributionId, @Nonnull String name, boolean active, @CheckForNull String ... aliases) throws InternalException, CloudException;
 }

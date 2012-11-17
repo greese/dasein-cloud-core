@@ -27,6 +27,7 @@ import javax.annotation.Nullable;
 import org.dasein.cloud.AccessControlledService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
+import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.identity.ServiceAction;
 
 /**
@@ -34,16 +35,17 @@ import org.dasein.cloud.identity.ServiceAction;
  * operations necessary for creating managed DNS zones and manipulating the records within those zones.
  * @author George Reese (george.reese@enstratus.com)
  */
+@SuppressWarnings("UnusedDeclaration")
 public interface DNSSupport extends AccessControlledService {
-    @SuppressWarnings("unused") static public final ServiceAction ANY           = new ServiceAction("DNS:ANY");
+    static public final ServiceAction ANY           = new ServiceAction("DNS:ANY");
 
-    @SuppressWarnings("unused") static public final ServiceAction ADD_RECORD    = new ServiceAction("DNS:AddRecord");
-    @SuppressWarnings("unused") static public final ServiceAction CREATE_ZONE   = new ServiceAction("DNS:CreateZone");
-    @SuppressWarnings("unused") static public final ServiceAction GET_ZONE      = new ServiceAction("DNS:GetZone");
-    @SuppressWarnings("unused") static public final ServiceAction LIST_RECORD   = new ServiceAction("DNS:ListRecord");
-    @SuppressWarnings("unused") static public final ServiceAction LIST_ZONE     = new ServiceAction("DNS:ListZone");
-    @SuppressWarnings("unused") static public final ServiceAction REMOVE_RECORD = new ServiceAction("DNS:RemoveRecord");
-    @SuppressWarnings("unused") static public final ServiceAction REMOVE_ZONE   = new ServiceAction("DNS:RemoveZone");
+    static public final ServiceAction ADD_RECORD    = new ServiceAction("DNS:AddRecord");
+    static public final ServiceAction CREATE_ZONE   = new ServiceAction("DNS:CreateZone");
+    static public final ServiceAction GET_ZONE      = new ServiceAction("DNS:GetZone");
+    static public final ServiceAction LIST_RECORD   = new ServiceAction("DNS:ListRecord");
+    static public final ServiceAction LIST_ZONE     = new ServiceAction("DNS:ListZone");
+    static public final ServiceAction REMOVE_RECORD = new ServiceAction("DNS:RemoveRecord");
+    static public final ServiceAction REMOVE_ZONE   = new ServiceAction("DNS:RemoveZone");
 
     /**
      * Adds a new record to the target DNS zone.
@@ -56,7 +58,6 @@ public interface DNSSupport extends AccessControlledService {
      * @throws CloudException an error occurred with the cloud provider when adding the record
      * @throws InternalException an error occurred within the Dasein Cloud implementation in trying to add the record
      */
-    @SuppressWarnings("unused")
     public abstract @Nonnull DNSRecord addDnsRecord(@Nonnull String providerDnsZoneId, @Nonnull DNSRecordType recordType, @Nonnull String name, @Nonnegative int ttl, @Nonnull String ... values) throws CloudException, InternalException;
     
     /**
@@ -69,7 +70,6 @@ public interface DNSSupport extends AccessControlledService {
      * @throws CloudException an error occurred in the cloud provider attempting to add the zone
      * @throws InternalException an error occurred within the Dasein Cloud implementation attempting to add the zone
      */
-    @SuppressWarnings("unused")
     public abstract @Nonnull String createDnsZone(@Nonnull String domainName, @Nonnull String name, @Nonnull String description) throws CloudException, InternalException;
         
     /**
@@ -78,7 +78,6 @@ public interface DNSSupport extends AccessControlledService {
      * @throws CloudException an error occurred in the cloud provider while attempting to remove the records
      * @throws InternalException an error occurred in the Dasein Cloud implementation while attempting to remove the records
      */
-    @SuppressWarnings("unused")
     public abstract void deleteDnsRecords(@Nonnull DNSRecord ... dnsRecords) throws CloudException, InternalException;
     
     /**
@@ -88,7 +87,6 @@ public interface DNSSupport extends AccessControlledService {
      * @throws CloudException an error occurred in the cloud provider while attempting to remove the zone
      * @throws InternalException an error occurred in the Dasein Cloud implementation while attempting to remove the zone
      */
-    @SuppressWarnings("unused")
     public abstract void deleteDnsZone(@Nonnull String providerDnsZoneId) throws CloudException, InternalException;
     
     /**
@@ -98,7 +96,6 @@ public interface DNSSupport extends AccessControlledService {
      * @throws CloudException an error occurred in the cloud provider while retrieving the specified zone
      * @throws InternalException an error occurred in the Dasein Cloud implementation while retrieving the specified zone
      */
-    @SuppressWarnings("unused")
     public abstract @Nullable DNSZone getDnsZone(@Nonnull String providerDnsZoneId) throws CloudException, InternalException;
     
     /**
@@ -106,7 +103,6 @@ public interface DNSSupport extends AccessControlledService {
      * @param locale the locale into which the term should be translated
      * @return the provider-specific, user-friendly term for a DNS record
      */
-    @SuppressWarnings("unused")
     public abstract @Nonnull String getProviderTermForRecord(@Nonnull Locale locale);
     
     /**
@@ -114,9 +110,8 @@ public interface DNSSupport extends AccessControlledService {
      * @param locale the locale into which the term should be translated
      * @return the provider-specific, user-friendly term for a DNS zone
      */
-    @SuppressWarnings("unused")
     public abstract @Nonnull String getProviderTermForZone(@Nonnull Locale locale);
-    
+
     /**
      * Lists all DNS records attached to the zone matching the optional type and name.
      * @param providerDnsZoneId the DNS zone for which the records are to be listed
@@ -126,16 +121,22 @@ public interface DNSSupport extends AccessControlledService {
      * @throws CloudException an error occurred in the cloud provider listing DNS records
      * @throws InternalException an error occurred in Dasein Cloud implementation while retrieving the DNS records
      */
-    @SuppressWarnings("unused")
     public abstract @Nonnull Iterable<DNSRecord> listDnsRecords(@Nonnull String providerDnsZoneId, @Nullable DNSRecordType forType, @Nullable String name) throws CloudException, InternalException;
-    
+
+    /**
+     * Lists the status of all DNS zones associated with this account
+     * @return the status of all DNS zones associated with this account
+     * @throws CloudException an error occurred in the cloud provider listing zones
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while listing zones
+     */
+    public abstract @Nonnull Iterable<ResourceStatus> listDnsZoneStatus() throws CloudException, InternalException;
+
     /**
      * Lists all DNS zones associated with your account.
      * @return all DNS zones associated with your account
      * @throws CloudException an error occurred in the cloud provider listing zones
      * @throws InternalException an error occurred in the Dasein Cloud implementation while listing zones
      */
-    @SuppressWarnings("unused")
     public abstract @Nonnull Iterable<DNSZone> listDnsZones() throws CloudException, InternalException;
     
     /**
@@ -146,6 +147,5 @@ public interface DNSSupport extends AccessControlledService {
      * @throws CloudException an error occurred in the cloud provider checking the subscription state
      * @throws InternalException an error occurred in the Dasein Cloud implementation while checking the subscription state
      */
-    @SuppressWarnings("unused")
     public abstract boolean isSubscribed() throws CloudException, InternalException;
 }

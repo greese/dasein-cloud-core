@@ -22,6 +22,7 @@ import org.dasein.cloud.AccessControlledService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.Requirement;
+import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.identity.ServiceAction;
 
 import javax.annotation.Nonnull;
@@ -67,13 +68,17 @@ public interface VPNSupport extends AccessControlledService {
     public abstract Requirement getVPNDataCenterConstraint() throws CloudException, InternalException;
 
     public abstract @Nonnull Iterable<VPNConnection> listGatewayConnections(@Nonnull String toGatewayId) throws CloudException, InternalException;
-    
+
+    public abstract @Nonnull Iterable<ResourceStatus> listGatewayStatus() throws CloudException, InternalException;
+
     public abstract @Nonnull Iterable<VPNGateway> listGateways() throws CloudException, InternalException;
 
     public abstract @Nonnull Iterable<VPNGateway> listGatewaysWithBgpAsn(@Nonnull String bgpAsn) throws CloudException, InternalException;
 
     public abstract @Nonnull Iterable<VPNConnection> listVPNConnections(@Nonnull String toVpnId) throws CloudException, InternalException;
-    
+
+    public abstract @Nonnull Iterable<ResourceStatus> listVPNStatus() throws CloudException, InternalException;
+
     public abstract @Nonnull Iterable<VPN> listVPNs() throws CloudException, InternalException;
     
     public abstract @Nonnull Iterable<VPNProtocol> listSupportedVPNProtocols() throws CloudException, InternalException;
