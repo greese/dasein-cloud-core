@@ -23,7 +23,8 @@ import javax.annotation.Nullable;
 
 /**
  * <p>
- * Describes a specific firewall rule allowing access through the target firewall.
+ * Describes a specific firewall rule allowing access through the target firewall. Note that for egress rules, the "source"
+ * is actually the destination and the "destination" is the source.
  * </p>
  * @author George Reese (george.reese@imaginary.com)
  * @version 2010.08
@@ -107,6 +108,113 @@ public class FirewallRule {
         }
     }
 
+    static public @Nullable FirewallRule parseId(@Nonnull String id) {
+        String[] parts = id.split(":");
+
+        if( parts.length < 2 ) {
+            return null;
+        }
+        Permission permission = Permission.ALLOW;
+        int i = 0;
+
+        if( parts[i].equalsIgnoreCase("DENY") ) {
+            permission = Permission.DENY;
+            i++;
+        }
+        else if( parts[i].equalsIgnoreCase("ALLOW") ) {
+            i++;
+        }
+        if( parts.length < i+1 ) {
+            return null;
+        }
+
+        String providerFirewallId = parts[i++];
+
+        if( parts.length < i+1 ) {
+            return null;
+        }
+
+        String source = parts[i++];
+
+        if( parts.length < i+1 ) {
+            return null;
+        }
+
+        Direction direction;
+
+        try {
+            direction = Direction.valueOf(parts[i++].toUpperCase());
+        }
+        catch( Throwable ignore ) {
+            return null;
+        }
+        if( parts.length < i+1 ) {
+            return null;
+        }
+
+        Protocol protocol;
+
+        try {
+            protocol = Protocol.valueOf(parts[i++].toUpperCase());
+        }
+        catch( Throwable ignore ) {
+            return null;
+        }
+        if( parts.length < i+1 ) {
+            return null;
+        }
+
+        int startPort;
+
+        try {
+            startPort = Integer.parseInt(parts[i++]);
+        }
+        catch( NumberFormatException ignore ) {
+            return null;
+        }
+        if( parts.length < i+1 ) {
+            return null;
+        }
+
+        int endPort;
+
+        try {
+            endPort = Integer.parseInt(parts[i++]);
+        }
+        catch( NumberFormatException ignore ) {
+            return null;
+        }
+
+        RuleDestination destination;
+
+        if( parts.length < i+1 ) {
+            destination = RuleDestination.getGlobal();
+        }
+        else {
+            String tname = parts[i++];
+
+            if( parts.length < i+1 ) {
+                destination = RuleDestination.getGlobal();
+            }
+            else {
+                try {
+                    DestinationType t = DestinationType.valueOf(tname);
+
+                    switch( t ) {
+                        case GLOBAL: destination = RuleDestination.getGlobal(); break;
+                        case VM: destination = RuleDestination.getVirtualMachine(parts[i]); break;
+                        case VLAN: destination = RuleDestination.getVlan(parts[i]); break;
+                        case CIDR: destination = RuleDestination.getCIDR(parts[i]); break;
+                        default: return null;
+                    }
+                }
+                catch( Throwable ignore ) {
+                    destination = RuleDestination.getGlobal();
+                }
+            }
+        }
+        return FirewallRule.getInstance(null, providerFirewallId, source, direction, protocol, permission, destination, startPort, endPort);
+    }
 
     private RuleDestination destination;
     private Direction  direction;
