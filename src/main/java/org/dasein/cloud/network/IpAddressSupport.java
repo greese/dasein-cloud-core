@@ -27,6 +27,7 @@ import org.dasein.cloud.AccessControlledService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.OperationNotSupportedException;
+import org.dasein.cloud.Requirement;
 import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.identity.ServiceAction;
 
@@ -138,7 +139,17 @@ public interface IpAddressSupport extends AccessControlledService {
      * @return the cloud provider-specific term for an IP address
      */
     public @Nonnull String getProviderTermForIpAddress(@Nonnull Locale locale);
-    
+
+    /**
+     * Indicates whether you need to specify which VLAN you are tying a static IP address to when creating an
+     * IP address for use in a VLAN. REQUIRED means you must specify the VLAN, OPTIONAL means you may, and NONE
+     * means you do not specify a VLAN.
+     * @return the level of requirement for specifying a VLAN when creating a VLAN IP address
+     * @throws CloudException an error occurred processing the request in the cloud
+     * @throws InternalException an internal error occurred inside the Dasein Cloud implementation
+     */
+    public @Nonnull Requirement identifyVlanForVlanIPRequirement() throws CloudException, InternalException;
+
     /**
      * Indicates whether the underlying cloud supports the assignment of addresses of the specified
      * type.
@@ -314,13 +325,27 @@ public interface IpAddressSupport extends AccessControlledService {
     public @Nonnull String request(@Nonnull IPVersion version) throws InternalException, CloudException;
     
     /**
-     * Requests a public IP address that may be used with a VLAN.
+     * Requests a public IP address that may be used with a VLAN. This version may be used only when
+     * {@link #identifyVlanForVlanIPRequirement()} is not {@link Requirement#REQUIRED}.
      * @param version the IP version of the address to be requested
      * @return the unique ID of a newly provisioned public IP address
      * @throws InternalException an error occurred locally while attempting to provision the IP address
      * @throws CloudException an error occurred in the cloud provider while provisioning the IP address
+     * @throws OperationNotSupportedException either VLAN IPs are not supported or they must be explicitly associated with a VLAN
      */
-    public @Nonnull String requestForVLAN(IPVersion version) throws InternalException, CloudException;
+    public @Nonnull String requestForVLAN(@Nonnull IPVersion version) throws InternalException, CloudException;
+
+    /**
+     * Requests a public IP address that must be used with a specific VLAN. This version may be used only when
+     * {@link #identifyVlanForVlanIPRequirement()} is not {@link Requirement#NONE}.
+     * @param version the IP version of the address to be requested
+     * @param vlanId the unique ID of the VLAN to which the IP address will be assigned
+     * @return the unique ID of a newly provisioned public IP address
+     * @throws InternalException an error occurred locally while attempting to provision the IP address
+     * @throws CloudException an error occurred in the cloud provider while provisioning the IP address
+     * @throws OperationNotSupportedException either VLAN IPs are not supported or they cannot be explicitly associated with a VLAN
+     */
+    public @Nonnull String requestForVLAN(@Nonnull IPVersion version, @Nonnull String vlanId) throws InternalException, CloudException;
 
     /**
      * Removes the specified forwarding rule from the address with which it is associated.
