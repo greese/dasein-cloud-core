@@ -34,8 +34,13 @@ import java.io.Serializable;
 public class FirewallRule implements Serializable {
     private static final long serialVersionUID = -3830971132733183138L;
     
-    static public String getRuleId(String providerFirewallId, String cidr, Direction direction, Protocol protocol, int startPort, int endPort) {
-        return providerFirewallId + ":" + cidr + ":" + direction + ":" + protocol + ":" + startPort + ":" + endPort;
+    static public String getRuleId(String providerFirewallId, String cidr, Direction direction, Protocol protocol, Permission permission, int startPort, int endPort) {
+        if( Permission.ALLOW.equals(permission) ) {
+            return providerFirewallId + ":" + cidr + ":" + direction + ":" + protocol + ":" + startPort + ":" + endPort;
+        }
+        else {
+            return Permission.DENY + ":" + providerFirewallId + ":" + cidr + ":" + direction + ":" + protocol + ":" + startPort + ":" + endPort;
+        }
     }
     
     private String     cidr;
@@ -208,7 +213,7 @@ public class FirewallRule implements Serializable {
     @SuppressWarnings("unused")
     public @Nonnull String getProviderRuleId() {
         if( providerRuleId == null ) {
-            return FirewallRule.getRuleId(getFirewallId(), getCidr(), getDirection(), getProtocol(), getStartPort(), getEndPort());
+            return FirewallRule.getRuleId(getFirewallId(), getCidr(), getDirection(), getProtocol(), getPermission(), getStartPort(), getEndPort());
         }
         return providerRuleId;
     }
