@@ -281,4 +281,12 @@ public interface FirewallSupport extends AccessControlledService {
      * @throws InternalException a local error occurred while checking for support
      */
     public boolean supportsRules(@Nonnull Direction direction, @Nonnull Permission permission, boolean inVlan) throws CloudException, InternalException;
+
+    /**
+     * Indicates whether or the sources you specify in your rules may be other firewalls (security group behavior).
+     * @return true if the sources may be other firewalls
+     * @throws CloudException an error occurred with the cloud provider while checking for support
+     * @throws InternalException a local error occurred while checking for support
+     */
+    public boolean supportsFirewallSources() throws CloudException, InternalException;
 }
