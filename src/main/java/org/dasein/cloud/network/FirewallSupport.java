@@ -36,6 +36,8 @@ import javax.annotation.Nullable;
  * server or group of servers.
  * </p>
  * @author George Reese @ enStratus (http://www.enstratus.com)
+ * @version 2013.01 Added better permission support and firewall rule id support (Issue #14)
+ * @since unknown
  */
 public interface FirewallSupport extends AccessControlledService {
     static public final ServiceAction ANY                  = new ServiceAction("FW:ANY");
@@ -51,7 +53,7 @@ public interface FirewallSupport extends AccessControlledService {
      * Provides positive ingress authorization for the specified firewall rule. Any call to this method should
      * result in an override of any previous revocations.
      * @param firewallId the unique, cloud-specific ID for the firewall being targeted by the new rule
-     * @param cidr the source CIDR (http://en.wikipedia.org/wiki/CIDR) for the allowed traffic
+     * @param source the source CIDR (http://en.wikipedia.org/wiki/CIDR) or provider firewall ID for the CIDR or other firewall being set
      * @param protocol the protocol (tcp/udp/icmp) supported by this rule
      * @param beginPort the beginning of the port range to be allowed, inclusive
      * @param endPort the end of the port range to be allowed, inclusive
@@ -59,14 +61,14 @@ public interface FirewallSupport extends AccessControlledService {
      * @throws CloudException an error occurred with the cloud provider establishing the rule
      * @throws InternalException an error occurred locally trying to establish the rule
      */
-    public @Nonnull String authorize(@Nonnull String firewallId, @Nonnull String cidr, @Nonnull Protocol protocol, int beginPort, int endPort) throws CloudException, InternalException;
+    public @Nonnull String authorize(@Nonnull String firewallId, @Nonnull String source, @Nonnull Protocol protocol, int beginPort, int endPort) throws CloudException, InternalException;
 
     /**
      * Provides positive authorization for the specified firewall rule. Any call to this method should
      * result in an override of any previous revocations.
      * @param firewallId the unique, cloud-specific ID for the firewall being targeted by the new rule
      * @param direction the direction of the traffic governing the rule                  
-     * @param cidr the source CIDR (http://en.wikipedia.org/wiki/CIDR) for the allowed traffic
+     * @param source the source CIDR (http://en.wikipedia.org/wiki/CIDR) or provider firewall ID for the CIDR or other firewall being set
      * @param protocol the protocol (tcp/udp/icmp) supported by this rule
      * @param beginPort the beginning of the port range to be allowed, inclusive
      * @param endPort the end of the port range to be allowed, inclusive
@@ -74,7 +76,7 @@ public interface FirewallSupport extends AccessControlledService {
      * @throws CloudException an error occurred with the cloud provider establishing the rule
      * @throws InternalException an error occurred locally trying to establish the rule
      */
-    public @Nonnull String authorize(@Nonnull String firewallId, @Nonnull Direction direction, @Nonnull String cidr, @Nonnull Protocol protocol, int beginPort, int endPort) throws CloudException, InternalException;
+    public @Nonnull String authorize(@Nonnull String firewallId, @Nonnull Direction direction, @Nonnull String source, @Nonnull Protocol protocol, int beginPort, int endPort) throws CloudException, InternalException;
 
     /**
      * Provides positive authorization for the specified firewall rule. Any call to this method should
@@ -82,7 +84,7 @@ public interface FirewallSupport extends AccessControlledService {
      * @param firewallId the unique, cloud-specific ID for the firewall being targeted by the new rule
      * @param direction the direction of the traffic governing the rule
      * @param permission ALLOW or DENY
-     * @param cidr the source CIDR (http://en.wikipedia.org/wiki/CIDR) for the allowed traffic
+     * @param source the source CIDR (http://en.wikipedia.org/wiki/CIDR) or provider firewall ID for the CIDR or other firewall being set
      * @param protocol the protocol (tcp/udp/icmp) supported by this rule
      * @param beginPort the beginning of the port range to be allowed, inclusive
      * @param endPort the end of the port range to be allowed, inclusive
@@ -90,7 +92,7 @@ public interface FirewallSupport extends AccessControlledService {
      * @throws CloudException an error occurred with the cloud provider establishing the rule
      * @throws InternalException an error occurred locally trying to establish the rule
      */
-    public @Nonnull String authorize(@Nonnull String firewallId, @Nonnull Direction direction, @Nonnull Permission permission, @Nonnull String cidr, @Nonnull Protocol protocol, int beginPort, int endPort) throws CloudException, InternalException;
+    public @Nonnull String authorize(@Nonnull String firewallId, @Nonnull Direction direction, @Nonnull Permission permission, @Nonnull String source, @Nonnull Protocol protocol, int beginPort, int endPort) throws CloudException, InternalException;
 
 
     /**
@@ -187,50 +189,51 @@ public interface FirewallSupport extends AccessControlledService {
     /**
      * Revokes the specified INGRESS + ALLOW access from the named firewall.
      * @param firewallId the firewall from which the rule is being revoked
-     * @param cidr the source CIDR (http://en.wikipedia.org/wiki/CIDR) for the rule being removed
+     * @param source the source CIDR (http://en.wikipedia.org/wiki/CIDR) or provider firewall ID for the CIDR or other firewall being set
      * @param protocol the protocol (tcp/icmp/udp) of the rule being removed
      * @param beginPort the initial port of the rule being removed
      * @param endPort the end port of the rule being removed
      * @throws InternalException an error occurred locally independent of any events in the cloud
      * @throws CloudException an error occurred with the cloud provider while performing the operation
      */
-    public void revoke(@Nonnull String firewallId, @Nonnull String cidr, @Nonnull Protocol protocol, int beginPort, int endPort) throws CloudException, InternalException;
+    public void revoke(@Nonnull String firewallId, @Nonnull String source, @Nonnull Protocol protocol, int beginPort, int endPort) throws CloudException, InternalException;
 
     /**
      * Revokes the specified ALLOW access from the named firewall.
      * @param firewallId the firewall from which the rule is being revoked
      * @param direction the direction of the traffic being revoked                  
-     * @param cidr the source CIDR (http://en.wikipedia.org/wiki/CIDR) for the rule being removed
+     * @param source the source CIDR (http://en.wikipedia.org/wiki/CIDR) or provider firewall ID for the CIDR or other firewall being set
      * @param protocol the protocol (tcp/icmp/udp) of the rule being removed
      * @param beginPort the initial port of the rule being removed
      * @param endPort the end port of the rule being removed
      * @throws InternalException an error occurred locally independent of any events in the cloud
      * @throws CloudException an error occurred with the cloud provider while performing the operation
      */
-    public void revoke(@Nonnull String firewallId, @Nonnull Direction direction, @Nonnull String cidr, @Nonnull Protocol protocol, int beginPort, int endPort) throws CloudException, InternalException;
+    public void revoke(@Nonnull String firewallId, @Nonnull Direction direction, @Nonnull String source, @Nonnull Protocol protocol, int beginPort, int endPort) throws CloudException, InternalException;
 
     /**
      * Revokes the specified access from the named firewall.
      * @param firewallId the firewall from which the rule is being revoked
      * @param direction the direction of the traffic being revoked
      * @param permission ALLOW or DENY
-     * @param cidr the source CIDR (http://en.wikipedia.org/wiki/CIDR) for the rule being removed
+     * @param source the source CIDR (http://en.wikipedia.org/wiki/CIDR) or provider firewall ID for the CIDR or other firewall being set
      * @param protocol the protocol (tcp/icmp/udp) of the rule being removed
      * @param beginPort the initial port of the rule being removed
      * @param endPort the end port of the rule being removed
      * @throws InternalException an error occurred locally independent of any events in the cloud
      * @throws CloudException an error occurred with the cloud provider while performing the operation
      */
-    public void revoke(@Nonnull String firewallId, @Nonnull Direction direction, @Nonnull Permission permission, @Nonnull String cidr, @Nonnull Protocol protocol, int beginPort, int endPort) throws CloudException, InternalException;
+    public void revoke(@Nonnull String firewallId, @Nonnull Direction direction, @Nonnull Permission permission, @Nonnull String source, @Nonnull Protocol protocol, int beginPort, int endPort) throws CloudException, InternalException;
 
 
     /**
      * Indicates whether firewalls of the specified type (VLAN or flat network) support rules over the direction specified.
      * @param direction the direction of the traffic
+     * @param permission the type of permission
      * @param inVlan whether or not you are looking for support for VLAN or flat network traffic
      * @return true if the cloud supports the creation of firewall rules in the direction specfied for the type of network specified
      * @throws CloudException an error occurred with the cloud provider while checking for support
      * @throws InternalException a local error occurred while checking for support
      */
-    public boolean supportsRules(@Nonnull Direction direction, boolean inVlan) throws CloudException, InternalException;
+    public boolean supportsRules(@Nonnull Direction direction, @Nonnull Permission permission, boolean inVlan) throws CloudException, InternalException;
 }
