@@ -17,6 +17,7 @@
 package org.dasein.cloud.network;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Describes a specific destination for an IP address rule and formats it for display.
@@ -25,7 +26,11 @@ import javax.annotation.Nonnull;
  * @version 2013.01 initial verson (Issue #11)
  * @since 2013.01
  */
+@SuppressWarnings("UnusedDeclaration")
 public class RuleDestination {
+    /**
+     * @return a rule destination that reflects global routing to all addresses protected by the firewall
+     */
     static public @Nonnull RuleDestination getGlobal() {
         RuleDestination d = new RuleDestination();
 
@@ -33,14 +38,22 @@ public class RuleDestination {
         return d;
     }
 
-    static public @Nonnull RuleDestination getIPAddress(@Nonnull String address) {
+    /**
+     * @param cidr the CIDR for the sub-destination
+     * @return a rule sub-destination reflecting the IPs that match the specified CIDR
+     */
+    static public @Nonnull RuleDestination getCIDR(@Nonnull String cidr) {
         RuleDestination d = new RuleDestination();
 
-        d.destinationType = DestinationType.IP;
-        d.ipAddress = address;
+        d.destinationType = DestinationType.CIDR;
+        d.cidr = cidr;
         return d;
     }
 
+    /**
+     * @param virtualMachineId a virtual machine behind this firewall
+     * @return a sub-destination for just the specified virtual machine
+     */
     static public @Nonnull RuleDestination getVirtualMachine(@Nonnull String virtualMachineId) {
         RuleDestination d = new RuleDestination();
 
@@ -49,6 +62,10 @@ public class RuleDestination {
         return d;
     }
 
+    /**
+     * @param vlanId a VLAN behind the firewall
+     * @return a sub-destination matching only IPs within a specific VLAN behind this firewall
+     */
     static public @Nonnull RuleDestination getVlan(@Nonnull String vlanId) {
         RuleDestination d = new RuleDestination();
 
@@ -58,31 +75,44 @@ public class RuleDestination {
     }
 
     private DestinationType destinationType;
-    private String          ipAddress;
+    private String          cidr;
     private String          providerVirtualMachineId;
     private String          providerVlanId;
 
     private RuleDestination() { }
 
-    public DestinationType getDestinationType() {
+    /**
+     * @return the type of destination this represents
+     */
+    public @Nonnull DestinationType getDestinationType() {
         return destinationType;
     }
 
-    public String getIpAddress() {
-        return ipAddress;
+    /**
+     * @return the CIDR behind the firewall for this destination
+     */
+    public @Nullable String getCidr() {
+        return cidr;
     }
 
-    public String getProviderVirtualMachineId() {
+    /**
+     * @return the unique ID of a virtual machine behind the firewall for this destination
+     */
+    public @Nullable String getProviderVirtualMachineId() {
         return providerVirtualMachineId;
     }
 
-    public String getProviderVlanId() {
+    /**
+     * @return the unique ID of a VLAN behind the firewall for this destination
+     */
+    public @Nullable String getProviderVlanId() {
         return providerVlanId;
     }
 
-    public String toString() {
-        if( ipAddress != null ) {
-            return destinationType + ":" + ipAddress;
+    @Override
+    public @Nonnull String toString() {
+        if( cidr != null ) {
+            return destinationType + ":" + cidr;
         }
         else if( providerVirtualMachineId != null ) {
             return destinationType + ":" + providerVirtualMachineId;

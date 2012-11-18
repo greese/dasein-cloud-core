@@ -24,5 +24,5 @@ package org.dasein.cloud.network;
  * @since 2013.01
  */
 public enum DestinationType {
-    GLOBAL, VLAN, VM, IP
+    GLOBAL, VLAN, VM, CIDR
 }
