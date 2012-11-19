@@ -265,4 +265,8 @@ public class Volume {
     public void setIops(int iops) {
         this.iops = iops;
     }
+
+    public boolean isAttached() {
+        return (providerVirtualMachineId != null);
+    }
 }
