@@ -44,6 +44,7 @@ public class Volume {
     private String      providerVolumeId;
     private String      providerRegionId;
     private String      providerVirtualMachineId;
+    private String      providerVlanId;
     private boolean     rootVolume;
     private Storage<Gigabyte> size;
     private String      providerSnapshotId;
@@ -279,5 +280,13 @@ public class Volume {
 
     public void setFormat(@Nonnull VolumeFormat format) {
         this.format = format;
+    }
+
+    public String getProviderVlanId() {
+        return providerVlanId;
+    }
+
+    public void setProviderVlanId(String providerVlanId) {
+        this.providerVlanId = providerVlanId;
     }
 }

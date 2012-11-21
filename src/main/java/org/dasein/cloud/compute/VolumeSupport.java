@@ -72,7 +72,7 @@ public interface VolumeSupport extends AccessControlledService {
      * @throws CloudException an error occurred within the service provider creating the volume
      * @deprecated Use {@link #createVolume(VolumeCreateOptions)}
      */
-    public @Nonnull String create(@Nonnull String fromSnapshot, @Nonnegative int sizeInGb, @Nonnull String inZone) throws InternalException, CloudException;
+    public @Nonnull String create(@Nullable String fromSnapshot, @Nonnegative int sizeInGb, @Nonnull String inZone) throws InternalException, CloudException;
 
     /**
      * Creates a new volume based on the specified options for creating a disk/block storage device.
@@ -160,7 +160,7 @@ public interface VolumeSupport extends AccessControlledService {
     public boolean isVolumeSizeDeterminedByProduct() throws InternalException, CloudException;
 
     /**
-     * Lists the possible device IDs supported in this cloud for different guest operating systems.
+     * Lists the possible device IDs supported in this cloud for block devices for different guest operating systems.
      * @param platform the guest operating system
      * @return a list of device IDs that may be used in attaching the volume to a virtual machine
      * @throws InternalException an error occurred in the Dasein Cloud implementation while assembling the list

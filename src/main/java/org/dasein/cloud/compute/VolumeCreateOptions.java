@@ -41,6 +41,30 @@ public class VolumeCreateOptions {
         return new VolumeCreateOptions(volumeProductId, null, size, name, description, iops);
     }
 
+    static public VolumeCreateOptions getNetworkInstance(@Nonnull String inVlanId, @Nonnull Storage<?> size, @Nonnull String name, @Nonnull String description) {
+        VolumeCreateOptions options = new VolumeCreateOptions(null, null, size, name, description, 0);
+
+        options.vlanId = inVlanId;
+        options.format = VolumeFormat.NFS;
+        return options;
+    }
+
+    static public VolumeCreateOptions getNetworkInstance(@Nonnull String volumeProductId, @Nonnull String inVlanId, @Nonnull Storage<?> size, @Nonnull String name, @Nonnull String description) {
+        VolumeCreateOptions options = new VolumeCreateOptions(volumeProductId, null, size, name, description, 0);
+
+        options.vlanId = inVlanId;
+        options.format = VolumeFormat.NFS;
+        return options;
+    }
+
+    static public VolumeCreateOptions getNetworkInstance(@Nonnull String volumeProductId, @Nonnull String inVlanId, @Nonnull Storage<?> size, @Nonnull String name, @Nonnull String description, @Nonnegative int iops) {
+        VolumeCreateOptions options = new VolumeCreateOptions(volumeProductId, null, size, name, description, iops);
+
+        options.vlanId = inVlanId;
+        options.format = VolumeFormat.NFS;
+        return options;
+    }
+
     static public VolumeCreateOptions getInstanceForSnapshot(@Nonnull String snapshotId, @Nonnull Storage<?> size, @Nonnull String name, @Nonnull String description) {
         return new VolumeCreateOptions(null, snapshotId, size, name, description, 0);
     }
@@ -57,6 +81,7 @@ public class VolumeCreateOptions {
     private String            name;
     private String            snapshotId;
     private String            virtualMachineId;
+    private String            vlanId;
     private String            volumeProductId;
     private Storage<Gigabyte> volumeSize;
     
@@ -70,11 +95,7 @@ public class VolumeCreateOptions {
         this.name = name;
         this.description = description;
         this.iops = iops;
-    }
-
-    public @Nonnull VolumeCreateOptions asFormat(@Nonnull VolumeFormat format) {
-        this.format = format;
-        return this;
+        this.format = VolumeFormat.BLOCK;
     }
 
     public @Nullable String getDataCenterId() {
@@ -87,6 +108,10 @@ public class VolumeCreateOptions {
 
     public @Nullable String getDeviceId() {
         return deviceId;
+    }
+
+    public @Nonnull VolumeFormat getFormat() {
+        return format;
     }
 
     public @Nonnegative int getIops() {
@@ -104,7 +129,11 @@ public class VolumeCreateOptions {
     public @Nullable String getVirtualMachineId() {
         return virtualMachineId;
     }
-    
+
+    public @Nullable String getVlanId() {
+        return vlanId;
+    }
+
     public @Nullable String getVolumeProductId() {
         return volumeProductId;
     }
