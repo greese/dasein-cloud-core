@@ -52,6 +52,7 @@ public class VolumeCreateOptions {
     private String            dataCenterId;
     private String            description;
     private String            deviceId;
+    private VolumeFormat      format;
     private int               iops;
     private String            name;
     private String            snapshotId;
@@ -70,7 +71,12 @@ public class VolumeCreateOptions {
         this.description = description;
         this.iops = iops;
     }
-    
+
+    public @Nonnull VolumeCreateOptions asFormat(@Nonnull VolumeFormat format) {
+        this.format = format;
+        return this;
+    }
+
     public @Nullable String getDataCenterId() {
         return dataCenterId;
     }

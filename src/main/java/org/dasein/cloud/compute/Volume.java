@@ -21,6 +21,8 @@ package org.dasein.cloud.compute;
 import org.dasein.util.uom.storage.Gigabyte;
 import org.dasein.util.uom.storage.Storage;
 
+import javax.annotation.Nonnull;
+
 /**
  * Represents a block storage volume in the cloud.
  * @author George Reese (george.reese@imaginary.com)
@@ -33,6 +35,7 @@ public class Volume {
     private String      providerDataCenterId;
     private String      description;
     private String      deviceId;
+    private VolumeFormat format;
     private Platform    guestOperatingSystem;
     private int         iops;
     private String      mediaLink;
@@ -47,7 +50,7 @@ public class Volume {
     private VolumeType  type;
     
 	public Volume() { }
-    
+
     public boolean equals(Object ob) {
         if( ob == null ) {
             return false;
@@ -268,5 +271,13 @@ public class Volume {
 
     public boolean isAttached() {
         return (providerVirtualMachineId != null);
+    }
+
+    public @Nonnull VolumeFormat getFormat() {
+        return (format == null ? VolumeFormat.BLOCK : format);
+    }
+
+    public void setFormat(@Nonnull VolumeFormat format) {
+        this.format = format;
     }
 }

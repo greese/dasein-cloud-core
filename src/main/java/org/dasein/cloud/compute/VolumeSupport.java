@@ -169,6 +169,14 @@ public interface VolumeSupport extends AccessControlledService {
     public @Nonnull Iterable<String> listPossibleDeviceIds(@Nonnull Platform platform) throws InternalException, CloudException;
 
     /**
+     * Describes the formats supported in this cloud.
+     * @return a list of supported formats
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while assembling the list
+     * @throws CloudException an error occurred fetching a list from the cloud provider
+     */
+    public @Nonnull Iterable<String> listSupportedFormats() throws InternalException, CloudException;
+
+    /**
      * Lists the set of volume products that may be used in provisioning a block storage volume. Because not all clouds
      * support the concept of volume products (as indicated by {@link #getVolumeProductRequirement()}, this method should
      * return an empty list in such clouds.

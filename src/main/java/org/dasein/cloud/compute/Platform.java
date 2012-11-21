@@ -67,7 +67,11 @@ public enum Platform {
     /**
      * Generic Windows
      */
-    WINDOWS, 
+    WINDOWS,
+    /**
+     * SUSE
+     */
+    SUSE,
     /**
      * No clue
      */
@@ -95,6 +99,9 @@ public enum Platform {
         }
         else if( name.contains("debian") ) {
             return DEBIAN;
+        }
+        else if( name.contains("suse") ) {
+            return SUSE;
         }
         else if( name.contains("bsd") ) {
             if( name.contains("free") ) {
@@ -171,6 +178,7 @@ public enum Platform {
         case SOLARIS: return "Solaris";
         case FEDORA_CORE: return "Fedora";
         case RHEL: return "Red Hat";
+        case SUSE: return "SUSE";
         case FREE_BSD: return "FreeBSD";
         case OPEN_BSD: return "OpenBSD";
         case CENT_OS: return "CentOS";

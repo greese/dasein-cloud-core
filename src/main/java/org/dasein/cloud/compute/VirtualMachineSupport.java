@@ -59,7 +59,21 @@ public interface VirtualMachineSupport extends AccessControlledService {
     static public final ServiceAction TOGGLE_ANALYTICS  = new ServiceAction("VM:TOGGLE_ANALYTICS");
     static public final ServiceAction VIEW_ANALYTICS    = new ServiceAction("VM:VIEW_ANALYTICS");
     static public final ServiceAction VIEW_CONSOLE      = new ServiceAction("VM:VIEW_CONSOLE");
-    
+
+    /**
+     * Scales a virtual machine in accordance with the specified scaling options. Few clouds will support all possible
+     * options. Therefore a client should check with the cloud's [VMScalingCapabilities] to see what can be scaled.
+     * To support the widest variety of clouds, a client should be prepared for the fact that the returned virtual
+     * machine will actually be different from the original. However, it isn't proper vertical scaling if the new VM
+     * has a different state or if the old VM is still running. Ideally, it's just the same VM with it's new state.
+     * @param vmId the virtual machine to scale
+     * @param options the options governing how the virtual machine is scaled
+     * @return a virtual machine representing the scaled virtual machine
+     * @throws InternalException an internal error occurred processing the request
+     * @throws CloudException an error occurred in the cloud processing the request
+     */
+    public abstract VirtualMachine alterVirtualMachine(@Nonnull String vmId, @Nonnull VMScalingOptions options) throws InternalException, CloudException;
+
     /**
      * Clones an existing virtual machine into a new copy.
      * @param vmId the ID of the server to be cloned
@@ -72,8 +86,17 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws InternalException an internal error occurred processing the request
      * @throws CloudException an error occurred in the cloud processing the request
      */
-    public abstract @Nonnull VirtualMachine clone(@Nonnull String vmId, @Nonnull String intoDcId, @Nonnull String name, @Nonnull String description, boolean powerOn, @Nullable String ... firewallIds) throws InternalException, CloudException;               
-    
+    public abstract @Nonnull VirtualMachine clone(@Nonnull String vmId, @Nonnull String intoDcId, @Nonnull String name, @Nonnull String description, boolean powerOn, @Nullable String ... firewallIds) throws InternalException, CloudException;
+
+    /**
+     * Describes the ways in which this cloud supports the vertical scaling of a virtual machine. A null response
+     * means this cloud just doesn't support vertical scaling.
+     * @return a description of how this cloud supports vertical scaling
+     * @throws InternalException an internal error occurred processing the request
+     * @throws CloudException an error occurred in the cloud processing the request
+     */
+    public abstract @Nullable VMScalingCapabilities describeVerticalScalingCapabilities() throws CloudException, InternalException;
+
     /**
      * Turns extended analytics off for the target server. If the underlying cloud does not support
      * hypervisor monitoring, this method will be a NO-OP.
