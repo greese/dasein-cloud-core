@@ -125,6 +125,17 @@ public interface VirtualMachineSupport extends AccessControlledService {
     public abstract @Nonnull String getConsoleOutput(@Nonnull String vmId) throws InternalException, CloudException;
 
     /**
+     * Provides a number between 0 and 100 describing what percentage of the standard VM bill rate should be charged for
+     * virtual machines in the specified state. 0 means that the VM incurs no charges while in the specified state, 100
+     * means it incurs full charges, and a number in between indicates the percent discount that applies.
+     * @param state the VM state being checked
+     * @return the discount factor for VMs in the specified state
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException an error occurred within the cloud provider
+     */
+    public abstract @Nonnegative int getCostFactor(@Nonnull VmState state) throws InternalException, CloudException;
+
+    /**
      * Provides the maximum number of virtual machines that may be launched in this region for the current account.
      * @return the maximum number of launchable VMs or -1 for unlimited or -2 for unknown
      * @throws CloudException an error occurred fetching the limits from the cloud provider
@@ -419,14 +430,28 @@ public interface VirtualMachineSupport extends AccessControlledService {
 
     /**
      * Shuts down a virtual machine with the capacity to boot it back up at a later time. The contents of volumes
-     * associated with this virtual machine are preserved, but the memory is not.
+     * associated with this virtual machine are preserved, but the memory is not. This method should first
+     * attempt a nice shutdown, then force the shutdown.
      * @param vmId the virtual machine to be shut down
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      * @throws CloudException an error occurred within the cloud provider
      * @throws OperationNotSupportedException starting/stopping is not supported for this virtual machine
      * @see #start(String)
+     * @see #stop(String,boolean)
      */
     public abstract void stop(@Nonnull String vmId) throws InternalException, CloudException;
+
+    /**
+     * Shuts down a virtual machine with the capacity to boot it back up at a later time. The contents of volumes
+     * associated with this virtual machine are preserved, but the memory is not.
+     * @param vmId the virtual machine to be shut down
+     * @param force whether or not to force a shutdown (kill the power)
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException an error occurred within the cloud provider
+     * @throws OperationNotSupportedException starting/stopping is not supported for this virtual machine
+     * @see #start(String)
+     */
+    public abstract void stop(@Nonnull String vmId, boolean force) throws InternalException, CloudException;
 
     /**
      * Identifies whether or not this cloud supports hypervisor-based analytics around usage and performance.
@@ -502,4 +527,14 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @see #pause(String)
      */
     public abstract void unpause(@Nonnull String vmId) throws CloudException, InternalException;
+
+    /**
+     * Updates meta-data for a virtual machine with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     * @param vmId the virtual machine to update
+     * @param tags the meta-data tags to set
+     * @throws CloudException an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void updateTags(@Nonnull String vmId, @Nonnull Tag ... tags) throws CloudException, InternalException;
 }

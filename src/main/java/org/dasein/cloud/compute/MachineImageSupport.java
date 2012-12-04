@@ -31,6 +31,7 @@ import org.dasein.cloud.InternalException;
 import org.dasein.cloud.OperationNotSupportedException;
 import org.dasein.cloud.Requirement;
 import org.dasein.cloud.ResourceStatus;
+import org.dasein.cloud.Tag;
 import org.dasein.cloud.identity.ServiceAction;
 
 /**
@@ -467,5 +468,15 @@ public interface MachineImageSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein cloud implementation
      */
     public abstract boolean supportsPublicLibrary(@Nonnull ImageClass cls) throws CloudException, InternalException;
+
+    /**
+     * Updates meta-data for a image with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     * @param imageId the image to update
+     * @param tags the meta-data tags to set
+     * @throws CloudException an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void updateTags(@Nonnull String imageId, @Nonnull Tag... tags) throws CloudException, InternalException;
 
 }
