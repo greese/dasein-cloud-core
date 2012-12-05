@@ -24,7 +24,7 @@ import javax.annotation.Nullable;
 /**
  * <p>
  * Describes a specific firewall rule allowing access through the target firewall. Note that for egress rules, the "source"
- * is actually the destination and the "destination" is the source.
+ * is actually the target and the "target" is the source.
  * </p>
  * @author George Reese (george.reese@imaginary.com)
  * @version 2010.08
@@ -38,64 +38,64 @@ public class FirewallRule {
         FirewallRule rule = new FirewallRule();
 
         rule.source = source;
-        rule.destination = RuleDestination.getGlobal();
+        rule.target = RuleTarget.getGlobal();
         rule.direction = Direction.INGRESS;
         rule.endPort = port;
         rule.firewallId = providerFirewallId;
         rule.permission = Permission.ALLOW;
         rule.protocol = protocol;
         rule.startPort = port;
-        rule.providerRuleId = (firewallRuleId == null ? getRuleId(rule.firewallId, rule.source, rule.direction, rule.protocol, rule.permission, rule.destination, rule.startPort, rule.endPort): firewallRuleId);
+        rule.providerRuleId = (firewallRuleId == null ? getRuleId(rule.firewallId, rule.source, rule.direction, rule.protocol, rule.permission, rule.target, rule.startPort, rule.endPort): firewallRuleId);
         return rule;
     }
 
-    static public @Nonnull FirewallRule getInstance(@Nullable String firewallRuleId, @Nonnull String providerFirewallId, @Nonnull String source, @Nonnull Protocol protocol, @Nonnull RuleDestination destination, int port) {
+    static public @Nonnull FirewallRule getInstance(@Nullable String firewallRuleId, @Nonnull String providerFirewallId, @Nonnull String source, @Nonnull Protocol protocol, @Nonnull RuleTarget target, int port) {
         FirewallRule rule = new FirewallRule();
 
         rule.source = source;
-        rule.destination = destination;
+        rule.target = target;
         rule.direction = Direction.INGRESS;
         rule.endPort = port;
         rule.firewallId = providerFirewallId;
         rule.permission = Permission.ALLOW;
         rule.protocol = protocol;
         rule.startPort = port;
-        rule.providerRuleId = (firewallRuleId == null ? getRuleId(rule.firewallId, rule.source, rule.direction, rule.protocol, rule.permission, rule.destination, rule.startPort, rule.endPort): firewallRuleId);
+        rule.providerRuleId = (firewallRuleId == null ? getRuleId(rule.firewallId, rule.source, rule.direction, rule.protocol, rule.permission, rule.target, rule.startPort, rule.endPort): firewallRuleId);
         return rule;
     }
 
-    static public @Nonnull FirewallRule getInstance(@Nullable String firewallRuleId, @Nonnull String providerFirewallId, @Nonnull String source, @Nonnull Direction direction, @Nonnull Protocol protocol, @Nonnull Permission permission, @Nonnull RuleDestination destination, int port) {
+    static public @Nonnull FirewallRule getInstance(@Nullable String firewallRuleId, @Nonnull String providerFirewallId, @Nonnull String source, @Nonnull Direction direction, @Nonnull Protocol protocol, @Nonnull Permission permission, @Nonnull RuleTarget target, int port) {
         FirewallRule rule = new FirewallRule();
 
         rule.source = source;
-        rule.destination = destination;
+        rule.target = target;
         rule.direction = direction;
         rule.endPort = port;
         rule.firewallId = providerFirewallId;
         rule.permission = permission;
         rule.protocol = protocol;
         rule.startPort = port;
-        rule.providerRuleId = (firewallRuleId == null ? getRuleId(rule.firewallId, rule.source, rule.direction, rule.protocol, rule.permission, rule.destination, rule.startPort, rule.endPort): firewallRuleId);
+        rule.providerRuleId = (firewallRuleId == null ? getRuleId(rule.firewallId, rule.source, rule.direction, rule.protocol, rule.permission, rule.target, rule.startPort, rule.endPort): firewallRuleId);
         return rule;
     }
 
-    static public @Nonnull FirewallRule getInstance(@Nullable String firewallRuleId, @Nonnull String providerFirewallId, @Nonnull String source, @Nonnull Direction direction, @Nonnull Protocol protocol, @Nonnull Permission permission, @Nonnull RuleDestination destination, int startPort, int endPort) {
+    static public @Nonnull FirewallRule getInstance(@Nullable String firewallRuleId, @Nonnull String providerFirewallId, @Nonnull String source, @Nonnull Direction direction, @Nonnull Protocol protocol, @Nonnull Permission permission, @Nonnull RuleTarget target, int startPort, int endPort) {
         FirewallRule rule = new FirewallRule();
 
         rule.source = source;
-        rule.destination = destination;
+        rule.target = target;
         rule.direction = direction;
         rule.endPort = endPort;
         rule.firewallId = providerFirewallId;
         rule.permission = permission;
         rule.protocol = protocol;
         rule.startPort = startPort;
-        rule.providerRuleId = (firewallRuleId == null ? getRuleId(rule.firewallId, rule.source, rule.direction, rule.protocol, rule.permission, rule.destination, rule.startPort, rule.endPort): firewallRuleId);
+        rule.providerRuleId = (firewallRuleId == null ? getRuleId(rule.firewallId, rule.source, rule.direction, rule.protocol, rule.permission, rule.target, rule.startPort, rule.endPort): firewallRuleId);
         return rule;
     }
 
-    static public @Nonnull String getRuleId(@Nonnull String providerFirewallId, @Nonnull String source, @Nonnull Direction direction, @Nonnull Protocol protocol, @Nonnull Permission permission, @Nullable RuleDestination destination, int startPort, int endPort) {
-        if( destination == null ) {
+    static public @Nonnull String getRuleId(@Nonnull String providerFirewallId, @Nonnull String source, @Nonnull Direction direction, @Nonnull Protocol protocol, @Nonnull Permission permission, @Nullable RuleTarget target, int startPort, int endPort) {
+        if( target == null ) {
             if( Permission.ALLOW.equals(permission) ) {
                 return providerFirewallId + ":" + source + ":" + direction + ":" + protocol + ":" + startPort + ":" + endPort;
             }
@@ -104,7 +104,7 @@ public class FirewallRule {
             }
         }
         else {
-            return permission + ":" + providerFirewallId + ":" + source + ":" + direction + ":" + protocol + ":" + startPort + ":" + endPort + ":" + destination;
+            return permission + ":" + providerFirewallId + ":" + source + ":" + direction + ":" + protocol + ":" + startPort + ":" + endPort + ":" + target;
         }
     }
 
@@ -185,38 +185,38 @@ public class FirewallRule {
             return null;
         }
 
-        RuleDestination destination;
+        RuleTarget target;
 
         if( parts.length < i+1 ) {
-            destination = RuleDestination.getGlobal();
+            target = RuleTarget.getGlobal();
         }
         else {
             String tname = parts[i++];
 
             if( parts.length < i+1 ) {
-                destination = RuleDestination.getGlobal();
+                target = RuleTarget.getGlobal();
             }
             else {
                 try {
-                    DestinationType t = DestinationType.valueOf(tname);
+                    RuleTargetType t = RuleTargetType.valueOf(tname);
 
                     switch( t ) {
-                        case GLOBAL: destination = RuleDestination.getGlobal(); break;
-                        case VM: destination = RuleDestination.getVirtualMachine(parts[i]); break;
-                        case VLAN: destination = RuleDestination.getVlan(parts[i]); break;
-                        case CIDR: destination = RuleDestination.getCIDR(parts[i]); break;
+                        case GLOBAL: target = RuleTarget.getGlobal(); break;
+                        case VM: target = RuleTarget.getVirtualMachine(parts[i]); break;
+                        case VLAN: target = RuleTarget.getVlan(parts[i]); break;
+                        case CIDR: target = RuleTarget.getCIDR(parts[i]); break;
                         default: return null;
                     }
                 }
                 catch( Throwable ignore ) {
-                    destination = RuleDestination.getGlobal();
+                    target = RuleTarget.getGlobal();
                 }
             }
         }
-        return FirewallRule.getInstance(null, providerFirewallId, source, direction, protocol, permission, destination, startPort, endPort);
+        return FirewallRule.getInstance(null, providerFirewallId, source, direction, protocol, permission, target, startPort, endPort);
     }
 
-    private RuleDestination destination;
+    private RuleTarget target;
     private Direction  direction;
     private int        endPort;
     private String     firewallId;
@@ -256,13 +256,14 @@ public class FirewallRule {
     }
 
     /**
-     * @return the sub-destination behind this firewall that limits routing of traffic.
+     * @return the sub-target behind this firewall that limits routing of traffic.
      */
-    public @Nonnull RuleDestination getDestination() {
-        if( destination == null ) {
-            return RuleDestination.getGlobal();
+    public @Nonnull
+    RuleTarget getTarget() {
+        if( target == null ) {
+            return RuleTarget.getGlobal();
         }
-        return destination;
+        return target;
     }
 
     /**
@@ -323,7 +324,7 @@ public class FirewallRule {
 
     @Override
     public @Nonnull String toString() {
-        return (direction + "/" + permission + ": " + source + "->" + protocol + ":" + destination + " [" + startPort + "-" + endPort + "]");
+        return (direction + "/" + permission + ": " + source + "->" + protocol + ":" + target + " [" + startPort + "-" + endPort + "]");
     }
 
 }

@@ -106,15 +106,15 @@ public interface FirewallSupport extends AccessControlledService {
      * @param permission ALLOW or DENY
      * @param source the source CIDR (http://en.wikipedia.org/wiki/CIDR) or provider firewall ID for the CIDR or other firewall being set
      * @param protocol the protocol (tcp/udp/icmp) supported by this rule
-     * @param destination the destination to specify for this rule
+     * @param target the target to specify for this rule
      * @param beginPort the beginning of the port range to be allowed, inclusive
      * @param endPort the end of the port range to be allowed, inclusive
      * @return the provider ID of the new rule
      * @throws CloudException an error occurred with the cloud provider establishing the rule
      * @throws InternalException an error occurred locally trying to establish the rule
-     * @throws OperationNotSupportedException the specified direction, destination, or permission are not supported
+     * @throws OperationNotSupportedException the specified direction, target, or permission are not supported
      */
-    public @Nonnull String authorize(@Nonnull String firewallId, @Nonnull Direction direction, @Nonnull Permission permission, @Nonnull String source, @Nonnull Protocol protocol, @Nonnull RuleDestination destination, int beginPort, int endPort) throws CloudException, InternalException;
+    public @Nonnull String authorize(@Nonnull String firewallId, @Nonnull Direction direction, @Nonnull Permission permission, @Nonnull String source, @Nonnull Protocol protocol, @Nonnull RuleTarget target, int beginPort, int endPort) throws CloudException, InternalException;
 
     /**
      * Creates a new firewall with the specified name.
@@ -207,7 +207,7 @@ public interface FirewallSupport extends AccessControlledService {
      * @throws InternalException an error occurred locally independent of any events in the cloud
      * @throws CloudException an error occurred with the cloud provider while performing the operation
      */
-    public @Nonnull Iterable<DestinationType> listSupportedDestinationTypes(boolean inVlan) throws InternalException, CloudException;
+    public @Nonnull Iterable<RuleTargetType> listSupportedDestinationTypes(boolean inVlan) throws InternalException, CloudException;
 
     /**
      * Revokes the uniquely identified firewall rule.
@@ -263,13 +263,13 @@ public interface FirewallSupport extends AccessControlledService {
      * @param permission ALLOW or DENY
      * @param source the source CIDR (http://en.wikipedia.org/wiki/CIDR) or provider firewall ID for the CIDR or other firewall being set
      * @param protocol the protocol (tcp/icmp/udp) of the rule being removed
-     * @param destination the target for traffic matching this rule
+     * @param target the target for traffic matching this rule
      * @param beginPort the initial port of the rule being removed
      * @param endPort the end port of the rule being removed
      * @throws InternalException an error occurred locally independent of any events in the cloud
      * @throws CloudException an error occurred with the cloud provider while performing the operation
      */
-    public void revoke(@Nonnull String firewallId, @Nonnull Direction direction, @Nonnull Permission permission, @Nonnull String source, @Nonnull Protocol protocol, @Nonnull RuleDestination destination, int beginPort, int endPort) throws CloudException, InternalException;
+    public void revoke(@Nonnull String firewallId, @Nonnull Direction direction, @Nonnull Permission permission, @Nonnull String source, @Nonnull Protocol protocol, @Nonnull RuleTarget target, int beginPort, int endPort) throws CloudException, InternalException;
 
     /**
      * Indicates whether firewalls of the specified type (VLAN or flat network) support rules over the direction specified.

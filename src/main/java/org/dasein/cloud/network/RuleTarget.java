@@ -27,14 +27,14 @@ import javax.annotation.Nullable;
  * @since 2013.01
  */
 @SuppressWarnings("UnusedDeclaration")
-public class RuleDestination {
+public class RuleTarget {
     /**
      * @return a rule destination that reflects global routing to all addresses protected by the firewall
      */
-    static public @Nonnull RuleDestination getGlobal() {
-        RuleDestination d = new RuleDestination();
+    static public @Nonnull RuleTarget getGlobal() {
+        RuleTarget d = new RuleTarget();
 
-        d.destinationType = DestinationType.GLOBAL;
+        d.ruleTargetType = RuleTargetType.GLOBAL;
         return d;
     }
 
@@ -42,10 +42,10 @@ public class RuleDestination {
      * @param cidr the CIDR for the sub-destination
      * @return a rule sub-destination reflecting the IPs that match the specified CIDR
      */
-    static public @Nonnull RuleDestination getCIDR(@Nonnull String cidr) {
-        RuleDestination d = new RuleDestination();
+    static public @Nonnull RuleTarget getCIDR(@Nonnull String cidr) {
+        RuleTarget d = new RuleTarget();
 
-        d.destinationType = DestinationType.CIDR;
+        d.ruleTargetType = RuleTargetType.CIDR;
         d.cidr = cidr;
         return d;
     }
@@ -54,10 +54,11 @@ public class RuleDestination {
      * @param virtualMachineId a virtual machine behind this firewall
      * @return a sub-destination for just the specified virtual machine
      */
-    static public @Nonnull RuleDestination getVirtualMachine(@Nonnull String virtualMachineId) {
-        RuleDestination d = new RuleDestination();
+    static public @Nonnull
+    RuleTarget getVirtualMachine(@Nonnull String virtualMachineId) {
+        RuleTarget d = new RuleTarget();
 
-        d.destinationType = DestinationType.VM;
+        d.ruleTargetType = RuleTargetType.VM;
         d.providerVirtualMachineId = virtualMachineId;
         return d;
     }
@@ -66,26 +67,27 @@ public class RuleDestination {
      * @param vlanId a VLAN behind the firewall
      * @return a sub-destination matching only IPs within a specific VLAN behind this firewall
      */
-    static public @Nonnull RuleDestination getVlan(@Nonnull String vlanId) {
-        RuleDestination d = new RuleDestination();
+    static public @Nonnull  RuleTarget getVlan(@Nonnull String vlanId) {
+        RuleTarget d = new RuleTarget();
 
-        d.destinationType = DestinationType.VM;
+        d.ruleTargetType = RuleTargetType.VLAN;
         d.providerVlanId = vlanId;
         return d;
     }
 
-    private DestinationType destinationType;
+    private RuleTargetType ruleTargetType;
     private String          cidr;
     private String          providerVirtualMachineId;
     private String          providerVlanId;
 
-    private RuleDestination() { }
+    private RuleTarget() { }
 
     /**
      * @return the type of destination this represents
      */
-    public @Nonnull DestinationType getDestinationType() {
-        return destinationType;
+    public @Nonnull
+    RuleTargetType getRuleTargetType() {
+        return ruleTargetType;
     }
 
     /**
@@ -112,14 +114,14 @@ public class RuleDestination {
     @Override
     public @Nonnull String toString() {
         if( cidr != null ) {
-            return destinationType + ":" + cidr;
+            return ruleTargetType + ":" + cidr;
         }
         else if( providerVirtualMachineId != null ) {
-            return destinationType + ":" + providerVirtualMachineId;
+            return ruleTargetType + ":" + providerVirtualMachineId;
         }
         else if( providerVlanId != null ) {
-            return destinationType + ":" + providerVlanId;
+            return ruleTargetType + ":" + providerVlanId;
         }
-        return destinationType.toString();
+        return ruleTargetType.toString();
     }
 }

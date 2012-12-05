@@ -23,6 +23,6 @@ package org.dasein.cloud.network;
  * @version 2013.01 initial version (Issue #11)
  * @since 2013.01
  */
-public enum DestinationType {
+public enum RuleTargetType {
     GLOBAL, VLAN, VM, CIDR
 }
