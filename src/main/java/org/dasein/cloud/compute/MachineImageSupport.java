@@ -324,16 +324,26 @@ public interface MachineImageSupport extends AccessControlledService {
      */
     public abstract @Nonnull MachineImage registerImageBundle(@Nonnull ImageCreateOptions options) throws CloudException, InternalException;
 
-    /**
-     * Permanently removes all traces of the target image. This method should remove both the image record in the cloud
-     * and any cloud storage location in which the image resides for staging.
-     * @param providerImageId the unique ID of the image to be removed
-     * @throws CloudException an error occurred with the cloud provider
-     * @throws InternalException a local error occurred in the Dasein Cloud implementation
-     */
-    public abstract void remove(@Nonnull String providerImageId) throws CloudException, InternalException;
+  /**
+   * Permanently removes all traces of the target image. This method should remove both the image record in the cloud
+   * and any cloud storage location in which the image resides for staging.
+   * @param providerImageId the unique ID of the image to be removed
+   * @throws CloudException an error occurred with the cloud provider
+   * @throws InternalException a local error occurred in the Dasein Cloud implementation
+   */
+  public abstract void remove(@Nonnull String providerImageId) throws CloudException, InternalException;
 
-    /**
+  /**
+   * Permanently removes all traces of the target image. This method should remove both the image record in the cloud
+   * and any cloud storage location in which the image resides for staging.
+   * @param providerImageId the unique ID of the image to be removed
+   * @param checkState if the state of the machine image should be checked first
+   * @throws CloudException an error occurred with the cloud provider
+   * @throws InternalException a local error occurred in the Dasein Cloud implementation
+   */
+  public abstract void remove(@Nonnull String providerImageId, boolean checkState) throws CloudException, InternalException;
+
+  /**
      * Removes ALL specific account shares for the specified image. NOTE THAT THIS METHOD WILL NOT THROW AN EXCEPTION
      * WHEN IMAGE SHARING IS NOT SUPPORTED. IT IS A NO-OP IN THAT SCENARIO.
      * @param providerImageId the unique ID of the image to be unshared
