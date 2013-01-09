@@ -25,6 +25,7 @@ import java.util.concurrent.Callable;
 
 import org.dasein.cloud.Tag;
 import org.dasein.cloud.Taggable;
+import org.dasein.cloud.network.RawAddress;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -52,7 +53,7 @@ public class VirtualMachine implements Taggable {
     private boolean               persistent;
     private Platform              platform;
     private String                privateDnsAddress;
-    private String[]              privateIpAddresses;
+    private RawAddress[]          privateIpAddresses;
     private String                productId;
     private String                providerAssignedIpAddressId;
     private String                providerDataCenterId;
@@ -67,7 +68,7 @@ public class VirtualMachine implements Taggable {
     private String                providerKeypairId;
     private String[]              providerFirewallIds;
     private String                publicDnsAddress;
-    public String[]               publicIpAddresses;
+    private RawAddress[]          publicIpAddresses;
     private boolean               rebootable;
     private String                rootPassword;
     private String                rootUser;
@@ -278,12 +279,43 @@ public class VirtualMachine implements Taggable {
         this.privateDnsAddress = privateDnsAddress;
     }
 
-    public String[] getPrivateIpAddresses() {
-        return privateIpAddresses;
+    public @Nonnull RawAddress[] getPrivateAddresses() {
+        return (privateIpAddresses == null ? new RawAddress[0] : privateIpAddresses);
     }
 
+    /**
+     * @return a list of private IP address strings
+     * @deprecated Use {@link #getPrivateAddresses()}
+     */
+    @Deprecated
+    public String[] getPrivateIpAddresses() {
+        String[] addrs = new String[privateIpAddresses == null ? 0 : privateIpAddresses.length];
+
+        if( privateIpAddresses != null ) {
+            int i = 0;
+
+            for( RawAddress addr : privateIpAddresses ) {
+                addrs[i++] = addr.getIpAddress();
+            }
+        }
+        return addrs;
+    }
+
+    public void setPrivateAddresses(@Nonnull RawAddress ... addresses) {
+        privateIpAddresses = addresses;
+    }
+
+    /**
+     * @deprecated Use {@link #setPrivateAddresses(RawAddress...)}
+     */
+    @Deprecated
     public void setPrivateIpAddresses(String[] privateIpAddresses) {
-        this.privateIpAddresses = privateIpAddresses;
+        this.privateIpAddresses = new RawAddress[privateIpAddresses == null ? 0 : privateIpAddresses.length];
+        if( privateIpAddresses != null ) {
+            for( int i=0; i<this.privateIpAddresses.length; i++ ) {
+                this.privateIpAddresses[i] = new RawAddress(privateIpAddresses[i]);
+            }
+        }
     }
 
     public String getProviderAssignedIpAddressId() {
@@ -342,12 +374,40 @@ public class VirtualMachine implements Taggable {
         this.publicDnsAddress = publicDnsAddress;
     }
 
-    public String[] getPublicIpAddresses() {
+    public @Nonnull RawAddress[] getPublicAddresses() {
         return publicIpAddresses;
     }
 
+    /**
+     * @deprecated Use {@link #getPublicAddresses()}
+     */
+    @Deprecated
+    public String[] getPublicIpAddresses() {
+        String[] addrs = new String[publicIpAddresses == null ? 0 : publicIpAddresses.length];
+
+        if( publicIpAddresses != null ) {
+            for( int i=0; i<addrs.length; i++ ) {
+                addrs[i] = publicIpAddresses[i].getIpAddress();
+            }
+        }
+        return addrs;
+    }
+
+    public void setPublicAddresses(@Nonnull RawAddress ... addresses) {
+        publicIpAddresses = addresses;
+    }
+
+    /**
+     * @deprecated Use {@link #setPublicAddresses(RawAddress...)}
+     */
+    @Deprecated
     public void setPublicIpAddresses(String[] publicIpAddresses) {
-        this.publicIpAddresses = publicIpAddresses;
+        this.publicIpAddresses = new RawAddress[publicIpAddresses == null ? 0 : publicIpAddresses.length];
+        if( publicIpAddresses != null ) {
+            for( int i=0; i<this.publicIpAddresses.length; i++ ) {
+                this.publicIpAddresses[i] = new RawAddress(publicIpAddresses[i]);
+            }
+        }
     }
 
     public boolean isRebootable() {
