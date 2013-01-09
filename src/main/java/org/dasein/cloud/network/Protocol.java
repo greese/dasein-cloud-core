@@ -24,6 +24,7 @@ package org.dasein.cloud.network;
  * </p>
  * @author George Reese @ enStratus (http://www.enstratus.com)
  * @version 2013.01 Added IPSec (Issue #15)
+ * @version 2013.02 Added ANY (issue #31)
  */
 public enum Protocol {
     /**
@@ -41,5 +42,9 @@ public enum Protocol {
     /**
      * IPsec
      */
-    IPSEC
+    IPSEC,
+    /**
+     * Any protocol
+     */
+    ANY
 }
