@@ -42,6 +42,7 @@ import org.dasein.cloud.identity.ServiceAction;
  * @version 2012-07 Added new launch method with {@link VMLaunchOptions} as well as better meta-data
  * @version 2013.01 Added meta-data for defining kernel and ramdisk image requirements (Issue #7)
  * @version 2013.01 Added status listing (Issue #4)
+ * @version 2013.02 Deprecated old requirements meta data for shell key and password and added new ones with platform params (issue #37)
  * @since unknown
  */
 @SuppressWarnings("UnusedDeclaration")
@@ -205,12 +206,23 @@ public interface VirtualMachineSupport extends AccessControlledService {
     public abstract @Nonnull Requirement identifyImageRequirement(@Nonnull ImageClass cls) throws CloudException, InternalException;
 
     /**
+     * Indicates the degree to which specifying a user name and password at launch is required for a Unix operating system.
+     * @return the requirements level for specifying a user name and password at launch
+     * @throws CloudException an error occurred in the cloud identifying this requirement
+     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this requirement
+     * @deprecated Use {@link #identifyPasswordRequirement(Platform)}
+     */
+    @Deprecated
+    public abstract @Nonnull Requirement identifyPasswordRequirement() throws CloudException, InternalException;
+
+    /**
      * Indicates the degree to which specifying a user name and password at launch is required.
+     * @param platform the platform for which password requirements are being sought
      * @return the requirements level for specifying a user name and password at launch
      * @throws CloudException an error occurred in the cloud identifying this requirement
      * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this requirement
      */
-    public abstract @Nonnull Requirement identifyPasswordRequirement() throws CloudException, InternalException;
+    public abstract @Nonnull Requirement identifyPasswordRequirement(Platform platform) throws CloudException, InternalException;
 
     /**
      * Indicates whether or not a root volume product must be specified when launching a virtual machine.
@@ -221,12 +233,23 @@ public interface VirtualMachineSupport extends AccessControlledService {
     public abstract @Nonnull Requirement identifyRootVolumeRequirement() throws CloudException, InternalException;
 
     /**
+     * Indicates the degree to which specifying a shell key at launch is required for a Unix operating system.
+     * @return the requirements level for shell key support at launch
+     * @throws CloudException an error occurred in the cloud identifying this requirement
+     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this requirement
+     * @deprecated Use {@link #identifyShellKeyRequirement(Platform)}
+     */
+    @Deprecated
+    public abstract @Nonnull Requirement identifyShellKeyRequirement() throws CloudException, InternalException;
+
+    /**
      * Indicates the degree to which specifying a shell key at launch is required.
+     * @param platform the target platform for which you are testing
      * @return the requirements level for shell key support at launch
      * @throws CloudException an error occurred in the cloud identifying this requirement
      * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this requirement
      */
-    public abstract @Nonnull Requirement identifyShellKeyRequirement() throws CloudException, InternalException;
+    public abstract @Nonnull Requirement identifyShellKeyRequirement(Platform platform) throws CloudException, InternalException;
 
     /**
      * Indicates the degree to which static IP addresses are required when launching a VM.
