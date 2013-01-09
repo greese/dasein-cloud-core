@@ -64,6 +64,8 @@ public class VirtualMachine implements Taggable {
     private String                providerSubnetId;
     private String                providerVirtualMachineId;
     private String                providerVlanId;
+    private String                providerKeypairId;
+    private String[]              providerFirewallIds;
     private String                publicDnsAddress;
     public String[]               publicIpAddresses;
     private boolean               rebootable;
@@ -421,6 +423,22 @@ public class VirtualMachine implements Taggable {
 
     public String getProviderVlanId() {
         return providerVlanId;
+    }
+
+    public String getProviderKeypairId() {
+      return providerKeypairId;
+    }
+
+    public void setProviderKeypairId( String providerKeypairId ) {
+      this.providerKeypairId = providerKeypairId;
+    }
+
+    public String[] getProviderFirewallIds() {
+      return providerFirewallIds;
+    }
+
+    public void setProviderFirewallIds( String[] providerFirewallIds ) {
+      this.providerFirewallIds = providerFirewallIds;
     }
 
     public @Nullable String getProviderKernelImageId() {

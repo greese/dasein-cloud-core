@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  
+
 <!--
     Copyright (C) 2009-2012 enStratus Networks Inc (http://www.enstratus.com)
 
@@ -22,7 +22,7 @@
 
   <groupId>org.dasein</groupId>
   <artifactId>dasein-cloud-core</artifactId>
-  <version>2013.04-SNAPSHOT</version>
+  <version>2013.04-SNAPSHOT-clstokes</version>
   <packaging>jar</packaging>
 
   <name>dasein-cloud-core</name>
@@ -44,7 +44,7 @@
   		<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
   	</license>
   </licenses>
-  
+
   <organization>
   	<name>enStratus Networks Inc.</name>
   	<url>http://www.enstratus.com</url>
@@ -55,13 +55,13 @@
     <developerConnection>scm:git:git@github.com:greese/dasein-cloud-core.git</developerConnection>
     <url>http://github.com/greese/dasein-cloud-core</url>
   </scm>
-  
+
   <parent>
     <groupId>org.sonatype.oss</groupId>
     <artifactId>oss-parent</artifactId>
     <version>5</version>
   </parent>
-    
+
   <dependencies>
     <dependency>
         <groupId>org.dasein</groupId>
@@ -97,7 +97,7 @@
         <version>1.2.17</version>
         <scope>compile</scope>
         <optional>false</optional>
-    </dependency>  
+    </dependency>
     <dependency>
         <groupId>com.google.code.findbugs</groupId>
         <artifactId>jsr305</artifactId>
@@ -110,7 +110,7 @@
           <scope>compile</scope>
       </dependency>
   </dependencies>
-  
+
   <build>
     <plugins>
       <plugin>
@@ -121,7 +121,7 @@
           <source>1.6</source>
           <target>1.6</target>
         </configuration>
-      </plugin>  
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
 	      <artifactId>maven-javadoc-plugin</artifactId>
@@ -134,7 +134,7 @@
 	                  <goal>jar</goal>
 	              </goals>
 	          </execution>
-	      </executions>                
+	      </executions>
 	      <configuration>
 	          <encoding>utf-8</encoding>
 	          <quiet>true</quiet>
@@ -178,8 +178,8 @@
 	                      <goal>jar-no-fork</goal>
 	                  </goals>
 	              </execution>
-	          </executions> 
-		</plugin>     
+	          </executions>
+		</plugin>
 		<plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
@@ -198,10 +198,10 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>      
+      </plugin>
     </plugins>
-  </build>  
-  
+  </build>
+
     <distributionManagement>
         <repository>
             <id>sonatype-nexus-staging</id>
@@ -211,9 +211,9 @@
         <snapshotRepository>
             <id>sonatype-nexus-snapshots</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>    
+        </snapshotRepository>
     </distributionManagement>
-  
+
   <developers>
     <developer>
         <name>George Reese</name>
@@ -226,7 +226,7 @@
         </roles>
         <url>http://www.enstratus.com</url>
         <timezone>-6</timezone>
-    </developer>  
+    </developer>
     <developer>
         <name>Morgan Catlin</name>
         <id>sylistron</id>
@@ -237,7 +237,7 @@
         </roles>
         <url>http://www.valtira.com</url>
         <timezone>-6</timezone>
-    </developer>    
+    </developer>
     <developer>
         <name>Adrian Cole</name>
         <id>ferncam1</id>
@@ -250,5 +250,5 @@
         <url>http://www.jclouds.org</url>
         <timezone>-8</timezone>
     </developer>
-  </developers>    
+  </developers>
 </project>
