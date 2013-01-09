@@ -21,15 +21,21 @@ package org.dasein.cloud.network;
 import org.dasein.cloud.Taggable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-@SuppressWarnings("UnusedDeclaration")
+/**
+ * Represents a network interfaces that controls a device's access to a network.
+ * @author George Reese
+ * @version 2013.02 Added support for multiple IP addresses (issue #38)
+ * @since unknown
+ */
 public class NetworkInterface implements Taggable {
     private NICState currentState;
     private String    description;
     private String    dnsName;
-    private String    ipAddress;
+    private RawAddress[] ipAddresses;
     private String    macAddress;
     private String    name;
     private String    providerDataCenterId;
@@ -73,12 +79,31 @@ public class NetworkInterface implements Taggable {
         this.dnsName = dnsName;
     }
 
-    public String getIpAddress() {
-        return ipAddress;
+    /**
+     * @return the first IP address as a string
+     * @deprecated Use {@link #getIpAddresses()}
+     */
+    @Deprecated
+    public @Nullable String getIpAddress() {
+        return (ipAddresses == null || ipAddresses.length < 1 ? null : ipAddresses[0].getIpAddress());
     }
 
-    public void setIpAddress(String ipAddress) {
-        this.ipAddress = ipAddress;
+    public @Nonnull RawAddress[] getIpAddresses() {
+        return (ipAddresses == null ? new RawAddress[0] : ipAddresses);
+    }
+
+    /**
+     * Sets the IP addresses to a single IP address
+     * @param ipAddress the one IP address for this NIC
+     * @deprecated Use {@link #setIpAddresses(RawAddress...)}
+     */
+    @Deprecated
+    public void setIpAddress(@Nonnull String ipAddress) {
+        ipAddresses = new RawAddress[] { new RawAddress(ipAddress) };
+    }
+
+    public void setIpAddresses(@Nonnull RawAddress ... addresses) {
+        this.ipAddresses = addresses;
     }
 
     public String getMacAddress() {
@@ -185,6 +210,7 @@ public class NetworkInterface implements Taggable {
     }
 
     public String toString() {
-        return (ipAddress + " [" + providerNetworkInterfaceId + "]");
+        //noinspection deprecation
+        return (getIpAddress() + " [" + providerNetworkInterfaceId + "]");
     }
 }
