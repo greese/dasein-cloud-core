@@ -43,6 +43,7 @@ import org.dasein.cloud.identity.ServiceAction;
  * @version 2013.01 Added support for ramdisk and kernel images (Issue #7)
  * @version 2013.01 Added synchronous bundling methods (Issue #12)
  * @version 2013.01 Added a resource lister (Issue #4)
+ * @version 2013.02 Added method to identify term for custom images (issue #34)
  * @since unknown
  */
 @SuppressWarnings("UnusedDeclaration")
@@ -156,15 +157,23 @@ public interface MachineImageSupport extends AccessControlledService {
      * @return the term used by the provider to describe a machine image
      * @deprecated Use {@link #getProviderTermForImage(Locale, ImageClass)}
      */
+    @Deprecated
     public abstract @Nonnull String getProviderTermForImage(@Nonnull Locale locale);
 
     /**
-     * Provides the cloud provider specific term for a machine image.
-     * @param locale the locale for which the term should be translated
+     * Provides the cloud provider specific term for a public image of the specified image class.
      * @param cls the image class for the desired type
-     * @return the term used by the provider to describe a machine image
+     * @return the term used by the provider to describe a public image
      */
     public abstract @Nonnull String getProviderTermForImage(@Nonnull Locale locale, @Nonnull ImageClass cls);
+
+    /**
+     * Provides the cloud provider specific term for a custom image of the specified image class.
+     * @param locale the locale for which the term should be translated
+     * @param cls the image class for the desired type
+     * @return the term used by the provider to describe a custom image
+     */
+    public abstract @Nonnull String getProviderTermForCustomImage(@Nonnull Locale locale, @Nonnull ImageClass cls);
 
     /**
      * Indicates whether or not a public image library of {@link ImageClass#MACHINE} is supported.
