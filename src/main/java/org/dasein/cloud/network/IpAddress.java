@@ -28,6 +28,7 @@ import javax.annotation.Nullable;
  * @version 2013.02 added method for fetching raw address (issue #38)
  * @version 2013.02 added providerVlanId field (issue #23)
  * @version 2013.02 added Networkable interface
+ * @version 2013.02 added reserved attribute (issue #28)
  * @since unknown
  */
 public class IpAddress implements Networkable, Comparable<IpAddress> {
@@ -39,6 +40,7 @@ public class IpAddress implements Networkable, Comparable<IpAddress> {
     private String      providerLoadBalancerId;
     private String      providerVlanId;
     private String      regionId;
+    private boolean     reserved;
     private String      serverId;
     private IPVersion   version;
     
@@ -194,5 +196,13 @@ public class IpAddress implements Networkable, Comparable<IpAddress> {
 
     public void setProviderVlanId(String providerVlanId) {
         this.providerVlanId = providerVlanId;
+    }
+
+    public boolean isReserved() {
+        return reserved;
+    }
+
+    public void setReserved(boolean reserved) {
+        this.reserved = reserved;
     }
 }
