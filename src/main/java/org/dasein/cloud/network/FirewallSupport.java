@@ -207,6 +207,7 @@ public interface FirewallSupport extends AccessControlledService {
      * @throws CloudException an error occurred with the cloud provider while performing the operation
      */
     public @Nonnull Requirement identifyPrecedenceRequirement(boolean inVlan) throws InternalException, CloudException;
+
     /**
      * Identifies whether or not the current account is subscribed to firewall services in the current region.
      * @return true if the current account is subscribed to firewall services for the current region
@@ -214,6 +215,15 @@ public interface FirewallSupport extends AccessControlledService {
      * @throws InternalException an error occurred in the Dasein Cloud implementation while determining subscription status
      */
     public boolean isSubscribed() throws CloudException, InternalException;
+
+    /**
+     * Indicates whether the highest precedence comes from low numbers. If true, 0 is the highest precedence a rule
+     * can have. If false, 0 is the lowest precedence.
+     * @return true if 0 is the highest precedence for a rule
+     * @throws InternalException an error occurred locally independent of any events in the cloud
+     * @throws CloudException an error occurred with the cloud provider while performing the operation
+     */
+    public boolean isZeroPrecedenceHighest() throws InternalException, CloudException;
 
     /**
      * Lists all firewalls in the current provider context.
