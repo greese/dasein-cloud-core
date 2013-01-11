@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
  * Represents an IP address that in some way belongs to a cloud account holder.
  * @author George Reese @ enStratus (http://www.enstratus.com)
  * @version 2013.02 added method for fetching raw address (issue #38)
+ * @version 2013.02 added providerVlanId field (issue #23)
  * @since unknown
  */
 public class IpAddress implements Comparable<IpAddress> {
@@ -35,6 +36,7 @@ public class IpAddress implements Comparable<IpAddress> {
     private String      providerNetworkInterfaceId;
     private String      providerIpAddressId;
     private String      providerLoadBalancerId;
+    private String      providerVlanId;
     private String      regionId;
     private String      serverId;
     private IPVersion   version;
@@ -183,5 +185,13 @@ public class IpAddress implements Comparable<IpAddress> {
 
     public void setVersion(IPVersion version) {
         this.version = version;
+    }
+
+    public String getProviderVlanId() {
+        return providerVlanId;
+    }
+
+    public void setProviderVlanId(String providerVlanId) {
+        this.providerVlanId = providerVlanId;
     }
 }
