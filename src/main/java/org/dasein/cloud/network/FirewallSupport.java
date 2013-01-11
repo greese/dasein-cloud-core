@@ -191,7 +191,8 @@ public interface FirewallSupport extends AccessControlledService {
     
     /**
      * Provides the affirmative rules supported by the named firewall ordered in order of precedence with the most
-     * important rule first.
+     * important rule first. <em>Implementation note: natural sorting order for {@link FirewallRule} is low to
+     * high. If this cloud has 0 as a low priority, you should reverse the natural sort!</em>
      * @param firewallId the unique ID of the firewall being queried
      * @return all rules supported by the target firewall
      * @throws InternalException an error occurred locally independent of any events in the cloud
