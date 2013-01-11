@@ -25,9 +25,11 @@ import org.dasein.cloud.AccessControlledService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.OperationNotSupportedException;
+import org.dasein.cloud.Requirement;
 import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.identity.ServiceAction;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -38,6 +40,7 @@ import javax.annotation.Nullable;
  * </p>
  * @author George Reese @ enStratus (http://www.enstratus.com)
  * @version 2013.01 Added better permission support and firewall rule id support (Issue #14)
+ * @version 2013.02 Added support for rule precedence (issue #33)
  * @since unknown
  */
 public interface FirewallSupport extends AccessControlledService {
@@ -117,6 +120,26 @@ public interface FirewallSupport extends AccessControlledService {
     public @Nonnull String authorize(@Nonnull String firewallId, @Nonnull Direction direction, @Nonnull Permission permission, @Nonnull String source, @Nonnull Protocol protocol, @Nonnull RuleTarget target, int beginPort, int endPort) throws CloudException, InternalException;
 
     /**
+     * Provides positive authorization for the specified firewall rule with the specified precedence. Any call to this method should
+     * result in an override of any previous revocations.
+     * @param firewallId the unique, cloud-specific ID for the firewall being targeted by the new rule
+     * @param direction the direction of the traffic governing the rule
+     * @param permission ALLOW or DENY
+     * @param source the source CIDR (http://en.wikipedia.org/wiki/CIDR) or provider firewall ID for the CIDR or other firewall being set
+     * @param protocol the protocol (tcp/udp/icmp) supported by this rule
+     * @param target the target to specify for this rule
+     * @param beginPort the beginning of the port range to be allowed, inclusive
+     * @param endPort the end of the port range to be allowed, inclusive
+     * @param precedence the precedence of this rule with respect to others
+     * @return the provider ID of the new rule
+     * @throws CloudException an error occurred with the cloud provider establishing the rule
+     * @throws InternalException an error occurred locally trying to establish the rule
+     * @throws OperationNotSupportedException the specified direction, target, or permission are not supported
+     */
+    public @Nonnull String authorize(@Nonnull String firewallId, @Nonnull Direction direction, @Nonnull Permission permission, @Nonnull String source, @Nonnull Protocol protocol, @Nonnull RuleTarget target, int beginPort, int endPort, @Nonnegative int precedence) throws CloudException, InternalException;
+
+
+    /**
      * Creates a new firewall with the specified name.
      * @param name the user-friendly name for the new firewall
      * @param description a description of the purpose of the firewall
@@ -167,7 +190,8 @@ public interface FirewallSupport extends AccessControlledService {
     public @Nonnull String getProviderTermForFirewall(@Nonnull Locale locale);
     
     /**
-     * Provides the affirmative rules supported by the named firewall.
+     * Provides the affirmative rules supported by the named firewall ordered in order of precedence with the most
+     * important rule first.
      * @param firewallId the unique ID of the firewall being queried
      * @return all rules supported by the target firewall
      * @throws InternalException an error occurred locally independent of any events in the cloud
@@ -175,6 +199,14 @@ public interface FirewallSupport extends AccessControlledService {
      */
     public @Nonnull Collection<FirewallRule> getRules(@Nonnull String firewallId) throws InternalException, CloudException;
 
+    /**
+     * Indicates the degree to which authorizations expect precedence of rules to be established.
+     * @param inVlan whether or not you are checking for VLAN firewalls or regular ones
+     * @return the degree to which precedence is required
+     * @throws InternalException an error occurred locally independent of any events in the cloud
+     * @throws CloudException an error occurred with the cloud provider while performing the operation
+     */
+    public @Nonnull Requirement identifyPrecedenceRequirement(boolean inVlan) throws InternalException, CloudException;
     /**
      * Identifies whether or not the current account is subscribed to firewall services in the current region.
      * @return true if the current account is subscribed to firewall services for the current region

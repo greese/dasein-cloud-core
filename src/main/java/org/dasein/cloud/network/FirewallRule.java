@@ -18,6 +18,7 @@
 
 package org.dasein.cloud.network;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -30,10 +31,11 @@ import javax.annotation.Nullable;
  * @version 2010.08
  * @version 2012.02 Added annotations
  * @version 2013.01 added full permission support and non-global destinations (Issue #14, Issue #11)
+ * @version 2013.02 added precedence
  * @since 2010.08
  */
 @SuppressWarnings("UnusedDeclaration")
-public class FirewallRule {
+public class FirewallRule implements Comparable<FirewallRule> {
     static public @Nonnull FirewallRule getInstance(@Nullable String firewallRuleId, @Nonnull String providerFirewallId, @Nonnull String source, @Nonnull Protocol protocol, int port) {
         FirewallRule rule = new FirewallRule();
 
@@ -45,6 +47,7 @@ public class FirewallRule {
         rule.permission = Permission.ALLOW;
         rule.protocol = protocol;
         rule.startPort = port;
+        rule.precedence = 0;
         rule.providerRuleId = (firewallRuleId == null ? getRuleId(rule.firewallId, rule.source, rule.direction, rule.protocol, rule.permission, rule.target, rule.startPort, rule.endPort): firewallRuleId);
         return rule;
     }
@@ -60,6 +63,7 @@ public class FirewallRule {
         rule.permission = Permission.ALLOW;
         rule.protocol = protocol;
         rule.startPort = port;
+        rule.precedence = 0;
         rule.providerRuleId = (firewallRuleId == null ? getRuleId(rule.firewallId, rule.source, rule.direction, rule.protocol, rule.permission, rule.target, rule.startPort, rule.endPort): firewallRuleId);
         return rule;
     }
@@ -75,6 +79,7 @@ public class FirewallRule {
         rule.permission = permission;
         rule.protocol = protocol;
         rule.startPort = port;
+        rule.precedence = 0;
         rule.providerRuleId = (firewallRuleId == null ? getRuleId(rule.firewallId, rule.source, rule.direction, rule.protocol, rule.permission, rule.target, rule.startPort, rule.endPort): firewallRuleId);
         return rule;
     }
@@ -89,6 +94,7 @@ public class FirewallRule {
         rule.firewallId = providerFirewallId;
         rule.permission = permission;
         rule.protocol = protocol;
+        rule.precedence = 0;
         rule.startPort = startPort;
         rule.providerRuleId = (firewallRuleId == null ? getRuleId(rule.firewallId, rule.source, rule.direction, rule.protocol, rule.permission, rule.target, rule.startPort, rule.endPort): firewallRuleId);
         return rule;
@@ -221,12 +227,30 @@ public class FirewallRule {
     private int        endPort;
     private String     firewallId;
     private Permission permission;
+    private int        precedence;
     private Protocol   protocol;
     private String     providerRuleId;
     private String     source;
     private int        startPort;
 
     private FirewallRule() { }
+
+    @Override
+    public int compareTo(FirewallRule other) {
+        if( other == null ) {
+            return -1;
+        }
+        if( other == this ) {
+            return 0;
+        }
+        if( direction.equals(other.direction) ) {
+            if( precedence == other.precedence ) {
+                return providerRuleId.compareTo(other.providerRuleId);
+            }
+            return (new Integer(precedence)).compareTo(precedence);
+        }
+        return direction.compareTo(other.direction);
+    }
 
     @Override
     public boolean equals(Object other) {
@@ -295,6 +319,13 @@ public class FirewallRule {
     }
 
     /**
+     * @return the precedence level of this firewall rule
+     */
+    public @Nonnegative int getPrecedence() {
+        return precedence;
+    }
+
+    /**
      * @return the network protocol to allow through to the target ports
      */
     public @Nonnull Protocol getProtocol() {
@@ -327,4 +358,13 @@ public class FirewallRule {
         return (direction + "/" + permission + ": " + source + "->" + protocol + ":" + target + " [" + startPort + "-" + endPort + "]");
     }
 
+    /**
+     * Indicates a precedence order for this rule
+     * @param precedence the numeric precedence
+     * @return this
+     */
+    public @Nonnull FirewallRule withPreference(@Nonnegative int precedence) {
+        this.precedence = precedence;
+        return this;
+    }
 }
