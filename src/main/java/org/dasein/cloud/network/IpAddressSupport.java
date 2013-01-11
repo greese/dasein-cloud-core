@@ -29,6 +29,8 @@ import org.dasein.cloud.InternalException;
 import org.dasein.cloud.OperationNotSupportedException;
 import org.dasein.cloud.Requirement;
 import org.dasein.cloud.ResourceStatus;
+import org.dasein.cloud.compute.VirtualMachine;
+import org.dasein.cloud.compute.VirtualMachineSupport;
 import org.dasein.cloud.identity.ServiceAction;
 
 /**
@@ -65,6 +67,7 @@ import org.dasein.cloud.identity.ServiceAction;
  * @version 2009.01
  * @version 2012.02 - Added support for service actions
  * @version 2012.07 - Began adding support for IPv6
+ * @version 2013.02 - Added isAssignablePostLaunch() (issue #35)
  */
 @SuppressWarnings("UnusedDeclaration")
 public interface IpAddressSupport extends AccessControlledService {
@@ -167,6 +170,18 @@ public interface IpAddressSupport extends AccessControlledService {
      * @throws InternalException a local error occurred determining support
      */
     public boolean isAssigned(@Nonnull IPVersion version) throws CloudException, InternalException;
+
+    /**
+     * When addresses are assignable, they may be assigned at launch, post-launch, or both.
+     * {@link VirtualMachineSupport#identifyStaticIPRequirement()} will tell you what must be done
+     * at launch time. This method indicates whether or not assignable IPs may be assigned after launch. This
+     * method should never return true when {@link #isAssigned(IPVersion)} returns false.
+     * @param version the IP version being checked
+     * @return true if IP addresses of the specified version can be assigned post launch
+     * @throws CloudException an error occurred with the cloud provider determining support
+     * @throws InternalException a local error occurred determining support
+     */
+    public boolean isAssignablePostLaunch(@Nonnull IPVersion version) throws CloudException, InternalException;
 
     /**
      * Indicates whether the underlying cloud supports the forwarding individual port traffic on 
