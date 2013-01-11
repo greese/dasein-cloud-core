@@ -18,9 +18,13 @@
 
 package org.dasein.cloud.network;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Map;
 
-@SuppressWarnings("UnusedDeclaration")
+/**
+ * @version 2013.02 Added networkType field (issue #25)
+ */
 public class VLAN {
     private String    cidr;
     private VLANState currentState;
@@ -33,6 +37,7 @@ public class VLAN {
     private String    providerOwnerId;
     private String    providerRegionId;
     private String    providerVlanId;
+    private String    networkType;
     private IPVersion[]        supportedTraffic;
     private Map<String,String> tags;
     
@@ -166,5 +171,13 @@ public class VLAN {
 
     public void setSupportedTraffic(IPVersion[] supportedTraffic) {
         this.supportedTraffic = supportedTraffic;
+    }
+
+    public @Nullable String getNetworkType() {
+        return networkType;
+    }
+
+    public void setNetworkType(@Nonnull String t) {
+        networkType = t;
     }
 }
