@@ -32,7 +32,7 @@ import java.util.Map;
  * @since 2012.07
  * @version 2012.07 initial version
  */
-public class RoutingTable implements Taggable {
+public class RoutingTable implements Networkable, Taggable {
     private String  description;
     private String  name;
     private String  providerOwnerId;

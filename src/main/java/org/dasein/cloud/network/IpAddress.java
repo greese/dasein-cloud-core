@@ -27,9 +27,10 @@ import javax.annotation.Nullable;
  * @author George Reese @ enStratus (http://www.enstratus.com)
  * @version 2013.02 added method for fetching raw address (issue #38)
  * @version 2013.02 added providerVlanId field (issue #23)
+ * @version 2013.02 added Networkable interface
  * @since unknown
  */
-public class IpAddress implements Comparable<IpAddress> {
+public class IpAddress implements Networkable, Comparable<IpAddress> {
     private String      address;
     private AddressType addressType;
     private boolean     forVlan;

@@ -32,7 +32,9 @@ import org.dasein.cloud.Requirement;
 import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.identity.ServiceAction;
 
-@SuppressWarnings("UnusedDeclaration")
+/**
+ * @version 2013.02 added listResources(String) (issue #24)
+ */
 public interface VLANSupport extends AccessControlledService {
     static public final ServiceAction ANY               = new ServiceAction("NET:ANY");
 
@@ -327,6 +329,16 @@ public interface VLANSupport extends AccessControlledService {
      * @throws InternalException a local error occurred constructing the cloud query
      */
     public abstract @Nonnull Iterable<NetworkInterface> listNetworkInterfacesInVLAN(@Nonnull String vlanId) throws CloudException, InternalException;
+
+    /**
+     * Lists all resources associated with the specified VLAN. In many clouds, this is a very expensive operation. So
+     * call this method with care.
+     * @param inVlanId the VLAN for whom you are seeking the resource list
+     * @return a list of resources associated with the specified VLAN
+     * @throws CloudException an error occurred in the cloud identifying the matching resources
+     * @throws InternalException a local error occurred constructing the cloud query
+     */
+    public @Nonnull Iterable<Networkable> listResources(@Nonnull String inVlanId) throws CloudException, InternalException;
 
     /**
      * Lists all routing tables associated with the specified VLAN. 

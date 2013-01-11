@@ -31,7 +31,7 @@ import java.io.Serializable;
  * @version 2010.08
  * @version 2012.02 - Added annotations
  */
-public class Firewall implements Serializable {
+public class Firewall implements Networkable, Serializable {
     private static final long serialVersionUID = 5863221134243831750L;
     
     private boolean active;

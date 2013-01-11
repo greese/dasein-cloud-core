@@ -21,9 +21,10 @@ package org.dasein.cloud.network;
 import java.io.Serializable;
 import java.util.Map;
 
-public class Subnet implements Serializable {
-    private static final long serialVersionUID = 3380494288221638270L;
-    
+/**
+ * @version 2013.02 added Networkable interface
+ */
+public class Subnet implements Networkable {
     private int         availableIpAddresses;
     private String      cidr;
     private SubnetState currentState;

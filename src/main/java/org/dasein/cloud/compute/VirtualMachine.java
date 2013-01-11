@@ -25,6 +25,7 @@ import java.util.concurrent.Callable;
 
 import org.dasein.cloud.Tag;
 import org.dasein.cloud.Taggable;
+import org.dasein.cloud.network.Networkable;
 import org.dasein.cloud.network.RawAddress;
 
 import javax.annotation.Nonnull;
@@ -37,8 +38,9 @@ import javax.annotation.Nullable;
  * </p>
  * @author George Reese @ enStratus (http://www.enstratus.com)
  * @version 2012-07 Altered product -> productId to minimize chattiness of any polling using Dasein Cloud
+ * @version 2013.02 added Networkable interface (issue #24)
  */
-public class VirtualMachine implements Taggable {
+public class VirtualMachine implements Networkable, Taggable {
     private Architecture          architecture;
     private boolean               clonable;
     private long                  creationTimestamp;

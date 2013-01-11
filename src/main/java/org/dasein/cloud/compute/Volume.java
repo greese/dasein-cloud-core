@@ -18,6 +18,7 @@
 
 package org.dasein.cloud.compute;
 
+import org.dasein.cloud.network.Networkable;
 import org.dasein.util.uom.storage.Gigabyte;
 import org.dasein.util.uom.storage.Storage;
 
@@ -29,7 +30,7 @@ import javax.annotation.Nonnull;
  * @since unknown
  * @version 2012-07 updated to match new volume enhancements, including UoM, type, and root volume awareness
  */
-public class Volume {
+public class Volume implements Networkable {
     private long        creationTimestamp;
 	private VolumeState currentState;
     private String      providerDataCenterId;
