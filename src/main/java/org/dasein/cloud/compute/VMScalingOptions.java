@@ -68,7 +68,7 @@ public class VMScalingOptions {
         return (volumes == null ? new VolumeCreateOptions[0] : volumes);
     }
     /**
-     * Identifies that this scaling operation will create volumes to be attached during the scale.
+     * Identifies that this scaling operation will create/modify volumes
      * @param options the list of options for creating the new volumes
      * @return this
      */
