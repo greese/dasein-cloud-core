@@ -138,7 +138,9 @@ public interface FirewallSupport extends AccessControlledService {
 
     /**
      * Provides positive authorization for the specified firewall rule with the specified precedence. Any call to this method should
-     * result in an override of any previous revocations.
+     * result in an override of any previous revocations. For this method, the source endpoint is the source for the traffic and
+     * the destination endpoint is where the traffic terminates. For INGRESS rules, the destination endpoint will thus be
+     * resources protected by this firewall and for EGRESS rules the destination endpoint is one or more external resources.
      * @param firewallId the unique, cloud-specific ID for the firewall being targeted by the new rule
      * @param direction the direction of the traffic governing the rule
      * @param permission ALLOW or DENY
