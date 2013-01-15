@@ -255,6 +255,24 @@ public interface FirewallSupport extends AccessControlledService {
     public @Nonnull Iterable<RuleTargetType> listSupportedDestinationTypes(boolean inVlan) throws InternalException, CloudException;
 
     /**
+     * Lists the supported traffic directions for rules behind this kind of firewall.
+     * @param inVlan whether or not you are interested in VLAN firewalls
+     * @return a list of supported directions
+     * @throws InternalException an error occurred locally independent of any events in the cloud
+     * @throws CloudException an error occurred with the cloud provider while performing the operation
+     */
+    public @Nonnull Iterable<Direction> listSupportedDirections(boolean inVlan) throws InternalException, CloudException;
+
+    /**
+     * Lists the types of permissions that one may authorize for a firewall rule.
+     * @param inVlan whether or not you are interested in VLAN firewalls or general ones
+     * @return a list of supported permissions
+     * @throws InternalException an error occurred locally independent of any events in the cloud
+     * @throws CloudException an error occurred with the cloud provider while performing the operation
+     */
+    public @Nonnull Iterable<Permission> listSupportedPermissions(boolean inVlan) throws InternalException, CloudException;
+
+    /**
      * Describes what kinds of source endpoints may be named. A cloud must support at least one, but may support more
      * than one.
      * @param inVlan whether or not you are testing capabilities for VLAN firewalls
