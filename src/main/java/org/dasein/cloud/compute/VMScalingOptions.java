@@ -46,8 +46,7 @@ public class VMScalingOptions {
     }
 
     private String                        providerProductId;
-    private VolumeCreateOptions[]         volumesToCreate;
-    private Storage<Gigabyte>[]           volumesToResize;
+    private VolumeCreateOptions[]         volumes;
 
     private VMScalingOptions() { }
 
@@ -59,42 +58,22 @@ public class VMScalingOptions {
     }
 
     /**
-     * @return the create options for the volumes to create an attach as part of this alteration process
+     * Provides a list of volumes to be scaled. The list may contain null entries and may be shorter or longer than
+     * the current list of volumes. If longer, it means new volumes should be added. If shorter, it means volumes beyond
+     * the end of the list should be left alone. If there's a null entry, it means the corresponding current volume
+     * should be left alone. There is no mechanism for removing volumes.
+     * @return a list of volumes to be scaled
      */
-    public @Nonnull VolumeCreateOptions[] getVolumesToCreate() {
-        return (volumesToCreate == null ? new VolumeCreateOptions[0] : volumesToCreate);
+    public @Nonnull VolumeCreateOptions[] getVolumes() {
+        return (volumes == null ? new VolumeCreateOptions[0] : volumes);
     }
-
-    /**
-     * @return the volumes to resize as part of the alteration process
-     */
-    public @Nonnull Storage<Gigabyte>[] getVolumesToResize() {
-        if( volumesToResize == null ) {
-            return (Storage<Gigabyte>[])(new Storage[0]);
-        }
-        return volumesToResize;
-    }
-
     /**
      * Identifies that this scaling operation will create volumes to be attached during the scale.
      * @param options the list of options for creating the new volumes
      * @return this
      */
-    public @Nonnull VMScalingOptions withVolumesToCreate(@Nonnull VolumeCreateOptions ... options) {
-        volumesToCreate = options;
-        return this;
-    }
-
-    /**
-     * Indicates that one or more of the volumes currently attached to the VM will be resized. The match is done by
-     * index. If a volume is not to be resized, it should have a null entry in this call. The number of volumes in
-     * this call may be less than the number of volumes attached to the VM. In that case, the extra volumes are to
-     * be unchanged during the alter VM process.
-     * @param volumes the new sizes of the volumes attached to the VM with null entries indicating no change
-     * @return this
-     */
-    public @Nonnull VMScalingOptions withVolumeToResize(@Nonnull Storage<Gigabyte> ... volumes) {
-        volumesToResize = volumes;
+    public @Nonnull VMScalingOptions withVolumes(@Nonnull VolumeCreateOptions ... options) {
+        volumes = options;
         return this;
     }
 }
