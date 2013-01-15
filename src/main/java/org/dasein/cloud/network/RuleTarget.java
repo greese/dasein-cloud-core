@@ -20,7 +20,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Describes a specific destination for an IP address rule and formats it for display.
+ * Describes a specific source or destination target for an IP address rule and formats it for display.
  * <p>Created by George Reese: 11/18/12 9:57 AM</p>
  * @author George Reese
  * @version 2013.01 initial verson (Issue #11)
@@ -29,11 +29,13 @@ import javax.annotation.Nullable;
 @SuppressWarnings("UnusedDeclaration")
 public class RuleTarget {
     /**
-     * @return a rule destination that reflects global routing to all addresses protected by the firewall
+     * @param providerFirewallId the firewall ID for the global rule
+     * @return a rule target that reflects global routing for all resources protected by the named firewall
      */
-    static public @Nonnull RuleTarget getGlobal() {
+    static public @Nonnull RuleTarget getGlobal(@Nonnull String providerFirewallId) {
         RuleTarget d = new RuleTarget();
 
+        d.providerFirewallId = providerFirewallId;
         d.ruleTargetType = RuleTargetType.GLOBAL;
         return d;
     }
@@ -75,8 +77,9 @@ public class RuleTarget {
         return d;
     }
 
-    private RuleTargetType ruleTargetType;
+    private RuleTargetType  ruleTargetType;
     private String          cidr;
+    private String          providerFirewallId;
     private String          providerVirtualMachineId;
     private String          providerVlanId;
 
@@ -95,6 +98,13 @@ public class RuleTarget {
      */
     public @Nullable String getCidr() {
         return cidr;
+    }
+
+    /**
+     * @return the unique ID of the provider firewall associated with resources for this target
+     */
+    public @Nullable String getProviderFirewallId() {
+        return providerFirewallId;
     }
 
     /**
@@ -121,6 +131,9 @@ public class RuleTarget {
         }
         else if( providerVlanId != null ) {
             return ruleTargetType + ":" + providerVlanId;
+        }
+        else if( providerFirewallId != null ) {
+            return ruleTargetType + ":" + providerFirewallId;
         }
         return ruleTargetType.toString();
     }

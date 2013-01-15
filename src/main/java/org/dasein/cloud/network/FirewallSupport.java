@@ -35,7 +35,7 @@ import javax.annotation.Nullable;
 
 /**
  * <p>
- * Operations on whatever concept the underlying cloud uses to regulate network traffic into a
+ * Operations on whatever concept the underlying cloud uses to regulate network traffic into and out of a
  * server or group of servers.
  * </p>
  * @author George Reese @ enStratus (http://www.enstratus.com)
@@ -56,7 +56,7 @@ public interface FirewallSupport extends AccessControlledService {
     static public final ServiceAction REVOKE               = new ServiceAction("FW:REVOKE");
 
     /**
-     * Provides ALLOW/INGRESS authorization to all destinations behing this firewall for the specified rule.
+     * Provides ALLOW/INGRESS authorization to all destinations behind this firewall for the specified rule.
      * Any call to this method should result in an override of any previous revocations.
      * @param firewallId the unique, cloud-specific ID for the firewall being targeted by the new rule
      * @param source the source CIDR (http://en.wikipedia.org/wiki/CIDR) or provider firewall ID for the CIDR or other firewall being set
@@ -72,6 +72,10 @@ public interface FirewallSupport extends AccessControlledService {
 
     /**
      * Provides positive authorization to all destinations behind this firewall for the specified rule.
+     * The meaning of "source" and "target" is counter-intuitive in this method for EGRESS operations. For the deprecated
+     * authorize methods, source ALWAYS means the thing outside of this firewall and target ALWAYS means the resources being
+     * protected by this firewall. Consequently, the source is the destination for EGRESS rules (but not INGRESS).
+     * To avoid confusion, avoid deprecated versions of this method.
      * Any call to this method should result in an override of any previous revocations.
      * @param firewallId the unique, cloud-specific ID for the firewall being targeted by the new rule
      * @param direction the direction of the traffic governing the rule                  
@@ -83,11 +87,16 @@ public interface FirewallSupport extends AccessControlledService {
      * @throws CloudException an error occurred with the cloud provider establishing the rule
      * @throws InternalException an error occurred locally trying to establish the rule
      * @throws OperationNotSupportedException the specified direction, ALLOW rules, or global destinations are not supported
+     * @deprecated Use {@link #authorize(String, Direction, Permission, RuleTarget, Protocol, RuleTarget, int, int, int)}
      */
     public @Nonnull String authorize(@Nonnull String firewallId, @Nonnull Direction direction, @Nonnull String source, @Nonnull Protocol protocol, int beginPort, int endPort) throws CloudException, InternalException;
 
     /**
      * Provides positive authorization for the specified firewall rule to global destinations. Any call to this method should
+     * The meaning of "source" and "target" is counter-intuitive in this method for EGRESS operations. For the deprecated
+     * authorize methods, source ALWAYS means the thing outside of this firewall and target ALWAYS means the resources being
+     * protected by this firewall. Consequently, the source is the destination for EGRESS rules (but not INGRESS).
+     * To avoid confusion, avoid deprecated versions of this method.
      * result in an override of any previous revocations.
      * @param firewallId the unique, cloud-specific ID for the firewall being targeted by the new rule
      * @param direction the direction of the traffic governing the rule
@@ -100,12 +109,17 @@ public interface FirewallSupport extends AccessControlledService {
      * @throws CloudException an error occurred with the cloud provider establishing the rule
      * @throws InternalException an error occurred locally trying to establish the rule
      * @throws OperationNotSupportedException the specified direction or permission are not supported or global destinations are not supported
+     * @deprecated Use {@link #authorize(String, Direction, Permission, RuleTarget, Protocol, RuleTarget, int, int, int)}
      */
     public @Nonnull String authorize(@Nonnull String firewallId, @Nonnull Direction direction, @Nonnull Permission permission, @Nonnull String source, @Nonnull Protocol protocol, int beginPort, int endPort) throws CloudException, InternalException;
 
     /**
      * Provides positive authorization for the specified firewall rule. Any call to this method should
      * result in an override of any previous revocations.
+     * The meaning of "source" and "target" is counter-intuitive in this method for EGRESS operations. For the deprecated
+     * authorize methods, source ALWAYS means the thing outside of this firewall and target ALWAYS means the resources being
+     * protected by this firewall. Consequently, the source is the destination for EGRESS rules (but not INGRESS).
+     * To avoid confusion, avoid deprecated versions of this method.
      * @param firewallId the unique, cloud-specific ID for the firewall being targeted by the new rule
      * @param direction the direction of the traffic governing the rule
      * @param permission ALLOW or DENY
@@ -118,6 +132,7 @@ public interface FirewallSupport extends AccessControlledService {
      * @throws CloudException an error occurred with the cloud provider establishing the rule
      * @throws InternalException an error occurred locally trying to establish the rule
      * @throws OperationNotSupportedException the specified direction, target, or permission are not supported
+     * @deprecated Use {@link #authorize(String, Direction, Permission, RuleTarget, Protocol, RuleTarget, int, int, int)}
      */
     public @Nonnull String authorize(@Nonnull String firewallId, @Nonnull Direction direction, @Nonnull Permission permission, @Nonnull String source, @Nonnull Protocol protocol, @Nonnull RuleTarget target, int beginPort, int endPort) throws CloudException, InternalException;
 
