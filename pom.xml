@@ -139,7 +139,8 @@
 	          <encoding>utf-8</encoding>
 	          <quiet>true</quiet>
 	          <links>
-	              <link>http://download.oracle.com/javase/6/docs/api/</link>
+	              <link>http://docs.oracle.com/javaee/6/api/</link>
+                  <link>http://www.dasein.org/api/dasein-utils/</link>
 	          </links>
               <stylesheetfile>dasein-javadoc.css</stylesheetfile>
 	          <footer />
