@@ -41,6 +41,7 @@ import javax.annotation.Nullable;
  * @author George Reese @ enStratus (http://www.enstratus.com)
  * @version 2013.01 Added better permission support and firewall rule id support (Issue #14)
  * @version 2013.02 Added support for rule precedence (issue #33)
+ * @version 2013.02 Added specifying both source and destination as {@link RuleTarget} objects (issue #26)
  * @since unknown
  */
 public interface FirewallSupport extends AccessControlledService {
@@ -125,9 +126,9 @@ public interface FirewallSupport extends AccessControlledService {
      * @param firewallId the unique, cloud-specific ID for the firewall being targeted by the new rule
      * @param direction the direction of the traffic governing the rule
      * @param permission ALLOW or DENY
-     * @param source the source CIDR (http://en.wikipedia.org/wiki/CIDR) or provider firewall ID for the CIDR or other firewall being set
+     * @param sourceEndpoint the source endpoint for this rule
      * @param protocol the protocol (tcp/udp/icmp) supported by this rule
-     * @param target the target to specify for this rule
+     * @param destinationEndpoint the destination endpoint to specify for this rule
      * @param beginPort the beginning of the port range to be allowed, inclusive
      * @param endPort the end of the port range to be allowed, inclusive
      * @param precedence the precedence of this rule with respect to others
@@ -136,7 +137,7 @@ public interface FirewallSupport extends AccessControlledService {
      * @throws InternalException an error occurred locally trying to establish the rule
      * @throws OperationNotSupportedException the specified direction, target, or permission are not supported
      */
-    public @Nonnull String authorize(@Nonnull String firewallId, @Nonnull Direction direction, @Nonnull Permission permission, @Nonnull String source, @Nonnull Protocol protocol, @Nonnull RuleTarget target, int beginPort, int endPort, @Nonnegative int precedence) throws CloudException, InternalException;
+    public @Nonnull String authorize(@Nonnull String firewallId, @Nonnull Direction direction, @Nonnull Permission permission, @Nonnull RuleTarget sourceEndpoint, @Nonnull Protocol protocol, @Nonnull RuleTarget destinationEndpoint, int beginPort, int endPort, @Nonnegative int precedence) throws CloudException, InternalException;
 
 
     /**
