@@ -42,6 +42,7 @@ import javax.annotation.Nullable;
  * @version 2013.01 Added better permission support and firewall rule id support (Issue #14)
  * @version 2013.02 Added support for rule precedence (issue #33)
  * @version 2013.02 Added specifying both source and destination as {@link RuleTarget} objects (issue #26)
+ * @version 2013.02 Added meta-data for source endpoint types (issue #27)
  * @since unknown
  */
 public interface FirewallSupport extends AccessControlledService {
@@ -252,6 +253,16 @@ public interface FirewallSupport extends AccessControlledService {
      * @throws CloudException an error occurred with the cloud provider while performing the operation
      */
     public @Nonnull Iterable<RuleTargetType> listSupportedDestinationTypes(boolean inVlan) throws InternalException, CloudException;
+
+    /**
+     * Describes what kinds of source endpoints may be named. A cloud must support at least one, but may support more
+     * than one.
+     * @param inVlan whether or not you are testing capabilities for VLAN firewalls
+     * @return a list of supported source endpoints
+     * @throws InternalException an error occurred locally independent of any events in the cloud
+     * @throws CloudException an error occurred with the cloud provider while performing the operation
+     */
+    public @Nonnull Iterable<RuleTargetType> listSupportedSourceTypes(boolean inVlan) throws InternalException, CloudException;
 
     /**
      * Revokes the uniquely identified firewall rule.
