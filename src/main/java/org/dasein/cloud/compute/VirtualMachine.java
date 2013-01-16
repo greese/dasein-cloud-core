@@ -39,6 +39,7 @@ import javax.annotation.Nullable;
  * @author George Reese @ enStratus (http://www.enstratus.com)
  * @version 2012-07 Altered product -> productId to minimize chattiness of any polling using Dasein Cloud
  * @version 2013.02 added Networkable interface (issue #24)
+ * @version 2013.04 added access to shell key IDs
  */
 public class VirtualMachine implements Networkable, Taggable {
     private Architecture          architecture;
@@ -64,6 +65,7 @@ public class VirtualMachine implements Networkable, Taggable {
     private String                providerOwnerId;
     private String                providerRamdiskImageId;
     private String                providerRegionId;
+    private String[]              providerShellKeyIds;
     private String                providerSubnetId;
     private String                providerVirtualMachineId;
     private String                providerVlanId;
@@ -517,5 +519,13 @@ public class VirtualMachine implements Networkable, Taggable {
 
     public void setProviderRamdiskImageId(@Nullable String providerRamdiskImageId) {
         this.providerRamdiskImageId = providerRamdiskImageId;
+    }
+
+    public void setProviderShellKeyIds(@Nonnull String ... keyIds) {
+        this.providerShellKeyIds = keyIds;
+    }
+
+    public @Nonnull String[] getProviderShellKeyIds() {
+        return (providerShellKeyIds == null ? new String[0] : providerShellKeyIds);
     }
 }
