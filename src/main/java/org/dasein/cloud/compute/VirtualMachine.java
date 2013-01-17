@@ -64,6 +64,7 @@ public class VirtualMachine implements Networkable, Taggable {
     private String                providerOwnerId;
     private String                providerRamdiskImageId;
     private String                providerRegionId;
+    private String[]              providerShellKeyIds;
     private String                providerSubnetId;
     private String                providerVirtualMachineId;
     private String                providerVlanId;
@@ -517,5 +518,13 @@ public class VirtualMachine implements Networkable, Taggable {
 
     public void setProviderRamdiskImageId(@Nullable String providerRamdiskImageId) {
         this.providerRamdiskImageId = providerRamdiskImageId;
+    }
+
+    public void setProviderShellKeyIds(@Nonnull String ... keyIds) {
+        this.providerShellKeyIds = keyIds;
+    }
+
+    public @Nonnull String[] getProviderShellKeyIds() {
+        return (providerShellKeyIds == null ? new String[0] : providerShellKeyIds);
     }
 }
