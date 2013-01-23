@@ -36,6 +36,7 @@ public interface LoadBalancerSupport extends AccessControlledService {
     static public final ServiceAction CREATE_LOAD_BALANCER = new ServiceAction("LB:CREATE_LOAD_BALANCER");
     static public final ServiceAction GET_LOAD_BALANCER    = new ServiceAction("LB:GET_LOAD_BALANCER");
     static public final ServiceAction LIST_LOAD_BALANCER   = new ServiceAction("LB:LIST_LOAD_BALANCER");
+    static public final ServiceAction GET_LOAD_BALANCER_SERVER_HEALTH   = new ServiceAction("LB:GET_LOAD_BALANCER_SERVER_HEALTH");
     static public final ServiceAction REMOVE_DATA_CENTERS  = new ServiceAction("LB:REMOVE_DC");
     static public final ServiceAction REMOVE_VMS           = new ServiceAction("LB:REMOVE_VM");
     static public final ServiceAction REMOVE_LOAD_BALANCER = new ServiceAction("LB:REMOVE_LOAD_BALANCER");
@@ -47,7 +48,11 @@ public interface LoadBalancerSupport extends AccessControlledService {
     public String create(String name, String description, String addressId, String[] dataCenterIds, LbListener[] listeners, String[] serverIds) throws CloudException, InternalException;
 
     public LoadBalancer getLoadBalancer(String loadBalancerId) throws CloudException, InternalException;
-    
+
+    public Iterable<LoadBalancerServer> getLoadBalancerServerHealth(String loadBalancerId) throws CloudException, InternalException;
+
+    public Iterable<LoadBalancerServer> getLoadBalancerServerHealth(String loadBalancerId, String ... serverIdsToCheck) throws CloudException, InternalException;
+
     public LoadBalancerAddressType getAddressType() throws CloudException, InternalException;
     
     public int getMaxPublicPorts() throws CloudException, InternalException;
