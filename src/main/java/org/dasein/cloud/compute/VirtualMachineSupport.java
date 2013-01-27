@@ -412,6 +412,16 @@ public interface VirtualMachineSupport extends AccessControlledService {
     public @Nonnull Iterable<VirtualMachine> listVirtualMachines() throws InternalException, CloudException;
 
     /**
+     * Lists all virtual machines matching the given VMFilterOptions belonging to the account owner currently in
+     * the cloud. The filtering functionality is delegated to the cloud provider.
+     * @param options filter options
+     * @return all servers belonging to the account owner
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException    an error occurred within the cloud provider
+     */
+    public @Nonnull Iterable<VirtualMachine> listVirtualMachines(VMFilterOptions options) throws InternalException, CloudException;
+
+    /**
      * Executes a hypervisor pause that essentially removes the virtual machine from the hypervisor scheduler.
      * The virtual machine is considered active and volatile at this point, but it won't actually do anything
      * from  CPU-perspective until it is {@link #unpause(String)}'ed.
