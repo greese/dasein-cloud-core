@@ -244,7 +244,7 @@ public interface MachineImageSupport extends AccessControlledService {
      * @throws CloudException an error occurred with the cloud provider
      * @throws InternalException a local error occurred in the Dasein Cloud implementation
      */
-    public abstract @Nonnull Iterable<MachineImage> listImages(@Nullable MachineImageFilterOptions options) throws CloudException, InternalException;
+    public abstract @Nonnull Iterable<MachineImage> listImages(@Nullable ImageFilterOptions options) throws CloudException, InternalException;
 
     /**
      * Lists all images in my library. This generally includes all images belonging to me as well any explicitly shared
@@ -253,7 +253,7 @@ public interface MachineImageSupport extends AccessControlledService {
      * @return the list of images in my image library of the specified image class
      * @throws CloudException an error occurred with the cloud provider
      * @throws InternalException a local error occurred in the Dasein Cloud implementation
-     * @deprecated Use {@link #listImages(MachineImageFilterOptions)}
+     * @deprecated Use {@link #listImages(ImageFilterOptions)}
      */
     public abstract @Nonnull Iterable<MachineImage> listImages(@Nonnull ImageClass cls) throws CloudException, InternalException;
 
@@ -265,7 +265,7 @@ public interface MachineImageSupport extends AccessControlledService {
      * @return the list of images I can see belonging to the specified account owner of the specified image class
      * @throws CloudException an error occurred with the cloud provider
      * @throws InternalException a local error occurred in the Dasein Cloud implementation
-     * @deprecated Use {@link #listImages(MachineImageFilterOptions)}
+     * @deprecated Use {@link #listImages(ImageFilterOptions)}
      */
     public abstract @Nonnull Iterable<MachineImage> listImages(@Nonnull ImageClass cls, @Nonnull String ownedBy) throws CloudException, InternalException;
 
@@ -394,19 +394,6 @@ public interface MachineImageSupport extends AccessControlledService {
     public abstract void removePublicShare(@Nonnull String providerImageId) throws CloudException, InternalException;
 
     /**
-     * Searches all machine images visible, public or otherwise, to this account for ones that match the specified values.
-     * If a search parameter is null, it doesn't constrain on that parameter.
-     * @param keyword a keyword on which to search
-     * @param platform the platform to be matched
-     * @param architecture the architecture to be matched
-     * @return any matching machine images (images of class {@link ImageClass#MACHINE})
-     * @throws CloudException an error occurred with the cloud provider
-     * @throws InternalException a local error occurred in the Dasein Cloud implementation
-     * @deprecated Use {@link #searchImages(String, String, Platform, Architecture, ImageClass...)} and/or {@link #searchPublicImages(String, Platform, Architecture, ImageClass...)}
-     */
-    public abstract @Nonnull Iterable<MachineImage> searchMachineImages(@Nullable String keyword, @Nullable Platform platform, @Nullable Architecture architecture) throws CloudException, InternalException;
-
-    /**
      * Searches images owned by the specified account number (if null, all visible images are searched). It will match against
      * the specified parameters. Any null parameter does not constrain the search.
      * @param accountNumber the account number to search against or null for searching all visible images
@@ -419,6 +406,19 @@ public interface MachineImageSupport extends AccessControlledService {
      * @throws InternalException a local error occurred in the Dasein Cloud implementation
      */
     public abstract @Nonnull Iterable<MachineImage> searchImages(@Nullable String accountNumber, @Nullable String keyword, @Nullable Platform platform, @Nullable Architecture architecture, @Nullable ImageClass ... imageClasses) throws CloudException, InternalException;
+
+    /**
+     * Searches all machine images visible, public or otherwise, to this account for ones that match the specified values.
+     * If a search parameter is null, it doesn't constrain on that parameter.
+     * @param keyword a keyword on which to search
+     * @param platform the platform to be matched
+     * @param architecture the architecture to be matched
+     * @return any matching machine images (images of class {@link ImageClass#MACHINE})
+     * @throws CloudException an error occurred with the cloud provider
+     * @throws InternalException a local error occurred in the Dasein Cloud implementation
+     * @deprecated Use {@link #searchImages(String, String, Platform, Architecture, ImageClass...)} and/or {@link #searchPublicImages(String, Platform, Architecture, ImageClass...)}
+     */
+    public abstract @Nonnull Iterable<MachineImage> searchMachineImages(@Nullable String keyword, @Nullable Platform platform, @Nullable Architecture architecture) throws CloudException, InternalException;
 
     /**
      * Searches the public machine image library. It will match against the specified parameters. Any null parameter does
