@@ -28,8 +28,8 @@ import javax.annotation.Nonnull;
 
 public class MachineImage implements Taggable {
     private Architecture       architecture;
+    private long               creationTimestamp;
     private MachineImageState  currentState;
-    private Map<String,String> tags;
     private String             description;
     private ImageClass         imageClass;
     private String             name;
@@ -39,6 +39,7 @@ public class MachineImage implements Taggable {
     private String             providerRegionId;
     private String             software;
     private MachineImageFormat storageFormat;
+    private Map<String,String> tags;
     private MachineImageType   type;
     
     public MachineImage() { }
@@ -191,5 +192,13 @@ public class MachineImage implements Taggable {
 
     public void setStorageFormat(MachineImageFormat storageFormat) {
         this.storageFormat = storageFormat;
+    }
+
+    public long getCreationTimestamp() {
+        return creationTimestamp;
+    }
+
+    public void setCreationTimestamp(long creationTimestamp) {
+        this.creationTimestamp = creationTimestamp;
     }
 }
