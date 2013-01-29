@@ -34,6 +34,7 @@ import org.dasein.cloud.identity.ServiceAction;
 
 /**
  * @version 2013.02 added listResources(String) (issue #24)
+ * @version 2013.04 added support for specifying data centers when provisioning subnets
  */
 public interface VLANSupport extends AccessControlledService {
     static public final ServiceAction ANY               = new ServiceAction("NET:ANY");
@@ -182,8 +183,28 @@ public interface VLANSupport extends AccessControlledService {
      */
     public abstract @Nonnull NetworkInterface createNetworkInterface(@Nonnull NICCreateOptions options) throws CloudException, InternalException;
 
+    /**
+     * Provisions a subnet in the specified VLAN using the specified address space.
+     * @param cidr the CIDR of the address space within the target VLAN that will be used for the subnet
+     * @param inProviderVlanId the provider ID for the VLAN being subnetted
+     * @param name the name of the subnet
+     * @param description a description of the purpose of the subnet
+     * @return a newly created subnet
+     * @throws CloudException an error occurred in the cloud while provisioning the subnet
+     * @throws InternalException a local error occurred during the provisoning of the subnet
+     * @deprecated Use {@link #createSubnet(SubnetCreateOptions)}
+     */
     public abstract @Nonnull Subnet createSubnet(@Nonnull String cidr, @Nonnull String inProviderVlanId, @Nonnull String name, @Nonnull String description) throws CloudException, InternalException;
-    
+
+    /**
+     * Provisions a subnet with the specified options for subnet creation.
+     * @param options the options to be used in provisioning the subnet
+     * @return a newly provisioned subnet
+     * @throws CloudException an error occurred in the cloud while provisioning the subnet
+     * @throws InternalException a local error occurred during the provisoning of the subnet
+     */
+    public abstract @Nonnull Subnet createSubnet(@Nonnull SubnetCreateOptions options) throws CloudException, InternalException;
+
     public abstract @Nonnull VLAN createVlan(@Nonnull String cidr, @Nonnull String name, @Nonnull String description, @Nonnull String domainName, @Nonnull String[] dnsServers, @Nonnull String[] ntpServers) throws CloudException, InternalException;
 
     /**
@@ -263,6 +284,18 @@ public interface VLANSupport extends AccessControlledService {
     public abstract @Nonnull Requirement getSubnetSupport() throws CloudException, InternalException;
 
     public abstract @Nullable VLAN getVlan(@Nonnull String vlanId) throws CloudException, InternalException;
+
+    /**
+     * Indicates whether or not you must specify a data center when provisioning your subnet. If {@link Requirement#NONE},
+     * then the cloud has no support for data centers and/or subnets or it lacks the ability to provision subnets in
+     * specific data centers. {@link Requirement#OPTIONAL} means that the cloud supports both and you may or may not
+     * specify a data center. No cloud should ever return {@link Requirement#REQUIRED}. Even if the cloud requires it,
+     * the Dasein Cloud implementation should pick on the client's request when none is specified.
+     * @return the requirements for specifying a data center when provisioning a subnet
+     * @throws CloudException an error occurred with the cloud provider determining support for this functionality
+     * @throws InternalException a local error occurred determining support for this functionality
+     */
+    public abstract @Nonnull Requirement identifySubnetDCRequirements() throws CloudException, InternalException;
 
     /**
      * Indicates whether or not this cloud included the concept of network interfaces in its networking support.

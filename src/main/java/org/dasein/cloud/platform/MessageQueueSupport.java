@@ -24,9 +24,17 @@ import org.dasein.cloud.InternalException;
 import org.dasein.cloud.identity.ServiceAction;
 
 import javax.annotation.Nonnull;
+import java.util.Locale;
 
 public interface MessageQueueSupport extends AccessControlledService {
     static public final ServiceAction ANY                = new ServiceAction("MQ:ANY");
+
+    /**
+     * Provides the term the cloud provider uses to describe a message queue.
+     * @param locale the locale into which the term should be translated
+     * @return the provider term for a message queue
+     */
+    public @Nonnull String getProviderTermForMessageQueue(@Nonnull Locale locale);
 
     /**
      * Indicates whether the current account is subscribed in the current cloud region for message queue services.
