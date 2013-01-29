@@ -18,13 +18,17 @@
 
 package org.dasein.cloud.network;
 
+import org.dasein.cloud.Taggable;
+
+import javax.annotation.Nonnull;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
  * @version 2013.02 added Networkable interface
  */
-public class Subnet implements Networkable {
+public class Subnet implements Networkable, Taggable {
     private int         availableIpAddresses;
     private String      cidr;
     private SubnetState currentState;
@@ -130,12 +134,24 @@ public class Subnet implements Networkable {
         return (cidr + " [" + providerOwnerId + "/" + providerSubnetId + "]");
     }
 
-    public void setTags(Map<String,String> tags) {
+    public void setTags(@Nonnull Map<String,String> tags) {
         this.tags = tags;
     }
 
-    public Map<String,String> getTags() {
+    @Override
+    public @Nonnull Map<String,String> getTags() {
+        if( tags == null ) {
+            return new HashMap<String, String>();
+        }
         return tags;
+    }
+
+    @Override
+    public void setTag(@Nonnull String key, @Nonnull String value) {
+        if( tags == null ) {
+            tags = new HashMap<String,String>();
+        }
+        tags.put(key, value);
     }
 
     public void setDescription(String description) {
