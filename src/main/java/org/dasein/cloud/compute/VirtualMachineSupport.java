@@ -419,7 +419,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      * @throws CloudException    an error occurred within the cloud provider
      */
-    public @Nonnull Iterable<VirtualMachine> listVirtualMachines(VMFilterOptions options) throws InternalException, CloudException;
+    public @Nonnull Iterable<VirtualMachine> listVirtualMachines(@Nonnull VMFilterOptions options) throws InternalException, CloudException;
 
     /**
      * Executes a hypervisor pause that essentially removes the virtual machine from the hypervisor scheduler.
