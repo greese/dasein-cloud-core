@@ -295,7 +295,7 @@ public interface VLANSupport extends AccessControlledService {
      * @throws CloudException an error occurred with the cloud provider determining support for this functionality
      * @throws InternalException a local error occurred determining support for this functionality
      */
-    public abstract @Nonnull Requirement identifySubnetDCRequirements() throws CloudException, InternalException;
+    public abstract @Nonnull Requirement identifySubnetDCRequirement() throws CloudException, InternalException;
 
     /**
      * Indicates whether or not this cloud included the concept of network interfaces in its networking support.
