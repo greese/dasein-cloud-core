@@ -236,12 +236,24 @@ public interface MachineImageSupport extends AccessControlledService {
     public abstract @Nonnull Iterable<ResourceStatus> listImageStatus(@Nonnull ImageClass cls) throws CloudException, InternalException;
 
     /**
+     * Lists all images in my library based on the given filter options. With no filter options specified, this
+     * generally includes all images belonging to me as well any explicitly shared with me. In clouds without a public
+     * library, it's all images I can see. The filtering functionality is delegated to the cloud provider.
+     * @param options filter options
+     * @return the list of images in my image library of the specified image class
+     * @throws CloudException an error occurred with the cloud provider
+     * @throws InternalException a local error occurred in the Dasein Cloud implementation
+     */
+    public abstract @Nonnull Iterable<MachineImage> listImages(@Nonnull MachineImageFilterOptions options) throws CloudException, InternalException;
+
+    /**
      * Lists all images in my library. This generally includes all images belonging to me as well any explicitly shared
      * with me. In clouds without a public library, it's all images I can see.
      * @param cls the class of image being listed
      * @return the list of images in my image library of the specified image class
      * @throws CloudException an error occurred with the cloud provider
      * @throws InternalException a local error occurred in the Dasein Cloud implementation
+     * @deprecated Use {@link #listImages(MachineImageFilterOptions)}
      */
     public abstract @Nonnull Iterable<MachineImage> listImages(@Nonnull ImageClass cls) throws CloudException, InternalException;
 
@@ -253,6 +265,7 @@ public interface MachineImageSupport extends AccessControlledService {
      * @return the list of images I can see belonging to the specified account owner of the specified image class
      * @throws CloudException an error occurred with the cloud provider
      * @throws InternalException a local error occurred in the Dasein Cloud implementation
+     * @deprecated Use {@link #listImages(MachineImageFilterOptions)}
      */
     public abstract @Nonnull Iterable<MachineImage> listImages(@Nonnull ImageClass cls, @Nonnull String ownedBy) throws CloudException, InternalException;
 
