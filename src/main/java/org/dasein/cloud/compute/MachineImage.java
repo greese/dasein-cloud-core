@@ -32,6 +32,7 @@ public class MachineImage implements Taggable {
     private MachineImageState  currentState;
     private String             description;
     private ImageClass         imageClass;
+    private String             kernelImageId;
     private String             name;
     private Platform           platform;
     private String             providerMachineImageId;
@@ -200,5 +201,13 @@ public class MachineImage implements Taggable {
 
     public void setCreationTimestamp(long creationTimestamp) {
         this.creationTimestamp = creationTimestamp;
+    }
+
+    public String getKernelImaged() {
+        return kernelImageId;
+    }
+
+    public void setKernelImageId(String kernelImageId) {
+        this.kernelImageId = kernelImageId;
     }
 }
