@@ -90,6 +90,7 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
         if( !supported ) {
             throw new OperationNotSupportedException("Image capture is not supported in " + getProvider().getCloudName());
         }
+        getProvider().hold();
         Thread t = new Thread() {
             public void run() {
                 try {
@@ -102,6 +103,9 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
                 catch( Throwable t ) {
                     taskTracker.complete(t);
                 }
+                finally {
+                    getProvider().release();
+                }
             }
         };
 
@@ -111,7 +115,7 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
     }
 
     @Override
-    public @Nullable MachineImage getMachineImage(@Nonnull String providerImageId) throws CloudException, InternalException {
+    public final @Nullable MachineImage getMachineImage(@Nonnull String providerImageId) throws CloudException, InternalException {
         return getImage(providerImageId);
     }
 
@@ -165,6 +169,7 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
         final ImageCreateOptions options = ImageCreateOptions.getInstance(vm, name, description);
         final AsynchronousTask<String> task = new AsynchronousTask<String>();
 
+        getProvider().hold();
         Thread t = new Thread() {
             public void run() {
                 try {
@@ -172,6 +177,9 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
                 }
                 catch( Throwable t ) {
                     task.complete(t);
+                }
+                finally {
+                    getProvider().release();
                 }
             }
         };
