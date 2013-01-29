@@ -244,7 +244,7 @@ public interface MachineImageSupport extends AccessControlledService {
      * @throws CloudException an error occurred with the cloud provider
      * @throws InternalException a local error occurred in the Dasein Cloud implementation
      */
-    public abstract @Nonnull Iterable<MachineImage> listImages(@Nonnull MachineImageFilterOptions options) throws CloudException, InternalException;
+    public abstract @Nonnull Iterable<MachineImage> listImages(@Nullable MachineImageFilterOptions options) throws CloudException, InternalException;
 
     /**
      * Lists all images in my library. This generally includes all images belonging to me as well any explicitly shared
