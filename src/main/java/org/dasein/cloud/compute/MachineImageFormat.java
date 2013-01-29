@@ -19,5 +19,5 @@
 package org.dasein.cloud.compute;
 
 public enum MachineImageFormat {
-    AWS, NIMBULA, VMDK, OVF, VHD
+    AWS, NIMBULA, VMDK, OVF, VHD, RAW, QCOW2
 }
