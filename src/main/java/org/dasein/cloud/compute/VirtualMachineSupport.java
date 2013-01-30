@@ -105,7 +105,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      * @throws CloudException an error occurred within the cloud provider
      */
-    public void disableAnalytics(String vmId) throws InternalException, CloudException; 
+    public void disableAnalytics(@Nonnull String vmId) throws InternalException, CloudException;
     
     /**
      * Turns extended hypervisor analytics for the target server. If the underlying cloud does not support
@@ -114,7 +114,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      * @throws CloudException an error occurred within the cloud provider
      */
-    public void enableAnalytics(String vmId) throws InternalException, CloudException;
+    public void enableAnalytics(@Nonnull String vmId) throws InternalException, CloudException;
     
     /**
      * Provides all output from the console of the target server since the specified Unix time.
@@ -180,7 +180,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      * @throws CloudException an error occurred within the cloud provider
      */
-    public VmStatistics getVMStatistics(String vmId, long from, long to) throws InternalException, CloudException;
+    public @Nonnull VmStatistics getVMStatistics(@Nonnull String vmId, @Nonnegative long from, @Nonnegative long to) throws InternalException, CloudException;
     
     /**
      * Provides hypervisor statistics for the specified server that fit within the defined time range.
