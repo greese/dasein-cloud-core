@@ -7,6 +7,7 @@ import org.dasein.cloud.OperationNotSupportedException;
 import org.dasein.cloud.ProviderContext;
 import org.dasein.cloud.Requirement;
 import org.dasein.cloud.ResourceStatus;
+import org.dasein.cloud.Tag;
 import org.dasein.cloud.identity.ServiceAction;
 import org.dasein.util.uom.storage.Gigabyte;
 import org.dasein.util.uom.storage.Storage;
@@ -207,7 +208,7 @@ public abstract class AbstractVolumeSupport implements VolumeSupport {
 
     @Override
     public @Nonnull Iterable<Volume> listVolumes(@Nullable VolumeFilterOptions options) throws InternalException, CloudException {
-        if( options == null ) {
+        if( options == null || !options.hasCriteria() ) {
             return listVolumes();
         }
         ArrayList<Volume> volumes = new ArrayList<Volume>();
@@ -223,5 +224,30 @@ public abstract class AbstractVolumeSupport implements VolumeSupport {
     @Override
     public @Nonnull String[] mapServiceAction(@Nonnull ServiceAction action) {
         return new String[0];
+    }
+
+    @Override
+    public void removeTags(@Nonnull String volumeId, @Nonnull Tag... tags) throws CloudException, InternalException {
+        // NO-OP
+    }
+
+    @Override
+    public void removeTags(@Nonnull String[] volumeIds, @Nonnull Tag ... tags) throws CloudException, InternalException {
+        // NO-OP
+    }
+
+    @Override
+    public void updateTags(@Nonnull String volumeId, @Nonnull Tag... tags) throws CloudException, InternalException {
+        // NO-OP
+    }
+
+    @Override
+    public void updateTags(@Nonnull String[] volumeIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        // NO-OP
+    }
+
+    @Override
+    public @Nonnull String toString() {
+        return (getProvider().getProviderName() + "/" + getProvider().getCloudName() + "/Compute/Volumes");
     }
 }

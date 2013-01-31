@@ -26,6 +26,8 @@ import org.dasein.util.uom.storage.Storage;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Configuration options for creating volumes. When you create volumes, you provide an instance of this class to
@@ -149,17 +151,18 @@ public class VolumeCreateOptions {
         return new VolumeCreateOptions(volumeProductId, snapshotId, size, name, description, iops);
     }
     
-    private String            dataCenterId;
-    private String            description;
-    private String            deviceId;
-    private VolumeFormat      format;
-    private int               iops;
-    private String            name;
-    private String            snapshotId;
-    private String            virtualMachineId;
-    private String            vlanId;
-    private String            volumeProductId;
-    private Storage<Gigabyte> volumeSize;
+    private String             dataCenterId;
+    private String             description;
+    private String             deviceId;
+    private VolumeFormat       format;
+    private int                iops;
+    private Map<String,Object> metaData;
+    private String             name;
+    private String             snapshotId;
+    private String             virtualMachineId;
+    private String             vlanId;
+    private String             volumeProductId;
+    private Storage<Gigabyte>  volumeSize;
     
     @SuppressWarnings("UnusedDeclaration")
     private VolumeCreateOptions() { }
@@ -208,6 +211,13 @@ public class VolumeCreateOptions {
      */
     public @Nonnegative int getIops() {
         return iops;
+    }
+
+    /**
+     * @return any extra meta-data to assign to the volume
+     */
+    public @Nonnull Map<String,Object> getMetaData() {
+        return (metaData == null ? new HashMap<String, Object>() : metaData);
     }
 
     /**
@@ -273,6 +283,38 @@ public class VolumeCreateOptions {
     public @Nonnull VolumeCreateOptions withAttachment(@Nonnull String vmId, @Nonnull String asDeviceId) {
         this.virtualMachineId = vmId;
         this.deviceId = asDeviceId;
+        return this;
+    }
+
+    /**
+     * Specifies any meta-data to be associated with the volume at launch time. This method is
+     * accretive, meaning that it adds to any existing meta-data (or replaces an existing key). Though Dasein Cloud
+     * allows the ability to retain type in meta-data, the reality is that most clouds will convert values to strings.
+     * @param key the key of the meta-data entry
+     * @param value the value for the meta-data entry (this will probably become a {@link java.lang.String} in most clouds)
+     * @return this
+     */
+    public @Nonnull VolumeCreateOptions withMetaData(@Nonnull String key, @Nonnull Object value) {
+        if( metaData == null ) {
+            metaData = new HashMap<String, Object>();
+        }
+        metaData.put(key, value);
+        return this;
+    }
+
+    /**
+     * Specifies meta-data to add onto any existing meta-data being associated with this volume at launch time.
+     * This method is accretive, meaning that it adds to any existing meta-data (or replaces an existing keys).
+     * Though Dasein Cloud allows the ability to retain type in meta-data, the reality is that most clouds will convert
+     * values to strings.
+     * @param metaData the meta-data to be set for the new volume
+     * @return this
+     */
+    public @Nonnull VolumeCreateOptions withMetaData(@Nonnull Map<String,Object> metaData) {
+        if( this.metaData == null ) {
+            this.metaData = new HashMap<String, Object>();
+        }
+        this.metaData.putAll(metaData);
         return this;
     }
 }

@@ -72,7 +72,7 @@ public class VolumeFilterOptions {
      * @return this
      */
     public @Nonnull VolumeFilterOptions attachedTo(@Nonnull String providerVMId) {
-        this.attachedTo = attachedTo;
+        this.attachedTo = providerVMId;
         return this;
     }
 
@@ -97,6 +97,14 @@ public class VolumeFilterOptions {
         return tags;
     }
 
+    /**
+     * Indicates whether or not this filter has any criteria on which to filter. If false, then all volumes
+     * will match this filter.
+     * @return <code>true</code> if there are criteria associated with this filter
+     */
+    public boolean hasCriteria() {
+        return (attachedTo != null || regex != null || (tags != null && !tags.isEmpty()));
+    }
     /**
      * Indicates whether these options can match a single criterion (<code>true</code>) or if all criteria must be
      * matched in order for the volume to pass the filter (<code>false</code>).
@@ -191,5 +199,10 @@ public class VolumeFilterOptions {
     public @Nonnull VolumeFilterOptions withTags(@Nonnull Map<String, String> tags) {
         this.tags = tags;
         return this;
+    }
+
+    @Override
+    public @Nonnull String toString() {
+        return "[matchesAny=" + matchesAny + ",attachedTo=" + attachedTo + ",regex=" + regex + ",tags=" + tags + "]";
     }
 }
