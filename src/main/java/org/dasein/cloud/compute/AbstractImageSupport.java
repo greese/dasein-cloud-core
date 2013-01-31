@@ -5,9 +5,11 @@ import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.OperationNotSupportedException;
+import org.dasein.cloud.ProviderContext;
 import org.dasein.cloud.Requirement;
 import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.Tag;
+import org.dasein.cloud.identity.ServiceAction;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -112,6 +114,15 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
         t.setName("Capture of " + options.getVirtualMachineId() + " in " + getProvider().getCloudName());
         t.setDaemon(true);
         t.start();
+    }
+
+    protected @Nonnull ProviderContext getContext() throws CloudException {
+        ProviderContext ctx = getProvider().getContext();
+
+        if( ctx == null ) {
+            throw new CloudException("No context has been set for this request");
+        }
+        return ctx;
     }
 
     @Override
@@ -254,6 +265,11 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
     @Override
     public @Nonnull Iterable<MachineImageType> listSupportedImageTypes() throws CloudException, InternalException {
         return Collections.singletonList(MachineImageType.VOLUME);
+    }
+
+    @Override
+    public @Nonnull String[] mapServiceAction(@Nonnull ServiceAction action) {
+        return new String[0];
     }
 
     /**

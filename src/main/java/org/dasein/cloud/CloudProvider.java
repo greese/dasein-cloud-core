@@ -56,6 +56,52 @@ import org.dasein.util.CalendarWrapper;
  * @author George Reese @ enStratus (http://www.enstratus.com)
  */
 public abstract class CloudProvider {
+    static public boolean matchesTags(@Nonnull Map<String,?> currentValues, @Nonnull String name, @Nonnull String description, @Nullable Map<String,String> valuesToMatch) {
+        if( valuesToMatch != null && !valuesToMatch.isEmpty() ) {
+            name = name.toLowerCase();
+            description = description.toLowerCase();
+            for( Map.Entry<String,String> entry : valuesToMatch.entrySet() ) {
+                String v = (entry.getValue() == null ? null : entry.getValue().toLowerCase());
+                Object t = currentValues.get(entry.getKey());
+
+                if( entry.getKey().equals("Name") ) {
+
+                    if( v != null ) {
+                        String n = name.toLowerCase();
+
+                        if( n.contains(v) || (t != null && t.toString().toLowerCase().contains(v)) ) {
+                            continue;
+                        }
+                    }
+                    return false;
+                }
+                if( entry.getKey().equals("Description") ) {
+                    if( v != null ) {
+                        String d = description.toLowerCase();
+
+                        if( d.contains(v) || (t != null && t.toString().toLowerCase().contains(v)) ) {
+                            continue;
+                        }
+                    }
+                    return false;
+                }
+                if( t == null && v == null ) {
+                    continue;
+                }
+                if( t == null ) {
+                    return false;
+                }
+                if( v == null ) {
+                    return false;
+                }
+                if( !t.toString().contains(v) ) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     private CloudProvider computeCloud = null;
     private ProviderContext context = null;
     
@@ -232,52 +278,6 @@ public abstract class CloudProvider {
     
     public synchronized boolean isConnected() {
         return (context != null);
-    }
-
-    public boolean matchesTags(@Nonnull Map<String,?> currentValues, @Nonnull String name, @Nonnull String description, @Nullable Map<String,String> valuesToMatch) {
-        if( valuesToMatch != null && !valuesToMatch.isEmpty() ) {
-            name = name.toLowerCase();
-            description = description.toLowerCase();
-            for( Map.Entry<String,String> entry : valuesToMatch.entrySet() ) {
-                String v = (entry.getValue() == null ? null : entry.getValue().toLowerCase());
-                Object t = currentValues.get(entry.getKey());
-
-                if( entry.getKey().equals("Name") ) {
-
-                    if( v != null ) {
-                        String n = name.toLowerCase();
-
-                        if( n.contains(v) || (t != null && t.toString().toLowerCase().contains(v)) ) {
-                            continue;
-                        }
-                    }
-                    return false;
-                }
-                if( entry.getKey().equals("Description") ) {
-                    if( v != null ) {
-                        String d = description.toLowerCase();
-
-                        if( d.contains(v) || (t != null && t.toString().toLowerCase().contains(v)) ) {
-                            continue;
-                        }
-                    }
-                    return false;
-                }
-                if( t == null && v == null ) {
-                    continue;
-                }
-                if( t == null ) {
-                    return false;
-                }
-                if( v == null ) {
-                    return false;
-                }
-                if( !t.toString().contains(v) ) {
-                    return false;
-                }
-            }
-        }
-        return true;
     }
 
     public void release() {
