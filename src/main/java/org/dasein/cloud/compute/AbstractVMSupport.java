@@ -291,15 +291,10 @@ public abstract class AbstractVMSupport implements VirtualMachineSupport {
         if( options == null ) {
             return listVirtualMachines();
         }
-        Map<String,String> tags = options.getTags();
-
-        if( tags == null ) {
-            return listVirtualMachines();
-        }
         ArrayList<VirtualMachine> vms = new ArrayList<VirtualMachine>();
 
         for( VirtualMachine vm : listVirtualMachines() ) {
-            if( getProvider().matchesTags(vm.getTags(), vm.getName(), vm.getDescription(), tags) ) {
+            if( options.matches(vm) ) {
                 vms.add(vm);
             }
         }

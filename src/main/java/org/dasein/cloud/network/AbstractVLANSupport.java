@@ -1,7 +1,9 @@
 package org.dasein.cloud.network;
 
 import org.dasein.cloud.CloudException;
+import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
+import org.dasein.cloud.ProviderContext;
 import org.dasein.cloud.Requirement;
 import org.dasein.cloud.ResourceStatus;
 
@@ -16,10 +18,29 @@ import java.util.ArrayList;
  * @since 2013.04
  */
 public abstract class AbstractVLANSupport implements VLANSupport {
+    private CloudProvider provider;
+
+    public AbstractVLANSupport(@Nonnull CloudProvider provider) {
+        this.provider = provider;
+    }
+
     @Override
     @Deprecated
     public @Nonnull Subnet createSubnet(@Nonnull String cidr, @Nonnull String inProviderVlanId, @Nonnull String name, @Nonnull String description) throws CloudException, InternalException {
         return createSubnet(SubnetCreateOptions.getInstance(inProviderVlanId, cidr, name, description));
+    }
+
+    protected @Nonnull ProviderContext getContext() throws CloudException {
+        ProviderContext ctx = getProvider().getContext();
+
+        if( ctx == null ) {
+            throw new CloudException("No context was set for this request");
+        }
+        return ctx;
+    }
+
+    protected final @Nonnull CloudProvider getProvider() {
+        return provider;
     }
 
     @Override
