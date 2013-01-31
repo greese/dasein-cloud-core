@@ -15,6 +15,48 @@ import java.util.Map;
  * @since 2013.04
  */
 public class VolumeFilterOptions {
+    /**
+     * Constructs an empty filter that will match all criteria assigned to it.
+     * @return an empty filter matching all criteria assigned to it
+     */
+    static public @Nonnull VolumeFilterOptions getInstance() {
+        return new VolumeFilterOptions(false);
+    }
+
+    /**
+     * Constructs an empty filter that will match as specified by the <code>matchAny</code> parameter.
+     * @param matchesAny <code>true</code> if any single criterion is sufficient to indicate a match, <code>false</code> if all criteria must be matched
+     * @return an empty filter
+     */
+    static public @Nonnull VolumeFilterOptions getInstance(boolean matchesAny) {
+        return new VolumeFilterOptions(matchesAny);
+    }
+
+    /**
+     * Constructs a filter matching on a Java regular expression that must match all criteria associated with it.
+     * @param regex the Java regex to match on
+     * @return a filter on a Java regex against the volume name, description, or tags
+     */
+    static public @Nonnull VolumeFilterOptions getInstance(@Nonnull String regex) {
+        VolumeFilterOptions options = new VolumeFilterOptions(false);
+
+        options.regex = regex;
+        return options;
+    }
+
+    /**
+     * Constructs a filter matching on a Java regular expression.
+     * @param matchesAny <code>true</code> if any single criterion is sufficient to indicate a match, <code>false</code> if all criteria must be matched
+     * @param regex the Java regex to match on
+     * @return a filter on a Java regex against the volume name, description, or tags
+     */
+    static public @Nonnull VolumeFilterOptions getInstance(boolean matchesAny, @Nonnull String regex) {
+        VolumeFilterOptions options = new VolumeFilterOptions(matchesAny);
+
+        options.regex = regex;
+        return options;
+    }
+
     private String             attachedTo;
     private boolean            matchesAny;
     private String             regex;
@@ -22,6 +64,16 @@ public class VolumeFilterOptions {
 
     private VolumeFilterOptions(boolean matchesAny) {
         this.matchesAny = matchesAny;
+    }
+
+    /**
+     * Filters volumes for those attached to a specific virtual machine
+     * @param providerVMId the virtual machine to which the volume must/may be tied
+     * @return this
+     */
+    public @Nonnull VolumeFilterOptions attachedTo(@Nonnull String providerVMId) {
+        this.attachedTo = attachedTo;
+        return this;
     }
 
     /**
