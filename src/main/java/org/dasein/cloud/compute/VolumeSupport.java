@@ -40,6 +40,7 @@ import javax.annotation.Nullable;
  * @since unknown
  * @version 2012-07 Added extended meta-data, included support for new {@link VolumeCreateOptions}
  * @version 2013.01 Added status listing (Issue #4)
+ * @version 2013.04 Added support for volume filtering (Issue greese/dasein-cloud/#6)
  */
 @SuppressWarnings("UnusedDeclaration")
 public interface VolumeSupport extends AccessControlledService {
@@ -201,6 +202,15 @@ public interface VolumeSupport extends AccessControlledService {
      * @throws CloudException an error occurred with the cloud provider
      */
     public @Nonnull Iterable<Volume> listVolumes() throws InternalException, CloudException;
+
+    /**
+     * Lists all volumes matching the specified filter options in the current region with the cloud provider.
+     * @param options the options on which you want to filter (<code>null</code> means return all volumes)
+     * @return the volumes in the current region for this cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     * @throws CloudException an error occurred with the cloud provider
+     */
+    public @Nonnull Iterable<Volume> listVolumes(@Nullable VolumeFilterOptions options) throws InternalException, CloudException;
 
     /**
      * Identifies whether or not the current account has access to volumes in the current region.
