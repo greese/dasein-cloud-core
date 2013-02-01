@@ -27,6 +27,7 @@ import org.dasein.cloud.InternalException;
 import org.dasein.cloud.OperationNotSupportedException;
 import org.dasein.cloud.Requirement;
 import org.dasein.cloud.ResourceStatus;
+import org.dasein.cloud.Tag;
 import org.dasein.cloud.identity.ServiceAction;
 
 import javax.annotation.Nonnegative;
@@ -181,8 +182,7 @@ public interface FirewallSupport extends AccessControlledService {
      */
     @SuppressWarnings("unused")
     public @Nonnull String createInVLAN(@Nonnull String name, @Nonnull String description, @Nonnull String providerVlanId) throws InternalException, CloudException;
-    
-    
+
     /**
      * Deletes the specified firewall from the system.
      * @param firewallId the unique ID of the firewall to be deleted
@@ -300,6 +300,28 @@ public interface FirewallSupport extends AccessControlledService {
     public @Nonnull Iterable<RuleTargetType> listSupportedSourceTypes(boolean inVlan) throws InternalException, CloudException;
 
     /**
+     * Removes meta-data from a volume. If tag values are set, their removal is dependent on underlying cloud
+     * provider behavior. They may be removed only if the tag value matches or they may be removed regardless of the
+     * value.
+     * @param volumeId the volume to update
+     * @param tags the meta-data tags to remove
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void removeTags(@Nonnull String volumeId, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Removes meta-data from multiple volumes. If tag values are set, their removal is dependent on underlying cloud
+     * provider behavior. They may be removed only if the tag value matches or they may be removed regardless of the
+     * value.
+     * @param volumeIds the virtual machine to update
+     * @param tags  the meta-data tags to remove
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void removeTags(@Nonnull String[] volumeIds, @Nonnull Tag ... tags) throws CloudException, InternalException;
+
+    /**
      * Revokes the uniquely identified firewall rule.
      * @param providerFirewallRuleId the unique ID of the firewall.
      * @throws InternalException an error occurred locally independent of any events in the cloud
@@ -373,10 +395,39 @@ public interface FirewallSupport extends AccessControlledService {
     public boolean supportsRules(@Nonnull Direction direction, @Nonnull Permission permission, boolean inVlan) throws CloudException, InternalException;
 
     /**
+     * Indicates whether or not you can create new firewalls or whether you just have to live with what the cloud provider gave you.
+     * @param inVlan whether this is for VLAN-specific firewalls
+     * @return <code>true</code> if you can call {@link #create(String, String)} or {@link #createInVLAN(String, String, String)} to create a firewall
+     * @throws CloudException an error occurred with the cloud provider while checking for support
+     * @throws InternalException a local error occurred while checking for support
+     */
+    public boolean supportsFirewallCreation(boolean inVlan) throws CloudException, InternalException;
+
+    /**
      * Indicates whether or the sources you specify in your rules may be other firewalls (security group behavior).
      * @return true if the sources may be other firewalls
      * @throws CloudException an error occurred with the cloud provider while checking for support
      * @throws InternalException a local error occurred while checking for support
      */
     public boolean supportsFirewallSources() throws CloudException, InternalException;
+
+    /**
+     * Updates meta-data for a volume with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     * @param volumeId the volume to update
+     * @param tags the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void updateTags(@Nonnull String volumeId, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Updates meta-data for multiple volumes with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     * @param volumeIds the virtual machines to update
+     * @param tags  the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void updateTags(@Nonnull String[] volumeIds, @Nonnull Tag... tags) throws CloudException, InternalException;
 }

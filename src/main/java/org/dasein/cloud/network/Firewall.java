@@ -18,9 +18,13 @@
 
 package org.dasein.cloud.network;
 
+import org.dasein.cloud.Taggable;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <p>
@@ -30,21 +34,18 @@ import java.io.Serializable;
  * @since 2010.08
  * @version 2010.08
  * @version 2012.02 - Added annotations
+ * @version 3013.04 implemented tagging of firewalls
  */
-public class Firewall implements Networkable, Serializable {
-    private static final long serialVersionUID = 5863221134243831750L;
-    
-    private boolean active;
-    private boolean available;
-    private String  description;
-    private String  name;
-    private String  providerFirewallId;
-    private String  providerVlanId;
-    private String  regionId;
-    
-    /**
-     * Empty constructor for marshalling.
-     */
+public class Firewall implements Networkable, Taggable {
+    private boolean            active;
+    private boolean            available;
+    private String             description;
+    private String             name;
+    private String             providerFirewallId;
+    private String             providerVlanId;
+    private String             regionId;
+    private Map<String,String> tags;
+
     public Firewall() { }
 
     @Override
@@ -198,6 +199,20 @@ public class Firewall implements Networkable, Serializable {
     @SuppressWarnings("unused")
     public @Nullable String getProviderVlanId() {
         return providerVlanId;
+    }
+
+
+    @Override
+    public @Nonnull Map<String, String> getTags() {
+        return (tags == null ? new HashMap<String, String>() : tags);
+    }
+
+    @Override
+    public void setTag(@Nonnull String key, @Nonnull String value) {
+        if( tags == null ) {
+            tags = new HashMap<String,String>();
+        }
+        tags.put(key, value);
     }
 
     @Override
