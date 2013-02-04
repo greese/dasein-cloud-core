@@ -34,11 +34,6 @@ public abstract class AbstractNetworkFirewallSupport implements NetworkFirewallS
     }
 
     @Override
-    public void associateWithVLAN(@Nonnull String firewallId, @Nonnull String withVLANId) throws CloudException, InternalException {
-        throw new OperationNotSupportedException("VLAN association is not implemented in " + getProvider().getCloudName());
-    }
-
-    @Override
     public @Nonnull String authorize(@Nonnull String firewallId, @Nonnull Direction direction, @Nonnull Permission permission, @Nonnull RuleTarget sourceEndpoint, @Nonnull Protocol protocol, @Nonnull RuleTarget destinationEndpoint, int beginPort, int endPort, int precedence) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Authorization of " + direction + "/" + permission + " in " + getProvider().getCloudName() + " is not currently implemented");
     }
