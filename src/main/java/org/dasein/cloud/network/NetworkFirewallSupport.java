@@ -98,22 +98,6 @@ public interface NetworkFirewallSupport {
     public @Nonnull Requirement identifyPrecedenceRequirement() throws InternalException, CloudException;
 
     /**
-     * Indicates whether a network firewall may be associated with a subnet.
-     * @return <code>true</code> if a network firewall can be associated at the subnet level
-     * @throws InternalException an error occurred locally independent of any events in the cloud
-     * @throws CloudException an error occurred with the cloud provider while performing the operation
-     */
-    public boolean isAssociatedWithSubnets() throws InternalException, CloudException;
-
-    /**
-     * Indicates whether a network firewall may be associated with a VLAN.
-     * @return <code>true</code> if a network firewall can be associated at the VLAN level
-     * @throws InternalException an error occurred locally independent of any events in the cloud
-     * @throws CloudException an error occurred with the cloud provider while performing the operation
-     */
-    public boolean isAssociatedWithVLANs() throws InternalException, CloudException;
-
-    /**
      * Identifies whether or not the current account is subscribed to network firewall services in the current region.
      * @return true if the current account is subscribed to network firewall services for the current region
      * @throws CloudException an error occurred with the cloud provider while determining subscription status

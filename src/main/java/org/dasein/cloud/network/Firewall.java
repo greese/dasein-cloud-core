@@ -42,9 +42,9 @@ public class Firewall implements Networkable, Taggable {
     private String             description;
     private String             name;
     private String             providerFirewallId;
-    private String             providerSubnetId;
     private String             providerVlanId;
     private String             regionId;
+    private String[]           subnetAssociations;
     private Map<String,String> tags;
 
     public Firewall() { }
@@ -185,14 +185,6 @@ public class Firewall implements Networkable, Taggable {
 		this.description = description;
 	}
 
-    public @Nullable String getProviderSubnetId() {
-        return providerSubnetId;
-    }
-
-    public void setProviderSubnetId(@Nonnull String providerSubnetId) {
-        this.providerSubnetId = providerSubnetId;
-    }
-
     /**
      * Specifies the VLAN over which this firewall operates
      * @param providerVlanId the unique provider ID for the firewall
@@ -227,5 +219,13 @@ public class Firewall implements Networkable, Taggable {
     @Override
     public @Nonnull String toString() {
         return (name + " [#" + providerFirewallId + "]");
+    }
+
+    public String[] getSubnetAssociations() {
+        return subnetAssociations;
+    }
+
+    public void setSubnetAssociations(String[] subnetAssociations) {
+        this.subnetAssociations = subnetAssociations;
     }
 }

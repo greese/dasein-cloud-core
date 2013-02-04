@@ -76,16 +76,6 @@ public abstract class AbstractNetworkFirewallSupport implements NetworkFirewallS
     }
 
     @Override
-    public boolean isAssociatedWithSubnets() throws InternalException, CloudException {
-        return true;
-    }
-
-    @Override
-    public boolean isAssociatedWithVLANs() throws InternalException, CloudException {
-        return false;
-    }
-
-    @Override
     public boolean isZeroPrecedenceHighest() throws InternalException, CloudException {
         return true;
     }
