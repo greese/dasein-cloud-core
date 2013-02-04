@@ -69,13 +69,25 @@ public interface SnapshotSupport extends AccessControlledService {
     public abstract void addPublicShare(@Nonnull String providerSnapshotId) throws CloudException, InternalException;
 
     /**
+     * Creates a new snapshot based on the options specified. This method supports both the creation of snapshots from
+     * an existing volume or the creation of a snapshot as a copy of an existing snapshot in another region. Which approach
+     * is taken depends on the contents of the create options.
+     * @param options the options for creating the new snapshot
+     * @return the ID of the newly created snapshot (or <code>null</code> if a create and no changes since last snapshot of volume)
+     * @throws CloudException an error occurred with the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     * @throws OperationNotSupportedException the cloud does not support the kind of creation desired
+     */
+    public @Nullable String createSnapshot(@Nonnull SnapshotCreateOptions options) throws CloudException, InternalException;
+
+    /**
      * Creates a snapshot from the specified volume.
      * @param ofVolume the unique ID of the volume to be snapshotted
      * @param description the description of the snapshot
      * @return the unique ID of the snapshot created (or null if no changes since last snapshot)
      * @throws InternalException an error occurred within the Dasein Cloud implementation
      * @throws CloudException an error occurred with the cloud provider
-     * @deprecated Use {@link #snapshot(String, String, String, Tag...)}
+     * @deprecated Use {@link #createSnapshot(SnapshotCreateOptions)}
      */
     public @Nullable String create(@Nonnull String ofVolume, @Nonnull String description) throws InternalException, CloudException;
 
@@ -186,6 +198,28 @@ public interface SnapshotSupport extends AccessControlledService {
     public abstract void removePublicShare(@Nonnull String providerSnapshotId) throws CloudException, InternalException;
 
     /**
+     * Removes meta-data from a snapshot. If tag values are set, their removal is dependent on underlying cloud
+     * provider behavior. They may be removed only if the tag value matches or they may be removed regardless of the
+     * value.
+     * @param snapshotId the snapshot to update
+     * @param tags the meta-data tags to remove
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void removeTags(@Nonnull String snapshotId, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Removes meta-data from multiple snapshots. If tag values are set, their removal is dependent on underlying cloud
+     * provider behavior. They may be removed only if the tag value matches or they may be removed regardless of the
+     * value.
+     * @param snapshotIds the snapshot to update
+     * @param tags  the meta-data tags to remove
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void removeTags(@Nonnull String[] snapshotIds, @Nonnull Tag ... tags) throws CloudException, InternalException;
+
+    /**
      * Searches all snapshots for the snapshots matching the specified parameters.
      * @param ownerId the optional owner of the target snapshots
      * @param keyword the optional keyword to search on
@@ -217,12 +251,20 @@ public interface SnapshotSupport extends AccessControlledService {
      * @return the snapshot resulting from the attempt or null if no changes have occurred and thus no snapshot is needed
      * @throws InternalException an error occurred within the Dasein Cloud implementation
      * @throws CloudException an error occurred with the cloud provider
+     * @deprecated Use {@link #createSnapshot(SnapshotCreateOptions)}
      */
     public @Nullable Snapshot snapshot(@Nonnull String volumeId, @Nonnull String name, @Nonnull String description, @Nullable Tag... tags) throws InternalException, CloudException;
 
     /**
-     * Indicates whether or not you can snapshot volumes in this region. If false, that means you can browse
-     * only a public library of fixed snapshots.
+     * Indicates whether or not you can copy existing snapshots from other regions.
+     * @return true if snapshot copying is supported
+     * @throws CloudException an error occurred with the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     */
+    public boolean supportsSnapshotCopying() throws CloudException, InternalException;
+
+    /**
+     * Indicates whether or not you can snapshot volumes in this region.
      * @return true if volume snapshotting is supported
      * @throws CloudException an error occurred with the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud implementation
@@ -244,4 +286,24 @@ public interface SnapshotSupport extends AccessControlledService {
      * @throws CloudException an error occurred with the cloud provider
      */
     public boolean supportsSnapshotSharingWithPublic() throws InternalException, CloudException;
+
+    /**
+     * Updates meta-data for a snapshot with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     * @param snapshotId the snapshot to update
+     * @param tags the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void updateTags(@Nonnull String snapshotId, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Updates meta-data for multiple snapshots with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     * @param snapshotIds the snapshots to update
+     * @param tags  the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void updateTags(@Nonnull String[] snapshotIds, @Nonnull Tag... tags) throws CloudException, InternalException;
 }
