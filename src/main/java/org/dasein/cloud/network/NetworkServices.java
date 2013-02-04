@@ -28,7 +28,9 @@ public interface NetworkServices {
     public abstract @Nullable IpAddressSupport getIpAddressSupport();
     
     public abstract @Nullable LoadBalancerSupport getLoadBalancerSupport();
-    
+
+    public abstract @Nullable NetworkFirewallSupport getNetworkFirewallSupport();
+
     public abstract @Nullable VLANSupport getVlanSupport();
     
     public abstract @Nullable VPNSupport getVpnSupport();
@@ -40,7 +42,9 @@ public interface NetworkServices {
     public abstract boolean hasIpAddressSupport();
     
     public abstract boolean hasLoadBalancerSupport();
-    
+
+    public abstract boolean hasNetworkFirewallSupport();
+
     public abstract boolean hasVlanSupport();
     
     public abstract boolean hasVpnSupport();

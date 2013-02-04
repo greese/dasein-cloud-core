@@ -166,11 +166,23 @@ public interface FirewallSupport extends AccessControlledService {
      * @return the unique ID for the newly created firewall
      * @throws CloudException an error occurred with the cloud provider while performing the operation
      * @throws InternalException an error occurred locally independent of any events in the cloud
+     * @throws UnsupportedOperationException this cloud doesn't support firewall creation
+     * @deprecated use {@link #create(FirewallCreateOptions)}
      */
     public @Nonnull String create(@Nonnull String name, @Nonnull String description) throws InternalException, CloudException;
-    
+
     /**
-     * Creates a new firewall with the specified name governing the target VLAN. If the underlying cloud 
+     * Creates a new firewall based on the specified creation options.
+     * @param options the options to be used in creating the firewall
+     * @return the unique provider ID identifying the newly created firewall
+     * @throws CloudException an error occurred with the cloud provider while performing the operation
+     * @throws InternalException an error occurred locally independent of any events in the cloud
+     * @throws UnsupportedOperationException this cloud doesn't support firewall creation using the specified options
+     */
+    public @Nonnull String create(@Nonnull FirewallCreateOptions options) throws InternalException, CloudException;
+
+    /**
+     * Creates a new firewall with the specified name governing the target VLAN. If the underlying cloud
      * doesn't support VLANs, then this method will throw an UnsupportedOperationException.
      * @param name the user-friendly name for the new firewall
      * @param description a description of the purpose of the firewall
@@ -179,8 +191,8 @@ public interface FirewallSupport extends AccessControlledService {
      * @throws CloudException an error occurred with the cloud provider while performing the operation
      * @throws InternalException an error occurred locally independent of any events in the cloud
      * @throws UnsupportedOperationException this cloud doesn't support VLANs with firewalls
+     * @deprecated use {@link #create(FirewallCreateOptions)}
      */
-    @SuppressWarnings("unused")
     public @Nonnull String createInVLAN(@Nonnull String name, @Nonnull String description, @Nonnull String providerVlanId) throws InternalException, CloudException;
 
     /**
@@ -300,30 +312,30 @@ public interface FirewallSupport extends AccessControlledService {
     public @Nonnull Iterable<RuleTargetType> listSupportedSourceTypes(boolean inVlan) throws InternalException, CloudException;
 
     /**
-     * Removes meta-data from a volume. If tag values are set, their removal is dependent on underlying cloud
+     * Removes meta-data from a firewall. If tag values are set, their removal is dependent on underlying cloud
      * provider behavior. They may be removed only if the tag value matches or they may be removed regardless of the
      * value.
-     * @param volumeId the volume to update
+     * @param firewallId the firewall to update
      * @param tags the meta-data tags to remove
      * @throws CloudException    an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public abstract void removeTags(@Nonnull String volumeId, @Nonnull Tag... tags) throws CloudException, InternalException;
+    public abstract void removeTags(@Nonnull String firewallId, @Nonnull Tag... tags) throws CloudException, InternalException;
 
     /**
-     * Removes meta-data from multiple volumes. If tag values are set, their removal is dependent on underlying cloud
+     * Removes meta-data from multiple firewalls. If tag values are set, their removal is dependent on underlying cloud
      * provider behavior. They may be removed only if the tag value matches or they may be removed regardless of the
      * value.
-     * @param volumeIds the virtual machine to update
+     * @param firewallIds the firewalls to update
      * @param tags  the meta-data tags to remove
      * @throws CloudException    an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public abstract void removeTags(@Nonnull String[] volumeIds, @Nonnull Tag ... tags) throws CloudException, InternalException;
+    public abstract void removeTags(@Nonnull String[] firewallIds, @Nonnull Tag ... tags) throws CloudException, InternalException;
 
     /**
      * Revokes the uniquely identified firewall rule.
-     * @param providerFirewallRuleId the unique ID of the firewall.
+     * @param providerFirewallRuleId the unique ID of the firewall rule
      * @throws InternalException an error occurred locally independent of any events in the cloud
      * @throws CloudException an error occurred with the cloud provider while performing the operation
      */
@@ -408,26 +420,27 @@ public interface FirewallSupport extends AccessControlledService {
      * @return true if the sources may be other firewalls
      * @throws CloudException an error occurred with the cloud provider while checking for support
      * @throws InternalException a local error occurred while checking for support
+     * @deprecated Use {@link #listSupportedSourceTypes(boolean)}
      */
     public boolean supportsFirewallSources() throws CloudException, InternalException;
 
     /**
-     * Updates meta-data for a volume with the new values. It will not overwrite any value that currently
+     * Updates meta-data for a firewall with the new values. It will not overwrite any value that currently
      * exists unless it appears in the tags you submit.
-     * @param volumeId the volume to update
+     * @param firewallId the firewall to update
      * @param tags the meta-data tags to set
      * @throws CloudException    an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public abstract void updateTags(@Nonnull String volumeId, @Nonnull Tag... tags) throws CloudException, InternalException;
+    public abstract void updateTags(@Nonnull String firewallId, @Nonnull Tag... tags) throws CloudException, InternalException;
 
     /**
-     * Updates meta-data for multiple volumes with the new values. It will not overwrite any value that currently
+     * Updates meta-data for multiple firewalls with the new values. It will not overwrite any value that currently
      * exists unless it appears in the tags you submit.
-     * @param volumeIds the virtual machines to update
+     * @param firewallIds the firewalls to update
      * @param tags  the meta-data tags to set
      * @throws CloudException    an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public abstract void updateTags(@Nonnull String[] volumeIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+    public abstract void updateTags(@Nonnull String[] firewallIds, @Nonnull Tag... tags) throws CloudException, InternalException;
 }

@@ -77,13 +77,21 @@ public abstract class AbstractFirewallSupport implements FirewallSupport {
     }
 
     @Override
+    @Deprecated
     public @Nonnull String create(@Nonnull String name, @Nonnull String description) throws InternalException, CloudException {
+        return create(FirewallCreateOptions.getInstance(name, description));
+
+    }
+
+    @Override
+    public @Nonnull String create(@Nonnull FirewallCreateOptions options) throws InternalException, CloudException {
         throw new OperationNotSupportedException("Firewall creation is not currently implemented for " + getProvider().getCloudName());
     }
 
     @Override
+    @Deprecated
     public @Nonnull String createInVLAN(@Nonnull String name, @Nonnull String description, @Nonnull String providerVlanId) throws InternalException, CloudException {
-        throw new OperationNotSupportedException("VLAN firewall creation is not currently implemented for " + getProvider().getCloudName());
+        return create(FirewallCreateOptions.getInstance(providerVlanId, name, description));
     }
 
     @Override

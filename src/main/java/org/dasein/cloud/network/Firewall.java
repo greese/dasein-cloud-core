@@ -22,7 +22,6 @@ import org.dasein.cloud.Taggable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,7 +33,8 @@ import java.util.Map;
  * @since 2010.08
  * @version 2010.08
  * @version 2012.02 - Added annotations
- * @version 3013.04 implemented tagging of firewalls
+ * @version 2013.04 implemented tagging of firewalls
+ * @version 2013.05 added support for network firewalls and subnet associations (issue greese/dasein-cloud-aws/#8)
  */
 public class Firewall implements Networkable, Taggable {
     private boolean            active;
@@ -42,6 +42,7 @@ public class Firewall implements Networkable, Taggable {
     private String             description;
     private String             name;
     private String             providerFirewallId;
+    private String             providerSubnetId;
     private String             providerVlanId;
     private String             regionId;
     private Map<String,String> tags;
@@ -183,6 +184,14 @@ public class Firewall implements Networkable, Taggable {
 	public void setDescription(@Nonnull String description) {
 		this.description = description;
 	}
+
+    public @Nullable String getProviderSubnetId() {
+        return providerSubnetId;
+    }
+
+    public void setProviderSubnetId(@Nonnull String providerSubnetId) {
+        this.providerSubnetId = providerSubnetId;
+    }
 
     /**
      * Specifies the VLAN over which this firewall operates

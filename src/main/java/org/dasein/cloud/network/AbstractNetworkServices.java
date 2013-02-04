@@ -44,6 +44,11 @@ public abstract class AbstractNetworkServices implements NetworkServices {
     }
 
     @Override
+    public @Nullable NetworkFirewallSupport getNetworkFirewallSupport() {
+        return null;
+    }
+
+    @Override
     public @Nullable VLANSupport getVlanSupport() {
         return null;
     }
@@ -72,7 +77,12 @@ public abstract class AbstractNetworkServices implements NetworkServices {
     public boolean hasLoadBalancerSupport() {
         return (getLoadBalancerSupport() != null);
     }
-    
+
+    @Override
+    public boolean hasNetworkFirewallSupport() {
+        return (getNetworkFirewallSupport() != null);
+    }
+
     @Override
     public boolean hasVlanSupport() {
         return (getVlanSupport() != null);
