@@ -1,11 +1,13 @@
 package org.dasein.cloud.network;
 
+import org.dasein.cloud.AccessControlledService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.OperationNotSupportedException;
 import org.dasein.cloud.Requirement;
 import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.Tag;
+import org.dasein.cloud.identity.ServiceAction;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -20,7 +22,17 @@ import java.util.Locale;
  * @since 2013.04
  * @version 2013.04 initial version (issue greese/dasein-cloud-aws/#8)
  */
-public interface NetworkFirewallSupport {
+public interface NetworkFirewallSupport extends AccessControlledService {
+    static public final ServiceAction ANY                  = new ServiceAction("NFW:ANY");
+
+    static public final ServiceAction ASSOCIATE            = new ServiceAction("NFW:ASSOCIATE");
+    static public final ServiceAction AUTHORIZE            = new ServiceAction("NFW:AUTHORIZE");
+    static public final ServiceAction CREATE_FIREWALL      = new ServiceAction("NFW:CREATE_FIREWALL");
+    static public final ServiceAction GET_FIREWALL         = new ServiceAction("NFW:GET_FIREWALL");
+    static public final ServiceAction LIST_FIREWALL        = new ServiceAction("NFW:LIST_FIREWALL");
+    static public final ServiceAction REMOVE_FIREWALL      = new ServiceAction("NFW:REMOVE_FIREWALL");
+    static public final ServiceAction REVOKE               = new ServiceAction("NFW:REVOKE");
+
     /**
      * Associates the specified firewall with the specified subnet.
      * @param firewallId the firewall to be associated
@@ -30,16 +42,6 @@ public interface NetworkFirewallSupport {
      * @throws OperationNotSupportedException you cannot associate network firewalls at the subnet level
      */
     public void associateWithSubnet(@Nonnull String firewallId, @Nonnull String withSubnetId) throws CloudException, InternalException;
-
-    /**
-     * Associates the specified firewall with the specified VLAN.
-     * @param firewallId the firewall to be associated
-     * @param withVLANId the VLAN with which the firewall is to be associated
-     * @throws CloudException an error occurred with the cloud provider while performing the operation
-     * @throws InternalException an error occurred locally independent of any events in the cloud
-     * @throws OperationNotSupportedException you cannot associate network firewalls at the VLAN level
-     */
-    public void associateWithVLAN(@Nonnull String firewallId, @Nonnull String withVLANId) throws CloudException, InternalException;
 
     /**
      * Provides positive authorization for the specified firewall rule with the specified precedence. Any call to this method should

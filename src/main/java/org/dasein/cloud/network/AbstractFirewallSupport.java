@@ -152,6 +152,11 @@ public abstract class AbstractFirewallSupport implements FirewallSupport {
     }
 
     @Override
+    public @Nonnull String[] mapServiceAction(@Nonnull ServiceAction action) {
+        return new String[0];
+    }
+
+    @Override
     public void removeTags(@Nonnull String volumeId, @Nonnull Tag... tags) throws CloudException, InternalException {
         // NO-OP
     }
@@ -271,12 +276,6 @@ public abstract class AbstractFirewallSupport implements FirewallSupport {
     public boolean supportsFirewallSources() throws CloudException, InternalException {
         return false;
     }
-
-    @Override
-    public @Nonnull String[] mapServiceAction(@Nonnull ServiceAction action) {
-        return new String[0];  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
 
     @Override
     public void updateTags(@Nonnull String volumeId, @Nonnull Tag... tags) throws CloudException, InternalException {

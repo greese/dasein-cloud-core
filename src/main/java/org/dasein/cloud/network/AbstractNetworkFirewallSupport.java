@@ -8,6 +8,7 @@ import org.dasein.cloud.ProviderContext;
 import org.dasein.cloud.Requirement;
 import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.Tag;
+import org.dasein.cloud.identity.ServiceAction;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -124,6 +125,11 @@ public abstract class AbstractNetworkFirewallSupport implements NetworkFirewallS
 
         Collections.addAll(types, RuleTargetType.values());
         return types;
+    }
+
+    @Override
+    public @Nonnull String[] mapServiceAction(@Nonnull ServiceAction action) {
+        return new String[0];
     }
 
     @Override

@@ -6,6 +6,7 @@ import org.dasein.cloud.InternalException;
 import org.dasein.cloud.ProviderContext;
 import org.dasein.cloud.Requirement;
 import org.dasein.cloud.ResourceStatus;
+import org.dasein.cloud.identity.ServiceAction;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -56,5 +57,10 @@ public abstract class AbstractVLANSupport implements VLANSupport {
             status.add(new ResourceStatus(vlan.getProviderVlanId(), vlan.getCurrentState()));
         }
         return status;
+    }
+
+    @Override
+    public @Nonnull String[] mapServiceAction(@Nonnull ServiceAction action) {
+        return new String[0];
     }
 }
