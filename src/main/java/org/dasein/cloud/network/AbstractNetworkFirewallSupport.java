@@ -62,7 +62,7 @@ public abstract class AbstractNetworkFirewallSupport implements NetworkFirewallS
         return null;
     }
 
-    protected final @Nonnull CloudProvider getProvider() {
+    protected @Nonnull CloudProvider getProvider() {
         return provider;
     }
 

@@ -1,8 +1,8 @@
 dasein-cloud-core
 =================
 
-* Current major version: 2013.01
-* API Documentation: http://www.dasein.org/api/dasein-cloud-2012-09
+* Current major version: 2013.04
+* API Documentation: http://www.dasein.org/api/dasein-cloud-2013-04
 * Source: http://gihub.org/greese/dasein-cloud-core
 * Tutorial: See overview.pdf
 
