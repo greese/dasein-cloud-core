@@ -134,14 +134,18 @@ public class VirtualMachine implements Networkable, Taggable {
     public String getRootPassword(long timeoutInMilliseconds) throws InterruptedException {
         long timeout = System.currentTimeMillis() + timeoutInMilliseconds;
         String pw = getRootPassword();
-        
-        if( passwordCallback != null ) {
+        boolean hasCallback;
+
+        synchronized( this ) {
+            hasCallback = (passwordCallback != null);
+        }
+        if( hasCallback ) {
             while( pw == null ) {
                 if( timeout <= System.currentTimeMillis() ) {
                     throw new InterruptedException("System timed out waiting for a password to become available.");
                 }
                 try { Thread.sleep(15000L); }
-                catch( InterruptedException e ) { }
+                catch( InterruptedException ignore ) { }
                 pw = getRootPassword();
             }
         }
