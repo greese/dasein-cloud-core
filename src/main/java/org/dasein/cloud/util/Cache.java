@@ -28,7 +28,7 @@ import org.dasein.util.uom.time.TimePeriod;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.lang.ref.WeakReference;
+import java.lang.ref.SoftReference;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -65,7 +65,7 @@ public final class Cache<T> {
 
     static private class CacheEntry<T> {
         public long lastCacheClear;
-        public WeakReference<Iterable<T>> items;
+        public SoftReference<Iterable<T>> items;
     }
 
     /**
@@ -214,7 +214,7 @@ public final class Cache<T> {
         CacheEntry<T> entry = new CacheEntry<T>();
         String endpoint = ctx.getEndpoint();
 
-        entry.items = new WeakReference<Iterable<T>>(list);
+        entry.items = new SoftReference<Iterable<T>>(list);
         entry.lastCacheClear = System.currentTimeMillis();
         if( cloudCache != null ) {
             cloudCache.put(endpoint, entry);
