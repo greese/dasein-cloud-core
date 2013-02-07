@@ -69,8 +69,62 @@ public class VLAN {
         return cidr;
     }
 
+    /**
+     * Sets the CIDR associated with this network.
+     * @param cidr the CIDR that governs the address space for the network
+     */
     public void setCidr(String cidr) {
         this.cidr = cidr;
+    }
+
+    /**
+     * Sets the network CIDR based on a netmask and an address within the network (typically, your gateway).
+     * @param netmask the netmask for the network
+     * @param anAddress an address within the network
+     */
+    public void setCidr(@Nonnull String netmask, @Nonnull String anAddress) {
+        String[] dots = netmask.split("\\.");
+        int cidr = 0;
+
+        for( String item : dots ) {
+            int x = Integer.parseInt(item);
+
+            for( ; x > 0 ; x = (x<<1)%256 ) {
+                cidr++;
+            }
+        }
+        StringBuilder network = new StringBuilder();
+
+        dots = anAddress.split("\\.");
+        int start = 0;
+
+        for( String item : dots ) {
+            if( ((start+8) < cidr) || cidr == 0 ) {
+                network.append(item);
+            }
+            else {
+                int addresses = (int)Math.pow(2, (start+8)-cidr);
+                int subnets = 256/addresses;
+                int gw = Integer.parseInt(item);
+
+                for( int i=0; i<subnets; i++ ) {
+                    int base = i*addresses;
+                    int top = ((i+1)*addresses);
+
+                    if( gw >= base && gw < top ) {
+                        network.append(String.valueOf(base));
+                        break;
+                    }
+                }
+            }
+            start += 8;
+            if( start < 32 ) {
+                network.append(".");
+            }
+        }
+        network.append("/");
+        network.append(String.valueOf(cidr));
+        setCidr(network.toString());
     }
 
     public String getDescription() {
