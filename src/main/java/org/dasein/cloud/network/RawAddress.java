@@ -83,6 +83,37 @@ public class RawAddress {
         return ipAddress.hashCode();
     }
 
+    /**
+     * Indicates whether this IP address is reserved for private address spaces or likely represents a publicly
+     * addressable IP address.
+     * @return true if this address is in the publicly addressable address space
+     */
+    public boolean isPublicIpAddress() {
+        if( getVersion().equals(IPVersion.IPV4) ) {
+            if( ipAddress.startsWith("10.") || ipAddress.startsWith("192.168") || ipAddress.startsWith("169.254") ) {
+                return false;
+            }
+            else if( ipAddress.startsWith("172.") ) {
+                String[] parts = ipAddress.split("\\.");
+
+                if( parts.length != 4 ) {
+                    return true;
+                }
+                int x = Integer.parseInt(parts[1]);
+
+                if( x >= 16 && x <= 31 ) {
+                    return false;
+                }
+            }
+        }
+        else {
+            if( ipAddress.startsWith("fd") || ipAddress.startsWith("fc00:")) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     public @Nonnull String toString() {
         return ipAddress;

@@ -343,10 +343,10 @@ public abstract class AbstractVMSupport implements VirtualMachineSupport {
     public final void stop(@Nonnull String vmId) throws InternalException, CloudException {
         stop(vmId, false);
 
-        long timeout = System.currentTimeMillis() + (CalendarWrapper.MINUTE * 10L);
+        long timeout = System.currentTimeMillis() + (CalendarWrapper.MINUTE * 5L);
 
         while( timeout > System.currentTimeMillis() ) {
-            try { Thread.sleep(15000L); }
+            try { Thread.sleep(10000L); }
             catch( InterruptedException ignore ) { }
             try {
                 VirtualMachine vm = getVirtualMachine(vmId);
