@@ -24,6 +24,7 @@ import org.dasein.util.uom.storage.Gigabyte;
 import org.dasein.util.uom.storage.Storage;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -295,9 +296,13 @@ public class Volume implements Networkable, Taggable {
         this.providerVlanId = providerVlanId;
     }
 
+    public @Nullable String getTag(@Nonnull String key) {
+        return getTags().get(key);
+    }
+
     @Override
     public @Nonnull Map<String, String> getTags() {
-        return (tags == null ? null : tags);
+        return (tags == null ? new HashMap<String, String>() : tags);
     }
 
     @Override
