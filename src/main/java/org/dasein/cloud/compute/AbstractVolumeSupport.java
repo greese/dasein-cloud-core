@@ -232,8 +232,10 @@ public abstract class AbstractVolumeSupport implements VolumeSupport {
     }
 
     @Override
-    public void removeTags(@Nonnull String[] volumeIds, @Nonnull Tag ... tags) throws CloudException, InternalException {
-        // NO-OP
+    public void removeTags(@Nonnull String[] volumeIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for( String id : volumeIds ) {
+            removeTags(id, tags);
+        }
     }
 
     @Override
@@ -243,7 +245,9 @@ public abstract class AbstractVolumeSupport implements VolumeSupport {
 
     @Override
     public void updateTags(@Nonnull String[] volumeIds, @Nonnull Tag... tags) throws CloudException, InternalException {
-        // NO-OP
+        for( String id : volumeIds ) {
+            updateTags(id, tags);
+        }
     }
 
     @Override

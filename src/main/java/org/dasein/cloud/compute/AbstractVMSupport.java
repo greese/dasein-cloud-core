@@ -406,7 +406,9 @@ public abstract class AbstractVMSupport implements VirtualMachineSupport {
 
     @Override
     public void updateTags(@Nonnull String[] vmIds, @Nonnull Tag... tags) throws CloudException, InternalException {
-        // NO-OP
+        for( String id : vmIds ) {
+            updateTags(id, tags);
+        }
     }
 
     @Override
@@ -416,7 +418,9 @@ public abstract class AbstractVMSupport implements VirtualMachineSupport {
 
     @Override
     public void removeTags(@Nonnull String[] vmIds, @Nonnull Tag... tags) throws CloudException, InternalException {
-        // NO-OP
+        for( String id : vmIds ) {
+            removeTags(id, tags);
+        }
     }
 
     @Override

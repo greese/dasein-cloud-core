@@ -162,8 +162,10 @@ public abstract class AbstractFirewallSupport implements FirewallSupport {
     }
 
     @Override
-    public void removeTags(@Nonnull String[] volumeIds, @Nonnull Tag ... tags) throws CloudException, InternalException {
-        // NO-OP
+    public void removeTags(@Nonnull String[] vmIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for( String id : vmIds ) {
+            removeTags(id, tags);
+        }
     }
 
     @Override
@@ -283,7 +285,9 @@ public abstract class AbstractFirewallSupport implements FirewallSupport {
     }
 
     @Override
-    public void updateTags(@Nonnull String[] volumeIds, @Nonnull Tag... tags) throws CloudException, InternalException {
-        // NO-OP
+    public void updateTags(@Nonnull String[] vmIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for( String id : vmIds ) {
+            updateTags(id, tags);
+        }
     }
 }

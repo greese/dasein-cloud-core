@@ -30,6 +30,7 @@ import org.dasein.cloud.InternalException;
 import org.dasein.cloud.OperationNotSupportedException;
 import org.dasein.cloud.Requirement;
 import org.dasein.cloud.ResourceStatus;
+import org.dasein.cloud.Tag;
 import org.dasein.cloud.identity.ServiceAction;
 
 /**
@@ -413,6 +414,7 @@ public interface VLANSupport extends AccessControlledService {
      * @param forVlanId the VLAN to disconnect
      * @throws CloudException an error occurred with the cloud provider while removing the gateway
      * @throws InternalException a local error occurred while removing the gateway
+     * @throws OperationNotSupportedException internet gateway creation/removal is not supported in this cloud
      */
     public abstract void removeInternetGateway(@Nonnull String forVlanId) throws CloudException, InternalException;
 
@@ -421,6 +423,7 @@ public interface VLANSupport extends AccessControlledService {
      * @param nicId the network interface to be de-provisioned
      * @throws CloudException an error occurred with the cloud provider while de-provisioning the network interface
      * @throws InternalException a local error occurred while de-provisioning the network interface
+     * @throws OperationNotSupportedException NIC creation/removal is not supported in this cloud
      */
     public abstract void removeNetworkInterface(@Nonnull String nicId) throws CloudException, InternalException;
 
@@ -430,6 +433,7 @@ public interface VLANSupport extends AccessControlledService {
      * @param destinationCidr the destination CIDR for the traffic being routed
      * @throws CloudException an error occurred in the cloud while removing the route
      * @throws InternalException a local error occurred processing the request to remove the route
+     * @throws OperationNotSupportedException route creation/removal is not supported in this cloud
      */
     public abstract void removeRoute(@Nonnull String inRoutingTableId, @Nonnull String destinationCidr) throws CloudException, InternalException;
 
@@ -438,12 +442,49 @@ public interface VLANSupport extends AccessControlledService {
      * @param routingTableId the unique ID of the routing table to be removed
      * @throws CloudException an error occurred in the cloud removing the routing table
      * @throws InternalException a local error occurred while processing the request to remove the routing table
+     * @throws OperationNotSupportedException routing table creation/removal is not supported in this cloud
      */
     public abstract void removeRoutingTable(@Nonnull String routingTableId) throws CloudException, InternalException;
 
+    /**
+     * Removes the specified subnet from the cloud.
+     * @param providerSubnetId the subnet to be removed
+     * @throws CloudException an error occurred with the cloud provider while removing the subnet
+     * @throws InternalException a local error occurred while processing the request
+     * @throws OperationNotSupportedException subnet creation/removal is not supported in this cloud
+     */
     public abstract void removeSubnet(String providerSubnetId) throws CloudException, InternalException;
-    
+
+    /**
+     * Removes the specified VLAN from the cloud.
+     * @param vlanId the unique ID of the VLAN to be removed
+     * @throws CloudException an error occurred removing the target VLAN
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws OperationNotSupportedException VLAN removal is not supported
+     */
     public abstract void removeVlan(String vlanId) throws CloudException, InternalException;
+
+    /**
+     * Removes meta-data from a VLAN. If tag values are set, their removal is dependent on underlying cloud
+     * provider behavior. They may be removed only if the tag value matches or they may be removed regardless of the
+     * value.
+     * @param vlanId the VLAN to update
+     * @param tags the meta-data tags to remove
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void removeVLANTags(@Nonnull String vlanId, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Removes meta-data from multiple VLANs. If tag values are set, their removal is dependent on underlying cloud
+     * provider behavior. They may be removed only if the tag value matches or they may be removed regardless of the
+     * value.
+     * @param vlanIds the VLANs to update
+     * @param tags  the meta-data tags to remove
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void removeVLANTags(@Nonnull String[] vlanIds, @Nonnull Tag ... tags) throws CloudException, InternalException;
 
     /**
      * Indicates whether or not this cloud allows enabling of internet gateways for VLANs. This is not relevant if all VLANs are Internet
@@ -461,4 +502,24 @@ public interface VLANSupport extends AccessControlledService {
      * @throws InternalException a local error occurred identifying support
      */
     public abstract boolean supportsRawAddressRouting() throws CloudException, InternalException;
+
+    /**
+     * Updates meta-data for a VLAN with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     * @param vlanId the VLAN to update
+     * @param tags the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void updateVLANTags(@Nonnull String vlanId, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Updates meta-data for multiple VLANs with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     * @param vlanIds the VLANs to update
+     * @param tags  the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void updateVLANTags(@Nonnull String[] vlanIds, @Nonnull Tag... tags) throws CloudException, InternalException;
 }

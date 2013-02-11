@@ -7,6 +7,7 @@ import org.dasein.cloud.OperationNotSupportedException;
 import org.dasein.cloud.ProviderContext;
 import org.dasein.cloud.Requirement;
 import org.dasein.cloud.ResourceStatus;
+import org.dasein.cloud.Tag;
 import org.dasein.cloud.compute.ComputeServices;
 import org.dasein.cloud.compute.VirtualMachine;
 import org.dasein.cloud.compute.VirtualMachineSupport;
@@ -395,6 +396,18 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     }
 
     @Override
+    public void removeVLANTags(@Nonnull String vlanId, @Nonnull Tag... tags) throws CloudException, InternalException {
+        // NO-OP
+    }
+
+    @Override
+    public void removeVLANTags(@Nonnull String[] vlanIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for( String id : vlanIds ) {
+            removeVLANTags(id, tags);
+        }
+    }
+
+    @Override
     public boolean supportsInternetGatewayCreation() throws CloudException, InternalException {
         return false;
     }
@@ -402,5 +415,17 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     @Override
     public boolean supportsRawAddressRouting() throws CloudException, InternalException {
         return false;
+    }
+
+    @Override
+    public void updateVLANTags(@Nonnull String vlanId, @Nonnull Tag... tags) throws CloudException, InternalException {
+        // NO-OP
+    }
+
+    @Override
+    public void updateVLANTags(@Nonnull String[] vlanIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for( String id : vlanIds ) {
+            updateVLANTags(id, tags);
+        }
     }
 }

@@ -18,14 +18,17 @@
 
 package org.dasein.cloud.network;
 
+import org.dasein.cloud.Taggable;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
  * @version 2013.02 Added networkType field (issue #25)
  */
-public class VLAN {
+public class VLAN implements Taggable {
     private String    cidr;
     private VLANState currentState;
     private String    description;
@@ -191,8 +194,8 @@ public class VLAN {
         this.tags = tags;
     }
 
-    public Map<String,String> getTags() {
-        return tags;
+    public @Nonnull Map<String,String> getTags() {
+        return (tags == null ? new HashMap<String, String>() : tags);
     }
 
     public void setDomainName(String domainName) {
@@ -233,5 +236,17 @@ public class VLAN {
 
     public void setNetworkType(@Nonnull String t) {
         networkType = t;
+    }
+
+    @Override
+    public void setTag(@Nonnull String key, @Nonnull String value) {
+        if( tags == null ) {
+            tags = new HashMap<String,String>();
+        }
+        tags.put(key, value);
+    }
+
+    public @Nullable String getTag(@Nonnull String key) {
+        return getTags().get(key);
     }
 }

@@ -137,7 +137,9 @@ public abstract class AbstractSnapshotSupport implements SnapshotSupport {
 
     @Override
     public void removeTags(@Nonnull String[] snapshotIds, @Nonnull Tag... tags) throws CloudException, InternalException {
-        // NO-OP
+        for( String id : snapshotIds ) {
+            removeTags(id, tags);
+        }
     }
 
     @Override
@@ -232,6 +234,8 @@ public abstract class AbstractSnapshotSupport implements SnapshotSupport {
 
     @Override
     public void updateTags(@Nonnull String[] snapshotIds, @Nonnull Tag... tags) throws CloudException, InternalException {
-        // NO-OP
+        for( String id : snapshotIds ) {
+            updateTags(id, tags);
+        }
     }
 }
