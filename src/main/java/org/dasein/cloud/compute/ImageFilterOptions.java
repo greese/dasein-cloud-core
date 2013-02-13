@@ -7,7 +7,11 @@ import javax.annotation.Nullable;
 import java.util.Map;
 
 /**
- * Options for filtering machine images when querying the cloud provider.
+ * Options for filtering machine images when querying the cloud provider. <b>Note:</b> How searching handles account numbers is
+ * dependent on the nature of the search. <code>listXXX</code>
+ * methods will treat no options or null options as MUST matching the current provider context account number and options
+ * with an account number set as MUST matching the specified account number, regardless of the value of {@link #isMatchesAny()}.
+ * <code>searchXXX</code> methods will not treat the account number in any special fashion.
  * <p>Created by Cameron Stokes: 01/28/13 08:41 AM</p>
  * @author Cameron Stokes
  * @version 2013.04 initial version
@@ -103,6 +107,8 @@ public class ImageFilterOptions {
     }
 
     /**
+     * See class documentation note for this class ({@link ImageFilterOptions}) for notes on the special handling
+     * associated with an account number.
      * @return an account number on which filtering should be done, or <code>null</code> to not filter on account number
      */
     public @Nullable String getAccountNumber() {
