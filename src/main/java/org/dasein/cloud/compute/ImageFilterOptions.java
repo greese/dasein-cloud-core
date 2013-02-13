@@ -8,10 +8,7 @@ import java.util.Map;
 
 /**
  * Options for filtering machine images when querying the cloud provider. <b>Note:</b> How searching handles account numbers is
- * dependent on the nature of the search. <code>listXXX</code>
- * methods will treat no options or null options as MUST matching the current provider context account number and options
- * with an account number set as MUST matching the specified account number, regardless of the value of {@link #isMatchesAny()}.
- * <code>searchXXX</code> methods will not treat the account number in any special fashion.
+ * dependent on the nature of the search.
  * <p>Created by Cameron Stokes: 01/28/13 08:41 AM</p>
  * @author Cameron Stokes
  * @version 2013.04 initial version
@@ -199,11 +196,9 @@ public class ImageFilterOptions {
     /**
      * Matches an image against the criteria in this set of filter options.
      * @param image the image to test
-     * @param currentAccount <code>null</code> if in the context of a <code>searchXXX</code> method, or the
-     *                       account number for the current user if in a <code>listXXX</code> method.
      * @return true if the image matches all criteria
      */
-    public boolean matches(@Nonnull MachineImage image, @Nullable String currentAccount) {
+    public boolean matches(@Nonnull MachineImage image) {
         if( imageClass != null ) {
             if( !imageClass.equals(image.getImageClass()) ) {
                 if( !matchesAny ) {
@@ -234,14 +229,7 @@ public class ImageFilterOptions {
                 return true;
             }
         }
-        if( accountNumber == null ) {
-            if( currentAccount != null && !currentAccount.equals(image.getProviderOwnerId()) ) {
-                if( !matchesAny ) {
-                    return false;
-                }
-            }
-        }
-        else {
+        if( accountNumber != null ) {
             if( !accountNumber.equals(image.getProviderOwnerId()) ) {
                 if( !matchesAny ) {
                     return false;

@@ -393,7 +393,7 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
                         break;
                     }
                 }
-                if( matches && options.matches(img, null) ) {
+                if( matches && options.matches(img) ) {
                     images.add(img);
                 }
             }
@@ -453,7 +453,7 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
                         break;
                     }
                 }
-                if( matches && options.matches(img, null) ) {
+                if( matches && options.matches(img) ) {
                     images.add(img);
                 }
             }
