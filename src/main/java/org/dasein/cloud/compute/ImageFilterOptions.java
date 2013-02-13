@@ -125,6 +125,33 @@ public class ImageFilterOptions {
     }
 
     /**
+     * @return the number of criteria on which this filter is operating
+     */
+    public int getCriteriaCount() {
+        int count = 0;
+
+        if( accountNumber != null ) {
+            count++;
+        }
+        if( architecture != null ) {
+            count++;
+        }
+        if( imageClass != null ) {
+            count++;
+        }
+        if( platform != null ) {
+            count++;
+        }
+        if( regex != null ) {
+            count++;
+        }
+        if( tags != null && !tags.isEmpty() ) {
+            count++;
+        }
+        return count;
+    }
+
+    /**
      * @return the image class on which filtering should be done, or <code>null</code> to not filter on image class
      */
     public @Nullable ImageClass getImageClass() {
