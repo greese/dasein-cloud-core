@@ -109,7 +109,7 @@ public abstract class AbstractSnapshotSupport implements SnapshotSupport {
         ArrayList<Snapshot> snapshots = new ArrayList<Snapshot>();
 
         for( Snapshot snapshot : listSnapshots() ) {
-            if( options.matches(snapshot) ) {
+            if( options.matches(snapshot, getContext().getAccountNumber()) ) {
                 snapshots.add(snapshot);
             }
         }

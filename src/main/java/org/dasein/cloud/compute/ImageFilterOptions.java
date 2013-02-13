@@ -150,14 +150,37 @@ public class ImageFilterOptions {
     /**
      * Matches an image against the criteria in this set of filter options.
      * @param image the image to test
+     * @param currentAccount <code>null</code> if in the context of a <code>searchXXX</code> method, or the
+     *                       account number for the current user if in a <code>listXXX</code> method.
      * @return true if the image matches all criteria
      */
-    public boolean matches(@Nonnull MachineImage image) {
-        if( imageClass != null && !imageClass.equals(image.getImageClass()) ) {
-            return false;
+    public boolean matches(@Nonnull MachineImage image, @Nullable String currentAccount) {
+        if( imageClass != null ) {
+            if( !imageClass.equals(image.getImageClass()) ) {
+                if( !matchesAny ) {
+                    return false;
+                }
+            }
+            else if( matchesAny ) {
+                return true;
+            }
         }
-        if( accountNumber != null && !accountNumber.equals(image.getProviderOwnerId()) ) {
-            return false;
+        if( accountNumber == null ) {
+            if( currentAccount != null && !currentAccount.equals(image.getProviderOwnerId()) ) {
+                if( !matchesAny ) {
+                    return false;
+                }
+            }
+        }
+        else {
+            if( !accountNumber.equals(image.getProviderOwnerId()) ) {
+                if( !matchesAny ) {
+                    return false;
+                }
+            }
+            else if( matchesAny ) {
+                return true;
+            }
         }
         if( regex != null ) {
             boolean matches = (image.getName().matches(regex) || image.getDescription().matches(regex));

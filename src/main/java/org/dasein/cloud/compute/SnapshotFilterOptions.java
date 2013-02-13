@@ -7,7 +7,10 @@ import javax.annotation.Nullable;
 import java.util.Map;
 
 /**
- * Options for filtering snapshots when querying the cloud provider.
+ * Options for filtering snapshots when querying the cloud provider. <b>Note:</b> How searching handles account numbers is dependent on the nature of the search. <code>listXXX</code>
+ * methods will treat no options or null options as MUST matching the current provider context account number and options
+ * with an account number set as MUST matching the specified account number, regardless of the value of {@link #isMatchesAny()}.
+ * <code>searchXXX</code> methods will not treat the account number in any special fashion.
  * <p>Created by Cameron Stokes: 02/12/13</p>
  * @author Cameron Stokes
  * @version 2013.04 initial version
@@ -70,6 +73,8 @@ public class SnapshotFilterOptions {
     private SnapshotFilterOptions() {}
 
     /**
+     * See class documentation note for this class ({@link SnapshotFilterOptions}) for notes on the special handling
+     * associated with an account number.
      * @return an account number on which filtering should be done, or <code>null</code> to not filter on account number
      */
     public @Nullable String getAccountNumber() {
@@ -110,11 +115,27 @@ public class SnapshotFilterOptions {
     /**
      * Compares a snapshot against these filter options to see if it matches.
      * @param snapshot the snapshot to be compared
+     * @param currentAccount <code>null</code> if in the context of a <code>searchXXX</code> method, or the
+     *                       account number for the current user if in a <code>listXXX</code> method.
      * @return <code>true</code> if the snapshot matches the filter criteria
      */
-    public boolean matches(@Nonnull Snapshot snapshot) {
-        if( accountNumber != null && !accountNumber.equals(snapshot.getOwner()) ) {
-            return false;
+    public boolean matches(@Nonnull Snapshot snapshot, @Nullable String currentAccount) {
+        if( accountNumber == null ) {
+            if( currentAccount != null && !currentAccount.equals(snapshot.getOwner()) ) {
+                if( !matchesAny ) {
+                    return false;
+                }
+            }
+        }
+        else {
+            if( !accountNumber.equals(snapshot.getOwner()) ) {
+                if( !matchesAny ) {
+                    return false;
+                }
+            }
+            else if( matchesAny ) {
+                return true;
+            }
         }
         if( regex != null ) {
             boolean matches = (snapshot.getName().matches(regex) || snapshot.getDescription().matches(regex));
