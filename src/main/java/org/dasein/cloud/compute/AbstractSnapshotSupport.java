@@ -105,6 +105,17 @@ public abstract class AbstractSnapshotSupport implements SnapshotSupport {
         return status;
     }
 
+    public @Nonnull Iterable<Snapshot> listSnapshots(SnapshotFilterOptions options) throws InternalException, CloudException {
+        ArrayList<Snapshot> snapshots = new ArrayList<Snapshot>();
+
+        for( Snapshot snapshot : listSnapshots() ) {
+            if( options.matches(snapshot) ) {
+                snapshots.add(snapshot);
+            }
+        }
+        return snapshots;
+    }
+
     @Override
     public @Nonnull String[] mapServiceAction(@Nonnull ServiceAction action) {
         return new String[0];

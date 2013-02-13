@@ -1,5 +1,7 @@
 package org.dasein.cloud.compute;
 
+import org.dasein.cloud.CloudProvider;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -28,6 +30,20 @@ public class SnapshotFilterOptions {
      */
     public @Nullable Map<String, String> getTags() {
         return tags;
+    }
+
+    /**
+     * Compares a snapshot against these filter options to see if it matches.
+     * @param snapshot the snapshot to be compared
+     * @return <code>true</code> if the snapshot matches the filter criteria
+     */
+    public boolean matches(@Nonnull Snapshot snapshot) {
+        if( tags != null && !tags.isEmpty() ) {
+            if( !CloudProvider.matchesTags(snapshot.getTags(), snapshot.getName(), snapshot.getDescription(), tags) ) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
