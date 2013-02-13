@@ -151,6 +151,17 @@ public interface SnapshotSupport extends AccessControlledService {
     public abstract @Nonnull Iterable<Snapshot> listSnapshots() throws InternalException, CloudException;
 
     /**
+     * Lists all volumes in the current region with the cloud provider matching the given
+     * SnapshotFilterOptions belonging to the account owner currently in the cloud. The filtering
+     * functionality is delegated to the cloud provider.
+     * @param options filter options
+     * @return a list of snapshots in the current region
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     * @throws CloudException an error occurred with the cloud provider
+     */
+    public abstract @Nonnull Iterable<Snapshot> listSnapshots(SnapshotFilterOptions options) throws InternalException, CloudException;
+
+    /**
      * Removes the specified snapshot permanently from the cloud.
      * @param snapshotId the unique ID of the snapshot to be removed
      * @throws InternalException an error occurred within the Dasein Cloud implementation
@@ -244,4 +255,29 @@ public interface SnapshotSupport extends AccessControlledService {
      * @throws CloudException an error occurred with the cloud provider
      */
     public boolean supportsSnapshotSharingWithPublic() throws InternalException, CloudException;
+
+
+    /**
+     * Updates meta-data for multiple snapshots with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     *
+     * @param snapshotIds the volumes to update
+     * @param tags     the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void updateTags(@Nonnull String[] snapshotIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Removes meta-data from multiple snapshots. If tag values are set, their removal is dependent on underlying cloud
+     * provider behavior. They may be removed only if the tag value matches or they may be removed regardless of the
+     * value.
+     *
+     * @param snapshotIds the volumes to update
+     * @param tags     the meta-data tags to remove
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void removeTags(@Nonnull String[] snapshotIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+
 }

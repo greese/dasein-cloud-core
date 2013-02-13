@@ -20,11 +20,7 @@ package org.dasein.cloud.compute;
 
 import java.util.Locale;
 
-import org.dasein.cloud.AccessControlledService;
-import org.dasein.cloud.CloudException;
-import org.dasein.cloud.InternalException;
-import org.dasein.cloud.Requirement;
-import org.dasein.cloud.ResourceStatus;
+import org.dasein.cloud.*;
 import org.dasein.cloud.identity.ServiceAction;
 import org.dasein.util.uom.storage.Gigabyte;
 import org.dasein.util.uom.storage.Storage;
@@ -203,6 +199,17 @@ public interface VolumeSupport extends AccessControlledService {
     public @Nonnull Iterable<Volume> listVolumes() throws InternalException, CloudException;
 
     /**
+     * Lists all volumes in the current region with the cloud provider matching the given
+     * VolumeFilterOptions belonging to the account owner currently in the cloud. The filtering
+     * functionality is delegated to the cloud provider.
+     * @param options filter options
+     * @return the volumes in the current region for this cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     * @throws CloudException an error occurred with the cloud provider
+     */
+    public @Nonnull Iterable<Volume> listVolumes(@Nullable VolumeFilterOptions options) throws InternalException, CloudException;
+
+    /**
      * Identifies whether or not the current account has access to volumes in the current region.
      * @return true if the current account has access to volumes in the current region
      * @throws CloudException an error occurred with the cloud provider
@@ -217,4 +224,28 @@ public interface VolumeSupport extends AccessControlledService {
      * @throws CloudException an error occurred with the cloud provider
      */
     public void remove(@Nonnull String volumeId) throws InternalException, CloudException;
+
+    /**
+     * Updates meta-data for multiple volumes with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     *
+     * @param volumeIds the volumes to update
+     * @param tags     the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void updateTags(@Nonnull String[] volumeIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Removes meta-data from multiple volumes. If tag values are set, their removal is dependent on underlying cloud
+     * provider behavior. They may be removed only if the tag value matches or they may be removed regardless of the
+     * value.
+     *
+     * @param volumeIds the volumes to update
+     * @param tags     the meta-data tags to remove
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void removeTags(@Nonnull String[] volumeIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+
 }

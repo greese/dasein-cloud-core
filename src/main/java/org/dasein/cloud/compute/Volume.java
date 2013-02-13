@@ -18,11 +18,14 @@
 
 package org.dasein.cloud.compute;
 
+import org.dasein.cloud.Taggable;
 import org.dasein.cloud.network.Networkable;
 import org.dasein.util.uom.storage.Gigabyte;
 import org.dasein.util.uom.storage.Storage;
 
 import javax.annotation.Nonnull;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Represents a block storage volume in the cloud.
@@ -30,7 +33,7 @@ import javax.annotation.Nonnull;
  * @since unknown
  * @version 2012-07 updated to match new volume enhancements, including UoM, type, and root volume awareness
  */
-public class Volume implements Networkable {
+public class Volume implements Networkable, Taggable {
     private long        creationTimestamp;
 	private VolumeState currentState;
     private String      providerDataCenterId;
@@ -50,8 +53,9 @@ public class Volume implements Networkable {
     private Storage<Gigabyte> size;
     private String      providerSnapshotId;
     private VolumeType  type;
-    
-	public Volume() { }
+    private Map<String,String> tags;
+
+    public Volume() { }
 
     public boolean equals(Object ob) {
         if( ob == null ) {
@@ -290,4 +294,28 @@ public class Volume implements Networkable {
     public void setProviderVlanId(String providerVlanId) {
         this.providerVlanId = providerVlanId;
     }
+
+    public Object getTag(String tag) {
+        return getTags().get(tag);
+    }
+
+    public synchronized Map<String,String> getTags() {
+        if( tags == null ) {
+            tags = new HashMap<String,String>();
+        }
+        return tags;
+    }
+
+    public void setTag(@Nonnull String key, @Nonnull String value) {
+        if( tags == null ) {
+            tags = new HashMap<String, String>();
+        }
+        tags.put(key, value);
+    }
+
+    public synchronized void setTags(Map<String,String> properties) {
+        getTags().clear();
+        getTags().putAll(properties);
+    }
+
 }
