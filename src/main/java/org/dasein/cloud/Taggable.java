@@ -22,15 +22,22 @@ import javax.annotation.Nonnull;
 import java.util.Map;
 
 /**
- * [Class Documentation]
- * <p>Created by greese: 6/26/12 10:43 AM</p>
- *
+ * Identifies a resource that may be tagged with meta-data.
+ * <p>Created by George Reese: 6/26/12 10:43 AM</p>
  * @author greese
- * @version [CURRENT_VERSION] (bugzid: [FOGBUGZID])
- * @since [CURRENT_RELEASE]
+ * @version 2012.09
+ * @since 2012.09
  */
 public interface Taggable {
+    /**
+     * @return the meta-data associated with the taggable resource
+     */
     public @Nonnull Map<String,String> getTags();
 
+    /**
+     * Sets a specific key/vaue pair in the taggable resource.
+     * @param key the key to be set
+     * @param value the value to be associated with the key
+     */
     public void setTag(@Nonnull String key, @Nonnull String value);
 }
