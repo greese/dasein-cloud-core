@@ -154,22 +154,30 @@ public abstract class AbstractSnapshotSupport implements SnapshotSupport {
     }
 
     @Override
+    @Deprecated
     public @Nonnull Iterable<Snapshot> searchSnapshots(@Nullable String ownerId, @Nullable String keyword) throws InternalException, CloudException {
-        if( ownerId == null && keyword == null ) {
+        SnapshotFilterOptions options = SnapshotFilterOptions.getInstance();
+
+        if( ownerId != null ) {
+            options.withAccountNumber(ownerId);
+        }
+        if( keyword != null ) {
+            options.matchingRegex(keyword);
+        }
+        return searchSnapshots(options);
+    }
+
+    @Override
+    public @Nonnull Iterable<Snapshot> searchSnapshots(@Nonnull SnapshotFilterOptions options) throws InternalException, CloudException {
+        if( !options.hasCriteria() ) {
             return listSnapshots();
         }
         ArrayList<Snapshot> snapshots = new ArrayList<Snapshot>();
 
         for( Snapshot snapshot : listSnapshots() ) {
-            if( ownerId != null && !ownerId.equals(snapshot.getOwner()) ) {
-                continue;
+            if( options.matches(snapshot, null) ) {
+                snapshots.add(snapshot);
             }
-            if( keyword != null ) {
-                if( !snapshot.getName().contains(keyword) && snapshot.getDescription().contains(keyword) ) {
-                    continue;
-                }
-            }
-            snapshots.add(snapshot);
         }
         return snapshots;
     }

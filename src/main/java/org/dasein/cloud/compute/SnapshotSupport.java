@@ -163,15 +163,17 @@ public interface SnapshotSupport extends AccessControlledService {
     public abstract @Nonnull Iterable<Snapshot> listSnapshots() throws InternalException, CloudException;
 
     /**
-     * Lists all volumes in the current region with the cloud provider matching the given
-     * SnapshotFilterOptions belonging to the account owner currently in the cloud. The filtering
-     * functionality is delegated to the cloud provider.
+     * Lists all snapshots in the current region with the cloud provider matching the given
+     * {@link SnapshotFilterOptions} belonging either to the account owner currently in the cloud or to the
+     * account owner specified in the filter options. The filtering may be delegated to the cloud provider where
+     * possible. This method differs from {@link #searchSnapshots(SnapshotFilterOptions)} in that it is focused on
+     * a single account (whereas {@link #searchSnapshots(SnapshotFilterOptions)} searches all visible snapshots).
      * @param options filter options
-     * @return a list of snapshots in the current region
+     * @return a list of snapshots in the current region matching the filter options
      * @throws InternalException an error occurred within the Dasein Cloud implementation
      * @throws CloudException an error occurred with the cloud provider
      */
-    public abstract @Nonnull Iterable<Snapshot> listSnapshots(SnapshotFilterOptions options) throws InternalException, CloudException;
+    public abstract @Nonnull Iterable<Snapshot> listSnapshots(@Nullable SnapshotFilterOptions options) throws InternalException, CloudException;
 
     /**
      * Removes the specified snapshot permanently from the cloud.
@@ -231,12 +233,23 @@ public interface SnapshotSupport extends AccessControlledService {
     public abstract void removeTags(@Nonnull String[] snapshotIds, @Nonnull Tag ... tags) throws CloudException, InternalException;
 
     /**
+     * Searches all snapshots visible to the current account owner (whether owned by the account owner or someone else)
+     * for all snapshots matching the specified snapshot filter options. This differs from the {@link #listSnapshots(SnapshotFilterOptions)}
+     * method in that it covers all snapshots, not just ones belonging to a specific account.
+     * @return all snapshots in the current region matching the specified filter options
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     * @throws CloudException an error occurred with the cloud provider
+     */
+    public @Nonnull Iterable<Snapshot> searchSnapshots(@Nonnull SnapshotFilterOptions options) throws InternalException, CloudException;
+
+    /**
      * Searches all snapshots for the snapshots matching the specified parameters.
      * @param ownerId the optional owner of the target snapshots
      * @param keyword the optional keyword to search on
      * @return a list of matching snapshots
      * @throws InternalException an error occurred within the Dasein Cloud implementation
      * @throws CloudException an error occurred with the cloud provider
+     * @deprecated Use {@link #searchSnapshots(SnapshotFilterOptions)}
      */
     public @Nonnull Iterable<Snapshot> searchSnapshots(@Nullable String ownerId, @Nullable String keyword) throws InternalException, CloudException;
 
