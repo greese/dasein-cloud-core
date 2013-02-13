@@ -163,6 +163,17 @@ public interface SnapshotSupport extends AccessControlledService {
     public abstract @Nonnull Iterable<Snapshot> listSnapshots() throws InternalException, CloudException;
 
     /**
+     * Lists all volumes in the current region with the cloud provider matching the given
+     * SnapshotFilterOptions belonging to the account owner currently in the cloud. The filtering
+     * functionality is delegated to the cloud provider.
+     * @param options filter options
+     * @return a list of snapshots in the current region
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     * @throws CloudException an error occurred with the cloud provider
+     */
+    public abstract @Nonnull Iterable<Snapshot> listSnapshots(SnapshotFilterOptions options) throws InternalException, CloudException;
+
+    /**
      * Removes the specified snapshot permanently from the cloud.
      * @param snapshotId the unique ID of the snapshot to be removed
      * @throws InternalException an error occurred within the Dasein Cloud implementation

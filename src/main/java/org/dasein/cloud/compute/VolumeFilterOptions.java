@@ -9,8 +9,9 @@ import java.util.Map;
 /**
  * Filtering options for filtering listings of volumes based on specific criteria. You can match any single criterion or
  * all criteria.
- * <p>Created by George Reese: 1/31/13 11:05 AM</p>
+ * <p>Created simultaneously by George Reese: 1/31/13 11:05 AM and Cameron Stokes: 02/12/13</p>
  * @author George Reese
+ * @author Cameron Stokes
  * @version 2013.04 initial version
  * @since 2013.04
  */
@@ -98,6 +99,7 @@ public class VolumeFilterOptions {
     }
 
     /**
+
      * Indicates whether or not this filter has any criteria on which to filter. If false, then all volumes
      * will match this filter.
      * @return <code>true</code> if there are criteria associated with this filter

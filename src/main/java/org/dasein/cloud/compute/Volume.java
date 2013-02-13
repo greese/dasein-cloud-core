@@ -55,8 +55,8 @@ public class Volume implements Networkable, Taggable {
     private String      providerSnapshotId;
     private Map<String,String> tags;
     private VolumeType  type;
-    
-	public Volume() { }
+
+    public Volume() { }
 
     public boolean equals(Object ob) {
         if( ob == null ) {
@@ -296,20 +296,21 @@ public class Volume implements Networkable, Taggable {
         this.providerVlanId = providerVlanId;
     }
 
-    public @Nullable String getTag(@Nonnull String key) {
-        return getTags().get(key);
+    public synchronized void setTags(Map<String,String> properties) {
+        getTags().clear();
+        getTags().putAll(properties);
     }
 
     @Override
     public @Nonnull Map<String, String> getTags() {
-        return (tags == null ? new HashMap<String, String>() : tags);
+        if( tags == null ) {
+            tags = new HashMap<String, String>();
+        }
+        return tags;
     }
 
     @Override
     public void setTag(@Nonnull String key, @Nonnull String value) {
-        if( tags == null ) {
-            tags = new HashMap<String,String>();
-        }
-        tags.put(key, value);
+        getTags().put(key, value);
     }
 }
