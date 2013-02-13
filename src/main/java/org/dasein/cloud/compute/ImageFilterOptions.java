@@ -131,6 +131,14 @@ public class ImageFilterOptions {
     }
 
     /**
+     * Indicates whether there are any criteria associated with these options.
+     * @return <code>true</code> if this filter options object has any criteria associated with it
+     */
+    public boolean hasCriteria() {
+        return ((tags != null && !tags.isEmpty()) || regex != null || accountNumber != null || imageClass != null);
+    }
+
+    /**
      * Indicates whether these options can match a single criterion (<code>true</code>) or if all criteria must be
      * matched in order for the image to pass the filter (<code>false</code>).
      * @return whether matching any single criterion is sufficient to consider an image a match
