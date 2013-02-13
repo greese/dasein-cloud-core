@@ -131,6 +131,15 @@ public class ImageFilterOptions {
     }
 
     /**
+     * Indicates whether these options can match a single criterion (<code>true</code>) or if all criteria must be
+     * matched in order for the image to pass the filter (<code>false</code>).
+     * @return whether matching any single criterion is sufficient to consider an image a match
+     */
+    public boolean isMatchesAny() {
+        return matchesAny;
+    }
+
+    /**
      * Matches an image against the criteria in this set of filter options.
      * @param image the image to test
      * @return true if the image matches all criteria

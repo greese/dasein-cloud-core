@@ -70,10 +70,33 @@ public class SnapshotFilterOptions {
     private SnapshotFilterOptions() {}
 
     /**
+     * @return an account number on which filtering should be done, or <code>null</code> to not filter on account number
+     */
+    public @Nullable String getAccountNumber() {
+        return accountNumber;
+    }
+
+    /**
+     * @return a regular expression to match against an image name, description, or tag values.
+     */
+    public @Nullable String getRegex() {
+        return regex;
+    }
+
+    /**
      * @return the tags, if any, on which filtering should be done (<code>null</code> means don't filter on tags)
      */
     public @Nullable Map<String, String> getTags() {
         return tags;
+    }
+
+    /**
+     * Indicates whether these options can match a single criterion (<code>true</code>) or if all criteria must be
+     * matched in order for the snapshot to pass the filter (<code>false</code>).
+     * @return whether matching any single criterion is sufficient to consider a snapshot a match
+     */
+    public boolean isMatchesAny() {
+        return matchesAny;
     }
 
     /**
