@@ -96,8 +96,10 @@ public class ImageFilterOptions {
     }
 
     private String             accountNumber;
+    private Architecture       architecture;
     private ImageClass         imageClass;
     private boolean            matchesAny;
+    private Platform           platform;
     private String             regex;
     private Map<String,String> tags;
 
@@ -116,10 +118,24 @@ public class ImageFilterOptions {
     }
 
     /**
+     * @return the architecture on which filtering should be done, or <code>null</code> to not filter on architecture
+     */
+    public @Nullable Architecture getArchitecture() {
+        return architecture;
+    }
+
+    /**
      * @return the image class on which filtering should be done, or <code>null</code> to not filter on image class
      */
     public @Nullable ImageClass getImageClass() {
         return imageClass;
+    }
+
+    /**
+     * @return the platform on which filtering should be done, or <code>null</code> to not filter on platform
+     */
+    public @Nullable Platform getPlatform() {
+        return platform;
     }
 
     /**
@@ -163,6 +179,26 @@ public class ImageFilterOptions {
     public boolean matches(@Nonnull MachineImage image, @Nullable String currentAccount) {
         if( imageClass != null ) {
             if( !imageClass.equals(image.getImageClass()) ) {
+                if( !matchesAny ) {
+                    return false;
+                }
+            }
+            else if( matchesAny ) {
+                return true;
+            }
+        }
+        if( architecture != null ) {
+            if( !architecture.equals(image.getArchitecture()) ) {
+                if( !matchesAny ) {
+                    return false;
+                }
+            }
+            else if( matchesAny ) {
+                return true;
+            }
+        }
+        if( platform != null ) {
+            if( !platform.equals(image.getPlatform()) ) {
                 if( !matchesAny ) {
                     return false;
                 }
@@ -251,12 +287,32 @@ public class ImageFilterOptions {
     }
 
     /**
+     * Adds a platform to the set of filtering options.
+     * @param platform the platform on which to filter
+     * @return this
+     */
+    public @Nonnull ImageFilterOptions onPlatform(@Nonnull Platform platform) {
+        this.platform = platform;
+        return this;
+    }
+
+    /**
      * Sets an account number to the options on which image filtering should be done.
      * @param accountNumber the account number to filter against
      * @return this
      */
     public @Nonnull ImageFilterOptions withAccountNumber(@Nonnull String accountNumber) {
         this.accountNumber = accountNumber;
+        return this;
+    }
+
+    /**
+     * Sets an architecture on which image filtering should be done.
+     * @param architecture the architecture to filter against
+     * @return this
+     */
+    public @Nonnull ImageFilterOptions withArchitecture(@Nonnull Architecture architecture) {
+        this.architecture = architecture;
         return this;
     }
 

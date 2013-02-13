@@ -363,38 +363,42 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
 
     @Override
     public @Nonnull Iterable<MachineImage> searchImages(@Nullable String accountNumber, @Nullable String keyword, @Nullable Platform platform, @Nullable Architecture architecture, @Nullable ImageClass ... imageClasses) throws CloudException, InternalException {
-        ArrayList<MachineImage> matches = new ArrayList<MachineImage>();
+        ImageFilterOptions options = ImageFilterOptions.getInstance();
 
-        if( imageClasses == null || imageClasses.length < 2 ) {
-            ImageFilterOptions options = ImageFilterOptions.getInstance();
-
-            if( imageClasses != null || imageClasses.length == 1 ) {
-                options.withImageClass(imageClasses[0]);
-            }
-            if( accountNumber != null ) {
-                options.withAccountNumber(accountNumber);
-            }
-            for( MachineImage img : listImages(options) ) {
-                if( matches(img, keyword, platform, architecture) ) {
-                    matches.add(img);
-                }
-            }
+        if( keyword != null ) {
+            options.matchingRegex(keyword);
+        }
+        if( architecture != null ) {
+            options.withArchitecture(architecture);
+        }
+        if( platform != null ) {
+            options.onPlatform(platform);
+        }
+        if( imageClasses == null || imageClasses.length < 1 ) {
+            return searchPublicImages(options);
+        }
+        else if( imageClasses.length == 1 ) {
+            options.withImageClass(imageClasses[0]);
+            return searchPublicImages(options);
         }
         else {
-            for( ImageClass cls : imageClasses ) {
-                ImageFilterOptions options = ImageFilterOptions.getInstance(cls);
+            ArrayList<MachineImage> images = new ArrayList<MachineImage>();
 
-                if( accountNumber != null ) {
-                    options.withAccountNumber(accountNumber);
-                }
-                for( MachineImage img : listImages(options) ) {
-                    if( matches(img, keyword, platform, architecture) ) {
-                        matches.add(img);
+            for( MachineImage img : listImages(options) ) {
+                boolean matches = false;
+
+                for( ImageClass cls : imageClasses ) {
+                    if( img.getImageClass().equals(cls) ) {
+                        matches = true;
+                        break;
                     }
                 }
+                if( matches && options.matches(img, null) ) {
+                    images.add(img);
+                }
             }
+            return images;
         }
-        return matches;
     }
 
     @Override
@@ -413,8 +417,48 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
     }
 
     @Override
-    public @Nonnull Iterable<MachineImage> searchPublicImages(@Nullable String keyword, @Nullable Platform platform, @Nullable Architecture architecture, @Nullable ImageClass ... imageClasses) throws CloudException, InternalException {
+    public @Nonnull Iterable<MachineImage> searchPublicImages(@Nonnull ImageFilterOptions options) throws CloudException, InternalException {
         return Collections.emptyList();
+    }
+
+    @Override
+    public @Nonnull Iterable<MachineImage> searchPublicImages(@Nullable String keyword, @Nullable Platform platform, @Nullable Architecture architecture, @Nullable ImageClass ... imageClasses) throws CloudException, InternalException {
+        ImageFilterOptions options = ImageFilterOptions.getInstance();
+
+        if( keyword != null ) {
+            options.matchingRegex(keyword);
+        }
+        if( architecture != null ) {
+            options.withArchitecture(architecture);
+        }
+        if( platform != null ) {
+            options.onPlatform(platform);
+        }
+        if( imageClasses == null || imageClasses.length < 1 ) {
+            return searchPublicImages(options);
+        }
+        else if( imageClasses.length == 1 ) {
+            options.withImageClass(imageClasses[0]);
+            return searchPublicImages(options);
+        }
+        else {
+            ArrayList<MachineImage> images = new ArrayList<MachineImage>();
+
+            for( MachineImage img : searchPublicImages(options) ) {
+                boolean matches = false;
+
+                for( ImageClass cls : imageClasses ) {
+                    if( img.getImageClass().equals(cls) ) {
+                        matches = true;
+                        break;
+                    }
+                }
+                if( matches && options.matches(img, null) ) {
+                    images.add(img);
+                }
+            }
+            return images;
+        }
     }
 
     @Override

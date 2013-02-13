@@ -236,9 +236,10 @@ public interface MachineImageSupport extends AccessControlledService {
     public abstract @Nonnull Iterable<ResourceStatus> listImageStatus(@Nonnull ImageClass cls) throws CloudException, InternalException;
 
     /**
-     * Lists all images in my library based on the given filter options. With no filter options specified, this
-     * generally includes all images belonging to me as well any explicitly shared with me. In clouds without a public
-     * library, it's all images I can see. The filtering functionality is delegated to the cloud provider.
+     * Lists all images in a specific library based on the given filter options. With no filter options specified, this
+     * generally includes all images belonging to the current account as well any explicitly shared with me. In clouds without a public
+     * library, it's all images I can see. The filtering functionality may be wholly or partially delegated to the cloud
+     * provider for efficiency.
      * @param options filter options
      * @return the list of images in my image library of the specified image class
      * @throws CloudException an error occurred with the cloud provider
@@ -419,6 +420,16 @@ public interface MachineImageSupport extends AccessControlledService {
      * @deprecated Use {@link #searchImages(String, String, Platform, Architecture, ImageClass...)} and/or {@link #searchPublicImages(String, Platform, Architecture, ImageClass...)}
      */
     public abstract @Nonnull Iterable<MachineImage> searchMachineImages(@Nullable String keyword, @Nullable Platform platform, @Nullable Architecture architecture) throws CloudException, InternalException;
+
+    /**
+     * Searches all snapshots visible to the current account owner (whether owned by the account owner or someone else)
+     * for all images matching the specified image filter options. This differs from the {@link #listImages(ImageFilterOptions)}
+     * method in that it covers all images, not just ones belonging to a specific account.
+     * @return all images in the current region matching the specified filter options
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     * @throws CloudException an error occurred with the cloud provider
+     */
+    public @Nonnull Iterable<MachineImage> searchPublicImages(@Nonnull ImageFilterOptions options) throws InternalException, CloudException;
 
     /**
      * Searches the public machine image library. It will match against the specified parameters. Any null parameter does
