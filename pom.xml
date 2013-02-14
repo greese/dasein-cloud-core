@@ -66,7 +66,7 @@
     <dependency>
         <groupId>org.dasein</groupId>
         <artifactId>dasein-util</artifactId>
-        <version>2012.08</version>
+        <version>2013.02</version>
         <scope>compile</scope>
         <optional>false</optional>
     </dependency>
