@@ -1,0 +1,108 @@
+[
+    {
+        "provider":"default",
+        "cloud":"default",
+        "products":[
+            {
+                "architectures":["I32", "I64"],
+                "id":"t1.micro",
+                "name":"Micro Instance (t1.micro)",
+                "description":"Micro Instance (t1.micro)",
+                "cpuCount":1,
+                "rootVolumeSizeInGb":1,
+                "ramSizeInMb":512
+            },
+            {
+                "architectures":["I32", "I64"],
+                "id":"m1.small",
+                "name":"Small Instance (m1.small)",
+                "description":"Small Instance (m1.small)",
+                "cpuCount":1,
+                "rootVolumeSizeInGb":1,
+                "ramSizeInMb":1024
+            },
+            {
+                "architectures":["I32", "I64"],
+                "id":"m1.medium",
+                "name":"Medium Instance (m1.medium)",
+                "description":"Medium Instance (m1.medium)",
+                "cpuCount":2,
+                "rootVolumeSizeInGb":410,
+                "ramSizeInMb": 3584
+            },
+            {
+                "architectures":["I64"],
+                "id":"c1.medium",
+                "name":"High-CPU Medium Instance (c1.medium)",
+                "description":"High-CPU Medium Instance (c1.medium)",
+                "cpuCount":5,
+                "rootVolumeSizeInGb":350,
+                "ramSizeInMb":1536
+            },
+            {
+                "architectures":["I64"],
+                "id":"m1.large",
+                "name":"Large Instance (m1.large)",
+                "description":"Large Instance (m1.large)",
+                "cpuCount":4,
+                "rootVolumeSizeInGb":850,
+                "ramSizeInMb":7168
+            },
+            {
+                "architectures":["I64"],
+                "id":"m1.xlarge",
+                "name":"Extra Large Instance (m1.xlarge)",
+                "description":"Extra Large Instance (m1.xlarge)",
+                "cpuCount":8,
+                "rootVolumeSizeInGb":1690,
+                "ramSizeInMb":16000
+            },
+            {
+                "architectures":["I64"],
+                "id":"c1.xlarge",
+                "name":"High-CPU Extra Large Instance (c1.xlarge)",
+                "description":"High-CPU Extra Large Instance (c1.xlarge)",
+                "cpuCount":20,
+                "rootVolumeSizeInGb":1690,
+                "ramSizeInMb":7168
+            },
+            {
+                "architectures":["I64"],
+                "id":"m2.xlarge",
+                "name":"High-Memory Extra Large Instance (m2.xlarge)",
+                "description":"High-Memory Extra Large Instance (m2.xlarge)",
+                "cpuCount":7,
+                "rootVolumeSizeInGb":420,
+                "ramSizeInMb":17024
+            },
+            {
+                "architectures":["I64"],
+                "id":"m2.2xlarge",
+                "name":"High-Memory Double Extra Large Instance (m2.2xlarge)",
+                "description":"High-Memory Double Extra Large Instance (m2.2xlarge)",
+                "cpuCount":13,
+                "rootVolumeSizeInGb":850,
+                "ramSizeInMb":34200
+            },
+            {
+                "architectures":["I64"],
+                "id":"m2.4xlarge",
+                "name":"High-Memory Quadruple Extra Large Instance (m2.4xlarge)",
+                "description":"High-Memory Quadruple Extra Large Instance (m2.4xlarge)",
+                "cpuCount":26,
+                "rootVolumeSizeInGb":1690,
+                "ramSizeInMb":68400
+            },
+            {
+                "architectures":["I64"],
+                "id":"cc1.4xlarge",
+                "name":"Cluster Compute Quadruple Extra Large (cc1.4xlarge)",
+                "description":"Cluster Compute Quadruple Extra Large (cc1.4xlarge)",
+                "cpuCount":34,
+                "rootVolumeSizeInGb":1690,
+                "ramSizeInMb":23000
+            }
+        ]
+    }
+]
+

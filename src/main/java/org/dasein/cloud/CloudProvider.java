@@ -56,6 +56,18 @@ import org.dasein.util.CalendarWrapper;
  * @author George Reese @ enStratus (http://www.enstratus.com)
  */
 public abstract class CloudProvider {
+    static private @Nonnull String getLastItem(@Nonnull String name) {
+        int idx = name.lastIndexOf('.');
+
+        if( idx < 0 ) {
+            return name;
+        }
+        else if( idx == (name.length()-1) ) {
+            return "";
+        }
+        return name.substring(idx+1);
+    }
+
     static public boolean matchesTags(@Nonnull Map<String,?> currentValues, @Nonnull String name, @Nonnull String description, @Nullable Map<String,String> valuesToMatch) {
         if( valuesToMatch != null && !valuesToMatch.isEmpty() ) {
             name = name.toLowerCase();
