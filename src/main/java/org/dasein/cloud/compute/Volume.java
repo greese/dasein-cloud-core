@@ -301,6 +301,10 @@ public class Volume implements Networkable, Taggable {
         getTags().putAll(properties);
     }
 
+    public @Nullable String getTag(@Nonnull String key) {
+        return getTags().get(key);
+    }
+
     @Override
     public @Nonnull Map<String, String> getTags() {
         if( tags == null ) {
