@@ -66,6 +66,7 @@ public final class Cache<T> {
     static private class CacheEntry<T> {
         public long lastCacheClear;
         public SoftReference<Iterable<T>> items;
+        public @Nonnull String toString() { return ((items == null) ? "--> empty <--" : items.toString()); }
     }
 
     /**
@@ -242,12 +243,14 @@ public final class Cache<T> {
 
             if( map == null ) {
                 map = new HashMap<String, Map<String, CacheEntry<T>>>();
+                regionAccountCache.put(endpoint, map);
             }
 
             Map<String,CacheEntry<T>> rmap = map.get(ctx.getRegionId());
 
             if( rmap == null ) {
                 rmap = new HashMap<String, CacheEntry<T>>();
+                map.put(ctx.getRegionId(), rmap);
             }
             rmap.put(ctx.getAccountNumber(), entry);
         }
