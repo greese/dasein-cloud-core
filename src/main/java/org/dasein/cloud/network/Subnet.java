@@ -221,6 +221,16 @@ public class Subnet implements Networkable, Taggable {
         tags.put(key, value);
     }
 
+    /**
+     * Indicates that this subnet will support the specified kind of traffic.
+     * @param traffic the traffic supported in this subnet
+     * @return this
+     */
+    public Subnet supportingTraffic(@Nonnull IPVersion ... traffic) {
+        supportedTraffic = traffic;
+        return this;
+    }
+
     @Override
     public String toString() {
         return (cidr + " [" + providerOwnerId + "/" + providerSubnetId + "]");
