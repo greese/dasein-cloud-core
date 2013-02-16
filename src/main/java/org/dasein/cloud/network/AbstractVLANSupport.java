@@ -54,6 +54,36 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     }
 
     @Override
+    public boolean allowsMultipleTrafficTypesOverSubnet() throws CloudException, InternalException {
+        if( getSubnetSupport().equals(Requirement.NONE) ) {
+            return false;
+        }
+        int count = 0;
+
+        for( IPVersion version : listSupportedIPVersions() ) {
+            count++;
+            if( count > 1 ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean allowsMultipleTrafficTypesOverVlan() throws CloudException, InternalException {
+        int count = 0;
+
+        for( IPVersion version : listSupportedIPVersions() ) {
+            count++;
+            if( count > 1 ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    @Override
     public boolean allowsNewNetworkInterfaceCreation() throws CloudException, InternalException {
         return false;
     }

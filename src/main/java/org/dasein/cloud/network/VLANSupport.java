@@ -126,6 +126,23 @@ public interface VLANSupport extends AccessControlledService {
     public abstract boolean allowsNewSubnetCreation() throws CloudException, InternalException;
 
     /**
+     * Indicates whether or not you can run both IPv4 and IPv6 over a subnet.
+     * @return true if you can run both types of traffic over the same subnet
+     * @throws CloudException an error occurred checking with the cloud for support
+     * @throws InternalException an error occurred in the Dasein Cloud implementation determining support
+     */
+    public abstract boolean allowsMultipleTrafficTypesOverSubnet() throws CloudException, InternalException;
+
+    /**
+     * Indicates whether or not you can run both IPv4 and IPv6 over a VLAN.
+     * @return true if you can run both types of traffic over the same VLAN
+     * @throws CloudException an error occurred checking with the cloud for support
+     * @throws InternalException an error occurred in the Dasein Cloud implementation determining support
+     */
+    public abstract boolean allowsMultipleTrafficTypesOverVlan() throws CloudException, InternalException;
+
+
+    /**
      * Assigns the specified routing table to the target subnet.
      * @param subnetId the unique ID of the subnet being assigned the routing table
      * @param routingTableId the routing table to which the subnet is being assigned

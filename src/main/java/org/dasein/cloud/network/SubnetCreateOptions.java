@@ -85,6 +85,7 @@ public class SubnetCreateOptions {
     private String             name;
     private String             providerDataCenterId;
     private String             providerVlanId;
+    private IPVersion[]        supportedTraffic;
 
     private SubnetCreateOptions() { }
 
@@ -131,6 +132,16 @@ public class SubnetCreateOptions {
     }
 
     /**
+     * @return the type of traffic supported over this subnet
+     */
+    public @Nonnull IPVersion[] getSupportedTraffic() {
+        if( supportedTraffic == null || supportedTraffic.length < 1 ) {
+            return new IPVersion[] { IPVersion.IPV4 };
+        }
+        return supportedTraffic;
+    }
+
+    /**
      * Adds meta-data to associate with the subnet to be created. This method is additive; it will not wipe existing
      * meta-data.
      * @param metaData the meta-data to add
@@ -141,6 +152,16 @@ public class SubnetCreateOptions {
             this.metaData = new HashMap<String, Object>();
         }
         this.metaData.putAll(metaData);
+        return this;
+    }
+
+    /**
+     * Defines the supported traffic over this subnet.
+     * @param versions the version or versions supported
+     * @return this
+     */
+    public @Nonnull SubnetCreateOptions withSupportedTraffic(@Nonnull IPVersion ... versions) {
+        supportedTraffic = versions;
         return this;
     }
 }

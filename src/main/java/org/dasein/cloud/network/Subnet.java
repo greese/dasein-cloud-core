@@ -39,6 +39,7 @@ public class Subnet implements Networkable, Taggable {
     private String      providerRegionId;
     private String      providerSubnetId;
     private String      providerVlanId;
+    private IPVersion[] supportedTraffic;
     private Map<String,String> tags;
     
     public Subnet() { }
@@ -129,7 +130,18 @@ public class Subnet implements Networkable, Taggable {
     public void setProviderVlanId(String providerVlanId) {
         this.providerVlanId = providerVlanId;
     }
-    
+
+    public IPVersion[] getSupportedTraffic() {
+        return ((supportedTraffic == null || supportedTraffic.length < 1) ? new IPVersion[] { IPVersion.IPV4 } : supportedTraffic);
+    }
+
+    public void setSupportedTraffic(@Nonnull IPVersion ... supportedTraffic) {
+        if( supportedTraffic.length < 1 ) {
+            throw new RuntimeException("You must specify at least one kind of traffic");
+        }
+        this.supportedTraffic = supportedTraffic;
+    }
+
     public String toString() {
         return (cidr + " [" + providerOwnerId + "/" + providerSubnetId + "]");
     }
