@@ -222,6 +222,14 @@ public class Subnet implements Networkable, Taggable {
     }
 
     /**
+     * Sets the meta-data tags and overwrites any existing values.
+     * @param tags the tags to be set
+     */
+    public void setTags(@Nonnull Map<String,String> tags) {
+        this.tags = tags;
+    }
+
+    /**
      * Indicates that this subnet will support the specified kind of traffic.
      * @param traffic the traffic supported in this subnet
      * @return this
