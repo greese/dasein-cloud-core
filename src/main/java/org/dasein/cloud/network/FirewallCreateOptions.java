@@ -1,5 +1,10 @@
 package org.dasein.cloud.network;
 
+import org.dasein.cloud.CloudException;
+import org.dasein.cloud.CloudProvider;
+import org.dasein.cloud.InternalException;
+import org.dasein.cloud.OperationNotSupportedException;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -50,6 +55,39 @@ public class FirewallCreateOptions {
     private String             providerVlanId;
 
     private FirewallCreateOptions() { }
+
+    /**
+     * Provisions a firewall in the specified cloud based on the options described in this object.
+     * @param provider the cloud provider in which the firewall will be created
+     * @param asNetworkFirewall if the provisioned firewall should be provisioned as a network firewall
+     * @return the unique ID of the firewall that is provisioned
+     * @throws CloudException an error occurred with the cloud provider while provisioning the firewall
+     * @throws InternalException an internal error occurred within Dasein Cloud while preparing or handling the API call
+     * @throws OperationNotSupportedException this cloud does not support firewalls
+     */
+    public @Nonnull String build(@Nonnull CloudProvider provider, boolean asNetworkFirewall) throws CloudException, InternalException {
+        NetworkServices services = provider.getNetworkServices();
+
+        if( services == null ) {
+            throw new OperationNotSupportedException(provider.getCloudName() + " does not support network services");
+        }
+        if( asNetworkFirewall ) {
+            NetworkFirewallSupport support = services.getNetworkFirewallSupport();
+
+            if( support == null ) {
+                throw new OperationNotSupportedException(provider.getCloudName() + " does not have support for network firewalls");
+            }
+            return support.createFirewall(this);
+        }
+        else {
+            FirewallSupport support = services.getFirewallSupport();
+
+            if( support == null ) {
+                throw new OperationNotSupportedException(provider.getCloudName() + " does not have support for firewalls");
+            }
+            return support.create(this);
+        }
+    }
 
     /**
      * @return text describing the purpose of the firewall

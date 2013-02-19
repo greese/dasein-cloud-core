@@ -18,6 +18,10 @@
 
 package org.dasein.cloud.compute;
 
+import org.dasein.cloud.CloudException;
+import org.dasein.cloud.CloudProvider;
+import org.dasein.cloud.InternalException;
+import org.dasein.cloud.OperationNotSupportedException;
 import org.dasein.cloud.Requirement;
 import org.dasein.cloud.dc.DataCenter;
 import org.dasein.util.uom.storage.Gigabyte;
@@ -175,6 +179,28 @@ public class VolumeCreateOptions {
         this.description = description;
         this.iops = iops;
         this.format = VolumeFormat.BLOCK;
+    }
+
+    /**
+     * Provisions a volume in the specified cloud based on the options defined in this object.
+     * @param provider the cloud provider in which the volume should be provisioned
+     * @return the unique ID of the newly provisioned volume
+     * @throws CloudException an error occurred with the cloud provider while provisioning the volume
+     * @throws InternalException an error occurred within Dasein Cloud while preparing the API call
+     * @throws OperationNotSupportedException the cloud does not support volumes
+     */
+    public @Nonnull String build(@Nonnull CloudProvider provider) throws CloudException, InternalException {
+        ComputeServices services = provider.getComputeServices();
+
+        if( services == null ) {
+            throw new OperationNotSupportedException(provider.getCloudName() + " does not have support for compute services");
+        }
+        VolumeSupport support = services.getVolumeSupport();
+
+        if( support == null ) {
+            throw new OperationNotSupportedException(provider.getCloudName() + " does not have volume support");
+        }
+        return support.createVolume(this);
     }
 
     /**

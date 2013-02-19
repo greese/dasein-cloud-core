@@ -1,5 +1,10 @@
 package org.dasein.cloud.compute;
 
+import org.dasein.cloud.CloudException;
+import org.dasein.cloud.CloudProvider;
+import org.dasein.cloud.InternalException;
+import org.dasein.cloud.OperationNotSupportedException;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -56,6 +61,28 @@ public class SnapshotCreateOptions {
     private String             volumeId;
 
     private SnapshotCreateOptions() { }
+
+    /**
+     * Creates a snapshot in the specified cloud based on the contents of this options object.
+     * @param provider the provider object for the cloud in which the snapshot should be created
+     * @return the ID of the newly created snapshot or <code>null</code> if no snapshot was created because no changes have occurred
+     * @throws CloudException an error occurred with the cloud provider while making the snapshot
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     * @throws OperationNotSupportedException snapshots are not supported in this cloud
+     */
+    public @Nullable String build(@Nonnull CloudProvider provider) throws CloudException, InternalException {
+        ComputeServices services = provider.getComputeServices();
+
+        if( services == null ) {
+            throw new OperationNotSupportedException(provider.getCloudName() + " does not support compute services");
+        }
+        SnapshotSupport support = services.getSnapshotSupport();
+
+        if( support == null ) {
+            throw new OperationNotSupportedException(provider.getCloudName() + " does not support snapshots");
+        }
+        return support.createSnapshot(this);
+    }
 
     /**
      * @return a description of the snapshot

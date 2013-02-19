@@ -1,5 +1,9 @@
 package org.dasein.cloud.network;
 
+import org.dasein.cloud.CloudException;
+import org.dasein.cloud.CloudProvider;
+import org.dasein.cloud.InternalException;
+import org.dasein.cloud.OperationNotSupportedException;
 import org.dasein.cloud.Tag;
 
 import javax.annotation.Nonnull;
@@ -88,6 +92,28 @@ public class SubnetCreateOptions {
     private IPVersion[]        supportedTraffic;
 
     private SubnetCreateOptions() { }
+
+    /**
+     * Provisions a subnet in the specified cloud based on the options in this object.
+     * @param provider the cloud provider in which the subnet will be provisioned
+     * @return the unique ID of the subnet that was provisioned
+     * @throws CloudException an error occurred in the cloud while provisioning the subnet
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while preparing or handling the API call
+     * @throws OperationNotSupportedException subnets are not supported in the specified cloud
+     */
+    public @Nonnull String build(@Nonnull CloudProvider provider) throws CloudException, InternalException {
+        NetworkServices services = provider.getNetworkServices();
+
+        if( services == null ) {
+            throw new OperationNotSupportedException(provider.getCloudName() + " does not support network services");
+        }
+        VLANSupport support = services.getVlanSupport();
+
+        if( support == null ) {
+            throw new OperationNotSupportedException(provider.getCloudName() + " does not support subnets");
+        }
+        return support.createSubnet(this).getProviderSubnetId();
+    }
 
     /**
      * @return the address space into which resources for the subnet to be created will be placed

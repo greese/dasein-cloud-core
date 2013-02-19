@@ -383,7 +383,7 @@ public class VirtualMachine implements Networkable, Taggable {
     }
 
     public @Nonnull RawAddress[] getPublicAddresses() {
-        return publicIpAddresses;
+        return (publicIpAddresses == null ? new RawAddress[0] : publicIpAddresses);
     }
 
     /**
@@ -502,7 +502,7 @@ public class VirtualMachine implements Networkable, Taggable {
     }
 
     public String[] getProviderFirewallIds() {
-      return providerFirewallIds;
+      return (providerFirewallIds == null ? new String[0] : providerFirewallIds);
     }
 
     public void setProviderFirewallIds( String[] providerFirewallIds ) {
