@@ -15,8 +15,7 @@ public class Metric implements Serializable {
   private static final long serialVersionUID = 1532589463237342269L;
 
   private String name;
-  private String namespace;
-  private Map<String, String> dimensions;
+  private Map<String, String> metadata;
 
   public Metric() {
   }
@@ -29,27 +28,26 @@ public class Metric implements Serializable {
     this.name = name;
   }
 
-  public String getNamespace() {
-    return namespace;
+  public Map<String, String> getMetadata() {
+    return metadata;
   }
 
-  public void setNamespace( String namespace ) {
-    this.namespace = namespace;
+  public void setMetadata( Map<String, String> newMetadata ) {
+    this.metadata = newMetadata;
   }
 
-  public Map<String, String> getDimensions() {
-    return dimensions;
-  }
-
-  public void setDimensions( Map<String, String> dimensions ) {
-    this.dimensions = dimensions;
-  }
-
-  public void addDimension( String name, String value ) {
-    if ( dimensions == null ) {
-      dimensions = new HashMap<String, String>();
+  public void addMetadata( String name, String value ) {
+    if ( this.metadata == null ) {
+      this.metadata = new HashMap<String, String>();
     }
-    dimensions.put( name, value );
+    this.metadata.put( name, value );
+  }
+
+  public void addMetadata( Map<String, String> newMetadata ) {
+    if ( this.metadata == null ) {
+      this.metadata = new HashMap<String, String>();
+    }
+    this.metadata.putAll( newMetadata );
   }
 
   @Override

@@ -1,9 +1,10 @@
 package org.dasein.cloud.platform;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Represents an alarm associated with a monitoring service.
+ * Represents an alarm associated with a monitoring service. Depending on the underlying provider, the current state may not be available.
  *
  * @author Cameron Stokes (http://github.com/clstokes)
  * @since 2013-02-19
@@ -12,28 +13,28 @@ public class Alarm {
 
   private String name;
   private String description;
-  private String metricNamespace;
-  private String metricName;
-  private Map<String, String> dimensions;
 
-  private boolean actionsEnabled;
+  private boolean function;
+  private String metric;
+  private Map<String, String> metadata;
+
+  private boolean enabled;
 
   private String providerAlarmId;
   private String[] providerAlarmActionIds;
   private String[] providerInsufficentDataActionIds;
   private String[] providerOKActionIds;
 
-  private String period;
-  private String evaluationPeriods;
+  private int period;
+  private int evaluationPeriods;
 
   private String statistic;
   private String comparisonOperator;
   private String threshold;
-  private String unit;
 
   private String stateReason;
   private String stateReasonData;
-  private String stateUpdatedTimestamp;
+  private long stateUpdatedTimestamp;
   private String stateValue;
 
   public String getName() {
@@ -52,36 +53,50 @@ public class Alarm {
     this.description = description;
   }
 
-  public String getMetricNamespace() {
-    return metricNamespace;
+  public boolean isFunction() {
+    return function;
   }
 
-  public void setMetricNamespace( String metricNamespace ) {
-    this.metricNamespace = metricNamespace;
+  public void setFunction( boolean function ) {
+    this.function = function;
   }
 
-  public String getMetricName() {
-    return metricName;
+  public String getMetric() {
+    return metric;
   }
 
-  public void setMetricName( String metricName ) {
-    this.metricName = metricName;
+  public void setMetric( String metric ) {
+    this.metric = metric;
   }
 
-  public Map<String, String> getDimensions() {
-    return dimensions;
+  public Map<String, String> getMetadata() {
+    return metadata;
   }
 
-  public void setDimensions( Map<String, String> dimensions ) {
-    this.dimensions = dimensions;
+  public void setMetadata( Map<String, String> newMetadata ) {
+    this.metadata = newMetadata;
   }
 
-  public boolean isActionsEnabled() {
-    return actionsEnabled;
+  public void addMetadata( String name, String value ) {
+    if ( this.metadata == null ) {
+      this.metadata = new HashMap<String, String>();
+    }
+    this.metadata.put( name, value );
   }
 
-  public void setActionsEnabled( boolean actionsEnabled ) {
-    this.actionsEnabled = actionsEnabled;
+  public void addMetadata( Map<String, String> newMetadata ) {
+    if ( this.metadata == null ) {
+      this.metadata = new HashMap<String, String>();
+    }
+    this.metadata.putAll( newMetadata );
+  }
+
+  public boolean isEnabled() {
+    return enabled;
+  }
+
+  public void setEnabled( boolean enabled ) {
+    this.enabled = enabled;
   }
 
   public String getProviderAlarmId() {
@@ -116,19 +131,19 @@ public class Alarm {
     this.providerOKActionIds = providerOKActionIds;
   }
 
-  public String getPeriod() {
+  public int getPeriod() {
     return period;
   }
 
-  public void setPeriod( String period ) {
+  public void setPeriod( int period ) {
     this.period = period;
   }
 
-  public String getEvaluationPeriods() {
+  public int getEvaluationPeriods() {
     return evaluationPeriods;
   }
 
-  public void setEvaluationPeriods( String evaluationPeriods ) {
+  public void setEvaluationPeriods( int evaluationPeriods ) {
     this.evaluationPeriods = evaluationPeriods;
   }
 
@@ -156,14 +171,6 @@ public class Alarm {
     this.threshold = threshold;
   }
 
-  public String getUnit() {
-    return unit;
-  }
-
-  public void setUnit( String unit ) {
-    this.unit = unit;
-  }
-
   public String getStateReason() {
     return stateReason;
   }
@@ -180,11 +187,11 @@ public class Alarm {
     this.stateReasonData = stateReasonData;
   }
 
-  public String getStateUpdatedTimestamp() {
+  public long getStateUpdatedTimestamp() {
     return stateUpdatedTimestamp;
   }
 
-  public void setStateUpdatedTimestamp( String stateUpdatedTimestamp ) {
+  public void setStateUpdatedTimestamp( long stateUpdatedTimestamp ) {
     this.stateUpdatedTimestamp = stateUpdatedTimestamp;
   }
 

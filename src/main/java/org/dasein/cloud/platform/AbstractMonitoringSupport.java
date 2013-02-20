@@ -8,6 +8,7 @@ import org.dasein.cloud.identity.ServiceAction;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
+import java.util.Collections;
 
 /**
  * Default no-op implementation of MonitoringSupport, also any common helper methods.
@@ -15,7 +16,7 @@ import java.util.Collection;
  * @author Cameron Stokes (http://github.com/clstokes)
  * @since 2013-02-18
  */
-public class AbstractMonitoringSupport implements MonitoringSupport {
+public abstract class AbstractMonitoringSupport implements MonitoringSupport {
 
   private CloudProvider provider;
 
@@ -25,18 +26,21 @@ public class AbstractMonitoringSupport implements MonitoringSupport {
 
   @Override
   public @Nonnull Collection<Metric> listMetrics( MetricFilterOptions options ) throws InternalException, CloudException {
-    throw new OperationNotSupportedException( "Listing metrics is not currently implemented" );
+    return Collections.emptyList();
   }
 
-  @Nonnull @Override public Collection<Alarm> listAlarms( AlarmFilterOptions options ) throws InternalException, CloudException {
-    throw new OperationNotSupportedException( "Listing alarms is not currently implemented" );
+  @Override
+  public @Nonnull Collection<Alarm> listAlarms( AlarmFilterOptions options ) throws InternalException, CloudException {
+    return Collections.emptyList();
   }
 
-  @Override public void enableAlarmActions( String[] alarmNames ) throws InternalException, CloudException {
+  @Override
+  public void enableAlarmActions( String[] alarmNames ) throws InternalException, CloudException {
     throw new OperationNotSupportedException( "Enabling alarm actions is not currently implemented" );
   }
 
-  @Override public void disableAlarmActions( String[] alarmNames ) throws InternalException, CloudException {
+  @Override
+  public void disableAlarmActions( String[] alarmNames ) throws InternalException, CloudException {
     throw new OperationNotSupportedException( "Disabling alarm actions is not currently implemented" );
   }
 

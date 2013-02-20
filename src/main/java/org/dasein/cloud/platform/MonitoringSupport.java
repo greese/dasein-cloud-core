@@ -61,4 +61,12 @@ public interface MonitoringSupport extends AccessControlledService {
    */
   public void disableAlarmActions( String[] alarmNames ) throws InternalException, CloudException;
 
+  /**
+   * Validates that the current user is subscribed to monitoring services in the target cloud/region.
+   * @return true if the account is subscribed to monitoring services
+   * @throws InternalException an error occurred within the Dasein Cloud implementation
+   * @throws CloudException an error occurred with the cloud provide
+   */
+  public boolean isSubscribed() throws CloudException, InternalException;
+
 }
