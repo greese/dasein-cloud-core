@@ -19,7 +19,7 @@ public interface MonitoringSupport extends AccessControlledService {
   static public final ServiceAction ANY = new ServiceAction( "MONITORING:ANY" );
 
   static public final ServiceAction LIST_METRICS = new ServiceAction( "MONITORING:LIST_METRICS" );
-  static public final ServiceAction LIST_ALARMS = new ServiceAction( "MONITORING:LIST_ALARMS" );
+  static public final ServiceAction DESCRIBE_ALARMS = new ServiceAction( "MONITORING:DESCRIBE_ALARMS" );
   static public final ServiceAction ENABLE_ALARM_ACTIONS = new ServiceAction( "MONITORING:ENABLE_ALARM_ACTIONS" );
   static public final ServiceAction DISABLE_ALARM_ACTIONS = new ServiceAction( "MONITORING:DISABLE_ALARM_ACTIONS" );
 
