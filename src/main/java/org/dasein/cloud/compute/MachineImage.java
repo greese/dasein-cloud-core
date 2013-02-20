@@ -285,7 +285,7 @@ public class MachineImage implements Taggable {
     /**
      * @return the kernel image associated with this machine image (this is a machine image if it is associated with a kernel image)
      */
-    public @Nullable String getKernelImaged() {
+    public @Nullable String getKernelImageId() {
         return kernelImageId;
     }
 
