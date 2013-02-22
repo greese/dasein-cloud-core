@@ -34,7 +34,7 @@ public abstract class AbstractMonitoringSupport implements MonitoringSupport {
     return Collections.emptyList();
   }
 
-  @Override public void addAlarm( @Nonnull AlarmCreateOptions options ) throws InternalException, CloudException {
+  @Override public void updateAlarm( @Nonnull AlarmUpdateOptions options ) throws InternalException, CloudException {
     throw new OperationNotSupportedException( "Creating alarms is not currently implemented" );
   }
 

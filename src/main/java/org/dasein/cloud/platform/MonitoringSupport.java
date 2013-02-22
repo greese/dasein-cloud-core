@@ -20,7 +20,7 @@ public interface MonitoringSupport extends AccessControlledService {
 
   static public final ServiceAction LIST_METRICS = new ServiceAction( "MONITORING:LIST_METRICS" );
   static public final ServiceAction DESCRIBE_ALARMS = new ServiceAction( "MONITORING:DESCRIBE_ALARMS" );
-  static public final ServiceAction CREATE_ALARM = new ServiceAction( "MONITORING:CREATE_ALARM" );
+  static public final ServiceAction UPDATE_ALARM = new ServiceAction( "MONITORING:UPDATE_ALARM" );
   static public final ServiceAction REMOVE_ALARMS = new ServiceAction( "MONITORING:REMOVE_ALARMS" );
   static public final ServiceAction ENABLE_ALARM_ACTIONS = new ServiceAction( "MONITORING:ENABLE_ALARM_ACTIONS" );
   static public final ServiceAction DISABLE_ALARM_ACTIONS = new ServiceAction( "MONITORING:DISABLE_ALARM_ACTIONS" );
@@ -52,7 +52,7 @@ public interface MonitoringSupport extends AccessControlledService {
    * @throws InternalException
    * @throws CloudException
    */
-  public void addAlarm( @Nonnull AlarmCreateOptions options ) throws InternalException, CloudException;
+  public void updateAlarm( @Nonnull AlarmUpdateOptions options ) throws InternalException, CloudException;
 
   /**
    * Removes the provided alarms.
