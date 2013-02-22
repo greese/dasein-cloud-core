@@ -15,6 +15,7 @@ public class Metric implements Serializable {
   private static final long serialVersionUID = 1532589463237342269L;
 
   private String name;
+  private String namespace;
   private Map<String, String> metadata;
 
   public Metric() {
@@ -26,6 +27,14 @@ public class Metric implements Serializable {
 
   public void setName( String name ) {
     this.name = name;
+  }
+
+  public String getNamespace() {
+    return namespace;
+  }
+
+  public void setNamespace( String namespace ) {
+    this.namespace = namespace;
   }
 
   public Map<String, String> getMetadata() {

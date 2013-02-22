@@ -14,8 +14,13 @@ public class Alarm {
   private String name;
   private String description;
 
+  /**
+   * If function is set to true, expect the metric field to contain the alarm function or DSL.
+   * If set to false, expect statistic, comparisonOperator, and threshold to be populated and metric is set to the the associated metric.
+   */
   private boolean function;
   private String metric;
+  private String namespace;
   private Map<String, String> metadata;
 
   private boolean enabled;
@@ -30,7 +35,7 @@ public class Alarm {
 
   private String statistic;
   private String comparisonOperator;
-  private String threshold;
+  private double threshold;
 
   private String stateReason;
   private String stateReasonData;
@@ -89,6 +94,14 @@ public class Alarm {
       this.metadata = new HashMap<String, String>();
     }
     this.metadata.putAll( newMetadata );
+  }
+
+  public String getNamespace() {
+    return namespace;
+  }
+
+  public void setNamespace( String namespace ) {
+    this.namespace = namespace;
   }
 
   public boolean isEnabled() {
@@ -163,11 +176,11 @@ public class Alarm {
     this.comparisonOperator = comparisonOperator;
   }
 
-  public String getThreshold() {
+  public double getThreshold() {
     return threshold;
   }
 
-  public void setThreshold( String threshold ) {
+  public void setThreshold( double threshold ) {
     this.threshold = threshold;
   }
 

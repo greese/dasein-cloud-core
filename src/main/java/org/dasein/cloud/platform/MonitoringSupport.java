@@ -20,6 +20,8 @@ public interface MonitoringSupport extends AccessControlledService {
 
   static public final ServiceAction LIST_METRICS = new ServiceAction( "MONITORING:LIST_METRICS" );
   static public final ServiceAction DESCRIBE_ALARMS = new ServiceAction( "MONITORING:DESCRIBE_ALARMS" );
+  static public final ServiceAction CREATE_ALARM = new ServiceAction( "MONITORING:CREATE_ALARM" );
+  static public final ServiceAction REMOVE_ALARMS = new ServiceAction( "MONITORING:REMOVE_ALARMS" );
   static public final ServiceAction ENABLE_ALARM_ACTIONS = new ServiceAction( "MONITORING:ENABLE_ALARM_ACTIONS" );
   static public final ServiceAction DISABLE_ALARM_ACTIONS = new ServiceAction( "MONITORING:DISABLE_ALARM_ACTIONS" );
 
@@ -34,7 +36,7 @@ public interface MonitoringSupport extends AccessControlledService {
   public @Nonnull Collection<Metric> listMetrics( MetricFilterOptions options ) throws InternalException, CloudException;
 
   /**
-   * List all alarms for the account owner.
+   * List all alarms.
    *
    * @param options filter options
    * @return all metrics or filtered alarms
@@ -44,13 +46,31 @@ public interface MonitoringSupport extends AccessControlledService {
   public @Nonnull Collection<Alarm> listAlarms( AlarmFilterOptions options ) throws InternalException, CloudException;
 
   /**
+   * Adds or updates an existing alarm.
+   *
+   * @param options options for the alarm
+   * @throws InternalException
+   * @throws CloudException
+   */
+  public void addAlarm( @Nonnull AlarmCreateOptions options ) throws InternalException, CloudException;
+
+  /**
+   * Removes the provided alarms.
+   *
+   * @param alarmNames the alarm names to remove
+   * @throws InternalException
+   * @throws CloudException
+   */
+  public void removeAlarms( @Nonnull String[] alarmNames ) throws InternalException, CloudException;
+
+  /**
    * Enables alarm actions for specified alarms.
    *
    * @param alarmNames the names of the alarms to enable actions for
    * @throws InternalException
    * @throws CloudException
    */
-  public void enableAlarmActions( String[] alarmNames ) throws InternalException, CloudException;
+  public void enableAlarmActions( @Nonnull String[] alarmNames ) throws InternalException, CloudException;
 
   /**
    * Disable alarm actions for specified alarms.
@@ -59,13 +79,14 @@ public interface MonitoringSupport extends AccessControlledService {
    * @throws InternalException
    * @throws CloudException
    */
-  public void disableAlarmActions( String[] alarmNames ) throws InternalException, CloudException;
+  public void disableAlarmActions( @Nonnull String[] alarmNames ) throws InternalException, CloudException;
 
   /**
    * Validates that the current user is subscribed to monitoring services in the target cloud/region.
+   *
    * @return true if the account is subscribed to monitoring services
    * @throws InternalException an error occurred within the Dasein Cloud implementation
-   * @throws CloudException an error occurred with the cloud provide
+   * @throws CloudException    an error occurred with the cloud provide
    */
   public boolean isSubscribed() throws CloudException, InternalException;
 

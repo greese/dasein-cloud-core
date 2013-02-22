@@ -34,13 +34,21 @@ public abstract class AbstractMonitoringSupport implements MonitoringSupport {
     return Collections.emptyList();
   }
 
+  @Override public void addAlarm( @Nonnull AlarmCreateOptions options ) throws InternalException, CloudException {
+    throw new OperationNotSupportedException( "Creating alarms is not currently implemented" );
+  }
+
+  @Override public void removeAlarms( @Nonnull String[] alarmNames ) throws InternalException, CloudException {
+    throw new OperationNotSupportedException( "Removing alarms is not currently implemented" );
+  }
+
   @Override
-  public void enableAlarmActions( String[] alarmNames ) throws InternalException, CloudException {
+  public void enableAlarmActions( @Nonnull String[] alarmNames ) throws InternalException, CloudException {
     throw new OperationNotSupportedException( "Enabling alarm actions is not currently implemented" );
   }
 
   @Override
-  public void disableAlarmActions( String[] alarmNames ) throws InternalException, CloudException {
+  public void disableAlarmActions( @Nonnull String[] alarmNames ) throws InternalException, CloudException {
     throw new OperationNotSupportedException( "Disabling alarm actions is not currently implemented" );
   }
 
