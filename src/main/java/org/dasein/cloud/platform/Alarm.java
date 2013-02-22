@@ -27,7 +27,7 @@ public class Alarm {
 
   private String providerAlarmId;
   private String[] providerAlarmActionIds;
-  private String[] providerInsufficentDataActionIds;
+  private String[] providerInsufficientDataActionIds;
   private String[] providerOKActionIds;
 
   private int period;
@@ -225,18 +225,18 @@ public class Alarm {
   /**
    * @return the list of unique IDs of actions (as identified by the cloud provider) when the alarm reaches "insufficient data" state
    */
-  public String[] getProviderInsufficentDataActionIds() {
-    return providerInsufficentDataActionIds;
+  public String[] getProviderInsufficientDataActionIds() {
+    return providerInsufficientDataActionIds;
   }
 
   /**
    * Sets the list of unique IDs of actions (as identified by the cloud provider) when the alarm reaches "insufficient data" state.
    *
-   * @param providerInsufficentDataActionIds
+   * @param providerInsufficientDataActionIds
    *         the list of unique IDs of actions (as identified by the cloud provider) when the alarm reaches "insufficient data" state
    */
-  public void setProviderInsufficentDataActionIds( String[] providerInsufficentDataActionIds ) {
-    this.providerInsufficentDataActionIds = providerInsufficentDataActionIds;
+  public void setProviderInsufficientDataActionIds( String[] providerInsufficientDataActionIds ) {
+    this.providerInsufficientDataActionIds = providerInsufficientDataActionIds;
   }
 
   /**
