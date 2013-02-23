@@ -48,6 +48,11 @@ public abstract class AbstractPlatformServices implements PlatformServices {
     }
 
     @Override
+    public @Nullable MonitoringSupport getMonitoringSupport() {
+        return null;
+    }
+
+    @Override
     public boolean hasCDNSupport() {
         return (getCDNSupport() != null);
     }
@@ -70,6 +75,11 @@ public abstract class AbstractPlatformServices implements PlatformServices {
     @Override
     public boolean hasRelationalDatabaseSupport() {
         return (getRelationalDatabaseSupport() != null);
+    }
+
+    @Override
+    public boolean hasMonitoringSupport() {
+       return getMonitoringSupport()!= null;
     }
 
 }
