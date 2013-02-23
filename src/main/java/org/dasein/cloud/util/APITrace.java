@@ -41,9 +41,9 @@ import java.util.TreeSet;
  * @version 2013.01 initial version (Issue #1)
  * @since 2013.01
  */
-public class APITrace {
+public class  APITrace {
     static private final Logger logger = Logger.getLogger(APITrace.class);
-    static public final String DELIMITER      = ".";
+    static public final String DELIMITER       = ".";
     static public final String DELIMITER_REGEX = "\\.";
 
     static private class CloudOperation {
@@ -86,7 +86,7 @@ public class APITrace {
                 ProviderContext ctx = provider.getContext();
                 String accountNumber = (ctx == null ? "---" : ctx.getAccountNumber());
 
-                operationName = provider.getProviderName() + DELIMITER + provider.getCloudName() + DELIMITER + accountNumber + DELIMITER + operationName;
+                operationName = provider.getProviderName().replaceAll(DELIMITER_REGEX, "_") + DELIMITER + provider.getCloudName().replaceAll(DELIMITER_REGEX, "_") + DELIMITER + accountNumber.replaceAll(DELIMITER_REGEX, "_") + DELIMITER + operationName;
                 long thread = Thread.currentThread().getId();
                 CloudOperation operation = new CloudOperation(operationName);
                 CloudOperation current = operations.get(thread);
@@ -172,23 +172,23 @@ public class APITrace {
     }
 
     static public long getAPICount(@Nonnull String providerName) {
-        return getAPICountForPrefix(providerName + DELIMITER);
+        return getAPICountForPrefix(providerName.replaceAll(DELIMITER_REGEX, "_") + DELIMITER);
     }
 
     static public long getAPICount(@Nonnull String providerName, @Nonnull String cloudName) {
-        return getAPICountForPrefix(providerName + DELIMITER + cloudName + DELIMITER);
+        return getAPICountForPrefix(providerName.replaceAll(DELIMITER_REGEX, "_") + DELIMITER + cloudName.replaceAll(DELIMITER_REGEX, "_") + DELIMITER);
     }
 
     static public long getAPICount(@Nonnull String providerName, @Nonnull String cloudName, @Nonnull String accountNumber) {
-        return getAPICountForPrefix(providerName + DELIMITER + cloudName + DELIMITER + accountNumber + DELIMITER);
+        return getAPICountForPrefix(providerName.replaceAll(DELIMITER_REGEX, "_") + DELIMITER + cloudName.replaceAll(DELIMITER_REGEX, "_") + DELIMITER + accountNumber.replaceAll(DELIMITER_REGEX, "_") + DELIMITER);
     }
 
     static public long getAPICount(@Nonnull String providerName, @Nonnull String cloudName, @Nonnull String accountNumber, @Nonnull String apiCall) {
-        return getAPICountForPrefix(providerName + DELIMITER + cloudName + DELIMITER + accountNumber + DELIMITER + apiCall);
+        return getAPICountForPrefix(providerName.replaceAll(DELIMITER_REGEX, "_") + DELIMITER + cloudName.replaceAll(DELIMITER_REGEX, "_") + DELIMITER + accountNumber.replaceAll(DELIMITER_REGEX, "_") + DELIMITER + apiCall);
     }
 
     static public long getAPICountAcrossAccounts(@Nonnull String providerName, @Nonnull String cloudName, @Nonnull String apiCall) {
-        String prefix = providerName + DELIMITER + cloudName + DELIMITER;
+        String prefix = providerName.replaceAll(DELIMITER_REGEX, "_") + DELIMITER + cloudName.replaceAll(DELIMITER_REGEX, "_") + DELIMITER;
         long count = 0L;
 
         synchronized( apiCount ) {
@@ -226,23 +226,23 @@ public class APITrace {
     }
 
     static public long getAPICountForOperation(@Nonnull String providerName) {
-        return getAPICountForPrefixForOperation(providerName + DELIMITER);
+        return getAPICountForPrefixForOperation(providerName.replaceAll(DELIMITER_REGEX, "_") + DELIMITER);
     }
 
     static public long getAPICountForOperation(@Nonnull String providerName, @Nonnull String cloudName) {
-        return getAPICountForPrefixForOperation(providerName + DELIMITER + cloudName + DELIMITER);
+        return getAPICountForPrefixForOperation(providerName.replaceAll(DELIMITER_REGEX, "_") + DELIMITER + cloudName.replaceAll(DELIMITER_REGEX, "_") + DELIMITER);
     }
 
     static public long getAPICountForOperation(@Nonnull String providerName, @Nonnull String cloudName, @Nonnull String accountNumber) {
-        return getAPICountForPrefixForOperation(providerName + DELIMITER + cloudName + DELIMITER + accountNumber + DELIMITER);
+        return getAPICountForPrefixForOperation(providerName.replaceAll(DELIMITER_REGEX, "_") + DELIMITER + cloudName.replaceAll(DELIMITER_REGEX, "_") + DELIMITER + accountNumber.replaceAll(DELIMITER_REGEX, "_") + DELIMITER);
     }
 
     static public long getAPICountForOperation(@Nonnull String providerName, @Nonnull String cloudName, @Nonnull String accountNumber, @Nonnull String operation) {
-        return getAPICountForPrefixForOperation(providerName + DELIMITER + cloudName + DELIMITER + accountNumber + DELIMITER + operation);
+        return getAPICountForPrefixForOperation(providerName.replaceAll(DELIMITER_REGEX, "_") + DELIMITER + cloudName.replaceAll(DELIMITER_REGEX, "_") + DELIMITER + accountNumber.replaceAll(DELIMITER_REGEX, "_") + DELIMITER + operation);
     }
 
     static public long getAPICountForOperationAcrossAccounts(@Nonnull String providerName, @Nonnull String cloudName, @Nonnull String operation) {
-        String prefix = providerName + DELIMITER + cloudName + DELIMITER;
+        String prefix = providerName.replaceAll(DELIMITER_REGEX, "_") + DELIMITER + cloudName.replaceAll(DELIMITER_REGEX, "_") + DELIMITER;
         long count = 0L;
 
         synchronized( operationApis ) {
@@ -280,23 +280,23 @@ public class APITrace {
     }
 
     static public long getOperationCount(@Nonnull String providerName) {
-        return getOperationCountForPrefix(providerName + DELIMITER);
+        return getOperationCountForPrefix(providerName.replaceAll(DELIMITER_REGEX, "_") + DELIMITER);
     }
 
     static public long getOperationCount(@Nonnull String providerName, @Nonnull String cloudName) {
-        return getOperationCountForPrefix(providerName + DELIMITER + cloudName + DELIMITER);
+        return getOperationCountForPrefix(providerName.replaceAll(DELIMITER_REGEX, "_") + DELIMITER + cloudName.replaceAll(DELIMITER_REGEX, "_") + DELIMITER);
     }
 
     static public long getOperationCount(@Nonnull String providerName, @Nonnull String cloudName, @Nonnull String accountNumber) {
-        return getOperationCountForPrefix(providerName + DELIMITER + cloudName + DELIMITER + accountNumber + DELIMITER);
+        return getOperationCountForPrefix(providerName.replaceAll(DELIMITER_REGEX, "_") + DELIMITER + cloudName.replaceAll(DELIMITER_REGEX, "_") + DELIMITER + accountNumber.replaceAll(DELIMITER_REGEX, "_") + DELIMITER);
     }
 
     static public long getOperationCount(@Nonnull String providerName, @Nonnull String cloudName, @Nonnull String accountNumber, @Nonnull String operation) {
-        return getOperationCountForPrefix(providerName + DELIMITER + cloudName + DELIMITER + accountNumber + DELIMITER + operation);
+        return getOperationCountForPrefix(providerName.replaceAll(DELIMITER_REGEX, "_") + DELIMITER + cloudName.replaceAll(DELIMITER_REGEX, "_") + DELIMITER + accountNumber.replaceAll(DELIMITER_REGEX, "_") + DELIMITER + operation);
     }
 
     static public long getOperationCountAcrossAccounts(@Nonnull String providerName, @Nonnull String cloudName, @Nonnull String operation) {
-        String prefix = providerName + DELIMITER + cloudName + DELIMITER;
+        String prefix = providerName.replaceAll(DELIMITER_REGEX, "_") + DELIMITER + cloudName.replaceAll(DELIMITER_REGEX, "_") + DELIMITER;
         long count = 0L;
 
         synchronized( operationCount ) {
@@ -323,11 +323,12 @@ public class APITrace {
     }
 
     static public @Nullable String getStackTrace(@Nonnull String providerName, @Nonnull String cloudName, @Nonnull String operationName) {
+
         CloudOperation operation = null;
 
         synchronized( operationTrace ) {
             for( Map.Entry<String,CloudOperation> entry : operationTrace.entrySet() ) {
-                if( entry.getKey().startsWith(providerName + DELIMITER + cloudName + DELIMITER) && entry.getKey().endsWith(DELIMITER + operationName) ) {
+                if( entry.getKey().startsWith(providerName.replaceAll(DELIMITER_REGEX, "_") + DELIMITER + cloudName.replaceAll(DELIMITER_REGEX, "_") + DELIMITER) && entry.getKey().endsWith(DELIMITER + operationName) ) {
                     operation = entry.getValue();
                     break;
                 }
@@ -390,6 +391,8 @@ public class APITrace {
     }
 
     static public String[] listAccounts(@Nonnull String provider, @Nonnull String cloud) {
+        provider = provider.replaceAll(DELIMITER_REGEX, "_");
+        cloud = cloud.replaceAll(DELIMITER_REGEX, "_");
         TreeSet<String> list = new TreeSet<String>();
 
         synchronized( apiCount ) {
@@ -405,6 +408,8 @@ public class APITrace {
     }
 
     static public String[] listApis(@Nonnull String provider, @Nonnull String cloud) {
+        provider = provider.replaceAll(DELIMITER_REGEX, "_");
+        cloud = cloud.replaceAll(DELIMITER_REGEX, "_");
         TreeSet<String> list = new TreeSet<String>();
 
         synchronized( apiCount ) {
@@ -433,6 +438,7 @@ public class APITrace {
     }
 
     static public String[] listClouds(@Nonnull String provider) {
+        provider = provider.replaceAll(DELIMITER_REGEX, "_");
         TreeSet<String> list = new TreeSet<String>();
 
         synchronized( apiCount ) {
@@ -448,6 +454,8 @@ public class APITrace {
     }
 
     static public String[] listOperations(@Nonnull String provider, @Nonnull String cloud) {
+        provider = provider.replaceAll(DELIMITER_REGEX, "_");
+        cloud = cloud.replaceAll(DELIMITER_REGEX, "_");
         TreeSet<String> list = new TreeSet<String>();
 
         synchronized( operationCount ) {
@@ -576,7 +584,7 @@ public class APITrace {
         if( logger.isInfoEnabled() ) {
             ProviderContext ctx = provider.getContext();
             String accountNumber = (ctx == null ? "---" : ctx.getAccountNumber());
-            String callName = provider.getProviderName() + DELIMITER + provider.getCloudName() + DELIMITER + accountNumber + DELIMITER + apiCall;
+            String callName = provider.getProviderName().replaceAll(DELIMITER_REGEX, "_") + DELIMITER + provider.getCloudName().replaceAll(DELIMITER_REGEX, "_") + DELIMITER + accountNumber.replaceAll(DELIMITER_REGEX, "_") + DELIMITER + apiCall;
 
             try {
                 CloudOperation current = null;
