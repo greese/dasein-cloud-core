@@ -375,11 +375,11 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
             options.onPlatform(platform);
         }
         if( imageClasses == null || imageClasses.length < 1 ) {
-            return searchPublicImages(options);
+            return listImages(options);
         }
         else if( imageClasses.length == 1 ) {
             options.withImageClass(imageClasses[0]);
-            return searchPublicImages(options);
+            return listImages(options);
         }
         else {
             ArrayList<MachineImage> images = new ArrayList<MachineImage>();
@@ -404,12 +404,11 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
     @Override
     public @Nonnull Iterable<MachineImage> searchMachineImages(@Nullable String keyword, @Nullable Platform platform, @Nullable Architecture architecture) throws CloudException, InternalException {
         ArrayList<MachineImage> matches = new ArrayList<MachineImage>();
-
         for( MachineImage img : searchImages(null, keyword, platform, architecture, ImageClass.MACHINE) ) {
             matches.add(img);
         }
         for( MachineImage img : searchPublicImages(keyword, platform, architecture, ImageClass.MACHINE) ) {
-            if( matches.contains(img) ) {
+            if( !matches.contains(img) ) {
                 matches.add(img);
             }
         }

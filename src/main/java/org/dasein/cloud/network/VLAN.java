@@ -187,7 +187,7 @@ public class VLAN implements Taggable {
     }
 
     public String[] getDnsServers() {
-        return dnsServers;
+        return (dnsServers == null ? new String[0] : dnsServers);
     }
 
     public void setTags(Map<String,String> tags) {
@@ -211,7 +211,7 @@ public class VLAN implements Taggable {
     }
 
     public String[] getNtpServers() {
-        return ntpServers;
+        return (ntpServers == null ? new String[0] : ntpServers);
     }
 
     public void setCurrentState(VLANState currentState) {
@@ -223,7 +223,7 @@ public class VLAN implements Taggable {
     }
 
     public IPVersion[] getSupportedTraffic() {
-        return supportedTraffic;
+        return (supportedTraffic == null ? new IPVersion[0] : supportedTraffic);
     }
 
     public void setSupportedTraffic(IPVersion[] supportedTraffic) {

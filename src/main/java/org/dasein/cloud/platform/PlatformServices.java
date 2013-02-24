@@ -30,6 +30,8 @@ public interface PlatformServices {
     public abstract @Nullable PushNotificationSupport getPushNotificationSupport();
     
     public abstract @Nullable RelationalDatabaseSupport getRelationalDatabaseSupport();
+
+    public abstract @Nullable MonitoringSupport getMonitoringSupport();
     
     public abstract boolean hasCDNSupport();
     
@@ -40,4 +42,7 @@ public interface PlatformServices {
     public abstract boolean hasPushNotificationSupport();
     
     public abstract boolean hasRelationalDatabaseSupport();
+
+   public abstract boolean hasMonitoringSupport();
+
 }
