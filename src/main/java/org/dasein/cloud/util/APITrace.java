@@ -84,7 +84,7 @@ public class  APITrace {
         if( logger.isDebugEnabled() ) {
             try {
                 ProviderContext ctx = provider.getContext();
-                String accountNumber = (ctx == null ? "---" : ctx.getAccountNumber());
+                String accountNumber = getAccountNumber( ctx );
 
                 operationName = provider.getProviderName().replaceAll(DELIMITER_REGEX, "_") + DELIMITER + provider.getCloudName().replaceAll(DELIMITER_REGEX, "_") + DELIMITER + accountNumber.replaceAll(DELIMITER_REGEX, "_") + DELIMITER + operationName;
                 long thread = Thread.currentThread().getId();
@@ -583,7 +583,7 @@ public class  APITrace {
     static public void trace(@Nonnull CloudProvider provider,  @Nonnull String apiCall) {
         if( logger.isInfoEnabled() ) {
             ProviderContext ctx = provider.getContext();
-            String accountNumber = (ctx == null ? "---" : ctx.getAccountNumber());
+            String accountNumber = getAccountNumber( ctx );
             String callName = provider.getProviderName().replaceAll(DELIMITER_REGEX, "_") + DELIMITER + provider.getCloudName().replaceAll(DELIMITER_REGEX, "_") + DELIMITER + accountNumber.replaceAll(DELIMITER_REGEX, "_") + DELIMITER + apiCall;
 
             try {
@@ -622,4 +622,8 @@ public class  APITrace {
             }
         }
     }
+
+  static public String getAccountNumber(@Nullable ProviderContext ctx) {
+    return ((ctx == null || ctx.getAccountNumber() == null) ? "---" : ctx.getAccountNumber());
+  }
 }
