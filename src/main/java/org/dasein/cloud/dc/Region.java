@@ -137,7 +137,7 @@ public class Region implements Serializable {
     }
     
     public String toString() {
-        return name;
+        return (name + " [#" + providerRegionId + "]");
     }
 
     public void setJurisdiction(String jurisdiction) {

@@ -316,6 +316,17 @@ public interface VLANSupport extends AccessControlledService {
     public abstract @Nonnull Requirement identifySubnetDCRequirement() throws CloudException, InternalException;
 
     /**
+     * Indicates whether or not the specified VLAN is connected to the public Internet via an Internet Gateway. A false
+     * response does not mean that the VLAN is not connected to the public Internet, it just means that, if it is connected,
+     * it's not connected via an Internet Gateway.
+     * @param vlanId the VLAN you are checking
+     * @return <code>true</code> if the VLAN is connected to the public Internet via an Internet Gateway
+     * @throws CloudException an error occurred with the cloud provider
+     * @throws InternalException a local error occurred
+     */
+    public abstract boolean isConnectedViaInternetGateway(@Nonnull String vlanId) throws CloudException, InternalException;
+
+    /**
      * Indicates whether or not this cloud included the concept of network interfaces in its networking support.
      * @return true if this cloud supports network interfaces as part of its networking concepts
      * @throws CloudException an error occurred with the cloud provider determining support for network interfaces

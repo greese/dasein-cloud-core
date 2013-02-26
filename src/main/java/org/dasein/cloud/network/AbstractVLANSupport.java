@@ -237,6 +237,11 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     }
 
     @Override
+    public boolean isConnectedViaInternetGateway(@Nonnull String vlanId) throws CloudException, InternalException {
+        return false;
+    }
+
+    @Override
     public boolean isNetworkInterfaceSupportEnabled() throws CloudException, InternalException {
         return false;
     }
