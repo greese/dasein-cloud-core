@@ -221,11 +221,11 @@ public class Firewall implements Networkable, Taggable {
         return (name + " [#" + providerFirewallId + "]");
     }
 
-    public String[] getSubnetAssociations() {
-        return subnetAssociations;
+    public @Nonnull String[] getSubnetAssociations() {
+        return (subnetAssociations == null ? new String[0] : subnetAssociations);
     }
 
-    public void setSubnetAssociations(String[] subnetAssociations) {
+    public void setSubnetAssociations(@Nonnull String[] subnetAssociations) {
         this.subnetAssociations = subnetAssociations;
     }
 }

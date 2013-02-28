@@ -80,9 +80,9 @@ public interface RelationalDatabaseSupport extends AccessControlledService {
     
     public boolean isSupportsFirewallRules();
     
-    public boolean isSupportsHighAvailability() throws CloudException, InterruptedException;
+    public boolean isSupportsHighAvailability() throws CloudException, InternalException;
 
-    public boolean isSupportsLowAvailability() throws CloudException, InterruptedException;
+    public boolean isSupportsLowAvailability() throws CloudException, InternalException;
 
     public boolean isSupportsMaintenanceWindows();
     

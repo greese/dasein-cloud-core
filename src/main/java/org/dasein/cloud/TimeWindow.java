@@ -18,6 +18,7 @@
 
 package org.dasein.cloud;
 
+import javax.annotation.Nonnull;
 import java.io.Serializable;
 
 public class TimeWindow implements Serializable {
@@ -29,7 +30,7 @@ public class TimeWindow implements Serializable {
     private DayOfWeek startDayOfWeek;
     private int       startHour;
     private int       startMinute;
-    
+
     public TimeWindow() { }
 
     public DayOfWeek getEndDayOfWeek() {
@@ -78,6 +79,11 @@ public class TimeWindow implements Serializable {
 
     public void setStartMinute(int startMinute) {
         this.startMinute = startMinute;
+    }
+
+    @Override
+    public @Nonnull String toString() {
+        return (startDayOfWeek + ":" + startHour + ":" + startMinute + " - " + endDayOfWeek + ":" + endHour + ":" + endMinute);
     }
     
 }
