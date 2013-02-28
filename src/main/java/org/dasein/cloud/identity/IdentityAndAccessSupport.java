@@ -298,11 +298,12 @@ public interface IdentityAndAccessSupport extends AccessControlledService {
      * @param permission the permission being granted or denied
      * @param action the action against which the permission applies
      * @param resourceId the resource ID against which the permission applies
+     * @return the ID of the newly created policy
      * @throws CloudException an error occurred with the cloud provider applying the permission
      * @throws InternalException an error occurred within Dasein Cloud processing the request
      */
     @SuppressWarnings("unused")
-    public void saveGroupPolicy(@Nonnull String providerGroupId, @Nonnull String name, @Nonnull CloudPermission permission, @Nullable ServiceAction action, @Nullable String resourceId) throws CloudException, InternalException;
+    public @Nonnull String saveGroupPolicy(@Nonnull String providerGroupId, @Nonnull String name, @Nonnull CloudPermission permission, @Nullable ServiceAction action, @Nullable String resourceId) throws CloudException, InternalException;
 
     /**
      * Saves the specified permission for the specified user to the access control system of the cloud. For any
@@ -313,11 +314,12 @@ public interface IdentityAndAccessSupport extends AccessControlledService {
      * @param permission the permission being granted or denied
      * @param action the action against which the permission applies
      * @param resourceId the resource ID against which the permission applies
+     * @return the ID of the newly created policy
      * @throws CloudException an error occurred with the cloud provider applying the permission
      * @throws InternalException an error occurred within Dasein Cloud processing the request
      */
     @SuppressWarnings("unused")
-    public void saveUserPolicy(@Nonnull String providerUserId, @Nonnull String name, @Nonnull CloudPermission permission, @Nullable ServiceAction action, @Nullable String resourceId) throws CloudException, InternalException;
+    public @Nonnull String saveUserPolicy(@Nonnull String providerUserId, @Nonnull String name, @Nonnull CloudPermission permission, @Nullable ServiceAction action, @Nullable String resourceId) throws CloudException, InternalException;
 
     /**
      * Updates the specified user with new path or user name values. If <code>null</code> is specified for any value,
