@@ -28,41 +28,63 @@ import javax.annotation.Nullable;
  * @version 2012.02
  */
 public class CloudPolicy {
+    static public CloudPolicy getInstance(@Nonnull String policyId, @Nonnull String name, @Nonnull CloudPermission permission, @Nullable ServiceAction action, @Nullable String resourceId) {
+        CloudPolicy policy = new CloudPolicy();
+
+        policy.providerPolicyId = policyId;
+        policy.name = name;
+        policy.permission = permission;
+        policy.action = action;
+        policy.resourceId = resourceId;
+        return policy;
+    }
+
     private ServiceAction   action;
     private String          name;
     private CloudPermission permission;
+    private String          providerPolicyId;
     private String          resourceId;
 
-    @SuppressWarnings("unused")
+    private CloudPolicy() { }
+
+    /**
+     * Constructs a new policy object
+     * @param name the name and ID of the policy
+     * @param permission the permission
+     * @param action the action the policy governs
+     * @param resourceId the resource being governed (or null for any)
+     * @deprecated Use {@link #getInstance(String, String, CloudPermission, ServiceAction, String)}
+     */
     public CloudPolicy(@Nonnull String name, @Nonnull CloudPermission permission, @Nullable ServiceAction action, @Nullable String resourceId) {
         this.permission = permission;
         this.action = action;
         this.name = name;
+        this.providerPolicyId = name;
         this.resourceId = resourceId;
     }
 
-    @SuppressWarnings("unused")
     public @Nullable ServiceAction getAction() {
         return action;
     }
 
-    @SuppressWarnings("unused")
     public @Nonnull String getName() {
         return name;
     }
 
-    @SuppressWarnings("unused")
     public @Nonnull CloudPermission getPermission() {
         return permission;
     }
 
-    @SuppressWarnings("unused")
+    public @Nonnull String getProviderPolicyId() {
+        return providerPolicyId;
+    }
+
     public @Nullable String getResourceId() {
         return resourceId;
     }
     
     @Override
     public @Nonnull String toString() {
-        return (permission + "/" + action + "/" + resourceId);
+        return (permission + "/" + action + "/" + resourceId + " [#" + providerPolicyId + "]");
     }
 }

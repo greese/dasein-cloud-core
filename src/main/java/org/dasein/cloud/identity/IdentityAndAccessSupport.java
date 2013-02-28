@@ -30,6 +30,7 @@ import javax.annotation.Nullable;
  * @author George Reese (george.reese@imaginary.com)
  * @since 2012.02
  * @version 2012.02
+ * @version 2013.04 added methods to remove policies
  */
 public interface IdentityAndAccessSupport extends AccessControlledService {
     @SuppressWarnings("unused") static public final ServiceAction ANY                 = new ServiceAction("IAM:ANY");
@@ -240,6 +241,15 @@ public interface IdentityAndAccessSupport extends AccessControlledService {
     public void removeGroup(@Nonnull String providerGroupId) throws CloudException, InternalException;
 
     /**
+     * Removes the specified group policy from the list of policies associated with this group
+     * @param providerGroupId the group from which the policy is being removed
+     * @param providerPolicyId the policy to be removed
+     * @throws CloudException an error occurred in the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     */
+    public void removeGroupPolicy(@Nonnull String providerGroupId, @Nonnull String providerPolicyId) throws CloudException, InternalException;
+
+    /**
      * Removes the specified user from the cloud provider.
      * @param providerUserId the user to be removed
      * @throws CloudException an error occurred in the cloud provider removing the user
@@ -257,6 +267,15 @@ public interface IdentityAndAccessSupport extends AccessControlledService {
      */
     @SuppressWarnings("unused")
     public void removeUserFromGroup(@Nonnull String providerUserId, @Nonnull String providerGroupId) throws CloudException, InternalException;
+
+    /**
+     * Removes the specified user policy from the list of policies associated with this user
+     * @param providerUserId the user from whom the policy is being removed
+     * @param providerPolicyId the policy to be removed
+     * @throws CloudException an error occurred in the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     */
+    public void removeUserPolicy(@Nonnull String providerUserId, @Nonnull String providerPolicyId) throws CloudException, InternalException;
 
     /**
      * Updates the specified group with new path or name values. If <code>null</code> is specified for any value, it
