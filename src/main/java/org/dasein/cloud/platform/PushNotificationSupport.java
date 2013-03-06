@@ -29,6 +29,7 @@ import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.identity.ServiceAction;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public interface PushNotificationSupport extends AccessControlledService {
     static public final ServiceAction ANY          = new ServiceAction("PUSH:ANY");
@@ -43,9 +44,17 @@ public interface PushNotificationSupport extends AccessControlledService {
 
     public String confirmSubscription(String providerTopicId, String token, boolean authenticateUnsubscribe) throws CloudException, InternalException;
 
-    
     public Topic createTopic(String name) throws CloudException, InternalException;
-    
+
+    /**
+     * Gets the details of a single Topic.
+     * @param providerTopicId the provider topic id
+     * @return the topic
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public @Nullable Topic getTopic( @Nonnull String providerTopicId ) throws CloudException, InternalException;
+
     public String getProviderTermForSubscription(Locale locale);
     
     public String getProviderTermForTopic(Locale locale);
