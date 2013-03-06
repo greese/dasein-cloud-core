@@ -70,8 +70,8 @@ public class Distribution implements Serializable {
      * sure that these aliases point to the distribution DNS name in your DNS server.
      * @return the list of aliases associated with this distribution
      */
-    public @Nullable String[] getAliases() {
-        return aliases;
+    public @Nonnull String[] getAliases() {
+        return (aliases == null ? new String[0] : aliases);
     }
 
     /**
