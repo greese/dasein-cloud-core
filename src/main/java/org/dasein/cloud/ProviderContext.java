@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2012 enStratus Networks Inc.
+ * Copyright (C) 2009-2013 enstratius, Inc.
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,7 +32,7 @@ import javax.annotation.Nullable;
  * the cloud. This context includes the account number, operational region, and any number of
  * authentication keys. 
  * </p>
- * @author George Reese @ enStratus (http://www.enstratus.com)
+ * @author George Reese @ enstratius (http://www.enstratius.com)
  */
 public class ProviderContext implements Serializable {
     private static final long serialVersionUID = 3503959903660616914L;

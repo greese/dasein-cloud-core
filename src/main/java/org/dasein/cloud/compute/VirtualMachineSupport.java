@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2012 enStratus Networks Inc.
+ * Copyright (C) 2009-2013 enstratius, Inc.
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,7 +38,7 @@ import org.dasein.cloud.identity.ServiceAction;
  * Core interface for the server services. Implements all operations critical to managing virtual
  * machines in a cloud environment.
  * </p>
- * @author George Reese @ enStratus (http://www.enstratus.com)
+ * @author George Reese @ enstratius (http://www.enstratius.com)
  * @version 2012-07 Added new launch method with {@link VMLaunchOptions} as well as better meta-data
  * @version 2013.01 Added meta-data for defining kernel and ramdisk image requirements (Issue #7)
  * @version 2013.01 Added status listing (Issue #4)

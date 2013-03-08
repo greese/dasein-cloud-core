@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2012 enStratus Networks Inc.
+ * Copyright (C) 2009-2013 enstratius, Inc.
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -53,7 +53,7 @@ import org.dasein.util.CalendarWrapper;
  * some of the operations of the service. Such methods should throw an 
  * {@link org.dasein.cloud.OperationNotSupportedException} to flag the lack of support.
  * </p>
- * @author George Reese @ enStratus (http://www.enstratus.com)
+ * @author George Reese @ enstratius (http://www.enstratius.com)
  */
 public abstract class CloudProvider {
     static private @Nonnull String getLastItem(@Nonnull String name) {

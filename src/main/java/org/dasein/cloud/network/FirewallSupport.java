@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2012 enStratus Networks Inc.
+ * Copyright (C) 2009-2013 enstratius, Inc.
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -39,7 +39,7 @@ import javax.annotation.Nullable;
  * Operations on whatever concept the underlying cloud uses to regulate network traffic into and out of a
  * server or group of servers.
  * </p>
- * @author George Reese @ enStratus (http://www.enstratus.com)
+ * @author George Reese @ enstratius (http://www.enstratius.com)
  * @version 2013.01 Added better permission support and firewall rule id support (Issue #14)
  * @version 2013.02 Added support for rule precedence (issue #33)
  * @version 2013.02 Added specifying both source and destination as {@link RuleTarget} objects (issue #26)

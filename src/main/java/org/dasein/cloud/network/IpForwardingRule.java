@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2012 enStratus Networks Inc.
+ * Copyright (C) 2009-2013 enstratius, Inc.
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,7 +27,7 @@ import javax.annotation.Nonnull;
 /**
  * Represents a rule for forwarding traffic from a public IP address and port to a private
  * IP address and port. 
- * @author George Reese @ enStratus (http://www.enstratus.com)
+ * @author George Reese @ enstratius (http://www.enstratius.com)
  *
  */
 public class IpForwardingRule implements Comparable<IpForwardingRule>, Serializable {

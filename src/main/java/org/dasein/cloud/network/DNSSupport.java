@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2012 enStratus Networks Inc.
+ * Copyright (C) 2009-2013 enstratius, Inc.
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,7 +33,7 @@ import org.dasein.cloud.identity.ServiceAction;
 /**
  * Support for a dynamically managed, cloud-based DNS service. This interface defines all of the core
  * operations necessary for creating managed DNS zones and manipulating the records within those zones.
- * @author George Reese (george.reese@enstratus.com)
+ * @author George Reese (george.reese@enstratius.com)
  */
 @SuppressWarnings("UnusedDeclaration")
 public interface DNSSupport extends AccessControlledService {

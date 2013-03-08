@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2012 enStratus Networks Inc.
+ * Copyright (C) 2009-2013 enstratius, Inc.
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,7 +34,7 @@ import org.dasein.cloud.identity.ServiceAction;
 /**
  * Provides interaction with cloud CDN services. A cloud CDN service is a service that enables you
  * to define distributions for content in different origins.
- * @author George Reese @ enStratus (http://www.enstratus.com)
+ * @author George Reese @ enstratius (http://www.enstratius.com)
  */
 @SuppressWarnings("UnusedDeclaration")
 public interface CDNSupport extends AccessControlledService {

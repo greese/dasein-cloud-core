@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2012 enStratus Networks Inc.
+ * Copyright (C) 2009-2013 enstratius, Inc.
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +20,7 @@ package org.dasein.cloud.network;
 
 /**
  * Represents a valid type of DNS record that may be managed in a cloud provider.
- * @author George Reese (george.reese@enstratus.com)
+ * @author George Reese (george.reese@enstratius.com)
  */
 public enum DNSRecordType {
     /**
