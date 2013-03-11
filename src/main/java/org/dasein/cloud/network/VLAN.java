@@ -226,7 +226,7 @@ public class VLAN implements Taggable {
         return (supportedTraffic == null ? new IPVersion[0] : supportedTraffic);
     }
 
-    public void setSupportedTraffic(IPVersion[] supportedTraffic) {
+    public void setSupportedTraffic(IPVersion ... supportedTraffic) {
         this.supportedTraffic = supportedTraffic;
     }
 
