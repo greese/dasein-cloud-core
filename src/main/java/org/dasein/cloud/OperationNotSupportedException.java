@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2012 enStratus Networks Inc.
+ * Copyright (C) 2009-2013 enstratius, Inc.
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,7 +26,7 @@ import javax.annotation.Nonnull;
  *  the general service has some level of support. If none of the operations are supported, however,
  *  then there should be no service implementation for that service.
  * </p>
- * @author George Reese @ enStratus (http://www.enstratus.com)
+ * @author George Reese @ enstratius (http://www.enstratius.com)
  */
 public class OperationNotSupportedException extends InternalException {
     private static final long serialVersionUID = 9141198296029381403L;

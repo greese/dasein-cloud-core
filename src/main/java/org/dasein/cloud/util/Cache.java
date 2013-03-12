@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2012 enStratus Networks Inc.
+ * Copyright (C) 2009-2013 enstratius, Inc.
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -66,6 +66,7 @@ public final class Cache<T> {
     static private class CacheEntry<T> {
         public long lastCacheClear;
         public SoftReference<Iterable<T>> items;
+        public @Nonnull String toString() { return ((items == null) ? "--> empty <--" : items.toString()); }
     }
 
     /**

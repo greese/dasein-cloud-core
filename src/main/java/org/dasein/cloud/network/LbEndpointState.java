@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2012 enStratus Networks Inc.
+ * Copyright (C) 2009-2013 enstratius, Inc.
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,8 +16,22 @@
  * ====================================================================
  */
 
-package org.dasein.cloud.compute;
+package org.dasein.cloud.network;
 
-public enum PersistenceModel {
-    ALL, NONE, SOME;
+/**
+ * Represents the current state of an endpoint as it is seen from the load balancer.
+ * @author Cameron Stokes
+ * @version 2013.04 changed from server state to endpoint state
+ * @version 2013.02 initial version
+ * @since 2013.02
+ */
+public enum LbEndpointState {
+    /**
+     * The endpoint is healthy and responding
+     */
+    ACTIVE,
+    /**
+     * The endpoint is not responding
+     */
+    INACTIVE
 }

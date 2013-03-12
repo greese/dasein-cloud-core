@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2012 enStratus Networks Inc.
+ * Copyright (C) 2009-2013 enstratius, Inc.
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,7 +29,7 @@ import javax.annotation.Nullable;
  * content distributed via a single DSN name. Different clouds may or may not support meta-data like
  * distribution names or retaining information about CNAME aliases. In addition, not all clouds 
  * necessarily support log files.
- * @author George Reese @ enStratus (http://www.enstratus.com)
+ * @author George Reese @ enstratius (http://www.enstratius.com)
  */
 public class Distribution implements Serializable {
     private static final long serialVersionUID = 4868589965234336269L;
@@ -70,8 +70,8 @@ public class Distribution implements Serializable {
      * sure that these aliases point to the distribution DNS name in your DNS server.
      * @return the list of aliases associated with this distribution
      */
-    public @Nullable String[] getAliases() {
-        return aliases;
+    public @Nonnull String[] getAliases() {
+        return (aliases == null ? new String[0] : aliases);
     }
 
     /**

@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 <!--
-    Copyright (C) 2009-2012 enStratus Networks Inc (http://www.enstratus.com)
+    Copyright (C) 2009-2013 enstratius, Inc.(http://www.enstratius.com)
 
     ====================================================================
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,7 +22,7 @@
 
   <groupId>org.dasein</groupId>
   <artifactId>dasein-cloud-core</artifactId>
-  <version>2013.02.5-SNAPSHOT</version>
+  <version>2013.04.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>dasein-cloud-core</name>
@@ -46,8 +46,8 @@
   </licenses>
 
   <organization>
-  	<name>enStratus Networks Inc.</name>
-  	<url>http://www.enstratus.com</url>
+  	<name>enstratius, Inc.</name>
+  	<url>http://www.enstratius.com</url>
   </organization>
 
   <scm>
@@ -66,7 +66,7 @@
     <dependency>
         <groupId>org.dasein</groupId>
         <artifactId>dasein-util</artifactId>
-        <version>2012.08</version>
+        <version>2013.02</version>
         <scope>compile</scope>
         <optional>false</optional>
     </dependency>
@@ -78,7 +78,7 @@
     <dependency>
         <groupId>org.apache.httpcomponents</groupId>
         <artifactId>httpclient</artifactId>
-        <version>4.2</version>
+        <version>4.2.1</version>
     </dependency>
     <dependency>
         <groupId>bouncycastle</groupId>
@@ -162,8 +162,8 @@
                     <exclude>**/LICENSE-APACHE.txt</exclude>
                 </excludes>
                 <properties>
-                    <year>2009-2012</year>
-                    <copyrightHolder>enStratus Networks Inc.</copyrightHolder>
+                    <year>2009-2013</year>
+                    <copyrightHolder>enstratius, Inc.</copyrightHolder>
                 </properties>
             </configuration>
         </plugin>
@@ -219,20 +219,20 @@
     <developer>
         <name>George Reese</name>
         <id>georgereese</id>
-        <email>george.reese -at- enstratus -dot- com</email>
-        <organization>enStratus</organization>
+        <email>george.reese -at- enstratius -dot- com</email>
+        <organization>enstratius</organization>
         <roles>
           <role>Java Developer</role>
           <role>PMC</role>
         </roles>
-        <url>http://www.enstratus.com</url>
+        <url>http://www.enstratius.com</url>
         <timezone>-6</timezone>
     </developer>
     <developer>
         <name>Morgan Catlin</name>
         <id>sylistron</id>
         <email>morgan.catlin -at- valtira -dot- com</email>
-        <organization>enStratus</organization>
+        <organization>enstratius</organization>
         <roles>
           <role>Java Developer</role>
         </roles>

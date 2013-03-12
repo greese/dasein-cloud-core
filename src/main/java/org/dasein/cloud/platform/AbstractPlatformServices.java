@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2012 enStratus Networks Inc.
+ * Copyright (C) 2009-2013 enstratius, Inc.
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -48,6 +48,11 @@ public abstract class AbstractPlatformServices implements PlatformServices {
     }
 
     @Override
+    public @Nullable MonitoringSupport getMonitoringSupport() {
+        return null;
+    }
+
+    @Override
     public boolean hasCDNSupport() {
         return (getCDNSupport() != null);
     }
@@ -70,6 +75,11 @@ public abstract class AbstractPlatformServices implements PlatformServices {
     @Override
     public boolean hasRelationalDatabaseSupport() {
         return (getRelationalDatabaseSupport() != null);
+    }
+
+    @Override
+    public boolean hasMonitoringSupport() {
+       return getMonitoringSupport()!= null;
     }
 
 }

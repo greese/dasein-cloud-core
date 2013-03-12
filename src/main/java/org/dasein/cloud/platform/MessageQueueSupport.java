@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2012 enStratus Networks Inc.
+ * Copyright (C) 2009-2013 enstratius, Inc.
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,9 +24,17 @@ import org.dasein.cloud.InternalException;
 import org.dasein.cloud.identity.ServiceAction;
 
 import javax.annotation.Nonnull;
+import java.util.Locale;
 
 public interface MessageQueueSupport extends AccessControlledService {
     static public final ServiceAction ANY                = new ServiceAction("MQ:ANY");
+
+    /**
+     * Provides the term the cloud provider uses to describe a message queue.
+     * @param locale the locale into which the term should be translated
+     * @return the provider term for a message queue
+     */
+    public @Nonnull String getProviderTermForMessageQueue(@Nonnull Locale locale);
 
     /**
      * Indicates whether the current account is subscribed in the current cloud region for message queue services.

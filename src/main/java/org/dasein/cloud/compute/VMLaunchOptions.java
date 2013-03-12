@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2012 enStratus Networks Inc.
+ * Copyright (C) 2009-2013 enstratius, Inc.
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +18,10 @@
 
 package org.dasein.cloud.compute;
 
+import org.dasein.cloud.CloudException;
+import org.dasein.cloud.CloudProvider;
+import org.dasein.cloud.InternalException;
+import org.dasein.cloud.OperationNotSupportedException;
 import org.dasein.cloud.network.NICCreateOptions;
 
 import javax.annotation.Nonnull;
@@ -107,6 +111,28 @@ public class VMLaunchOptions {
         this.hostName = hostName;
         this.friendlyName = friendlyName;
         extendedAnalytics = false;
+    }
+
+    /**
+     * Launches a virtual machine based on the current contents of this set of VM launch options.
+     * @param provider the cloud provider in which the VM should be provisioned
+     * @return the unique ID of the provisioned virtual machine
+     * @throws CloudException an error occurred within the cloud provider while building the VM
+     * @throws InternalException an error occurred within Dasein Cloud in preparing the API call
+     * @throws OperationNotSupportedException the cloud does not support virtual machines
+     */
+    public @Nonnull String build(@Nonnull CloudProvider provider) throws CloudException, InternalException {
+        ComputeServices services = provider.getComputeServices();
+
+        if( services == null ) {
+            throw new OperationNotSupportedException(provider.getCloudName() + " does not support compute services.");
+        }
+        VirtualMachineSupport support = services.getVirtualMachineSupport();
+
+        if( support == null ) {
+            throw new OperationNotSupportedException(provider.getCloudName() + " does not have virtual machine support");
+        }
+        return support.launch(this).getProviderVirtualMachineId();
     }
 
     /**

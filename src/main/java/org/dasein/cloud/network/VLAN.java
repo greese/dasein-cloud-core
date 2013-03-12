@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2012 enStratus Networks Inc.
+ * Copyright (C) 2009-2013 enstratius, Inc.
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,14 +18,17 @@
 
 package org.dasein.cloud.network;
 
+import org.dasein.cloud.Taggable;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
  * @version 2013.02 Added networkType field (issue #25)
  */
-public class VLAN {
+public class VLAN implements Taggable {
     private String    cidr;
     private VLANState currentState;
     private String    description;
@@ -69,8 +72,62 @@ public class VLAN {
         return cidr;
     }
 
+    /**
+     * Sets the CIDR associated with this network.
+     * @param cidr the CIDR that governs the address space for the network
+     */
     public void setCidr(String cidr) {
         this.cidr = cidr;
+    }
+
+    /**
+     * Sets the network CIDR based on a netmask and an address within the network (typically, your gateway).
+     * @param netmask the netmask for the network
+     * @param anAddress an address within the network
+     */
+    public void setCidr(@Nonnull String netmask, @Nonnull String anAddress) {
+        String[] dots = netmask.split("\\.");
+        int cidr = 0;
+
+        for( String item : dots ) {
+            int x = Integer.parseInt(item);
+
+            for( ; x > 0 ; x = (x<<1)%256 ) {
+                cidr++;
+            }
+        }
+        StringBuilder network = new StringBuilder();
+
+        dots = anAddress.split("\\.");
+        int start = 0;
+
+        for( String item : dots ) {
+            if( ((start+8) < cidr) || cidr == 0 ) {
+                network.append(item);
+            }
+            else {
+                int addresses = (int)Math.pow(2, (start+8)-cidr);
+                int subnets = 256/addresses;
+                int gw = Integer.parseInt(item);
+
+                for( int i=0; i<subnets; i++ ) {
+                    int base = i*addresses;
+                    int top = ((i+1)*addresses);
+
+                    if( gw >= base && gw < top ) {
+                        network.append(String.valueOf(base));
+                        break;
+                    }
+                }
+            }
+            start += 8;
+            if( start < 32 ) {
+                network.append(".");
+            }
+        }
+        network.append("/");
+        network.append(String.valueOf(cidr));
+        setCidr(network.toString());
     }
 
     public String getDescription() {
@@ -130,15 +187,15 @@ public class VLAN {
     }
 
     public String[] getDnsServers() {
-        return dnsServers;
+        return (dnsServers == null ? new String[0] : dnsServers);
     }
 
     public void setTags(Map<String,String> tags) {
         this.tags = tags;
     }
 
-    public Map<String,String> getTags() {
-        return tags;
+    public @Nonnull Map<String,String> getTags() {
+        return (tags == null ? new HashMap<String, String>() : tags);
     }
 
     public void setDomainName(String domainName) {
@@ -154,7 +211,7 @@ public class VLAN {
     }
 
     public String[] getNtpServers() {
-        return ntpServers;
+        return (ntpServers == null ? new String[0] : ntpServers);
     }
 
     public void setCurrentState(VLANState currentState) {
@@ -166,10 +223,10 @@ public class VLAN {
     }
 
     public IPVersion[] getSupportedTraffic() {
-        return supportedTraffic;
+        return (supportedTraffic == null ? new IPVersion[0] : supportedTraffic);
     }
 
-    public void setSupportedTraffic(IPVersion[] supportedTraffic) {
+    public void setSupportedTraffic(IPVersion ... supportedTraffic) {
         this.supportedTraffic = supportedTraffic;
     }
 
@@ -179,5 +236,17 @@ public class VLAN {
 
     public void setNetworkType(@Nonnull String t) {
         networkType = t;
+    }
+
+    @Override
+    public void setTag(@Nonnull String key, @Nonnull String value) {
+        if( tags == null ) {
+            tags = new HashMap<String,String>();
+        }
+        tags.put(key, value);
+    }
+
+    public @Nullable String getTag(@Nonnull String key) {
+        return getTags().get(key);
     }
 }

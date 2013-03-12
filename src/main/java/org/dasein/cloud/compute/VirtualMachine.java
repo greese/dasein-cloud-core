@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2012 enStratus Networks Inc.
+ * Copyright (C) 2009-2013 enstratius, Inc.
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,9 +36,10 @@ import javax.annotation.Nullable;
  * A virtual machine running within a cloud. This class contains the current state at the time
  * of any cloud API call for the target VM.
  * </p>
- * @author George Reese @ enStratus (http://www.enstratus.com)
+ * @author George Reese @ enstratius (http://www.enstratius.com)
  * @version 2012-07 Altered product -> productId to minimize chattiness of any polling using Dasein Cloud
  * @version 2013.02 added Networkable interface (issue #24)
+ * @version 2013.04 added access to shell key IDs
  */
 public class VirtualMachine implements Networkable, Taggable {
     private Architecture          architecture;
@@ -133,14 +134,18 @@ public class VirtualMachine implements Networkable, Taggable {
     public String getRootPassword(long timeoutInMilliseconds) throws InterruptedException {
         long timeout = System.currentTimeMillis() + timeoutInMilliseconds;
         String pw = getRootPassword();
-        
-        if( passwordCallback != null ) {
+        boolean hasCallback;
+
+        synchronized( this ) {
+            hasCallback = (passwordCallback != null);
+        }
+        if( hasCallback ) {
             while( pw == null ) {
                 if( timeout <= System.currentTimeMillis() ) {
                     throw new InterruptedException("System timed out waiting for a password to become available.");
                 }
                 try { Thread.sleep(15000L); }
-                catch( InterruptedException e ) { }
+                catch( InterruptedException ignore ) { }
                 pw = getRootPassword();
             }
         }
@@ -378,7 +383,7 @@ public class VirtualMachine implements Networkable, Taggable {
     }
 
     public @Nonnull RawAddress[] getPublicAddresses() {
-        return publicIpAddresses;
+        return (publicIpAddresses == null ? new RawAddress[0] : publicIpAddresses);
     }
 
     /**
@@ -497,7 +502,7 @@ public class VirtualMachine implements Networkable, Taggable {
     }
 
     public String[] getProviderFirewallIds() {
-      return providerFirewallIds;
+      return (providerFirewallIds == null ? new String[0] : providerFirewallIds);
     }
 
     public void setProviderFirewallIds( String[] providerFirewallIds ) {

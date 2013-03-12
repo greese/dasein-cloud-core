@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2012 enStratus Networks Inc.
+ * Copyright (C) 2009-2013 enstratius, Inc.
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,7 +38,7 @@ import org.dasein.cloud.identity.ServiceAction;
  * Core interface for the server services. Implements all operations critical to managing virtual
  * machines in a cloud environment.
  * </p>
- * @author George Reese @ enStratus (http://www.enstratus.com)
+ * @author George Reese @ enstratius (http://www.enstratius.com)
  * @version 2012-07 Added new launch method with {@link VMLaunchOptions} as well as better meta-data
  * @version 2013.01 Added meta-data for defining kernel and ramdisk image requirements (Issue #7)
  * @version 2013.01 Added status listing (Issue #4)
@@ -105,7 +105,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      * @throws CloudException an error occurred within the cloud provider
      */
-    public void disableAnalytics(String vmId) throws InternalException, CloudException; 
+    public void disableAnalytics(@Nonnull String vmId) throws InternalException, CloudException;
     
     /**
      * Turns extended hypervisor analytics for the target server. If the underlying cloud does not support
@@ -114,7 +114,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      * @throws CloudException an error occurred within the cloud provider
      */
-    public void enableAnalytics(String vmId) throws InternalException, CloudException;
+    public void enableAnalytics(@Nonnull String vmId) throws InternalException, CloudException;
     
     /**
      * Provides all output from the console of the target server since the specified Unix time.
@@ -180,7 +180,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      * @throws CloudException an error occurred within the cloud provider
      */
-    public VmStatistics getVMStatistics(String vmId, long from, long to) throws InternalException, CloudException;
+    public @Nonnull VmStatistics getVMStatistics(@Nonnull String vmId, @Nonnegative long from, @Nonnegative long to) throws InternalException, CloudException;
     
     /**
      * Provides hypervisor statistics for the specified server that fit within the defined time range.
@@ -412,6 +412,16 @@ public interface VirtualMachineSupport extends AccessControlledService {
     public @Nonnull Iterable<VirtualMachine> listVirtualMachines() throws InternalException, CloudException;
 
     /**
+     * Lists all virtual machines matching the given VMFilterOptions belonging to the account owner currently in
+     * the cloud. The filtering functionality is delegated to the cloud provider.
+     * @param options filter options
+     * @return all servers belonging to the account owner
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException    an error occurred within the cloud provider
+     */
+    public @Nonnull Iterable<VirtualMachine> listVirtualMachines(@Nullable VMFilterOptions options) throws InternalException, CloudException;
+
+    /**
      * Executes a hypervisor pause that essentially removes the virtual machine from the hypervisor scheduler.
      * The virtual machine is considered active and volatile at this point, but it won't actually do anything
      * from  CPU-perspective until it is {@link #unpause(String)}'ed.
@@ -554,10 +564,47 @@ public interface VirtualMachineSupport extends AccessControlledService {
     /**
      * Updates meta-data for a virtual machine with the new values. It will not overwrite any value that currently
      * exists unless it appears in the tags you submit.
+     *
      * @param vmId the virtual machine to update
      * @param tags the meta-data tags to set
-     * @throws CloudException an error occurred within the cloud provider
+     * @throws CloudException    an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public abstract void updateTags(@Nonnull String vmId, @Nonnull Tag ... tags) throws CloudException, InternalException;
+    public abstract void updateTags(@Nonnull String vmId, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Updates meta-data for multiple virtual machines with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     *
+     * @param vmIds the virtual machines to update
+     * @param tags  the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void updateTags(@Nonnull String[] vmIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Removes meta-data from a virtual machine. If tag values are set, their removal is dependent on underlying cloud
+     * provider behavior. They may be removed only if the tag value matches or they may be removed regardless of the
+     * value.
+     *
+     * @param vmId the virtual machine to update
+     * @param tags the meta-data tags to remove
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void removeTags(@Nonnull String vmId, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Removes meta-data from multiple virtual machines. If tag values are set, their removal is dependent on underlying cloud
+     * provider behavior. They may be removed only if the tag value matches or they may be removed regardless of the
+     * value.
+     *
+     * @param vmIds the virtual machine to update
+     * @param tags  the meta-data tags to remove
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void removeTags(@Nonnull String[] vmIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+
 }

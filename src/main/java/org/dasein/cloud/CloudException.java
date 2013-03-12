@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2012 enStratus Networks Inc.
+ * Copyright (C) 2009-2013 enstratius, Inc.
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,7 +34,7 @@ import javax.annotation.Nullable;
  * a particular provider. This distinction can help clients determine how to recover from any
  * given error.
  * </p>
- * @author George Reese @ enStratus (http://www.enstratus.com)
+ * @author George Reese @ enstratius (http://www.enstratius.com)
  */
 public class CloudException extends Exception {
     private static final long serialVersionUID = -1975104091752615199L;

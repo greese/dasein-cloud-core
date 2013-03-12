@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2012 enStratus Networks Inc.
+ * Copyright (C) 2009-2013 enstratius, Inc.
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,7 +28,7 @@ import javax.annotation.Nullable;
  * <p>
  *   Represents a raw file or object stored in cloud storage.
  * </p>
- * @author George Reese @ enStratus (http://www.enstratus.com)
+ * @author George Reese @ enstratius (http://www.enstratius.com)
  */
 public class Blob implements Comparable<Blob> {
     static public @Nonnull Blob getInstance(@Nonnull String providerRegionId, @Nonnull String location, @Nonnull String bucketName, @Nonnegative long creationTimestamp) {
@@ -137,6 +137,6 @@ public class Blob implements Comparable<Blob> {
 
     @Override
     public @Nonnull String toString() {
-        return ((bucketName == null ? "/" : ("/" + bucketName)) + (objectName == null ? "" : ("/" + objectName)));
+        return ((bucketName == null ? "/" : (bucketName.startsWith("/") ? bucketName : "/" + bucketName)) + (objectName == null ? "" : ("/" + objectName)));
     }
 }

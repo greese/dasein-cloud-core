@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2012 enStratus Networks Inc.
+ * Copyright (C) 2009-2013 enstratius, Inc.
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,7 +22,7 @@ package org.dasein.cloud.admin;
  * <p>
  * Identifies what kind of fee is in force for data storage or transfer.
  * </p>
- * @author George Reese @ <a href="http://www.enstratus.com">enStratus</a>
+ * @author George Reese @ <a href="http://www.enstratius.com">enstratius</a>
  */
 public enum DataFeeType {
     /**

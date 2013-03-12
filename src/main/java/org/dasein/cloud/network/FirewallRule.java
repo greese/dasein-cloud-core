@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2012 enStratus Networks Inc.
+ * Copyright (C) 2009-2013 enstratius, Inc.
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,6 +32,7 @@ import javax.annotation.Nullable;
  * @version 2012.02 Added annotations
  * @version 2013.01 added full permission support and non-global destinations (Issue #14, Issue #11)
  * @version 2013.02 added precedence
+ * @version 2013.04 added support for proper sorting of -1 rules to the end (issue greese/dasein-cloud-aws/#8)
  * @since 2010.08
  */
 @SuppressWarnings("UnusedDeclaration")
@@ -413,6 +414,12 @@ public class FirewallRule implements Comparable<FirewallRule> {
         if( direction.equals(other.direction) ) {
             if( precedence == other.precedence ) {
                 return providerRuleId.compareTo(other.providerRuleId);
+            }
+            if( precedence == -1 ) {
+                return 1;
+            }
+            else if( other.precedence == -1 ) {
+                return -1;
             }
             return (new Integer(precedence)).compareTo(precedence);
         }

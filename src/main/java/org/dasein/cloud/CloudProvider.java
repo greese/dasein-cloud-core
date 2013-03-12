@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2012 enStratus Networks Inc.
+ * Copyright (C) 2009-2013 enstratius, Inc.
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +18,7 @@
 
 package org.dasein.cloud;
 
+import java.util.Map;
 import java.util.Properties;
 
 import javax.annotation.Nonnull;
@@ -52,9 +53,67 @@ import org.dasein.util.CalendarWrapper;
  * some of the operations of the service. Such methods should throw an 
  * {@link org.dasein.cloud.OperationNotSupportedException} to flag the lack of support.
  * </p>
- * @author George Reese @ enStratus (http://www.enstratus.com)
+ * @author George Reese @ enstratius (http://www.enstratius.com)
  */
 public abstract class CloudProvider {
+    static private @Nonnull String getLastItem(@Nonnull String name) {
+        int idx = name.lastIndexOf('.');
+
+        if( idx < 0 ) {
+            return name;
+        }
+        else if( idx == (name.length()-1) ) {
+            return "";
+        }
+        return name.substring(idx+1);
+    }
+
+    static public boolean matchesTags(@Nonnull Map<String,?> currentValues, @Nonnull String name, @Nonnull String description, @Nullable Map<String,String> valuesToMatch) {
+        if( valuesToMatch != null && !valuesToMatch.isEmpty() ) {
+            name = name.toLowerCase();
+            description = description.toLowerCase();
+            for( Map.Entry<String,String> entry : valuesToMatch.entrySet() ) {
+                String v = (entry.getValue() == null ? null : entry.getValue().toLowerCase());
+                Object t = currentValues.get(entry.getKey());
+
+                if( entry.getKey().equals("Name") ) {
+
+                    if( v != null ) {
+                        String n = name.toLowerCase();
+
+                        if( n.contains(v) || (t != null && t.toString().toLowerCase().contains(v)) ) {
+                            continue;
+                        }
+                    }
+                    return false;
+                }
+                if( entry.getKey().equals("Description") ) {
+                    if( v != null ) {
+                        String d = description.toLowerCase();
+
+                        if( d.contains(v) || (t != null && t.toString().toLowerCase().contains(v)) ) {
+                            continue;
+                        }
+                    }
+                    return false;
+                }
+                if( t == null && v == null ) {
+                    continue;
+                }
+                if( t == null ) {
+                    return false;
+                }
+                if( v == null ) {
+                    return false;
+                }
+                if( !t.toString().contains(v) ) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     private CloudProvider computeCloud = null;
     private ProviderContext context = null;
     
@@ -232,7 +291,7 @@ public abstract class CloudProvider {
     public synchronized boolean isConnected() {
         return (context != null);
     }
-    
+
     public void release() {
         if( computeCloud != null ) {
             computeCloud.release();

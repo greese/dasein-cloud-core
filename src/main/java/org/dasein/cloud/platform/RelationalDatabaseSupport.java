@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2012 enStratus Networks Inc.
+ * Copyright (C) 2009-2013 enstratius, Inc.
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -80,9 +80,9 @@ public interface RelationalDatabaseSupport extends AccessControlledService {
     
     public boolean isSupportsFirewallRules();
     
-    public boolean isSupportsHighAvailability() throws CloudException, InterruptedException;
+    public boolean isSupportsHighAvailability() throws CloudException, InternalException;
 
-    public boolean isSupportsLowAvailability() throws CloudException, InterruptedException;
+    public boolean isSupportsLowAvailability() throws CloudException, InternalException;
 
     public boolean isSupportsMaintenanceWindows();
     

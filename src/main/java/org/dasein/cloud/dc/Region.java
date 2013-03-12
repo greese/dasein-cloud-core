@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2012 enStratus Networks Inc.
+ * Copyright (C) 2009-2013 enstratius, Inc.
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,7 +26,7 @@ import java.io.Serializable;
  *   a data center is in two different regions, it should have no common failure points. Similarly,
  *   if two data centers are in the same region, they share the same jurisdiction.
  * </p>
- * @author George Reese @ enStratus (http://www.enstratus.com)
+ * @author George Reese @ enstratius (http://www.enstratius.com)
  */
 public class Region implements Serializable {
     private static final long serialVersionUID = 5759708802908910045L;
@@ -137,7 +137,7 @@ public class Region implements Serializable {
     }
     
     public String toString() {
-        return name;
+        return (name + " [#" + providerRegionId + "]");
     }
 
     public void setJurisdiction(String jurisdiction) {

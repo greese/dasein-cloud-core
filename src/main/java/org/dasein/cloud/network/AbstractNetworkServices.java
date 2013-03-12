@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2012 enStratus Networks Inc.
+ * Copyright (C) 2009-2013 enstratius, Inc.
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,6 +44,11 @@ public abstract class AbstractNetworkServices implements NetworkServices {
     }
 
     @Override
+    public @Nullable NetworkFirewallSupport getNetworkFirewallSupport() {
+        return null;
+    }
+
+    @Override
     public @Nullable VLANSupport getVlanSupport() {
         return null;
     }
@@ -72,7 +77,12 @@ public abstract class AbstractNetworkServices implements NetworkServices {
     public boolean hasLoadBalancerSupport() {
         return (getLoadBalancerSupport() != null);
     }
-    
+
+    @Override
+    public boolean hasNetworkFirewallSupport() {
+        return (getNetworkFirewallSupport() != null);
+    }
+
     @Override
     public boolean hasVlanSupport() {
         return (getVlanSupport() != null);

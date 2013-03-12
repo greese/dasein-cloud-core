@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2012 enStratus Networks Inc.
+ * Copyright (C) 2009-2013 enstratius, Inc.
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,15 +19,13 @@
 package org.dasein.cloud.compute;
 
 import org.dasein.cloud.Tag;
+import org.dasein.cloud.Taggable;
 
 import javax.annotation.Nonnull;
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Snapshot implements Serializable {
-    private static final long serialVersionUID = 1451559961429054236L;
-    
+public class Snapshot implements Taggable {
     private SnapshotState currentState;
     private String        description;
     private String        name;

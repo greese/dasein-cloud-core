@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2012 enStratus Networks Inc.
+ * Copyright (C) 2009-2013 enstratius, Inc.
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -236,12 +236,25 @@ public interface MachineImageSupport extends AccessControlledService {
     public abstract @Nonnull Iterable<ResourceStatus> listImageStatus(@Nonnull ImageClass cls) throws CloudException, InternalException;
 
     /**
+     * Lists all images in a specific library based on the given filter options. With no filter options specified, this
+     * generally includes all images belonging to the current account as well any explicitly shared with me. In clouds without a public
+     * library, it's all images I can see. The filtering functionality may be wholly or partially delegated to the cloud
+     * provider for efficiency.
+     * @param options filter options
+     * @return the list of images in my image library of the specified image class
+     * @throws CloudException an error occurred with the cloud provider
+     * @throws InternalException a local error occurred in the Dasein Cloud implementation
+     */
+    public abstract @Nonnull Iterable<MachineImage> listImages(@Nullable ImageFilterOptions options) throws CloudException, InternalException;
+
+    /**
      * Lists all images in my library. This generally includes all images belonging to me as well any explicitly shared
      * with me. In clouds without a public library, it's all images I can see.
      * @param cls the class of image being listed
      * @return the list of images in my image library of the specified image class
      * @throws CloudException an error occurred with the cloud provider
      * @throws InternalException a local error occurred in the Dasein Cloud implementation
+     * @deprecated Use {@link #listImages(ImageFilterOptions)}
      */
     public abstract @Nonnull Iterable<MachineImage> listImages(@Nonnull ImageClass cls) throws CloudException, InternalException;
 
@@ -253,6 +266,7 @@ public interface MachineImageSupport extends AccessControlledService {
      * @return the list of images I can see belonging to the specified account owner of the specified image class
      * @throws CloudException an error occurred with the cloud provider
      * @throws InternalException a local error occurred in the Dasein Cloud implementation
+     * @deprecated Use {@link #listImages(ImageFilterOptions)}
      */
     public abstract @Nonnull Iterable<MachineImage> listImages(@Nonnull ImageClass cls, @Nonnull String ownedBy) throws CloudException, InternalException;
 
@@ -381,6 +395,20 @@ public interface MachineImageSupport extends AccessControlledService {
     public abstract void removePublicShare(@Nonnull String providerImageId) throws CloudException, InternalException;
 
     /**
+     * Searches images owned by the specified account number (if null, all visible images are searched). It will match against
+     * the specified parameters. Any null parameter does not constrain the search.
+     * @param accountNumber the account number to search against or null for searching all visible images
+     * @param keyword a keyword on which to search
+     * @param platform the platform to match
+     * @param architecture the architecture to match
+     * @param imageClasses the image classes to search for (null or empty list for all)
+     * @return all matching machine images
+     * @throws CloudException an error occurred with the cloud provider
+     * @throws InternalException a local error occurred in the Dasein Cloud implementation
+     */
+    public abstract @Nonnull Iterable<MachineImage> searchImages(@Nullable String accountNumber, @Nullable String keyword, @Nullable Platform platform, @Nullable Architecture architecture, @Nullable ImageClass ... imageClasses) throws CloudException, InternalException;
+
+    /**
      * Searches all machine images visible, public or otherwise, to this account for ones that match the specified values.
      * If a search parameter is null, it doesn't constrain on that parameter.
      * @param keyword a keyword on which to search
@@ -394,18 +422,14 @@ public interface MachineImageSupport extends AccessControlledService {
     public abstract @Nonnull Iterable<MachineImage> searchMachineImages(@Nullable String keyword, @Nullable Platform platform, @Nullable Architecture architecture) throws CloudException, InternalException;
 
     /**
-     * Searches images owned by the specified account number (if null, all visible images are searched). It will match against
-     * the specified parameters. Any null parameter does not constrain the search.
-     * @param accountNumber the account number to search against or null for searching all visible images
-     * @param keyword a keyword on which to search
-     * @param platform the platform to match
-     * @param architecture the architecture to match
-     * @param imageClasses the image classes to search for (null or empty list for all)
-     * @return all matching machine images
+     * Searches all snapshots visible to the current account owner (whether owned by the account owner or someone else)
+     * for all images matching the specified image filter options. This differs from the {@link #listImages(ImageFilterOptions)}
+     * method in that it covers all images, not just ones belonging to a specific account.
+     * @return all images in the current region matching the specified filter options
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
      * @throws CloudException an error occurred with the cloud provider
-     * @throws InternalException a local error occurred in the Dasein Cloud implementation
      */
-    public abstract @Nonnull Iterable<MachineImage> searchImages(@Nullable String accountNumber, @Nullable String keyword, @Nullable Platform platform, @Nullable Architecture architecture, @Nullable ImageClass ... imageClasses) throws CloudException, InternalException;
+    public @Nonnull Iterable<MachineImage> searchPublicImages(@Nonnull ImageFilterOptions options) throws InternalException, CloudException;
 
     /**
      * Searches the public machine image library. It will match against the specified parameters. Any null parameter does
@@ -491,11 +515,47 @@ public interface MachineImageSupport extends AccessControlledService {
     /**
      * Updates meta-data for a image with the new values. It will not overwrite any value that currently
      * exists unless it appears in the tags you submit.
+     *
      * @param imageId the image to update
-     * @param tags the meta-data tags to set
-     * @throws CloudException an error occurred within the cloud provider
+     * @param tags    the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
     public abstract void updateTags(@Nonnull String imageId, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Updates meta-data for multiple images with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     *
+     * @param imageIds the virtual machines to update
+     * @param tags     the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void updateTags(@Nonnull String[] imageIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Removes meta-data from an image. If tag values are set, their removal is dependent on underlying cloud
+     * provider behavior. They may be removed only if the tag value matches or they may be removed regardless of the
+     * value.
+     *
+     * @param imageId the virtual machine to update
+     * @param tags    the meta-data tags to remove
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void removeTags(@Nonnull String imageId, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Removes meta-data from multiple images. If tag values are set, their removal is dependent on underlying cloud
+     * provider behavior. They may be removed only if the tag value matches or they may be removed regardless of the
+     * value.
+     *
+     * @param imageIds the virtual machine to update
+     * @param tags     the meta-data tags to remove
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void removeTags(@Nonnull String[] imageIds, @Nonnull Tag... tags) throws CloudException, InternalException;
 
 }

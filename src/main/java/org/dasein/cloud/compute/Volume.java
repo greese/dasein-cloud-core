@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2012 enStratus Networks Inc.
+ * Copyright (C) 2009-2013 enstratius, Inc.
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,11 +18,15 @@
 
 package org.dasein.cloud.compute;
 
+import org.dasein.cloud.Taggable;
 import org.dasein.cloud.network.Networkable;
 import org.dasein.util.uom.storage.Gigabyte;
 import org.dasein.util.uom.storage.Storage;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Represents a block storage volume in the cloud.
@@ -30,7 +34,7 @@ import javax.annotation.Nonnull;
  * @since unknown
  * @version 2012-07 updated to match new volume enhancements, including UoM, type, and root volume awareness
  */
-public class Volume implements Networkable {
+public class Volume implements Networkable, Taggable {
     private long        creationTimestamp;
 	private VolumeState currentState;
     private String      providerDataCenterId;
@@ -49,9 +53,10 @@ public class Volume implements Networkable {
     private boolean     rootVolume;
     private Storage<Gigabyte> size;
     private String      providerSnapshotId;
+    private Map<String,String> tags;
     private VolumeType  type;
-    
-	public Volume() { }
+
+    public Volume() { }
 
     public boolean equals(Object ob) {
         if( ob == null ) {
@@ -289,5 +294,27 @@ public class Volume implements Networkable {
 
     public void setProviderVlanId(String providerVlanId) {
         this.providerVlanId = providerVlanId;
+    }
+
+    public synchronized void setTags(Map<String,String> properties) {
+        getTags().clear();
+        getTags().putAll(properties);
+    }
+
+    public @Nullable String getTag(@Nonnull String key) {
+        return getTags().get(key);
+    }
+
+    @Override
+    public @Nonnull Map<String, String> getTags() {
+        if( tags == null ) {
+            tags = new HashMap<String, String>();
+        }
+        return tags;
+    }
+
+    @Override
+    public void setTag(@Nonnull String key, @Nonnull String value) {
+        getTags().put(key, value);
     }
 }

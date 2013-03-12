@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2012 enStratus Networks Inc.
+ * Copyright (C) 2009-2013 enstratius, Inc.
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +17,11 @@
  */
 
 package org.dasein.cloud.compute;
+
+import org.dasein.cloud.CloudException;
+import org.dasein.cloud.CloudProvider;
+import org.dasein.cloud.InternalException;
+import org.dasein.cloud.OperationNotSupportedException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -76,6 +81,33 @@ public class ImageCreateOptions {
 
     private ImageCreateOptions() { }
 
+    /**
+     * Captures a machine image from a virtual machine or registers one from a bundle with the specified cloud
+     * based on the options in this object.
+     * @param provider the cloud provider object for the cloud in which the image is going to be created
+     * @return the unique ID of the newly created image
+     * @throws CloudException an error occurred with the cloud provider while creating the image
+     * @throws InternalException an error occurred within Dasein Cloud while preparing the API call
+     * @throws OperationNotSupportedException images are not supported in the target cloud
+     */
+    public @Nonnull String build(@Nonnull CloudProvider provider) throws CloudException, InternalException {
+        ComputeServices services = provider.getComputeServices();
+
+        if( services == null ) {
+            throw new OperationNotSupportedException(provider.getCloudName() + " does not support compute services");
+        }
+        MachineImageSupport support = services.getImageSupport();
+
+        if( support == null ) {
+            throw new OperationNotSupportedException(provider.getCloudName() + " does not support images");
+        }
+        if( virtualMachineId != null ) {
+            return support.captureImage(this).getProviderMachineImageId();
+        }
+        else {
+            return support.registerImageBundle(this).getProviderMachineImageId();
+        }
+    }
     /**
      * @return the format of the file(s) found at {@link #getBundleLocation()}.
      */

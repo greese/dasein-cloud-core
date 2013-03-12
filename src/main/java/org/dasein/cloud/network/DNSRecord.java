@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2012 enStratus Networks Inc.
+ * Copyright (C) 2009-2013 enstratius, Inc.
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,7 +30,7 @@ import java.io.Serializable;
  * Operations on these objects do not travel to the cloud. You must call operations on {@link DNSSupport}
  * to effect any changes in the cloud.
  * </p>
- * @author George Reese (george.reese@enstratus.com)
+ * @author George Reese (george.reese@enstratius.com)
  */
 public class DNSRecord implements Serializable {
     private static final long serialVersionUID = -8497137234556104567L;

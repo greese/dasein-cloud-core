@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2012 enStratus Networks Inc.
+ * Copyright (C) 2009-2013 enstratius, Inc.
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -43,7 +43,7 @@ import org.dasein.cloud.InternalException;
  * <li>If two virtual servers are in different data centers, they cannot be running on the same physical hardware.</li>
  * <li>Outages in one data center are highly unlikely to impact other data centers.</li>
  * </ul>
- * @author George Reese @ enStratus (http://www.enstratus.com)
+ * @author George Reese @ enstratius (http://www.enstratius.com)
  */
 public interface DataCenterServices {
     /**

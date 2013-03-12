@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2012 enStratus Networks Inc.
+ * Copyright (C) 2009-2013 enstratius, Inc.
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,10 +30,12 @@ import org.dasein.cloud.InternalException;
 import org.dasein.cloud.OperationNotSupportedException;
 import org.dasein.cloud.Requirement;
 import org.dasein.cloud.ResourceStatus;
+import org.dasein.cloud.Tag;
 import org.dasein.cloud.identity.ServiceAction;
 
 /**
  * @version 2013.02 added listResources(String) (issue #24)
+ * @version 2013.04 added support for specifying data centers when provisioning subnets
  */
 public interface VLANSupport extends AccessControlledService {
     static public final ServiceAction ANY               = new ServiceAction("NET:ANY");
@@ -124,6 +126,23 @@ public interface VLANSupport extends AccessControlledService {
     public abstract boolean allowsNewSubnetCreation() throws CloudException, InternalException;
 
     /**
+     * Indicates whether or not you can run both IPv4 and IPv6 over a subnet.
+     * @return true if you can run both types of traffic over the same subnet
+     * @throws CloudException an error occurred checking with the cloud for support
+     * @throws InternalException an error occurred in the Dasein Cloud implementation determining support
+     */
+    public abstract boolean allowsMultipleTrafficTypesOverSubnet() throws CloudException, InternalException;
+
+    /**
+     * Indicates whether or not you can run both IPv4 and IPv6 over a VLAN.
+     * @return true if you can run both types of traffic over the same VLAN
+     * @throws CloudException an error occurred checking with the cloud for support
+     * @throws InternalException an error occurred in the Dasein Cloud implementation determining support
+     */
+    public abstract boolean allowsMultipleTrafficTypesOverVlan() throws CloudException, InternalException;
+
+
+    /**
      * Assigns the specified routing table to the target subnet.
      * @param subnetId the unique ID of the subnet being assigned the routing table
      * @param routingTableId the routing table to which the subnet is being assigned
@@ -182,8 +201,28 @@ public interface VLANSupport extends AccessControlledService {
      */
     public abstract @Nonnull NetworkInterface createNetworkInterface(@Nonnull NICCreateOptions options) throws CloudException, InternalException;
 
+    /**
+     * Provisions a subnet in the specified VLAN using the specified address space.
+     * @param cidr the CIDR of the address space within the target VLAN that will be used for the subnet
+     * @param inProviderVlanId the provider ID for the VLAN being subnetted
+     * @param name the name of the subnet
+     * @param description a description of the purpose of the subnet
+     * @return a newly created subnet
+     * @throws CloudException an error occurred in the cloud while provisioning the subnet
+     * @throws InternalException a local error occurred during the provisoning of the subnet
+     * @deprecated Use {@link #createSubnet(SubnetCreateOptions)}
+     */
     public abstract @Nonnull Subnet createSubnet(@Nonnull String cidr, @Nonnull String inProviderVlanId, @Nonnull String name, @Nonnull String description) throws CloudException, InternalException;
-    
+
+    /**
+     * Provisions a subnet with the specified options for subnet creation.
+     * @param options the options to be used in provisioning the subnet
+     * @return a newly provisioned subnet
+     * @throws CloudException an error occurred in the cloud while provisioning the subnet
+     * @throws InternalException a local error occurred during the provisoning of the subnet
+     */
+    public abstract @Nonnull Subnet createSubnet(@Nonnull SubnetCreateOptions options) throws CloudException, InternalException;
+
     public abstract @Nonnull VLAN createVlan(@Nonnull String cidr, @Nonnull String name, @Nonnull String description, @Nonnull String domainName, @Nonnull String[] dnsServers, @Nonnull String[] ntpServers) throws CloudException, InternalException;
 
     /**
@@ -263,6 +302,29 @@ public interface VLANSupport extends AccessControlledService {
     public abstract @Nonnull Requirement getSubnetSupport() throws CloudException, InternalException;
 
     public abstract @Nullable VLAN getVlan(@Nonnull String vlanId) throws CloudException, InternalException;
+
+    /**
+     * Indicates whether or not you must specify a data center when provisioning your subnet. If {@link Requirement#NONE},
+     * then the cloud has no support for data centers and/or subnets or it lacks the ability to provision subnets in
+     * specific data centers. {@link Requirement#OPTIONAL} means that the cloud supports both and you may or may not
+     * specify a data center. No cloud should ever return {@link Requirement#REQUIRED}. Even if the cloud requires it,
+     * the Dasein Cloud implementation should pick on the client's request when none is specified.
+     * @return the requirements for specifying a data center when provisioning a subnet
+     * @throws CloudException an error occurred with the cloud provider determining support for this functionality
+     * @throws InternalException a local error occurred determining support for this functionality
+     */
+    public abstract @Nonnull Requirement identifySubnetDCRequirement() throws CloudException, InternalException;
+
+    /**
+     * Indicates whether or not the specified VLAN is connected to the public Internet via an Internet Gateway. A false
+     * response does not mean that the VLAN is not connected to the public Internet, it just means that, if it is connected,
+     * it's not connected via an Internet Gateway.
+     * @param vlanId the VLAN you are checking
+     * @return <code>true</code> if the VLAN is connected to the public Internet via an Internet Gateway
+     * @throws CloudException an error occurred with the cloud provider
+     * @throws InternalException a local error occurred
+     */
+    public abstract boolean isConnectedViaInternetGateway(@Nonnull String vlanId) throws CloudException, InternalException;
 
     /**
      * Indicates whether or not this cloud included the concept of network interfaces in its networking support.
@@ -380,6 +442,7 @@ public interface VLANSupport extends AccessControlledService {
      * @param forVlanId the VLAN to disconnect
      * @throws CloudException an error occurred with the cloud provider while removing the gateway
      * @throws InternalException a local error occurred while removing the gateway
+     * @throws OperationNotSupportedException internet gateway creation/removal is not supported in this cloud
      */
     public abstract void removeInternetGateway(@Nonnull String forVlanId) throws CloudException, InternalException;
 
@@ -388,6 +451,7 @@ public interface VLANSupport extends AccessControlledService {
      * @param nicId the network interface to be de-provisioned
      * @throws CloudException an error occurred with the cloud provider while de-provisioning the network interface
      * @throws InternalException a local error occurred while de-provisioning the network interface
+     * @throws OperationNotSupportedException NIC creation/removal is not supported in this cloud
      */
     public abstract void removeNetworkInterface(@Nonnull String nicId) throws CloudException, InternalException;
 
@@ -397,6 +461,7 @@ public interface VLANSupport extends AccessControlledService {
      * @param destinationCidr the destination CIDR for the traffic being routed
      * @throws CloudException an error occurred in the cloud while removing the route
      * @throws InternalException a local error occurred processing the request to remove the route
+     * @throws OperationNotSupportedException route creation/removal is not supported in this cloud
      */
     public abstract void removeRoute(@Nonnull String inRoutingTableId, @Nonnull String destinationCidr) throws CloudException, InternalException;
 
@@ -405,12 +470,49 @@ public interface VLANSupport extends AccessControlledService {
      * @param routingTableId the unique ID of the routing table to be removed
      * @throws CloudException an error occurred in the cloud removing the routing table
      * @throws InternalException a local error occurred while processing the request to remove the routing table
+     * @throws OperationNotSupportedException routing table creation/removal is not supported in this cloud
      */
     public abstract void removeRoutingTable(@Nonnull String routingTableId) throws CloudException, InternalException;
 
+    /**
+     * Removes the specified subnet from the cloud.
+     * @param providerSubnetId the subnet to be removed
+     * @throws CloudException an error occurred with the cloud provider while removing the subnet
+     * @throws InternalException a local error occurred while processing the request
+     * @throws OperationNotSupportedException subnet creation/removal is not supported in this cloud
+     */
     public abstract void removeSubnet(String providerSubnetId) throws CloudException, InternalException;
-    
+
+    /**
+     * Removes the specified VLAN from the cloud.
+     * @param vlanId the unique ID of the VLAN to be removed
+     * @throws CloudException an error occurred removing the target VLAN
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws OperationNotSupportedException VLAN removal is not supported
+     */
     public abstract void removeVlan(String vlanId) throws CloudException, InternalException;
+
+    /**
+     * Removes meta-data from a VLAN. If tag values are set, their removal is dependent on underlying cloud
+     * provider behavior. They may be removed only if the tag value matches or they may be removed regardless of the
+     * value.
+     * @param vlanId the VLAN to update
+     * @param tags the meta-data tags to remove
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void removeVLANTags(@Nonnull String vlanId, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Removes meta-data from multiple VLANs. If tag values are set, their removal is dependent on underlying cloud
+     * provider behavior. They may be removed only if the tag value matches or they may be removed regardless of the
+     * value.
+     * @param vlanIds the VLANs to update
+     * @param tags  the meta-data tags to remove
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void removeVLANTags(@Nonnull String[] vlanIds, @Nonnull Tag ... tags) throws CloudException, InternalException;
 
     /**
      * Indicates whether or not this cloud allows enabling of internet gateways for VLANs. This is not relevant if all VLANs are Internet
@@ -428,4 +530,24 @@ public interface VLANSupport extends AccessControlledService {
      * @throws InternalException a local error occurred identifying support
      */
     public abstract boolean supportsRawAddressRouting() throws CloudException, InternalException;
+
+    /**
+     * Updates meta-data for a VLAN with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     * @param vlanId the VLAN to update
+     * @param tags the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void updateVLANTags(@Nonnull String vlanId, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Updates meta-data for multiple VLANs with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     * @param vlanIds the VLANs to update
+     * @param tags  the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void updateVLANTags(@Nonnull String[] vlanIds, @Nonnull Tag... tags) throws CloudException, InternalException;
 }
