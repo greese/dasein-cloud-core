@@ -295,20 +295,14 @@ public class FirewallRule implements Comparable<FirewallRule> {
                 RuleTargetType t = RuleTargetType.valueOf(tname);
                 String tmp = parts[i++];
 
-                try {
-                    direction = Direction.valueOf(tmp.toUpperCase());
-                    source = RuleTarget.getGlobal(providerFirewallId);
+                direction = Direction.valueOf(tmp.toUpperCase());
+                switch( t ) {
+                    case GLOBAL: source = RuleTarget.getGlobal(tmp); break;
+                    case VM: source = RuleTarget.getVirtualMachine(tmp); break;
+                    case VLAN: source = RuleTarget.getVlan(tmp); break;
+                    case CIDR: source = RuleTarget.getCIDR(tmp); break;
+                    default: return null;
                 }
-                catch( Throwable ignore ) {
-                    switch( t ) {
-                        case GLOBAL: source = RuleTarget.getGlobal(tmp); break;
-                        case VM: source = RuleTarget.getVirtualMachine(tmp); break;
-                        case VLAN: source = RuleTarget.getVlan(tmp); break;
-                        case CIDR: source = RuleTarget.getCIDR(tmp); break;
-                        default: return null;
-                    }
-                }
-
             }
             catch( Throwable ignore ) {
                 source = RuleTarget.getGlobal(providerFirewallId);
