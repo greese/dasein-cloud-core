@@ -226,6 +226,16 @@ public interface VLANSupport extends AccessControlledService {
     public abstract @Nonnull VLAN createVlan(@Nonnull String cidr, @Nonnull String name, @Nonnull String description, @Nonnull String domainName, @Nonnull String[] dnsServers, @Nonnull String[] ntpServers) throws CloudException, InternalException;
 
     /**
+     * Creates a new vlan based on the specified creation options.
+     * @param options the options to be used in creating the vlan
+     * @return the unique provider ID identifying the newly created vlan
+     * @throws CloudException an error occurred with the cloud provider while performing the operation
+     * @throws InternalException an error occurred locally independent of any events in the cloud
+     * @throws UnsupportedOperationException this cloud doesn't support vlan creation using the specified options
+     */
+    public abstract @Nonnull VLAN createVlan(@Nonnull VlanCreateOptions options) throws InternalException, CloudException;
+
+    /**
      * Detaches the specified network interface from any virtual machine it might be attached to.
      * @param nicId the unique ID of the network interface to be detached
      * @throws CloudException an error occurred with the cloud provider while detaching the network interface
