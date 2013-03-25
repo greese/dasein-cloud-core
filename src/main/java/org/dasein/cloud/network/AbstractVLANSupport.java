@@ -145,6 +145,11 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     }
 
     @Override
+    public @Nonnull VLAN createVlan(@Nonnull VlanCreateOptions vco) throws CloudException, InternalException {
+      throw new OperationNotSupportedException("VLANs are not currently implemented for " + getProvider().getCloudName());
+    }
+
+    @Override
     public void detachNetworkInterface(@Nonnull String nicId) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Network interfaces are not currently implemented for " + getProvider().getCloudName());
     }
