@@ -96,21 +96,21 @@ public class VlanCreateOptions {
     /**
      * @return the domain, if any, for the vlan
      */
-    public @Nonnull String getDomain() {
+    public @Nullable String getDomain() {
       return domain;
     }
 
     /**
      * @return the NTP servers, if any, for the vlan
      */
-    public @Nonnull String[] getNtpServers() {
+    public @Nullable String[] getNtpServers() {
       return ntpServers;
     }
 
     /**
      * @return the DNS servers, if any, for the vlan
      */
-    public @Nonnull String[] getDnsServers() {
+    public @Nullable String[] getDnsServers() {
       return dnsServers;
     }
 
