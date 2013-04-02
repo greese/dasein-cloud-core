@@ -144,7 +144,6 @@
 	          </links>
               <stylesheetfile>dasein-javadoc.css</stylesheetfile>
 	          <footer />
-            <skip>true</skip>
 	      </configuration>
         </plugin>
         <plugin>
