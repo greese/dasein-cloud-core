@@ -9,3 +9,5 @@
 target
 
 .DS_Store
+
+src/main/java/org/dasein/cloud/.DS_Store
