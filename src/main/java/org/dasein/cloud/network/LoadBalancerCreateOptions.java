@@ -78,11 +78,40 @@ public class LoadBalancerCreateOptions {
 
     private ArrayList<LoadBalancerEndpoint> endpoints;
     private ArrayList<String>               providerDataCenterIds;
+    private ArrayList<String>               subnets;
     private String                          providerIpAddressId;
     private String                          description;
     private ArrayList<LbListener>           listeners;
     private Map<String,Object>              metaData;
     private String                          name;
+    /* only needs to be set if internal
+     very AWS specific - needs tweaking
+     AWS messaging regarding non-internal:
+     The selected VPC does not have an Internet Gateway attached and can only be used for an internal load balancer. If you would like to create an internet facing (public) load balancer, please attach an Internet Gateway to your VPC. To create an internal load balancer, select the 'Create an internal load balancer' checkbox.
+     Cannot attach an instance to a Load Balancer in a VPC, AWS throws this error:
+     SEVERE: The exception contained within MappableContainerException could not be mapped to a response, re-throwing to the HTTP container
+    org.dasein.cloud.CloudException: org.dasein.cloud.aws.compute.EC2Exception: EC2 instance i-d323b5be is in VPC.
+     */
+    private String                          scheme;
+
+    /**
+     * Tells AWS this is an internal loadbalancer
+     * @param internal true/false to set as internal load balancer
+     * @return this
+     */
+    public @Nonnull LoadBalancerCreateOptions setInternal(boolean internal) {
+      if(internal){
+        scheme = "internal";
+      }
+      return this;
+    }
+
+    /**
+     * @return the internal scheme value of the load balancer to be created
+     */
+    public String getScheme() {
+      return scheme;
+    }
 
     private LoadBalancerCreateOptions() { }
 
@@ -186,6 +215,16 @@ public class LoadBalancerCreateOptions {
     }
 
     /**
+     * @return thesubnets to which this load balancer will be added
+     */
+    public @Nonnull String[] getSubnetIds() {
+      if( subnets == null ) {
+        return new String[0];
+      }
+      return subnets.toArray(new String[subnets.size()]);
+    }
+
+    /**
      * @return the IP address you are assigning to this load balancer if the address is required
      */
     public @Nullable String getProviderIpAddressId() {
@@ -216,6 +255,19 @@ public class LoadBalancerCreateOptions {
         }
         Collections.addAll(providerDataCenterIds, dataCenterIds);
         return this;
+    }
+
+    /**
+     * Adds the specified subnets into this list of subnets to which this load balancer rotation will be added.
+     * @param subnetIds the IDs of the subnets to add the load balancer to
+     * @return this
+     */
+    public @Nonnull LoadBalancerCreateOptions subnettedTo(@Nonnull String ... subnetIds) {
+      if( subnets == null ) {
+        subnets = new ArrayList<String>();
+      }
+      Collections.addAll(subnets, subnetIds);
+      return this;
     }
 
     @Override

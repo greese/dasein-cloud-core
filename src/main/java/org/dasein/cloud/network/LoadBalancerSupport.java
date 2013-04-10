@@ -342,7 +342,7 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
      * @deprecated Use {@link #createLoadBalancer(LoadBalancerCreateOptions)}
      */
-    public @Nonnull String create(@Nonnull String name, @Nonnull String description, @Nullable String addressId, @Nullable String[] dataCenterIds, @Nullable LbListener[] listeners, @Nullable String[] serverIds) throws CloudException, InternalException;
+    public @Nonnull String create(@Nonnull String name, @Nonnull String description, @Nullable String addressId, @Nullable String[] dataCenterIds, @Nullable LbListener[] listeners, @Nullable String[] serverIds, @Nullable String[] subnetId, @Nullable String scheme) throws CloudException, InternalException;
 
     /**
      * Removes a load balancer.
