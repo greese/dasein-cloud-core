@@ -78,7 +78,7 @@ public class LoadBalancerCreateOptions {
 
     private ArrayList<LoadBalancerEndpoint> endpoints;
     private ArrayList<String>               providerDataCenterIds;
-    private ArrayList<String>               subnets;
+    private ArrayList<String>               providerSubnetIds;
     private String                          providerIpAddressId;
     private String                          description;
     private ArrayList<LbListener>           listeners;
@@ -190,11 +190,11 @@ public class LoadBalancerCreateOptions {
     /**
      * @return the subnets to which this load balancer will be added
      */
-    public @Nonnull String[] getSubnetIds() {
-      if( subnets == null ) {
+    public @Nonnull String[] getProviderSubnetIds() {
+      if( providerSubnetIds == null ) {
         return new String[0];
       }
-      return subnets.toArray(new String[subnets.size()]);
+      return providerSubnetIds.toArray(new String[providerSubnetIds.size()]);
     }
 
     /**
@@ -239,14 +239,14 @@ public class LoadBalancerCreateOptions {
 
     /**
      * Adds the specified subnets into this list of subnets to which this load balancer rotation will be added.
-     * @param subnetIds the IDs of the subnets to add the load balancer to
+     * @param providerSubnetIds the IDs of the subnets to add the load balancer to
      * @return this
      */
-    public @Nonnull LoadBalancerCreateOptions subnettedTo(@Nonnull String ... subnetIds) {
-      if( subnets == null ) {
-        subnets = new ArrayList<String>();
+    public @Nonnull LoadBalancerCreateOptions withProviderSubnetIds(@Nonnull String ... providerSubnetIds) {
+      if( this.providerSubnetIds == null ) {
+        this.providerSubnetIds = new ArrayList<String>();
       }
-      Collections.addAll(subnets, subnetIds);
+      Collections.addAll(this.providerSubnetIds, providerSubnetIds);
       return this;
     }
 

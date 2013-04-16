@@ -83,7 +83,7 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
             }
         }
         //noinspection deprecation
-        return create(options.getName(), options.getDescription(), options.getProviderIpAddressId(), options.getProviderDataCenterIds(), options.getListeners(), serverIds.toArray(new String[serverIds.size()]), options.getSubnetIds(), options.getType());
+        return create(options.getName(), options.getDescription(), options.getProviderIpAddressId(), options.getProviderDataCenterIds(), options.getListeners(), serverIds.toArray(new String[serverIds.size()]), options.getProviderSubnetIds(), options.getType());
     }
 
 

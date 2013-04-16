@@ -88,6 +88,7 @@ public class LoadBalancer implements Networkable, Taggable {
     private String                  providerOwnerId;
     private String                  providerRegionId;
     private String[]                providerServerIds;
+    private ArrayList<String>       providerSubnetIds;
     private int[]                   publicPorts;
     private IPVersion[]             supportedTraffic;
     private Map<String,String>      tags;
@@ -257,6 +258,26 @@ public class LoadBalancer implements Networkable, Taggable {
         assert (dataCenterIds.length > 0);
         this.providerDataCenterIds = dataCenterIds;
         return this;
+    }
+
+    /**
+     * @return the provider subnet ids
+     */
+    public ArrayList<String> getProviderSubnetIds() {
+      return providerSubnetIds;
+    }
+
+    /**
+     * Sets the provider subnet ids.
+     * @param providerSubnetIds the provider subnet ids
+     * @return this
+     */
+    public LoadBalancer withProviderSubnetIds( String... providerSubnetIds ) {
+      if( this.providerSubnetIds == null ) {
+        this.providerSubnetIds = new ArrayList<String>();
+      }
+      Collections.addAll(this.providerSubnetIds, providerSubnetIds);
+      return this;
     }
 
     /**
