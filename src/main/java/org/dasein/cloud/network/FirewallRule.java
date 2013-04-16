@@ -480,7 +480,7 @@ public class FirewallRule implements Comparable<FirewallRule> {
     public int getEndPort() {
         return endPort;
     }
-    
+
     /**
      * @return the unique provider ID for the firewall behind this rule
      */
