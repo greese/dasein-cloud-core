@@ -338,13 +338,13 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @param listeners the listeners to be established on create
      * @param serverIds a list of servers to be attached to the load balancer on create
      * @param subnetIds a list of subnets to be attached to the load balancer on create
-     * @param scheme value to set for internal (VLAN) load-balancers [ "internal" ]
+     * @param type the load balancer type
      * @return the unique ID for the new load balancer
      * @throws CloudException an error occurred with the cloud provider while performing this action
      * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
      * @deprecated Use {@link #createLoadBalancer(LoadBalancerCreateOptions)}
      */
-    public @Nonnull String create(@Nonnull String name, @Nonnull String description, @Nullable String addressId, @Nullable String[] dataCenterIds, @Nullable LbListener[] listeners, @Nullable String[] serverIds, @Nullable String[] subnetIds, @Nullable String scheme) throws CloudException, InternalException;
+    public @Nonnull String create(@Nonnull String name, @Nonnull String description, @Nullable String addressId, @Nullable String[] dataCenterIds, @Nullable LbListener[] listeners, @Nullable String[] serverIds, @Nullable String[] subnetIds, @Nullable LbType type) throws CloudException, InternalException;
 
     /**
      * Removes a load balancer.

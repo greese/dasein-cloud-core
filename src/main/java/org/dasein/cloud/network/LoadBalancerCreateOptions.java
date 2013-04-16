@@ -84,34 +84,7 @@ public class LoadBalancerCreateOptions {
     private ArrayList<LbListener>           listeners;
     private Map<String,Object>              metaData;
     private String                          name;
-    /* only needs to be set if internal
-     very AWS specific - needs tweaking
-     AWS messaging regarding non-internal:
-     The selected VPC does not have an Internet Gateway attached and can only be used for an internal load balancer. If you would like to create an internet facing (public) load balancer, please attach an Internet Gateway to your VPC. To create an internal load balancer, select the 'Create an internal load balancer' checkbox.
-     Cannot attach an instance to a Load Balancer in a VPC, AWS throws this error:
-     SEVERE: The exception contained within MappableContainerException could not be mapped to a response, re-throwing to the HTTP container
-    org.dasein.cloud.CloudException: org.dasein.cloud.aws.compute.EC2Exception: EC2 instance i-d323b5be is in VPC.
-     */
-    private String                          scheme;
-
-    /**
-     * Tells AWS this is an internal loadbalancer
-     * @param internal true/false to set as internal load balancer
-     * @return this
-     */
-    public @Nonnull LoadBalancerCreateOptions setInternal(boolean internal) {
-      if(internal){
-        scheme = "internal";
-      }
-      return this;
-    }
-
-    /**
-     * @return the internal scheme value of the load balancer to be created
-     */
-    public String getScheme() {
-      return scheme;
-    }
+    private LbType                          type;
 
     private LoadBalancerCreateOptions() { }
 
@@ -215,7 +188,7 @@ public class LoadBalancerCreateOptions {
     }
 
     /**
-     * @return thesubnets to which this load balancer will be added
+     * @return the subnets to which this load balancer will be added
      */
     public @Nonnull String[] getSubnetIds() {
       if( subnets == null ) {
@@ -229,6 +202,13 @@ public class LoadBalancerCreateOptions {
      */
     public @Nullable String getProviderIpAddressId() {
         return providerIpAddressId;
+    }
+
+    /**
+     * @return the load balancer type
+     */
+    public LbType getType() {
+      return type;
     }
 
     /**
@@ -320,4 +300,15 @@ public class LoadBalancerCreateOptions {
         this.metaData.putAll(metaData);
         return this;
     }
+
+    /**
+     * Sets the load balancer type.
+     * @param type the load balancer type
+     * @return this
+     */
+    public LoadBalancerCreateOptions asType( LbType type ) {
+      this.type = type;
+      return this;
+    }
+
 }

@@ -53,8 +53,26 @@ public class LoadBalancer implements Networkable, Taggable {
      * @return a load balancer instance representing the specified state
      */
     static public LoadBalancer getInstance(@Nonnull String ownerId, @Nonnull String regionId, @Nonnull String lbId, @Nonnull LoadBalancerState state, @Nonnull String name, @Nonnull String description, @Nonnull LoadBalancerAddressType addressType, @Nonnull String address, @Nonnull int ... publicPorts) {
-        assert (publicPorts.length > 0);
         return new LoadBalancer(ownerId, regionId, lbId, state, name, description, addressType, address, publicPorts);
+    }
+
+    /**
+     * Constructs a load balancer with the minimally acceptable data set.
+     * @param ownerId the account number that owns this load balancer
+     * @param regionId the region ID of the region in which the load balancer operates
+     * @param lbId the unique ID of the load balancer in the target cloud
+     * @param state the current operational state for the load balancer
+     * @param name the name of the load balancer
+     * @param description a user-friendly description of the load balancer
+     * @param addressType what kind of address is represented by the load balancer address
+     * @param address the load balancer CNAME, IPv4, or IPv6 address
+     * @param publicPorts one or more public ports on which the load balancer is listening
+     * @return a load balancer instance representing the specified state
+     */
+    static public LoadBalancer getInstance(@Nonnull String ownerId, @Nonnull String regionId, @Nonnull String lbId, @Nonnull LoadBalancerState state, @Nonnull String name, @Nonnull String description, @Nonnull LbType type, @Nonnull LoadBalancerAddressType addressType, @Nonnull String address, @Nonnull int ... publicPorts) {
+      LoadBalancer lb = new LoadBalancer(ownerId, regionId, lbId, state, name, description, addressType, address, publicPorts);
+      lb.setType( type );
+      return lb;
     }
 
     private String                  address;
@@ -62,6 +80,7 @@ public class LoadBalancer implements Networkable, Taggable {
     private long                    creationTimestamp;
     private LoadBalancerState       currentState;
     private String                  description;
+    private LbType                  type;
     private ArrayList<LbListener>   listeners;
     private String                  name;
     private String[]                providerDataCenterIds;
@@ -86,6 +105,7 @@ public class LoadBalancer implements Networkable, Taggable {
         this.currentState = state;
         this.name = name;
         this.description = description;
+        this.type = type;
         this.address = address;
         this.addressType = addressType;
         this.publicPorts = publicPorts;
@@ -155,6 +175,13 @@ public class LoadBalancer implements Networkable, Taggable {
      */
     public @Nonnull String getDescription() {
         return description;
+    }
+
+    /**
+     * @return the type of load balancer
+     */
+    public LbType getType() {
+      return type;
     }
 
     /**
@@ -348,6 +375,14 @@ public class LoadBalancer implements Networkable, Taggable {
      */
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    /**
+     * Sets the load balancer type.
+     * @param type the load balancer type
+     */
+    public void setType( LbType type ) {
+      this.type = type;
     }
 
     /**
