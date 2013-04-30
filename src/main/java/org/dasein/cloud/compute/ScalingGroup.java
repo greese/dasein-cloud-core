@@ -23,7 +23,7 @@ import java.io.Serializable;
 public class ScalingGroup implements Serializable {
     private static final long serialVersionUID = -5317003700769693511L;
     
-    private int      cooldown;
+    private int      defaultCooldown;
     private long     creationTimestamp;
     private String   description;
     private int      maxServers;
@@ -39,12 +39,12 @@ public class ScalingGroup implements Serializable {
     
     public ScalingGroup() { }
 
-    public int getCooldown() {
-        return cooldown;
+    public int getDefaultCoolcown() {
+        return defaultCooldown;
     }
 
-    public void setCooldown(int cooldown) {
-        this.cooldown = cooldown;
+    public void setDefaultCoolcown(int cooldown) {
+        this.defaultCooldown = cooldown;
     }
 
     public String getDescription() {
