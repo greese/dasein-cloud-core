@@ -78,11 +78,13 @@ public class LoadBalancerCreateOptions {
 
     private ArrayList<LoadBalancerEndpoint> endpoints;
     private ArrayList<String>               providerDataCenterIds;
+    private ArrayList<String>               providerSubnetIds;
     private String                          providerIpAddressId;
     private String                          description;
     private ArrayList<LbListener>           listeners;
     private Map<String,Object>              metaData;
     private String                          name;
+    private LbType                          type;
 
     private LoadBalancerCreateOptions() { }
 
@@ -186,10 +188,27 @@ public class LoadBalancerCreateOptions {
     }
 
     /**
+     * @return the subnets to which this load balancer will be added
+     */
+    public @Nonnull String[] getProviderSubnetIds() {
+      if( providerSubnetIds == null ) {
+        return new String[0];
+      }
+      return providerSubnetIds.toArray(new String[providerSubnetIds.size()]);
+    }
+
+    /**
      * @return the IP address you are assigning to this load balancer if the address is required
      */
     public @Nullable String getProviderIpAddressId() {
         return providerIpAddressId;
+    }
+
+    /**
+     * @return the load balancer type
+     */
+    public LbType getType() {
+      return type;
     }
 
     /**
@@ -216,6 +235,19 @@ public class LoadBalancerCreateOptions {
         }
         Collections.addAll(providerDataCenterIds, dataCenterIds);
         return this;
+    }
+
+    /**
+     * Adds the specified subnets into this list of subnets to which this load balancer rotation will be added.
+     * @param providerSubnetIds the IDs of the subnets to add the load balancer to
+     * @return this
+     */
+    public @Nonnull LoadBalancerCreateOptions withProviderSubnetIds(@Nonnull String ... providerSubnetIds) {
+      if( this.providerSubnetIds == null ) {
+        this.providerSubnetIds = new ArrayList<String>();
+      }
+      Collections.addAll(this.providerSubnetIds, providerSubnetIds);
+      return this;
     }
 
     @Override
@@ -268,4 +300,15 @@ public class LoadBalancerCreateOptions {
         this.metaData.putAll(metaData);
         return this;
     }
+
+    /**
+     * Sets the load balancer type.
+     * @param type the load balancer type
+     * @return this
+     */
+    public LoadBalancerCreateOptions asType( LbType type ) {
+      this.type = type;
+      return this;
+    }
+
 }

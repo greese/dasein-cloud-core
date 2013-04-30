@@ -337,6 +337,15 @@ public interface VLANSupport extends AccessControlledService {
     public abstract boolean isConnectedViaInternetGateway(@Nonnull String vlanId) throws CloudException, InternalException;
 
     /**
+     * Gets the Internet Gateway ID of vlanId.  If null then no gateway attached to VLAN
+     * @param forVlanId the VLAN you are checking for a gateway id against
+     * @return Id for the Internet Gateway
+     * @throws CloudException an error occurred with the cloud provider
+     * @throws InternalException a local error occurred
+     */
+    public abstract @Nullable String getInternetGatewayId(@Nonnull String forVlanId) throws CloudException, InternalException;
+
+    /**
      * Indicates whether or not this cloud included the concept of network interfaces in its networking support.
      * @return true if this cloud supports network interfaces as part of its networking concepts
      * @throws CloudException an error occurred with the cloud provider determining support for network interfaces
