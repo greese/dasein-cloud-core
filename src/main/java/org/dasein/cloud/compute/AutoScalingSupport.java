@@ -41,6 +41,7 @@ public interface AutoScalingSupport extends AccessControlledService {
     static public final ServiceAction SET_SCALING_TRIGGER         = new ServiceAction("SCALING:SET_SCALING_TRIGGER");
     static public final ServiceAction UPDATE_SCALING_GROUP        = new ServiceAction("SCALING:UPDATE_SCALING_GROUP");
     static public final ServiceAction SUSPEND_AUTO_SCALING_GROUP  = new ServiceAction("SCALING:SUSPEND_AUTO_SCALING_GROUP");
+    static public final ServiceAction RESUME_AUTO_SCALING_GROUP  = new ServiceAction("SCALING:RESUME_AUTO_SCALING_GROUP");
     
     public String createAutoScalingGroup(String name, String launchConfigurationId, int minServers, int maxServers, int cooldown, String ... dataCenterIds) throws InternalException, CloudException;
         
@@ -57,6 +58,8 @@ public interface AutoScalingSupport extends AccessControlledService {
     public boolean isSubscribed() throws CloudException, InternalException;
 
     public void suspendAutoScaling(String providerScalingGroupId, String[] processesToSuspend) throws CloudException, InternalException;
+
+    public void resumeAutoScaling(String providerScalingGroupId, String[] processesToResume) throws CloudException, InternalException;
 
     public Iterable<ResourceStatus> listScalingGroupStatus() throws CloudException, InternalException;
 
