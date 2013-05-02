@@ -18,26 +18,111 @@
 
 package org.dasein.cloud.compute;
 
+import org.dasein.cloud.platform.Metric;
+
 import java.io.Serializable;
+import java.util.Collection;
 
 public class ScalingGroup implements Serializable {
     private static final long serialVersionUID = -5317003700769693511L;
     
-    private int      defaultCooldown;
-    private long     creationTimestamp;
-    private String   description;
-    private int      maxServers;
-    private int      minServers;
-    private String   name;
-    private String[] providerDataCenterIds;
-    private String   providerLaunchConfigurationId;
-    private String   providerOwnerId;
-    private String   providerRegionId;
-    private String   providerScalingGroupId;
-    private String[] providerServerIds;
-    private int      targetCapacity;
+    private int                   defaultCooldown;
+    private long                  creationTimestamp;
+    private String                description;
+    private int                   maxServers;
+    private int                   minServers;
+    private String                name;
+    private String[]              providerDataCenterIds;
+    private String                providerLaunchConfigurationId;
+    private String                providerOwnerId;
+    private String                providerRegionId;
+    private String                providerScalingGroupId;
+    private String[]              providerServerIds;
+    private int                   targetCapacity;
+    private String                autoScalingGroupARN;
+    private Collection<String[]>  enabledMetrics;
+    private int                   healthCheckGracePeriod;
+    private String                healthCheckType;
+    private String[]              providerLoadBalancerNames;
+    private String                status;
+    private Collection<String[]>  suspendedProcesses;
+    private String[]              terminationPolicies;
+    private String                providerVlanId;
+
     
     public ScalingGroup() { }
+
+    public String getAutoScalingGroupARN() {
+      return autoScalingGroupARN;
+    }
+
+    public void setAutoScalingGroupARN(String arn) {
+      this.autoScalingGroupARN = arn;
+    }
+
+    public Collection<String[]> getEnabledMetrics() {
+      return enabledMetrics;
+    }
+
+    public void setEnabledMetrics(Collection<String[]> metrics) {
+      this.enabledMetrics = metrics;
+    }
+
+    public int getHealthCheckGracePeriod() {
+      return healthCheckGracePeriod;
+    }
+
+    public void setHealthCheckGracePeriod(int healthCheckGracePeriod) {
+      this.healthCheckGracePeriod = healthCheckGracePeriod;
+    }
+
+    public String getHealthCheckType() {
+      return healthCheckType;
+    }
+
+    public void setHealthCheckType(String healthCheckType) {
+      this.healthCheckType = healthCheckType;
+    }
+
+    public String[] getProviderLoadBalancerNames() {
+      return providerLoadBalancerNames;
+    }
+
+    public void setProviderLoadBalancerNames(String[] providerLoadBalancerNames) {
+      this.providerLoadBalancerNames = providerLoadBalancerNames;
+    }
+
+    public String getStatus() {
+      return status;
+    }
+
+    public void setStatus(String status) {
+      this.status = status;
+    }
+
+    public Collection<String[]> getSuspendedProcesses() {
+      return suspendedProcesses;
+    }
+
+    public void setSuspendedProcesses(Collection<String[]> suspendedProcesses) {
+      this.suspendedProcesses = suspendedProcesses;
+    }
+
+    public String[] getTerminationPolicies() {
+      return terminationPolicies;
+    }
+
+    public void setTerminationPolicies(String[] terminationPolicies) {
+      this.terminationPolicies = terminationPolicies;
+    }
+
+    public String getProviderVlanId() {
+      return providerVlanId;
+    }
+
+    public void setProviderVlanId(String providerVlanId) {
+      this.providerVlanId = providerVlanId;
+    }
 
     public int getDefaultCoolcown() {
         return defaultCooldown;
