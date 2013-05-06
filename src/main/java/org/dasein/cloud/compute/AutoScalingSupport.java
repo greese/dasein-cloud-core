@@ -46,7 +46,7 @@ public interface AutoScalingSupport extends AccessControlledService {
     
     public String createAutoScalingGroup(String name, String launchConfigurationId, int minServers, int maxServers, int cooldown, String[] loadBalancerIds, String ... dataCenterIds) throws InternalException, CloudException;
         
-    public String createLaunchConfiguration(String name, String imageId, VirtualMachineProduct size, String ... firewalls) throws InternalException, CloudException;
+    public String createLaunchConfiguration(String name, String imageId, VirtualMachineProduct size, String keyPairName, String userData, String ... firewalls) throws InternalException, CloudException;
         
     public void deleteAutoScalingGroup(String providerAutoScalingGroupId) throws CloudException, InternalException;
     
