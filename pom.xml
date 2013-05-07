@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 <!--
-    Copyright (C) 2009-2013 enstratius, Inc.(http://www.enstratius.com)
+    Copyright (C) 2009-2013 Dell, Inc.(http://www.enstratius.com)
 
     ====================================================================
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,8 +46,8 @@
   </licenses>
 
   <organization>
-  	<name>enstratius, Inc.</name>
-  	<url>http://www.enstratius.com</url>
+  	<name>Dell, Inc.</name>
+  	<url>http://software.dell.com</url>
   </organization>
 
   <scm>
@@ -163,7 +163,7 @@
                 </excludes>
                 <properties>
                     <year>2009-2013</year>
-                    <copyrightHolder>enstratius, Inc.</copyrightHolder>
+                    <copyrightHolder>Dell, Inc.</copyrightHolder>
                 </properties>
             </configuration>
         </plugin>
@@ -219,7 +219,7 @@
     <developer>
         <name>George Reese</name>
         <id>georgereese</id>
-        <email>george.reese -at- enstratius -dot- com</email>
+        <email>George_Reese -at- dell -dot- com</email>
         <organization>enstratius</organization>
         <roles>
           <role>Java Developer</role>
