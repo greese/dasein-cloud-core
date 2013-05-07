@@ -43,6 +43,8 @@ public interface AutoScalingSupport extends AccessControlledService {
     static public final ServiceAction SUSPEND_AUTO_SCALING_GROUP  = new ServiceAction("SCALING:SUSPEND_AUTO_SCALING_GROUP");
     static public final ServiceAction RESUME_AUTO_SCALING_GROUP   = new ServiceAction("SCALING:RESUME_AUTO_SCALING_GROUP");
     static public final ServiceAction PUT_SCALING_POLICY          = new ServiceAction("SCALING:PUT_SCALING_POLICY");
+    static public final ServiceAction DELETE_SCALING_POLICY       = new ServiceAction("SCALING:DELETE_SCALING_POLICY");
+    static public final ServiceAction LIST_SCALING_POLICIES       = new ServiceAction("SCALING:LIST_SCALING_POLICIES");
     
     public String createAutoScalingGroup(String name, String launchConfigurationId, int minServers, int maxServers, int cooldown, String[] loadBalancerIds, String ... dataCenterIds) throws InternalException, CloudException;
         
@@ -63,6 +65,10 @@ public interface AutoScalingSupport extends AccessControlledService {
     public void resumeAutoScaling(String providerScalingGroupId, String[] processesToResume) throws CloudException, InternalException;
 
     public String updateScalingPolicy(String policyName, String adjustmentType, String autoScalingGroupName, int cooldown, Integer minAdjustmentStep, int scalingAdjustment) throws CloudException, InternalException;
+
+    public void deleteScalingPolicy(String policyName, String autoScalingGroupName) throws CloudException, InternalException;
+
+    public Collection<ScalingPolicy> listScalingPolicies(String autoScalingGroupName) throws CloudException, InternalException;
 
     public Iterable<ResourceStatus> listScalingGroupStatus() throws CloudException, InternalException;
 
