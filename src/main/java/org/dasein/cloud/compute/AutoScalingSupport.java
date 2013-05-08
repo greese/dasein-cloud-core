@@ -26,6 +26,8 @@ import org.dasein.cloud.InternalException;
 import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.identity.ServiceAction;
 
+import javax.annotation.Nullable;
+
 public interface AutoScalingSupport extends AccessControlledService {
     static public final ServiceAction ANY                         = new ServiceAction("SCALING:ANY");
 
@@ -46,7 +48,7 @@ public interface AutoScalingSupport extends AccessControlledService {
     static public final ServiceAction DELETE_SCALING_POLICY       = new ServiceAction("SCALING:DELETE_SCALING_POLICY");
     static public final ServiceAction LIST_SCALING_POLICIES       = new ServiceAction("SCALING:LIST_SCALING_POLICIES");
     
-    public String createAutoScalingGroup(String name, String launchConfigurationId, int minServers, int maxServers, int cooldown, String[] loadBalancerIds, String ... dataCenterIds) throws InternalException, CloudException;
+    public String createAutoScalingGroup(String name, String launchConfigurationId, int minServers, int maxServers, @Nullable Integer cooldown, @Nullable String[] loadBalancerIds, @Nullable Integer desiredCapacity, @Nullable Integer healthCheckGracePeriod, @Nullable String healthCheckType, @Nullable String vpcZones, String ... dataCenterIds) throws InternalException, CloudException;
         
     public String createLaunchConfiguration(String name, String imageId, VirtualMachineProduct size, String keyPairName, String userData, String ... firewalls) throws InternalException, CloudException;
         
