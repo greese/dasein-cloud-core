@@ -48,7 +48,9 @@ public interface AutoScalingSupport extends AccessControlledService {
     static public final ServiceAction DELETE_SCALING_POLICY       = new ServiceAction("SCALING:DELETE_SCALING_POLICY");
     static public final ServiceAction LIST_SCALING_POLICIES       = new ServiceAction("SCALING:LIST_SCALING_POLICIES");
     
-    public String createAutoScalingGroup(String name, String launchConfigurationId, int minServers, int maxServers, @Nullable Integer cooldown, @Nullable String[] loadBalancerIds, @Nullable Integer desiredCapacity, @Nullable Integer healthCheckGracePeriod, @Nullable String healthCheckType, @Nullable String vpcZones, String ... dataCenterIds) throws InternalException, CloudException;
+    public String createAutoScalingGroup(String name, String launchConfigurationId, Integer minServers, Integer maxServers, @Nullable Integer cooldown, @Nullable String[] loadBalancerIds, @Nullable Integer desiredCapacity, @Nullable Integer healthCheckGracePeriod, @Nullable String healthCheckType, @Nullable String vpcZones, String ... dataCenterIds) throws InternalException, CloudException;
+
+    public void updateAutoScalingGroup(String scalingGroupId, @Nullable String launchConfigurationId, @Nullable Integer minServers, @Nullable Integer maxServers, @Nullable Integer cooldown, @Nullable String[] loadBalancerIds, @Nullable Integer desiredCapacity, @Nullable Integer healthCheckGracePeriod, @Nullable String healthCheckType, @Nullable String vpcZones, @Nullable String ... zoneIds) throws InternalException, CloudException;
         
     public String createLaunchConfiguration(String name, String imageId, VirtualMachineProduct size, String keyPairName, String userData, String ... firewalls) throws InternalException, CloudException;
         
@@ -83,7 +85,5 @@ public interface AutoScalingSupport extends AccessControlledService {
     public void setDesiredCapacity(String scalingGroupId, int capacity) throws CloudException, InternalException;
         
     public String setTrigger(String name, String scalingGroupId, String statistic, String unitOfMeasure, String metric, int periodInSeconds, double lowerThreshold, double upperThreshold, int lowerIncrement, boolean lowerIncrementAbsolute, int upperIncrement, boolean upperIncrementAbsolute, int breachDuration) throws InternalException, CloudException;
-    
-    public void updateAutoScalingGroup(String scalingGroupId, String launchConfigurationId, int minServers, int maxServers, int cooldown, String ... zoneIds) throws InternalException, CloudException;
         
 }
