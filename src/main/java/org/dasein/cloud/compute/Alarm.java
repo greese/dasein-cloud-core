@@ -10,16 +10,16 @@ public class Alarm implements Serializable {
     private static final long serialVersionUID = 4416279768844752736L;
 
     private String                name;
-    private String                alarmARN;
+    private String                id;
 
     public Alarm() { }
 
-    public void setAlarmARN(String alarmARN) {
-      this.alarmARN = alarmARN;
+    public void setId(String alarmARN) {
+      this.id = alarmARN;
     }
 
-    public String getAlarmARN() {
-      return this.alarmARN;
+    public String getId() {
+      return this.id;
     }
 
     public void setName(String name) {
