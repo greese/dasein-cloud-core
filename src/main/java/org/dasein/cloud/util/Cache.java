@@ -32,6 +32,7 @@ import javax.annotation.Nullable;
 import java.lang.ref.SoftReference;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Implements efficient caching of non-changing resources so that you can minimize the number of API calls being made
@@ -64,11 +65,116 @@ import java.util.Map;
 public final class Cache<T> {
     static private final HashMap<String,Cache<?>> caches = new HashMap<String, Cache<?>>();
 
+    static public class CacheDelegate implements CacheMBean {
+        @Override
+        public void clear(@Nonnull String cacheName) {
+            Cache<?> c;
+
+            synchronized( caches ) {
+                if( caches.containsKey(cacheName) ) {
+                    //noinspection unchecked
+                    c = caches.get(cacheName);
+                }
+                else {
+                    return;
+                }
+            }
+            c.clear();
+        }
+
+        @Override
+        public @Nonnull String[] getCaches() {
+            Set<String> names;
+
+            synchronized( caches ) {
+                names = caches.keySet();
+            }
+            return names.toArray(new String[names.size()]);
+        }
+
+        @Override
+        public @Nullable CacheLevel getCacheLevel(@Nonnull String cacheName) {
+            Cache<?> c;
+
+            synchronized( caches ) {
+                if( caches.containsKey(cacheName) ) {
+                    //noinspection unchecked
+                    c = caches.get(cacheName);
+                }
+                else {
+                    return null;
+                }
+            }
+            if( c.cloudCache != null ) {
+                return CacheLevel.CLOUD;
+            }
+            else if( c.cloudAccountCache != null ) {
+                return CacheLevel.CLOUD_ACCOUNT;
+            }
+            else if( c.regionCache != null ) {
+                return CacheLevel.REGION;
+            }
+            else if( c.regionAccountCache != null ) {
+                return CacheLevel.REGION_ACCOUNT;
+            }
+            return null;
+        }
+
+        @Override
+        public long getNextTimeout(@Nonnull String cacheName) {
+            Cache<?> c;
+
+            synchronized( caches ) {
+                if( caches.containsKey(cacheName) ) {
+                    //noinspection unchecked
+                    c = caches.get(cacheName);
+                }
+                else {
+                    return System.currentTimeMillis();
+                }
+            }
+            return (c.cacheStart + c.cacheTimeout.longValue());
+        }
+
+        @Override
+        public long getTimeoutInSeconds(@Nonnull String cacheName) {
+            Cache<?> c;
+
+            synchronized( caches ) {
+                if( caches.containsKey(cacheName) ) {
+                    //noinspection unchecked
+                    c = caches.get(cacheName);
+                }
+                else {
+                    return 0L;
+                }
+            }
+            return (c.cacheTimeout.longValue()/1000L);
+        }
+
+        public void setTimeoutInSeconds(@Nonnull String cacheName, @Nonnegative long timeoutInSeconds) {
+            Cache<?> c;
+
+            synchronized( caches ) {
+                if( caches.containsKey(cacheName) ) {
+                    //noinspection unchecked
+                    c = caches.get(cacheName);
+                }
+                else {
+                    return;
+                }
+            }
+            c.cacheTimeout = new TimePeriod<Millisecond>(timeoutInSeconds, TimePeriod.MILLISECOND);
+        }
+    }
+
     static private class CacheEntry<T> {
         public long lastCacheClear;
         public SoftReference<Iterable<T>> items;
         public @Nonnull String toString() { return ((items == null) ? "--> empty <--" : items.toString()); }
     }
+
+
 
     /**
      * Provides access to a cache for items under the specified name.
