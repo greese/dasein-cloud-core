@@ -21,15 +21,48 @@ package org.dasein.cloud.storage;
 
 import javax.annotation.Nullable;
 
+/**
+ * Abstract base class for implementing storage services for any generic cloud. Using this base class, you need override
+ * only the methods that provide actual functionality in the target cloud.
+ * @author George Reese
+ * @version 2013.07 added support for online and offline storage (issue #66)
+ * @since unknown
+ */
 public abstract class AbstractStorageServices implements StorageServices {
     @Override
-    public @Nullable BlobStoreSupport getBlobStoreSupport() {
+    @Deprecated
+    public final @Nullable BlobStoreSupport getBlobStoreSupport() {
+        BlobStoreSupport s = getOnlineStorageSupport();
+
+        if( s == null ) {
+            return getOfflineStorageSupport();
+        }
+        return s;
+    }
+
+    @Override
+    @Deprecated
+    public final boolean hasBlobStoreSupport() {
+        return (hasOnlineStorageSupport() || hasOfflineStorageSupport());
+    }
+
+    @Override
+    public @Nullable BlobStoreSupport getOfflineStorageSupport() {
         return null;
     }
 
     @Override
-    public boolean hasBlobStoreSupport() {
-        return (getBlobStoreSupport() != null);
+    public boolean hasOfflineStorageSupport() {
+        return (getOfflineStorageSupport() != null);
     }
 
+    @Override
+    public @Nullable BlobStoreSupport getOnlineStorageSupport() {
+        return null;
+    }
+
+    @Override
+    public boolean hasOnlineStorageSupport() {
+        return (getOnlineStorageSupport() != null);
+    }
 }
