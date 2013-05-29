@@ -18,11 +18,6 @@
 
 package org.dasein.cloud.compute;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.Callable;
-
 import org.dasein.cloud.Tag;
 import org.dasein.cloud.Taggable;
 import org.dasein.cloud.network.Networkable;
@@ -30,6 +25,9 @@ import org.dasein.cloud.network.RawAddress;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.Callable;
 
 /**
  * <p>
@@ -68,6 +66,7 @@ public class VirtualMachine implements Networkable, Taggable {
     private String[]              providerShellKeyIds;
     private String                providerSubnetId;
     private String                providerVirtualMachineId;
+    private String[]              providerNetworkInterfaceIds;
     private String                providerVlanId;
     private String                providerKeypairId;
     private String[]              providerFirewallIds;
@@ -507,6 +506,14 @@ public class VirtualMachine implements Networkable, Taggable {
 
     public void setProviderFirewallIds( String[] providerFirewallIds ) {
       this.providerFirewallIds = providerFirewallIds;
+    }
+
+    public String[] getProviderNetworkInterfaceIds() {
+      return (providerNetworkInterfaceIds == null ? new String[0] : providerNetworkInterfaceIds);
+    }
+
+    public void setProviderNetworkInterfaceIds( String[] providerNetworkInterfaceIds ) {
+      this.providerNetworkInterfaceIds = providerNetworkInterfaceIds;
     }
 
     public @Nullable String getProviderKernelImageId() {
