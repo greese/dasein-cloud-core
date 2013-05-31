@@ -54,6 +54,7 @@ public class Topology implements Taggable {
     private TopologyState      currentState;
     private String             description;
     private String             name;
+    private String             providerDataCenterId;
     private String             providerOwnerId;
     private String             providerRegionId;
     private String             providerTopologyId;
@@ -87,6 +88,18 @@ public class Topology implements Taggable {
         return name;
     }
 
+    public @Nullable String getProviderDataCenterId() {
+        return providerDataCenterId;
+    }
+
+    public @Nonnull String getProviderOwnerId() {
+        return providerOwnerId;
+    }
+
+    public @Nonnull String getProviderRegionId() {
+        return providerRegionId;
+    }
+
     public @Nonnull String getProviderTopologyId() {
         return providerTopologyId;
     }
@@ -111,6 +124,11 @@ public class Topology implements Taggable {
     @Override
     public int hashCode() {
         return (providerOwnerId + providerRegionId + providerTopologyId).hashCode();
+    }
+
+    public @Nonnull Topology inDataCenter(@Nonnull String dcId) {
+        providerDataCenterId = dcId;
+        return this;
     }
 
     @Override
