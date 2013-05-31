@@ -528,7 +528,7 @@ public interface MachineImageSupport extends AccessControlledService {
      * Updates meta-data for multiple images with the new values. It will not overwrite any value that currently
      * exists unless it appears in the tags you submit.
      *
-     * @param imageIds the virtual machines to update
+     * @param imageIds the images to update
      * @param tags     the meta-data tags to set
      * @throws CloudException    an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
@@ -540,7 +540,7 @@ public interface MachineImageSupport extends AccessControlledService {
      * provider behavior. They may be removed only if the tag value matches or they may be removed regardless of the
      * value.
      *
-     * @param imageId the virtual machine to update
+     * @param imageId the image to update
      * @param tags    the meta-data tags to remove
      * @throws CloudException    an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
@@ -552,7 +552,7 @@ public interface MachineImageSupport extends AccessControlledService {
      * provider behavior. They may be removed only if the tag value matches or they may be removed regardless of the
      * value.
      *
-     * @param imageIds the virtual machine to update
+     * @param imageIds the image to update
      * @param tags     the meta-data tags to remove
      * @throws CloudException    an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation

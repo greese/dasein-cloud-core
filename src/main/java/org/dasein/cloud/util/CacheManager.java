@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013 Dell, Inc.
+ * Copyright (C) 2009-2013 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -16,6 +16,7 @@
  * limitations under the License.
  * ====================================================================
  */
+
 package org.dasein.cloud.util;
 
 import javax.annotation.Nonnegative;

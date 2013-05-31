@@ -19,10 +19,16 @@
 
 package org.dasein.cloud.compute;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public abstract class AbstractComputeServices implements ComputeServices{
+/**
+ * Skeleton implementation of compute services with a default behavior of supporting no services. Override those services
+ * you wish to provide in support of the cloud you are implementing.
+ * @author George Reese
+ * @version 2013.07 added topology support
+ * @since unknown
+ */
+public abstract class AbstractComputeServices implements ComputeServices {
 
     @Override
     public @Nullable  AutoScalingSupport getAutoScalingSupport() {
@@ -45,6 +51,11 @@ public abstract class AbstractComputeServices implements ComputeServices{
     }
 
     @Override
+    public @Nullable TopologySupport getTopologySupport() {
+        return null;
+    }
+
+    @Override
     public @Nullable VolumeSupport getVolumeSupport() {
         return null;
     }
@@ -62,6 +73,11 @@ public abstract class AbstractComputeServices implements ComputeServices{
     @Override
     public boolean hasSnapshotSupport() {
         return (getSnapshotSupport() != null);
+    }
+
+    @Override
+    public boolean hasTopologySupport() {
+        return (getTopologySupport() != null);
     }
 
     @Override

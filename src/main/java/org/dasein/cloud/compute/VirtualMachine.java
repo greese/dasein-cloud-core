@@ -19,7 +19,6 @@
 
 package org.dasein.cloud.compute;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;

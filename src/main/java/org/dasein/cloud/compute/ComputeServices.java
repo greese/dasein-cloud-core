@@ -46,6 +46,11 @@ public interface ComputeServices {
     public abstract @Nullable SnapshotSupport getSnapshotSupport();
 
     /**
+     * @return access to support for complex cloud resource topologies in the cloud provider
+     */
+    public abstract @Nullable TopologySupport getTopologySupport();
+
+    /**
      * @return access to support for virtual machines in the cloud provider
      */
     public abstract @Nullable VirtualMachineSupport getVirtualMachineSupport();
@@ -69,6 +74,11 @@ public interface ComputeServices {
      * @return indicates whether or not the cloud provider supports snapshotting volumes
      */
     public abstract boolean hasSnapshotSupport();
+
+    /**
+     * @return indicates whether or not the cloud provider supports complex resource topologies
+     */
+    public abstract boolean hasTopologySupport();
 
     /**
      * @return indicates whether or not the cloud provider supports virtual machines
