@@ -37,24 +37,26 @@ import java.util.Map;
  * @since 2013.07
  */
 public class Topology implements Taggable {
-    static public @Nonnull Topology getInstance(@Nonnull String ownerId, @Nonnull String regionId, @Nonnull String topologyId, @Nonnull String name, @Nonnull String description) {
+    static public @Nonnull Topology getInstance(@Nonnull String ownerId, @Nonnull String regionId, @Nonnull String topologyId, @Nonnull TopologyState state, @Nonnull String name, @Nonnull String description) {
         Topology t = new Topology();
 
         t.providerOwnerId = ownerId;
         t.providerRegionId = regionId;
         t.providerTopologyId = topologyId;
+        t.currentState = state;
         t.name = name;
         t.description = description;
         t.creationTimestamp = 0L;
         return t;
     }
 
-    private long   creationTimestamp;
-    private String description;
-    private String name;
-    private String providerOwnerId;
-    private String providerRegionId;
-    private String providerTopologyId;
+    private long               creationTimestamp;
+    private TopologyState      currentState;
+    private String             description;
+    private String             name;
+    private String             providerOwnerId;
+    private String             providerRegionId;
+    private String             providerTopologyId;
     private Map<String,String> tags;
 
     private Topology() { }
@@ -71,6 +73,10 @@ public class Topology implements Taggable {
 
     public @Nonnegative long getCreationTimestamp() {
         return creationTimestamp;
+    }
+
+    public @Nonnull TopologyState getCurrentState() {
+        return currentState;
     }
 
     public @Nonnull String getDescription() {
