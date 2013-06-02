@@ -168,7 +168,7 @@ public abstract class CloudProvider {
      * @param context the context for services calls using this provider instance
      * @param computeProvider the compute context if this is a storage-only cloud (the compute context controls the connection)
      */
-    public final void connect(@Nonnull ProviderContext context, @Nullable CloudProvider computeProvider) {
+    public void connect(@Nonnull ProviderContext context, @Nullable CloudProvider computeProvider) {
         close();
         this.context = context;
         this.computeCloud = computeProvider;

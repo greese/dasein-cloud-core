@@ -26,10 +26,11 @@ import javax.annotation.Nullable;
 import java.util.Map;
 
 /**
- * [Class Documentation]
+ * Options for filtering topology objects when performing searches.
  * <p>Created by George Reese: 5/31/13 9:22 AM</p>
- *
  * @author George Reese
+ * @version 2013.07 initial version
+ * @since 2013.07
  */
 public class TopologyFilterOptions {
 

@@ -26,10 +26,11 @@ import org.dasein.cloud.InternalException;
 import javax.annotation.Nonnull;
 
 /**
- * [Class Documentation]
+ * Options for provisioning infrastructure from topologies.
  * <p>Created by George Reese: 5/31/13 9:30 AM</p>
- *
  * @author George Reese
+ * @version 2013.07 initial version
+ * @since 2013.07
  */
 public class TopologyProvisionOptions {
     static public @Nonnull TopologyProvisionOptions getInstance(@Nonnull String topologyId) {
