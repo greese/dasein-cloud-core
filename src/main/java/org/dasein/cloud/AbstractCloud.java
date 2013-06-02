@@ -28,7 +28,6 @@ import org.dasein.cloud.dc.DataCenterServices;
 import org.dasein.cloud.identity.IdentityServices;
 import org.dasein.cloud.network.NetworkServices;
 import org.dasein.cloud.platform.PlatformServices;
-import org.dasein.cloud.storage.StorageServices;
 
 /**
  * Simple base implementation of a cloud provider bootstrap object that defaults all services to <code>null</code>.
