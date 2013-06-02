@@ -40,15 +40,22 @@ public class ResourceStatus {
         resourceStatus = status;
     }
 
-    public String getProviderResourceId() {
+    /**
+     * @return the cloud provider's unique identifier for this resource
+     */
+    public @Nonnull String getProviderResourceId() {
         return providerResourceId;
     }
 
-    public Object getResourceStatus() {
+    /**
+     * @return the current status of the target resource
+     */
+    public @Nonnull Object getResourceStatus() {
         return resourceStatus;
     }
 
-    public String toString() {
+    @Override
+    public @Nonnull String toString() {
         return (providerResourceId + " [" + resourceStatus + "]");
     }
 }
