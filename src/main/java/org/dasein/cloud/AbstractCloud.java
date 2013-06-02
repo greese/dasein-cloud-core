@@ -28,8 +28,18 @@ import org.dasein.cloud.dc.DataCenterServices;
 import org.dasein.cloud.identity.IdentityServices;
 import org.dasein.cloud.network.NetworkServices;
 import org.dasein.cloud.platform.PlatformServices;
+import org.dasein.cloud.storage.StorageServices;
 
+/**
+ * Simple base implementation of a cloud provider bootstrap object that defaults all services to <code>null</code>.
+ * @author George Reese
+ * @version 2013.07 added javadoc, fixed annotations on data center services, made it return an NPE
+ * @since unknown
+ */
 public abstract class AbstractCloud extends CloudProvider {
+    /**
+     * Constructs a cloud provider instance.
+     */
     public AbstractCloud() { }
 
     @Override
