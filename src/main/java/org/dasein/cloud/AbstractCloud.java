@@ -19,6 +19,7 @@
 
 package org.dasein.cloud;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.dasein.cloud.admin.AdminServices;
@@ -44,8 +45,8 @@ public abstract class AbstractCloud extends CloudProvider {
     }
     
     @Override
-    public @Nullable DataCenterServices getDataCenterServices() {
-        throw new RuntimeException("A cloud must have a data center services implementation.");
+    public @Nonnull DataCenterServices getDataCenterServices() {
+        throw new NullPointerException("A cloud must have a data center services implementation.");
     }
     
     @Override
