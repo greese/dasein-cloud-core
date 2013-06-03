@@ -15,5 +15,9 @@ public interface CIServices {
 
     public boolean hasConvergedInfrastructureSupport();
 
-    public boolean hasTopologySupport();
+
+    /**
+     * @return indicates whether or not the cloud provider supports complex resource topologies
+     */
+    public abstract boolean hasTopologySupport();
 }

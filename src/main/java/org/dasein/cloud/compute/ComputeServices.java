@@ -71,11 +71,6 @@ public interface ComputeServices {
     public abstract boolean hasSnapshotSupport();
 
     /**
-     * @return indicates whether or not the cloud provider supports complex resource topologies
-     */
-    public abstract boolean hasTopologySupport();
-
-    /**
      * @return indicates whether or not the cloud provider supports virtual machines
      */
     public abstract boolean hasVirtualMachineSupport();

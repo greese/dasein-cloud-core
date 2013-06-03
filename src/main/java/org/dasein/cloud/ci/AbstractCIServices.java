@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
  *
  * @author George Reese
  */
-public class AbstractCIServices implements CIServices {
+public abstract class AbstractCIServices implements CIServices {
     @Override
     public @Nullable ConvergedInfrastructureSupport getConvergedInfrastructureSupport() {
         return null;
