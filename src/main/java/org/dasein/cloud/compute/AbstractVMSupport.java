@@ -62,10 +62,10 @@ import java.util.Properties;
  * @version 2013.04
  * @since 2013.04
  */
-public abstract class AbstractVMSupport implements VirtualMachineSupport {
-    private CloudProvider provider;
+public abstract class AbstractVMSupport<T extends CloudProvider> implements VirtualMachineSupport {
+    private T provider;
 
-    public AbstractVMSupport(CloudProvider provider) {
+    public AbstractVMSupport(T provider) {
         this.provider = provider;
     }
 
@@ -138,7 +138,7 @@ public abstract class AbstractVMSupport implements VirtualMachineSupport {
     /**
      * @return the current provider governing any operations against this cloud in this support instance
      */
-    protected final @Nonnull CloudProvider getProvider() {
+    protected final @Nonnull T getProvider() {
         return provider;
     }
 
