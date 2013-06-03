@@ -158,10 +158,11 @@ public interface TopologySupport extends AccessControlledService {
      * Terminates the specified composite infrastructure, terminating or deleting all resources provisioned during
      * the provisioning process for the composite infrastructure. The operation is destructive and not recoverable.
      * @param ciId the unique ID of the composite infrastructure to terminate
+     * @param explanation an optional explanation to submit for audit purposes to the cloud provider
      * @throws CloudException an error occurred in the cloud provider while processing the request
      * @throws InternalException an error occurred within Dasein Cloud while processing the request
      */
-    public void terminate(@Nonnull String ciId) throws CloudException, InternalException;
+    public void terminate(@Nonnull String ciId, @Nullable String explanation) throws CloudException, InternalException;
 
     /**
      * Updates meta-data for a topology with the new values. It will not overwrite any value that currently

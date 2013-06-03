@@ -550,6 +550,16 @@ public interface VirtualMachineSupport extends AccessControlledService {
      */
     public abstract void terminate(@Nonnull String vmId) throws InternalException, CloudException;
 
+    /**
+     * TERMINATES AND DESTROYS the specified virtual machine. If it is running, it will be stopped. Once it is
+     * stopped, all of its data will be destroyed and it will no longer be usable. This is a very
+     * dangerous operation, especially in clouds with persistent servers.
+     * @param vmId the provider ID of the server to be destroyed
+     * @param explanation an optional explanation supplied to the cloud provider for audit purposes describing why the VM was terminated
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException an error occurred within the cloud provider
+     */
+    public abstract void terminate(@Nonnull String vmId, @Nullable String explanation) throws InternalException, CloudException;
 
     /**
      * Executes a hypervisor unpause operation on a currently paused virtual machine, adding it back into the

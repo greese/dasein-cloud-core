@@ -645,6 +645,11 @@ public abstract class AbstractVMSupport implements VirtualMachineSupport {
     }
 
     @Override
+    public void terminate(@Nonnull String vmId) throws CloudException, InternalException {
+        terminate(vmId, null);
+    }
+
+    @Override
     public void unpause(@Nonnull String vmId) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Pause/unpause is not currently implemented for " + getProvider().getCloudName());
     }
