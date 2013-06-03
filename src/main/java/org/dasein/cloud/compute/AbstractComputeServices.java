@@ -53,12 +53,6 @@ public abstract class AbstractComputeServices implements ComputeServices {
     }
 
     @Override
-    public @Nullable
-    ConvergedInfrastructureSupport getTopologySupport() {
-        return null;
-    }
-
-    @Override
     public @Nullable VolumeSupport getVolumeSupport() {
         return null;
     }
@@ -76,11 +70,6 @@ public abstract class AbstractComputeServices implements ComputeServices {
     @Override
     public boolean hasSnapshotSupport() {
         return (getSnapshotSupport() != null);
-    }
-
-    @Override
-    public boolean hasTopologySupport() {
-        return (getTopologySupport() != null);
     }
 
     @Override

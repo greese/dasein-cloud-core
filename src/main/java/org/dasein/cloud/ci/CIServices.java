@@ -1,6 +1,5 @@
 package org.dasein.cloud.ci;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -13,4 +12,8 @@ public interface CIServices {
     public @Nullable ConvergedInfrastructureSupport getConvergedInfrastructureSupport();
 
     public @Nullable TopologySupport getTopologySupport();
+
+    public boolean hasConvergedInfrastructureSupport();
+
+    public boolean hasTopologySupport();
 }

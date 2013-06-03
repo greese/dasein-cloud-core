@@ -22,7 +22,6 @@ package org.dasein.cloud.ci;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
-import org.dasein.cloud.compute.ComputeServices;
 
 import javax.annotation.Nonnull;
 
@@ -33,9 +32,9 @@ import javax.annotation.Nonnull;
  * @version 2013.07 initial version
  * @since 2013.07
  */
-public class TopologyProvisionOptions {
-    static public @Nonnull TopologyProvisionOptions getInstance(@Nonnull String topologyId) {
-        TopologyProvisionOptions options = new TopologyProvisionOptions();
+public class CIProvisionOptions {
+    static public @Nonnull CIProvisionOptions getInstance(@Nonnull String topologyId) {
+        CIProvisionOptions options = new CIProvisionOptions();
 
         options.topologyId = topologyId;
         return options;
@@ -43,7 +42,7 @@ public class TopologyProvisionOptions {
 
     private String topologyId;
 
-    private TopologyProvisionOptions() { }
+    private CIProvisionOptions() { }
 
     /**
      * Triggers a call to provision from the topology based on the current state of the topology provisioning options.
@@ -52,17 +51,16 @@ public class TopologyProvisionOptions {
      * @throws CloudException an error occurred in the cloud during the provisioning operation
      * @throws InternalException an error occurred within Dasein Cloud attempting to execute the request
      */
-    public @Nonnull
-    ConvergedInfrastructure build(@Nonnull CloudProvider provider) throws CloudException, InternalException {
-        ComputeServices compute = provider.getComputeServices();
+    public @Nonnull ConvergedInfrastructure build(@Nonnull CloudProvider provider) throws CloudException, InternalException {
+        CIServices ci = provider.getCIServices();
 
-        if( compute == null ) {
-            throw new CloudException("Compute services are not supported in " + provider.getCloudName());
+        if( ci == null ) {
+            throw new CloudException("CI services are not supported in " + provider.getCloudName());
         }
-        ConvergedInfrastructureSupport support = compute.getTopologySupport();
+        ConvergedInfrastructureSupport support = ci.getConvergedInfrastructureSupport();
 
         if( support == null ) {
-            throw new CloudException("Topologies are not supported in " + provider.getCloudName());
+            throw new CloudException("Converged infrastructures are not supported in " + provider.getCloudName());
         }
         return support.provision(this);
     }

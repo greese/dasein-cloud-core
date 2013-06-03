@@ -29,7 +29,6 @@ import org.dasein.cloud.network.VLANSupport;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Locale;
 
 /**
  * Provides access to functionality around complex topologies represented by the Dasein Cloud
@@ -102,7 +101,7 @@ public interface ConvergedInfrastructureSupport extends AccessControlledService 
      * @throws CloudException an error occurred in the cloud provider while processing the request
      * @throws InternalException an error occurred within Dasein Cloud while processing the request
      */
-    public @Nonnull ConvergedInfrastructure provision(@Nonnull TopologyProvisionOptions options) throws CloudException, InternalException;
+    public @Nonnull ConvergedInfrastructure provision(@Nonnull CIProvisionOptions options) throws CloudException, InternalException;
 
     /**
      * Terminates the specified converged infrastructure, terminating or deleting all resources provisioned during
