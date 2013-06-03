@@ -39,6 +39,15 @@ import java.util.Locale;
  */
 public interface TopologySupport extends AccessControlledService {
     /**
+     * Provides the specified composite infrastructure if it exists.
+     * @param ciId the unique ID for the desired composite infrastructure
+     * @return the specified composite infrastructure if it exists, otherwise <code>null</code>
+     * @throws CloudException an error occurred in the cloud provider while processing the request
+     * @throws InternalException an error occurred within Dasein Cloud while processing the request
+     */
+    public @Nullable CompositeInfrastructure getCompositeInfrastructure(@Nonnull String ciId) throws CloudException, InternalException;
+
+    /**
      * Provides a localized term for topologies as the current cloud provider refers to them.
      * @param locale the locale for which the term should be translated
      * @return a localized term for topology in this cloud
@@ -63,6 +72,24 @@ public interface TopologySupport extends AccessControlledService {
     public boolean isSubscribed() throws CloudException, InternalException;
 
     /**
+     * Lists all provisioned composite infrastructures matching the optional filtering options. If no options are provided,
+     * all provisioned composite infrastructures are returned.
+     * @param options the options for filtering the list of composite infrastructures
+     * @return a list of matching composite infrastructures
+     * @throws CloudException an error occurred in the cloud provider while processing the request
+     * @throws InternalException an error occurred within Dasein Cloud while processing the request
+     */
+    public @Nonnull Iterable<CompositeInfrastructure> listCompositeInfrastructures(@Nullable CIFilterOptions options) throws CloudException, InternalException;
+
+    /**
+     * Lists the status for all composite infrastructures in the current region.
+     * @return the status for all composite infrastructures in the current region
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     * @throws CloudException an error occurred with the cloud provider
+     */
+    public @Nonnull Iterable<ResourceStatus> listCompositeInfrastructureStatus() throws CloudException, InternalException;
+
+    /**
      * Lists private topologies matching the specified filtering options.
      * @param options the options on which you would like to filter
      * @return a list of matching topologies from your private topology library
@@ -82,11 +109,11 @@ public interface TopologySupport extends AccessControlledService {
     /**
      * Provisions a cloud infrastructure based on the specified topology provision options.
      * @param options the options for provisioning a topology-based infrastructure
-     * @return a list of virtual machines provisioned as a result of this operation
+     * @return the composite infrastructure that results from this provisioning operation
      * @throws CloudException an error occurred in the cloud provider while processing the request
      * @throws InternalException an error occurred within Dasein Cloud while processing the request
      */
-    public @Nonnull Iterable<VirtualMachine> provision(@Nonnull TopologyProvisionOptions options) throws CloudException, InternalException;
+    public @Nonnull CompositeInfrastructure provision(@Nonnull TopologyProvisionOptions options) throws CloudException, InternalException;
 
     /**
      * Searches through the public topology catalog to find topologies matching the specified filtering options.

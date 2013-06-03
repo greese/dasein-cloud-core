@@ -53,6 +53,16 @@ public abstract class AbstractTopologySupport<T extends CloudProvider> implement
         this.provider = provider;
     }
 
+    @Override
+    public @Nullable CompositeInfrastructure getCompositeInfrastructure(@Nonnull String ciId) throws CloudException, InternalException {
+        for( CompositeInfrastructure ci : listCompositeInfrastructures(null) ) {
+            if( ciId.equals(ci.getProviderCompositeInfrastructureId()) ) {
+                return ci;
+            }
+        }
+        return null;
+    }
+
     /**
      * @return the current authentication context for any calls through this support object
      * @throws CloudException no context was set
@@ -81,6 +91,16 @@ public abstract class AbstractTopologySupport<T extends CloudProvider> implement
             }
         }
         return null;
+    }
+
+    @Override
+    public @Nonnull Iterable<ResourceStatus> listCompositeInfrastructureStatus() throws CloudException, InternalException {
+        ArrayList<ResourceStatus> status = new ArrayList<ResourceStatus>();
+
+        for( CompositeInfrastructure ci : listCompositeInfrastructures(null) ) {
+            status.add(new ResourceStatus(ci.getProviderCompositeInfrastructureId(), ci.getCurrentState()));
+        }
+        return status;
     }
 
     @Override

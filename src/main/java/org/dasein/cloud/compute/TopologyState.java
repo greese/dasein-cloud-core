@@ -36,6 +36,10 @@ public enum TopologyState {
      */
     OFFLINE,
     /**
+     * In the process of changing state
+     */
+    PENDING,
+    /**
      * Deleted from the system
      */
     DELETED

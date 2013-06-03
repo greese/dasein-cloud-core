@@ -44,6 +44,13 @@ public class TopologyProvisionOptions {
 
     private TopologyProvisionOptions() { }
 
+    /**
+     * Triggers a call to provision from the topology based on the current state of the topology provisioning options.
+     * @param provider the cloud provider in which to provision
+     * @return the result of the attempt to provision from the topology
+     * @throws CloudException an error occurred in the cloud during the provisioning operation
+     * @throws InternalException an error occurred within Dasein Cloud attempting to execute the request
+     */
     public @Nonnull Iterable<VirtualMachine> build(@Nonnull CloudProvider provider) throws CloudException, InternalException {
         ComputeServices compute = provider.getComputeServices();
 
@@ -58,8 +65,15 @@ public class TopologyProvisionOptions {
         return support.provision(this);
     }
 
+    /**
+     * @return the topology from which an infrastructure is being provisioned
+     */
     public @Nonnull String getTopologyId() {
         return topologyId;
     }
 
+    @Override
+    public @Nonnull String toString() {
+        return topologyId;
+    }
 }
