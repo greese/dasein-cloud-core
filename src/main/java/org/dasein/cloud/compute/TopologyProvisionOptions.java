@@ -51,7 +51,7 @@ public class TopologyProvisionOptions {
      * @throws CloudException an error occurred in the cloud during the provisioning operation
      * @throws InternalException an error occurred within Dasein Cloud attempting to execute the request
      */
-    public @Nonnull Iterable<VirtualMachine> build(@Nonnull CloudProvider provider) throws CloudException, InternalException {
+    public @Nonnull CompositeInfrastructure build(@Nonnull CloudProvider provider) throws CloudException, InternalException {
         ComputeServices compute = provider.getComputeServices();
 
         if( compute == null ) {
