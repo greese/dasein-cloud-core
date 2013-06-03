@@ -163,6 +163,11 @@ public class Topology implements Taggable {
             return platform;
         }
 
+        public @Nonnull VMDevice withPlatform(@Nonnull Platform p) {
+            platform = p;
+            return this;
+        }
+
         public String toString() {
             return (name + " [#" + deviceId + "]");
         }
