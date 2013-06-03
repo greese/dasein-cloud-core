@@ -361,7 +361,7 @@ public class Topology implements Taggable {
      * @param devices one or more VLAN devices to be added to the topology
      * @return this
      */
-    public @Nonnull Topology withVLANs(@Nonnull VLANDevice devices) {
+    public @Nonnull Topology withVLANs(@Nonnull VLANDevice ... devices) {
         if( vlans == null ) {
             vlans = new ArrayList<VLANDevice>();
         }
