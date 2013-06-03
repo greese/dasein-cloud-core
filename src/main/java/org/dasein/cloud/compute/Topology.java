@@ -20,11 +20,16 @@
 package org.dasein.cloud.compute;
 
 import org.dasein.cloud.Taggable;
+import org.dasein.util.uom.storage.Megabyte;
+import org.dasein.util.uom.storage.Storage;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,6 +42,132 @@ import java.util.Map;
  * @since 2013.07
  */
 public class Topology implements Taggable {
+    /**
+     * A VLAN attached to a topology.
+     */
+    static public class VLANDevice {
+        /**
+         * Constructs a VLAN device instance from the specified parameters.
+         * @param deviceId the ID (unique within the topology) of the VLAN
+         * @param name the name of the VLAN
+         * @return a VLAN device with the specified parameters as attributes
+         */
+        static public VLANDevice getInstance(@Nonnull String deviceId, @Nonnull String name) {
+            VLANDevice d = new VLANDevice();
+
+            d.deviceId = deviceId;
+            d.name = name;
+            return d;
+        }
+
+        private String deviceId;
+        private String name;
+
+        private VLANDevice() { }
+
+        /**
+         * @return an ID that is unique within the topology
+         */
+        public @Nonnull String getDeviceId() {
+            return deviceId;
+        }
+
+        /**
+         * @return a name for the VLAN
+         */
+        public @Nonnull String getName() {
+            return name;
+        }
+
+        @Override
+        public @Nonnull String toString() {
+            return (name + " [#" + deviceId + "]");
+        }
+    }
+
+    /**
+     * A logical virtual machine attached to a topology.
+     */
+    static public class VMDevice {
+        static public VMDevice getInstance(@Nonnull String deviceId, @Nonnull String name, int cpuCount, Storage<?> memory, String ... interfaces) {
+            VMDevice d = new VMDevice();
+
+            d.deviceId = deviceId;
+            d.capacity = 1;
+            d.platform = Platform.UNKNOWN;
+            d.architecture = Architecture.I64;
+            d.name = name;
+            d.cpuCount = cpuCount;
+            d.memory = (Storage<Megabyte>)memory.convertTo(Storage.MEGABYTE);
+            d.interfaces = interfaces;
+            return d;
+        }
+
+        static public VMDevice getInstance(@Nonnull String deviceId, int capacity, @Nonnull String name, int cpuCount, Storage<?> memory, Architecture architecture, Platform platform, String ... interfaces) {
+            VMDevice d = new VMDevice();
+
+            d.deviceId = deviceId;
+            d.capacity = capacity;
+            d.platform = platform;
+            d.architecture = architecture;
+            d.name = name;
+            d.cpuCount = cpuCount;
+            d.memory = (Storage<Megabyte>)memory.convertTo(Storage.MEGABYTE);
+            d.interfaces = interfaces;
+            return d;
+        }
+
+        private Architecture      architecture;
+        private int               capacity;
+        private int               cpuCount;
+        private String            deviceId;
+        private String[]          interfaces;
+        private Storage<Megabyte> memory;
+        private String            name;
+        private Platform          platform;
+
+        private VMDevice() { }
+
+        public @Nonnull Architecture getArchitecture() {
+            return architecture;
+        }
+
+        public @Nonnegative int getCapacity() {
+            return capacity;
+        }
+
+        public @Nonnegative int getCpuCount() {
+            return cpuCount;
+        }
+
+        public @Nonnull String getDeviceId() {
+            return deviceId;
+        }
+
+        public @Nonnull String[] getInterfaces() {
+            if( interfaces == null ) {
+                return new String[0];
+            }
+            return interfaces;
+        }
+
+        public @Nonnull Storage<Megabyte> getMemory() {
+            return memory;
+        }
+
+        public @Nonnull String getName() {
+            return name;
+        }
+
+        public @Nonnull Platform getPlatform() {
+            return platform;
+        }
+
+        public String toString() {
+            return (name + " [#" + deviceId + "]");
+        }
+    }
+
     static public @Nonnull Topology getInstance(@Nonnull String ownerId, @Nonnull String regionId, @Nonnull String topologyId, @Nonnull TopologyState state, @Nonnull String name, @Nonnull String description) {
         Topology t = new Topology();
 
@@ -59,6 +190,8 @@ public class Topology implements Taggable {
     private String             providerRegionId;
     private String             providerTopologyId;
     private Map<String,String> tags;
+    private List<VMDevice>     virtualMachines;
+    private List<VLANDevice>   vlans;
 
     private Topology() { }
 
@@ -161,6 +294,26 @@ public class Topology implements Taggable {
         return tags;
     }
 
+    /**
+     * @return a list of the logical virtual machines to be provisioned when the topology is provisioned into a composite infrastructure
+     */
+    public @Nonnull Iterable<VMDevice> getVirtualMachines() {
+        if( virtualMachines == null ) {
+            return Collections.emptyList();
+        }
+        return virtualMachines;
+    }
+
+    /**
+     * @return a list of VLANs associated with this topology
+     */
+    public @Nonnull Iterable<VLANDevice> getVLANs() {
+        if( vlans == null ) {
+            return Collections.emptyList();
+        }
+        return vlans;
+    }
+
     @Override
     public int hashCode() {
         return (providerOwnerId + providerRegionId + providerTopologyId).hashCode();
@@ -188,6 +341,32 @@ public class Topology implements Taggable {
     public void setTags(Map<String,String> properties) {
         getTags().clear();
         getTags().putAll(properties);
+    }
+
+    /**
+     * Indicates the virtual machines to be associated with this topology. Calls to this method are additive.
+     * @param devices one or more VM devices to be added to the topology
+     * @return this
+     */
+    public @Nonnull Topology withVirtualMachines(@Nonnull VMDevice ... devices) {
+        if( virtualMachines == null ) {
+            virtualMachines = new ArrayList<VMDevice>();
+        }
+        Collections.addAll(virtualMachines, devices);
+        return this;
+    }
+
+    /**
+     * Indicates the VLANs to be associated with this topology. Calls to this method are additive.
+     * @param devices one or more VLAN devices to be added to the topology
+     * @return this
+     */
+    public @Nonnull Topology withVLANs(@Nonnull VLANDevice devices) {
+        if( vlans == null ) {
+            vlans = new ArrayList<VLANDevice>();
+        }
+        Collections.addAll(vlans, devices);
+        return this;
     }
 
     @Override
