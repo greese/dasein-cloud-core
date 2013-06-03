@@ -22,6 +22,7 @@ package org.dasein.cloud.compute;
 import org.dasein.cloud.AccessControlledService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
+import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.Tag;
 
 import javax.annotation.Nonnull;
@@ -69,6 +70,14 @@ public interface TopologySupport extends AccessControlledService {
      * @throws InternalException an error occurred within Dasein Cloud while processing the request
      */
     public @Nonnull Iterable<Topology> listTopologies(@Nullable TopologyFilterOptions options) throws CloudException, InternalException;
+
+    /**
+     * Lists the status for all topologies in the current region.
+     * @return the status for all topologies in the current region
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     * @throws CloudException an error occurred with the cloud provider
+     */
+    public @Nonnull Iterable<ResourceStatus> listTopologyStatus() throws InternalException, CloudException;
 
     /**
      * Provisions a cloud infrastructure based on the specified topology provision options.

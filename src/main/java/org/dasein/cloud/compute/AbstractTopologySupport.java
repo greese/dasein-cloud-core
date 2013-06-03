@@ -23,11 +23,13 @@ import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.ProviderContext;
+import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.Tag;
 import org.dasein.cloud.identity.ServiceAction;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Collections;
 
 /**
@@ -79,6 +81,16 @@ public abstract class AbstractTopologySupport<T extends CloudProvider> implement
             }
         }
         return null;
+    }
+
+    @Override
+    public @Nonnull Iterable<ResourceStatus> listTopologyStatus() throws InternalException, CloudException {
+        ArrayList<ResourceStatus> status = new ArrayList<ResourceStatus>();
+
+        for( Topology topology : listTopologies(null) ) {
+            status.add(new ResourceStatus(topology.getProviderTopologyId(), topology.getCurrentState()));
+        }
+        return status;
     }
 
     @Override

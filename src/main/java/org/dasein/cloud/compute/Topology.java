@@ -72,34 +72,74 @@ public class Topology implements Taggable {
         return this;
     }
 
+    @Override
+    public boolean equals(@Nullable Object other) {
+        if( other == null ) {
+            return false;
+        }
+        if( other == this ) {
+            return true;
+        }
+        if( !getClass().getName().equals(other.getClass().getName()) ) {
+            return false;
+        }
+        Topology t = (Topology)other;
+
+        return (t.providerOwnerId.equals(providerOwnerId) && t.providerRegionId.equals(providerRegionId) && t.providerTopologyId.equals(providerRegionId));
+    }
+
+    /**
+     * @return the UNIX timestamp representing the time at which this toplogy was initially created
+     */
     public @Nonnegative long getCreationTimestamp() {
         return creationTimestamp;
     }
 
+    /**
+     * @return the current state of the topology
+     */
     public @Nonnull TopologyState getCurrentState() {
         return currentState;
     }
 
+    /**
+     * @return a user-friendly description of the topology
+     */
     public @Nonnull String getDescription() {
         return description;
     }
 
+    /**
+     * @return a user-friendly name for the topology
+     */
     public @Nonnull String getName() {
         return name;
     }
 
+    /**
+     * @return the data center, if any, to which the topology is constrained
+     */
     public @Nullable String getProviderDataCenterId() {
         return providerDataCenterId;
     }
 
+    /**
+     * @return the account number of the account that owns this topology
+     */
     public @Nonnull String getProviderOwnerId() {
         return providerOwnerId;
     }
 
+    /**
+     * @return the region to which this topology is constrained
+     */
     public @Nonnull String getProviderRegionId() {
         return providerRegionId;
     }
 
+    /**
+     * @return the unique ID used by the cloud provider to identify this topology
+     */
     public @Nonnull String getProviderTopologyId() {
         return providerTopologyId;
     }
@@ -126,6 +166,11 @@ public class Topology implements Taggable {
         return (providerOwnerId + providerRegionId + providerTopologyId).hashCode();
     }
 
+    /**
+     * Indicates that the topology is constrained to the specified data center.
+     * @param dcId the unique ID of the data center to which this topology is constrained
+     * @return this
+     */
     public @Nonnull Topology inDataCenter(@Nonnull String dcId) {
         providerDataCenterId = dcId;
         return this;
