@@ -24,6 +24,7 @@ import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.Tag;
+import org.dasein.cloud.network.VLANSupport;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -31,7 +32,7 @@ import java.util.Locale;
 
 /**
  * Provides access to functionality around complex topologies represented by the Dasein Cloud
- * {@link Topology} concept.
+ * {@link Topology} concept and the resulting {@link CompositeInfrastructure} infrastructures.
  * <p>Created by George Reese: 5/30/13 11:37 AM</p>
  * @author George Reese
  * @version 2013.07 initial version
@@ -107,6 +108,26 @@ public interface TopologySupport extends AccessControlledService {
     public @Nonnull Iterable<ResourceStatus> listTopologyStatus() throws InternalException, CloudException;
 
     /**
+     * Lists all virtual machines currently part of the specified composite infrastructure. The result is a list of
+     * IDs that may be queried using {@link VirtualMachineSupport#getVirtualMachine(String)}.
+     * @param inCIId the unique ID of the {@link CompositeInfrastructure} for which VMs are being looked up
+     * @return the list of virtual machine IDs supporting the specified composite infrastructure
+     * @throws InternalException an error occurred within Dasein Cloud while processing the request
+     * @throws CloudException an error occurred in the cloud provider while processing the request
+     */
+    public @Nonnull Iterable<String> listVirtualMachines(@Nonnull String inCIId) throws InternalException, CloudException;
+
+    /**
+     * Lists all VLANs currently part of the specified composite infrastructure. The result is a list of IDs
+     * that may be queried using {@link VLANSupport#getVlan(String)}.
+     * @param inCIId the unique ID of the {@link CompositeInfrastructure} for which VLANs are being queried
+     * @return a list of VLAN IDs supporting the specified composite infrastructure
+     * @throws CloudException an error occurred in the cloud provider while processing the request
+     * @throws InternalException an error occurred within Dasein Cloud while processing the request
+     */
+    public @Nonnull Iterable<String> listVLANS(@Nonnull String inCIId) throws CloudException, InternalException;
+
+    /**
      * Provisions a cloud infrastructure based on the specified topology provision options.
      * @param options the options for provisioning a topology-based infrastructure
      * @return the composite infrastructure that results from this provisioning operation
@@ -131,7 +152,16 @@ public interface TopologySupport extends AccessControlledService {
      * @throws CloudException an error occurred with the cloud provider
      * @throws InternalException an error occurred within the Dasein cloud implementation
      */
-    public abstract boolean supportsPublicLibrary() throws CloudException, InternalException;
+    public boolean supportsPublicLibrary() throws CloudException, InternalException;
+
+    /**
+     * Terminates the specified composite infrastructure, terminating or deleting all resources provisioned during
+     * the provisioning process for the composite infrastructure. The operation is destructive and not recoverable.
+     * @param ciId the unique ID of the composite infrastructure to terminate
+     * @throws CloudException an error occurred in the cloud provider while processing the request
+     * @throws InternalException an error occurred within Dasein Cloud while processing the request
+     */
+    public void terminate(@Nonnull String ciId) throws CloudException, InternalException;
 
     /**
      * Updates meta-data for a topology with the new values. It will not overwrite any value that currently
@@ -141,7 +171,7 @@ public interface TopologySupport extends AccessControlledService {
      * @throws CloudException an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public abstract void updateTags(@Nonnull String topologyId, @Nonnull Tag... tags) throws CloudException, InternalException;
+    public void updateTags(@Nonnull String topologyId, @Nonnull Tag... tags) throws CloudException, InternalException;
 
     /**
      * Updates meta-data for multiple topologies with the new values. It will not overwrite any value that currently
@@ -151,7 +181,7 @@ public interface TopologySupport extends AccessControlledService {
      * @throws CloudException an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public abstract void updateTags(@Nonnull String[] topologyIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+    public void updateTags(@Nonnull String[] topologyIds, @Nonnull Tag... tags) throws CloudException, InternalException;
 
     /**
      * Removes meta-data from a topology. If tag values are set, their removal is dependent on underlying cloud
@@ -162,7 +192,7 @@ public interface TopologySupport extends AccessControlledService {
      * @throws CloudException an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public abstract void removeTags(@Nonnull String topologyId, @Nonnull Tag... tags) throws CloudException, InternalException;
+    public void removeTags(@Nonnull String topologyId, @Nonnull Tag... tags) throws CloudException, InternalException;
 
     /**
      * Removes meta-data from multiple topologies. If tag values are set, their removal is dependent on underlying cloud
@@ -173,5 +203,5 @@ public interface TopologySupport extends AccessControlledService {
      * @throws CloudException an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public abstract void removeTags(@Nonnull String[] topologyIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+    public void removeTags(@Nonnull String[] topologyIds, @Nonnull Tag... tags) throws CloudException, InternalException;
 }
