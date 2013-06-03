@@ -125,7 +125,7 @@ public interface TopologySupport extends AccessControlledService {
      * @throws CloudException an error occurred in the cloud provider while processing the request
      * @throws InternalException an error occurred within Dasein Cloud while processing the request
      */
-    public @Nonnull Iterable<String> listVLANS(@Nonnull String inCIId) throws CloudException, InternalException;
+    public @Nonnull Iterable<String> listVLANs(@Nonnull String inCIId) throws CloudException, InternalException;
 
     /**
      * Provisions a cloud infrastructure based on the specified topology provision options.
