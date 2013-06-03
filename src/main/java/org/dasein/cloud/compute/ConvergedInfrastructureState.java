@@ -25,6 +25,6 @@ package org.dasein.cloud.compute;
  *
  * @author George Reese
  */
-public enum CompositeInfrastructureState {
+public enum ConvergedInfrastructureState {
     PENDING, RUNNING, DELETED
 }

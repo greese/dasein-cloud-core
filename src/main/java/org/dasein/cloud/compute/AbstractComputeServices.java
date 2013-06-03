@@ -51,7 +51,8 @@ public abstract class AbstractComputeServices implements ComputeServices {
     }
 
     @Override
-    public @Nullable TopologySupport getTopologySupport() {
+    public @Nullable
+    CISupport getTopologySupport() {
         return null;
     }
 

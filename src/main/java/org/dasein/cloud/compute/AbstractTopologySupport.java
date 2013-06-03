@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * Implements the most basic operations for a cloud with topology support and no public topology library. Concrete
+ * Implements the most basic operations for a cloud with converged infrastructure support with no public topology library. Concrete
  * classes for specific clouds should override the public searching methods if those cloud support a public topology library
  * as well as the methods left unimplemented by this class. In addition, this class provides no-OP implementations of
  * access control and tagging.
@@ -42,7 +42,7 @@ import java.util.Collections;
  * @version 2013.07 initial version
  * @since 2013.07
  */
-public abstract class AbstractTopologySupport<T extends CloudProvider> implements TopologySupport {
+public abstract class AbstractTopologySupport<T extends CloudProvider> implements CISupport {
     private T provider;
 
     /**
@@ -54,9 +54,9 @@ public abstract class AbstractTopologySupport<T extends CloudProvider> implement
     }
 
     @Override
-    public @Nullable CompositeInfrastructure getCompositeInfrastructure(@Nonnull String ciId) throws CloudException, InternalException {
-        for( CompositeInfrastructure ci : listCompositeInfrastructures(null) ) {
-            if( ciId.equals(ci.getProviderCompositeInfrastructureId()) ) {
+    public @Nullable ConvergedInfrastructure getConvergedInfrastructure(@Nonnull String ciId) throws CloudException, InternalException {
+        for( ConvergedInfrastructure ci : listConvergedInfrastructures(null) ) {
+            if( ciId.equals(ci.getProviderConvergedInfrastructureId()) ) {
                 return ci;
             }
         }
@@ -94,11 +94,11 @@ public abstract class AbstractTopologySupport<T extends CloudProvider> implement
     }
 
     @Override
-    public @Nonnull Iterable<ResourceStatus> listCompositeInfrastructureStatus() throws CloudException, InternalException {
+    public @Nonnull Iterable<ResourceStatus> listConvergedInfrastructureStatus() throws CloudException, InternalException {
         ArrayList<ResourceStatus> status = new ArrayList<ResourceStatus>();
 
-        for( CompositeInfrastructure ci : listCompositeInfrastructures(null) ) {
-            status.add(new ResourceStatus(ci.getProviderCompositeInfrastructureId(), ci.getCurrentState()));
+        for( ConvergedInfrastructure ci : listConvergedInfrastructures(null) ) {
+            status.add(new ResourceStatus(ci.getProviderConvergedInfrastructureId(), ci.getCurrentState()));
         }
         return status;
     }
@@ -129,26 +129,50 @@ public abstract class AbstractTopologySupport<T extends CloudProvider> implement
     }
 
     @Override
-    public void updateTags(@Nonnull String topologyId, @Nonnull Tag... tags) throws CloudException, InternalException {
+    public void updateCITags(@Nonnull String ciId, @Nonnull Tag... tags) throws CloudException, InternalException {
         // NO-OP
     }
 
     @Override
-    public void updateTags(@Nonnull String[] topologyIds, @Nonnull Tag ... tags) throws CloudException, InternalException {
-        for( String id : topologyIds ) {
-            updateTags(id, tags);
+    public void updateCITags(@Nonnull String[] ciIds, @Nonnull Tag ... tags) throws CloudException, InternalException {
+        for( String id : ciIds ) {
+            updateCITags(id, tags);
         }
     }
 
     @Override
-    public void removeTags(@Nonnull String topologyId, @Nonnull Tag ... tags) throws CloudException, InternalException {
+    public void removeCITags(@Nonnull String ciId, @Nonnull Tag ... tags) throws CloudException, InternalException {
         // NO-OP
     }
 
     @Override
-    public void removeTags(@Nonnull String[] topologyIds, @Nonnull Tag ... tags) throws CloudException, InternalException {
+    public void removeCITags(@Nonnull String[] ciIds, @Nonnull Tag ... tags) throws CloudException, InternalException {
+        for( String id : ciIds ) {
+            removeCITags(id, tags);
+        }
+    }
+
+    @Override
+    public void updateTopologyTags(@Nonnull String topologyId, @Nonnull Tag... tags) throws CloudException, InternalException {
+        // NO-OP
+    }
+
+    @Override
+    public void updateTopologyTags(@Nonnull String[] topologyIds, @Nonnull Tag ... tags) throws CloudException, InternalException {
         for( String id : topologyIds ) {
-            removeTags(id, tags);
+            updateTopologyTags(id, tags);
+        }
+    }
+
+    @Override
+    public void removeTopologyTags(@Nonnull String topologyId, @Nonnull Tag ... tags) throws CloudException, InternalException {
+        // NO-OP
+    }
+
+    @Override
+    public void removeTopologyTags(@Nonnull String[] topologyIds, @Nonnull Tag ... tags) throws CloudException, InternalException {
+        for( String id : topologyIds ) {
+            removeTopologyTags(id, tags);
         }
     }
 }

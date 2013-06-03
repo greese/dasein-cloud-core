@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
 import java.util.Map;
 
 /**
- * Filtering options for filtering listings of composite infrastructures.
+ * Filtering options for filtering listings of converged infrastructures.
  * <p>Created by George Reese: 6/2/13 7:34 PM</p>
  * @author George Reese
  * @version 2013.07 initial version
@@ -35,17 +35,17 @@ import java.util.Map;
 public class CIFilterOptions {
 
     /**
-     * Constructs a filter for any kind of composite infrastructures.
-     * @return a simple filter for composite infrastructures that does no filtering unless other options are added
+     * Constructs a filter for any kind of converged infrastructures.
+     * @return a simple filter for converged infrastructures that does no filtering unless other options are added
      */
     static public @Nonnull CIFilterOptions getInstance() {
         return new CIFilterOptions(null, false);
     }
 
     /**
-     * Constructs a filter for any kind of composite infrastructures.
+     * Constructs a filter for any kind of converged infrastructures.
      * @param matchesAny <code>true</code> if it is sufficient that just one of the criteria are matched, false if all are needed to be matched
-     * @return a simple filter for composite infrastructures that does no filtering unless other options are added
+     * @return a simple filter for converged infrastructures that does no filtering unless other options are added
      */
     static public @Nonnull CIFilterOptions getInstance(boolean matchesAny) {
         return new CIFilterOptions(null, matchesAny);
@@ -54,7 +54,7 @@ public class CIFilterOptions {
     /**
      * Constructs a regex filter on the specified regular expression.
      * @param regex the regular expression on which to filter
-     * @return a filter for composite infrastructures that match the specified regular expression
+     * @return a filter for converged infrastructures that match the specified regular expression
      */
     static public @Nonnull CIFilterOptions getInstance(@Nonnull String regex) {
         CIFilterOptions options = new CIFilterOptions(null, false);
@@ -67,7 +67,7 @@ public class CIFilterOptions {
      * Constructs a regex filter on the specified regular expression.
      * @param matchesAny <code>true</code> if it is sufficient that just one of the criteria are matched, false if all are needed to be matched
      * @param regex the regular expression on which to filter
-     * @return a filter for composite infrastructures that match the specified regular expression
+     * @return a filter for converged infrastructures that match the specified regular expression
      */
     static public @Nonnull CIFilterOptions getInstance(boolean matchesAny, @Nonnull String regex) {
         CIFilterOptions options = new CIFilterOptions(null, matchesAny);
@@ -87,11 +87,11 @@ public class CIFilterOptions {
     }
 
     /**
-     * Matches a composite infrastructure against the criteria in this set of filter options.
-     * @param ci the composite infrastructure to test
-     * @return true if the composite infrastructure matches all criteria
+     * Matches a converged infrastructure against the criteria in this set of filter options.
+     * @param ci the converged infrastructure to test
+     * @return true if the converged infrastructure matches all criteria
      */
-    public boolean matches(@Nonnull CompositeInfrastructure ci) {
+    public boolean matches(@Nonnull ConvergedInfrastructure ci) {
         if( accountNumber != null ) {
             if( !accountNumber.equals(ci.getProviderOwnerId()) ) {
                 if( !matchesAny ) {

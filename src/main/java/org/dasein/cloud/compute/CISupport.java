@@ -32,21 +32,21 @@ import java.util.Locale;
 
 /**
  * Provides access to functionality around complex topologies represented by the Dasein Cloud
- * {@link Topology} concept and the resulting {@link CompositeInfrastructure} infrastructures.
+ * {@link Topology} concept and the resulting {@link ConvergedInfrastructure} infrastructures.
  * <p>Created by George Reese: 5/30/13 11:37 AM</p>
  * @author George Reese
  * @version 2013.07 initial version
  * @since 2013.07
  */
-public interface TopologySupport extends AccessControlledService {
+public interface CISupport extends AccessControlledService {
     /**
-     * Provides the specified composite infrastructure if it exists.
-     * @param ciId the unique ID for the desired composite infrastructure
-     * @return the specified composite infrastructure if it exists, otherwise <code>null</code>
+     * Provides the specified converged infrastructure if it exists.
+     * @param ciId the unique ID for the desired converged infrastructure
+     * @return the specified converged infrastructure if it exists, otherwise <code>null</code>
      * @throws CloudException an error occurred in the cloud provider while processing the request
      * @throws InternalException an error occurred within Dasein Cloud while processing the request
      */
-    public @Nullable CompositeInfrastructure getCompositeInfrastructure(@Nonnull String ciId) throws CloudException, InternalException;
+    public @Nullable ConvergedInfrastructure getConvergedInfrastructure(@Nonnull String ciId) throws CloudException, InternalException;
 
     /**
      * Provides a localized term for topologies as the current cloud provider refers to them.
@@ -73,22 +73,22 @@ public interface TopologySupport extends AccessControlledService {
     public boolean isSubscribed() throws CloudException, InternalException;
 
     /**
-     * Lists all provisioned composite infrastructures matching the optional filtering options. If no options are provided,
-     * all provisioned composite infrastructures are returned.
-     * @param options the options for filtering the list of composite infrastructures
-     * @return a list of matching composite infrastructures
+     * Lists all provisioned converged infrastructures matching the optional filtering options. If no options are provided,
+     * all provisioned converged infrastructures are returned.
+     * @param options the options for filtering the list of converged infrastructures
+     * @return a list of matching converged infrastructures
      * @throws CloudException an error occurred in the cloud provider while processing the request
      * @throws InternalException an error occurred within Dasein Cloud while processing the request
      */
-    public @Nonnull Iterable<CompositeInfrastructure> listCompositeInfrastructures(@Nullable CIFilterOptions options) throws CloudException, InternalException;
+    public @Nonnull Iterable<ConvergedInfrastructure> listConvergedInfrastructures(@Nullable CIFilterOptions options) throws CloudException, InternalException;
 
     /**
-     * Lists the status for all composite infrastructures in the current region.
-     * @return the status for all composite infrastructures in the current region
+     * Lists the status for all converged infrastructures in the current region.
+     * @return the status for all converged infrastructures in the current region
      * @throws InternalException an error occurred within the Dasein Cloud implementation
      * @throws CloudException an error occurred with the cloud provider
      */
-    public @Nonnull Iterable<ResourceStatus> listCompositeInfrastructureStatus() throws CloudException, InternalException;
+    public @Nonnull Iterable<ResourceStatus> listConvergedInfrastructureStatus() throws CloudException, InternalException;
 
     /**
      * Lists private topologies matching the specified filtering options.
@@ -108,20 +108,20 @@ public interface TopologySupport extends AccessControlledService {
     public @Nonnull Iterable<ResourceStatus> listTopologyStatus() throws InternalException, CloudException;
 
     /**
-     * Lists all virtual machines currently part of the specified composite infrastructure. The result is a list of
+     * Lists all virtual machines currently part of the specified converged infrastructure. The result is a list of
      * IDs that may be queried using {@link VirtualMachineSupport#getVirtualMachine(String)}.
-     * @param inCIId the unique ID of the {@link CompositeInfrastructure} for which VMs are being looked up
-     * @return the list of virtual machine IDs supporting the specified composite infrastructure
+     * @param inCIId the unique ID of the {@link ConvergedInfrastructure} for which VMs are being looked up
+     * @return the list of virtual machine IDs supporting the specified converged infrastructure
      * @throws InternalException an error occurred within Dasein Cloud while processing the request
      * @throws CloudException an error occurred in the cloud provider while processing the request
      */
     public @Nonnull Iterable<String> listVirtualMachines(@Nonnull String inCIId) throws InternalException, CloudException;
 
     /**
-     * Lists all VLANs currently part of the specified composite infrastructure. The result is a list of IDs
+     * Lists all VLANs currently part of the specified converged infrastructure. The result is a list of IDs
      * that may be queried using {@link VLANSupport#getVlan(String)}.
-     * @param inCIId the unique ID of the {@link CompositeInfrastructure} for which VLANs are being queried
-     * @return a list of VLAN IDs supporting the specified composite infrastructure
+     * @param inCIId the unique ID of the {@link ConvergedInfrastructure} for which VLANs are being queried
+     * @return a list of VLAN IDs supporting the specified converged infrastructure
      * @throws CloudException an error occurred in the cloud provider while processing the request
      * @throws InternalException an error occurred within Dasein Cloud while processing the request
      */
@@ -130,11 +130,12 @@ public interface TopologySupport extends AccessControlledService {
     /**
      * Provisions a cloud infrastructure based on the specified topology provision options.
      * @param options the options for provisioning a topology-based infrastructure
-     * @return the composite infrastructure that results from this provisioning operation
+     * @return the converged infrastructure that results from this provisioning operation
      * @throws CloudException an error occurred in the cloud provider while processing the request
      * @throws InternalException an error occurred within Dasein Cloud while processing the request
      */
-    public @Nonnull CompositeInfrastructure provision(@Nonnull TopologyProvisionOptions options) throws CloudException, InternalException;
+    public @Nonnull
+    ConvergedInfrastructure provision(@Nonnull TopologyProvisionOptions options) throws CloudException, InternalException;
 
     /**
      * Searches through the public topology catalog to find topologies matching the specified filtering options.
@@ -155,14 +156,56 @@ public interface TopologySupport extends AccessControlledService {
     public boolean supportsPublicLibrary() throws CloudException, InternalException;
 
     /**
-     * Terminates the specified composite infrastructure, terminating or deleting all resources provisioned during
-     * the provisioning process for the composite infrastructure. The operation is destructive and not recoverable.
-     * @param ciId the unique ID of the composite infrastructure to terminate
+     * Terminates the specified converged infrastructure, terminating or deleting all resources provisioned during
+     * the provisioning process for the converged infrastructure. The operation is destructive and not recoverable.
+     * @param ciId the unique ID of the converged infrastructure to terminate
      * @param explanation an optional explanation to submit for audit purposes to the cloud provider
      * @throws CloudException an error occurred in the cloud provider while processing the request
      * @throws InternalException an error occurred within Dasein Cloud while processing the request
      */
     public void terminate(@Nonnull String ciId, @Nullable String explanation) throws CloudException, InternalException;
+
+    /**
+     * Updates meta-data for a converged infrastructure with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     * @param ciId the converged infrastructure to update
+     * @param tags the meta-data tags to set
+     * @throws CloudException an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void updateCITags(@Nonnull String ciId, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Updates meta-data for multiple converged infrastructures with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     * @param ciIds the converged infrastructures to update
+     * @param tags the meta-data tags to set
+     * @throws CloudException an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void updateCITags(@Nonnull String[] ciIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Removes meta-data from a converged infrastructure. If tag values are set, their removal is dependent on underlying cloud
+     * provider behavior. They may be removed only if the tag value matches or they may be removed regardless of the
+     * value.
+     * @param ciId the converged infrastructure to update
+     * @param tags the meta-data tags to remove
+     * @throws CloudException an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void removeCITags(@Nonnull String ciId, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Removes meta-data from multiple converged infrastructures. If tag values are set, their removal is dependent on underlying cloud
+     * provider behavior. They may be removed only if the tag value matches or they may be removed regardless of the
+     * value.
+     * @param ciIds the converged infrastructures to update
+     * @param tags the meta-data tags to remove
+     * @throws CloudException an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void removeCITags(@Nonnull String[] ciIds, @Nonnull Tag... tags) throws CloudException, InternalException;
 
     /**
      * Updates meta-data for a topology with the new values. It will not overwrite any value that currently
@@ -172,7 +215,7 @@ public interface TopologySupport extends AccessControlledService {
      * @throws CloudException an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public void updateTags(@Nonnull String topologyId, @Nonnull Tag... tags) throws CloudException, InternalException;
+    public void updateTopologyTags(@Nonnull String topologyId, @Nonnull Tag... tags) throws CloudException, InternalException;
 
     /**
      * Updates meta-data for multiple topologies with the new values. It will not overwrite any value that currently
@@ -182,7 +225,7 @@ public interface TopologySupport extends AccessControlledService {
      * @throws CloudException an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public void updateTags(@Nonnull String[] topologyIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+    public void updateTopologyTags(@Nonnull String[] topologyIds, @Nonnull Tag... tags) throws CloudException, InternalException;
 
     /**
      * Removes meta-data from a topology. If tag values are set, their removal is dependent on underlying cloud
@@ -193,7 +236,7 @@ public interface TopologySupport extends AccessControlledService {
      * @throws CloudException an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public void removeTags(@Nonnull String topologyId, @Nonnull Tag... tags) throws CloudException, InternalException;
+    public void removeTopologyTags(@Nonnull String topologyId, @Nonnull Tag... tags) throws CloudException, InternalException;
 
     /**
      * Removes meta-data from multiple topologies. If tag values are set, their removal is dependent on underlying cloud
@@ -204,5 +247,5 @@ public interface TopologySupport extends AccessControlledService {
      * @throws CloudException an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public void removeTags(@Nonnull String[] topologyIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+    public void removeTopologyTags(@Nonnull String[] topologyIds, @Nonnull Tag... tags) throws CloudException, InternalException;
 }

@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * A composite infrastructure is a group of cloud resources provisioned from a {@link Topology} that operate together
+ * A converged infrastructure is a group of cloud resources provisioned from a {@link Topology} that operate together
  * in service of a common purpose. It can be as simple as a single VM or something more complex like two database VMs
  * and two app server VMs or it may be a very complex multi-tier application.
  * <p>Created by George Reese: 6/2/13 7:19 PM</p>
@@ -36,13 +36,14 @@ import java.util.Map;
  * @version 2013.07 initial version
  * @since 2013.07
  */
-public class CompositeInfrastructure implements Taggable {
-    static public @Nonnull CompositeInfrastructure getInstance(@Nonnull String ownerId, @Nonnull String regionId, @Nonnull String ciId, @Nonnull CompositeInfrastructureState state, @Nonnull String name, @Nonnull String description) {
-        CompositeInfrastructure ci = new CompositeInfrastructure();
+public class ConvergedInfrastructure implements Taggable {
+    static public @Nonnull
+    ConvergedInfrastructure getInstance(@Nonnull String ownerId, @Nonnull String regionId, @Nonnull String ciId, @Nonnull ConvergedInfrastructureState state, @Nonnull String name, @Nonnull String description) {
+        ConvergedInfrastructure ci = new ConvergedInfrastructure();
 
         ci.providerOwnerId = ownerId;
         ci.providerRegionId = regionId;
-        ci.providerCompositeInfrastructureId = ciId;
+        ci.providerConvergedInfrastructureId = ciId;
         ci.currentState = state;
         ci.name = name;
         ci.description = description;
@@ -50,10 +51,10 @@ public class CompositeInfrastructure implements Taggable {
         return ci;
     }
 
-    private CompositeInfrastructureState currentState;
+    private ConvergedInfrastructureState currentState;
     private String                       description;
     private String                       name;
-    private String                       providerCompositeInfrastructureId;
+    private String providerConvergedInfrastructureId;
     private String                       providerDataCenterId;
     private String                       providerOwnerId;
     private String                       providerRegionId;
@@ -61,9 +62,10 @@ public class CompositeInfrastructure implements Taggable {
     private long                         provisioningTimestamp;
     private Map<String,String>           tags;
 
-    private CompositeInfrastructure() { }
+    private ConvergedInfrastructure() { }
 
-    public @Nonnull CompositeInfrastructureState getCurrentState() {
+    public @Nonnull
+    ConvergedInfrastructureState getCurrentState() {
         return currentState;
     }
 
@@ -75,8 +77,8 @@ public class CompositeInfrastructure implements Taggable {
         return name;
     }
 
-    public @Nonnull String getProviderCompositeInfrastructureId() {
-        return providerCompositeInfrastructureId;
+    public @Nonnull String getProviderConvergedInfrastructureId() {
+        return providerConvergedInfrastructureId;
     }
 
     public @Nullable String getProviderDataCenterId() {
@@ -117,21 +119,24 @@ public class CompositeInfrastructure implements Taggable {
     }
 
     /**
-     * Indicates that the composite infrastructure is constrained to the specified data center.
-     * @param dcId the unique ID of the data center to which this composite infrastructure is constrained
+     * Indicates that the converged infrastructure is constrained to the specified data center.
+     * @param dcId the unique ID of the data center to which this converged infrastructure is constrained
      * @return this
      */
-    public @Nonnull CompositeInfrastructure inDataCenter(@Nonnull String dcId) {
+    public @Nonnull
+    ConvergedInfrastructure inDataCenter(@Nonnull String dcId) {
         providerDataCenterId = dcId;
         return this;
     }
 
-    public @Nonnull CompositeInfrastructure provisionedAt(@Nonnegative long ts) {
+    public @Nonnull
+    ConvergedInfrastructure provisionedAt(@Nonnegative long ts) {
         provisioningTimestamp = ts;
         return this;
     }
 
-    public @Nonnull CompositeInfrastructure provisionedFrom(@Nonnull String topologyId) {
+    public @Nonnull
+    ConvergedInfrastructure provisionedFrom(@Nonnull String topologyId) {
         providerTopologyId = topologyId;
         return this;
     }

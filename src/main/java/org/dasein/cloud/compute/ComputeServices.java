@@ -48,7 +48,8 @@ public interface ComputeServices {
     /**
      * @return access to support for complex cloud resource topologies in the cloud provider
      */
-    public abstract @Nullable TopologySupport getTopologySupport();
+    public abstract @Nullable
+    CISupport getTopologySupport();
 
     /**
      * @return access to support for virtual machines in the cloud provider
