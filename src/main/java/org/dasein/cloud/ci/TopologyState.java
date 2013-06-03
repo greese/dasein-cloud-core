@@ -17,7 +17,7 @@
  * ====================================================================
  */
 
-package org.dasein.cloud.compute;
+package org.dasein.cloud.ci;
 
 /**
  * Represents the current state of a {@link Topology}.

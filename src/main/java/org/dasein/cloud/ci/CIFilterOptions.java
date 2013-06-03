@@ -17,7 +17,7 @@
  * ====================================================================
  */
 
-package org.dasein.cloud.compute;
+package org.dasein.cloud.ci;
 
 import org.dasein.cloud.CloudProvider;
 
@@ -26,38 +26,38 @@ import javax.annotation.Nullable;
 import java.util.Map;
 
 /**
- * Options for filtering topology objects when performing searches.
- * <p>Created by George Reese: 5/31/13 9:22 AM</p>
+ * Filtering options for filtering listings of converged infrastructures.
+ * <p>Created by George Reese: 6/2/13 7:34 PM</p>
  * @author George Reese
  * @version 2013.07 initial version
  * @since 2013.07
  */
-public class TopologyFilterOptions {
+public class CIFilterOptions {
 
     /**
-     * Constructs a filter for any kind of topologies.
-     * @return a simple filter for topologies that does no filtering unless other options are added
+     * Constructs a filter for any kind of converged infrastructures.
+     * @return a simple filter for converged infrastructures that does no filtering unless other options are added
      */
-    static public @Nonnull TopologyFilterOptions getInstance() {
-        return new TopologyFilterOptions(null, false);
+    static public @Nonnull CIFilterOptions getInstance() {
+        return new CIFilterOptions(null, false);
     }
 
     /**
-     * Constructs a filter for any kind of topologies.
+     * Constructs a filter for any kind of converged infrastructures.
      * @param matchesAny <code>true</code> if it is sufficient that just one of the criteria are matched, false if all are needed to be matched
-     * @return a simple filter for topologies that does no filtering unless other options are added
+     * @return a simple filter for converged infrastructures that does no filtering unless other options are added
      */
-    static public @Nonnull TopologyFilterOptions getInstance(boolean matchesAny) {
-        return new TopologyFilterOptions(null, matchesAny);
+    static public @Nonnull CIFilterOptions getInstance(boolean matchesAny) {
+        return new CIFilterOptions(null, matchesAny);
     }
 
     /**
      * Constructs a regex filter on the specified regular expression.
      * @param regex the regular expression on which to filter
-     * @return a filter for topologies that match the specified regular expression
+     * @return a filter for converged infrastructures that match the specified regular expression
      */
-    static public @Nonnull TopologyFilterOptions getInstance(@Nonnull String regex) {
-        TopologyFilterOptions options = new TopologyFilterOptions(null, false);
+    static public @Nonnull CIFilterOptions getInstance(@Nonnull String regex) {
+        CIFilterOptions options = new CIFilterOptions(null, false);
 
         options.regex = regex;
         return options;
@@ -67,10 +67,10 @@ public class TopologyFilterOptions {
      * Constructs a regex filter on the specified regular expression.
      * @param matchesAny <code>true</code> if it is sufficient that just one of the criteria are matched, false if all are needed to be matched
      * @param regex the regular expression on which to filter
-     * @return a filter for topologies that match the specified regular expression
+     * @return a filter for converged infrastructures that match the specified regular expression
      */
-    static public @Nonnull TopologyFilterOptions getInstance(boolean matchesAny, @Nonnull String regex) {
-        TopologyFilterOptions options = new TopologyFilterOptions(null, matchesAny);
+    static public @Nonnull CIFilterOptions getInstance(boolean matchesAny, @Nonnull String regex) {
+        CIFilterOptions options = new CIFilterOptions(null, matchesAny);
 
         options.regex = regex;
         return options;
@@ -81,19 +81,19 @@ public class TopologyFilterOptions {
     private String             regex;
     private Map<String,String> tags;
 
-    private TopologyFilterOptions(@Nullable String account, boolean matchesAny) {
+    private CIFilterOptions(@Nullable String account, boolean matchesAny) {
         this.accountNumber = account;
         this.matchesAny = matchesAny;
     }
 
     /**
-     * Matches a topology against the criteria in this set of filter options.
-     * @param topology the topology to test
-     * @return true if the topology matches all criteria
+     * Matches a converged infrastructure against the criteria in this set of filter options.
+     * @param ci the converged infrastructure to test
+     * @return true if the converged infrastructure matches all criteria
      */
-    public boolean matches(@Nonnull Topology topology) {
+    public boolean matches(@Nonnull ConvergedInfrastructure ci) {
         if( accountNumber != null ) {
-            if( !accountNumber.equals(topology.getProviderOwnerId()) ) {
+            if( !accountNumber.equals(ci.getProviderOwnerId()) ) {
                 if( !matchesAny ) {
                     return false;
                 }
@@ -103,10 +103,10 @@ public class TopologyFilterOptions {
             }
         }
         if( regex != null ) {
-            boolean matches = (topology.getName().matches(regex) || topology.getDescription().matches(regex));
+            boolean matches = (ci.getName().matches(regex) || ci.getDescription().matches(regex));
 
             if( !matches ) {
-                for( Map.Entry<String,String> tag : topology.getTags().entrySet() ) {
+                for( Map.Entry<String,String> tag : ci.getTags().entrySet() ) {
                     String value = tag.getValue();
 
                     if( value != null && value.matches(regex) ) {
@@ -123,7 +123,7 @@ public class TopologyFilterOptions {
             }
         }
         if( tags != null && !tags.isEmpty() ) {
-            if( !CloudProvider.matchesTags(topology.getTags(), topology.getName(), topology.getDescription(), tags) ) {
+            if( !CloudProvider.matchesTags(ci.getTags(), ci.getName(), ci.getDescription(), tags) ) {
                 if( !matchesAny ) {
                     return false;
                 }
@@ -140,7 +140,7 @@ public class TopologyFilterOptions {
      * @param tags the tags to filter against
      * @return this
      */
-    public @Nonnull TopologyFilterOptions withTags(@Nonnull Map<String, String> tags) {
+    public @Nonnull CIFilterOptions withTags(@Nonnull Map<String, String> tags) {
         this.tags = tags;
         return this;
     }

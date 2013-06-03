@@ -17,11 +17,12 @@
  * ====================================================================
  */
 
-package org.dasein.cloud.compute;
+package org.dasein.cloud.ci;
 
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
+import org.dasein.cloud.compute.ComputeServices;
 
 import javax.annotation.Nonnull;
 
@@ -58,7 +59,7 @@ public class TopologyProvisionOptions {
         if( compute == null ) {
             throw new CloudException("Compute services are not supported in " + provider.getCloudName());
         }
-        CISupport support = compute.getTopologySupport();
+        ConvergedInfrastructureSupport support = compute.getTopologySupport();
 
         if( support == null ) {
             throw new CloudException("Topologies are not supported in " + provider.getCloudName());

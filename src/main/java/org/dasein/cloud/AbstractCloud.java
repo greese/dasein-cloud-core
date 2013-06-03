@@ -23,6 +23,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.dasein.cloud.admin.AdminServices;
+import org.dasein.cloud.ci.CIServices;
 import org.dasein.cloud.compute.ComputeServices;
 import org.dasein.cloud.dc.DataCenterServices;
 import org.dasein.cloud.identity.IdentityServices;
@@ -52,7 +53,14 @@ public abstract class AbstractCloud extends CloudProvider {
         
         return (compute == null ? null : compute.getComputeServices());
     }
-    
+
+    @Override
+    public @Nullable CIServices getCIServices() {
+        CloudProvider compute = getComputeCloud();
+
+        return (compute == null ? null : compute.getCIServices());
+    }
+
     @Override
     public @Nonnull DataCenterServices getDataCenterServices() {
         throw new NullPointerException("A cloud must have a data center services implementation.");

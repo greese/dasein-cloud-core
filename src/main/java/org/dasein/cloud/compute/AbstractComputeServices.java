@@ -19,6 +19,8 @@
 
 package org.dasein.cloud.compute;
 
+import org.dasein.cloud.ci.ConvergedInfrastructureSupport;
+
 import javax.annotation.Nullable;
 
 /**
@@ -52,7 +54,7 @@ public abstract class AbstractComputeServices implements ComputeServices {
 
     @Override
     public @Nullable
-    CISupport getTopologySupport() {
+    ConvergedInfrastructureSupport getTopologySupport() {
         return null;
     }
 

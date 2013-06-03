@@ -17,9 +17,11 @@
  * ====================================================================
  */
 
-package org.dasein.cloud.compute;
+package org.dasein.cloud.ci;
 
 import org.dasein.cloud.Taggable;
+import org.dasein.cloud.compute.Architecture;
+import org.dasein.cloud.compute.Platform;
 import org.dasein.util.uom.storage.Megabyte;
 import org.dasein.util.uom.storage.Storage;
 

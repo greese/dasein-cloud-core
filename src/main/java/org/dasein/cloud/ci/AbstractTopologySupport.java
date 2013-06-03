@@ -17,7 +17,7 @@
  * ====================================================================
  */
 
-package org.dasein.cloud.compute;
+package org.dasein.cloud.ci;
 
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
@@ -42,7 +42,7 @@ import java.util.Collections;
  * @version 2013.07 initial version
  * @since 2013.07
  */
-public abstract class AbstractTopologySupport<T extends CloudProvider> implements CISupport {
+public abstract class AbstractTopologySupport<T extends CloudProvider> implements TopologySupport {
     private T provider;
 
     /**
@@ -51,16 +51,6 @@ public abstract class AbstractTopologySupport<T extends CloudProvider> implement
      */
     public AbstractTopologySupport(@Nonnull T provider) {
         this.provider = provider;
-    }
-
-    @Override
-    public @Nullable ConvergedInfrastructure getConvergedInfrastructure(@Nonnull String ciId) throws CloudException, InternalException {
-        for( ConvergedInfrastructure ci : listConvergedInfrastructures(null) ) {
-            if( ciId.equals(ci.getProviderConvergedInfrastructureId()) ) {
-                return ci;
-            }
-        }
-        return null;
     }
 
     /**
@@ -94,16 +84,6 @@ public abstract class AbstractTopologySupport<T extends CloudProvider> implement
     }
 
     @Override
-    public @Nonnull Iterable<ResourceStatus> listConvergedInfrastructureStatus() throws CloudException, InternalException {
-        ArrayList<ResourceStatus> status = new ArrayList<ResourceStatus>();
-
-        for( ConvergedInfrastructure ci : listConvergedInfrastructures(null) ) {
-            status.add(new ResourceStatus(ci.getProviderConvergedInfrastructureId(), ci.getCurrentState()));
-        }
-        return status;
-    }
-
-    @Override
     public @Nonnull Iterable<ResourceStatus> listTopologyStatus() throws InternalException, CloudException {
         ArrayList<ResourceStatus> status = new ArrayList<ResourceStatus>();
 
@@ -129,50 +109,26 @@ public abstract class AbstractTopologySupport<T extends CloudProvider> implement
     }
 
     @Override
-    public void updateCITags(@Nonnull String ciId, @Nonnull Tag... tags) throws CloudException, InternalException {
+    public void updateTags(@Nonnull String topologyId, @Nonnull Tag... tags) throws CloudException, InternalException {
         // NO-OP
     }
 
     @Override
-    public void updateCITags(@Nonnull String[] ciIds, @Nonnull Tag ... tags) throws CloudException, InternalException {
-        for( String id : ciIds ) {
-            updateCITags(id, tags);
-        }
-    }
-
-    @Override
-    public void removeCITags(@Nonnull String ciId, @Nonnull Tag ... tags) throws CloudException, InternalException {
-        // NO-OP
-    }
-
-    @Override
-    public void removeCITags(@Nonnull String[] ciIds, @Nonnull Tag ... tags) throws CloudException, InternalException {
-        for( String id : ciIds ) {
-            removeCITags(id, tags);
-        }
-    }
-
-    @Override
-    public void updateTopologyTags(@Nonnull String topologyId, @Nonnull Tag... tags) throws CloudException, InternalException {
-        // NO-OP
-    }
-
-    @Override
-    public void updateTopologyTags(@Nonnull String[] topologyIds, @Nonnull Tag ... tags) throws CloudException, InternalException {
+    public void updateTags(@Nonnull String[] topologyIds, @Nonnull Tag ... tags) throws CloudException, InternalException {
         for( String id : topologyIds ) {
-            updateTopologyTags(id, tags);
+            updateTags(id, tags);
         }
     }
 
     @Override
-    public void removeTopologyTags(@Nonnull String topologyId, @Nonnull Tag ... tags) throws CloudException, InternalException {
+    public void removeTags(@Nonnull String topologyId, @Nonnull Tag ... tags) throws CloudException, InternalException {
         // NO-OP
     }
 
     @Override
-    public void removeTopologyTags(@Nonnull String[] topologyIds, @Nonnull Tag ... tags) throws CloudException, InternalException {
+    public void removeTags(@Nonnull String[] topologyIds, @Nonnull Tag ... tags) throws CloudException, InternalException {
         for( String id : topologyIds ) {
-            removeTopologyTags(id, tags);
+            removeTags(id, tags);
         }
     }
 }

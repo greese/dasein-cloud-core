@@ -26,6 +26,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.dasein.cloud.admin.AdminServices;
+import org.dasein.cloud.ci.CIServices;
 import org.dasein.cloud.compute.ComputeServices;
 import org.dasein.cloud.dc.DataCenterServices;
 import org.dasein.cloud.identity.IdentityServices;
@@ -203,7 +204,13 @@ public abstract class CloudProvider {
      * @return an implementation of the {@link org.dasein.cloud.dc.DataCenterServices} API
      */
     public abstract @Nonnull DataCenterServices getDataCenterServices();
-    
+
+    /**
+     * Provides access to support for complex topologies managed through converged infrastructure as a cloudy environment.
+     * @return the services representing converged infrastructure, if any
+     */
+    public abstract @Nullable CIServices getCIServices();
+
     public abstract @Nullable ComputeServices getComputeServices();
     
     public abstract @Nullable IdentityServices getIdentityServices();
