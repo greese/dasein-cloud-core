@@ -156,7 +156,7 @@ public abstract class CloudProvider {
      * context. Prior to initializing itself, this method will close out any existing state.
      * @param context the context for services calls using this provider instance
      */
-    public final void connect(@Nonnull ProviderContext context) {
+    public void connect(@Nonnull ProviderContext context) {
         connect(context, null);
     }
     

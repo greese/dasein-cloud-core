@@ -19,5 +19,9 @@
 package org.dasein.cloud.platform;
 
 public enum EndpointType {
-    HTTP, HTTPS, EMAIL, AWS_SQS;
+    HTTP,
+    HTTPS,
+    EMAIL,
+    AWS_SQS,
+    SMS
 }
