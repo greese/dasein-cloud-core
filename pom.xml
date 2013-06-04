@@ -22,7 +22,7 @@
 
   <groupId>org.dasein</groupId>
   <artifactId>dasein-cloud-core</artifactId>
-  <version>2013.04.2-SNAPSHOT</version>
+  <version>2013.04a-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>dasein-cloud-core</name>
@@ -46,8 +46,8 @@
   </licenses>
 
   <organization>
-  	<name>enstratius, Inc.</name>
-  	<url>http://www.enstratius.com</url>
+  	<name>Dell, Inc.</name>
+  	<url>http://software.dell.com</url>
   </organization>
 
   <scm>
@@ -163,7 +163,7 @@
                 </excludes>
                 <properties>
                     <year>2009-2013</year>
-                    <copyrightHolder>enstratius, Inc.</copyrightHolder>
+                    <copyrightHolder>Dell, Inc.</copyrightHolder>
                 </properties>
             </configuration>
         </plugin>
@@ -219,13 +219,13 @@
     <developer>
         <name>George Reese</name>
         <id>georgereese</id>
-        <email>george.reese -at- enstratius -dot- com</email>
-        <organization>enstratius</organization>
+        <email>george_reese -at- dell -dot- com</email>
+        <organization>Dell</organization>
         <roles>
           <role>Java Developer</role>
           <role>PMC</role>
         </roles>
-        <url>http://www.enstratius.com</url>
+        <url>http://software.dell.com</url>
         <timezone>-6</timezone>
     </developer>
     <developer>
