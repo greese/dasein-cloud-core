@@ -18,20 +18,13 @@
 
 package org.dasein.cloud.network;
 
-import java.util.Collection;
-import java.util.Locale;
+import org.dasein.cloud.*;
+import org.dasein.cloud.identity.ServiceAction;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import org.dasein.cloud.AccessControlledService;
-import org.dasein.cloud.CloudException;
-import org.dasein.cloud.InternalException;
-import org.dasein.cloud.OperationNotSupportedException;
-import org.dasein.cloud.Requirement;
-import org.dasein.cloud.ResourceStatus;
-import org.dasein.cloud.Tag;
-import org.dasein.cloud.identity.ServiceAction;
+import java.util.Collection;
+import java.util.Locale;
 
 /**
  * @version 2013.02 added listResources(String) (issue #24)
@@ -150,6 +143,15 @@ public interface VLANSupport extends AccessControlledService {
      * @throws InternalException a local error occurred while processing the request
      */
     public abstract void assignRoutingTableToSubnet(@Nonnull String subnetId, @Nonnull String routingTableId) throws CloudException, InternalException;
+
+    /**
+     * Disassociates the specified routing table from the target subnet.
+     * @param subnetId the unique ID of the subnet being disassociated from the routing table
+     * @param routingTableId the routing table from which the subnet is being disassociated
+     * @throws CloudException an error occurred with the cloud provider disassociating the routing table
+     * @throws InternalException a local error occurred while processing the request
+     */
+    public abstract void disassociateRoutingTableFromSubnet(@Nonnull String subnetId, @Nonnull String routingTableId) throws CloudException, InternalException;
 
     /**
      * Assigns the specified routing table to the target VLAN (or makes it the main routing table among the routing tables)
