@@ -45,22 +45,22 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     }
 
     @Override
-    public void addRouteToAddress(@Nonnull String toRoutingTableId, @Nonnull IPVersion version, @Nullable String destinationCidr, @Nonnull String address) throws CloudException, InternalException {
+    public Route addRouteToAddress(@Nonnull String toRoutingTableId, @Nonnull IPVersion version, @Nullable String destinationCidr, @Nonnull String address) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Routing tables are not currently implemented for " + getProvider().getCloudName());
     }
 
     @Override
-    public void addRouteToGateway(@Nonnull String toRoutingTableId, @Nonnull IPVersion version, @Nullable String destinationCidr, @Nonnull String gatewayId) throws CloudException, InternalException {
+    public Route addRouteToGateway(@Nonnull String toRoutingTableId, @Nonnull IPVersion version, @Nullable String destinationCidr, @Nonnull String gatewayId) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Routing tables are not currently implemented for " + getProvider().getCloudName());
     }
 
     @Override
-    public void addRouteToNetworkInterface(@Nonnull String toRoutingTableId, @Nonnull IPVersion version, @Nullable String destinationCidr, @Nonnull String nicId) throws CloudException, InternalException {
+    public Route addRouteToNetworkInterface(@Nonnull String toRoutingTableId, @Nonnull IPVersion version, @Nullable String destinationCidr, @Nonnull String nicId) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Routing tables are not currently implemented for " + getProvider().getCloudName());
     }
 
     @Override
-    public void addRouteToVirtualMachine(@Nonnull String toRoutingTableId, @Nonnull IPVersion version, @Nullable String destinationCidr, @Nonnull String vmId) throws CloudException, InternalException {
+    public Route addRouteToVirtualMachine(@Nonnull String toRoutingTableId, @Nonnull IPVersion version, @Nullable String destinationCidr, @Nonnull String vmId) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Routing tables are not currently implemented for " + getProvider().getCloudName());
     }
 

@@ -70,7 +70,7 @@ public interface VLANSupport extends AccessControlledService {
      * @throws CloudException an error occurred in the cloud while adding the route to the routing table
      * @throws InternalException a local error occurred processing the request to add the route
      */
-    public abstract void addRouteToAddress(@Nonnull String toRoutingTableId, @Nonnull IPVersion version, @Nullable String destinationCidr, @Nonnull String address) throws CloudException, InternalException;
+    public abstract Route addRouteToAddress(@Nonnull String toRoutingTableId, @Nonnull IPVersion version, @Nullable String destinationCidr, @Nonnull String address) throws CloudException, InternalException;
 
     /**
      * Adds the specified route to the specified routing table.
@@ -81,7 +81,7 @@ public interface VLANSupport extends AccessControlledService {
      * @throws CloudException an error occurred in the cloud while adding the route to the routing table
      * @throws InternalException a local error occurred processing the request to add the route
      */
-    public abstract void addRouteToGateway(@Nonnull String toRoutingTableId, @Nonnull IPVersion version, @Nullable String destinationCidr, @Nonnull String gatewayId) throws CloudException, InternalException;
+    public abstract Route addRouteToGateway(@Nonnull String toRoutingTableId, @Nonnull IPVersion version, @Nullable String destinationCidr, @Nonnull String gatewayId) throws CloudException, InternalException;
 
     /**
      * Adds the specified route to the specified routing table.
@@ -92,7 +92,7 @@ public interface VLANSupport extends AccessControlledService {
      * @throws CloudException an error occurred in the cloud while adding the route to the routing table
      * @throws InternalException a local error occurred processing the request to add the route
      */
-    public abstract void addRouteToNetworkInterface(@Nonnull String toRoutingTableId, @Nonnull IPVersion version, @Nullable String destinationCidr, @Nonnull String nicId) throws CloudException, InternalException;
+    public abstract Route addRouteToNetworkInterface(@Nonnull String toRoutingTableId, @Nonnull IPVersion version, @Nullable String destinationCidr, @Nonnull String nicId) throws CloudException, InternalException;
 
     /**
      * Adds the specified route to the specified routing table.
@@ -103,7 +103,7 @@ public interface VLANSupport extends AccessControlledService {
      * @throws CloudException an error occurred in the cloud while adding the route to the routing table
      * @throws InternalException a local error occurred processing the request to add the route
      */
-    public abstract void addRouteToVirtualMachine(@Nonnull String toRoutingTableId, @Nonnull IPVersion version, @Nullable String destinationCidr, @Nonnull String vmId) throws CloudException, InternalException;
+    public abstract Route addRouteToVirtualMachine(@Nonnull String toRoutingTableId, @Nonnull IPVersion version, @Nullable String destinationCidr, @Nonnull String vmId) throws CloudException, InternalException;
 
     /**
      * Indicates that users may self-provision network interfaces. If false, either network interfaces are not supported
