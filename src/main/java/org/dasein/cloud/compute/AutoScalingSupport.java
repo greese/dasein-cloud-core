@@ -68,7 +68,7 @@ public interface AutoScalingSupport extends AccessControlledService {
 
     public void resumeAutoScaling(String providerScalingGroupId, String[] processesToResume) throws CloudException, InternalException;
 
-    public String updateScalingPolicy(String policyName, String adjustmentType, String autoScalingGroupName, int cooldown, Integer minAdjustmentStep, int scalingAdjustment) throws CloudException, InternalException;
+    public String updateScalingPolicy(String policyName, String adjustmentType, String autoScalingGroupName, Integer cooldown, Integer minAdjustmentStep, Integer scalingAdjustment) throws CloudException, InternalException;
 
     public void deleteScalingPolicy(String policyName, String autoScalingGroupName) throws CloudException, InternalException;
 
