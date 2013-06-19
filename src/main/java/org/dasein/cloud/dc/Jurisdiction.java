@@ -49,6 +49,10 @@ public enum Jurisdiction {
      */
     CN,
     /**
+     * Germany
+     */
+    DE,
+    /**
      * Hong Kong
      */
     HK,
