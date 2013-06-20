@@ -303,6 +303,15 @@ public interface VLANSupport extends AccessControlledService {
      */
     public abstract @Nullable RoutingTable getRoutingTableForVlan(@Nonnull String vlanId) throws CloudException, InternalException;
 
+    /**
+     * Identifies the routing table that matches the provided id.
+     * @param id the id of the route table
+     * @return the matching routing table or <code>null</code> if the cloud doesn't support routing tables or no routing table is found
+     * @throws CloudException an error occurred loading the routing table
+     * @throws InternalException a local error occurred identifying the routing table
+     */
+    public abstract @Nullable RoutingTable getRoutingTable(@Nonnull String id) throws CloudException, InternalException;
+
     public abstract @Nullable Subnet getSubnet(@Nonnull String subnetId) throws CloudException, InternalException;
 
     /**
@@ -424,14 +433,34 @@ public interface VLANSupport extends AccessControlledService {
     public @Nonnull Iterable<Networkable> listResources(@Nonnull String inVlanId) throws CloudException, InternalException;
 
     /**
+     * Lists all routing tables associated with the specified Subnet.
+     * @param subnetId the subnet ID whose routing tables are being sought
+     * @return a list of routing tables for the specified Subnet
+     * @throws CloudException an error occurred fetching the routing tables from the cloud provider
+     * @throws InternalException a local error occurred processing the routing tables
+     */
+    public abstract @Nonnull Iterable<RoutingTable> listRoutingTablesForSubnet(@Nonnull String subnetId) throws CloudException, InternalException;
+
+    /**
      * Lists all routing tables associated with the specified VLAN. 
      * @param inVlanId the VLAN ID whose routing tables are being sought
      * @return a list of routing tables for the specified VLAN
      * @throws CloudException an error occurred fetching the routing tables from the cloud provider
      * @throws InternalException a local error occurred processing the routing tables
+     * @deprecated use {@link #listRoutingTablesForVlan(String)}
      */
+    @Deprecated
     public abstract @Nonnull Iterable<RoutingTable> listRoutingTables(@Nonnull String inVlanId) throws CloudException, InternalException;
-    
+
+    /**
+     * Lists all routing tables associated with the specified VLAN.
+     * @param vlanId the VLAN ID whose routing tables are being sought
+     * @return a list of routing tables for the specified VLAN
+     * @throws CloudException an error occurred fetching the routing tables from the cloud provider
+     * @throws InternalException a local error occurred processing the routing tables
+     */
+    public abstract @Nonnull Iterable<RoutingTable> listRoutingTablesForVlan(@Nonnull String vlanId) throws CloudException, InternalException;
+
     public abstract @Nonnull Iterable<Subnet> listSubnets(@Nonnull String inVlanId) throws CloudException, InternalException;
 
     /**

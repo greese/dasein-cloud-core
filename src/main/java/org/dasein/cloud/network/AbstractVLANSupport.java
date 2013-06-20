@@ -205,6 +205,11 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     }
 
     @Override
+    public RoutingTable getRoutingTable(@Nonnull String id) throws CloudException, InternalException {
+      return null;
+    }
+
+    @Override
     public Subnet getSubnet(@Nonnull String subnetId) throws CloudException, InternalException {
         for( VLAN vlan : listVlans() ) {
             for( Subnet subnet : listSubnets(vlan.getProviderVlanId()) ) {
@@ -386,8 +391,18 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     }
 
     @Override
+    public @Nonnull Iterable<RoutingTable> listRoutingTablesForSubnet(@Nonnull String subnetId) throws CloudException, InternalException {
+      return Collections.emptyList();
+    }
+
+    @Override
     public @Nonnull Iterable<RoutingTable> listRoutingTables(@Nonnull String inVlanId) throws CloudException, InternalException {
         return Collections.emptyList();
+    }
+
+    @Override
+    public @Nonnull Iterable<RoutingTable> listRoutingTablesForVlan(@Nonnull String vlanId) throws CloudException, InternalException {
+      return Collections.emptyList();
     }
 
     @Override
