@@ -39,6 +39,7 @@ public class IpAddress implements Networkable, Comparable<IpAddress> {
     private String      providerIpAddressId;
     private String      providerLoadBalancerId;
     private String      providerVlanId;
+    private String      providerAssociationId;
     private String      regionId;
     private boolean     reserved;
     private String      serverId;
@@ -196,6 +197,14 @@ public class IpAddress implements Networkable, Comparable<IpAddress> {
 
     public void setProviderVlanId(String providerVlanId) {
         this.providerVlanId = providerVlanId;
+    }
+
+    public String getProviderAssociationId() {
+      return providerAssociationId;
+    }
+
+    public void setProviderAssociationId(String providerAssociationId) {
+      this.providerAssociationId = providerAssociationId;
     }
 
     public boolean isReserved() {
