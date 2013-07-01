@@ -19,6 +19,8 @@
 
 package org.dasein.cloud.util;
 
+import org.bouncycastle.util.Arrays;
+
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -32,35 +34,69 @@ import javax.annotation.Nullable;
  * @since 2013.07
  */
 public class CacheManager implements CacheMBean {
-    private Cache.CacheDelegate delegate = new Cache.CacheDelegate();
+    private Cache.CacheDelegate collections         = new Cache.CacheDelegate();
+    private SingletonCache.CacheDelegate singletons = new SingletonCache.CacheDelegate();
 
     @Override
     public void clear(@Nonnull String cacheName) {
-        delegate.clear(cacheName);
+        collections.clear(cacheName);
     }
 
     @Override
     public @Nonnull String[] getCaches() {
-        return delegate.getCaches();
+        String[] s = singletons.getCaches();
+        String[] c = collections.getCaches();
+        String[] names = new String[s.length + c.length];
+        int i = 0;
+
+        for( String str : s ) {
+            names[i++] = str;
+        }
+        for( String str : c ) {
+            names[i++] = str;
+        }
+        return names;
     }
 
     @Override
     public @Nullable CacheLevel getCacheLevel(@Nonnull String cacheName) {
-        return delegate.getCacheLevel(cacheName);
+        CacheLevel l = collections.getCacheLevel(cacheName);
+
+        if( l == null ) {
+            l = singletons.getCacheLevel(cacheName);
+        }
+        return l;
     }
 
     @Override
     public long getNextTimeout(@Nonnull String cacheName) {
-        return delegate.getNextTimeout(cacheName);
+        CacheLevel l = collections.getCacheLevel(cacheName);
+
+        if( l == null ) {
+            return singletons.getNextTimeout(cacheName);
+        }
+        return collections.getNextTimeout(cacheName);
     }
 
     @Override
     public long getTimeoutInSeconds(@Nonnull String cacheName) {
-        return delegate.getTimeoutInSeconds(cacheName);
+        CacheLevel l = collections.getCacheLevel(cacheName);
+
+        if( l == null ) {
+            return singletons.getTimeoutInSeconds(cacheName);
+        }
+        return collections.getTimeoutInSeconds(cacheName);
     }
 
     @Override
     public void setTimeoutInSeconds(@Nonnull String cacheName, @Nonnegative long timeoutInSeconds) {
-        delegate.setTimeoutInSeconds(cacheName, timeoutInSeconds);
+        CacheLevel l = collections.getCacheLevel(cacheName);
+
+        if( l == null ) {
+            singletons.setTimeoutInSeconds(cacheName, timeoutInSeconds);
+        }
+        else {
+            collections.setTimeoutInSeconds(cacheName, timeoutInSeconds);
+        }
     }
 }
