@@ -19,8 +19,6 @@
 
 package org.dasein.cloud.util;
 
-import org.bouncycastle.util.Arrays;
-
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
