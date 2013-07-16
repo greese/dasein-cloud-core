@@ -515,6 +515,15 @@ public interface VLANSupport extends AccessControlledService {
     public abstract void removeInternetGateway(@Nonnull String forVlanId) throws CloudException, InternalException;
 
     /**
+     * Disconnects the specified gateway from it's VLAN and deletes it.
+     * @param id the gateway id to delete
+     * @throws CloudException an error occurred with the cloud provider while removing the gateway
+     * @throws InternalException a local error occurred while removing the gateway
+     * @throws OperationNotSupportedException internet gateway creation/removal is not supported in this cloud
+     */
+    public abstract void removeInternetGatewayById(@Nonnull String id) throws CloudException, InternalException;
+
+    /**
      * De-provisions the specified network interface.
      * @param nicId the network interface to be de-provisioned
      * @throws CloudException an error occurred with the cloud provider while de-provisioning the network interface
