@@ -389,6 +389,15 @@ public interface VLANSupport extends AccessControlledService {
     public abstract Collection<String> listFirewallIdsForNIC(@Nonnull String nicId) throws CloudException, InternalException;
 
     /**
+     * Lists all Internet Gateways for an account or optionally all Internet Gateways for a VLAN.
+     * @param inVlanId the VLAN ID to search in for internet gateways
+     * @return a list of internet gateways
+     * @throws CloudException an error occurred fetching the internet gatewayss from the cloud provider
+     * @throws InternalException a local error occurred processing the internet gateways
+     */
+    public abstract @Nonnull Collection<InternetGateway> listInternetGateways(@Nullable String inVlanId) throws CloudException, InternalException;
+
+    /**
      * Lists the status of all network interfaces currently provisioned in the current region.
      * @return a list of status for all provisioned network interfaces in the current region
      * @throws CloudException an error occurred with the cloud provider fetching the network interfaces
