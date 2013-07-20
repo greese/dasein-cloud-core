@@ -74,6 +74,8 @@ public interface AutoScalingSupport extends AccessControlledService {
 
     public Collection<ScalingPolicy> listScalingPolicies(@Nullable String autoScalingGroupName) throws CloudException, InternalException;
 
+    public ScalingPolicy getScalingPolicy(@Nonnull String policyName) throws CloudException, InternalException;
+
     public Iterable<ResourceStatus> listScalingGroupStatus() throws CloudException, InternalException;
 
     public Collection<ScalingGroup> listScalingGroups() throws CloudException, InternalException;
