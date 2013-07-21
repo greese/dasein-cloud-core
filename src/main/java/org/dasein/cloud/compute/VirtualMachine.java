@@ -76,6 +76,7 @@ public class VirtualMachine implements Networkable, Taggable {
     private String                rootPassword;
     private String                rootUser;
     private long                  terminationTimestamp;
+    private Volume[]              volumes;
     
     public VirtualMachine() { }
     
@@ -539,4 +540,13 @@ public class VirtualMachine implements Networkable, Taggable {
     public @Nonnull String[] getProviderShellKeyIds() {
         return (providerShellKeyIds == null ? new String[0] : providerShellKeyIds);
     }
+
+    public @Nullable Volume[] getVolumes() {
+      return volumes;
+    }
+
+    public void setVolumes( @Nullable Volume[] volumes ) {
+      this.volumes = volumes;
+    }
+
 }
