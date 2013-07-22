@@ -389,6 +389,15 @@ public interface VLANSupport extends AccessControlledService {
     public abstract Collection<String> listFirewallIdsForNIC(@Nonnull String nicId) throws CloudException, InternalException;
 
     /**
+     * Lists all Internet Gateways for an account or optionally all Internet Gateways for a VLAN.
+     * @param inVlanId the VLAN ID to search in for internet gateways
+     * @return a list of internet gateways
+     * @throws CloudException an error occurred fetching the internet gatewayss from the cloud provider
+     * @throws InternalException a local error occurred processing the internet gateways
+     */
+    public abstract @Nonnull Collection<InternetGateway> listInternetGateways(@Nullable String inVlanId) throws CloudException, InternalException;
+
+    /**
      * Lists the status of all network interfaces currently provisioned in the current region.
      * @return a list of status for all provisioned network interfaces in the current region
      * @throws CloudException an error occurred with the cloud provider fetching the network interfaces
@@ -470,7 +479,23 @@ public interface VLANSupport extends AccessControlledService {
      */
     public abstract @Nonnull Iterable<RoutingTable> listRoutingTablesForVlan(@Nonnull String vlanId) throws CloudException, InternalException;
 
+    /**
+     * Lists all subnets associated with the specified VLAN.
+     * @param inVlanId the VLAN ID whose subnets are being sought
+     * @return a list of subnets for the specified VLAN
+     * @throws CloudException an error occurred fetching the subnets from the cloud provider
+     * @throws InternalException a local error occurred processing the subnets
+     */
     public abstract @Nonnull Iterable<Subnet> listSubnets(@Nonnull String inVlanId) throws CloudException, InternalException;
+
+    /**
+     * Lists all subnets associated with the specified VLAN.
+     * @param inVlanId the VLAN ID whose subnets are being sought
+     * @return a list of subnets for the specified VLAN
+     * @throws CloudException an error occurred fetching the subnets from the cloud provider
+     * @throws InternalException a local error occurred processing the subnets
+     */
+    public abstract @Nonnull Iterable<Subnet> listAllSubnets(@Nonnull String inVlanId) throws CloudException, InternalException;
 
     /**
      * Lists all IP protocol versions supported for VLANs in this cloud.
@@ -504,6 +529,15 @@ public interface VLANSupport extends AccessControlledService {
      * @throws OperationNotSupportedException internet gateway creation/removal is not supported in this cloud
      */
     public abstract void removeInternetGateway(@Nonnull String forVlanId) throws CloudException, InternalException;
+
+    /**
+     * Disconnects the specified gateway from it's VLAN and deletes it.
+     * @param id the gateway id to delete
+     * @throws CloudException an error occurred with the cloud provider while removing the gateway
+     * @throws InternalException a local error occurred while removing the gateway
+     * @throws OperationNotSupportedException internet gateway creation/removal is not supported in this cloud
+     */
+    public abstract void removeInternetGatewayById(@Nonnull String id) throws CloudException, InternalException;
 
     /**
      * De-provisions the specified network interface.
