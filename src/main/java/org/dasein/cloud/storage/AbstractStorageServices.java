@@ -47,7 +47,7 @@ public abstract class AbstractStorageServices implements StorageServices {
     }
 
     @Override
-    public @Nullable BlobStoreSupport getOfflineStorageSupport() {
+    public @Nullable OfflineStoreSupport getOfflineStorageSupport() {
         return null;
     }
 
