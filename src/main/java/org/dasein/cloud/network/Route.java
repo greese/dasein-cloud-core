@@ -67,7 +67,18 @@ public class Route {
         r.gatewayVirtualMachineId = vmId;
         return r;
     }
-    
+
+    static public Route getRouteToVirtualMachineAndNetworkInterface(@Nonnull IPVersion version, @Nonnull String destination, @Nonnull String ownerId, @Nonnull String vmId, @Nonnull String nicId) {
+        Route r = new Route();
+
+        r.version = version;
+        r.destinationCidr = destination;
+        r.gatewayOwnerId = ownerId;
+        r.gatewayVirtualMachineId = vmId;
+        r.gatewayNetworkInterfaceId = nicId;
+        return r;
+    }
+
     private String    destinationCidr;
     private String    gatewayAddress;
     private String    gatewayId;
