@@ -52,6 +52,15 @@ public interface MQSupport extends AccessControlledService {
     public @Nonnull String createMessageQueue(@Nonnull MQCreateOptions options) throws CloudException, InternalException;
 
     /**
+     * Fetches the specified message queue from the cloud if it exists.
+     * @param mqId the unique ID of the target message queue
+     * @return the message queue matching the specified ID if it exists
+     * @throws CloudException an error occurred with the cloud provider while executing the request
+     * @throws InternalException an error occurred within the Dasein Cloud implementation while handling the request
+     */
+    public @Nullable MessageQueue getMessageQueue(@Nonnull String mqId) throws CloudException, InternalException;
+
+    /**
      * Provides the term the cloud provider uses to describe a message queue.
      * @param locale the locale into which the term should be translated
      * @return the provider term for a message queue

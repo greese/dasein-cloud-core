@@ -76,6 +76,16 @@ public abstract class AbstractMQSupport<T extends CloudProvider> implements MQSu
     }
 
     @Override
+    public @Nullable MessageQueue getMessageQueue(@Nonnull String mqId) throws CloudException, InternalException {
+        for( MessageQueue q : listMessageQueues() ) {
+            if( mqId.equals(q.getProviderMessageQueueId()) ) {
+                return q;
+            }
+        }
+        return null;
+    }
+
+    @Override
     public @Nonnull Iterable<ResourceStatus> listMessageQueueStatus() throws CloudException, InternalException {
         ArrayList<ResourceStatus> status = new ArrayList<ResourceStatus>();
 
