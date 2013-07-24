@@ -26,7 +26,8 @@ public interface PlatformServices {
     
     public abstract @Nullable KeyValueDatabaseSupport getKeyValueDatabaseSupport();
     
-    public abstract @Nullable MessageQueueSupport getMessageQueueSupport();
+    public abstract @Nullable
+    MQSupport getMessageQueueSupport();
     
     public abstract @Nullable PushNotificationSupport getPushNotificationSupport();
     

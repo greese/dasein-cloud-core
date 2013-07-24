@@ -34,7 +34,8 @@ public abstract class AbstractPlatformServices implements PlatformServices {
     }
 
     @Override
-    public @Nullable MessageQueueSupport getMessageQueueSupport() {
+    public @Nullable
+    MQSupport getMessageQueueSupport() {
         return null;
     }
 

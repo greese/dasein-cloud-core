@@ -17,26 +17,33 @@
  * ====================================================================
  */
 
-package org.dasein.cloud.ci;
+package org.dasein.cloud.platform;
 
-import javax.annotation.Nullable;
+import org.omg.PortableInterceptor.ACTIVE;
+import org.omg.PortableInterceptor.INACTIVE;
 
 /**
- * [Class Documentation]
- * <p>Created by George Reese: 6/3/13 3:27 PM</p>
- *
+ * Represents the current state of a {@link MessageQueue}.
+ * <p>Created by George Reese: 7/24/13 5:11 AM</p>
  * @author George Reese
+ * @version 2013.07 initial version (issue #76)
+ * @since 2013.07
  */
-public interface CIServices {
-    public @Nullable ConvergedInfrastructureSupport getConvergedInfrastructureSupport();
-
-    public @Nullable TopologySupport getTopologySupport();
-
-    public boolean hasConvergedInfrastructureSupport();
-
-
+public enum MQState {
     /**
-     * @return indicates whether or not the cloud provider supports complex resource topologies
+     * An active message queue with which clients may interact
      */
-    public abstract boolean hasTopologySupport();
+    ACTIVE,
+    /**
+     * A deleted message queue that cannot ever be used again
+     */
+    DELETED,
+    /**
+     * An inactive message queue that cannot process messages
+     */
+    INACTIVE,
+    /**
+     * A pending message queue that is in a transitional state
+     */
+    PENDING
 }
