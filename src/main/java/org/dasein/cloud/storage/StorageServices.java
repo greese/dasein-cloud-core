@@ -48,7 +48,7 @@ public interface StorageServices {
      * to fetch.
      * @return blob store support for the offline storage, if it exists
      */
-    public abstract @Nullable BlobStoreSupport getOfflineStorageSupport();
+    public abstract @Nullable OfflineStoreSupport getOfflineStorageSupport();
 
     /**
      * @return true if the cloud supports offline storage
