@@ -18,8 +18,6 @@
 
 package org.dasein.cloud.compute;
 
-import org.dasein.cloud.platform.Metric;
-
 import java.io.Serializable;
 import java.util.Collection;
 
@@ -47,7 +45,8 @@ public class ScalingGroup implements Serializable {
     private String                status;
     private Collection<String[]>  suspendedProcesses;
     private String[]              terminationPolicies;
-    private String                providerVlanId;
+    // comma seperated list
+    private String                subnetIds;
 
     
     public ScalingGroup() { }
@@ -114,14 +113,6 @@ public class ScalingGroup implements Serializable {
 
     public void setTerminationPolicies(String[] terminationPolicies) {
       this.terminationPolicies = terminationPolicies;
-    }
-
-    public String getProviderVlanId() {
-      return providerVlanId;
-    }
-
-    public void setProviderVlanId(String providerVlanId) {
-      this.providerVlanId = providerVlanId;
     }
 
     public int getDefaultCoolcown() {
@@ -226,6 +217,14 @@ public class ScalingGroup implements Serializable {
 
     public int getTargetCapacity() {
         return targetCapacity;
+    }
+
+    public String getSubnetIds() {
+      return subnetIds;
+    }
+
+    public void setSubnetIds(String subnetIds) {
+      this.subnetIds = subnetIds;
     }
     
 }
