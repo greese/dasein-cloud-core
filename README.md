@@ -1,9 +1,9 @@
 dasein-cloud-core
 =================
 
-* Current major version: 2013.01
-* API Documentation: http://www.dasein.org/api/dasein-cloud-2012-09
-* Source: http://gihub.org/greese/dasein-cloud-core
+* Current major version: 2013.02
+* API Documentation: http://www.dasein.org/api/dasein-cloud-2013-02
+* Source: http://github.org/greese/dasein-cloud-core
 * Tutorial: See overview.pdf
 
 Dasein Cloud Core is the core API for the Dasein Cloud multi-cloud abstraction API for Java. It is the sole compile-time
