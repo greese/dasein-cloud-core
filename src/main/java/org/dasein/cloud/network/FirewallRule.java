@@ -1,5 +1,6 @@
 /**
- * Copyright (C) 2009-2013 enstratius, Inc.
+ * Copyright (C) 2009-2013 Dell, Inc.
+ * See annotations for authorship information
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -296,7 +297,6 @@ public class FirewallRule implements Comparable<FirewallRule> {
                 String tmp = parts[i++];
 
                 direction = Direction.valueOf(tmp.toUpperCase());
-
                 switch( t ) {
                     case GLOBAL: source = RuleTarget.getGlobal(tmp); break;
                     case VM: source = RuleTarget.getVirtualMachine(tmp); break;

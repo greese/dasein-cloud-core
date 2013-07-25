@@ -1,5 +1,6 @@
 /**
- * Copyright (C) 2009-2013 enstratius, Inc.
+ * Copyright (C) 2009-2013 Dell, Inc.
+ * See annotations for authorship information
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,7 +26,8 @@ public interface PlatformServices {
     
     public abstract @Nullable KeyValueDatabaseSupport getKeyValueDatabaseSupport();
     
-    public abstract @Nullable MessageQueueSupport getMessageQueueSupport();
+    public abstract @Nullable
+    MQSupport getMessageQueueSupport();
     
     public abstract @Nullable PushNotificationSupport getPushNotificationSupport();
     

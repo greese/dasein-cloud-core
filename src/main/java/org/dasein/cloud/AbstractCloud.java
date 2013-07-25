@@ -1,5 +1,6 @@
 /**
- * Copyright (C) 2009-2013 enstratius, Inc.
+ * Copyright (C) 2009-2013 Dell, Inc.
+ * See annotations for authorship information
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,16 +19,27 @@
 
 package org.dasein.cloud;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.dasein.cloud.admin.AdminServices;
+import org.dasein.cloud.ci.CIServices;
 import org.dasein.cloud.compute.ComputeServices;
 import org.dasein.cloud.dc.DataCenterServices;
 import org.dasein.cloud.identity.IdentityServices;
 import org.dasein.cloud.network.NetworkServices;
 import org.dasein.cloud.platform.PlatformServices;
 
+/**
+ * Simple base implementation of a cloud provider bootstrap object that defaults all services to <code>null</code>.
+ * @author George Reese
+ * @version 2013.07 added javadoc, fixed annotations on data center services, made it return an NPE
+ * @since unknown
+ */
 public abstract class AbstractCloud extends CloudProvider {
+    /**
+     * Constructs a cloud provider instance.
+     */
     public AbstractCloud() { }
 
     @Override
@@ -41,10 +53,17 @@ public abstract class AbstractCloud extends CloudProvider {
         
         return (compute == null ? null : compute.getComputeServices());
     }
-    
+
     @Override
-    public @Nullable DataCenterServices getDataCenterServices() {
-        throw new RuntimeException("A cloud must have a data center services implementation.");
+    public @Nullable CIServices getCIServices() {
+        CloudProvider compute = getComputeCloud();
+
+        return (compute == null ? null : compute.getCIServices());
+    }
+
+    @Override
+    public @Nonnull DataCenterServices getDataCenterServices() {
+        throw new NullPointerException("A cloud must have a data center services implementation.");
     }
     
     @Override

@@ -1,5 +1,6 @@
 /**
- * Copyright (C) 2009-2013 enstratius, Inc.
+ * Copyright (C) 2009-2013 Dell, Inc.
+ * See annotations for authorship information
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -160,6 +161,11 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     @Override
     public @Nonnull VLAN createVlan(@Nonnull String cidr, @Nonnull String name, @Nonnull String description, @Nonnull String domainName, @Nonnull String[] dnsServers, @Nonnull String[] ntpServers) throws CloudException, InternalException {
         throw new OperationNotSupportedException("VLANs are not currently implemented for " + getProvider().getCloudName());
+    }
+
+    @Override
+    public @Nonnull VLAN createVlan(@Nonnull VlanCreateOptions vco) throws CloudException, InternalException {
+      throw new OperationNotSupportedException("VLANs are not currently implemented for " + getProvider().getCloudName());
     }
 
     @Override

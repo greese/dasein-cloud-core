@@ -1,5 +1,6 @@
 /**
- * Copyright (C) 2009-2013 enstratius, Inc.
+ * Copyright (C) 2009-2013 Dell, Inc.
+ * See annotations for authorship information
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -47,6 +48,10 @@ public enum Jurisdiction {
      * China
      */
     CN,
+    /**
+     * Germany
+     */
+    DE,
     /**
      * Hong Kong
      */

@@ -1,5 +1,6 @@
 /**
- * Copyright (C) 2009-2013 enstratius, Inc.
+ * Copyright (C) 2009-2013 Dell, Inc.
+ * See annotations for authorship information
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -61,10 +62,10 @@ import java.util.Properties;
  * @version 2013.04
  * @since 2013.04
  */
-public abstract class AbstractVMSupport implements VirtualMachineSupport {
-    private CloudProvider provider;
+public abstract class AbstractVMSupport<T extends CloudProvider> implements VirtualMachineSupport {
+    private T provider;
 
-    public AbstractVMSupport(CloudProvider provider) {
+    public AbstractVMSupport(T provider) {
         this.provider = provider;
     }
 
@@ -137,7 +138,7 @@ public abstract class AbstractVMSupport implements VirtualMachineSupport {
     /**
      * @return the current provider governing any operations against this cloud in this support instance
      */
-    protected final @Nonnull CloudProvider getProvider() {
+    protected final @Nonnull T getProvider() {
         return provider;
     }
 
@@ -641,6 +642,11 @@ public abstract class AbstractVMSupport implements VirtualMachineSupport {
     public void suspend(@Nonnull String vmId) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Resume/suspend is not currently implemented for " + getProvider().getCloudName());
 
+    }
+
+    @Override
+    public void terminate(@Nonnull String vmId) throws CloudException, InternalException {
+        terminate(vmId, null);
     }
 
     @Override

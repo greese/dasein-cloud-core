@@ -1,5 +1,6 @@
 /**
- * Copyright (C) 2009-2013 enstratius, Inc.
+ * Copyright (C) 2009-2013 Dell, Inc.
+ * See annotations for authorship information
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,6 +37,7 @@ import java.util.Map;
  * is routed over to the endpoints.
  * @author George Reese
  * @version 2013.04 added Javadoc and refactored for support for endpoints and data integrity
+ * @version 2013.07 added silly assertion (issue #60)
  * @since unknown
  */
 public class LoadBalancer implements Networkable, Taggable {
@@ -53,7 +55,6 @@ public class LoadBalancer implements Networkable, Taggable {
      * @return a load balancer instance representing the specified state
      */
     static public LoadBalancer getInstance(@Nonnull String ownerId, @Nonnull String regionId, @Nonnull String lbId, @Nonnull LoadBalancerState state, @Nonnull String name, @Nonnull String description, @Nonnull LoadBalancerAddressType addressType, @Nonnull String address, @Nonnull int ... publicPorts) {
-        assert (publicPorts.length > 0);
         return new LoadBalancer(ownerId, regionId, lbId, state, name, description, addressType, address, publicPorts);
     }
 
