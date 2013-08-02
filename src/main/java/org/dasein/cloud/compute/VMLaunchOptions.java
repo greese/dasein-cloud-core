@@ -101,6 +101,7 @@ public class VMLaunchOptions {
     private String             userData;
     private String             vlanId;
     private VolumeAttachment[] volumes;
+    private boolean            ioOptimized;
 
     private VMLaunchOptions() { }
     
@@ -297,6 +298,13 @@ public class VMLaunchOptions {
      */
     public @Nonnull VolumeAttachment[] getVolumes() {
         return (volumes == null ? new VolumeAttachment[0] : volumes);
+    }
+
+    /**
+     * @return true/false for i/o optimized
+     */
+    public boolean isIoOptimized() {
+      return ioOptimized;
     }
     
     /**
@@ -613,5 +621,10 @@ public class VMLaunchOptions {
     public @Nonnull VMLaunchOptions withStaticIps(@Nonnull String ... ipIds) {
         this.staticIpIds = ipIds;
         return this;
+    }
+
+    public @Nonnull VMLaunchOptions withIoOptimized(@Nonnull boolean ioOptimized) {
+      this.ioOptimized = ioOptimized;
+      return this;
     }
 }
