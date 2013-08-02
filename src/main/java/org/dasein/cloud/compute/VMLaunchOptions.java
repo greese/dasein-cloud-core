@@ -98,6 +98,7 @@ public class VMLaunchOptions {
     private String             rootVolumeProductId;
     private String             standardProductId;
     private String[]           staticIpIds;
+    private String             privateIp;
     private String             userData;
     private String             vlanId;
     private VolumeAttachment[] volumes;
@@ -277,6 +278,13 @@ public class VMLaunchOptions {
             return new String[0];
         }
         return Arrays.copyOf(staticIpIds, staticIpIds.length);
+    }
+
+    /**
+     * @return the private ip when VM is launched in VLAN
+     */
+    public @Nonnull String getPrivateIp() {
+      return privateIp;
     }
 
     /**
@@ -625,6 +633,16 @@ public class VMLaunchOptions {
 
     public @Nonnull VMLaunchOptions withIoOptimized(@Nonnull boolean ioOptimized) {
       this.ioOptimized = ioOptimized;
+      return this;
+    }
+
+    /**
+     * Identifies the private ip address to assign to the VM when launched in a VLAN
+     * @param ipAddr an ip address within the subnet cidr range which the VM is being launched into
+     * @return this
+     */
+    public @Nonnull VMLaunchOptions withPrivateIp(@Nonnull String ipAddr) {
+      this.privateIp = ipAddr;
       return this;
     }
 }
