@@ -77,6 +77,7 @@ public class VirtualMachine implements Networkable, Taggable {
     private String                rootUser;
     private long                  terminationTimestamp;
     private Volume[]              volumes;
+    private boolean               ioOptimized;
     
     public VirtualMachine() { }
     
@@ -547,6 +548,14 @@ public class VirtualMachine implements Networkable, Taggable {
 
     public void setVolumes( @Nullable Volume[] volumes ) {
       this.volumes = volumes;
+    }
+
+    public boolean isIoOptimized() {
+      return ioOptimized;
+    }
+
+    public void setIoOptimized(boolean ioOptimized) {
+      this.ioOptimized = ioOptimized;
     }
 
 }
