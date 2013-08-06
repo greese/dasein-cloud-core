@@ -1,5 +1,6 @@
 /**
- * Copyright (C) 2009-2013 enstratius, Inc.
+ * Copyright (C) 2009-2013 Dell, Inc.
+ * See annotations for authorship information
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,6 +26,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.dasein.cloud.admin.AdminServices;
+import org.dasein.cloud.ci.CIServices;
 import org.dasein.cloud.compute.ComputeServices;
 import org.dasein.cloud.dc.DataCenterServices;
 import org.dasein.cloud.identity.IdentityServices;
@@ -167,7 +169,7 @@ public abstract class CloudProvider {
      * @param context the context for services calls using this provider instance
      * @param computeProvider the compute context if this is a storage-only cloud (the compute context controls the connection)
      */
-    public final void connect(@Nonnull ProviderContext context, @Nullable CloudProvider computeProvider) {
+    public void connect(@Nonnull ProviderContext context, @Nullable CloudProvider computeProvider) {
         close();
         this.context = context;
         this.computeCloud = computeProvider;
@@ -202,7 +204,13 @@ public abstract class CloudProvider {
      * @return an implementation of the {@link org.dasein.cloud.dc.DataCenterServices} API
      */
     public abstract @Nonnull DataCenterServices getDataCenterServices();
-    
+
+    /**
+     * Provides access to support for complex topologies managed through converged infrastructure as a cloudy environment.
+     * @return the services representing converged infrastructure, if any
+     */
+    public abstract @Nullable CIServices getCIServices();
+
     public abstract @Nullable ComputeServices getComputeServices();
     
     public abstract @Nullable IdentityServices getIdentityServices();

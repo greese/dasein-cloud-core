@@ -1,5 +1,6 @@
 /**
- * Copyright (C) 2009-2013 enstratius, Inc.
+ * Copyright (C) 2009-2013 Dell, Inc.
+ * See annotations for authorship information
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -224,7 +225,7 @@ public interface VolumeSupport extends AccessControlledService {
     public boolean isSubscribed() throws CloudException, InternalException;
 
     /**
-     * De-provisions the specified volume.
+     * De-provisions the specified volume. This method should block until the volume is in a {@link VolumeState#DELETED} state.
      * @param volumeId the unique ID of the volume to be de-provisioned
      * @throws InternalException an error occurred within the Dasein Cloud implementation
      * @throws CloudException an error occurred with the cloud provider

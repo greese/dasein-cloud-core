@@ -10,4 +10,12 @@ target
 
 .DS_Store
 
-src/main/java/org/dasein/cloud/.DS_Store
+# IDE Files #
+*.iml
+*.ipr
+*.iws
+.idea
+.classpath
+.project
+.settings
+target-eclipse

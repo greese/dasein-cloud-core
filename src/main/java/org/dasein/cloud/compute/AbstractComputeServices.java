@@ -1,5 +1,6 @@
 /**
- * Copyright (C) 2009-2013 enstratius, Inc.
+ * Copyright (C) 2009-2013 Dell, Inc.
+ * See annotations for authorship information
  *
  * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,10 +19,18 @@
 
 package org.dasein.cloud.compute;
 
-import javax.annotation.Nonnull;
+import org.dasein.cloud.ci.ConvergedInfrastructureSupport;
+
 import javax.annotation.Nullable;
 
-public abstract class AbstractComputeServices implements ComputeServices{
+/**
+ * Skeleton implementation of compute services with a default behavior of supporting no services. Override those services
+ * you wish to provide in support of the cloud you are implementing.
+ * @author George Reese
+ * @version 2013.07 added topology support
+ * @since unknown
+ */
+public abstract class AbstractComputeServices implements ComputeServices {
 
     @Override
     public @Nullable  AutoScalingSupport getAutoScalingSupport() {
