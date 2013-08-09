@@ -38,7 +38,7 @@ public class ScalingGroup implements Serializable {
     private String                providerScalingGroupId;
     private String[]              providerServerIds;
     private int                   targetCapacity;
-    private String                autoScalingGroupARN;
+    private String                id;
     private String[]              enabledMetrics;
     private int                   healthCheckGracePeriod;
     private String                healthCheckType;
@@ -52,12 +52,12 @@ public class ScalingGroup implements Serializable {
     
     public ScalingGroup() { }
 
-    public String getAutoScalingGroupARN() {
-      return autoScalingGroupARN;
+    public String getId() {
+      return id;
     }
 
-    public void setAutoScalingGroupARN(String arn) {
-      this.autoScalingGroupARN = arn;
+    public void setId(String id) {
+      this.id = id;
     }
 
     public String[] getEnabledMetrics() {
