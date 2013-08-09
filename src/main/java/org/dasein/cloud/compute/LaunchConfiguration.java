@@ -27,7 +27,7 @@ public class LaunchConfiguration implements Serializable {
     private long     creationTimestamp;
     private String   name;
     private String[] providerFirewallIds;
-    private String   providerARN;
+    private String   id;
     private String   providerKeypairName;
     private String   userData;
     private String   providerImageId;
@@ -60,12 +60,12 @@ public class LaunchConfiguration implements Serializable {
         this.providerFirewallIds = providerFirewallIds;
     }
 
-    public void setProviderARN(String ARN) {
-      this.providerARN = ARN;
+    public void setId(String id) {
+      this.id = id;
     }
 
-    public String getProviderARN(){
-      return this.providerARN;
+    public String getId(){
+      return this.id;
     }
 
     public void setProviderKeypairName(String keyPairName){
