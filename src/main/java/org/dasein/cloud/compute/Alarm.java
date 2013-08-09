@@ -23,8 +23,8 @@ public class Alarm implements Serializable {
 
     public Alarm() { }
 
-    public void setId(String alarmARN) {
-      this.id = alarmARN;
+    public void setId(String id) {
+      this.id = id;
     }
 
     public String getId() {
