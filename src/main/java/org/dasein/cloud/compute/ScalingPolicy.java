@@ -9,7 +9,7 @@ public class ScalingPolicy implements Serializable {
     private String                autoScalingGroupName;
     private int                   coolDown;
     private int                   minAdjustmentStep;
-    private String                policyARN;
+    private String                id;
     private String                name;
     private int                   scalingAdjustment;
     private Alarm[]               alarms;
@@ -48,12 +48,12 @@ public class ScalingPolicy implements Serializable {
       return this.minAdjustmentStep;
     }
 
-    public void setPolicyARN(String policyARN) {
-      this.policyARN = policyARN;
+    public void setId(String id) {
+      this.id = id;
     }
 
-    public String getPolicyARN() {
-      return this.policyARN;
+    public String getId() {
+      return this.id;
     }
 
     public void setName(String name) {
