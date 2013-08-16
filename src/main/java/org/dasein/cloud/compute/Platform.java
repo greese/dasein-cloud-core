@@ -121,7 +121,7 @@ public enum Platform {
         else if( name.contains("linux") ) {
             return UNIX;
         }
-        return Platform.UNKNOWN;
+        return UNKNOWN;
     }
     
     /**
