@@ -26,7 +26,7 @@ package org.dasein.cloud.network;
  */
 public class InternetGateway {
 
-    private String                            gatewayId;
+    private String                            providerInternetGatewayId;
     private String                            providerVlanId;
     private InternetGatewayAttachmentState    attachmentState;
     private String                            providerOwnerId;
@@ -34,12 +34,12 @@ public class InternetGateway {
 
     public InternetGateway() { }
 
-    public String getGatewayId() {
-        return gatewayId;
+    public String getProviderInternetGatewayId() {
+        return providerInternetGatewayId;
     }
 
-    public void setGatewayId(String gatewayId) {
-      this.gatewayId = gatewayId;
+    public void setProviderInternetGatewayId(String id) {
+      this.providerInternetGatewayId = id;
     }
 
     public String getProviderVlanId() {
