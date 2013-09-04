@@ -57,6 +57,12 @@ public class Volume implements Networkable, Taggable {
     private Map<String,String> tags;
     private VolumeType  type;
 
+    /**
+     * deleteOnVirtualMachineTermination is needed for listing volumes on a virtualmachine, but set to null
+     * for when listing volumes through VolumeSupport as some providers (AWS) don't provide this info there.
+     */
+    private Boolean     deleteOnVirtualMachineTermination = null;
+
     public Volume() { }
 
     public boolean equals(Object ob) {
@@ -318,4 +324,13 @@ public class Volume implements Networkable, Taggable {
     public void setTag(@Nonnull String key, @Nonnull String value) {
         getTags().put(key, value);
     }
+
+    public Boolean isDeleteOnVirtualMachineTermination() {
+      return deleteOnVirtualMachineTermination;
+    }
+
+    public void setDeleteOnVirtualMachineTermination( Boolean deleteOnVirtualMachineTermination ) {
+      this.deleteOnVirtualMachineTermination = deleteOnVirtualMachineTermination;
+    }
+
 }

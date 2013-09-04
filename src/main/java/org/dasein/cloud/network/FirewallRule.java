@@ -297,6 +297,7 @@ public class FirewallRule implements Comparable<FirewallRule> {
                 String tmp = parts[i++];
 
                 direction = Direction.valueOf(tmp.toUpperCase());
+
                 switch( t ) {
                     case GLOBAL: source = RuleTarget.getGlobal(tmp); break;
                     case VM: source = RuleTarget.getVirtualMachine(tmp); break;

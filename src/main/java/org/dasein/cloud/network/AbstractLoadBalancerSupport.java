@@ -70,8 +70,8 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
 
     @Override
     @Deprecated
-    public @Nonnull String create(@Nonnull String name, @Nonnull String description, @Nullable String addressId, @Nullable String[] dataCenterIds, @Nullable LbListener[] listeners, @Nullable String[] serverIds) throws CloudException, InternalException {
-        throw new OperationNotSupportedException("Load balancer removal is not implemented in " + getContext().getRegionId() + " of " + getProvider().getCloudName());
+    public @Nonnull String create(@Nonnull String name, @Nonnull String description, @Nullable String addressId, @Nullable String[] dataCenterIds, @Nullable LbListener[] listeners, @Nullable String[] serverIds, @Nullable String[] subnetIds, @Nullable LbType type) throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Load balancer creation is not implemented in " + getContext().getRegionId() + " of " + getProvider().getCloudName());
     }
 
     @Override
@@ -84,7 +84,7 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
             }
         }
         //noinspection deprecation
-        return create(options.getName(), options.getDescription(), options.getProviderIpAddressId(), options.getProviderDataCenterIds(), options.getListeners(), serverIds.toArray(new String[serverIds.size()]));
+        return create(options.getName(), options.getDescription(), options.getProviderIpAddressId(), options.getProviderDataCenterIds(), options.getListeners(), serverIds.toArray(new String[serverIds.size()]), options.getProviderSubnetIds(), options.getType());
     }
 
 
