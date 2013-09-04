@@ -487,16 +487,7 @@ public interface VLANSupport extends AccessControlledService {
      * @throws CloudException an error occurred fetching the subnets from the cloud provider
      * @throws InternalException a local error occurred processing the subnets
      */
-    public abstract @Nonnull Iterable<Subnet> listSubnets(@Nonnull String inVlanId) throws CloudException, InternalException;
-
-    /**
-     * Lists all subnets associated with the specified VLAN.
-     * @param inVlanId the VLAN ID whose subnets are being sought
-     * @return a list of subnets for the specified VLAN
-     * @throws CloudException an error occurred fetching the subnets from the cloud provider
-     * @throws InternalException a local error occurred processing the subnets
-     */
-    public abstract @Nonnull Iterable<Subnet> listAllSubnets(@Nonnull String inVlanId) throws CloudException, InternalException;
+    public abstract @Nonnull Iterable<Subnet> listSubnets(@Nullable String inVlanId) throws CloudException, InternalException;
 
     /**
      * Lists all IP protocol versions supported for VLANs in this cloud.
