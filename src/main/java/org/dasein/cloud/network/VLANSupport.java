@@ -116,6 +116,8 @@ public interface VLANSupport extends AccessControlledService {
     public abstract boolean allowsNewNetworkInterfaceCreation() throws CloudException, InternalException;
 
     public abstract boolean allowsNewVlanCreation() throws CloudException, InternalException;
+
+    public abstract boolean allowsNewRoutingTableCreation() throws CloudException, InternalException;
     
     public abstract boolean allowsNewSubnetCreation() throws CloudException, InternalException;
 

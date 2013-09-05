@@ -106,6 +106,11 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     }
 
     @Override
+    public boolean allowsNewRoutingTableCreation() throws CloudException, InternalException {
+      return false;
+    }
+
+    @Override
     public boolean allowsNewSubnetCreation() throws CloudException, InternalException {
         return false;
     }
