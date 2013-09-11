@@ -46,22 +46,22 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     }
 
     @Override
-    public Route addRouteToAddress(@Nonnull String toRoutingTableId, @Nonnull IPVersion version, @Nullable String destinationCidr, @Nonnull String address) throws CloudException, InternalException {
+    public Route addRouteToAddress(@Nonnull String routingTableId, @Nonnull IPVersion version, @Nullable String destinationCidr, @Nonnull String address) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Routing tables are not currently implemented for " + getProvider().getCloudName());
     }
 
     @Override
-    public Route addRouteToGateway(@Nonnull String toRoutingTableId, @Nonnull IPVersion version, @Nullable String destinationCidr, @Nonnull String gatewayId) throws CloudException, InternalException {
+    public Route addRouteToGateway(@Nonnull String routingTableId, @Nonnull IPVersion version, @Nullable String destinationCidr, @Nonnull String gatewayId) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Routing tables are not currently implemented for " + getProvider().getCloudName());
     }
 
     @Override
-    public Route addRouteToNetworkInterface(@Nonnull String toRoutingTableId, @Nonnull IPVersion version, @Nullable String destinationCidr, @Nonnull String nicId) throws CloudException, InternalException {
+    public Route addRouteToNetworkInterface(@Nonnull String routingTableId, @Nonnull IPVersion version, @Nullable String destinationCidr, @Nonnull String nicId) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Routing tables are not currently implemented for " + getProvider().getCloudName());
     }
 
     @Override
-    public Route addRouteToVirtualMachine(@Nonnull String toRoutingTableId, @Nonnull IPVersion version, @Nullable String destinationCidr, @Nonnull String vmId) throws CloudException, InternalException {
+    public Route addRouteToVirtualMachine(@Nonnull String routingTableId, @Nonnull IPVersion version, @Nullable String destinationCidr, @Nonnull String vmId) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Routing tables are not currently implemented for " + getProvider().getCloudName());
     }
 
@@ -135,12 +135,12 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     }
 
     @Override
-    public String createInternetGateway(@Nonnull String forVlanId) throws CloudException, InternalException {
+    public String createInternetGateway(@Nonnull String vlanId) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Internet gateways are not currently implemented for " + getProvider().getCloudName());
     }
 
     @Override
-    public @Nonnull String createRoutingTable(@Nonnull String forVlanId, @Nonnull String name, @Nonnull String description) throws CloudException, InternalException {
+    public @Nonnull String createRoutingTable(@Nonnull String vlanId, @Nonnull String name, @Nonnull String description) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Routing tables are not currently implemented for " + getProvider().getCloudName());
     }
 
@@ -402,7 +402,7 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     }
 
     @Override
-    public @Nonnull Iterable<RoutingTable> listRoutingTables(@Nonnull String inVlanId) throws CloudException, InternalException {
+    public @Nonnull Iterable<RoutingTable> listRoutingTables(@Nonnull String vlanId) throws CloudException, InternalException {
         return Collections.emptyList();
     }
 
@@ -412,7 +412,7 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     }
 
     @Override
-    public @Nonnull Iterable<Subnet> listSubnets(@Nonnull String inVlanId) throws CloudException, InternalException {
+    public @Nonnull Iterable<Subnet> listSubnets(@Nonnull String vlanId) throws CloudException, InternalException {
         return Collections.emptyList();
     }
 
@@ -442,7 +442,7 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     }
 
     @Override
-    public void removeInternetGateway(@Nonnull String forVlanId) throws CloudException, InternalException {
+    public void removeInternetGateway(@Nonnull String vlanId) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Internet gateways are not currently implemented for " + getProvider().getCloudName());
     }
 
@@ -452,7 +452,7 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     }
 
     @Override
-    public void removeRoute(@Nonnull String inRoutingTableId, @Nonnull String destinationCidr) throws CloudException, InternalException {
+    public void removeRoute(@Nonnull String routingTableId, @Nonnull String destinationCidr) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Routing tables are not currently implemented for " + getProvider().getCloudName());
     }
 
