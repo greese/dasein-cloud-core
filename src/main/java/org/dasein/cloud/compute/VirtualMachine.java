@@ -68,6 +68,7 @@ public class VirtualMachine implements Networkable, Taggable {
     private String[]              providerShellKeyIds;
     private String                providerSubnetId;
     private String                providerVirtualMachineId;
+    private String[]              providerNetworkInterfaceIds;
     private String                providerVlanId;
     private String                providerKeypairId;
     private String[]              providerFirewallIds;
@@ -77,6 +78,8 @@ public class VirtualMachine implements Networkable, Taggable {
     private String                rootPassword;
     private String                rootUser;
     private long                  terminationTimestamp;
+    private Volume[]              volumes;
+    private boolean               ioOptimized;
     
     public VirtualMachine() { }
     
@@ -509,6 +512,14 @@ public class VirtualMachine implements Networkable, Taggable {
       this.providerFirewallIds = providerFirewallIds;
     }
 
+    public String[] getProviderNetworkInterfaceIds() {
+      return (providerNetworkInterfaceIds == null ? new String[0] : providerNetworkInterfaceIds);
+    }
+
+    public void setProviderNetworkInterfaceIds( String[] providerNetworkInterfaceIds ) {
+      this.providerNetworkInterfaceIds = providerNetworkInterfaceIds;
+    }
+
     public @Nullable String getProviderKernelImageId() {
         return providerKernelImageId;
     }
@@ -532,4 +543,21 @@ public class VirtualMachine implements Networkable, Taggable {
     public @Nonnull String[] getProviderShellKeyIds() {
         return (providerShellKeyIds == null ? new String[0] : providerShellKeyIds);
     }
+
+    public @Nullable Volume[] getVolumes() {
+      return volumes;
+    }
+
+    public void setVolumes( @Nullable Volume[] volumes ) {
+      this.volumes = volumes;
+    }
+
+    public boolean isIoOptimized() {
+      return ioOptimized;
+    }
+
+    public void setIoOptimized(boolean ioOptimized) {
+      this.ioOptimized = ioOptimized;
+    }
+
 }
