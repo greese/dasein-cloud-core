@@ -19,9 +19,9 @@
 
 package org.dasein.cloud.admin;
 
-import java.io.Serializable;
-
 import org.dasein.cloud.compute.Platform;
+
+import java.io.Serializable;
 
 public class Prepayment implements Serializable {
     private static final long serialVersionUID = -3570970098813092306L;
@@ -34,15 +34,33 @@ public class Prepayment implements Serializable {
     private Platform platform;
     private long   periodStartTimestamp;
     private PrepaymentState prepaymentState;
-
+    private boolean  forVLAN;
     private String   providerPrepaymentId;
     private String   size;
     private String   software;
     private double   usageFee;
+    private double   hourlyFee;
     
     public Prepayment() { }
-    
+
     public Prepayment(String prepaymentId, String currencyCode, int period, long periodStart, String dataCenterId, Platform platform, String size, String software, int count, double fixedFee, double usageFee, PrepaymentState state) {
+      this.providerPrepaymentId = prepaymentId;
+      this.count = count;
+      this.currencyCode = currencyCode;
+      this.dataCenterId = dataCenterId;
+      periodStartTimestamp = periodStart;
+      this.fixedFee = fixedFee;
+      this.periodInDays = period;
+      this.platform = platform;
+      this.size = size;
+      this.software = software;
+      this.usageFee = usageFee;
+      prepaymentState = state;
+      this.forVLAN = false;
+      this.hourlyFee = 0.0;
+    }
+
+    public Prepayment(String prepaymentId, String currencyCode, int period, long periodStart, String dataCenterId, Platform platform, String size, String software, int count, double fixedFee, double usageFee, PrepaymentState state, boolean forVlan, double hourlyFee) {
         this.providerPrepaymentId = prepaymentId;
         this.count = count;
         this.currencyCode = currencyCode;
@@ -55,6 +73,8 @@ public class Prepayment implements Serializable {
         this.software = software;
         this.usageFee = usageFee;
         prepaymentState = state;
+        this.forVLAN = forVlan;
+        this.hourlyFee = hourlyFee;
     }
     
     public int getCount() {
@@ -104,6 +124,14 @@ public class Prepayment implements Serializable {
     public double getUsageFee() {
         return usageFee;
     }
+
+    public boolean isForVlan() {
+      return forVLAN;
+    }
+
+    public double getHourlyFee() {
+      return hourlyFee;
+    }
     
     public void setCount(int count) {
         this.count = count;
@@ -151,5 +179,13 @@ public class Prepayment implements Serializable {
     
     public void setUsageFee(double usageFee) {
         this.usageFee = usageFee;
+    }
+
+    public void setForVlan(boolean forVlan) {
+      this.forVLAN = forVlan;
+    }
+
+    public void setHourlyFee(double hrFee) {
+      this.hourlyFee = hrFee;
     }
 }

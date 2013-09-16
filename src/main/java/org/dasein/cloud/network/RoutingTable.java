@@ -42,6 +42,7 @@ public class RoutingTable implements Networkable, Taggable {
     private String  providerVlanId;
     private Route[] routes;
     private Map<String,String> tags;
+    private String[] providerSubnetIds;
     
     public RoutingTable() { }
 
@@ -91,6 +92,14 @@ public class RoutingTable implements Networkable, Taggable {
 
     public void setProviderVlanId(String providerVlanId) {
         this.providerVlanId = providerVlanId;
+    }
+
+    public String[] getProviderSubnetIds() {
+      return providerSubnetIds;
+    }
+
+    public void setProviderSubnetIds(String[] providerSubnetIds) {
+      this.providerSubnetIds = providerSubnetIds;
     }
 
     public Route[] getRoutes() {

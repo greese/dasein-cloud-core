@@ -23,6 +23,8 @@ import org.dasein.cloud.Taggable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,15 +40,16 @@ import java.util.Map;
  * @version 2013.05 added support for network firewalls and subnet associations (issue greese/dasein-cloud-aws/#8)
  */
 public class Firewall implements Networkable, Taggable {
-    private boolean            active;
-    private boolean            available;
-    private String             description;
-    private String             name;
-    private String             providerFirewallId;
-    private String             providerVlanId;
-    private String             regionId;
-    private String[]           subnetAssociations;
-    private Map<String,String> tags;
+    private boolean                 active;
+    private boolean                 available;
+    private String                  description;
+    private String                  name;
+    private String                  providerFirewallId;
+    private String                  providerVlanId;
+    private String                  regionId;
+    private String[]                subnetAssociations;
+    private Map<String,String>      tags;
+    private Collection<FirewallRule> rules;
 
     public Firewall() { }
 
@@ -173,18 +176,18 @@ public class Firewall implements Networkable, Taggable {
      * @return a long description of the firewall
      */
     @SuppressWarnings("unused")
-	public @Nullable String getDescription() {
-		return description;
-	}
+    public @Nullable String getDescription() {
+      return description;
+    }
 
-	/**
-	 * Defines the firewall description.
-	 * @param description a description of the firewall
-	 */
+    /**
+     * Defines the firewall description.
+     * @param description a description of the firewall
+     */
     @SuppressWarnings("unused")
-	public void setDescription(@Nonnull String description) {
-		this.description = description;
-	}
+    public void setDescription(@Nonnull String description) {
+      this.description = description;
+    }
 
     /**
      * Specifies the VLAN over which this firewall operates
@@ -203,6 +206,23 @@ public class Firewall implements Networkable, Taggable {
         return providerVlanId;
     }
 
+    /**
+     * Provides a Collection of FirewallRules
+     * @return a Collection of FirewallRule
+     */
+    @SuppressWarnings("unused")
+    public @Nonnull Collection<FirewallRule> getRules() {
+      return (rules == null ? new ArrayList<FirewallRule>() : rules);
+    }
+
+    /**
+     * Defines the firewall rules.
+     * @param ruleList a Collection of type FirewallRule
+     */
+    @SuppressWarnings("unused")
+    public @Nonnull void setRules( Collection<FirewallRule> ruleList ) {
+      rules = ruleList;
+    }
 
     @Override
     public @Nonnull Map<String, String> getTags() {
