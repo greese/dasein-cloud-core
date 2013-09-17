@@ -38,14 +38,25 @@ import java.util.Map;
  * @since 2013.01
  */
 public class ImageCreateOptions {
-    static public @Nonnull ImageCreateOptions getInstance(@Nonnull VirtualMachine fromVirtualMachine, @Nonnull String name, @Nonnull String description) {
+    static public @Nonnull ImageCreateOptions getInstance(@Nonnull VirtualMachine fromVirtualMachine, @Nonnull String name, @Nonnull String description, @Nullable Boolean reboot) {
         ImageCreateOptions options = new ImageCreateOptions();
 
         options.virtualMachineId = fromVirtualMachine.getProviderVirtualMachineId();
         options.platform = fromVirtualMachine.getPlatform();
         options.name = name;
         options.description = description;
+        options.reboot = reboot;
         return options;
+    }
+
+    static public @Nonnull ImageCreateOptions getInstance(@Nonnull VirtualMachine fromVirtualMachine, @Nonnull String name, @Nonnull String description) {
+      ImageCreateOptions options = new ImageCreateOptions();
+
+      options.virtualMachineId = fromVirtualMachine.getProviderVirtualMachineId();
+      options.platform = fromVirtualMachine.getPlatform();
+      options.name = name;
+      options.description = description;
+      return options;
     }
 
     static public @Nonnull ImageCreateOptions getInstance(@Nonnull MachineImageFormat bundleFormat, @Nonnull String bundleLocation, @Nonnull Platform platform, @Nonnull String name, @Nonnull String description) {
@@ -79,6 +90,7 @@ public class ImageCreateOptions {
     private Platform           platform;
     private String             software;
     private String             virtualMachineId;
+    private Boolean            reboot; // to reboot the machine or not while taking the image
 
     private ImageCreateOptions() { }
 
@@ -170,6 +182,13 @@ public class ImageCreateOptions {
      */
     public @Nullable String getVirtualMachineId() {
         return virtualMachineId;
+    }
+
+    /**
+     * @return the whether the instance should reboot while taking the image or not (true/false)
+     */
+    public @Nullable Boolean getReboot() {
+      return reboot;
     }
 
     /**
