@@ -19,20 +19,13 @@
 
 package org.dasein.cloud.compute;
 
-import java.util.Locale;
+import org.dasein.cloud.*;
+import org.dasein.cloud.identity.ServiceAction;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import org.dasein.cloud.AccessControlledService;
-import org.dasein.cloud.CloudException;
-import org.dasein.cloud.InternalException;
-import org.dasein.cloud.OperationNotSupportedException;
-import org.dasein.cloud.Requirement;
-import org.dasein.cloud.ResourceStatus;
-import org.dasein.cloud.Tag;
-import org.dasein.cloud.identity.ServiceAction;
+import java.util.Locale;
 
 /**
  * <p>
@@ -116,7 +109,16 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws CloudException an error occurred within the cloud provider
      */
     public void enableAnalytics(@Nonnull String vmId) throws InternalException, CloudException;
-    
+
+    /**
+     * Provides the password as stored by the cloud provider (sometimes encrypted)
+     * @param vmId the unique ID of the target server
+     * @return the current password of the virtual machine as stored by the provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException an error occurred within the cloud provider
+     */
+    public abstract @Nullable String getPassword(@Nonnull String vmId) throws InternalException, CloudException;
+
     /**
      * Provides all output from the console of the target server since the specified Unix time.
      * @param vmId the unique ID of the target server
