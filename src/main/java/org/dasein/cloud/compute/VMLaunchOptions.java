@@ -104,6 +104,7 @@ public class VMLaunchOptions {
     private String             vlanId;
     private VolumeAttachment[] volumes;
     private boolean            ioOptimized;
+    private boolean            ipForwardingAllowed;
 
     private VMLaunchOptions() { }
     
@@ -632,7 +633,7 @@ public class VMLaunchOptions {
         return this;
     }
 
-    public @Nonnull VMLaunchOptions withIoOptimized(@Nonnull boolean ioOptimized) {
+    public @Nonnull VMLaunchOptions withIoOptimized(boolean ioOptimized) {
       this.ioOptimized = ioOptimized;
       return this;
     }
@@ -646,4 +647,24 @@ public class VMLaunchOptions {
       this.privateIp = ipAddr;
       return this;
     }
+
+    /**
+     * Specifies if the VM can forward IP packets that don't match the IP address of the
+     * VM sending the packet. This allows VMs to act as NAT instances.
+     *
+     * @return if IP forwarding is enabled
+     */
+    public boolean isIpForwardingAllowed() {
+      return ipForwardingAllowed;
+    }
+
+    /**
+     * See {@link #isIpForwardingAllowed()}
+     * @return this
+     */
+    public @Nonnull VMLaunchOptions withIpForwardingAllowed( boolean ipForwardingAllowed ) {
+      this.ipForwardingAllowed = ipForwardingAllowed;
+      return this;
+    }
+
 }
