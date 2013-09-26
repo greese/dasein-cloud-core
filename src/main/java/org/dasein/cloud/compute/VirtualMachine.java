@@ -80,8 +80,9 @@ public class VirtualMachine implements Networkable, Taggable {
     private long                  terminationTimestamp;
     private Volume[]              volumes;
     private boolean               ioOptimized;
-    
-    public VirtualMachine() { }
+    private boolean               ipForwardingAllowed;
+
+  public VirtualMachine() { }
     
     public boolean equals(Object ob) {
         if( ob == null ) {
@@ -558,6 +559,14 @@ public class VirtualMachine implements Networkable, Taggable {
 
     public void setIoOptimized(boolean ioOptimized) {
       this.ioOptimized = ioOptimized;
+    }
+
+    public boolean isIpForwardingAllowed() {
+      return ipForwardingAllowed;
+    }
+
+    public void setIpForwardingAllowed( boolean ipForwardingAllowed ) {
+      this.ipForwardingAllowed = ipForwardingAllowed;
     }
 
 }
