@@ -50,10 +50,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Default implementation of virtual machine support for clouds with very little support.
@@ -106,6 +103,26 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
             throw new CloudException("No context was defined for this request");
         }
         return ctx;
+    }
+
+    @Override
+    public @Nonnull Iterable<VmState> getAlterVMStates(@Nullable VirtualMachine vm) {
+        return new ArrayList<VmState>(Arrays.asList(VmState.values()));
+    }
+
+    @Override
+    public @Nonnull Iterable<VmState> getCloneVMStates(@Nullable VirtualMachine vm) {
+        return new ArrayList<VmState>(Arrays.asList(VmState.values()));
+    }
+
+    @Override
+    public @Nonnull Iterable<VmState> getRebootVMStates(@Nullable VirtualMachine vm) {
+        return new ArrayList<VmState>(Arrays.asList(VmState.values()));
+    }
+
+    @Override
+    public @Nonnull Iterable<VmState> getTerminateVMStates(@Nullable VirtualMachine vm) {
+        return new ArrayList<VmState>(Arrays.asList(VmState.values()));
     }
 
     @Override

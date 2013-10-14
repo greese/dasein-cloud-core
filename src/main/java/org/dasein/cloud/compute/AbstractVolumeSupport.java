@@ -35,6 +35,7 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 
@@ -153,6 +154,16 @@ public abstract class AbstractVolumeSupport implements VolumeSupport {
     @Override
     public void detach(@Nonnull String volumeId, boolean force) throws InternalException, CloudException {
         throw new OperationNotSupportedException("Detaching volumes is not currently implemented for " + getProvider().getCloudName());
+    }
+
+    @Override
+    public @Nonnull Iterable<VmState> getAttachStates(@Nullable Volume volume) {
+        return new ArrayList<VmState>(Arrays.asList(VmState.values()));
+    }
+
+    @Override
+    public @Nonnull Iterable<VmState> getDetachStates(@Nullable Volume volume) {
+        return new ArrayList<VmState>(Arrays.asList(VmState.values()));
     }
 
     /**
