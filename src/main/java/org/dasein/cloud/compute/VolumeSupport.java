@@ -217,6 +217,20 @@ public interface VolumeSupport extends AccessControlledService {
     public @Nonnull Iterable<Volume> listVolumes(@Nullable VolumeFilterOptions options) throws InternalException, CloudException;
 
     /**
+     * Lists the states in which a Virtual Machine must be for the Volume to be attached
+     * @param volume the Volume object that's being interrogate
+     * @return the Virtual Machine states required for the volume to be attached
+     */
+    public abstract @Nonnull Iterable<VmState> getAttachStates(@Nullable Volume volume);
+
+    /**
+     * Lists the states in which a Virtual Machine must be for the Volume to be detached
+     * @param volume the Volume object that's being interrogate
+     * @return the Virtual Machine states required for the volume to be detached
+     */
+    public abstract @Nonnull Iterable<VmState> getDetachStates(@Nullable Volume volume);
+
+    /**
      * Identifies whether or not the current account has access to volumes in the current region.
      * @return true if the current account has access to volumes in the current region
      * @throws CloudException an error occurred with the cloud provider

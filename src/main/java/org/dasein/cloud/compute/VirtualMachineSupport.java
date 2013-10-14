@@ -111,6 +111,34 @@ public interface VirtualMachineSupport extends AccessControlledService {
     public void enableAnalytics(@Nonnull String vmId) throws InternalException, CloudException;
 
     /**
+     *
+     * @return list of required VmStates in which the Machine must be in order to be altered
+     * @param vm the Virtual Machine object that's being interrogated
+     */
+    public abstract @Nonnull Iterable<VmState> getAlterVMStates(@Nullable VirtualMachine vm);
+
+    /**
+     *
+     * @return list of required VmStates in which the Machine must be in order to be cloned
+     * @param vm the Virtual Machine object that's being interrogated
+     */
+    public abstract @Nonnull Iterable<VmState> getCloneVMStates(@Nullable VirtualMachine vm);
+
+    /**
+     *
+     * @return list of required VmStates in which the Machine must be in order to be rebooted
+     * @param vm the Virtual Machine object that's being interrogated
+     */
+    public abstract @Nonnull Iterable<VmState> getRebootVMStates(@Nullable VirtualMachine vm);
+
+    /**
+     *
+     * @return list of required VmStates in which the Machine must be in order to be terminated
+     * @param vm the Virtual Machine object that's being interrogated
+     */
+    public abstract @Nonnull Iterable<VmState> getTerminateVMStates(@Nullable VirtualMachine vm);
+
+    /**
      * Provides the password as stored by the cloud provider (sometimes encrypted)
      * @param vmId the unique ID of the target server
      * @return the current password of the virtual machine as stored by the provider
