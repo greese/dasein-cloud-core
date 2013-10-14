@@ -33,6 +33,7 @@ import org.dasein.cloud.identity.ServiceAction;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Locale;
 
@@ -161,6 +162,16 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
     @Override
     public @Nonnull String getProviderTermForCustomImage(@Nonnull Locale locale, @Nonnull ImageClass cls) {
         return getProviderTermForImage(locale, cls);
+    }
+
+    @Override
+    public @Nonnull Iterable<VmState> getCaptureImageStates(MachineImage img) {
+        return new ArrayList<VmState>(Arrays.asList(VmState.values()));
+    }
+
+    @Override
+    public @Nonnull Iterable<VmState> getBundleVirtualMachineStates(MachineImage img) {
+        return new ArrayList<VmState>(Arrays.asList(VmState.values()));
     }
 
     @Override

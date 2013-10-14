@@ -177,6 +177,20 @@ public interface MachineImageSupport extends AccessControlledService {
     public abstract @Nonnull String getProviderTermForCustomImage(@Nonnull Locale locale, @Nonnull ImageClass cls);
 
     /**
+     * Lists the required Virtual Machine state in order for the machineImage to be captured
+     * @param img the MachineImage object that's being interrogated
+     * @return the list of states in which a Virtual Machine must be in order to be captured
+     */
+    public abstract @Nonnull Iterable<VmState> getCaptureImageStates(@Nullable MachineImage img);
+
+    /**
+     * Lists the required Virtual Machine state in order for the VM to be bundled
+     * @param img the MachineImage object that's being interrogated
+     * @return the list of states in which a Virtual Machine must be in order to be bundled
+     */
+    public abstract @Nonnull Iterable<VmState> getBundleVirtualMachineStates(@Nullable MachineImage img);
+
+    /**
      * Indicates whether or not a public image library of {@link ImageClass#MACHINE} is supported.
      * @return true if there is a public library
      * @deprecated Use {@link #supportsPublicLibrary(ImageClass)}
