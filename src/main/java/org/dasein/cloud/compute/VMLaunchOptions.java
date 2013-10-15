@@ -102,6 +102,7 @@ public class VMLaunchOptions {
     private String             privateIp;
     private String             userData;
     private String             vlanId;
+    private String             subnetId;
     private VolumeAttachment[] volumes;
     private boolean            ioOptimized;
     private boolean            ipForwardingAllowed;
@@ -372,6 +373,22 @@ public class VMLaunchOptions {
         this.networkProductId = networkProductId;
         this.dataCenterId = dataCenterId;
         this.vlanId = vlanId;
+        return this;
+    }
+
+    /**
+     * Indicates specifically the subnet into which the virtual machine should be launched
+     * @param networkProductId the network product, if any, for the VLAN/subnet into which the VM is being launched
+     * @param dataCenterId the data center into which the VM is being launched
+     * @param vlanId optionally provide the vlanId containing the subnet if the cloud requires it
+     * @param subnetId the subnet into which the virtual machine is being launched
+     * @return this
+     */
+    public @Nonnull VMLaunchOptions inSubnet(@Nullable String networkProductId, @Nonnull String dataCenterId, @Nullable String vlanId, @Nonnull String subnetId) {
+        this.networkProductId = networkProductId;
+        this.dataCenterId = dataCenterId;
+        this.vlanId = vlanId;
+        this.subnetId = subnetId;
         return this;
     }
 
