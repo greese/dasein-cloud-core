@@ -259,7 +259,7 @@ public class ImageFilterOptions {
             }
         }
         if( regex != null ) {
-            boolean matches = (image.getName().matches(regex) || image.getDescription().matches(regex));
+            boolean matches = (image.getName().toLowerCase().matches(regex.toLowerCase()) || image.getDescription().toLowerCase().matches(regex.toLowerCase()));
 
             if (!matches) {
                 matches = image.getProviderMachineImageId().matches(regex);
@@ -267,9 +267,9 @@ public class ImageFilterOptions {
 
             if( !matches ) {
                 for( Map.Entry<String,String> tag : image.getTags().entrySet() ) {
-                    String value = tag.getValue();
+                    String value = tag.getValue().toLowerCase();
 
-                    if( value != null && value.matches(regex) ) {
+                    if( value != null && value.matches(regex.toLowerCase()) ) {
                         matches = true;
                         break;
                     }
