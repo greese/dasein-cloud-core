@@ -19,9 +19,6 @@
 
 package org.dasein.cloud.storage;
 
-import java.io.File;
-import java.util.Locale;
-
 import org.dasein.cloud.AccessControlledService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
@@ -31,6 +28,8 @@ import org.dasein.util.uom.storage.Storage;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.io.File;
+import java.util.Locale;
 
 /**
  * <p>
@@ -67,6 +66,8 @@ public interface BlobStoreSupport extends AccessControlledService {
     public Blob getBucket(@Nonnull String bucketName) throws InternalException, CloudException;
 
     public Blob getObject(@Nullable String bucketName, @Nonnull String objectName) throws InternalException, CloudException;
+
+    public @Nullable String getSignedObjectUrl(@Nonnull String publicBucketKey, @Nonnull String privateBucketKey, @Nonnull String bucket,@Nonnull String object, @Nonnull String expiresEpochInSeconds) throws InternalException, CloudException;
 
     public @Nullable Storage<org.dasein.util.uom.storage.Byte> getObjectSize(@Nullable String bucketName, @Nullable String objectName) throws InternalException, CloudException;
 
