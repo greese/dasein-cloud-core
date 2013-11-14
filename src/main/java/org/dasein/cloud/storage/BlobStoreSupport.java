@@ -67,7 +67,7 @@ public interface BlobStoreSupport extends AccessControlledService {
 
     public Blob getObject(@Nullable String bucketName, @Nonnull String objectName) throws InternalException, CloudException;
 
-    public @Nullable String getSignedObjectUrl(@Nonnull String publicBucketKey, @Nonnull String privateBucketKey, @Nonnull String bucket,@Nonnull String object, @Nonnull String expiresEpochInSeconds) throws InternalException, CloudException;
+    public @Nullable String getSignedObjectUrl(@Nonnull String bucket,@Nonnull String object, @Nonnull String expiresEpochInSeconds) throws InternalException, CloudException;
 
     public @Nullable Storage<org.dasein.util.uom.storage.Byte> getObjectSize(@Nullable String bucketName, @Nullable String objectName) throws InternalException, CloudException;
 
