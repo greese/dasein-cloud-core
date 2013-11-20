@@ -48,7 +48,19 @@ public interface AutoScalingSupport extends AccessControlledService {
     static public final ServiceAction PUT_SCALING_POLICY          = new ServiceAction("SCALING:PUT_SCALING_POLICY");
     static public final ServiceAction DELETE_SCALING_POLICY       = new ServiceAction("SCALING:DELETE_SCALING_POLICY");
     static public final ServiceAction LIST_SCALING_POLICIES       = new ServiceAction("SCALING:LIST_SCALING_POLICIES");
-    
+
+    /**
+     * Creates an auto scaling group with the provided options.
+     * @param options the auto scaling group options
+     * @return the provider's auto scaling group id
+     * @throws InternalException
+     * @throws CloudException
+     */
+    public String createAutoScalingGroup(@Nonnull AutoScalingGroupOptions options) throws InternalException, CloudException;
+
+    /**
+     * @deprecated use {@link #createAutoScalingGroup(AutoScalingGroupOptions)}
+     */
     public String createAutoScalingGroup(@Nonnull String name, @Nonnull String launchConfigurationId, @Nonnull Integer minServers, @Nonnull Integer maxServers, @Nullable Integer cooldown, @Nullable String[] loadBalancerIds, @Nullable Integer desiredCapacity, @Nullable Integer healthCheckGracePeriod, @Nullable String healthCheckType, @Nullable String vpcZones, @Nullable String ... dataCenterIds) throws InternalException, CloudException;
 
     public void updateAutoScalingGroup(String scalingGroupId, @Nullable String launchConfigurationId, @Nullable Integer minServers, @Nullable Integer maxServers, @Nullable Integer cooldown, @Nullable Integer desiredCapacity, @Nullable Integer healthCheckGracePeriod, @Nullable String healthCheckType, @Nullable String vpcZones, @Nullable String ... zoneIds) throws InternalException, CloudException;
@@ -88,5 +100,28 @@ public interface AutoScalingSupport extends AccessControlledService {
     public void setDesiredCapacity(String scalingGroupId, int capacity) throws CloudException, InternalException;
         
     public String setTrigger(String name, String scalingGroupId, String statistic, String unitOfMeasure, String metric, int periodInSeconds, double lowerThreshold, double upperThreshold, int lowerIncrement, boolean lowerIncrementAbsolute, int upperIncrement, boolean upperIncrementAbsolute, int breachDuration) throws InternalException, CloudException;
-        
+
+    /**
+     * Updates meta-data for multiple auto scaling groups with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     *
+     * @param providerScalingGroupIds the auto scaling groups to update
+     * @param tags  the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void updateTags(@Nonnull String[] providerScalingGroupIds, @Nonnull AutoScalingTag... tags) throws CloudException, InternalException;
+
+    /**
+     * Removes meta-data from multiple auto scaling groups. If tag values are set, their removal is dependent on underlying cloud
+     * provider behavior. They may be removed only if the tag value matches or they may be removed regardless of the
+     * value.
+     *
+     * @param providerScalingGroupIds the auto scaling groups to update
+     * @param tags  the meta-data tags to remove
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void removeTags(@Nonnull String[] providerScalingGroupIds, @Nonnull AutoScalingTag... tags) throws CloudException, InternalException;
+
 }

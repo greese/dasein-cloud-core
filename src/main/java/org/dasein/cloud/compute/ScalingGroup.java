@@ -46,6 +46,7 @@ public class ScalingGroup implements Serializable {
     private String                status;
     private Collection<String[]>  suspendedProcesses;
     private String[]              terminationPolicies;
+    private AutoScalingTag[]      tags;
     // comma seperated list
     private String                subnetIds;
 
@@ -218,6 +219,14 @@ public class ScalingGroup implements Serializable {
 
     public int getTargetCapacity() {
         return targetCapacity;
+    }
+
+    public AutoScalingTag[] getTags() {
+      return tags;
+    }
+
+    public void setTags(AutoScalingTag[] tags) {
+      this.tags = tags;
     }
 
     public String getSubnetIds() {
