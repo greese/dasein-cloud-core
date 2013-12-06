@@ -106,6 +106,7 @@ public class VMLaunchOptions {
     private VolumeAttachment[] volumes;
     private boolean            ioOptimized;
     private boolean            ipForwardingAllowed;
+    private String             roleId;
 
     private VMLaunchOptions() { }
     
@@ -682,6 +683,23 @@ public class VMLaunchOptions {
     public @Nonnull VMLaunchOptions withIpForwardingAllowed( boolean ipForwardingAllowed ) {
       this.ipForwardingAllowed = ipForwardingAllowed;
       return this;
+    }
+
+    /**
+     * Identifies a service account/role that the virtual machine will be able to use
+     * @param roleId the role Id from the provider
+     * @return this
+     */
+    public @Nonnull VMLaunchOptions withRoleId(@Nonnull String roleId) {
+      this.roleId = roleId;
+      return this;
+    }
+
+    /**
+     * @return the role id
+     */
+    public @Nullable String getRoleId() {
+      return roleId;
     }
 
 }
