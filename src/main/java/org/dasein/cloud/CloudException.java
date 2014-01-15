@@ -74,7 +74,7 @@ public class CloudException extends Exception {
      * @param msg the error message
      */
     public CloudException(@Nonnull CloudErrorType type, @Nonnegative int httpCode, @Nullable String providerCode, @Nonnull String msg) {
-        super(msg);
+        super(type + ": " + msg);
         this.errorType = type;
         this.httpCode = httpCode;
         this.providerCode = providerCode;
@@ -86,6 +86,10 @@ public class CloudException extends Exception {
     
     public @Nonnull CloudErrorType getErrorType() {
         return (errorType == null ? CloudErrorType.GENERAL : errorType);
+    }
+    
+    protected void setErrorType(CloudErrorType errorType ) {
+        this.errorType = errorType ;
     }
     
     public @Nonnull String getProviderCode() {
