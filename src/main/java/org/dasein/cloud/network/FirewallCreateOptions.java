@@ -27,6 +27,7 @@ import org.dasein.cloud.OperationNotSupportedException;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -70,6 +71,8 @@ public class FirewallCreateOptions {
 
     private String             description;
     private Map<String,String> metaData;
+    private List<String> sourceTags;
+    private List<String> targetTags;
     private String             name;
     private String             providerVlanId;
 
@@ -136,7 +139,47 @@ public class FirewallCreateOptions {
         return providerVlanId;
     }
 
-    /**
+	/**
+	 * It's GCE sourceTag, it isn't AWS tags.
+	 * AWS tags == GCE metadata
+	 *
+	 * @return sourceTags to assign to the firewall.
+	 */
+	public List<String> getSourceTags() {
+		return sourceTags;
+	}
+
+	/**
+	 * It's GCE targetTag, it isn't AWS tags.
+	 * AWS tags == GCE metadata
+	 *
+	 * @return targetTags to assign to the firewall
+	 */
+	public List<String> getTargetTags() {
+		return targetTags;
+	}
+
+	/**
+	 * It's GCE targetTag, it isn't AWS tags.
+	 * AWS tags == GCE metadata
+	 *
+	 * @param sourceTags tags to assign to the firewall
+	 */
+	public void setSourceTags(List<String> sourceTags) {
+		this.sourceTags = sourceTags;
+	}
+
+	/**
+	 * It's GCE targetTag, it isn't AWS tags.
+	 * AWS tags == GCE metadata
+	 *
+	 * @param targetTags tags to assign to the firewall
+	 */
+	public void setTargetTags(List<String> targetTags) {
+		this.targetTags = targetTags;
+	}
+
+	/**
      * Adds a VLAN onto the set of parameters with which the firewall will be created.
      * @param vlanId the unique ID of the VLAN with which the firewall will be associated on creation
      * @return this
