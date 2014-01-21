@@ -81,7 +81,7 @@ public class VMFilterOptions {
     private boolean            matchesAny;
     private String             regex;
     private Map<String,String> tags;
-	private String[]           labels;
+    private String[]           labels;
 
     private VMFilterOptions(boolean matchesAny) {
         this.matchesAny = matchesAny;
