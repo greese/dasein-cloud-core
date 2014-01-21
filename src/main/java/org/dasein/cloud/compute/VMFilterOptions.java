@@ -81,7 +81,7 @@ public class VMFilterOptions {
     private boolean            matchesAny;
     private String             regex;
     private Map<String,String> tags;
-	private String[]           labels;
+    private String[]           labels;
 
     private VMFilterOptions(boolean matchesAny) {
         this.matchesAny = matchesAny;
@@ -101,12 +101,12 @@ public class VMFilterOptions {
         return tags;
     }
 
-	/**
-	 * @return the labels, if any, on which filtering should be done (<code>null</code> means don't filter on labels)
-	 */
-	public @Nullable String[] getLabels() {
-		return labels;
-	}
+    /**
+     * @return the labels, if any, on which filtering should be done (<code>null</code> means don't filter on labels)
+     */
+    public @Nullable String[] getLabels() {
+        return labels;
+    }
 
     /**
      * Indicates whether there are any criteria associated with these options.
@@ -203,14 +203,14 @@ public class VMFilterOptions {
         return this;
     }
 
-	/**
-  	 * Builds filtering options that will force filtering on the specified labels.
-  	 * @param labels the meta-data tags on which to filter
-  	 * @return this
-  	 */
- 	public @Nonnull VMFilterOptions withLabels(@Nonnull String... labels) {
-    	this.labels = labels;
-    	return this;
- 	}
+    /**
+     * Builds filtering options that will force filtering on the specified labels.
+     * @param labels the meta-data tags on which to filter
+     * @return this
+     */
+    public @Nonnull VMFilterOptions withLabels(@Nonnull String... labels) {
+        this.labels = labels;
+        return this;
+    }
 
 }
