@@ -92,6 +92,7 @@ public class VMLaunchOptions {
     private String             kernelId;
     private String             machineImageId;
     private Map<String,Object> metaData;
+	private String[]           labels;
     private String             networkProductId;
     private NICConfig[]        networkInterfaces;
     private boolean            preventApiTermination;
@@ -192,6 +193,13 @@ public class VMLaunchOptions {
     public @Nonnull String[] getFirewallIds() {
         return (firewallIds == null ? new String[0] : firewallIds);
     }
+
+	/**
+	 * @return any labels to assign to this virtual machine
+	 */
+	public @Nonnull String[] getLabels() {
+		return (labels == null ? new String[0] : labels);
+	}
 
     /**
      * @return the friendly name of the virtual machine
@@ -343,6 +351,18 @@ public class VMLaunchOptions {
         }
         return this;
     }
+
+	/**
+	 * Specifies any labels to be added to the virtual machine at launch time
+	 * @param labels one or more labels to be added to new VM
+	 * @return this
+	 */
+	public @Nonnull VMLaunchOptions withLabels(String... labels) {
+		if (labels != null) {
+		   this.labels = Arrays.copyOf(labels, labels.length);
+		}
+		return this;
+	}
 
     /**
      * Indicates the data center into which the VM should be launched.
