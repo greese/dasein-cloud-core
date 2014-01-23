@@ -205,7 +205,7 @@ public class VMFilterOptions {
 
     /**
      * Builds filtering options that will force filtering on the specified labels.
-     * @param labels the meta-data tags on which to filter
+     * @param labels the labels on which to filter
      * @return this
      */
     public @Nonnull VMFilterOptions withLabels(@Nonnull String... labels) {
