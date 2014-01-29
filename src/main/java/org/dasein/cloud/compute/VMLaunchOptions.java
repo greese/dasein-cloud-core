@@ -52,6 +52,7 @@ public class VMLaunchOptions {
     static public class VolumeAttachment {
         public String deviceId;
         public String existingVolumeId;
+        public boolean rootVolume;
         public VolumeCreateOptions volumeToCreate;
     }
 
