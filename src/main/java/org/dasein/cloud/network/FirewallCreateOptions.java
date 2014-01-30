@@ -26,9 +26,7 @@ import org.dasein.cloud.OperationNotSupportedException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Encapsulates values to be used in the creation of {@link Firewall} instances either for virtual machine or
@@ -69,12 +67,14 @@ public class FirewallCreateOptions {
         return options;
     }
 
-    private String             description;
-    private Map<String,String> metaData;
-    private List<String> sourceTags;
-    private List<String> targetTags;
-    private String             name;
-    private String             providerVlanId;
+    private String                   description;
+    private Map<String,String>       metaData;
+    private Collection<String>       sourceLabels;
+    private Collection<String>       targetLabels;
+    private String                   name;
+    private String                   providerVlanId;
+    private Collection<FirewallRule> rules;
+
 
     private FirewallCreateOptions() { }
 
@@ -139,47 +139,65 @@ public class FirewallCreateOptions {
         return providerVlanId;
     }
 
-	/**
-	 * It's GCE sourceTag, it isn't AWS tags.
-	 * AWS tags == GCE metadata
-	 *
-	 * @return sourceTags to assign to the firewall.
-	 */
-	public List<String> getSourceTags() {
-		return sourceTags;
+    /**
+     * @return  source labels to assign to firewall
+     */
+	public Collection<String> getSourceLabels() {
+		return sourceLabels;
 	}
 
-	/**
-	 * It's GCE targetTag, it isn't AWS tags.
-	 * AWS tags == GCE metadata
-	 *
-	 * @return targetTags to assign to the firewall
-	 */
-	public List<String> getTargetTags() {
-		return targetTags;
+    /**
+     * @return  target labels to assign to firewall
+     */
+	public @Nonnull Collection<String> getTargetLabels() {
+		return targetLabels;
 	}
 
-	/**
-	 * It's GCE targetTag, it isn't AWS tags.
-	 * AWS tags == GCE metadata
-	 *
-	 * @param sourceTags tags to assign to the firewall
-	 */
-	public void setSourceTags(List<String> sourceTags) {
-		this.sourceTags = sourceTags;
-	}
+    /**
+     * Identifies which source labels will be attached to this firewall
+   	 * @param sourceLabelsToAdd source labels to assign to the firewall
+   	 */
+   	public @Nonnull FirewallCreateOptions withSourceLabels(@Nonnull Collection<String> sourceLabelsToAdd) {
+        if (sourceLabels == null) {
+            sourceLabels = new ArrayList<String>();
+        }
+   		sourceLabels = sourceLabelsToAdd;
+        return this;
+   	}
 
-	/**
-	 * It's GCE targetTag, it isn't AWS tags.
-	 * AWS tags == GCE metadata
-	 *
-	 * @param targetTags tags to assign to the firewall
-	 */
-	public void setTargetTags(List<String> targetTags) {
-		this.targetTags = targetTags;
-	}
+   	/**
+   	 * Identifies which target labels will be attached to this firewall
+   	 * @param targetLabelsToAdd labels to assign to the firewall
+   	 */
+   	public @Nonnull FirewallCreateOptions withTargetLabels(@Nonnull Collection<String> targetLabelsToAdd) {
+        if (targetLabels == null) {
+            targetLabels = new ArrayList<String>();
+        }
+   		targetLabels = targetLabelsToAdd;
+        return this;
+   	}
 
-	/**
+    /**
+     * Provides a Collection of default FirewallRules
+     * @return a Collection of FirewallRule
+     */
+    public @Nonnull Collection<FirewallRule> getRules() {
+        return rules == null ? Collections.<FirewallRule>emptyList() : rules;
+    }
+
+    /**
+     * Defines the default firewall rules.
+     * @param rulesToAdd a Collection of type FirewallRule
+     */
+    public @Nonnull FirewallCreateOptions withRules(@Nonnull Collection<FirewallRule> rulesToAdd) {
+        if (rules == null) {
+            rules = new ArrayList<FirewallRule>();
+        }
+        rules.addAll(rulesToAdd);
+        return this;
+    }
+
+    /**
      * Adds a VLAN onto the set of parameters with which the firewall will be created.
      * @param vlanId the unique ID of the VLAN with which the firewall will be associated on creation
      * @return this
