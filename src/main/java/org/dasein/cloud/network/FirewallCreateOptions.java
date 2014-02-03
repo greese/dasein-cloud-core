@@ -161,7 +161,7 @@ public class FirewallCreateOptions {
         if (sourceLabels == null) {
             sourceLabels = new ArrayList<String>();
         }
-        sourceLabels = sourceLabelsToAdd;
+        sourceLabels.addAll(sourceLabelsToAdd);
         return this;
    	}
 
@@ -173,7 +173,7 @@ public class FirewallCreateOptions {
         if (targetLabels == null) {
             targetLabels = new ArrayList<String>();
         }
-        targetLabels = targetLabelsToAdd;
+        targetLabels.addAll(targetLabelsToAdd);
         return this;
    	}
 
