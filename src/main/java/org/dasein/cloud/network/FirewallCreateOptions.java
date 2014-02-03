@@ -73,7 +73,7 @@ public class FirewallCreateOptions {
     private Collection<String>       targetLabels;
     private String                   name;
     private String                   providerVlanId;
-    private Collection<FirewallRule> rules;
+    private Collection<FirewallRule> authorizeRules;
 
 
     private FirewallCreateOptions() { }
@@ -142,16 +142,16 @@ public class FirewallCreateOptions {
     /**
      * @return  source labels to assign to firewall
      */
-	public Collection<String> getSourceLabels() {
-		return sourceLabels;
-	}
+    public Collection<String> getSourceLabels() {
+        return sourceLabels;
+    }
 
     /**
      * @return  target labels to assign to firewall
      */
-	public @Nonnull Collection<String> getTargetLabels() {
-		return targetLabels;
-	}
+    public @Nonnull Collection<String> getTargetLabels() {
+        return targetLabels;
+    }
 
     /**
      * Identifies which source labels will be attached to this firewall
@@ -161,7 +161,7 @@ public class FirewallCreateOptions {
         if (sourceLabels == null) {
             sourceLabels = new ArrayList<String>();
         }
-   		sourceLabels = sourceLabelsToAdd;
+        sourceLabels = sourceLabelsToAdd;
         return this;
    	}
 
@@ -173,27 +173,27 @@ public class FirewallCreateOptions {
         if (targetLabels == null) {
             targetLabels = new ArrayList<String>();
         }
-   		targetLabels = targetLabelsToAdd;
+        targetLabels = targetLabelsToAdd;
         return this;
    	}
 
     /**
-     * Provides a Collection of default FirewallRules
+     * Provides a Collection of initial authorize FirewallRules
      * @return a Collection of FirewallRule
      */
-    public @Nonnull Collection<FirewallRule> getRules() {
-        return rules == null ? Collections.<FirewallRule>emptyList() : rules;
+    public @Nonnull Collection<FirewallRule> getAuthorizeRules() {
+        return authorizeRules == null ? Collections.<FirewallRule>emptyList() : authorizeRules;
     }
 
     /**
-     * Defines the default firewall rules.
+     * Defines the initial authorize firewall rules.
      * @param rulesToAdd a Collection of type FirewallRule
      */
-    public @Nonnull FirewallCreateOptions withRules(@Nonnull Collection<FirewallRule> rulesToAdd) {
-        if (rules == null) {
-            rules = new ArrayList<FirewallRule>();
+    public @Nonnull FirewallCreateOptions withAuthorizeRules(@Nonnull Collection<FirewallRule> rulesToAdd) {
+        if (authorizeRules == null) {
+            authorizeRules = new ArrayList<FirewallRule>();
         }
-        rules.addAll(rulesToAdd);
+        authorizeRules.addAll(rulesToAdd);
         return this;
     }
 
