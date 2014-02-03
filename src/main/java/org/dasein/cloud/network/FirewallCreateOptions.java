@@ -38,6 +38,7 @@ import java.util.Map;
  * @author George Reese
  * @since 2013.04
  * @version 2013.04 initial version (issue greese/dasein-cloud-aws/#8)
+ * @version 2014.04 support for rules on create and constraints
  */
 public class FirewallCreateOptions {
     /**
@@ -106,11 +107,12 @@ public class FirewallCreateOptions {
         return options;
     }
 
-    private String                               description;
-    private ArrayList<FirewallRuleCreateOptions> initialRules;
-    private Map<String,String>                   metaData;
-    private String                               name;
-    private String                               providerVlanId;
+    private Map<FirewallConstraints.Constraint,Object> constraints;
+    private String                                     description;
+    private ArrayList<FirewallRuleCreateOptions>       initialRules;
+    private Map<String,String>                         metaData;
+    private String                                     name;
+    private String                                     providerVlanId;
 
     private FirewallCreateOptions() { }
 
@@ -145,6 +147,21 @@ public class FirewallCreateOptions {
             }
             return support.create(this);
         }
+    }
+
+    /**
+     * @param constraint the constraint being checked
+     * @return the value to which rules in this firewall will be constrained for the specified constraint
+     */
+    public @Nullable Object getConstraintValue(@Nonnull FirewallConstraints.Constraint constraint) {
+        return (constraints == null ? null : constraints.get(constraint));
+    }
+
+    /**
+     * @return a list of all constraints
+     */
+    public Iterable<FirewallConstraints.Constraint> getConstraints() {
+        return (constraints == null ? new ArrayList<FirewallConstraints.Constraint>() : constraints.keySet());
     }
 
     /**
@@ -213,6 +230,20 @@ public class FirewallCreateOptions {
      */
     public @Nonnull FirewallCreateOptions inVlanId(@Nonnull String vlanId) {
         providerVlanId = vlanId;
+        return this;
+    }
+
+    /**
+     * Adds a constraint value to a constrained firewall. All rules must match the specified value when added.
+     * @param constraint the rule field being constrained
+     * @param value the value to which it is constrained
+     * @return this
+     */
+    public @Nonnull FirewallCreateOptions withConstraint(@Nonnull FirewallConstraints.Constraint constraint, @Nonnull Object value) {
+        if( constraints == null ) {
+            constraints = new HashMap<FirewallConstraints.Constraint, Object>();
+        }
+        constraints.put(constraint, value);
         return this;
     }
 
