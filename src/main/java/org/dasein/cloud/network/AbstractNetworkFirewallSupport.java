@@ -29,9 +29,13 @@ import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.Tag;
 import org.dasein.cloud.identity.ServiceAction;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Bare-bones implementation of network firewall support with nothing enabled.
@@ -53,13 +57,43 @@ public abstract class AbstractNetworkFirewallSupport implements NetworkFirewallS
     }
 
     @Override
-    public @Nonnull String authorize(@Nonnull String firewallId, @Nonnull Direction direction, @Nonnull Permission permission, @Nonnull RuleTarget sourceEndpoint, @Nonnull Protocol protocol, @Nonnull RuleTarget destinationEndpoint, int beginPort, int endPort, int precedence) throws CloudException, InternalException {
+    public @Nonnull String authorize(@Nonnull String firewallId, @Nonnull Direction direction, @Nonnull Permission permission, @Nonnull RuleTarget sourceEndpoint, @Nonnull Protocol protocol, @Nonnull RuleTarget destinationEndpoint, int beginPort, int endPort, @Nonnegative int precedence) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Authorization of " + direction + "/" + permission + " in " + getProvider().getCloudName() + " is not currently implemented");
+    }
+
+    @Override
+    public @Nonnull String authorize(@Nonnull String firewallId, @Nonnull FirewallRuleCreateOptions options) throws CloudException, InternalException {
+        return authorize(firewallId, options.getDirection(), options.getPermission(), options.getSourceEndpoint(), options.getProtocol(), options.getDestinationEndpoint(), options.getPortRangeStart(), options.getPortRangeEnd(), options.getPrecedence());
     }
 
     @Override
     public @Nonnull String createFirewall(@Nonnull FirewallCreateOptions options) throws InternalException, CloudException {
         throw new OperationNotSupportedException("Network firewall creation is not currently implemented in " + getProvider().getCloudName());
+    }
+
+
+    @Override
+    public @Nullable Map<FirewallConstraints.Constraint, Object> getActiveConstraintsForFirewall(@Nonnull String firewallId) throws CloudException, InternalException {
+        HashMap<FirewallConstraints.Constraint, Object> active = new HashMap<FirewallConstraints.Constraint, Object>();
+        FirewallConstraints fields = getFirewallConstraintsForCloud();
+
+        if( fields.isOpen() ) {
+            return active;
+        }
+        Firewall firewall = getFirewall(firewallId);
+
+        if( firewall == null ) {
+            return null;
+        }
+        for( FirewallConstraints.Constraint c : fields.getConstraints() ) {
+            FirewallConstraints.Level l = fields.getConstraintLevel(c);
+
+            if( !l.equals(FirewallConstraints.Level.NOT_CONSTRAINED) ) {
+
+                active.put(c, c.getValue(getProvider(), firewallId));
+            }
+        }
+        return active;
     }
 
     protected @Nonnull ProviderContext getContext() throws CloudException {
@@ -79,6 +113,11 @@ public abstract class AbstractNetworkFirewallSupport implements NetworkFirewallS
             }
         }
         return null;
+    }
+
+    @Override
+    public @Nonnull FirewallConstraints getFirewallConstraintsForCloud() throws InternalException, CloudException {
+        return FirewallConstraints.getInstance();
     }
 
     protected @Nonnull CloudProvider getProvider() {

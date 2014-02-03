@@ -173,6 +173,7 @@ public abstract class AbstractFirewallSupport implements FirewallSupport {
     public @Nonnull FirewallConstraints getFirewallConstraintsForCloud() throws InternalException, CloudException {
         return FirewallConstraints.getInstance();
     }
+
     /**
      * @return the provider object associated with any calls through this support object
      */
