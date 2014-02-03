@@ -159,6 +159,16 @@ public interface FirewallSupport extends AccessControlledService {
      */
     public @Nonnull String authorize(@Nonnull String firewallId, @Nonnull Direction direction, @Nonnull Permission permission, @Nonnull RuleTarget sourceEndpoint, @Nonnull Protocol protocol, @Nonnull RuleTarget destinationEndpoint, int beginPort, int endPort, @Nonnegative int precedence) throws CloudException, InternalException;
 
+    /**
+     * Provides positive authorization matching the specified options for creating a new firewall rule.
+     * @param firewallId the unique, cloud-specific ID for the firewall being targeted by the new rule
+     * @param ruleOptions the create options that dictate how the rule is added
+     * @return the provider ID of the new rule
+     * @throws CloudException an error occurred with the cloud provider establishing the rule
+     * @throws InternalException an error occurred locally trying to establish the rule
+     * @throws OperationNotSupportedException the specified direction, target, or permission are not supported
+     */
+    public @Nonnull String authorize(@Nonnull String firewallId, @Nonnull FirewallRuleCreateOptions ruleOptions) throws CloudException, InternalException;
 
     /**
      * Creates a new firewall with the specified name.

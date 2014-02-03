@@ -42,6 +42,7 @@ import java.util.Collections;
  * @author George Reese
  * @since 2013.04
  * @version 2013.04
+ * @version 2014.04 added support for authorizing with rule create options
  */
 public abstract class AbstractFirewallSupport implements FirewallSupport {
     private CloudProvider provider;
@@ -93,6 +94,11 @@ public abstract class AbstractFirewallSupport implements FirewallSupport {
     @Override
     public @Nonnull String authorize(@Nonnull String firewallId, @Nonnull Direction direction, @Nonnull Permission permission, @Nonnull RuleTarget sourceEndpoint, @Nonnull Protocol protocol, @Nonnull RuleTarget destinationEndpoint, int beginPort, int endPort, @Nonnegative int precedence) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Authorization is not currently implemented for " + getProvider().getCloudName());
+    }
+
+    @Override
+    public @Nonnull String authorize(@Nonnull String firewallId, @Nonnull FirewallRuleCreateOptions options) throws CloudException, InternalException {
+        return authorize(firewallId, options.getDirection(), options.getPermission(), options.getSourceEndpoint(), options.getProtocol(), options.getDestinationEndpoint(), options.getPortRangeStart(), options.getPortRangeEnd(), options.getPrecedence());
     }
 
     @Override

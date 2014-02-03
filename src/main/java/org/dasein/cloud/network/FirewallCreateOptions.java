@@ -26,6 +26,8 @@ import org.dasein.cloud.OperationNotSupportedException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,6 +55,23 @@ public class FirewallCreateOptions {
     }
 
     /**
+     * Constructs options for creating a firewall having the specified name and description with a defined set of initial rules.
+     * @param name the name of the firewall to be created
+     * @param description a description of the purpose of the firewall to be created
+     * @param ruleOptions a list of one or more options to be created as the same time as the firewall
+     * @return options for creating the firewall based on the specified parameters
+     */
+    static public FirewallCreateOptions getInstance(@Nonnull String name, @Nonnull String description, @Nonnull FirewallRuleCreateOptions ... ruleOptions) {
+        FirewallCreateOptions options = new FirewallCreateOptions();
+
+        options.name = name;
+        options.description = description;
+        options.initialRules = new ArrayList<FirewallRuleCreateOptions>();
+        Collections.addAll(options.initialRules, ruleOptions);
+        return options;
+    }
+
+    /**
      * Constructs options for creating a firewall tied to a specific VLAN having the specified name and description.
      * @param inVlanId the VLAN ID with which the firewall is associated
      * @param name the name of the firewall to be created
@@ -68,10 +87,30 @@ public class FirewallCreateOptions {
         return options;
     }
 
-    private String             description;
-    private Map<String,String> metaData;
-    private String             name;
-    private String             providerVlanId;
+    /**
+     * Constructs options for creating a firewall in the specified VLAN having the specified name and description with a defined set of initial rules.
+     * @param inVlanId the VLAN ID with which the firewall is associated
+     * @param name the name of the firewall to be created
+     * @param description a description of the purpose of the firewall to be created
+     * @param ruleOptions a list of one or more options to be created as the same time as the firewall
+     * @return options for creating the firewall based on the specified parameters
+     */
+    static public FirewallCreateOptions getInstance(@Nonnull String inVlanId, @Nonnull String name, @Nonnull String description, @Nonnull FirewallRuleCreateOptions ... ruleOptions) {
+        FirewallCreateOptions options = new FirewallCreateOptions();
+
+        options.providerVlanId = inVlanId;
+        options.name = name;
+        options.description = description;
+        options.initialRules = new ArrayList<FirewallRuleCreateOptions>();
+        Collections.addAll(options.initialRules, ruleOptions);
+        return options;
+    }
+
+    private String                               description;
+    private ArrayList<FirewallRuleCreateOptions> initialRules;
+    private Map<String,String>                   metaData;
+    private String                               name;
+    private String                               providerVlanId;
 
     private FirewallCreateOptions() { }
 
@@ -116,6 +155,22 @@ public class FirewallCreateOptions {
     }
 
     /**
+     * @return the initial set of rules with which the firewall should be created
+     */
+    public @Nonnull FirewallRuleCreateOptions[] getInitialRules() {
+        FirewallRuleCreateOptions[] options = new FirewallRuleCreateOptions[initialRules == null ? 0 : initialRules.size()];
+
+        if( initialRules != null ) {
+            int idx = 0;
+
+            for( FirewallRuleCreateOptions option : initialRules ) {
+                options[idx++] = option;
+            }
+        }
+        return options;
+    }
+
+    /**
      * @return any extra meta-data to assign to the firewall
      */
     public @Nonnull Map<String,String> getMetaData() {
@@ -134,6 +189,21 @@ public class FirewallCreateOptions {
      */
     public @Nullable String getProviderVlanId() {
         return providerVlanId;
+    }
+
+    /**
+     * Adds one or more firewall rule creation options to the list of rules that should be created at the
+     * same time as the firewall. This method is additive, meaning it will add to any rule options set in
+     * prior calls.
+     * @param options one or more firewall rule options to be used in authorizing rules during the firewall create process
+     * @return this
+     */
+    public @Nonnull FirewallCreateOptions havingInitialRules(@Nonnull FirewallRuleCreateOptions ... options) {
+        if( initialRules == null ) {
+            initialRules = new ArrayList<FirewallRuleCreateOptions>();
+        }
+        Collections.addAll(initialRules, options);
+        return this;
     }
 
     /**
