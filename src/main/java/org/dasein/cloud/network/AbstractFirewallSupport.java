@@ -35,6 +35,8 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Basic implementation of firewall support methods to minimize the work in implementing support in a new cloud.
@@ -44,6 +46,7 @@ import java.util.Collections;
  * @version 2013.04
  * @version 2014.04 added support for authorizing with rule create options
  */
+@SuppressWarnings("UnusedDeclaration")
 public abstract class AbstractFirewallSupport implements FirewallSupport {
     private CloudProvider provider;
 
@@ -119,17 +122,6 @@ public abstract class AbstractFirewallSupport implements FirewallSupport {
         return create(FirewallCreateOptions.getInstance(providerVlanId, name, description));
     }
 
-    @Override
-    public @Nullable
-    Firewall getFirewall(@Nonnull String firewallId) throws InternalException, CloudException {
-        for( Firewall fw : list() ) {
-            if( firewallId.equals(fw.getProviderFirewallId()) ) {
-                return fw;
-            }
-        }
-        return null;
-    }
-
     /**
      * @return the current authentication context for any calls through this support object
      * @throws CloudException no context was set
@@ -143,6 +135,44 @@ public abstract class AbstractFirewallSupport implements FirewallSupport {
         return ctx;
     }
 
+    @Override
+    public @Nullable Map<FirewallConstraints.Constraint, Object> getActiveConstraintsForFirewall(@Nonnull String firewallId) throws CloudException, InternalException {
+        HashMap<FirewallConstraints.Constraint, Object> active = new HashMap<FirewallConstraints.Constraint, Object>();
+        FirewallConstraints fields = getFirewallConstraintsForCloud();
+
+        if( fields.isOpen() ) {
+            return active;
+        }
+        Firewall firewall = getFirewall(firewallId);
+
+        if( firewall == null ) {
+            return null;
+        }
+        for( FirewallConstraints.Constraint c : fields.getConstraints() ) {
+            FirewallConstraints.Level l = fields.getConstraintLevel(c);
+
+            if( !l.equals(FirewallConstraints.Level.NOT_CONSTRAINED) ) {
+
+                 active.put(c, c.getValue(getProvider(), firewallId));
+            }
+        }
+        return active;
+    }
+
+    @Override
+    public @Nullable  Firewall getFirewall(@Nonnull String firewallId) throws InternalException, CloudException {
+        for( Firewall fw : list() ) {
+            if( firewallId.equals(fw.getProviderFirewallId()) ) {
+                return fw;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public @Nonnull FirewallConstraints getFirewallConstraintsForCloud() throws InternalException, CloudException {
+        return FirewallConstraints.getInstance();
+    }
     /**
      * @return the provider object associated with any calls through this support object
      */
