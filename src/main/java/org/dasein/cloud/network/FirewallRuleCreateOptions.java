@@ -26,6 +26,7 @@ import org.dasein.cloud.OperationNotSupportedException;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * The options to be used in authorizing a new firewall rule.
@@ -39,15 +40,15 @@ public class FirewallRuleCreateOptions {
      * Constructs the options for creating a new firewall rule with a default precedence of 0.
      * @param direction the direction of the traffic governing the rule
      * @param permission ALLOW or DENY
-     * @param sourceEndpoint the source endpoint for this rule
+     * @param sourceEndpoint the source endpoint for this rule (null == global for owner firewall)
      * @param protocol the protocol (tcp/udp/icmp) supported by this rule
-     * @param destinationEndpoint the destination endpoint to specify for this rule
+     * @param destinationEndpoint the destination endpoint to specify for this rule (null == global for owner firewall)
      * @param portRangeStart the beginning of the port range to be allowed, inclusive
      * @param portRangeEnd the end of the port range to be allowed, inclusive
      * @return a set of options that can be used in the firewall rule authorization process
      */
 
-    static public FirewallRuleCreateOptions getInstance(@Nonnull Direction direction, @Nonnull Permission permission, @Nonnull RuleTarget sourceEndpoint, @Nonnull Protocol protocol, @Nonnull RuleTarget destinationEndpoint, int portRangeStart, int portRangeEnd)  {
+    static public FirewallRuleCreateOptions getInstance(@Nonnull Direction direction, @Nonnull Permission permission, @Nullable RuleTarget sourceEndpoint, @Nonnull Protocol protocol, @Nullable RuleTarget destinationEndpoint, int portRangeStart, int portRangeEnd)  {
         FirewallRuleCreateOptions options = new FirewallRuleCreateOptions();
 
         options.direction = direction;
@@ -65,15 +66,15 @@ public class FirewallRuleCreateOptions {
      * Constructs the options for creating a new firewall rule with a specific precedence.
      * @param direction the direction of the traffic governing the rule
      * @param permission ALLOW or DENY
-     * @param sourceEndpoint the source endpoint for this rule
+     * @param sourceEndpoint the source endpoint for this rule (null == global for owner firewall)
      * @param protocol the protocol (tcp/udp/icmp) supported by this rule
-     * @param destinationEndpoint the destination endpoint to specify for this rule
+     * @param destinationEndpoint the destination endpoint to specify for this rule  (null == global for owner firewall)
      * @param portRangeStart the beginning of the port range to be allowed, inclusive
      * @param portRangeEnd the end of the port range to be allowed, inclusive
      * @param precedence the precedence of this rule with respect to others
      * @return a set of options that can be used in the firewall rule authorization process
      */
-    static public FirewallRuleCreateOptions getInstance(@Nonnull Direction direction, @Nonnull Permission permission, @Nonnull RuleTarget sourceEndpoint, @Nonnull Protocol protocol, @Nonnull RuleTarget destinationEndpoint, int portRangeStart, int portRangeEnd, @Nonnegative int precedence)  {
+    static public FirewallRuleCreateOptions getInstance(@Nonnull Direction direction, @Nonnull Permission permission, @Nullable RuleTarget sourceEndpoint, @Nonnull Protocol protocol, @Nullable RuleTarget destinationEndpoint, int portRangeStart, int portRangeEnd, @Nonnegative int precedence)  {
         FirewallRuleCreateOptions options = new FirewallRuleCreateOptions();
 
         options.direction = direction;
@@ -115,13 +116,20 @@ public class FirewallRuleCreateOptions {
         if( support == null ) {
             throw new OperationNotSupportedException(provider.getCloudName() + " does not have support for firewalls");
         }
+        if( sourceEndpoint == null ) {
+            sourceEndpoint = RuleTarget.getGlobal(forFirewallId);
+        }
+        if( destinationEndpoint == null ) {
+            destinationEndpoint = RuleTarget.getGlobal(forFirewallId);
+        }
         return support.authorize(forFirewallId, this);
     }
 
     /**
+     * If null, this value represents a global rule target associated with the owning firewall
      * @return the destination rule target for traffic matching the rule to be created
      */
-    public @Nonnull RuleTarget getDestinationEndpoint() {
+    public @Nullable RuleTarget getDestinationEndpoint() {
         return destinationEndpoint;
     }
 
@@ -168,9 +176,10 @@ public class FirewallRuleCreateOptions {
     }
 
     /**
+     * If null, this value represents a global rule target associated with the owning firewall
      * @return the source of the traffic associated with the rule to be authorized
      */
-    public @Nonnull RuleTarget getSourceEndpoint() {
+    public @Nullable RuleTarget getSourceEndpoint() {
         return sourceEndpoint;
     }
 
