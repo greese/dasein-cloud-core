@@ -63,7 +63,16 @@ public abstract class AbstractNetworkFirewallSupport implements NetworkFirewallS
 
     @Override
     public @Nonnull String authorize(@Nonnull String firewallId, @Nonnull FirewallRuleCreateOptions options) throws CloudException, InternalException {
-        return authorize(firewallId, options.getDirection(), options.getPermission(), options.getSourceEndpoint(), options.getProtocol(), options.getDestinationEndpoint(), options.getPortRangeStart(), options.getPortRangeEnd(), options.getPrecedence());
+        RuleTarget source = options.getSourceEndpoint();
+        RuleTarget dest = options.getDestinationEndpoint();
+
+        if( source == null ) {
+            source = RuleTarget.getGlobal(firewallId);
+        }
+        if( dest == null ) {
+            dest = RuleTarget.getGlobal(firewallId);
+        }
+        return authorize(firewallId, options.getDirection(), options.getPermission(), source, options.getProtocol(), dest, options.getPortRangeStart(), options.getPortRangeEnd(), options.getPrecedence());
     }
 
     @Override
