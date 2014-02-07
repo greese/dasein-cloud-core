@@ -31,19 +31,86 @@ import javax.annotation.Nullable;
  * @version 2014.03 added model (issue #100)
  */
 public class DataCluster {
-    static public DataCluster getInstance(@Nonnull String providerRegionId, @Nullable String providerDataCenterId, @Nonnull String providerDataClusterId, @Nonnull DataClusterState currentState, @Nonnull String name, @Nonnull String description, @Nonnull String providerProductId, @Nonnull String databaseName, @Nonnegative int databasePort) {
+    /**
+     * Constructs a new data cluster object with the most basic data required in order to be considered a valid Dasein
+     * object. Make sure to honor the nullability of the specified parameters.
+     * @param providerRegionId the region in which the cluster operates
+     * @param providerDataCenterId the data center affinity of the cluster, if any
+     * @param providerDataClusterId the unique ID for the cluster
+     * @param currentState the current state of the cluster
+     * @param name the user-friendly name of the cluster
+     * @param description a user-friendly description of the cluster
+     * @param providerProductId the unique ID of the product with which the cluster is associated
+     * @param databaseName the name of the database supported by the cluster
+     * @param databasePort the port to which you can connect for SQL (or other protocol) queries
+     * @return a newly constructed data cluster
+     */
+    static public @Nonnull DataCluster getInstance(@Nonnull String providerRegionId, @Nullable String providerDataCenterId, @Nonnull String providerDataClusterId, @Nonnull DataClusterState currentState, @Nonnull String name, @Nonnull String description, @Nonnull String providerProductId, @Nonnull String databaseName, @Nonnegative int databasePort) {
         return getInstance(null, providerRegionId, providerDataCenterId, providerDataClusterId, currentState, name, description, providerProductId, "0", databaseName, databasePort, null, null, 1, false);
     }
 
-    static public DataCluster getInstance(@Nonnull String inVlanId, @Nonnull String providerRegionId, @Nullable String providerDataCenterId, @Nonnull String providerDataClusterId, @Nonnull DataClusterState currentState, @Nonnull String name, @Nonnull String description, @Nonnull String providerProductId, @Nonnull String databaseName, @Nonnegative int databasePort) {
+    /**
+     * Constructs a new data cluster object in a VLAN with the most basic data required in order to be considered a valid Dasein
+     * object. Make sure to honor the nullability of the specified parameters.
+     * @param inVlanId the unique ID of the VLAN in which the data cluster operates
+     * @param providerRegionId the region in which the cluster operates
+     * @param providerDataCenterId the data center affinity of the cluster, if any
+     * @param providerDataClusterId the unique ID for the cluster
+     * @param currentState the current state of the cluster
+     * @param name the user-friendly name of the cluster
+     * @param description a user-friendly description of the cluster
+     * @param providerProductId the unique ID of the product with which the cluster is associated
+     * @param databaseName the name of the database supported by the cluster
+     * @param databasePort the port to which you can connect for SQL (or other protocol) queries
+     * @return a newly constructed data cluster
+     */
+    static public @Nonnull DataCluster getInstance(@Nonnull String inVlanId, @Nonnull String providerRegionId, @Nullable String providerDataCenterId, @Nonnull String providerDataClusterId, @Nonnull DataClusterState currentState, @Nonnull String name, @Nonnull String description, @Nonnull String providerProductId, @Nonnull String databaseName, @Nonnegative int databasePort) {
         return getInstance(inVlanId, providerRegionId, providerDataCenterId, providerDataClusterId, currentState, name, description, providerProductId, "0", databaseName, databasePort, null, null, 1, false);
     }
 
-    static public DataCluster getInstance(@Nonnull String providerRegionId, @Nullable String providerDataCenterId, @Nonnull String providerDataClusterId, @Nonnull DataClusterState currentState, @Nonnull String name, @Nonnull String description, @Nonnull String providerProductId, @Nonnull String databaseName, @Nonnegative int databasePort, @Nullable String adminUser, @Nullable String adminPassword, @Nonnegative int nodeCount) {
+    /**
+     * Constructs a new data cluster object with extended attributes.
+     * Make sure to honor the nullability of the specified parameters.
+     * @param providerRegionId the region in which the cluster operates
+     * @param providerDataCenterId the data center affinity of the cluster, if any
+     * @param providerDataClusterId the unique ID for the cluster
+     * @param currentState the current state of the cluster
+     * @param name the user-friendly name of the cluster
+     * @param description a user-friendly description of the cluster
+     * @param providerProductId the unique ID of the product with which the cluster is associated
+     * @param clusterVersion the version of the cluster
+     * @param databaseName the name of the database supported by the cluster
+     * @param databasePort the port to which you can connect for SQL (or other protocol) queries
+     * @param adminUser the administrative user for the database
+     * @param adminPassword the password for the administrative user for the database
+     * @param nodeCount the number of nodes supporting the database
+     * @return a newly constructed data cluster
+     */
+    static public @Nonnull DataCluster getInstance(@Nonnull String providerRegionId, @Nullable String providerDataCenterId, @Nonnull String providerDataClusterId, @Nonnull DataClusterState currentState, @Nonnull String name, @Nonnull String description, @Nonnull String providerProductId, @Nonnull String databaseName, @Nonnegative int databasePort, @Nullable String adminUser, @Nullable String adminPassword, @Nonnegative int nodeCount) {
         return getInstance(null, providerRegionId, providerDataCenterId, providerDataClusterId, currentState, name, description, providerProductId, "0", databaseName, databasePort, adminUser, adminPassword, nodeCount, false);
     }
 
-    static public DataCluster getInstance(@Nullable String inVlanId, @Nonnull String providerRegionId, @Nullable String providerDataCenterId, @Nonnull String providerDataClusterId, @Nonnull DataClusterState currentState, @Nonnull String name, @Nonnull String description, @Nonnull String providerProductId, @Nonnull String clusterVersion, @Nonnull String databaseName, @Nonnegative int databasePort, @Nullable String adminUser, @Nullable String adminPassword, @Nonnegative int nodeCount, boolean encrypted) {
+    /**
+     * Constructs a new data cluster object in a specific VLAN with extended attributes.
+     * Make sure to honor the nullability of the specified parameters.
+     * @param inVlanId the unique ID of the VLAN in which the data cluster operates
+     * @param providerRegionId the region in which the cluster operates
+     * @param providerDataCenterId the data center affinity of the cluster, if any
+     * @param providerDataClusterId the unique ID for the cluster
+     * @param currentState the current state of the cluster
+     * @param name the user-friendly name of the cluster
+     * @param description a user-friendly description of the cluster
+     * @param providerProductId the unique ID of the product with which the cluster is associated
+     * @param clusterVersion the version of the cluster
+     * @param databaseName the name of the database supported by the cluster
+     * @param databasePort the port to which you can connect for SQL (or other protocol) queries
+     * @param adminUser the administrative user for the database
+     * @param adminPassword the password for the administrative user for the database
+     * @param nodeCount the number of nodes supporting the database
+     * @param encrypted indicates whether the database supported by the cluster is encrypted
+     * @return a newly constructed data cluster
+     */
+    static public @Nonnull DataCluster getInstance(@Nullable String inVlanId, @Nonnull String providerRegionId, @Nullable String providerDataCenterId, @Nonnull String providerDataClusterId, @Nonnull DataClusterState currentState, @Nonnull String name, @Nonnull String description, @Nonnull String providerProductId, @Nonnull String clusterVersion, @Nonnull String databaseName, @Nonnegative int databasePort, @Nullable String adminUser, @Nullable String adminPassword, @Nonnegative int nodeCount, boolean encrypted) {
         DataCluster c = new DataCluster();
 
         c.providerVlanId = inVlanId;
