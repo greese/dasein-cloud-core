@@ -43,6 +43,7 @@ import java.util.Map;
  * @author George Reese
  * @since 2013.04
  * @version 2013.04 (issue greese/dasein-cloud-aws/#8)
+ * @version 2014.03 (issue #99)
  */
 public abstract class AbstractNetworkFirewallSupport implements NetworkFirewallSupport {
     private CloudProvider provider;

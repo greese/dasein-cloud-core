@@ -46,8 +46,8 @@ import javax.annotation.Nullable;
  * @version 2013.02 Added support for rule precedence (issue #33)
  * @version 2013.02 Added specifying both source and destination as {@link RuleTarget} objects (issue #26)
  * @version 2013.02 Added meta-data for source endpoint types (issue #27)
- * @version 2014.04 Added support for creating firewall rules through a create options object
- * @version 2014.04 Added support for firewall constraints (issue #99)
+ * @version 2014.03 Added support for creating firewall rules through a create options object
+ * @version 2014.03 Added support for firewall constraints (issue #99)
  * @since unknown
  */
 public interface FirewallSupport extends AccessControlledService {

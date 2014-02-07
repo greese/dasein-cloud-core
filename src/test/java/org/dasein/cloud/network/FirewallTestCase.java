@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
  * Test cases for generic networking classes independent of cloud context.
  * <p>Created by George Reese: 2/3/14 11:38 AM</p>
  * @author George Reese
- * @version 2014.04 initial version
+ * @version 2014.03 initial version
  */
 public class FirewallTestCase {
     @Before

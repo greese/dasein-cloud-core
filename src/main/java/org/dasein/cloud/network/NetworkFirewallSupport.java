@@ -41,7 +41,7 @@ import java.util.Map;
  * @author George Reese
  * @since 2013.04
  * @version 2013.04 initial version (issue greese/dasein-cloud-aws/#8)
- * @version 2014.04 added support for constraints (issue #99)
+ * @version 2014.03 added support for constraints (issue #99)
  */
 public interface NetworkFirewallSupport extends AccessControlledService {
     static public final ServiceAction ANY                  = new ServiceAction("NFW:ANY");

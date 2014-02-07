@@ -32,8 +32,8 @@ import javax.annotation.Nullable;
  * The options to be used in authorizing a new firewall rule.
  * <p>Created by George Reese: 2/3/14 10:48 AM</p>
  * @author George Reese
- * @since 2014.04
- * @version 2014.04 initial version
+ * @since 2014.03
+ * @version 2014.03 initial version
  */
 public class FirewallRuleCreateOptions {
     /**

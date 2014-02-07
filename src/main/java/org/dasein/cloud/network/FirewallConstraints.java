@@ -36,7 +36,7 @@ import java.util.Iterator;
  * the firewall, it will cause an error.
  * <p>Created by George Reese: 2/3/14 1:56 PM</p>
  * @author George Reese
- * @version 2014.04 initial version (issue #99)
+ * @version 2014.03 initial version (issue #99)
  */
 public class FirewallConstraints {
     /**

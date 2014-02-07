@@ -44,7 +44,7 @@ import java.util.Map;
  * @author George Reese
  * @since 2013.04
  * @version 2013.04
- * @version 2014.04 added support for authorizing with rule create options
+ * @version 2014.03 added support for authorizing with rule create options
  */
 @SuppressWarnings("UnusedDeclaration")
 public abstract class AbstractFirewallSupport implements FirewallSupport {
