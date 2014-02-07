@@ -20,6 +20,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -40,6 +41,15 @@ public class DataWarehouseTestCase {
     static private final String           PRODUCT_ID    = "productId";
     static private final String           REGION_ID     = "regionId";
 
+    private String adminPassword;
+    private String adminUser;
+    private String dataCenterId;
+    private boolean encrypted;
+    private int    nodeCount;
+    private ClusterQueryProtocol[] protocols;
+    private String version;
+    private String vlanId;
+
     @Before
     public void setUp() {
         dataCenterId = null;
@@ -49,20 +59,13 @@ public class DataWarehouseTestCase {
         nodeCount = 1;
         version = "0";
         encrypted = false;
+        protocols = new ClusterQueryProtocol[0];
     }
 
     @After
     public void tearDown() {
 
     }
-
-    private String adminPassword;
-    private String adminUser;
-    private String dataCenterId;
-    private boolean encrypted;
-    private int    nodeCount;
-    private String version;
-    private String vlanId;
 
     private void checkDataClusterContent(DataCluster cluster) {
         assertNotNull("The cluster returned from the constructor was illegally a null value", cluster);
@@ -79,11 +82,23 @@ public class DataWarehouseTestCase {
         assertEquals("The admin password does not match the test value", adminPassword, cluster.getAdminPassword());
         assertEquals("The node count does not match the test value", nodeCount, cluster.getNodeCount());
         assertEquals("The version does not match the test value", version, cluster.getClusterVersion());
+
+        ClusterQueryProtocol[] p = cluster.getProtocols();
+
+        assertNotNull("The protocols supported by a data cluster cannot be null", p);
+        assertEquals("The number of protocols must match", protocols.length, p.length);
+        assertArrayEquals("The protocols must match", protocols, p);
     }
 
     @Test
     public void verifyDataClusterSimpleConstructor() {
         checkDataClusterContent(DataCluster.getInstance(REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, DB_NAME, PORT));
+    }
+
+    @Test
+    public void verifyDataClusterSimpleConstructorWithProtocols() {
+        protocols = new ClusterQueryProtocol[] { ClusterQueryProtocol.JDBC };
+        checkDataClusterContent(DataCluster.getInstance(REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, DB_NAME, PORT, protocols));
     }
 
     @Test
@@ -109,7 +124,7 @@ public class DataWarehouseTestCase {
     }
 
     @Test
-    public void verifyDataClusterUserVLANConstructor() {
+    public void verifyDataClusterFullConstructor() {
         dataCenterId = "dataCenterId";
         adminUser = "admin";
         adminPassword = "password";
@@ -118,6 +133,32 @@ public class DataWarehouseTestCase {
         version = "1.0";
         encrypted = true;
         checkDataClusterContent(DataCluster.getInstance(vlanId, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, version, DB_NAME, PORT, adminUser, adminPassword, nodeCount, encrypted));
+    }
+
+    @Test
+    public void verifyDataClusterFullConstructorWithOneProtocol() {
+        dataCenterId = "dataCenterId";
+        adminUser = "admin";
+        adminPassword = "password";
+        vlanId = "vlanId";
+        nodeCount = 2;
+        version = "1.0";
+        encrypted = true;
+        protocols = new ClusterQueryProtocol[] { ClusterQueryProtocol.JDBC };
+        checkDataClusterContent(DataCluster.getInstance(vlanId, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, version, DB_NAME, PORT, adminUser, adminPassword, nodeCount, encrypted, protocols));
+    }
+
+    @Test
+    public void verifyDataClusterFullConstructorWithTwoProtocols() {
+        dataCenterId = "dataCenterId";
+        adminUser = "admin";
+        adminPassword = "password";
+        vlanId = "vlanId";
+        nodeCount = 2;
+        version = "1.0";
+        encrypted = true;
+        protocols = new ClusterQueryProtocol[] { ClusterQueryProtocol.JDBC, ClusterQueryProtocol.ODBC };
+        checkDataClusterContent(DataCluster.getInstance(vlanId, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, version, DB_NAME, PORT, adminUser, adminPassword, nodeCount, encrypted, protocols));
     }
 
     @Test
@@ -182,4 +223,23 @@ public class DataWarehouseTestCase {
         c.inVlan(vlanId);
         checkDataClusterContent(c);
     }
+
+    @Test
+    public void verifyDataClusterAlterProtocolsWithNone() {
+        DataCluster c = DataCluster.getInstance(REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, DB_NAME, PORT);
+
+        protocols = new ClusterQueryProtocol[] { ClusterQueryProtocol.ODBC };
+        c.supportingProtocols(protocols);
+        checkDataClusterContent(c);
+    }
+
+    @Test
+    public void verifyDataClusterAlterProtocolsWithOne() {
+        DataCluster c = DataCluster.getInstance(REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, DB_NAME, PORT, ClusterQueryProtocol.JDBC);
+
+        c.supportingProtocols(ClusterQueryProtocol.ODBC);
+        protocols = new ClusterQueryProtocol[] { ClusterQueryProtocol.JDBC, ClusterQueryProtocol.ODBC };
+        checkDataClusterContent(c);
+    }
+
 }

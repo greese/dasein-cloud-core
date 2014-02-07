@@ -21,6 +21,7 @@ import org.dasein.cloud.network.VLAN;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Arrays;
 
 /**
  * Models a data warehousing cluster that consists of a number of database nodes and a shared
@@ -43,10 +44,11 @@ public class DataCluster {
      * @param providerProductId the unique ID of the product with which the cluster is associated
      * @param databaseName the name of the database supported by the cluster
      * @param databasePort the port to which you can connect for SQL (or other protocol) queries
+     * @param protocols the supported query protocols
      * @return a newly constructed data cluster
      */
-    static public @Nonnull DataCluster getInstance(@Nonnull String providerRegionId, @Nullable String providerDataCenterId, @Nonnull String providerDataClusterId, @Nonnull DataClusterState currentState, @Nonnull String name, @Nonnull String description, @Nonnull String providerProductId, @Nonnull String databaseName, @Nonnegative int databasePort) {
-        return getInstance(null, providerRegionId, providerDataCenterId, providerDataClusterId, currentState, name, description, providerProductId, "0", databaseName, databasePort, null, null, 1, false);
+    static public @Nonnull DataCluster getInstance(@Nonnull String providerRegionId, @Nullable String providerDataCenterId, @Nonnull String providerDataClusterId, @Nonnull DataClusterState currentState, @Nonnull String name, @Nonnull String description, @Nonnull String providerProductId, @Nonnull String databaseName, @Nonnegative int databasePort, @Nullable ClusterQueryProtocol ... protocols) {
+        return getInstance(null, providerRegionId, providerDataCenterId, providerDataClusterId, currentState, name, description, providerProductId, "0", databaseName, databasePort, null, null, 1, false, protocols);
     }
 
     /**
@@ -62,10 +64,11 @@ public class DataCluster {
      * @param providerProductId the unique ID of the product with which the cluster is associated
      * @param databaseName the name of the database supported by the cluster
      * @param databasePort the port to which you can connect for SQL (or other protocol) queries
+     * @param protocols the supported query protocols
      * @return a newly constructed data cluster
      */
-    static public @Nonnull DataCluster getInstance(@Nonnull String inVlanId, @Nonnull String providerRegionId, @Nullable String providerDataCenterId, @Nonnull String providerDataClusterId, @Nonnull DataClusterState currentState, @Nonnull String name, @Nonnull String description, @Nonnull String providerProductId, @Nonnull String databaseName, @Nonnegative int databasePort) {
-        return getInstance(inVlanId, providerRegionId, providerDataCenterId, providerDataClusterId, currentState, name, description, providerProductId, "0", databaseName, databasePort, null, null, 1, false);
+    static public @Nonnull DataCluster getInstance(@Nonnull String inVlanId, @Nonnull String providerRegionId, @Nullable String providerDataCenterId, @Nonnull String providerDataClusterId, @Nonnull DataClusterState currentState, @Nonnull String name, @Nonnull String description, @Nonnull String providerProductId, @Nonnull String databaseName, @Nonnegative int databasePort, @Nullable ClusterQueryProtocol ... protocols) {
+        return getInstance(inVlanId, providerRegionId, providerDataCenterId, providerDataClusterId, currentState, name, description, providerProductId, "0", databaseName, databasePort, null, null, 1, false, protocols);
     }
 
     /**
@@ -84,10 +87,11 @@ public class DataCluster {
      * @param adminUser the administrative user for the database
      * @param adminPassword the password for the administrative user for the database
      * @param nodeCount the number of nodes supporting the database
+     * @param protocols the supported query protocols
      * @return a newly constructed data cluster
      */
-    static public @Nonnull DataCluster getInstance(@Nonnull String providerRegionId, @Nullable String providerDataCenterId, @Nonnull String providerDataClusterId, @Nonnull DataClusterState currentState, @Nonnull String name, @Nonnull String description, @Nonnull String providerProductId, @Nonnull String databaseName, @Nonnegative int databasePort, @Nullable String adminUser, @Nullable String adminPassword, @Nonnegative int nodeCount) {
-        return getInstance(null, providerRegionId, providerDataCenterId, providerDataClusterId, currentState, name, description, providerProductId, "0", databaseName, databasePort, adminUser, adminPassword, nodeCount, false);
+    static public @Nonnull DataCluster getInstance(@Nonnull String providerRegionId, @Nullable String providerDataCenterId, @Nonnull String providerDataClusterId, @Nonnull DataClusterState currentState, @Nonnull String name, @Nonnull String description, @Nonnull String providerProductId, @Nonnull String databaseName, @Nonnegative int databasePort, @Nullable String adminUser, @Nullable String adminPassword, @Nonnegative int nodeCount, @Nullable ClusterQueryProtocol ... protocols) {
+        return getInstance(null, providerRegionId, providerDataCenterId, providerDataClusterId, currentState, name, description, providerProductId, "0", databaseName, databasePort, adminUser, adminPassword, nodeCount, false, protocols);
     }
 
     /**
@@ -108,9 +112,10 @@ public class DataCluster {
      * @param adminPassword the password for the administrative user for the database
      * @param nodeCount the number of nodes supporting the database
      * @param encrypted indicates whether the database supported by the cluster is encrypted
+     * @param protocols the supported query protocols
      * @return a newly constructed data cluster
      */
-    static public @Nonnull DataCluster getInstance(@Nullable String inVlanId, @Nonnull String providerRegionId, @Nullable String providerDataCenterId, @Nonnull String providerDataClusterId, @Nonnull DataClusterState currentState, @Nonnull String name, @Nonnull String description, @Nonnull String providerProductId, @Nonnull String clusterVersion, @Nonnull String databaseName, @Nonnegative int databasePort, @Nullable String adminUser, @Nullable String adminPassword, @Nonnegative int nodeCount, boolean encrypted) {
+    static public @Nonnull DataCluster getInstance(@Nullable String inVlanId, @Nonnull String providerRegionId, @Nullable String providerDataCenterId, @Nonnull String providerDataClusterId, @Nonnull DataClusterState currentState, @Nonnull String name, @Nonnull String description, @Nonnull String providerProductId, @Nonnull String clusterVersion, @Nonnull String databaseName, @Nonnegative int databasePort, @Nullable String adminUser, @Nullable String adminPassword, @Nonnegative int nodeCount, boolean encrypted, ClusterQueryProtocol ... protocols) {
         DataCluster c = new DataCluster();
 
         c.providerVlanId = inVlanId;
@@ -128,24 +133,26 @@ public class DataCluster {
         c.clusterVersion = clusterVersion;
         c.adminUserName = adminUser;
         c.adminPassword = adminPassword;
+        c.protocols = protocols;
         return c;
     }
 
-    private String           adminPassword;
-    private String           adminUserName;
-    private String           clusterVersion;
-    private DataClusterState currentState;
-    private String           databaseName;
-    private int              databasePort;
-    private String           description;
-    private boolean          encrypted;
-    private String           providerDataCenterId;
-    private String           providerDataClusterId;
-    private String           providerProductId;
-    private String           providerRegionId;
-    private String           providerVlanId;
-    private String           name;
-    private int              nodeCount;
+    private String                 adminPassword;
+    private String                 adminUserName;
+    private String                 clusterVersion;
+    private DataClusterState       currentState;
+    private String                 databaseName;
+    private int                    databasePort;
+    private String                 description;
+    private boolean                encrypted;
+    private ClusterQueryProtocol[] protocols;
+    private String                 providerDataCenterId;
+    private String                 providerDataClusterId;
+    private String                 providerProductId;
+    private String                 providerRegionId;
+    private String                 providerVlanId;
+    private String                 name;
+    private int                    nodeCount;
 
     private DataCluster() { }
 
@@ -225,6 +232,20 @@ public class DataCluster {
      */
     public @Nonnull String getDescription() {
         return description;
+    }
+
+    /**
+     * @return a list of all protocols that may be used to query this database on the {@link #getDatabasePort()}.
+     */
+    public @Nonnull ClusterQueryProtocol[] getProtocols() {
+        ClusterQueryProtocol[] p = new ClusterQueryProtocol[protocols == null ? 0 : protocols.length];
+
+        if( protocols != null && protocols.length > 0 ) {
+            for( int i = 0; i< protocols.length; i++ ) {
+                p[i] = protocols[i];
+            }
+        }
+        return p;
     }
 
     /**
@@ -318,6 +339,33 @@ public class DataCluster {
      */
     public boolean isEncrypted() {
         return encrypted;
+    }
+
+    /**
+     * Adds additional protocols to the list of protocols associated with this data cluster.
+     * @param protocols the new protocols (in addition to the current ones) to be associated with this cluster
+     * @return this
+     */
+    public @Nonnull DataCluster supportingProtocols(@Nonnull ClusterQueryProtocol ... protocols) {
+        if( protocols.length > 0 ) {
+            ClusterQueryProtocol[] p;
+            int idx = 0;
+
+            if( this.protocols == null ) {
+                p = new ClusterQueryProtocol[protocols.length];
+            }
+            else {
+                p = new ClusterQueryProtocol[this.protocols.length + protocols.length];
+                for( ; idx<this.protocols.length; idx++ ) {
+                    p[idx] = this.protocols[idx];
+                }
+            }
+            for( int i=0; idx< p.length; idx++, i++ ) {
+                p[idx] = protocols[i];
+            }
+            this.protocols = p;
+        }
+        return this;
     }
 
     @Override

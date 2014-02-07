@@ -16,25 +16,21 @@
 
 package org.dasein.cloud.platform.bigdata;
 
-import org.dasein.cloud.CloudException;
-import org.dasein.cloud.InternalException;
-import org.dasein.cloud.Requirement;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
- * Implements support for bigdata/data warehousing services like Amazon's Redshift.
- * <p>Created by George Reese: 2/7/14 12:06 PM</p>
+ * Protocols that may be used to communicate with and query the database in the data cluster.
+ * <p>Created by George Reese: 2/7/14 4:06 PM</p>
  * @author George Reese
  * @since 2014.03
  * @version 2014.03 initial version (issue #100)
  */
-public interface DataWarehouseSupport {
-    public @Nullable DataCluster getCluster(@Nonnull String clusterId) throws CloudException, InternalException;
-
-    public @Nonnull Requirement isDataCenterConstrained() throws CloudException, InternalException;
-
-    public @Nonnull Iterable<DataCluster> listClusters() throws CloudException, InternalException;
-
+public enum ClusterQueryProtocol {
+    /**
+     * Java/JDBC
+     */
+    JDBC,
+    /**
+     * ODBC
+     */
+    ODBC
 }
