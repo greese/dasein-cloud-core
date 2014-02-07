@@ -32,7 +32,7 @@ import javax.annotation.Nullable;
  */
 public class DataCluster {
     static public DataCluster getInstance(@Nonnull String providerRegionId, @Nullable String providerDataCenterId, @Nonnull String providerDataClusterId, @Nonnull DataClusterState currentState, @Nonnull String name, @Nonnull String description, @Nonnull String providerProductId, @Nonnull String databaseName, @Nonnegative int databasePort) {
-        return getInstance(providerRegionId, providerDataCenterId, providerDataClusterId, currentState, name, description, providerProductId, databaseName, databasePort, null, null, 1);
+        return getInstance(null, providerRegionId, providerDataCenterId, providerDataClusterId, currentState, name, description, providerProductId, "0", databaseName, databasePort, null, null, 1, false);
     }
 
     static public DataCluster getInstance(@Nonnull String inVlanId, @Nonnull String providerRegionId, @Nullable String providerDataCenterId, @Nonnull String providerDataClusterId, @Nonnull DataClusterState currentState, @Nonnull String name, @Nonnull String description, @Nonnull String providerProductId, @Nonnull String databaseName, @Nonnegative int databasePort) {
@@ -40,7 +40,7 @@ public class DataCluster {
     }
 
     static public DataCluster getInstance(@Nonnull String providerRegionId, @Nullable String providerDataCenterId, @Nonnull String providerDataClusterId, @Nonnull DataClusterState currentState, @Nonnull String name, @Nonnull String description, @Nonnull String providerProductId, @Nonnull String databaseName, @Nonnegative int databasePort, @Nullable String adminUser, @Nullable String adminPassword, @Nonnegative int nodeCount) {
-        return getInstance(null, providerRegionId, providerDataCenterId, providerDataClusterId, currentState, name, description, providerProductId, "0", databaseName, databasePort, null, null, 1, false);
+        return getInstance(null, providerRegionId, providerDataCenterId, providerDataClusterId, currentState, name, description, providerProductId, "0", databaseName, databasePort, adminUser, adminPassword, nodeCount, false);
     }
 
     static public DataCluster getInstance(@Nullable String inVlanId, @Nonnull String providerRegionId, @Nullable String providerDataCenterId, @Nonnull String providerDataClusterId, @Nonnull DataClusterState currentState, @Nonnull String name, @Nonnull String description, @Nonnull String providerProductId, @Nonnull String clusterVersion, @Nonnull String databaseName, @Nonnegative int databasePort, @Nullable String adminUser, @Nullable String adminPassword, @Nonnegative int nodeCount, boolean encrypted) {
@@ -126,6 +126,20 @@ public class DataCluster {
     }
 
     /**
+     * @return the data center in which the cluster operates
+     */
+    public @Nullable String getProviderDataCenterId() {
+        return providerDataCenterId;
+    }
+
+    /**
+     * @return the unique identifier for identifying this data cluster with the cloud provider
+     */
+    public @Nonnull String getProviderDataClusterId() {
+        return providerDataClusterId;
+    }
+
+    /**
      * @return the database name to use in accessing the database behind this cluster
      */
     public @Nonnull String getDatabaseName() {
@@ -147,17 +161,17 @@ public class DataCluster {
     }
 
     /**
-     * @return the unique identifier for identifying this data cluster with the cloud provider
-     */
-    public @Nonnull String getProviderDataClusterId() {
-        return providerDataClusterId;
-    }
-
-    /**
      * @return the unique identifier of the product associated with the cluster
      */
     public @Nonnull String getProviderProductId() {
         return providerProductId;
+    }
+
+    /**
+     * @return the region in which the cluster operates
+     */
+    public @Nonnull String getProviderRegionId() {
+        return providerRegionId;
     }
 
     /**
