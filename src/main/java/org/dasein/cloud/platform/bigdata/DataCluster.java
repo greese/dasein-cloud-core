@@ -1,17 +1,20 @@
-/*
- * Copyright (C) 2014 enStratus Networks Inc.
+/**
+ * Copyright (C) 2014 Dell, Inc.
+ * See annotations for authorship information
  *
+ * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ * ====================================================================
  */
 
 package org.dasein.cloud.platform.bigdata;
@@ -48,7 +51,7 @@ public class DataCluster {
      * @return a newly constructed data cluster
      */
     static public @Nonnull DataCluster getInstance(@Nonnull String providerRegionId, @Nullable String providerDataCenterId, @Nonnull String providerDataClusterId, @Nonnull DataClusterState currentState, @Nonnull String name, @Nonnull String description, @Nonnull String providerProductId, @Nonnull String databaseName, @Nonnegative int databasePort, @Nullable ClusterQueryProtocol ... protocols) {
-        return getInstance(null, providerRegionId, providerDataCenterId, providerDataClusterId, currentState, name, description, providerProductId, "0", databaseName, databasePort, null, null, 1, false, protocols);
+        return getInstance(null, providerRegionId, providerDataCenterId, providerDataClusterId, currentState, name, description, providerProductId, "0", databaseName, databasePort, null, null, 1, false, 0L, protocols);
     }
 
     /**
@@ -68,7 +71,7 @@ public class DataCluster {
      * @return a newly constructed data cluster
      */
     static public @Nonnull DataCluster getInstance(@Nonnull String inVlanId, @Nonnull String providerRegionId, @Nullable String providerDataCenterId, @Nonnull String providerDataClusterId, @Nonnull DataClusterState currentState, @Nonnull String name, @Nonnull String description, @Nonnull String providerProductId, @Nonnull String databaseName, @Nonnegative int databasePort, @Nullable ClusterQueryProtocol ... protocols) {
-        return getInstance(inVlanId, providerRegionId, providerDataCenterId, providerDataClusterId, currentState, name, description, providerProductId, "0", databaseName, databasePort, null, null, 1, false, protocols);
+        return getInstance(inVlanId, providerRegionId, providerDataCenterId, providerDataClusterId, currentState, name, description, providerProductId, "0", databaseName, databasePort, null, null, 1, false, 0L, protocols);
     }
 
     /**
@@ -91,7 +94,7 @@ public class DataCluster {
      * @return a newly constructed data cluster
      */
     static public @Nonnull DataCluster getInstance(@Nonnull String providerRegionId, @Nullable String providerDataCenterId, @Nonnull String providerDataClusterId, @Nonnull DataClusterState currentState, @Nonnull String name, @Nonnull String description, @Nonnull String providerProductId, @Nonnull String databaseName, @Nonnegative int databasePort, @Nullable String adminUser, @Nullable String adminPassword, @Nonnegative int nodeCount, @Nullable ClusterQueryProtocol ... protocols) {
-        return getInstance(null, providerRegionId, providerDataCenterId, providerDataClusterId, currentState, name, description, providerProductId, "0", databaseName, databasePort, adminUser, adminPassword, nodeCount, false, protocols);
+        return getInstance(null, providerRegionId, providerDataCenterId, providerDataClusterId, currentState, name, description, providerProductId, "0", databaseName, databasePort, adminUser, adminPassword, nodeCount, false, 0L, protocols);
     }
 
     /**
@@ -112,10 +115,11 @@ public class DataCluster {
      * @param adminPassword the password for the administrative user for the database
      * @param nodeCount the number of nodes supporting the database
      * @param encrypted indicates whether the database supported by the cluster is encrypted
+     * @param creationTimestamp the time at which the data cluster was initial provisioned
      * @param protocols the supported query protocols
      * @return a newly constructed data cluster
      */
-    static public @Nonnull DataCluster getInstance(@Nullable String inVlanId, @Nonnull String providerRegionId, @Nullable String providerDataCenterId, @Nonnull String providerDataClusterId, @Nonnull DataClusterState currentState, @Nonnull String name, @Nonnull String description, @Nonnull String providerProductId, @Nonnull String clusterVersion, @Nonnull String databaseName, @Nonnegative int databasePort, @Nullable String adminUser, @Nullable String adminPassword, @Nonnegative int nodeCount, boolean encrypted, ClusterQueryProtocol ... protocols) {
+    static public @Nonnull DataCluster getInstance(@Nullable String inVlanId, @Nonnull String providerRegionId, @Nullable String providerDataCenterId, @Nonnull String providerDataClusterId, @Nonnull DataClusterState currentState, @Nonnull String name, @Nonnull String description, @Nonnull String providerProductId, @Nonnull String clusterVersion, @Nonnull String databaseName, @Nonnegative int databasePort, @Nullable String adminUser, @Nullable String adminPassword, @Nonnegative int nodeCount, boolean encrypted, long creationTimestamp, ClusterQueryProtocol ... protocols) {
         DataCluster c = new DataCluster();
 
         c.providerVlanId = inVlanId;
@@ -133,6 +137,7 @@ public class DataCluster {
         c.clusterVersion = clusterVersion;
         c.adminUserName = adminUser;
         c.adminPassword = adminPassword;
+        c.creationTimestamp = creationTimestamp;
         c.protocols = protocols;
         return c;
     }
@@ -140,6 +145,7 @@ public class DataCluster {
     private String                 adminPassword;
     private String                 adminUserName;
     private String                 clusterVersion;
+    private long                   creationTimestamp;
     private DataClusterState       currentState;
     private String                 databaseName;
     private int                    databasePort;
@@ -155,6 +161,17 @@ public class DataCluster {
     private int                    nodeCount;
 
     private DataCluster() { }
+
+    /**
+     * Alters the time at which this data cluster object indicates the underlying cloud resource was provisioned. This
+     * method will not actually affect a change in the underlying cloud resource.
+     * @param creationTimestamp the unix timestamp reflected the provision time of this data cluster
+     * @return this
+     */
+    public @Nonnull DataCluster createdAt(@Nonnegative long creationTimestamp) {
+        this.creationTimestamp = creationTimestamp;
+        return this;
+    }
 
     @Override
     public boolean equals(@Nullable Object other) {
@@ -190,6 +207,13 @@ public class DataCluster {
      */
     public @Nonnull String getClusterVersion() {
         return clusterVersion;
+    }
+
+    /**
+     * @return the unix timestamp when this data cluster was initially provisioned (0L for unknown)
+     */
+    public @Nonnegative long getCreationTimestamp() {
+        return creationTimestamp;
     }
 
     /**
@@ -313,17 +337,6 @@ public class DataCluster {
     }
 
     /**
-     * Alters this data cluster object to reflect the version associated with this cluster. It does not
-     * actually cause a change to the underlying cloud resource.
-     * @param version the cluster version
-     * @return this
-     */
-    public @Nonnull DataCluster havingVersion(@Nonnull String version) {
-        this.clusterVersion = version;
-        return this;
-    }
-
-    /**
      * Alters this data cluster object to reflect the {@link VLAN} to which this data cluster is attached.
      * It does not actually cause a change to the underlying cloud resource.
      * @param providerVlanId the unique ID of the {@link VLAN} to which this data cluster is attached
@@ -371,6 +384,17 @@ public class DataCluster {
     @Override
     public @Nonnull String toString() {
         return providerDataClusterId;
+    }
+
+    /**
+     * Alters this data cluster object to reflect the version associated with this cluster. It does not
+     * actually cause a change to the underlying cloud resource.
+     * @param version the cluster version
+     * @return this
+     */
+    public @Nonnull DataCluster usingVersion(@Nonnull String version) {
+        this.clusterVersion = version;
+        return this;
     }
 
     /**

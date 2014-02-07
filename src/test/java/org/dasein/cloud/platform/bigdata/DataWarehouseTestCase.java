@@ -1,17 +1,20 @@
-/*
- * Copyright (C) 2014 enStratus Networks Inc.
+/**
+ * Copyright (C) 2014 Dell, Inc.
+ * See annotations for authorship information
  *
+ * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ * ====================================================================
  */
 
 package org.dasein.cloud.platform.bigdata;
@@ -43,6 +46,7 @@ public class DataWarehouseTestCase {
 
     private String adminPassword;
     private String adminUser;
+    private long   creationTimestamp;
     private String dataCenterId;
     private boolean encrypted;
     private int    nodeCount;
@@ -59,6 +63,7 @@ public class DataWarehouseTestCase {
         nodeCount = 1;
         version = "0";
         encrypted = false;
+        creationTimestamp = 0L;
         protocols = new ClusterQueryProtocol[0];
     }
 
@@ -132,7 +137,7 @@ public class DataWarehouseTestCase {
         nodeCount = 2;
         version = "1.0";
         encrypted = true;
-        checkDataClusterContent(DataCluster.getInstance(vlanId, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, version, DB_NAME, PORT, adminUser, adminPassword, nodeCount, encrypted));
+        checkDataClusterContent(DataCluster.getInstance(vlanId, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, version, DB_NAME, PORT, adminUser, adminPassword, nodeCount, encrypted, creationTimestamp));
     }
 
     @Test
@@ -145,7 +150,7 @@ public class DataWarehouseTestCase {
         version = "1.0";
         encrypted = true;
         protocols = new ClusterQueryProtocol[] { ClusterQueryProtocol.JDBC };
-        checkDataClusterContent(DataCluster.getInstance(vlanId, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, version, DB_NAME, PORT, adminUser, adminPassword, nodeCount, encrypted, protocols));
+        checkDataClusterContent(DataCluster.getInstance(vlanId, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, version, DB_NAME, PORT, adminUser, adminPassword, nodeCount, encrypted, creationTimestamp, protocols));
     }
 
     @Test
@@ -158,7 +163,20 @@ public class DataWarehouseTestCase {
         version = "1.0";
         encrypted = true;
         protocols = new ClusterQueryProtocol[] { ClusterQueryProtocol.JDBC, ClusterQueryProtocol.ODBC };
-        checkDataClusterContent(DataCluster.getInstance(vlanId, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, version, DB_NAME, PORT, adminUser, adminPassword, nodeCount, encrypted, protocols));
+        checkDataClusterContent(DataCluster.getInstance(vlanId, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, version, DB_NAME, PORT, adminUser, adminPassword, nodeCount, encrypted, creationTimestamp, protocols));
+    }
+
+    @Test
+    public void verifyDataClusterFullConstructorWithCreationTimestamp() {
+        dataCenterId = "dataCenterId";
+        adminUser = "admin";
+        adminPassword = "password";
+        vlanId = "vlanId";
+        nodeCount = 2;
+        version = "1.0";
+        encrypted = true;
+        creationTimestamp = System.currentTimeMillis();
+        checkDataClusterContent(DataCluster.getInstance(vlanId, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, version, DB_NAME, PORT, adminUser, adminPassword, nodeCount, encrypted, creationTimestamp, protocols));
     }
 
     @Test
@@ -199,7 +217,7 @@ public class DataWarehouseTestCase {
         version = "1.0";
         encrypted = true;
 
-        DataCluster c = DataCluster.getInstance(vlanId, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, version, DB_NAME, PORT, adminUser, adminPassword, nodeCount, encrypted);
+        DataCluster c = DataCluster.getInstance(vlanId, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, version, DB_NAME, PORT, adminUser, adminPassword, nodeCount, encrypted, creationTimestamp);
 
         encrypted = false;
         c.withoutEncryption();
@@ -211,7 +229,7 @@ public class DataWarehouseTestCase {
         DataCluster c = DataCluster.getInstance(REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, DB_NAME, PORT);
 
         version = "2.0";
-        c.havingVersion(version);
+        c.usingVersion(version);
         checkDataClusterContent(c);
     }
 
@@ -239,6 +257,15 @@ public class DataWarehouseTestCase {
 
         c.supportingProtocols(ClusterQueryProtocol.ODBC);
         protocols = new ClusterQueryProtocol[] { ClusterQueryProtocol.JDBC, ClusterQueryProtocol.ODBC };
+        checkDataClusterContent(c);
+    }
+
+    @Test
+    public void verifyDataClusterAlterCreationTimestamp() {
+        DataCluster c = DataCluster.getInstance(REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, DB_NAME, PORT);
+
+        creationTimestamp = System.currentTimeMillis();
+        c.createdAt(creationTimestamp);
         checkDataClusterContent(c);
     }
 
