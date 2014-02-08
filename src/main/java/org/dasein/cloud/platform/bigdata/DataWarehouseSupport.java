@@ -46,6 +46,24 @@ public interface DataWarehouseSupport {
     public @Nonnull String createCluster(@Nonnull DataClusterCreateOptions options) throws CloudException, InternalException;
 
     /**
+     * Disables any logging currently happening for the specified data cluster.
+     * @param clusterId the unique ID of the cluster for whom logging should be diabled
+     * @throws CloudException an error occurred processing the request in the cloud provider
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
+     */
+    public void disableLogging(@Nonnull String clusterId) throws CloudException, InternalException;
+
+    /**
+     * Enables logging for the specified cluster to the named bucket with entries having the specified prefix.
+     * @param clusterId the unique ID of the cluster on which logging should be enabled
+     * @param bucket the cloud object store bucket in which the logs will be stored
+     * @param prefix the prefix of all log entries associated with this cluster
+     * @throws CloudException an error occurred processing the request in the cloud provider
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
+     */
+    public @Nonnull void enableLogging(@Nonnull String clusterId, @Nonnull String bucket, @Nonnull String prefix) throws CloudException, InternalException;
+
+    /**
      * Fetches the state of the cluster identified with the specified cluster ID from the cloud. If no such cloud exists,
      * no value will be returned.
      * @param clusterId the unique ID of the data cluster being fetched
@@ -90,6 +108,14 @@ public interface DataWarehouseSupport {
     public @Nonnull Iterable<DataClusterProduct> listClusterProducts() throws CloudException, InternalException;
 
     /**
+     * Reboots the cluster (probably results in downtime).
+     * @param clusterId the unique ID of the cluster to be rebooted
+     * @throws CloudException an error occurred processing the request in the cloud provider
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
+     */
+    public void rebootCluster(@Nonnull String clusterId) throws CloudException, InternalException;
+
+    /**
      * Removes the specified data cluster from the cloud.
      * @param clusterId the data cluster to be removed
      * @param snapshotFirst snapshot the database before removing the cluster
@@ -105,4 +131,13 @@ public interface DataWarehouseSupport {
      * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
      */
     public boolean supportsEncryptionAtRest() throws CloudException, InternalException;
+
+    /**
+     * Indicates whether or not your can enable cluster logging to a bucket in the cloud storage tied to this
+     * cloud.
+     * @return true if logging can be enabled
+     * @throws CloudException an error occurred processing the request in the cloud provider
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
+     */
+    public boolean supportsCloudStorageLogging() throws CloudException, InternalException;
 }
