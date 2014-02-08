@@ -30,7 +30,6 @@ import java.util.Set;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for the support classes of the data warehouse support in Dasein Cloud
@@ -136,6 +135,7 @@ public class DataWarehouseTestCase {
         assertEquals("The database name does not match the test value", DB_NAME, options.getDatabaseName());
         assertEquals("The database port does not match the test or expected default value", createPort, options.getDatabasePort());
         assertEquals("The encrypted value does not match the test value", createEncrypted,  options.isEncrypted());
+        assertEquals("The parameter group does not match the test value", parameterGroup, options.getProviderParameterGroupId());
     }
 
     private void checkDataClusterProductContent(DataClusterProduct product) {
@@ -384,6 +384,15 @@ public class DataWarehouseTestCase {
 
         createEncrypted = false;
         options.withoutEncryption();
+        checkDataClusterCreateOptionsContent(options);
+    }
+
+    @Test
+    public void verifyCreateAlterParameterGroup() {
+        DataClusterCreateOptions options = DataClusterCreateOptions.getInstance(PRODUCT_ID, NAME, DESCRIPTION, DB_NAME);
+
+        parameterGroup = "vikings";
+        options.withParameterGroup(parameterGroup);
         checkDataClusterCreateOptionsContent(options);
     }
 

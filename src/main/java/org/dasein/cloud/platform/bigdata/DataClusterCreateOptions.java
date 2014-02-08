@@ -106,6 +106,7 @@ public class DataClusterCreateOptions {
     private String  name;
     private int     nodeCount;
     private String  providerDataCenterId;
+    private String  providerParameterGroupId;
     private String  providerProductId;
 
     private DataClusterCreateOptions() { }
@@ -196,6 +197,13 @@ public class DataClusterCreateOptions {
     }
 
     /**
+     * @return the parameter group to associate with this cluster
+     */
+    public @Nullable String getProviderParameterGroupId() {
+        return providerParameterGroupId;
+    }
+
+    /**
      * @return the product to use in provisioning the cluster
      */
     public @Nonnull String getProviderProductId() {
@@ -247,6 +255,16 @@ public class DataClusterCreateOptions {
      */
     public @Nonnull DataClusterCreateOptions withEncryption() {
         this.encrypted = false;
+        return this;
+    }
+
+    /**
+     * Alters the creation options to support creating a data cluster with the specified parameter group assigned.
+     * @param providerParameterGroupId the parameter group to assign to the new cluster
+     * @return this
+     */
+    public @Nonnull DataClusterCreateOptions withParameterGroup(@Nonnull String providerParameterGroupId) {
+        this.providerParameterGroupId = providerParameterGroupId;
         return this;
     }
 
