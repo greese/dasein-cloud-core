@@ -25,6 +25,7 @@ import org.dasein.cloud.Requirement;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Map;
 
 /**
  * Implements support for bigdata/data warehousing services like Amazon's Redshift.
@@ -44,6 +45,18 @@ public interface DataWarehouseSupport {
      * @throws InternalException an error occurred in the Dasein Cloud implementation while preparing or processing the call
      */
     public @Nonnull String createCluster(@Nonnull DataClusterCreateOptions options) throws CloudException, InternalException;
+
+    /**
+     * Creates a new parameter group that defines parameters to be associated with data clusters.
+     * @param family the family with which the parameter group is associated (see {@link DataClusterVersion#getParameterFamily()})
+     * @param name the name of the parameter group
+     * @param description a description of the parameter group
+     * @param initialParameters the initial parameter values to associate with the parameter group
+     * @return the unique ID for the newly constructed parameter group
+     * @throws CloudException an error occurred in the cloud provider while provisioning the parameter group
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while preparing or processing the call
+     */
+    public @Nonnull String createClusterParameterGroup(@Nonnull String family, @Nonnull String name, @Nonnull String description, @Nonnull Map<String,Object> initialParameters) throws CloudException, InternalException;
 
     /**
      * Disables any logging currently happening for the specified data cluster.
@@ -74,6 +87,15 @@ public interface DataWarehouseSupport {
     public @Nullable DataCluster getCluster(@Nonnull String clusterId) throws CloudException, InternalException;
 
     /**
+     * Fetches the specified cluster parameter group based on its unique group ID.
+     * @param groupId the unique ID of the group being sought
+     * @return an object representing the parameter group if it exists, or <code>null</code> if there is no match
+     * @throws CloudException an error occurred processing the request in the cloud provider
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
+     */
+    public @Nullable DataClusterParameterGroup getClusterParameterGroup(@Nonnull String groupId) throws CloudException, InternalException;
+
+    /**
      * Fetches a specific product offering for the provisioning of data clusters. If no such product exists,
      * a <code>null</code> value is returned.
      * @param productId the product ID of the desired product
@@ -92,12 +114,12 @@ public interface DataWarehouseSupport {
     public @Nonnull Requirement getDataCenterConstraintRequirement() throws CloudException, InternalException;
 
     /**
-     * Lists all known data clusters for the current account in the current region of the cloud.
-     * @return all known data clusters for this region
+     * Lists all parameter groups belonging to this account.
+     * @return a list of parameter groups for this account
      * @throws CloudException an error occurred processing the request in the cloud provider
      * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
      */
-    public @Nonnull Iterable<DataCluster> listClusters() throws CloudException, InternalException;
+    public @Nonnull Iterable<DataClusterParameterGroup> listClusterParameterGroups() throws CloudException, InternalException;
 
     /**
      * Lists all products through which data clusters may be provisioned.
@@ -113,7 +135,15 @@ public interface DataWarehouseSupport {
      * @throws CloudException an error occurred processing the request in the cloud provider
      * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
      */
-    public @Nonnull Iterable<DataClusterVersion> listVersions() throws CloudException, InternalException;
+    public @Nonnull Iterable<DataClusterVersion> listClusterVersions() throws CloudException, InternalException;
+
+    /**
+     * Lists all known data clusters for the current account in the current region of the cloud.
+     * @return all known data clusters for this region
+     * @throws CloudException an error occurred processing the request in the cloud provider
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
+     */
+    public @Nonnull Iterable<DataCluster> listClusters() throws CloudException, InternalException;
 
     /**
      * Reboots the cluster (probably results in downtime).
@@ -131,6 +161,14 @@ public interface DataWarehouseSupport {
      * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
      */
     public void removeCluster(@Nonnull String clusterId, boolean snapshotFirst) throws CloudException, InternalException;
+
+    /**
+     * Removes the specified parameter group from the cloud.
+     * @param groupId the unique ID of the target parameter group
+     * @throws CloudException an error occurred processing the request in the cloud provider
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
+     */
+    public void removeClusterParameterGroup(@Nonnull String groupId) throws CloudException, InternalException;
 
     /**
      * Indicates whether or not this cloud supports encryption of your database at rest.

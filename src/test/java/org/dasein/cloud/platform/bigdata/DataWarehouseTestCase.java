@@ -23,9 +23,14 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for the support classes of the data warehouse support in Dasein Cloud
@@ -55,6 +60,8 @@ public class DataWarehouseTestCase {
     private String dataCenterId;
     private boolean encrypted;
     private int    nodeCount;
+    private Map<String,Object> parameters;
+    private String parameterGroup;
     private ClusterQueryProtocol[] protocols;
     private String version;
     private String vlanId;
@@ -73,6 +80,8 @@ public class DataWarehouseTestCase {
         createPort = 0;
         createVersion = null;
         protocols = new ClusterQueryProtocol[0];
+        parameterGroup = null;
+        parameters = new HashMap<String,Object>();
     }
 
     @After
@@ -138,10 +147,30 @@ public class DataWarehouseTestCase {
 
     private void checkDataClusterVersionContent(DataClusterVersion version) {
         assertNotNull("The data cluster version may not be null", version);
-        assertEquals("The version number does not match the test value", createVersion);
-        assertEquals("The parameter family does not match the test value", PARAM_FAMILY);
+        assertEquals("The version number does not match the test value", createVersion, version.getVersionNumber());
+        assertEquals("The parameter family does not match the test value", PARAM_FAMILY, version.getParameterFamily());
         assertEquals("The name does not match the test value", NAME, version.getName());
         assertEquals("The description does not match the test value", DESCRIPTION, version.getDescription());
+    }
+
+    private void checkDataClusterParameterGroupContent(DataClusterParameterGroup group) {
+        assertNotNull("The parameter group may not be null", group);
+        assertEquals("The parameter group ID does not match", parameterGroup, group.getProviderGroupId());
+        assertEquals("The family does not match the test value", PARAM_FAMILY, group.getFamily());
+        assertEquals("The name does not match the test value", NAME, group.getName());
+        assertEquals("The description does not match the test value", DESCRIPTION, group.getDescription());
+
+        Set<String> keys = group.getParameters().keySet();
+        String[] actualKeys = keys.toArray(new String[keys.size()]);
+
+        keys = parameters.keySet();
+        String[] expectedKeys = keys.toArray(new String[keys.size()]);
+
+        assertArrayEquals("The available parameters do not match", expectedKeys, actualKeys);
+
+        for( String key : expectedKeys ) {
+            assertEquals("The parameter value for " + key + " does not match the test value", parameters.get(key), group.getParameters().get(key));
+        }
     }
 
     @Test
@@ -397,5 +426,24 @@ public class DataWarehouseTestCase {
     public void verifyVersionConstructor() {
         createVersion = "91.5fm";
         DataClusterVersion version = DataClusterVersion.getInstance(createVersion, PARAM_FAMILY, NAME, DESCRIPTION);
+
+        checkDataClusterVersionContent(version);
+    }
+
+    @Test
+    public void verifyParameterGroupConstructorNoParams() {
+        parameterGroup = "alpha";
+        DataClusterParameterGroup group = DataClusterParameterGroup.getInstance(parameterGroup, PARAM_FAMILY, NAME, DESCRIPTION, parameters);
+
+        checkDataClusterParameterGroupContent(group);
+    }
+
+    @Test
+    public void verifyParameterGroupConstructorWithParams() {
+        parameterGroup = "alpha";
+        parameters.put("hello", "goodbye");
+        DataClusterParameterGroup group = DataClusterParameterGroup.getInstance(parameterGroup, PARAM_FAMILY, NAME, DESCRIPTION, parameters);
+
+        checkDataClusterParameterGroupContent(group);
     }
 }
