@@ -108,6 +108,14 @@ public interface DataWarehouseSupport {
     public @Nonnull Iterable<DataClusterProduct> listClusterProducts() throws CloudException, InternalException;
 
     /**
+     * Lists all versions of the clustering technology available for creating new data cluster instances.
+     * @return a list of supported versions
+     * @throws CloudException an error occurred processing the request in the cloud provider
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
+     */
+    public @Nonnull Iterable<DataClusterVersion> listVersions() throws CloudException, InternalException;
+
+    /**
      * Reboots the cluster (probably results in downtime).
      * @param clusterId the unique ID of the cluster to be rebooted
      * @throws CloudException an error occurred processing the request in the cloud provider

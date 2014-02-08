@@ -42,6 +42,7 @@ public class DataWarehouseTestCase {
     static private final String           NAME          = "name";
     static private final int              PORT          = 17;
     static private final String           OWNER_ID      = "me";
+    static private final String           PARAM_FAMILY  = "flintstones";
     static private final String           PRODUCT_ID    = "productId";
     static private final String           REGION_ID     = "regionId";
 
@@ -133,6 +134,14 @@ public class DataWarehouseTestCase {
         assertEquals("The product ID does not match the test value", PRODUCT_ID, product.getProviderProductId());
         assertEquals("The name does not match the test value", NAME, product.getName());
         assertEquals("The description does not match the test value", DESCRIPTION, product.getDescription());
+    }
+
+    private void checkDataClusterVersionContent(DataClusterVersion version) {
+        assertNotNull("The data cluster version may not be null", version);
+        assertEquals("The version number does not match the test value", createVersion);
+        assertEquals("The parameter family does not match the test value", PARAM_FAMILY);
+        assertEquals("The name does not match the test value", NAME, version.getName());
+        assertEquals("The description does not match the test value", DESCRIPTION, version.getDescription());
     }
 
     @Test
@@ -382,5 +391,11 @@ public class DataWarehouseTestCase {
         DataClusterProduct product = DataClusterProduct.getInstance(PRODUCT_ID, NAME, DESCRIPTION);
 
         checkDataClusterProductContent(product);
+    }
+
+    @Test
+    public void verifyVersionConstructor() {
+        createVersion = "91.5fm";
+        DataClusterVersion version = DataClusterVersion.getInstance(createVersion, PARAM_FAMILY, NAME, DESCRIPTION);
     }
 }
