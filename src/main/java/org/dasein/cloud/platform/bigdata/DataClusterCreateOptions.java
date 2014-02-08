@@ -19,6 +19,11 @@
 
 package org.dasein.cloud.platform.bigdata;
 
+import org.dasein.cloud.CloudException;
+import org.dasein.cloud.CloudProvider;
+import org.dasein.cloud.InternalException;
+import org.dasein.cloud.OperationNotSupportedException;
+import org.dasein.cloud.platform.PlatformServices;
 import org.dasein.cloud.util.Security;
 
 import javax.annotation.Nonnegative;
@@ -33,14 +38,47 @@ import javax.annotation.Nullable;
  * @version 2014.03 initial version (issue #100)
  */
 public class DataClusterCreateOptions {
+    /**
+     * Constructs the provisioning options for a very basic data cluster. By default, the resulting options support a
+     * single node cluster with auto-generated
+     * @param providerProductId the product to use in the provisioning process
+     * @param name the name of the data cluster to be created
+     * @param description a user-friendly description for the data cluster
+     * @param databaseName the name of the database to be placed in the cluster
+     * @return options for creating a data cluster
+     */
     static @Nonnull DataClusterCreateOptions getInstance(@Nonnull String providerProductId, @Nonnull String name, @Nonnull String description, @Nonnull String databaseName) {
         return getInstance(providerProductId, null, name, description, null, databaseName, 0, null, null, 1, true);
     }
 
+    /**
+     * Constructs provisioning options for a data cluster with a data center affinity.
+     * @param providerProductId the product to use in the provisioning process
+     * @param providerDataCenterId the data center into which the data cluster will be provisioned
+     * @param name the name of the data cluster to be created
+     * @param description a user-friendly description for the data cluster
+     * @param databaseName the name of the database to be placed in the cluster
+     * @return options for creating a data cluster based on the specified parameters
+     */
     static @Nonnull DataClusterCreateOptions getInstance(@Nonnull String providerProductId, @Nonnull String providerDataCenterId, @Nonnull String name, @Nonnull String description, @Nonnull String databaseName) {
         return getInstance(providerProductId, providerDataCenterId, name, description, null, databaseName, 0, null, null, 1, true);
     }
 
+    /**
+     * Constructs provisioning options for a significantly configured data cluster.
+     * @param providerProductId the product to use in the provisioning prociess
+     * @param providerDataCenterId  the data center into which the data cluster will be provisioned
+     * @param name the name of the data cluster to be created
+     * @param description a user-friendly description for the data cluster
+     * @param clusterVersion the clustering version to be targeted
+     * @param databaseName the name of the database to be placed in the cluster
+     * @param databasePort the port on which queries will be run
+     * @param adminUser the administrative user for querying the database
+     * @param adminPassword the password for the administrative user
+     * @param nodeCount the number of nodes to be provisioned
+     * @param encrypted whether or not the data should be encrypted at rest
+     * @return options for creating a data cluster based on the specified parameters
+     */
     static @Nonnull DataClusterCreateOptions getInstance(@Nonnull String providerProductId, @Nullable String providerDataCenterId, @Nonnull String name, @Nonnull String description, @Nullable String clusterVersion, @Nonnull String databaseName, @Nonnegative int databasePort, @Nullable String adminUser, @Nullable String adminPassword, @Nonnegative int nodeCount, boolean encrypted) {
         DataClusterCreateOptions options = new DataClusterCreateOptions();
 
@@ -53,6 +91,7 @@ public class DataClusterCreateOptions {
         options.clusterVersion = clusterVersion;
         options.databaseName = databaseName;
         options.databasePort = databasePort;
+        options.nodeCount = (nodeCount < 1 ? 1 : nodeCount);
         options.encrypted = encrypted;
         return options;
     }
@@ -70,6 +109,28 @@ public class DataClusterCreateOptions {
     private String  providerProductId;
 
     private DataClusterCreateOptions() { }
+
+    /**
+     * Executes a request to create a data cluster in the target region of the target cloud using the
+     * options described in this object.
+     * @param provider the provider object representing the cloud and region in which the data cluster should be created
+     * @return the ID of the newly created data cluster
+     * @throws CloudException an error occurred with the cloud provider when creating the data cluster
+     * @throws InternalException an error occurred within the Dasein Cloud implementation while creating the data cluster
+     */
+    public @Nonnull String build(@Nonnull CloudProvider provider) throws CloudException, InternalException {
+        PlatformServices services = provider.getPlatformServices();
+
+        if( services == null ) {
+            throw new OperationNotSupportedException("No platform services in " + provider.getCloudName());
+        }
+        DataWarehouseSupport support = services.getDataWarehouseSupport();
+
+        if( support == null ) {
+            throw new OperationNotSupportedException("No data warehouse support in " + provider.getCloudName());
+        }
+        return support.createCluster(this);
+    }
 
     /**
      * @return the admin password to use in accessing the database on the cluster

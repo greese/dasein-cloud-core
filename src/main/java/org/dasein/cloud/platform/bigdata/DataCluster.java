@@ -24,7 +24,9 @@ import org.dasein.cloud.network.VLAN;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Models a data warehousing cluster that consists of a number of database nodes and a shared
@@ -38,6 +40,7 @@ public class DataCluster {
     /**
      * Constructs a new data cluster object with the most basic data required in order to be considered a valid Dasein
      * object. Make sure to honor the nullability of the specified parameters.
+     * @param providerOwnerId the owning account of the data cluster
      * @param providerRegionId the region in which the cluster operates
      * @param providerDataCenterId the data center affinity of the cluster, if any
      * @param providerDataClusterId the unique ID for the cluster
@@ -50,14 +53,15 @@ public class DataCluster {
      * @param protocols the supported query protocols
      * @return a newly constructed data cluster
      */
-    static public @Nonnull DataCluster getInstance(@Nonnull String providerRegionId, @Nullable String providerDataCenterId, @Nonnull String providerDataClusterId, @Nonnull DataClusterState currentState, @Nonnull String name, @Nonnull String description, @Nonnull String providerProductId, @Nonnull String databaseName, @Nonnegative int databasePort, @Nullable ClusterQueryProtocol ... protocols) {
-        return getInstance(null, providerRegionId, providerDataCenterId, providerDataClusterId, currentState, name, description, providerProductId, "0", databaseName, databasePort, null, null, 1, false, 0L, protocols);
+    static public @Nonnull DataCluster getInstance(@Nonnull String providerOwnerId, @Nonnull String providerRegionId, @Nullable String providerDataCenterId, @Nonnull String providerDataClusterId, @Nonnull DataClusterState currentState, @Nonnull String name, @Nonnull String description, @Nonnull String providerProductId, @Nonnull String databaseName, @Nonnegative int databasePort, @Nullable ClusterQueryProtocol ... protocols) {
+        return getInstance(null, providerOwnerId, providerRegionId, providerDataCenterId, providerDataClusterId, currentState, name, description, providerProductId, "0", databaseName, databasePort, null, null, 1, false, 0L, protocols);
     }
 
     /**
      * Constructs a new data cluster object in a VLAN with the most basic data required in order to be considered a valid Dasein
      * object. Make sure to honor the nullability of the specified parameters.
      * @param inVlanId the unique ID of the VLAN in which the data cluster operates
+     * @param providerOwnerId the owning account of the data cluster
      * @param providerRegionId the region in which the cluster operates
      * @param providerDataCenterId the data center affinity of the cluster, if any
      * @param providerDataClusterId the unique ID for the cluster
@@ -70,13 +74,14 @@ public class DataCluster {
      * @param protocols the supported query protocols
      * @return a newly constructed data cluster
      */
-    static public @Nonnull DataCluster getInstance(@Nonnull String inVlanId, @Nonnull String providerRegionId, @Nullable String providerDataCenterId, @Nonnull String providerDataClusterId, @Nonnull DataClusterState currentState, @Nonnull String name, @Nonnull String description, @Nonnull String providerProductId, @Nonnull String databaseName, @Nonnegative int databasePort, @Nullable ClusterQueryProtocol ... protocols) {
-        return getInstance(inVlanId, providerRegionId, providerDataCenterId, providerDataClusterId, currentState, name, description, providerProductId, "0", databaseName, databasePort, null, null, 1, false, 0L, protocols);
+    static public @Nonnull DataCluster getInstance(@Nonnull String inVlanId, @Nonnull String providerOwnerId, @Nonnull String providerRegionId, @Nullable String providerDataCenterId, @Nonnull String providerDataClusterId, @Nonnull DataClusterState currentState, @Nonnull String name, @Nonnull String description, @Nonnull String providerProductId, @Nonnull String databaseName, @Nonnegative int databasePort, @Nullable ClusterQueryProtocol ... protocols) {
+        return getInstance(inVlanId, providerOwnerId, providerRegionId, providerDataCenterId, providerDataClusterId, currentState, name, description, providerProductId, "0", databaseName, databasePort, null, null, 1, false, 0L, protocols);
     }
 
     /**
      * Constructs a new data cluster object with extended attributes.
      * Make sure to honor the nullability of the specified parameters.
+     * @param providerOwnerId the owning account of the data cluster
      * @param providerRegionId the region in which the cluster operates
      * @param providerDataCenterId the data center affinity of the cluster, if any
      * @param providerDataClusterId the unique ID for the cluster
@@ -93,14 +98,15 @@ public class DataCluster {
      * @param protocols the supported query protocols
      * @return a newly constructed data cluster
      */
-    static public @Nonnull DataCluster getInstance(@Nonnull String providerRegionId, @Nullable String providerDataCenterId, @Nonnull String providerDataClusterId, @Nonnull DataClusterState currentState, @Nonnull String name, @Nonnull String description, @Nonnull String providerProductId, @Nonnull String databaseName, @Nonnegative int databasePort, @Nullable String adminUser, @Nullable String adminPassword, @Nonnegative int nodeCount, @Nullable ClusterQueryProtocol ... protocols) {
-        return getInstance(null, providerRegionId, providerDataCenterId, providerDataClusterId, currentState, name, description, providerProductId, "0", databaseName, databasePort, adminUser, adminPassword, nodeCount, false, 0L, protocols);
+    static public @Nonnull DataCluster getInstance(@Nonnull String providerOwnerId, @Nonnull String providerRegionId, @Nullable String providerDataCenterId, @Nonnull String providerDataClusterId, @Nonnull DataClusterState currentState, @Nonnull String name, @Nonnull String description, @Nonnull String providerProductId, @Nonnull String databaseName, @Nonnegative int databasePort, @Nullable String adminUser, @Nullable String adminPassword, @Nonnegative int nodeCount, @Nullable ClusterQueryProtocol ... protocols) {
+        return getInstance(null, providerOwnerId, providerRegionId, providerDataCenterId, providerDataClusterId, currentState, name, description, providerProductId, "0", databaseName, databasePort, adminUser, adminPassword, nodeCount, false, 0L, protocols);
     }
 
     /**
      * Constructs a new data cluster object in a specific VLAN with extended attributes.
      * Make sure to honor the nullability of the specified parameters.
      * @param inVlanId the unique ID of the VLAN in which the data cluster operates
+     * @param providerOwnerId the owning account of the data cluster
      * @param providerRegionId the region in which the cluster operates
      * @param providerDataCenterId the data center affinity of the cluster, if any
      * @param providerDataClusterId the unique ID for the cluster
@@ -119,10 +125,11 @@ public class DataCluster {
      * @param protocols the supported query protocols
      * @return a newly constructed data cluster
      */
-    static public @Nonnull DataCluster getInstance(@Nullable String inVlanId, @Nonnull String providerRegionId, @Nullable String providerDataCenterId, @Nonnull String providerDataClusterId, @Nonnull DataClusterState currentState, @Nonnull String name, @Nonnull String description, @Nonnull String providerProductId, @Nonnull String clusterVersion, @Nonnull String databaseName, @Nonnegative int databasePort, @Nullable String adminUser, @Nullable String adminPassword, @Nonnegative int nodeCount, boolean encrypted, long creationTimestamp, ClusterQueryProtocol ... protocols) {
+    static public @Nonnull DataCluster getInstance(@Nullable String inVlanId, @Nonnull String providerOwnerId, @Nonnull String providerRegionId, @Nullable String providerDataCenterId, @Nonnull String providerDataClusterId, @Nonnull DataClusterState currentState, @Nonnull String name, @Nonnull String description, @Nonnull String providerProductId, @Nonnull String clusterVersion, @Nonnull String databaseName, @Nonnegative int databasePort, @Nullable String adminUser, @Nullable String adminPassword, @Nonnegative int nodeCount, boolean encrypted, long creationTimestamp, ClusterQueryProtocol ... protocols) {
         DataCluster c = new DataCluster();
 
         c.providerVlanId = inVlanId;
+        c.providerOwnerId = providerOwnerId;
         c.providerRegionId = providerRegionId;
         c.providerDataCenterId = providerDataCenterId;
         c.currentState = currentState;
@@ -154,6 +161,7 @@ public class DataCluster {
     private ClusterQueryProtocol[] protocols;
     private String                 providerDataCenterId;
     private String                 providerDataClusterId;
+    private String                 providerOwnerId;
     private String                 providerProductId;
     private String                 providerRegionId;
     private String                 providerVlanId;
@@ -185,7 +193,7 @@ public class DataCluster {
             return false;
         }
         DataCluster c = (DataCluster)other;
-        return providerRegionId.equals(c.providerRegionId) && !((providerDataCenterId == null && c.providerDataCenterId != null) || (providerDataCenterId != null && c.providerDataCenterId != null)) && !(providerDataCenterId != null && !providerDataCenterId.equals(c.providerDataCenterId)) && providerDataClusterId.equals(providerDataClusterId);
+        return providerOwnerId.equals(c.providerOwnerId) && providerRegionId.equals(c.providerRegionId) && !((providerDataCenterId == null && c.providerDataCenterId != null) || (providerDataCenterId != null && c.providerDataCenterId != null)) && !(providerDataCenterId != null && !providerDataCenterId.equals(c.providerDataCenterId)) && providerDataClusterId.equals(providerDataClusterId);
     }
 
     /**
@@ -270,6 +278,13 @@ public class DataCluster {
             }
         }
         return p;
+    }
+
+    /**
+     * @return the owner of this data cluster
+     */
+    public @Nonnull String getProviderOwnerId() {
+        return providerOwnerId;
     }
 
     /**
@@ -361,22 +376,14 @@ public class DataCluster {
      */
     public @Nonnull DataCluster supportingProtocols(@Nonnull ClusterQueryProtocol ... protocols) {
         if( protocols.length > 0 ) {
-            ClusterQueryProtocol[] p;
-            int idx = 0;
+            ArrayList<ClusterQueryProtocol> p = new ArrayList<ClusterQueryProtocol>();
 
-            if( this.protocols == null ) {
-                p = new ClusterQueryProtocol[protocols.length];
+            if( this.protocols != null ) {
+                Collections.addAll(p, this.protocols);
             }
-            else {
-                p = new ClusterQueryProtocol[this.protocols.length + protocols.length];
-                for( ; idx<this.protocols.length; idx++ ) {
-                    p[idx] = this.protocols[idx];
-                }
-            }
-            for( int i=0; idx< p.length; idx++, i++ ) {
-                p[idx] = protocols[i];
-            }
-            this.protocols = p;
+            Collections.addAll(p, protocols);
+            this.protocols = new ClusterQueryProtocol[p.size()];
+            this.protocols = p.toArray(this.protocols);
         }
         return this;
     }

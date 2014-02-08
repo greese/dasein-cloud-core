@@ -34,6 +34,15 @@ import javax.annotation.Nullable;
  * @version 2014.03 initial version (issue #100)
  */
 public interface DataWarehouseSupport {
+    /**
+     * Provisions a new data cluster in the current region of this cloud using the provided provisioning options. This
+     * method should block until an ID is available and {@link #getCluster(String)} and {@link #listClusters()} will
+     * return the new data cluster when queried.
+     * @param options the state information to be used in creating the data cluster
+     * @return the unique ID of the newly created data cluster
+     * @throws CloudException an error occurred in the cloud provider while provisioning the data cluster
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while preparing or processing the call
+     */
     public @Nonnull String createCluster(@Nonnull DataClusterCreateOptions options) throws CloudException, InternalException;
 
     public @Nullable DataCluster getCluster(@Nonnull String clusterId) throws CloudException, InternalException;
@@ -42,6 +51,9 @@ public interface DataWarehouseSupport {
 
     public @Nonnull Iterable<DataCluster> listClusters() throws CloudException, InternalException;
 
+    // TODO: list products
+
     public void removeCluster(@Nonnull String clusterId) throws CloudException, InternalException;
 
+    public boolean supportsEncryptionAtRest() throws CloudException, InternalException;
 }

@@ -19,10 +19,11 @@
 package org.dasein.cloud.platform.bigdata;
 
 /**
- * [Class Documentation]
+ * Represents the operational state for a {@link DataCluster}.
  * <p>Created by George Reese: 2/7/14 12:24 PM</p>
- *
  * @author George Reese
+ * @since 2014.03
+ * @version 2014.03 initial version
  */
 public enum DataClusterState {
     AVAILABLE, CREATING

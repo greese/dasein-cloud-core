@@ -19,12 +19,25 @@
 
 package org.dasein.cloud.platform;
 
+import org.dasein.cloud.platform.bigdata.DataWarehouseSupport;
+
 import javax.annotation.Nullable;
 
+/**
+ * Default implementation of platform services for a cloud with support for no platform services functionality.
+ * Implementations will override this class to manage support for the features relevant to that cloud.
+ * @since unknown
+ * @version 2014.03 added support for data warehouse functionality (issue #100)
+ */
 public abstract class AbstractPlatformServices implements PlatformServices {
 
     @Override
     public @Nullable CDNSupport getCDNSupport() {
+        return null;
+    }
+
+    @Override
+    public @Nullable DataWarehouseSupport getDataWarehouseSupport() {
         return null;
     }
 
@@ -34,8 +47,7 @@ public abstract class AbstractPlatformServices implements PlatformServices {
     }
 
     @Override
-    public @Nullable
-    MQSupport getMessageQueueSupport() {
+    public @Nullable MQSupport getMessageQueueSupport() {
         return null;
     }
 
@@ -57,6 +69,11 @@ public abstract class AbstractPlatformServices implements PlatformServices {
     @Override
     public boolean hasCDNSupport() {
         return (getCDNSupport() != null);
+    }
+
+    @Override
+    public boolean hasDataWarehouseSupport() {
+        return (getDataWarehouseSupport() != null);
     }
 
     @Override

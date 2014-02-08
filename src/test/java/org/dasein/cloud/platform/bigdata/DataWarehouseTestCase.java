@@ -41,11 +41,15 @@ public class DataWarehouseTestCase {
     static private final String           DESCRIPTION   = "description";
     static private final String           NAME          = "name";
     static private final int              PORT          = 17;
+    static private final String           OWNER_ID      = "me";
     static private final String           PRODUCT_ID    = "productId";
     static private final String           REGION_ID     = "regionId";
 
     private String adminPassword;
     private String adminUser;
+    private boolean createEncrypted;
+    private int    createPort;
+    private String createVersion;
     private long   creationTimestamp;
     private String dataCenterId;
     private boolean encrypted;
@@ -63,7 +67,10 @@ public class DataWarehouseTestCase {
         nodeCount = 1;
         version = "0";
         encrypted = false;
+        createEncrypted = true;
         creationTimestamp = 0L;
+        createPort = 0;
+        createVersion = null;
         protocols = new ClusterQueryProtocol[0];
     }
 
@@ -74,6 +81,7 @@ public class DataWarehouseTestCase {
 
     private void checkDataClusterContent(DataCluster cluster) {
         assertNotNull("The cluster returned from the constructor was illegally a null value", cluster);
+        assertEquals("The cluster owner ID does not match the test value", OWNER_ID, cluster.getProviderOwnerId());
         assertEquals("The cluster region ID does not match the test value", REGION_ID, cluster.getProviderRegionId());
         assertEquals("The cluster data center ID does not match the test value", dataCenterId, cluster.getProviderDataCenterId());
         assertEquals("The cluster ID does not match the test value", CLUSTER_ID, cluster.getProviderDataClusterId());
@@ -95,28 +103,53 @@ public class DataWarehouseTestCase {
         assertArrayEquals("The protocols must match", protocols, p);
     }
 
+    private void checkDataClusterCreateOptionsContent(DataClusterCreateOptions options) {
+        assertNotNull("The data cluster create options may not be null", options);
+        assertEquals("The data center ID does not match the test value", dataCenterId, options.getProviderDataCenterId());
+        assertEquals("The product ID does not match the test value", PRODUCT_ID, options.getProviderProductId());
+        assertEquals("The name does not match the test value", NAME, options.getName());
+        assertEquals("The description does not match the test value", DESCRIPTION, options.getDescription());
+        assertEquals("The node count does not match the test value", nodeCount, options.getNodeCount());
+        if( adminUser == null ) {
+            assertNotNull("The default admin user may not be null", options.getAdminUserName());
+        }
+        else {
+            assertEquals("The admin user does not match the test value", adminUser, options.getAdminUserName());
+        }
+        if( adminPassword == null ) {
+            assertNotNull("The default admin password may not be null", options.getAdminPassword());
+        }
+        else {
+            assertEquals("The admin password does not match the test value", adminPassword, options.getAdminPassword());
+        }
+        assertEquals("The cluster version does not match the test value", createVersion, options.getClusterVersion());
+        assertEquals("The database name does not match the test value", DB_NAME, options.getDatabaseName());
+        assertEquals("The database port does not match the test or expected default value", createPort, options.getDatabasePort());
+        assertEquals("The encrypted value does not match the test value", createEncrypted,  options.isEncrypted());
+    }
+
     @Test
     public void verifyDataClusterSimpleConstructor() {
-        checkDataClusterContent(DataCluster.getInstance(REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, DB_NAME, PORT));
+        checkDataClusterContent(DataCluster.getInstance(OWNER_ID, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, DB_NAME, PORT));
     }
 
     @Test
     public void verifyDataClusterSimpleConstructorWithProtocols() {
         protocols = new ClusterQueryProtocol[] { ClusterQueryProtocol.JDBC };
-        checkDataClusterContent(DataCluster.getInstance(REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, DB_NAME, PORT, protocols));
+        checkDataClusterContent(DataCluster.getInstance(OWNER_ID, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, DB_NAME, PORT, protocols));
     }
 
     @Test
     public void verifyDataClusterSimpleConstructorWithValidDC() {
         dataCenterId = "dataCenterId";
-        checkDataClusterContent(DataCluster.getInstance(REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, DB_NAME, PORT));
+        checkDataClusterContent(DataCluster.getInstance(OWNER_ID, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, DB_NAME, PORT));
     }
 
     @Test
     public void verifyDataClusterSimpleVLANConstructor() {
         dataCenterId = "dataCenterId";
         vlanId = "vlanId";
-        checkDataClusterContent(DataCluster.getInstance(vlanId, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, DB_NAME, PORT));
+        checkDataClusterContent(DataCluster.getInstance(vlanId, OWNER_ID, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, DB_NAME, PORT));
     }
 
     @Test
@@ -125,7 +158,7 @@ public class DataWarehouseTestCase {
         adminUser = "admin";
         adminPassword = "password";
         nodeCount = 2;
-        checkDataClusterContent(DataCluster.getInstance(REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, DB_NAME, PORT, adminUser, adminPassword, nodeCount));
+        checkDataClusterContent(DataCluster.getInstance(OWNER_ID, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, DB_NAME, PORT, adminUser, adminPassword, nodeCount));
     }
 
     @Test
@@ -137,7 +170,7 @@ public class DataWarehouseTestCase {
         nodeCount = 2;
         version = "1.0";
         encrypted = true;
-        checkDataClusterContent(DataCluster.getInstance(vlanId, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, version, DB_NAME, PORT, adminUser, adminPassword, nodeCount, encrypted, creationTimestamp));
+        checkDataClusterContent(DataCluster.getInstance(vlanId, OWNER_ID, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, version, DB_NAME, PORT, adminUser, adminPassword, nodeCount, encrypted, creationTimestamp));
     }
 
     @Test
@@ -150,7 +183,7 @@ public class DataWarehouseTestCase {
         version = "1.0";
         encrypted = true;
         protocols = new ClusterQueryProtocol[] { ClusterQueryProtocol.JDBC };
-        checkDataClusterContent(DataCluster.getInstance(vlanId, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, version, DB_NAME, PORT, adminUser, adminPassword, nodeCount, encrypted, creationTimestamp, protocols));
+        checkDataClusterContent(DataCluster.getInstance(vlanId, OWNER_ID, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, version, DB_NAME, PORT, adminUser, adminPassword, nodeCount, encrypted, creationTimestamp, protocols));
     }
 
     @Test
@@ -163,7 +196,7 @@ public class DataWarehouseTestCase {
         version = "1.0";
         encrypted = true;
         protocols = new ClusterQueryProtocol[] { ClusterQueryProtocol.JDBC, ClusterQueryProtocol.ODBC };
-        checkDataClusterContent(DataCluster.getInstance(vlanId, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, version, DB_NAME, PORT, adminUser, adminPassword, nodeCount, encrypted, creationTimestamp, protocols));
+        checkDataClusterContent(DataCluster.getInstance(vlanId, OWNER_ID, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, version, DB_NAME, PORT, adminUser, adminPassword, nodeCount, encrypted, creationTimestamp, protocols));
     }
 
     @Test
@@ -176,12 +209,12 @@ public class DataWarehouseTestCase {
         version = "1.0";
         encrypted = true;
         creationTimestamp = System.currentTimeMillis();
-        checkDataClusterContent(DataCluster.getInstance(vlanId, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, version, DB_NAME, PORT, adminUser, adminPassword, nodeCount, encrypted, creationTimestamp, protocols));
+        checkDataClusterContent(DataCluster.getInstance(vlanId, OWNER_ID, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, version, DB_NAME, PORT, adminUser, adminPassword, nodeCount, encrypted, creationTimestamp, protocols));
     }
 
     @Test
     public void verifyDataClusterAlterCredentials() {
-        DataCluster c = DataCluster.getInstance(REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, DB_NAME, PORT);
+        DataCluster c = DataCluster.getInstance(OWNER_ID, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, DB_NAME, PORT);
 
         adminUser = "admin";
         adminPassword = "password";
@@ -191,7 +224,7 @@ public class DataWarehouseTestCase {
 
     @Test
     public void verifyDataClusterAlterNodeCount() {
-        DataCluster c = DataCluster.getInstance(REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, DB_NAME, PORT);
+        DataCluster c = DataCluster.getInstance(OWNER_ID, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, DB_NAME, PORT);
 
         nodeCount = 3;
         c.havingNodeCount(nodeCount);
@@ -200,7 +233,7 @@ public class DataWarehouseTestCase {
 
     @Test
     public void verifyDataClusterAlterEncryptionOn() {
-        DataCluster c = DataCluster.getInstance(REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, DB_NAME, PORT);
+        DataCluster c = DataCluster.getInstance(OWNER_ID, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, DB_NAME, PORT);
 
         encrypted = true;
         c.withEncryption();
@@ -217,7 +250,7 @@ public class DataWarehouseTestCase {
         version = "1.0";
         encrypted = true;
 
-        DataCluster c = DataCluster.getInstance(vlanId, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, version, DB_NAME, PORT, adminUser, adminPassword, nodeCount, encrypted, creationTimestamp);
+        DataCluster c = DataCluster.getInstance(vlanId, OWNER_ID, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, version, DB_NAME, PORT, adminUser, adminPassword, nodeCount, encrypted, creationTimestamp);
 
         encrypted = false;
         c.withoutEncryption();
@@ -226,7 +259,7 @@ public class DataWarehouseTestCase {
 
     @Test
     public void verifyDataClusterAlterVersion() {
-        DataCluster c = DataCluster.getInstance(REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, DB_NAME, PORT);
+        DataCluster c = DataCluster.getInstance(OWNER_ID, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, DB_NAME, PORT);
 
         version = "2.0";
         c.usingVersion(version);
@@ -235,7 +268,7 @@ public class DataWarehouseTestCase {
 
     @Test
     public void verifyDataClusterAlterVLAN() {
-        DataCluster c = DataCluster.getInstance(REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, DB_NAME, PORT);
+        DataCluster c = DataCluster.getInstance(OWNER_ID, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, DB_NAME, PORT);
 
         vlanId = "vlanId";
         c.inVlan(vlanId);
@@ -244,7 +277,7 @@ public class DataWarehouseTestCase {
 
     @Test
     public void verifyDataClusterAlterProtocolsWithNone() {
-        DataCluster c = DataCluster.getInstance(REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, DB_NAME, PORT);
+        DataCluster c = DataCluster.getInstance(OWNER_ID, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, DB_NAME, PORT);
 
         protocols = new ClusterQueryProtocol[] { ClusterQueryProtocol.ODBC };
         c.supportingProtocols(protocols);
@@ -253,7 +286,7 @@ public class DataWarehouseTestCase {
 
     @Test
     public void verifyDataClusterAlterProtocolsWithOne() {
-        DataCluster c = DataCluster.getInstance(REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, DB_NAME, PORT, ClusterQueryProtocol.JDBC);
+        DataCluster c = DataCluster.getInstance(OWNER_ID, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, DB_NAME, PORT, ClusterQueryProtocol.JDBC);
 
         c.supportingProtocols(ClusterQueryProtocol.ODBC);
         protocols = new ClusterQueryProtocol[] { ClusterQueryProtocol.JDBC, ClusterQueryProtocol.ODBC };
@@ -262,11 +295,78 @@ public class DataWarehouseTestCase {
 
     @Test
     public void verifyDataClusterAlterCreationTimestamp() {
-        DataCluster c = DataCluster.getInstance(REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, DB_NAME, PORT);
+        DataCluster c = DataCluster.getInstance(OWNER_ID, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, DB_NAME, PORT);
 
         creationTimestamp = System.currentTimeMillis();
         c.createdAt(creationTimestamp);
         checkDataClusterContent(c);
     }
 
+    @Test
+    public void verifyDataClusterCreateOptionsSimpleConstructor() {
+        DataClusterCreateOptions options = DataClusterCreateOptions.getInstance(PRODUCT_ID, NAME, DESCRIPTION, DB_NAME);
+
+        checkDataClusterCreateOptionsContent(options);
+    }
+
+    @Test
+    public void verifyDataClusterCreateOptionsSimpleConstructorWithDC() {
+        dataCenterId = "moon";
+
+        DataClusterCreateOptions options = DataClusterCreateOptions.getInstance(PRODUCT_ID, dataCenterId, NAME, DESCRIPTION, DB_NAME);
+
+        checkDataClusterCreateOptionsContent(options);
+    }
+
+    @Test
+    public void verifyDataClusterCreateOptionsFullConstructor() {
+        dataCenterId = "moon";
+        createEncrypted = false;
+        nodeCount = 7;
+        createVersion = "9.34";
+        createPort = 1701;
+        adminUser = "spiderman";
+        adminPassword = "olympics";
+
+        DataClusterCreateOptions options = DataClusterCreateOptions.getInstance(PRODUCT_ID, dataCenterId, NAME, DESCRIPTION, createVersion, DB_NAME, createPort, adminUser, adminPassword, nodeCount, createEncrypted);
+
+        checkDataClusterCreateOptionsContent(options);
+    }
+
+    @Test
+    public void verifyCreateAlterEncryption() {
+        DataClusterCreateOptions options = DataClusterCreateOptions.getInstance(PRODUCT_ID, NAME, DESCRIPTION, DB_NAME);
+
+        createEncrypted = false;
+        options.withoutEncryption();
+        checkDataClusterCreateOptionsContent(options);
+    }
+
+    @Test
+    public void verifyCreateAlterCredentials() {
+        DataClusterCreateOptions options = DataClusterCreateOptions.getInstance(PRODUCT_ID, NAME, DESCRIPTION, DB_NAME);
+
+        adminUser = "wonderwoman";
+        adminPassword = "airplane";
+        options.havingAdminCredentials(adminUser, adminPassword);
+        checkDataClusterCreateOptionsContent(options);
+    }
+
+    @Test
+    public void verifyCreateAlterNodeCount() {
+        DataClusterCreateOptions options = DataClusterCreateOptions.getInstance(PRODUCT_ID, NAME, DESCRIPTION, DB_NAME);
+
+        nodeCount = 12;
+        options.havingNodeCount(nodeCount);
+        checkDataClusterCreateOptionsContent(options);
+    }
+
+    @Test
+    public void verifyCreateAlterDC() {
+        DataClusterCreateOptions options = DataClusterCreateOptions.getInstance(PRODUCT_ID, NAME, DESCRIPTION, DB_NAME);
+
+        dataCenterId = "mars";
+        options.inDataCenter(dataCenterId);
+        checkDataClusterCreateOptionsContent(options);
+    }
 }
