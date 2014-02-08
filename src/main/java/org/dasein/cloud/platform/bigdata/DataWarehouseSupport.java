@@ -45,15 +45,48 @@ public interface DataWarehouseSupport {
      */
     public @Nonnull String createCluster(@Nonnull DataClusterCreateOptions options) throws CloudException, InternalException;
 
+    /**
+     * Fetches the state of the cluster identified with the specified cluster ID from the cloud. If no such cloud exists,
+     * no value will be returned.
+     * @param clusterId the unique ID of the data cluster being fetched
+     * @return an object with the current data cluster state or <code>null</code> if no such data cluster exists
+     * @throws CloudException an error occurred in the cloud provider while fetching the target data cluster
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
+     */
     public @Nullable DataCluster getCluster(@Nonnull String clusterId) throws CloudException, InternalException;
 
-    public @Nonnull Requirement isDataCenterConstrained() throws CloudException, InternalException;
+    /**
+     * Indicates whether or not data clusters may be (or are required to be) constrained to a specific data center.
+     * @return the requirement for data clusters to be constrained to a data center
+     * @throws CloudException an error occurred processing the request in the cloud provider
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
+     */
+    public @Nonnull Requirement getDataCenterConstraintRequirement() throws CloudException, InternalException;
 
+    /**
+     * Lists all known data clusters for the current account in the current region of the cloud.
+     * @return all known data clusters for this region
+     * @throws CloudException an error occurred processing the request in the cloud provider
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
+     */
     public @Nonnull Iterable<DataCluster> listClusters() throws CloudException, InternalException;
 
     // TODO: list products
 
-    public void removeCluster(@Nonnull String clusterId) throws CloudException, InternalException;
+    /**
+     * Removes the specified data cluster from the cloud.
+     * @param clusterId the data cluster to be removed
+     * @param snapshotFirst snapshot the database before removing the cluster
+     * @throws CloudException an error occurred processing the request in the cloud provider
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
+     */
+    public void removeCluster(@Nonnull String clusterId, boolean snapshotFirst) throws CloudException, InternalException;
 
+    /**
+     * Indicates whether or not this cloud supports encryption of your database at rest.
+     * @return true if encryption at rest is supported
+     * @throws CloudException an error occurred processing the request in the cloud provider
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
+     */
     public boolean supportsEncryptionAtRest() throws CloudException, InternalException;
 }
