@@ -56,6 +56,16 @@ public interface DataWarehouseSupport {
     public @Nullable DataCluster getCluster(@Nonnull String clusterId) throws CloudException, InternalException;
 
     /**
+     * Fetches a specific product offering for the provisioning of data clusters. If no such product exists,
+     * a <code>null</code> value is returned.
+     * @param productId the product ID of the desired product
+     * @return any matching product or <code>null</code> if no such product exists
+     * @throws CloudException an error occurred processing the request in the cloud provider
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
+     */
+    public @Nullable DataClusterProduct getClusterProduct(@Nonnull String productId) throws CloudException, InternalException;
+
+    /**
      * Indicates whether or not data clusters may be (or are required to be) constrained to a specific data center.
      * @return the requirement for data clusters to be constrained to a data center
      * @throws CloudException an error occurred processing the request in the cloud provider
@@ -71,7 +81,13 @@ public interface DataWarehouseSupport {
      */
     public @Nonnull Iterable<DataCluster> listClusters() throws CloudException, InternalException;
 
-    // TODO: list products
+    /**
+     * Lists all products through which data clusters may be provisioned.
+     * @return the list of available data cluster products
+     * @throws CloudException an error occurred processing the request in the cloud provider
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
+     */
+    public @Nonnull Iterable<DataClusterProduct> listClusterProducts() throws CloudException, InternalException;
 
     /**
      * Removes the specified data cluster from the cloud.

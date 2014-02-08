@@ -128,6 +128,13 @@ public class DataWarehouseTestCase {
         assertEquals("The encrypted value does not match the test value", createEncrypted,  options.isEncrypted());
     }
 
+    private void checkDataClusterProductContent(DataClusterProduct product) {
+        assertNotNull("The data cluster product may not be null", product);
+        assertEquals("The product ID does not match the test value", PRODUCT_ID, product.getProviderProductId());
+        assertEquals("The name does not match the test value", NAME, product.getName());
+        assertEquals("The description does not match the test value", DESCRIPTION, product.getDescription());
+    }
+
     @Test
     public void verifyDataClusterSimpleConstructor() {
         checkDataClusterContent(DataCluster.getInstance(OWNER_ID, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, DB_NAME, PORT));
@@ -368,5 +375,12 @@ public class DataWarehouseTestCase {
         dataCenterId = "mars";
         options.inDataCenter(dataCenterId);
         checkDataClusterCreateOptionsContent(options);
+    }
+
+    @Test
+    public void verifyProductConstructor() {
+        DataClusterProduct product = DataClusterProduct.getInstance(PRODUCT_ID, NAME, DESCRIPTION);
+
+        checkDataClusterProductContent(product);
     }
 }
