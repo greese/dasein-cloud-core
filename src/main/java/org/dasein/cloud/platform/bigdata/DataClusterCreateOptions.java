@@ -23,6 +23,7 @@ import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.OperationNotSupportedException;
+import org.dasein.cloud.TimeWindow;
 import org.dasein.cloud.platform.PlatformServices;
 import org.dasein.cloud.util.Security;
 import org.dasein.util.uom.time.Day;
@@ -108,6 +109,7 @@ public class DataClusterCreateOptions {
     private int             databasePort;
     private String          description;
     private boolean         encrypted;
+    private TimeWindow      maintenanceWindow;
     private String          name;
     private int             nodeCount;
     private String          providerDataCenterId;
@@ -183,6 +185,13 @@ public class DataClusterCreateOptions {
     }
 
     /**
+     * @return the preferred time window in which the cloud should perform any automated maintenance operations
+     */
+    public @Nullable TimeWindow getMaintenanceWindow() {
+        return maintenanceWindow;
+    }
+
+    /**
      * @return a user-friendly name for the database
      */
     public @Nonnull String getName() {
@@ -249,6 +258,16 @@ public class DataClusterCreateOptions {
     public @Nonnull DataClusterCreateOptions havingAdminCredentials(@Nonnull String adminUser, @Nonnull String adminPassword) {
         this.adminUserName = adminUser;
         this.adminPassword = adminPassword;
+        return this;
+    }
+
+    /**
+     * Alters this data cluster object to reflect the the time window during which this data cluster is maintained
+     * @param window the preferred maintenance window
+     * @return this
+     */
+    public @Nonnull DataClusterCreateOptions havingMaintenanceWindow(@Nonnull TimeWindow window) {
+        maintenanceWindow = window;
         return this;
     }
 

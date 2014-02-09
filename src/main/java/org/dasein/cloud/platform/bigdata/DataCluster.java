@@ -21,6 +21,7 @@ package org.dasein.cloud.platform.bigdata;
 
 import com.sun.istack.internal.NotNull;
 import org.dasein.cloud.Taggable;
+import org.dasein.cloud.TimeWindow;
 import org.dasein.cloud.network.VLAN;
 import org.dasein.util.uom.time.Day;
 import org.dasein.util.uom.time.TimePeriod;
@@ -164,6 +165,7 @@ public class DataCluster implements Taggable {
     private int                    databasePort;
     private String                 description;
     private boolean                encrypted;
+    private TimeWindow             maintenanceWindow;
     private ClusterQueryProtocol[] protocols;
     private String                 providerDataCenterId;
     private String                 providerDataClusterId;
@@ -241,20 +243,6 @@ public class DataCluster implements Taggable {
     }
 
     /**
-     * @return the data center in which the cluster operates
-     */
-    public @Nullable String getProviderDataCenterId() {
-        return providerDataCenterId;
-    }
-
-    /**
-     * @return the unique identifier for identifying this data cluster with the cloud provider
-     */
-    public @Nonnull String getProviderDataClusterId() {
-        return providerDataClusterId;
-    }
-
-    /**
      * @return the database name to use in accessing the database behind this cluster
      */
     public @Nonnull String getDatabaseName() {
@@ -276,6 +264,13 @@ public class DataCluster implements Taggable {
     }
 
     /**
+     * @return the preferred time window in which the cloud should perform any automated maintenance operations
+     */
+    public @Nullable TimeWindow getMaintenanceWindow() {
+        return maintenanceWindow;
+    }
+
+    /**
      * @return a list of all protocols that may be used to query this database on the {@link #getDatabasePort()}.
      */
     public @Nonnull ClusterQueryProtocol[] getProtocols() {
@@ -285,6 +280,20 @@ public class DataCluster implements Taggable {
             System.arraycopy(protocols, 0, p, 0, protocols.length);
         }
         return p;
+    }
+
+    /**
+     * @return the data center in which the cluster operates
+     */
+    public @Nullable String getProviderDataCenterId() {
+        return providerDataCenterId;
+    }
+
+    /**
+     * @return the unique identifier for identifying this data cluster with the cloud provider
+     */
+    public @Nonnull String getProviderDataClusterId() {
+        return providerDataClusterId;
     }
 
     /**
@@ -373,6 +382,17 @@ public class DataCluster implements Taggable {
     public @Nonnull DataCluster havingAdminCredentials(@Nonnull String adminUser, @Nonnull String adminPassword) {
         this.adminUserName = adminUser;
         this.adminPassword = adminPassword;
+        return this;
+    }
+
+    /**
+     * Alters this data cluster object to reflect the the time window during which this data cluster is maintained
+     * It does not actually cause a change to the underlying cloud resource.
+     * @param window the preferred maintenance window
+     * @return this
+     */
+    public @Nonnull DataCluster havingMaintenanceWindow(@Nonnull TimeWindow window) {
+        maintenanceWindow = window;
         return this;
     }
 
