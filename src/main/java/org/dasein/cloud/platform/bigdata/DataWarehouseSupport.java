@@ -219,6 +219,15 @@ public interface DataWarehouseSupport {
     public void removeClusterParameterGroup(@Nonnull String groupId) throws CloudException, InternalException;
 
     /**
+     * Rotates the encryption keys used for data at rest encryption inside a data cluster. Encryption at rest
+     * must be enabled for the data cluster, otherwise this method will throw an exception.
+     * @param clusterId the cluster ID of the cluster for whom key rotation should take place
+     * @throws CloudException an error occurred processing the request in the cloud provider or encryption at rest is not enabled
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
+     */
+    public void rotateEncryptionKeys(@Nonnull String clusterId) throws CloudException, InternalException;
+
+    /**
      * Indicates whether or not this cloud supports protecting access to data clusters with special data cluster firewalls.
      * @return true if supported
      * @throws CloudException an error occurred processing the request in the cloud provider

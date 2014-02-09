@@ -274,9 +274,7 @@ public class DataCluster {
         ClusterQueryProtocol[] p = new ClusterQueryProtocol[protocols == null ? 0 : protocols.length];
 
         if( protocols != null && protocols.length > 0 ) {
-            for( int i = 0; i< protocols.length; i++ ) {
-                p[i] = protocols[i];
-            }
+            System.arraycopy(protocols, 0, p, 0, protocols.length);
         }
         return p;
     }
