@@ -589,7 +589,7 @@ public class DataWarehouseTestCase {
     public void verifyDataClusterFirewallAlterBoth() {
         DataClusterFirewall fw = DataClusterFirewall.getInstance(OWNER_ID, REGION_ID, FIREWALL_ID, NAME, DESCRIPTION);
 
-        ipCidrs = new String[] { "192.168.1.0/0", "12.0.0.0/0" };
+        ipCidrs = new String[] { "12.0.0.0/0", "192.168.1.0/0" };
         fw.authorizingIps(ipCidrs);
         computeFirewalls = new FirewallReference[] { FirewallReference.getInstance("1", "2"), FirewallReference.getInstance("3", "4") };
         fw.authorizingComputeFirewalls(computeFirewalls);

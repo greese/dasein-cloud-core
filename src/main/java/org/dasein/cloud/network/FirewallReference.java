@@ -32,7 +32,7 @@ import javax.annotation.Nullable;
  * @since 2014.03
  * @version 2014.03 initial version in support of data cluster firewalls
  */
-public class FirewallReference {
+public class FirewallReference implements Comparable<FirewallReference> {
     /**
      * Constructs a firewall reference from the specified owner ID/firewall ID pair
      * @param ownerId the owner of the target firewall
@@ -51,6 +51,14 @@ public class FirewallReference {
     private String providerFirewallId;
 
     private FirewallReference() { }
+
+    @Override
+    public int compareTo(@Nullable FirewallReference other) {
+        if( other == null ) {
+            return -1;
+        }
+        return toString().compareTo(other.toString());
+    }
 
     @Override
     public boolean equals(@Nullable Object other) {

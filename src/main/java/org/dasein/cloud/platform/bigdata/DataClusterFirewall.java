@@ -79,7 +79,7 @@ public class DataClusterFirewall {
      * @return this
      */
     public @Nonnull DataClusterFirewall authorizingComputeFirewalls(@Nonnull FirewallReference ... firewalls) {
-        ArrayList<FirewallReference> fws = new ArrayList<FirewallReference>();
+        TreeSet<FirewallReference> fws = new TreeSet<FirewallReference>();
 
         if( authorizedFirewalls != null ) {
             Collections.addAll(fws, authorizedFirewalls);
