@@ -232,6 +232,15 @@ public interface DataWarehouseSupport {
     public @Nonnull Iterable<DataClusterSnapshot> listClusterSnapshots() throws CloudException, InternalException;
 
     /**
+     * Lists data cluster snapshots matching the filter criteria specified. If no filter criteria are specified, this
+     * method acts as if it were filtering solely on this user's snapshots (e.g. equal to {@link #listClusterSnapshots()}).
+     * @return a list of data cluster snapshots matching the specified criteria
+     * @throws CloudException an error occurred processing the request in the cloud provider
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
+     */
+    public @Nonnull Iterable<DataClusterSnapshot> listClusterSnapshots(@Nullable DataClusterSnapshotFilterOptions options) throws CloudException, InternalException;
+
+    /**
      * Lists all versions of the clustering technology available for creating new data cluster instances.
      * @return a list of supported versions
      * @throws CloudException an error occurred processing the request in the cloud provider
