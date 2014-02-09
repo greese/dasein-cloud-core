@@ -27,5 +27,24 @@ package org.dasein.cloud.platform.bigdata;
  * @version 2014.03 initial version
  */
 public enum DataClusterState {
-    AVAILABLE, CREATING
+    /**
+     * The cluster is available
+     */
+    AVAILABLE,
+    /**
+     * The system is in the process of creating the cluster
+     */
+    CREATING,
+    /**
+     * The system is in the process of deleting the cluster
+     */
+    DELETING,
+    /**
+     * The cloud is in the process of rebooting the cluster
+     */
+    REBOOTING,
+    /**
+     * The cloud is in the process of resizing the cluster
+     */
+    RESIZING
 }

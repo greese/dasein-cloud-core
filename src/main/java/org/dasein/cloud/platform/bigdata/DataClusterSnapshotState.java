@@ -27,5 +27,20 @@ package org.dasein.cloud.platform.bigdata;
  * @version 2014.03 initial version (issue #100)
  */
 public enum DataClusterSnapshotState {
-    AVAILABLE, PENDING
+    /**
+     * The snapshot is available for use
+     */
+    AVAILABLE,
+    /**
+     * The snapshot is in the middle of an operation and you can't do anything to it right now
+     */
+    PENDING,
+    /**
+     * The snapshot has been deleted, but it still is registered in the system
+     */
+    DELETED,
+    /**
+     * The snapshot failed and can never be used to any useful ends
+     */
+    FAILED
 }

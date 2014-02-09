@@ -21,6 +21,7 @@ package org.dasein.cloud.platform.bigdata;
 
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
+import org.dasein.cloud.OperationNotSupportedException;
 import org.dasein.cloud.Requirement;
 import org.dasein.cloud.Tag;
 import org.dasein.cloud.network.Firewall;
@@ -39,6 +40,16 @@ import java.util.Map;
  * @version 2014.03 initial version (issue #100)
  */
 public interface DataWarehouseSupport {
+    /**
+     * Adds the specified account number to the list of accounts with which this snapshot is shared.
+     * @param snapshotId the unique ID of the snapshot to be shared
+     * @param accountNumber the account number with which the snapshot will be shared
+     * @throws CloudException an error occurred with the cloud provider
+     * @throws InternalException a local error occurred in the Dasein Cloud implementation
+     * @throws OperationNotSupportedException the cloud does not support sharing snapshots with other accounts
+     */
+    public abstract void addSnapshotShare(@Nonnull String snapshotId, @Nonnull String accountNumber) throws CloudException, InternalException;
+
     /**
      * Authorizes access to data clusters associated with a specified data cluster firewall by the compute firewalls
      * ({@link Firewall}) referenced by the firewall references.
@@ -245,6 +256,15 @@ public interface DataWarehouseSupport {
     public void rebootCluster(@Nonnull String clusterId) throws CloudException, InternalException;
 
     /**
+     * Removes ALL specific account shares for the specified snapshot. NOTE THAT THIS METHOD WILL NOT THROW AN EXCEPTION
+     * WHEN SNAPSHOT SHARING IS NOT SUPPORTED. IT IS A NO-OP IN THAT SCENARIO.
+     * @param snapshotId the unique ID of the snapshot to be unshared
+     * @throws CloudException an error occurred with the cloud provider
+     * @throws InternalException a local error occurred in the Dasein Cloud implementation
+     */
+    public abstract void removeAllSnapshotShares(@Nonnull String snapshotId) throws CloudException, InternalException;
+
+    /**
      * Removes the specified data cluster from the cloud.
      * @param clusterId the data cluster to be removed
      * @param snapshotFirst snapshot the database before removing the cluster
@@ -276,6 +296,16 @@ public interface DataWarehouseSupport {
      * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
      */
     public void removeClusterSnapshot(@Nonnull String snapshotId) throws CloudException, InternalException;
+
+    /**
+     * Removes the specified account number from the list of accounts with which this snapshot is shared.
+     * @param snapshotId the unique ID of the snapshot to be unshared
+     * @param accountNumber the account number with which the snapshot will be unshared
+     * @throws CloudException an error occurred with the cloud provider
+     * @throws InternalException a local error occurred in the Dasein Cloud implementation
+     * @throws OperationNotSupportedException the cloud does not support sharing snapshots with other accounts
+     */
+    public abstract void removeSnapshotShare(@Nonnull String snapshotId, @Nonnull String accountNumber) throws CloudException, InternalException;
 
     /**
      * Revokes access to data clusters associated with a specified data cluster firewall from the compute firewalls
@@ -359,6 +389,14 @@ public interface DataWarehouseSupport {
      * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
      */
     public void updateParameters(@Nonnull String parameterGroupId, @Nonnull Map<String,Object> parameters) throws CloudException, InternalException;
+
+    /**
+     * Indicates whether or not a snapshot owner can explicitly share a snapshot with another account.
+     * @return true if snapshot sharing is supported
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     * @throws CloudException an error occurred with the cloud provider
+     */
+    public boolean supportsSnapshotSharing() throws InternalException, CloudException;
 
     /**
      * Updates meta-data for a data cluster with the new values. It will not overwrite any value that currently

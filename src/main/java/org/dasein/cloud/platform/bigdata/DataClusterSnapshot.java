@@ -20,12 +20,18 @@
 package org.dasein.cloud.platform.bigdata;
 
 import org.dasein.cloud.Taggable;
+import org.dasein.util.uom.storage.Megabyte;
+import org.dasein.util.uom.storage.Storage;
+import org.dasein.util.uom.time.Second;
+import org.dasein.util.uom.time.TimePeriod;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeSet;
 
 /**
  * Snapshots of data clusters that may be used to create/restore data clusters.
@@ -102,6 +108,8 @@ public class DataClusterSnapshot implements Taggable {
     private String                   databaseName;
     private int                      databasePort;
     private String                   description;
+    private TimePeriod<Second>       estimatedTimeToCompletion;
+    private Storage<Megabyte>        incrementalSize;
     private String                   name;
     private int                      nodeCount;
     private String                   providerClusterId;
@@ -110,7 +118,9 @@ public class DataClusterSnapshot implements Taggable {
     private String                   providerProductId;
     private String                   providerRegionId;
     private String                   providerSnapshotId;
+    private String[]                 shares;
     private Map<String,String>       tags;
+    private Storage<Megabyte>        totalBackupSize;
 
     private DataClusterSnapshot() { }
 
@@ -180,6 +190,20 @@ public class DataClusterSnapshot implements Taggable {
     }
 
     /**
+     * @return an estimate for the time until the snapshot is completed or <code>null</code> if the snapshot is already complete or the duration is unknown
+     */
+    public @Nullable TimePeriod<Second> getEstimatedTimeToCompletion() {
+        return estimatedTimeToCompletion;
+    }
+
+    /**
+     * @return the incremental cost of this specific snapshot to the overall backup size or <code>null</code> if unknown
+     */
+    public @Nullable Storage<Megabyte> getIncrementalSize() {
+        return incrementalSize;
+    }
+
+    /**
      * @return a user-friendly name for the snapshot
      */
     public @Nonnull String getName() {
@@ -236,6 +260,19 @@ public class DataClusterSnapshot implements Taggable {
     }
 
     /**
+     * @return a list of cloud accounts with which this snapshot has been shared
+     */
+    public @Nonnull String[] getShares() {
+        if( shares == null || shares.length < 1 ) {
+            return new String[0];
+        }
+        String[] copy = new String[shares.length];
+
+        System.arraycopy(shares, 0, copy, 0, copy.length);
+        return copy;
+    }
+
+    /**
      * @param key the key of the tag value you wish to fetch
      * @return the tag value for the specified tag key
      */
@@ -246,6 +283,13 @@ public class DataClusterSnapshot implements Taggable {
     @Override
     public @Nonnull Map<String, String> getTags() {
         return (tags == null ? new HashMap<String, String>() : tags);
+    }
+
+    /**
+     * @return the total amount of data needed to restore the cluster from this snapshot or <code>null</code> if unknown
+     */
+    public @Nullable Storage<Megabyte> getTotalBackupSize() {
+        return totalBackupSize;
     }
 
     @Override
@@ -265,10 +309,60 @@ public class DataClusterSnapshot implements Taggable {
     }
 
     /**
+     * Alters this snapshot to reflect the amount of data associated with it. This method has no impact on the cloud
+     * itself.
+     * @param incremental the incremental size of this snapshot
+     * @param total the total size of any restore operation from this snapshot
+     * @return this
+     */
+    public @Nonnull DataClusterSnapshot havingStorage(@Nullable Storage<?> incremental, @Nullable Storage<?> total) {
+        if( incremental != null ) {
+            this.incrementalSize = (Storage<Megabyte>)incremental.convertTo(Storage.MEGABYTE);
+        }
+        if( total != null ) {
+            this.totalBackupSize = (Storage<Megabyte>)total.convertTo(Storage.MEGABYTE);
+        }
+        return this;
+    }
+
+    /**
      * @return true if the snapshot was an automated snapshot, false if it was manually taken
      */
     public boolean isAutomated() {
         return automated;
+    }
+
+    /**
+     * @return <code>true</code> if the snapshot is shared with at least one another account
+     */
+    public boolean isShared() {
+        if( shares == null || shares.length < 1 ) {
+            return false;
+        }
+        for( String id : shares ) {
+            if( !id.equals(providerOwnerId) ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Alters the state of this object to reflect the fact that the underlying snapshot has been shared with the specified
+     * accounts. This method adds to the current list and does not replace it. It does not actually impact anything
+     * in the cloud itself.
+     * @param accounts a list of account numbers for accounts with which this snapshot is shared
+     * @return this
+     */
+    public @Nonnull DataClusterSnapshot sharedWith(@Nonnull String ... accounts) {
+        TreeSet<String> copy = new TreeSet<String>();
+
+        if( shares != null && shares.length > 0 ) {
+            Collections.addAll(copy, shares);
+        }
+        Collections.addAll(copy, accounts);
+        shares = copy.toArray(new String[copy.size()]);
+        return this;
     }
 
     @Override
@@ -282,5 +376,15 @@ public class DataClusterSnapshot implements Taggable {
     @Override
     public @Nonnull String toString() {
         return providerSnapshotId;
+    }
+
+    /**
+     * Indicates how much time is left to complete the snapshot if it is in the middle of being created.
+     * @param period the estimated period until the snapshot is complete
+     * @return this
+     */
+    public @Nonnull DataClusterSnapshot withEstimatedTimeToCompletion(@Nonnull TimePeriod<?> period) {
+        estimatedTimeToCompletion = (TimePeriod<Second>)period.convertTo(TimePeriod.SECOND);
+        return this;
     }
 }
