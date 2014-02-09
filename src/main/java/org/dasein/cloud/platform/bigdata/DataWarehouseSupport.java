@@ -28,6 +28,7 @@ import org.dasein.cloud.network.Firewall;
 import org.dasein.cloud.network.FirewallReference;
 import org.dasein.cloud.storage.CloudStorageLogging;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -314,7 +315,16 @@ public interface DataWarehouseSupport {
      * @throws InternalException a local error occurred in the Dasein Cloud implementation
      * @throws OperationNotSupportedException the cloud does not support sharing snapshots with other accounts
      */
-    public abstract void removeSnapshotShare(@Nonnull String snapshotId, @Nonnull String accountNumber) throws CloudException, InternalException;
+    public void removeSnapshotShare(@Nonnull String snapshotId, @Nonnull String accountNumber) throws CloudException, InternalException;
+
+    /**
+     * Resizes the cluster to the specified number of nodes.
+     * @param clusterId the cluster to resize
+     * @param nodeCount the number of nodes to which the cluster should be resized
+     * @throws CloudException an error occurred in the cloud provider while performing the operation
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while preparing or processing the call
+     */
+    public void resizeCluster(@Nonnull String clusterId, @Nonnegative int nodeCount) throws CloudException, InternalException;
 
     /**
      * Revokes access to data clusters associated with a specified data cluster firewall from the compute firewalls
