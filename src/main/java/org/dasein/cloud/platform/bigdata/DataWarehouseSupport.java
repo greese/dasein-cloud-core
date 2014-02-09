@@ -23,7 +23,7 @@ import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.Requirement;
 import org.dasein.cloud.network.Firewall;
-import org.dasein.cloud.network.FirewallCreateOptions;
+import org.dasein.cloud.network.FirewallReference;
 import org.dasein.cloud.storage.CloudStorageLogging;
 
 import javax.annotation.Nonnull;
@@ -39,6 +39,26 @@ import java.util.Map;
  */
 public interface DataWarehouseSupport {
     /**
+     * Authorizes access to data clusters associated with a specified data cluster firewall by the compute firewalls
+     * ({@link Firewall}) referenced by the firewall references.
+     * @param dataClusterFirewallId the data cluster firewall to be altered
+     * @param firewalls one or more references to compute firewalls to be authorized
+     * @throws CloudException an error occurred in the cloud provider while performing the operation
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while preparing or processing the call
+     */
+    public void authorizeComputeFirewalls(@Nonnull String dataClusterFirewallId, @Nonnull FirewallReference ... firewalls) throws CloudException, InternalException;
+
+    /**
+     * Authorizes access to data clusters associated with the specified data cluster firewall by IP addresses that match
+     * the specified CIDR notation list.
+     * @param dataClusterFirewallId the data cluster firewall to be altered
+     * @param cidrs one or more IP addresses in CIDR notation
+     * @throws CloudException an error occurred in the cloud provider while performing the operation
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while preparing or processing the call
+     */
+    public void authorizeIPs(@Nonnull String dataClusterFirewallId, @Nonnull String ... cidrs) throws CloudException, InternalException;
+
+    /**
      * Provisions a new data cluster in the current region of this cloud using the provided provisioning options. This
      * method should block until an ID is available and {@link #getCluster(String)} and {@link #listClusters()} will
      * return the new data cluster when queried.
@@ -51,12 +71,13 @@ public interface DataWarehouseSupport {
 
     /**
      * Creates a firewall supporting data clusters in the target cloud if the target cloud supports data cluster firewalls.
-     * @param options the options for creating the new data cluster firewall
+     * @param name the name of the new firewall
+     * @param description a description of the new firewall
      * @return the unique ID for the newly created firewall
      * @throws CloudException an error occurred processing the request in the cloud provider
      * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
      */
-    public @Nonnull String createClusterFirewall(@Nonnull FirewallCreateOptions options) throws CloudException, InternalException;
+    public @Nonnull String createClusterFirewall(@Nonnull String name, @Nonnull String description) throws CloudException, InternalException;
 
     /**
      * Creates a new parameter group that defines parameters to be associated with data clusters.
@@ -106,7 +127,7 @@ public interface DataWarehouseSupport {
      * @throws CloudException an error occurred processing the request in the cloud provider
      * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
      */
-    public @Nullable Firewall getClusterFirewall(@Nonnull String firewallId) throws CloudException, InternalException;
+    public @Nullable DataClusterFirewall getClusterFirewall(@Nonnull String firewallId) throws CloudException, InternalException;
 
     /**
      * Indicates the current logging status for the specified data cluster. If logging is not enabled or the specified
@@ -161,7 +182,7 @@ public interface DataWarehouseSupport {
      * @throws CloudException an error occurred processing the request in the cloud provider
      * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
      */
-    public @Nonnull Iterable<Firewall> listClusterFirewalls() throws CloudException, InternalException;
+    public @Nonnull Iterable<DataClusterFirewall> listClusterFirewalls() throws CloudException, InternalException;
 
     /**
      * Lists all parameter groups belonging to this account.
@@ -243,6 +264,26 @@ public interface DataWarehouseSupport {
      * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
      */
     public void removeClusterSnapshot(@Nonnull String snapshotId) throws CloudException, InternalException;
+
+    /**
+     * Revokes access to data clusters associated with a specified data cluster firewall from the compute firewalls
+     * ({@link Firewall}) referenced by the firewall references.
+     * @param dataClusterFirewallId the data cluster firewall to be altered
+     * @param firewalls one or more references to compute firewalls to be revoked
+     * @throws CloudException an error occurred in the cloud provider while performing the operation
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while preparing or processing the call
+     */
+    public void revokeComputeFirewalls(@Nonnull String dataClusterFirewallId, @Nonnull FirewallReference ... firewalls) throws CloudException, InternalException;
+
+    /**
+     * Revokes access to data clusters associated with the specified data cluster firewall from IP addresses that match
+     * the specified CIDR notation list.
+     * @param dataClusterFirewallId the data cluster firewall to be altered
+     * @param cidrs one or more IP addresses in CIDR notation
+     * @throws CloudException an error occurred in the cloud provider while performing the operation
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while preparing or processing the call
+     */
+    public void revokeIPs(@Nonnull String dataClusterFirewallId, @Nonnull String ... cidrs) throws CloudException, InternalException;
 
     /**
      * Rotates the encryption keys used for data at rest encryption inside a data cluster. Encryption at rest

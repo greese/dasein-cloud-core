@@ -43,6 +43,51 @@ public class FirewallTestCase {
     }
 
     @Test
+    public void verifyFirewallReferenceContent() {
+        String ownerId = "me";
+        String firewallId = "you";
+
+        FirewallReference r = FirewallReference.getInstance(ownerId, firewallId);
+
+        assertNotNull("The firewall reference from the constructor cannot be null", r);
+        assertEquals("The owner ID did not match the test value", ownerId, r.getProviderOwnerId());
+        assertEquals("The firewall ID did not match the test value", firewallId, r.getProviderFirewallId());
+        assertNotNull("The toString() reference cannot be null", r.toString());
+    }
+
+    @Test
+    public void verifyFirewallReferenceEquals() {
+        String ownerId = "me";
+        String firewallId = "you";
+
+        FirewallReference r1 = FirewallReference.getInstance(ownerId, firewallId);
+        FirewallReference r2 = FirewallReference.getInstance(ownerId, firewallId);
+
+        assertTrue("A firewall reference should be equal to itself", r1.equals(r1));
+        assertTrue("The two firewall references should be equal, but they are not", r1.equals(r2));
+    }
+
+    @Test
+    public void verifyFirewallReferenceNotEquals() {
+        String ownerId = "me";
+        String firewallId = "you";
+
+        FirewallReference r1 = FirewallReference.getInstance(ownerId, firewallId);
+
+        //noinspection ObjectEqualsNull
+        assertFalse("A firewall reference should not equal null", r1.equals(null));
+
+        FirewallReference r2 = FirewallReference.getInstance("other", "firewall");
+        assertFalse("The two firewall references should not be equal, but they are", r1.equals(r2));
+
+        r2 = FirewallReference.getInstance(ownerId, "another");
+        assertFalse("The two firewall references with the same owner should not be equal, but they are", r1.equals(r2));
+
+        r2 = FirewallReference.getInstance("someoneelse", firewallId);
+        assertFalse("The two firewall references with the same ID and different owners should not be equal, but they are", r1.equals(r2));
+    }
+
+    @Test
     public void createRuleOptionsWithPrecedence() {
         RuleTarget source = RuleTarget.getCIDR("209.98.98.98/0");
         RuleTarget dest = RuleTarget.getGlobal("1234");

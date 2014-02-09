@@ -19,6 +19,7 @@
 
 package org.dasein.cloud.platform.bigdata;
 
+import org.dasein.cloud.network.FirewallReference;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,7 +31,9 @@ import java.util.Set;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for the support classes of the data warehouse support in Dasein Cloud
@@ -44,6 +47,7 @@ public class DataWarehouseTestCase {
     static private final DataClusterState CLUSTER_STATE = DataClusterState.AVAILABLE;
     static private final String           DB_NAME       = "dbName";
     static private final String           DESCRIPTION   = "description";
+    static private final String           FIREWALL_ID   = "firewallId";
     static private final String           NAME          = "name";
     static private final int              PORT          = 17;
     static private final String           OWNER_ID      = "me";
@@ -56,6 +60,7 @@ public class DataWarehouseTestCase {
     private String adminPassword;
     private String adminUser;
     private boolean automated;
+    private FirewallReference[] computeFirewalls;
     private boolean createEncrypted;
     private int    createPort;
     private String createVersion;
@@ -63,6 +68,7 @@ public class DataWarehouseTestCase {
     private String dataCenterId;
     private boolean encrypted;
     private String[] firewalls;
+    private String[] ipCidrs;
     private int    nodeCount;
     private Map<String,Object> parameters;
     private String parameterGroup;
@@ -88,6 +94,8 @@ public class DataWarehouseTestCase {
         parameterGroup = null;
         parameters = new HashMap<String,Object>();
         firewalls = new String[0];
+        computeFirewalls = new FirewallReference[0];
+        ipCidrs = new String[0];
     }
 
     @After
@@ -119,6 +127,7 @@ public class DataWarehouseTestCase {
         assertNotNull("The protocols supported by a data cluster cannot be null", p);
         assertEquals("The number of protocols must match", protocols.length, p.length);
         assertArrayEquals("The protocols must match", protocols, p);
+        assertNotNull("toString() may not be null", cluster.toString());
     }
 
     private void checkDataClusterSnapshotContent(@Nullable DataClusterSnapshot snapshot) {
@@ -139,6 +148,7 @@ public class DataWarehouseTestCase {
         assertEquals("The automated value does not match the test value", automated, snapshot.isAutomated());
         assertEquals("The creation timestamp does not match the test value", creationTimestamp, snapshot.getCreationTimestamp());
         assertEquals("The snapshot state does not match the test value", SNAPSHOT_STATE, snapshot.getCurrentState());
+        assertNotNull("toString() may not be null", snapshot.toString());
     }
 
     private void checkDataClusterCreateOptionsContent(DataClusterCreateOptions options) {
@@ -166,6 +176,7 @@ public class DataWarehouseTestCase {
         assertEquals("The encrypted value does not match the test value", createEncrypted,  options.isEncrypted());
         assertEquals("The parameter group does not match the test value", parameterGroup, options.getProviderParameterGroupId());
         assertArrayEquals("The firewall IDs do not match the test value", firewalls, options.getProviderFirewallIds());
+        assertNotNull("toString() may not be null", options);
     }
 
     private void checkDataClusterProductContent(DataClusterProduct product) {
@@ -173,6 +184,7 @@ public class DataWarehouseTestCase {
         assertEquals("The product ID does not match the test value", PRODUCT_ID, product.getProviderProductId());
         assertEquals("The name does not match the test value", NAME, product.getName());
         assertEquals("The description does not match the test value", DESCRIPTION, product.getDescription());
+        assertNotNull("toString() may not be null", product.toString());
     }
 
     private void checkDataClusterVersionContent(DataClusterVersion version) {
@@ -181,6 +193,7 @@ public class DataWarehouseTestCase {
         assertEquals("The parameter family does not match the test value", PARAM_FAMILY, version.getParameterFamily());
         assertEquals("The name does not match the test value", NAME, version.getName());
         assertEquals("The description does not match the test value", DESCRIPTION, version.getDescription());
+        assertNotNull("toString() may not be null", version.toString());
     }
 
     private void checkDataClusterParameterGroupContent(DataClusterParameterGroup group) {
@@ -201,6 +214,19 @@ public class DataWarehouseTestCase {
         for( String key : expectedKeys ) {
             assertEquals("The parameter value for " + key + " does not match the test value", parameters.get(key), group.getParameters().get(key));
         }
+        assertNotNull("toString() may not be null", group.toString());
+    }
+
+    private void checkDataClusterFirewallContent(@Nullable DataClusterFirewall firewall) {
+        assertNotNull("The constructed firewall may not be null", firewall);
+        assertEquals("The name did not match the test value", NAME, firewall.getName());
+        assertEquals("The description did not match the test value", DESCRIPTION, firewall.getDescription());
+        assertEquals("The firewall ID did not match the test value", FIREWALL_ID, firewall.getProviderFirewallId());
+        assertEquals("The owner ID did not match the test value", OWNER_ID, firewall.getProviderOwnerId());
+        assertEquals("The region ID did not match the test value", REGION_ID, firewall.getProviderRegionId());
+        assertArrayEquals("The compute firewalls did not match the test value", computeFirewalls, firewall.getAuthorizedComputeFirewalls());
+        assertArrayEquals("The CIDR IPs did not match the test value", ipCidrs, firewall.getAuthorizedIps());
+        assertNotNull("toString() may not be null", firewall.toString());
     }
 
     @Test
@@ -530,5 +556,73 @@ public class DataWarehouseTestCase {
         adminUser = "voltaire";
         snapshot = snapshot.havingAdminCredentials(adminUser);
         checkDataClusterSnapshotContent(snapshot);
+    }
+
+    @Test
+    public void verifyDataClusterFirewallConstructor() {
+        DataClusterFirewall fw = DataClusterFirewall.getInstance(OWNER_ID, REGION_ID, FIREWALL_ID, NAME, DESCRIPTION);
+
+        checkDataClusterFirewallContent(fw);
+    }
+
+    @Test
+    public void verifyDataClusterFirewallAlterComputeFirewalls() {
+        DataClusterFirewall fw = DataClusterFirewall.getInstance(OWNER_ID, REGION_ID, FIREWALL_ID, NAME, DESCRIPTION);
+
+        computeFirewalls = new FirewallReference[] { FirewallReference.getInstance("1", "2") };
+
+        fw.authorizingComputeFirewalls(computeFirewalls);
+        checkDataClusterFirewallContent(fw);
+    }
+
+    @Test
+    public void verifyDataClusterFirewallAlterIPs() {
+        DataClusterFirewall fw = DataClusterFirewall.getInstance(OWNER_ID, REGION_ID, FIREWALL_ID, NAME, DESCRIPTION);
+
+        ipCidrs = new String[] { "192.168.1.0/0" };
+
+        fw.authorizingIps(ipCidrs);
+        checkDataClusterFirewallContent(fw);
+    }
+
+    @Test
+    public void verifyDataClusterFirewallAlterBoth() {
+        DataClusterFirewall fw = DataClusterFirewall.getInstance(OWNER_ID, REGION_ID, FIREWALL_ID, NAME, DESCRIPTION);
+
+        ipCidrs = new String[] { "192.168.1.0/0", "12.0.0.0/0" };
+        fw.authorizingIps(ipCidrs);
+        computeFirewalls = new FirewallReference[] { FirewallReference.getInstance("1", "2"), FirewallReference.getInstance("3", "4") };
+        fw.authorizingComputeFirewalls(computeFirewalls);
+
+        checkDataClusterFirewallContent(fw);
+    }
+
+    @Test
+    public void verifyFirewallEquals() {
+        DataClusterFirewall fw = DataClusterFirewall.getInstance(OWNER_ID, REGION_ID, FIREWALL_ID, NAME, DESCRIPTION);
+
+        assertTrue("A firewall must equal itself", fw.equals(fw));
+
+        DataClusterFirewall fw2 = DataClusterFirewall.getInstance(OWNER_ID, REGION_ID, FIREWALL_ID, NAME, DESCRIPTION);
+
+        assertTrue("The firewall should equal one with the same values", fw.equals(fw2));
+    }
+
+    @Test
+    public void verifyFirewallNotEquals() {
+        DataClusterFirewall fw = DataClusterFirewall.getInstance(OWNER_ID, REGION_ID, FIREWALL_ID, NAME, DESCRIPTION);
+
+        //noinspection ObjectEqualsNull
+        assertFalse("A firewall must not equal null", fw.equals(null));
+
+        DataClusterFirewall fw2 = DataClusterFirewall.getInstance(OWNER_ID, REGION_ID, "someotherid", NAME, DESCRIPTION);
+
+        assertFalse("The firewall should NOT equal one with a different id", fw.equals(fw2));
+
+        fw2 = DataClusterFirewall.getInstance(OWNER_ID, "someotherregion", FIREWALL_ID, NAME, DESCRIPTION);
+        assertFalse("The firewall should NOT equal one with a different region", fw.equals(fw2));
+
+        fw2 = DataClusterFirewall.getInstance("someoneelse", REGION_ID, FIREWALL_ID, NAME, DESCRIPTION);
+        assertFalse("The firewall should NOT equal one with a different owner", fw.equals(fw2));
     }
 }
