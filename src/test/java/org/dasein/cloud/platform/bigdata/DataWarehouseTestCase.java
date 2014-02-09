@@ -104,6 +104,7 @@ public class DataWarehouseTestCase {
         assertEquals("The admin password does not match the test value", adminPassword, cluster.getAdminPassword());
         assertEquals("The node count does not match the test value", nodeCount, cluster.getNodeCount());
         assertEquals("The version does not match the test value", version, cluster.getClusterVersion());
+        assertEquals("The parameter group does not match the test value", parameterGroup, cluster.getProviderParameterGroupId());
 
         ClusterQueryProtocol[] p = cluster.getProtocols();
 
@@ -273,6 +274,15 @@ public class DataWarehouseTestCase {
 
         nodeCount = 3;
         c.havingNodeCount(nodeCount);
+        checkDataClusterContent(c);
+    }
+
+    @Test
+    public void verifyDataClusterAlterParameterGroup() {
+        DataCluster c = DataCluster.getInstance(OWNER_ID, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, DB_NAME, PORT);
+
+        parameterGroup = "soda";
+        c.withParameterGroup(parameterGroup);
         checkDataClusterContent(c);
     }
 

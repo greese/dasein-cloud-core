@@ -22,6 +22,7 @@ package org.dasein.cloud.platform.bigdata;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.Requirement;
+import org.dasein.cloud.storage.CloudStorageLogging;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -86,6 +87,15 @@ public interface DataWarehouseSupport {
      */
     public @Nullable DataCluster getCluster(@Nonnull String clusterId) throws CloudException, InternalException;
 
+    /**
+     * Indicates the current logging status for the specified data cluster. If logging is not enabled or the specified
+     * cluster doesn't exist, this method will return <code>null</code>.
+     * @param clusterId the ID of the cluster whose logging status should be fetched
+     * @return the logging status for the specified data cluster if enabled and it exists
+     * @throws CloudException an error occurred processing the request in the cloud provider
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
+     */
+    public @Nullable CloudStorageLogging getClusterLoggingStatus(@Nonnull String clusterId) throws CloudException, InternalException;
     /**
      * Fetches the specified cluster parameter group based on its unique group ID.
      * @param groupId the unique ID of the group being sought
@@ -186,4 +196,13 @@ public interface DataWarehouseSupport {
      * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
      */
     public boolean supportsCloudStorageLogging() throws CloudException, InternalException;
+
+    /**
+     * Updates the parameters associated with the specified parameter group to new values.
+     * @param parameterGroupId the ID of the group whose parameters should be modified
+     * @param parameters the parameters to modify
+     * @throws CloudException an error occurred processing the request in the cloud provider
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
+     */
+    public void updateParameters(@Nonnull String parameterGroupId, @Nonnull Map<String,Object> parameters) throws CloudException, InternalException;
 }

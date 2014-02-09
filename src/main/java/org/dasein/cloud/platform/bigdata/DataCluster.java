@@ -162,6 +162,7 @@ public class DataCluster {
     private String                 providerDataCenterId;
     private String                 providerDataClusterId;
     private String                 providerOwnerId;
+    private String                 providerParameterGroupId;
     private String                 providerProductId;
     private String                 providerRegionId;
     private String                 providerVlanId;
@@ -285,6 +286,13 @@ public class DataCluster {
      */
     public @Nonnull String getProviderOwnerId() {
         return providerOwnerId;
+    }
+
+    /**
+     * @return the parameter group, if any, associated with this data cluster
+     */
+    public @Nullable String getProviderParameterGroupId() {
+        return providerParameterGroupId;
     }
 
     /**
@@ -421,6 +429,17 @@ public class DataCluster {
      */
     public @Nonnull DataCluster withoutEncryption() {
         encrypted = false;
+        return this;
+    }
+
+    /**
+     * Alters the data cluster to reflect the fact that the underlying cloud resource is assigned to the specified
+     * parameter group. It does not actually cause a change to the underlying cloud resource.
+     * @param providerParameterGroupId the parameter group with which this cluster is associated
+     * @return this
+     */
+    public @Nonnull DataCluster withParameterGroup(@Nonnull String providerParameterGroupId) {
+        this.providerParameterGroupId = providerParameterGroupId;
         return this;
     }
 }
