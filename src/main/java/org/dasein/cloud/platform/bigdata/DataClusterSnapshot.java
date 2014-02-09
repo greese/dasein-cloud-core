@@ -46,7 +46,7 @@ public class DataClusterSnapshot {
      * @return a cluster snapshot object matching the specified state
      */
     static public @Nonnull DataClusterSnapshot getInstance(@Nonnull String providerOwnerId, @Nonnull String providerRegionId, @Nonnull String providerSnapshotId, @Nullable String providerClusterId, @Nonnull String name, @Nonnull String description, @Nonnull String providerProductId, @Nonnegative long creationTimestamp, @Nonnull DataClusterSnapshotState currentState, @Nonnull String dbName) {
-        return getInstance(providerOwnerId, providerRegionId, providerSnapshotId, null, null, name, description, providerProductId, creationTimestamp, true, currentState, "0", 1, dbName, 0);
+        return getInstance(providerOwnerId, providerRegionId, providerSnapshotId, providerClusterId, null, name, description, providerProductId, creationTimestamp, true, currentState, "0", 1, dbName, 0);
     }
 
     /**

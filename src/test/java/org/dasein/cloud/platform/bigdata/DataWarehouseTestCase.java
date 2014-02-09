@@ -23,6 +23,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -120,7 +121,7 @@ public class DataWarehouseTestCase {
         assertArrayEquals("The protocols must match", protocols, p);
     }
 
-    private void checkDataClusterSnapshotContent(DataClusterSnapshot snapshot) {
+    private void checkDataClusterSnapshotContent(@Nullable DataClusterSnapshot snapshot) {
         assertNotNull("The snapshot returned from the constructor was illegally a null value", snapshot);
         assertEquals("The owner ID does not match the test value", OWNER_ID, snapshot.getProviderOwnerId());
         assertEquals("The region ID does not match the test value", REGION_ID, snapshot.getProviderRegionId());
@@ -131,7 +132,7 @@ public class DataWarehouseTestCase {
         assertEquals("The description does not match the test value", DESCRIPTION, snapshot.getDescription());
         assertEquals("The product ID does not match the test value", PRODUCT_ID, snapshot.getProviderProductId());
         assertEquals("The database name does not match the test value", DB_NAME, snapshot.getDatabaseName());
-        assertEquals("The port does not match the test value", PORT, snapshot.getDatabasePort());
+        assertEquals("The port does not match the test value", createPort, snapshot.getDatabasePort());
         assertEquals("The admin user does not match the test value", adminUser, snapshot.getAdminUserName());
         assertEquals("The node count does not match the test value", nodeCount, snapshot.getNodeCount());
         assertEquals("The version does not match the test value", version, snapshot.getClusterVersion());
@@ -517,7 +518,8 @@ public class DataWarehouseTestCase {
         automated = false;
         version = "crm114";
         nodeCount = 3;
-        DataClusterSnapshot snapshot = DataClusterSnapshot.getInstance(OWNER_ID, REGION_ID, SNAPSHOT_ID, CLUSTER_ID, dataCenterId, NAME, DESCRIPTION, PRODUCT_ID, creationTimestamp, automated, SNAPSHOT_STATE, version, nodeCount, DB_NAME, PORT);
+        createPort = PORT;
+        DataClusterSnapshot snapshot = DataClusterSnapshot.getInstance(OWNER_ID, REGION_ID, SNAPSHOT_ID, CLUSTER_ID, dataCenterId, NAME, DESCRIPTION, PRODUCT_ID, creationTimestamp, automated, SNAPSHOT_STATE, version, nodeCount, DB_NAME, createPort);
         checkDataClusterSnapshotContent(snapshot);
     }
 
