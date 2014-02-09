@@ -19,8 +19,11 @@
 
 package org.dasein.cloud.platform.bigdata;
 
+import com.sun.istack.internal.NotNull;
 import org.dasein.cloud.Taggable;
 import org.dasein.cloud.network.VLAN;
+import org.dasein.util.uom.time.Day;
+import org.dasein.util.uom.time.TimePeriod;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -171,6 +174,7 @@ public class DataCluster implements Taggable {
     private String                 providerVlanId;
     private String                 name;
     private int                    nodeCount;
+    private TimePeriod<Day>        snapshotRetention;
     private Map<String,String>     tags;
 
     private DataCluster() { }
@@ -333,6 +337,15 @@ public class DataCluster implements Taggable {
     }
 
     /**
+     * Indicates the period for which an automated snapshot will be retained. A <code>null</code> value indicates
+     * that snapshots are retained for an indetermined length of time (or forever).
+     * @return the time period for which automated snapshots get retained
+     */
+    public @Nullable TimePeriod<Day> getSnapshotRetentionPeriod() {
+        return snapshotRetention;
+    }
+
+    /**
      * @param key the key of the tag value you wish to fetch
      * @return the tag value for the specified tag key
      */
@@ -446,16 +459,6 @@ public class DataCluster implements Taggable {
     }
 
     /**
-     * Alters this data cluster object to reflect the fact that the underlying cloud resource is NOT encrypted. It does not
-     * actually cause a change to the underlying cloud resource.
-     * @return this
-     */
-    public @Nonnull DataCluster withoutEncryption() {
-        encrypted = false;
-        return this;
-    }
-
-    /**
      * Alters the data cluster to reflect the fact that the underlying cloud resource is assigned to the specified
      * parameter group. It does not actually cause a change to the underlying cloud resource.
      * @param providerParameterGroupId the parameter group with which this cluster is associated
@@ -463,6 +466,27 @@ public class DataCluster implements Taggable {
      */
     public @Nonnull DataCluster withParameterGroup(@Nonnull String providerParameterGroupId) {
         this.providerParameterGroupId = providerParameterGroupId;
+        return this;
+    }
+
+    /**
+     * Alters the data cluster to reflect the fact that the underlying cloud cluster has a snapshot retention period
+     * of the specified length. It does not actually cause a change in the cloud.
+     * @param period the period for which automated snapshots are retained against this cluster
+     * @return this
+     */
+    public @Nonnull DataCluster withSnapshotsRetainedFor(@Nonnull TimePeriod<?> period) {
+        snapshotRetention = (TimePeriod<Day>)period.convertTo(TimePeriod.DAY);
+        return this;
+    }
+
+    /**
+     * Alters this data cluster object to reflect the fact that the underlying cloud resource is NOT encrypted. It does not
+     * actually cause a change to the underlying cloud resource.
+     * @return this
+     */
+    public @Nonnull DataCluster withoutEncryption() {
+        encrypted = false;
         return this;
     }
 }

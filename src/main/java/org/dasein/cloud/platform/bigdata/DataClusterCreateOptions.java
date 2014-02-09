@@ -25,6 +25,8 @@ import org.dasein.cloud.InternalException;
 import org.dasein.cloud.OperationNotSupportedException;
 import org.dasein.cloud.platform.PlatformServices;
 import org.dasein.cloud.util.Security;
+import org.dasein.util.uom.time.Day;
+import org.dasein.util.uom.time.TimePeriod;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -99,19 +101,20 @@ public class DataClusterCreateOptions {
         return options;
     }
 
-    private String   adminPassword;
-    private String   adminUserName;
-    private String   clusterVersion;
-    private String   databaseName;
-    private int      databasePort;
-    private String   description;
-    private boolean  encrypted;
-    private String   name;
-    private int      nodeCount;
-    private String   providerDataCenterId;
-    private String[] providerFirewallIds;
-    private String   providerParameterGroupId;
-    private String   providerProductId;
+    private String          adminPassword;
+    private String          adminUserName;
+    private String          clusterVersion;
+    private String          databaseName;
+    private int             databasePort;
+    private String          description;
+    private boolean         encrypted;
+    private String          name;
+    private int             nodeCount;
+    private String          providerDataCenterId;
+    private String[]        providerFirewallIds;
+    private String          providerParameterGroupId;
+    private String          providerProductId;
+    private TimePeriod<Day> snapshotRetentionPeriod;
 
     private DataClusterCreateOptions() { }
 
@@ -229,6 +232,15 @@ public class DataClusterCreateOptions {
     }
 
     /**
+     * Indicates the period for which an automated snapshot will be retained. A <code>null</code> value indicates
+     * that snapshots are retained for an indetermined length of time (or forever).
+     * @return the time period for which automated snapshots get retained
+     */
+    public @Nullable TimePeriod<Day> getSnapshotRetentionPeriod() {
+        return snapshotRetentionPeriod;
+    }
+
+    /**
      * Alters the creation state to support the specified administrative credentials.
      * @param adminUser the administrative user name to use in SQL or other data access APIs
      * @param adminPassword the administrative password to use in SQL or other data access APIs
@@ -301,6 +313,17 @@ public class DataClusterCreateOptions {
      */
     public @Nonnull DataClusterCreateOptions withParameterGroup(@Nonnull String providerParameterGroupId) {
         this.providerParameterGroupId = providerParameterGroupId;
+        return this;
+    }
+
+    /**
+     * Alters the data cluster to reflect the fact that the underlying cloud cluster has a snapshot retention period
+     * of the specified length.
+     * @param period the period for which automated snapshots are retained against the new cluster
+     * @return this
+     */
+    public @Nonnull DataClusterCreateOptions withSnapshotsRetainedFor(@Nonnull TimePeriod<?> period) {
+        snapshotRetentionPeriod = (TimePeriod<Day>)period.convertTo(TimePeriod.DAY);
         return this;
     }
 

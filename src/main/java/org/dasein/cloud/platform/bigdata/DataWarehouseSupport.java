@@ -316,6 +316,15 @@ public interface DataWarehouseSupport {
     public boolean supportsAuthorizingComputeFirewalls() throws CloudException, InternalException;
 
     /**
+     * Indicates whether or not your can enable cluster logging to a bucket in the cloud storage tied to this
+     * cloud.
+     * @return true if logging can be enabled
+     * @throws CloudException an error occurred processing the request in the cloud provider
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
+     */
+    public boolean supportsCloudStorageLogging() throws CloudException, InternalException;
+
+    /**
      * Indicates whether or not this cloud supports protecting access to data clusters with special data cluster firewalls.
      * @return true if supported
      * @throws CloudException an error occurred processing the request in the cloud provider
@@ -324,21 +333,23 @@ public interface DataWarehouseSupport {
     public boolean supportsClusterFirewalls() throws CloudException, InternalException;
 
     /**
+     * Indicates whether or not you can snapshot clusters. Automated snapshots are performed automatically
+     * by the cloud provider on a regular basis with a fixed snapshot retention. Manual snapshots are performed through
+     * the API or cloud console.
+     * @param automated <code>true</code> if you are checking for automated snapshot support, <code>false</code> if for manual
+     * @return true if the specified kind of snapshots are supported
+     * @throws CloudException an error occurred processing the request in the cloud provider
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
+     */
+    public boolean supportsClusterSnapshots(boolean automated) throws CloudException, InternalException;
+
+    /**
      * Indicates whether or not this cloud supports encryption of your database at rest.
      * @return true if encryption at rest is supported
      * @throws CloudException an error occurred processing the request in the cloud provider
      * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
      */
     public boolean supportsEncryptionAtRest() throws CloudException, InternalException;
-
-    /**
-     * Indicates whether or not your can enable cluster logging to a bucket in the cloud storage tied to this
-     * cloud.
-     * @return true if logging can be enabled
-     * @throws CloudException an error occurred processing the request in the cloud provider
-     * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
-     */
-    public boolean supportsCloudStorageLogging() throws CloudException, InternalException;
 
     /**
      * Updates the parameters associated with the specified parameter group to new values.

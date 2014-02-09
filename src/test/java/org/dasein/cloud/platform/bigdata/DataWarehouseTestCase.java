@@ -20,6 +20,9 @@
 package org.dasein.cloud.platform.bigdata;
 
 import org.dasein.cloud.network.FirewallReference;
+import org.dasein.util.uom.time.Day;
+import org.dasein.util.uom.time.Hour;
+import org.dasein.util.uom.time.TimePeriod;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -73,6 +76,7 @@ public class DataWarehouseTestCase {
     private Map<String,Object> parameters;
     private String parameterGroup;
     private ClusterQueryProtocol[] protocols;
+    private TimePeriod<Day> retention;
     private String version;
     private String vlanId;
 
@@ -96,6 +100,7 @@ public class DataWarehouseTestCase {
         firewalls = new String[0];
         computeFirewalls = new FirewallReference[0];
         ipCidrs = new String[0];
+        retention = null;
     }
 
     @After
@@ -122,6 +127,7 @@ public class DataWarehouseTestCase {
         assertEquals("The parameter group does not match the test value", parameterGroup, cluster.getProviderParameterGroupId());
         assertEquals("The creation timestamp does not match the test value", creationTimestamp, cluster.getCreationTimestamp());
         assertEquals("The cluster state does not match the test value", CLUSTER_STATE, cluster.getCurrentState());
+        assertEquals("The snapshot retention period does not match the test value", retention, cluster.getSnapshotRetentionPeriod());
         ClusterQueryProtocol[] p = cluster.getProtocols();
 
         assertNotNull("The protocols supported by a data cluster cannot be null", p);
@@ -331,6 +337,16 @@ public class DataWarehouseTestCase {
         c.havingNodeCount(nodeCount);
         checkDataClusterContent(c);
     }
+
+    /*  implement once comparing time periods is fixed in dasein-util
+    public void verifyDataClusterAlterSnapshotRetention() {
+        DataCluster c = DataCluster.getInstance(OWNER_ID, REGION_ID, dataCenterId, CLUSTER_ID, CLUSTER_STATE, NAME, DESCRIPTION, PRODUCT_ID, DB_NAME, PORT);
+
+        retention = new TimePeriod<Day>(3, TimePeriod.DAY);
+        c.withSnapshotsRetainedFor(retention);
+        checkDataClusterContent(c);
+    }
+    */
 
     @Test
     public void verifyDataClusterAlterParameterGroup() {
