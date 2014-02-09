@@ -19,9 +19,13 @@
 
 package org.dasein.cloud.platform.bigdata;
 
+import org.dasein.cloud.Taggable;
+
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Snapshots of data clusters that may be used to create/restore data clusters.
@@ -30,7 +34,7 @@ import javax.annotation.Nullable;
  * @since 2014.03
  * @version 2014.03 initial version (issue #100)
  */
-public class DataClusterSnapshot {
+public class DataClusterSnapshot implements Taggable {
     /**
      * Constructs the most basic data cluster snapshot possible from the specified data.
      * @param providerOwnerId the owner of the snapshot
@@ -106,6 +110,7 @@ public class DataClusterSnapshot {
     private String                   providerProductId;
     private String                   providerRegionId;
     private String                   providerSnapshotId;
+    private Map<String,String>       tags;
 
     private DataClusterSnapshot() { }
 
@@ -230,6 +235,19 @@ public class DataClusterSnapshot {
         return providerSnapshotId;
     }
 
+    /**
+     * @param key the key of the tag value you wish to fetch
+     * @return the tag value for the specified tag key
+     */
+    public @Nullable String getTag(@Nonnull String key) {
+        return getTags().get(key);
+    }
+
+    @Override
+    public @Nonnull Map<String, String> getTags() {
+        return (tags == null ? new HashMap<String, String>() : tags);
+    }
+
     @Override
     public int hashCode() {
         return (providerOwnerId + "/" + providerRegionId + "/" + providerSnapshotId).hashCode();
@@ -251,6 +269,14 @@ public class DataClusterSnapshot {
      */
     public boolean isAutomated() {
         return automated;
+    }
+
+    @Override
+    public void setTag(@Nonnull String key, @Nonnull String value) {
+        if( tags == null ) {
+            tags = new HashMap<String,String>();
+        }
+        tags.put(key, value);
     }
 
     @Override

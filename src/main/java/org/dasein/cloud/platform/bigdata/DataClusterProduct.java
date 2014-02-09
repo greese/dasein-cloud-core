@@ -19,6 +19,8 @@
 
 package org.dasein.cloud.platform.bigdata;
 
+import org.dasein.cloud.Taggable;
+
 import javax.annotation.Nonnull;
 
 /**

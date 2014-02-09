@@ -22,6 +22,7 @@ package org.dasein.cloud.platform.bigdata;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.Requirement;
+import org.dasein.cloud.Tag;
 import org.dasein.cloud.network.Firewall;
 import org.dasein.cloud.network.FirewallReference;
 import org.dasein.cloud.storage.CloudStorageLogging;
@@ -107,7 +108,7 @@ public interface DataWarehouseSupport {
      * @throws CloudException an error occurred processing the request in the cloud provider
      * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
      */
-    public @Nonnull void enableLogging(@Nonnull String clusterId, @Nonnull String bucket, @Nonnull String prefix) throws CloudException, InternalException;
+    public void enableLogging(@Nonnull String clusterId, @Nonnull String bucket, @Nonnull String prefix) throws CloudException, InternalException;
 
     /**
      * Fetches the state of the cluster identified with the specified cluster ID from the cloud. If no such cloud exists,
@@ -295,6 +296,15 @@ public interface DataWarehouseSupport {
     public void rotateEncryptionKeys(@Nonnull String clusterId) throws CloudException, InternalException;
 
     /**
+     * Indicates whether or not you can authorize compute firewalls for data cluster firewalls. Only makes sense
+     * when {@link #supportsClusterFirewalls()} is true.
+     * @return true if you can authorize compute firewall access to data cluster firewalls
+     * @throws CloudException an error occurred processing the request in the cloud provider
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
+     */
+    public boolean supportsAuthorizingComputeFirewalls() throws CloudException, InternalException;
+
+    /**
      * Indicates whether or not this cloud supports protecting access to data clusters with special data cluster firewalls.
      * @return true if supported
      * @throws CloudException an error occurred processing the request in the cloud provider
@@ -327,4 +337,44 @@ public interface DataWarehouseSupport {
      * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
      */
     public void updateParameters(@Nonnull String parameterGroupId, @Nonnull Map<String,Object> parameters) throws CloudException, InternalException;
+
+    /**
+     * Updates meta-data for a data cluster with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     * @param clusterId the data cluster to update
+     * @param tags the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void updateClusterTags(@Nonnull String clusterId, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Updates meta-data for multiple data clusters with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     * @param clusterIds the clusters to update
+     * @param tags  the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void updateClusterTags(@Nonnull String[] clusterIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Updates meta-data for a data cluster snapshot with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     * @param snapshotId the data cluster snapshot to update
+     * @param tags the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void updateSnapshotTags(@Nonnull String snapshotId, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Updates meta-data for multiple data cluster snapshots with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     * @param snapshotIds the snapshots to update
+     * @param tags  the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void updateSnapshotTags(@Nonnull String[] snapshotIds, @Nonnull Tag... tags) throws CloudException, InternalException;
 }

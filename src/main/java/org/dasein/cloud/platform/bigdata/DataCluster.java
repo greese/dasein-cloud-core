@@ -19,6 +19,7 @@
 
 package org.dasein.cloud.platform.bigdata;
 
+import org.dasein.cloud.Taggable;
 import org.dasein.cloud.network.VLAN;
 
 import javax.annotation.Nonnegative;
@@ -27,6 +28,8 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Models a data warehousing cluster that consists of a number of database nodes and a shared
@@ -36,7 +39,7 @@ import java.util.Collections;
  * @since 2014.03
  * @version 2014.03 added model (issue #100)
  */
-public class DataCluster {
+public class DataCluster implements Taggable {
     /**
      * Constructs a new data cluster object with the most basic data required in order to be considered a valid Dasein
      * object. Make sure to honor the nullability of the specified parameters.
@@ -168,6 +171,7 @@ public class DataCluster {
     private String                 providerVlanId;
     private String                 name;
     private int                    nodeCount;
+    private Map<String,String>     tags;
 
     private DataCluster() { }
 
@@ -328,6 +332,19 @@ public class DataCluster {
         return nodeCount;
     }
 
+    /**
+     * @param key the key of the tag value you wish to fetch
+     * @return the tag value for the specified tag key
+     */
+    public @Nullable String getTag(@Nonnull String key) {
+        return getTags().get(key);
+    }
+
+    @Override
+    public @Nonnull Map<String, String> getTags() {
+        return (tags == null ? new HashMap<String, String>() : tags);
+    }
+
     @Override
     public int hashCode() {
         return (providerRegionId + "/" + providerDataCenterId + "/" + providerDataClusterId).hashCode();
@@ -373,6 +390,14 @@ public class DataCluster {
      */
     public boolean isEncrypted() {
         return encrypted;
+    }
+
+    @Override
+    public void setTag(@Nonnull String key, @Nonnull String value) {
+        if( tags == null ) {
+            tags = new HashMap<String,String>();
+        }
+        tags.put(key, value);
     }
 
     /**
