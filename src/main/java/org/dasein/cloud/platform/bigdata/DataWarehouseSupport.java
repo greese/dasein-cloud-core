@@ -138,6 +138,16 @@ public interface DataWarehouseSupport {
     public @Nullable DataClusterProduct getClusterProduct(@Nonnull String productId) throws CloudException, InternalException;
 
     /**
+     * Fetches the specified snapshot matching the specified unique snapshot ID. If no such snapshot exists, a
+     * <code>null</code> value is returned.
+     * @param snapshotId the unique ID of the desired data cluster snapshot
+     * @return any matching data cluster snapshot or <code>null</code> if no such snapshot exists
+     * @throws CloudException an error occurred processing the request in the cloud provider
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
+     */
+    public @Nullable DataClusterSnapshot getClusterSnapshot(@Nonnull String snapshotId) throws CloudException, InternalException;
+
+    /**
      * Indicates whether or not data clusters may be (or are required to be) constrained to a specific data center.
      * @return the requirement for data clusters to be constrained to a data center
      * @throws CloudException an error occurred processing the request in the cloud provider
@@ -168,6 +178,14 @@ public interface DataWarehouseSupport {
      * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
      */
     public @Nonnull Iterable<DataClusterProduct> listClusterProducts() throws CloudException, InternalException;
+
+    /**
+     * Lists all data cluster snapshots owned by the current user in the current region.
+     * @return a list of data cluster snapshots for the current user in the current region
+     * @throws CloudException an error occurred processing the request in the cloud provider
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
+     */
+    public @Nonnull Iterable<DataClusterSnapshot> listClusterSnapshots() throws CloudException, InternalException;
 
     /**
      * Lists all versions of the clustering technology available for creating new data cluster instances.
@@ -217,6 +235,14 @@ public interface DataWarehouseSupport {
      * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
      */
     public void removeClusterParameterGroup(@Nonnull String groupId) throws CloudException, InternalException;
+
+    /**
+     * Removes the specified cluster snapshot.
+     * @param snapshotId the snapshot to be removed
+     * @throws CloudException an error occurred processing the request in the cloud provider
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
+     */
+    public void removeClusterSnapshot(@Nonnull String snapshotId) throws CloudException, InternalException;
 
     /**
      * Rotates the encryption keys used for data at rest encryption inside a data cluster. Encryption at rest
