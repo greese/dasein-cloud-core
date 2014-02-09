@@ -22,7 +22,6 @@ package org.dasein.cloud.platform.bigdata;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import sun.jvm.hotspot.utilities.soql.DefaultScriptObject;
 
 import java.util.HashMap;
 import java.util.Map;
