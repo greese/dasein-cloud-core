@@ -22,6 +22,7 @@ package org.dasein.cloud.platform.bigdata;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import sun.jvm.hotspot.utilities.soql.DefaultScriptObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,9 +50,12 @@ public class DataWarehouseTestCase {
     static private final String           PARAM_FAMILY  = "flintstones";
     static private final String           PRODUCT_ID    = "productId";
     static private final String           REGION_ID     = "regionId";
+    static private final String           SNAPSHOT_ID   = "snapshotId";
+    static private final DataClusterSnapshotState SNAPSHOT_STATE = DataClusterSnapshotState.AVAILABLE;
 
     private String adminPassword;
     private String adminUser;
+    private boolean automated;
     private boolean createEncrypted;
     private int    createPort;
     private String createVersion;
@@ -68,6 +72,7 @@ public class DataWarehouseTestCase {
 
     @Before
     public void setUp() {
+        automated = true;
         dataCenterId = null;
         vlanId = null;
         adminUser = null;
@@ -107,12 +112,33 @@ public class DataWarehouseTestCase {
         assertEquals("The node count does not match the test value", nodeCount, cluster.getNodeCount());
         assertEquals("The version does not match the test value", version, cluster.getClusterVersion());
         assertEquals("The parameter group does not match the test value", parameterGroup, cluster.getProviderParameterGroupId());
-
+        assertEquals("The creation timestamp does not match the test value", creationTimestamp, cluster.getCreationTimestamp());
+        assertEquals("The cluster state does not match the test value", CLUSTER_STATE, cluster.getCurrentState());
         ClusterQueryProtocol[] p = cluster.getProtocols();
 
         assertNotNull("The protocols supported by a data cluster cannot be null", p);
         assertEquals("The number of protocols must match", protocols.length, p.length);
         assertArrayEquals("The protocols must match", protocols, p);
+    }
+
+    private void checkDataClusterSnapshotContent(DataClusterSnapshot snapshot) {
+        assertNotNull("The snapshot returned from the constructor was illegally a null value", snapshot);
+        assertEquals("The owner ID does not match the test value", OWNER_ID, snapshot.getProviderOwnerId());
+        assertEquals("The region ID does not match the test value", REGION_ID, snapshot.getProviderRegionId());
+        assertEquals("The data center ID does not match the test value", dataCenterId, snapshot.getProviderDataCenterId());
+        assertEquals("The cluster ID does not match the test value", CLUSTER_ID, snapshot.getProviderClusterId());
+        assertEquals("The snapshot ID does not match the test value", SNAPSHOT_ID, snapshot.getProviderSnapshotId());
+        assertEquals("The name does not match the test value", NAME, snapshot.getName());
+        assertEquals("The description does not match the test value", DESCRIPTION, snapshot.getDescription());
+        assertEquals("The product ID does not match the test value", PRODUCT_ID, snapshot.getProviderProductId());
+        assertEquals("The database name does not match the test value", DB_NAME, snapshot.getDatabaseName());
+        assertEquals("The port does not match the test value", PORT, snapshot.getDatabasePort());
+        assertEquals("The admin user does not match the test value", adminUser, snapshot.getAdminUserName());
+        assertEquals("The node count does not match the test value", nodeCount, snapshot.getNodeCount());
+        assertEquals("The version does not match the test value", version, snapshot.getClusterVersion());
+        assertEquals("The automated value does not match the test value", automated, snapshot.isAutomated());
+        assertEquals("The creation timestamp does not match the test value", creationTimestamp, snapshot.getCreationTimestamp());
+        assertEquals("The snapshot state does not match the test value", SNAPSHOT_STATE, snapshot.getCurrentState());
     }
 
     private void checkDataClusterCreateOptionsContent(DataClusterCreateOptions options) {
@@ -476,5 +502,32 @@ public class DataWarehouseTestCase {
         DataClusterParameterGroup group = DataClusterParameterGroup.getInstance(parameterGroup, PARAM_FAMILY, NAME, DESCRIPTION, parameters);
 
         checkDataClusterParameterGroupContent(group);
+    }
+
+    @Test
+    public void verifyDataClusterSnapshotSimpleConstructor() {
+        creationTimestamp = System.currentTimeMillis();
+        DataClusterSnapshot snapshot = DataClusterSnapshot.getInstance(OWNER_ID, REGION_ID, SNAPSHOT_ID, CLUSTER_ID, NAME, DESCRIPTION, PRODUCT_ID, creationTimestamp, SNAPSHOT_STATE, DB_NAME);
+        checkDataClusterSnapshotContent(snapshot);
+    }
+
+    @Test
+    public void verifyDataClusterSnapshotComplexConstructor() {
+        creationTimestamp = System.currentTimeMillis();
+        dataCenterId = "pluto";
+        automated = false;
+        version = "crm114";
+        nodeCount = 3;
+        DataClusterSnapshot snapshot = DataClusterSnapshot.getInstance(OWNER_ID, REGION_ID, SNAPSHOT_ID, CLUSTER_ID, dataCenterId, NAME, DESCRIPTION, PRODUCT_ID, creationTimestamp, automated, SNAPSHOT_STATE, version, nodeCount, DB_NAME, PORT);
+        checkDataClusterSnapshotContent(snapshot);
+    }
+
+    @Test
+    public void verifyDataClusterSnapshotAlterUser() {
+        creationTimestamp = System.currentTimeMillis();
+        DataClusterSnapshot snapshot = DataClusterSnapshot.getInstance(OWNER_ID, REGION_ID, SNAPSHOT_ID, CLUSTER_ID, NAME, DESCRIPTION, PRODUCT_ID, creationTimestamp, SNAPSHOT_STATE, DB_NAME);
+        adminUser = "voltaire";
+        snapshot = snapshot.havingAdminCredentials(adminUser);
+        checkDataClusterSnapshotContent(snapshot);
     }
 }
