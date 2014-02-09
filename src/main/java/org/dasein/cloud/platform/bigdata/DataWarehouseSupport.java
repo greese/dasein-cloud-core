@@ -93,6 +93,17 @@ public interface DataWarehouseSupport {
     public @Nonnull String createClusterParameterGroup(@Nonnull String family, @Nonnull String name, @Nonnull String description, @Nonnull Map<String,Object> initialParameters) throws CloudException, InternalException;
 
     /**
+     * Enables the creation of manual snapshots of a cluster.
+     * @param clusterId the unique ID of the cluster to be snapshotted
+     * @param name the name of the snapshot
+     * @param description a description of the snapshot purpose
+     * @return the unique ID of the pending new snapshot
+     * @throws CloudException an error occurred processing the request in the cloud provider
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
+     */
+    public @Nonnull String createClusterSnapshot(@Nonnull String clusterId, @Nonnull String name, @Nonnull String description) throws CloudException, InternalException;
+
+    /**
      * Disables any logging currently happening for the specified data cluster.
      * @param clusterId the unique ID of the cluster for whom logging should be diabled
      * @throws CloudException an error occurred processing the request in the cloud provider
