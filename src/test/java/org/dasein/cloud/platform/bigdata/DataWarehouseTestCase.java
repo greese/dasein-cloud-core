@@ -58,6 +58,7 @@ public class DataWarehouseTestCase {
     private long   creationTimestamp;
     private String dataCenterId;
     private boolean encrypted;
+    private String[] firewalls;
     private int    nodeCount;
     private Map<String,Object> parameters;
     private String parameterGroup;
@@ -81,6 +82,7 @@ public class DataWarehouseTestCase {
         protocols = new ClusterQueryProtocol[0];
         parameterGroup = null;
         parameters = new HashMap<String,Object>();
+        firewalls = new String[0];
     }
 
     @After
@@ -137,6 +139,7 @@ public class DataWarehouseTestCase {
         assertEquals("The database port does not match the test or expected default value", createPort, options.getDatabasePort());
         assertEquals("The encrypted value does not match the test value", createEncrypted,  options.isEncrypted());
         assertEquals("The parameter group does not match the test value", parameterGroup, options.getProviderParameterGroupId());
+        assertArrayEquals("The firewall IDs do not match the test value", firewalls, options.getProviderFirewallIds());
     }
 
     private void checkDataClusterProductContent(DataClusterProduct product) {
@@ -394,6 +397,15 @@ public class DataWarehouseTestCase {
 
         createEncrypted = false;
         options.withoutEncryption();
+        checkDataClusterCreateOptionsContent(options);
+    }
+
+    @Test
+    public void verifyCreateAlterFirewalls() {
+        DataClusterCreateOptions options = DataClusterCreateOptions.getInstance(PRODUCT_ID, NAME, DESCRIPTION, DB_NAME);
+
+        firewalls = new String[] { "a", "b" };
+        options.behindFirewalls(firewalls);
         checkDataClusterCreateOptionsContent(options);
     }
 

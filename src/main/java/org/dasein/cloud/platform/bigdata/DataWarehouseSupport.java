@@ -22,6 +22,8 @@ package org.dasein.cloud.platform.bigdata;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.Requirement;
+import org.dasein.cloud.network.Firewall;
+import org.dasein.cloud.network.FirewallCreateOptions;
 import org.dasein.cloud.storage.CloudStorageLogging;
 
 import javax.annotation.Nonnull;
@@ -46,6 +48,15 @@ public interface DataWarehouseSupport {
      * @throws InternalException an error occurred in the Dasein Cloud implementation while preparing or processing the call
      */
     public @Nonnull String createCluster(@Nonnull DataClusterCreateOptions options) throws CloudException, InternalException;
+
+    /**
+     * Creates a firewall supporting data clusters in the target cloud if the target cloud supports data cluster firewalls.
+     * @param options the options for creating the new data cluster firewall
+     * @return the unique ID for the newly created firewall
+     * @throws CloudException an error occurred processing the request in the cloud provider
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
+     */
+    public @Nonnull String createClusterFirewall(@Nonnull FirewallCreateOptions options) throws CloudException, InternalException;
 
     /**
      * Creates a new parameter group that defines parameters to be associated with data clusters.
@@ -88,6 +99,16 @@ public interface DataWarehouseSupport {
     public @Nullable DataCluster getCluster(@Nonnull String clusterId) throws CloudException, InternalException;
 
     /**
+     * Fetches a specific data cluster firewall based on a desired firewall ID. If a matching data cluster firewall
+     * does not exist, <code>null</code> is returned.
+     * @param firewallId the unique ID of the desired data cluster firewall
+     * @return a firewall object matching the specified firewall ID or <code>null</code> if no firewall matches
+     * @throws CloudException an error occurred processing the request in the cloud provider
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
+     */
+    public @Nullable Firewall getClusterFirewall(@Nonnull String firewallId) throws CloudException, InternalException;
+
+    /**
      * Indicates the current logging status for the specified data cluster. If logging is not enabled or the specified
      * cluster doesn't exist, this method will return <code>null</code>.
      * @param clusterId the ID of the cluster whose logging status should be fetched
@@ -96,6 +117,7 @@ public interface DataWarehouseSupport {
      * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
      */
     public @Nullable CloudStorageLogging getClusterLoggingStatus(@Nonnull String clusterId) throws CloudException, InternalException;
+
     /**
      * Fetches the specified cluster parameter group based on its unique group ID.
      * @param groupId the unique ID of the group being sought
@@ -122,6 +144,14 @@ public interface DataWarehouseSupport {
      * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
      */
     public @Nonnull Requirement getDataCenterConstraintRequirement() throws CloudException, InternalException;
+
+    /**
+     * Lists all data cluster firewalls that support data clusters in this cloud.
+     * @return a list of data cluster firewalls
+     * @throws CloudException an error occurred processing the request in the cloud provider
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
+     */
+    public @Nonnull Iterable<Firewall> listClusterFirewalls() throws CloudException, InternalException;
 
     /**
      * Lists all parameter groups belonging to this account.
@@ -173,12 +203,28 @@ public interface DataWarehouseSupport {
     public void removeCluster(@Nonnull String clusterId, boolean snapshotFirst) throws CloudException, InternalException;
 
     /**
+     * Deactivates the specified data cluster firewall.
+     * @param firewallId the unique ID of the data cluster firewall to be deactivated
+     * @throws CloudException an error occurred processing the request in the cloud provider
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
+     */
+    public void removeClusterFirewall(@Nonnull String firewallId) throws CloudException, InternalException;
+
+    /**
      * Removes the specified parameter group from the cloud.
      * @param groupId the unique ID of the target parameter group
      * @throws CloudException an error occurred processing the request in the cloud provider
      * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
      */
     public void removeClusterParameterGroup(@Nonnull String groupId) throws CloudException, InternalException;
+
+    /**
+     * Indicates whether or not this cloud supports protecting access to data clusters with special data cluster firewalls.
+     * @return true if supported
+     * @throws CloudException an error occurred processing the request in the cloud provider
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request
+     */
+    public boolean supportsClusterFirewalls() throws CloudException, InternalException;
 
     /**
      * Indicates whether or not this cloud supports encryption of your database at rest.

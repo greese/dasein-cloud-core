@@ -29,6 +29,9 @@ import org.dasein.cloud.util.Security;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.TreeSet;
 
 /**
  * Configuration options for provisioning new data clusters.
@@ -96,18 +99,19 @@ public class DataClusterCreateOptions {
         return options;
     }
 
-    private String  adminPassword;
-    private String  adminUserName;
-    private String  clusterVersion;
-    private String  databaseName;
-    private int     databasePort;
-    private String  description;
-    private boolean encrypted;
-    private String  name;
-    private int     nodeCount;
-    private String  providerDataCenterId;
-    private String  providerParameterGroupId;
-    private String  providerProductId;
+    private String   adminPassword;
+    private String   adminUserName;
+    private String   clusterVersion;
+    private String   databaseName;
+    private int      databasePort;
+    private String   description;
+    private boolean  encrypted;
+    private String   name;
+    private int      nodeCount;
+    private String   providerDataCenterId;
+    private String[] providerFirewallIds;
+    private String   providerParameterGroupId;
+    private String   providerProductId;
 
     private DataClusterCreateOptions() { }
 
@@ -197,6 +201,20 @@ public class DataClusterCreateOptions {
     }
 
     /**
+     * @return a list of data cluster firewalls to associate the data cluster with upon creation
+     */
+    public @Nonnull String[] getProviderFirewallIds() {
+        String[] ids = new String[providerFirewallIds == null ? 0 : providerFirewallIds.length];
+
+        if( providerFirewallIds != null ) {
+            for( int i=0; i<ids.length; i++ ) {
+                ids[i] = providerFirewallIds[i];
+            }
+        }
+        return ids;
+    }
+
+    /**
      * @return the parameter group to associate with this cluster
      */
     public @Nullable String getProviderParameterGroupId() {
@@ -247,6 +265,24 @@ public class DataClusterCreateOptions {
      */
     public boolean isEncrypted() {
         return encrypted;
+    }
+
+    /**
+     * Alters the creation options to associate the newly created data cluster with the specified data cluster
+     * firewalls. These firewalls must specifically exist for data clusters (e.g. appear in
+     * {@link DataWarehouseSupport#listClusterFirewalls()}).
+     * @param firewallIds a list of firewalls to associate with the data cluster
+     * @return this
+     */
+    public @Nonnull DataClusterCreateOptions behindFirewalls(@Nonnull String ... firewallIds) {
+        TreeSet<String> ids = new TreeSet<String>();
+
+        if( providerFirewallIds != null ) {
+            Collections.addAll(ids, providerFirewallIds);
+        }
+        Collections.addAll(ids, firewallIds);
+        providerFirewallIds = ids.toArray(new String[ids.size()]);
+        return this;
     }
 
     /**

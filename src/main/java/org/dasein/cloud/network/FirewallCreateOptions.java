@@ -117,7 +117,9 @@ public class FirewallCreateOptions {
     private FirewallCreateOptions() { }
 
     /**
-     * Provisions a firewall in the specified cloud based on the options described in this object.
+     * Provisions a firewall in the specified cloud based on the options described in this object. Note that a
+     * {@link Firewall} object may represents many different kinds of firewalls, and this class can be used to create
+     * many of them as well. This build method, however, is limited to building firewalls for compute resources.
      * @param provider the cloud provider in which the firewall will be created
      * @param asNetworkFirewall if the provisioned firewall should be provisioned as a network firewall
      * @return the unique ID of the firewall that is provisioned
