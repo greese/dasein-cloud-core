@@ -504,4 +504,46 @@ public abstract class AbstractVLANSupport implements VLANSupport {
             updateVLANTags(id, tags);
         }
     }
+
+    @Override
+    public void updateInternetGatewayTags(@Nonnull String[] internetGatewayIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for (String internetGatewayId : internetGatewayIds) {
+            updateInternetGatewayTags(internetGatewayId, tags);
+        }
+    }
+
+    @Override
+    public void updateSubnetTags(@Nonnull String[] providerSubnetIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for (String providerSubnetId : providerSubnetIds) {
+            updateSubnetTags(providerSubnetId, tags);
+        }
+    }
+
+    @Override
+    public void updateRoutingTableTags(@Nonnull String[] routingTableIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for (String routingTableId : routingTableIds) {
+            updateRoutingTableTags(routingTableId, tags);
+        }
+    }
+
+    @Override
+    public void removeSubnetTags(@Nonnull String[] providerSubnetIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for (String providerSubnetId : providerSubnetIds) {
+            removeSubnetTags(providerSubnetId, tags);
+        }
+    }
+
+    @Override
+    public void removeRoutingTableTags(@Nonnull String[] routingTableIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for (String routingTableId : routingTableIds) {
+            removeRoutingTableTags(routingTableId, tags);
+        }
+    }
+
+    @Override
+    public void removeInternetGatewayTags(@Nonnull String[] internetGatewayIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for (String internetGatewayId : internetGatewayIds) {
+            removeInternetGatewayTags(internetGatewayId, tags);
+        }
+    }
 }
