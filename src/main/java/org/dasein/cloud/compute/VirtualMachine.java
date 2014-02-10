@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2013 Dell, Inc.
+ * Copyright (C) 2009-2014 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -19,10 +19,6 @@
 
 package org.dasein.cloud.compute;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.Callable;
-
 import org.dasein.cloud.Tag;
 import org.dasein.cloud.Taggable;
 import org.dasein.cloud.network.Networkable;
@@ -30,6 +26,9 @@ import org.dasein.cloud.network.RawAddress;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.Callable;
 
 /**
  * <p>
@@ -81,6 +80,7 @@ public class VirtualMachine implements Networkable, Taggable {
     private Volume[]              volumes;
     private boolean               ioOptimized;
     private boolean               ipForwardingAllowed;
+    private String                providerRoleId;
 
   public VirtualMachine() { }
     
@@ -181,8 +181,7 @@ public class VirtualMachine implements Networkable, Taggable {
             return null;
         }
     }
-    
-    
+
     public String toString() {
         return name + " [" + providerVirtualMachineId + "]";
     }
@@ -567,6 +566,14 @@ public class VirtualMachine implements Networkable, Taggable {
 
     public void setIpForwardingAllowed( boolean ipForwardingAllowed ) {
       this.ipForwardingAllowed = ipForwardingAllowed;
+    }
+
+    public String getProviderRoleId() {
+      return providerRoleId;
+    }
+
+    public void setProviderRoleId(String roleId) {
+      this.providerRoleId = roleId;
     }
 
 }

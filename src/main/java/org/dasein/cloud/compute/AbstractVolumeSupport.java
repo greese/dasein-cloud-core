@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2013 Dell, Inc.
+ * Copyright (C) 2009-2014 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -116,28 +116,44 @@ public abstract class AbstractVolumeSupport implements VolumeSupport {
                 if( fromSnapshot != null ) {
                     String name = "Volume from Snapshot " + fromSnapshot;
                     String description = "Volume created from snapshot #" + fromSnapshot + " on " + (new Date());
+                    VolumeCreateOptions options = VolumeCreateOptions.getInstanceForSnapshot(closest.getProviderProductId(), fromSnapshot, storage, name, description, 0);
 
-                    return createVolume(VolumeCreateOptions.getInstanceForSnapshot(closest.getProviderProductId(), fromSnapshot, storage, name, description, 0));
+                    if( inZone != null ) {
+                        options = options.inDataCenter(inZone);
+                    }
+                    return createVolume(options);
                 }
                 else {
                     String name = "New Volume " + System.currentTimeMillis();
                     String description = "New Volume (created " + (new Date()) + ")";
+                    VolumeCreateOptions options = VolumeCreateOptions.getInstance(closest.getProviderProductId(), storage, name, description, 0);
 
-                    return createVolume(VolumeCreateOptions.getInstance(closest.getProviderProductId(), storage, name, description, 0));
+                    if( inZone != null ) {
+                        options = options.inDataCenter(inZone);
+                    }
+                    return createVolume(options);
                 }
             }
         }
         if( fromSnapshot != null ) {
             String name = "Volume from Snapshot " + fromSnapshot;
             String description = "Volume created from snapshot #" + fromSnapshot + " on " + (new Date());
+            VolumeCreateOptions options = VolumeCreateOptions.getInstanceForSnapshot(fromSnapshot, storage, name, description);
 
-            return createVolume(VolumeCreateOptions.getInstanceForSnapshot(fromSnapshot, storage, name, description));
+            if( inZone != null ) {
+                options = options.inDataCenter(inZone);
+            }
+            return createVolume(options);
         }
         else {
             String name = "New Volume " + System.currentTimeMillis();
             String description = "New Volume (created " + (new Date()) + ")";
+            VolumeCreateOptions options = VolumeCreateOptions.getInstance(storage, name, description);
 
-            return createVolume(VolumeCreateOptions.getInstance(storage, name, description));
+            if( inZone != null ) {
+                options = options.inDataCenter(inZone);
+            }
+            return createVolume(options);
         }
     }
 

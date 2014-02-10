@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2013 Dell, Inc.
+ * Copyright (C) 2009-2014 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -33,6 +33,8 @@ public class LaunchConfiguration implements Serializable {
     private String   providerImageId;
     private String   providerLaunchConfigurationId;
     private String   serverSizeId;
+    private String   providerRoleId;
+    private Boolean  detailedMonitoring;
     
     public LaunchConfiguration() { }
 
@@ -106,6 +108,22 @@ public class LaunchConfiguration implements Serializable {
 
     public void setServerSizeId(String serverSizeId) {
         this.serverSizeId = serverSizeId;
+    }
+
+    public String getProviderRoleId() {
+      return providerRoleId;
+    }
+
+    public void setProviderRoleId(String providerRoleId) {
+      this.providerRoleId = providerRoleId;
+    }
+
+    public Boolean getDetailedMonitoring() {
+      return detailedMonitoring;
+    }
+
+    public void setDetailedMonitoring(Boolean detailedMonitoring) {
+      this.detailedMonitoring = detailedMonitoring;
     }
     
 }

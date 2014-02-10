@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2013 Dell, Inc.
+ * Copyright (C) 2009-2014 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -29,9 +29,13 @@ import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.Tag;
 import org.dasein.cloud.identity.ServiceAction;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Bare-bones implementation of network firewall support with nothing enabled.
@@ -39,6 +43,7 @@ import java.util.Collections;
  * @author George Reese
  * @since 2013.04
  * @version 2013.04 (issue greese/dasein-cloud-aws/#8)
+ * @version 2014.03 (issue #99)
  */
 public abstract class AbstractNetworkFirewallSupport implements NetworkFirewallSupport {
     private CloudProvider provider;
@@ -53,13 +58,52 @@ public abstract class AbstractNetworkFirewallSupport implements NetworkFirewallS
     }
 
     @Override
-    public @Nonnull String authorize(@Nonnull String firewallId, @Nonnull Direction direction, @Nonnull Permission permission, @Nonnull RuleTarget sourceEndpoint, @Nonnull Protocol protocol, @Nonnull RuleTarget destinationEndpoint, int beginPort, int endPort, int precedence) throws CloudException, InternalException {
+    public @Nonnull String authorize(@Nonnull String firewallId, @Nonnull Direction direction, @Nonnull Permission permission, @Nonnull RuleTarget sourceEndpoint, @Nonnull Protocol protocol, @Nonnull RuleTarget destinationEndpoint, int beginPort, int endPort, @Nonnegative int precedence) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Authorization of " + direction + "/" + permission + " in " + getProvider().getCloudName() + " is not currently implemented");
+    }
+
+    @Override
+    public @Nonnull String authorize(@Nonnull String firewallId, @Nonnull FirewallRuleCreateOptions options) throws CloudException, InternalException {
+        RuleTarget source = options.getSourceEndpoint();
+        RuleTarget dest = options.getDestinationEndpoint();
+
+        if( source == null ) {
+            source = RuleTarget.getGlobal(firewallId);
+        }
+        if( dest == null ) {
+            dest = RuleTarget.getGlobal(firewallId);
+        }
+        return authorize(firewallId, options.getDirection(), options.getPermission(), source, options.getProtocol(), dest, options.getPortRangeStart(), options.getPortRangeEnd(), options.getPrecedence());
     }
 
     @Override
     public @Nonnull String createFirewall(@Nonnull FirewallCreateOptions options) throws InternalException, CloudException {
         throw new OperationNotSupportedException("Network firewall creation is not currently implemented in " + getProvider().getCloudName());
+    }
+
+
+    @Override
+    public @Nullable Map<FirewallConstraints.Constraint, Object> getActiveConstraintsForFirewall(@Nonnull String firewallId) throws CloudException, InternalException {
+        HashMap<FirewallConstraints.Constraint, Object> active = new HashMap<FirewallConstraints.Constraint, Object>();
+        FirewallConstraints fields = getFirewallConstraintsForCloud();
+
+        if( fields.isOpen() ) {
+            return active;
+        }
+        Firewall firewall = getFirewall(firewallId);
+
+        if( firewall == null ) {
+            return null;
+        }
+        for( FirewallConstraints.Constraint c : fields.getConstraints() ) {
+            FirewallConstraints.Level l = fields.getConstraintLevel(c);
+
+            if( !l.equals(FirewallConstraints.Level.NOT_CONSTRAINED) ) {
+
+                active.put(c, c.getValue(getProvider(), firewallId));
+            }
+        }
+        return active;
     }
 
     protected @Nonnull ProviderContext getContext() throws CloudException {
@@ -79,6 +123,11 @@ public abstract class AbstractNetworkFirewallSupport implements NetworkFirewallS
             }
         }
         return null;
+    }
+
+    @Override
+    public @Nonnull FirewallConstraints getFirewallConstraintsForCloud() throws InternalException, CloudException {
+        return FirewallConstraints.getInstance();
     }
 
     protected @Nonnull CloudProvider getProvider() {

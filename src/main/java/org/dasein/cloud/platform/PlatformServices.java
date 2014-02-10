@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2013 Dell, Inc.
+ * Copyright (C) 2009-2014 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -19,15 +19,26 @@
 
 package org.dasein.cloud.platform;
 
+import org.dasein.cloud.platform.bigdata.DataWarehouseSupport;
+
 import javax.annotation.Nullable;
 
+/**
+ * Provides access to services that support platform as a service (PaaS) operations.
+ * @since unknown
+ * @version 2014.03 added data warehousing support access (issue #100)
+ */
 public interface PlatformServices {
     public abstract @Nullable CDNSupport getCDNSupport();
-    
+
+    /**
+     * @return access to any support for data warehousing functionality, or <code>null</code> if no support exists
+     */
+    public abstract @Nullable DataWarehouseSupport getDataWarehouseSupport();
+
     public abstract @Nullable KeyValueDatabaseSupport getKeyValueDatabaseSupport();
     
-    public abstract @Nullable
-    MQSupport getMessageQueueSupport();
+    public abstract @Nullable MQSupport getMessageQueueSupport();
     
     public abstract @Nullable PushNotificationSupport getPushNotificationSupport();
     
@@ -36,7 +47,12 @@ public interface PlatformServices {
     public abstract @Nullable MonitoringSupport getMonitoringSupport();
     
     public abstract boolean hasCDNSupport();
-    
+
+    /**
+     * @return true if this cloud supports data warehousing functionality in this region
+     */
+    public abstract boolean hasDataWarehouseSupport();
+
     public abstract boolean hasKeyValueDatabaseSupport();
     
     public abstract boolean hasMessageQueueSupport();
