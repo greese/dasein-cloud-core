@@ -243,7 +243,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      * @throws CloudException an error occurred within the cloud provider
      */
-    public abstract @Nullable Iterable<VirtualMachine> getVMStatus(String ... vmIds) throws InternalException, CloudException;
+    public abstract @Nullable Iterable<VirtualMachineStatus> getVMStatus(String ... vmIds) throws InternalException, CloudException;
 
     /**
      * Identifies whether images of the specified image class are required for launching a VM. This method should
