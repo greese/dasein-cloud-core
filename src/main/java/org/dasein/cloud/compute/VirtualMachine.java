@@ -82,6 +82,8 @@ public class VirtualMachine implements Networkable, Taggable {
     private boolean               ioOptimized;
     private boolean               ipForwardingAllowed;
     private String                providerRoleId;
+    private VmStatus              providerHostStatus;
+    private VmStatus              providerVmStatus;
 
   public VirtualMachine() { }
     
@@ -583,6 +585,22 @@ public class VirtualMachine implements Networkable, Taggable {
 
     public void setProviderRoleId(String roleId) {
       this.providerRoleId = roleId;
+    }
+
+    public VmStatus getProviderVmStatus() {
+      return providerVmStatus;
+    }
+
+    public void setProviderVmStatus(VmStatus vmStatus) {
+      this.providerVmStatus = vmStatus;
+    }
+
+    public VmStatus getProviderHostStatus() {
+      return providerHostStatus;
+    }
+
+    public void setProviderHostStatus(VmStatus vmStatus) {
+      this.providerHostStatus = vmStatus;
     }
 
 }

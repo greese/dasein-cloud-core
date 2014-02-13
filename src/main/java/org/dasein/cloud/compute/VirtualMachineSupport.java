@@ -237,6 +237,15 @@ public interface VirtualMachineSupport extends AccessControlledService {
     public abstract @Nonnull Iterable<VmStatistics> getVMStatisticsForPeriod(@Nonnull String vmId, @Nonnegative long from, @Nonnegative long to) throws InternalException, CloudException;
 
     /**
+     * Provides the status as determined by the cloud provider
+     * @param vmIds the unique ID(s) of the target server(s)
+     * @return the status(es) of the virtual machines
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException an error occurred within the cloud provider
+     */
+    public abstract @Nullable Iterable<VirtualMachineStatus> getVMStatus(@Nullable String ... vmIds) throws InternalException, CloudException;
+
+    /**
      * Identifies whether images of the specified image class are required for launching a VM. This method should
      * always return {@link Requirement#REQUIRED} when the image class chosen is {@link ImageClass#MACHINE}.
      * @param cls the desired image class
