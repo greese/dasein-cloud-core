@@ -36,7 +36,7 @@ import java.util.Map;
  */
 public class VMFilterOptions {
     /**
-     * Constructs an empty set of filtering options that will force match against ay VM by default.
+     * Constructs an empty set of filtering options that will force match against any VM by default.
      * @return an empty filtering options objects
      */
     static public @Nonnull VMFilterOptions getInstance() {
