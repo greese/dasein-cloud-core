@@ -71,6 +71,7 @@ public class VirtualMachine implements Networkable, Taggable {
     private String                providerVlanId;
     private String                providerKeypairId;
     private String[]              providerFirewallIds;
+    private String[]              providerVolumeIds;
     private String                publicDnsAddress;
     private RawAddress[]          publicIpAddresses;
     private boolean               rebootable;
@@ -542,6 +543,14 @@ public class VirtualMachine implements Networkable, Taggable {
 
     public @Nonnull String[] getProviderShellKeyIds() {
         return (providerShellKeyIds == null ? new String[0] : providerShellKeyIds);
+    }
+
+    public @Nonnull String[] getProviderVolumeIds() {
+        return providerVolumeIds;
+    }
+
+    public void setProviderVolumeIds(@Nonnull String ... ids) {
+        providerVolumeIds = ids;
     }
 
     public @Nullable Volume[] getVolumes() {
