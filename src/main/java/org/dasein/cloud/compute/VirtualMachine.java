@@ -19,6 +19,10 @@
 
 package org.dasein.cloud.compute;
 
+import org.dasein.cloud.CloudException;
+import org.dasein.cloud.CloudProvider;
+import org.dasein.cloud.InternalException;
+import org.dasein.cloud.OperationNotSupportedException;
 import org.dasein.cloud.Tag;
 import org.dasein.cloud.Taggable;
 import org.dasein.cloud.network.Networkable;
@@ -26,8 +30,10 @@ import org.dasein.cloud.network.RawAddress;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeSet;
 import java.util.concurrent.Callable;
 
 /**
@@ -545,7 +551,27 @@ public class VirtualMachine implements Networkable, Taggable {
         return (providerShellKeyIds == null ? new String[0] : providerShellKeyIds);
     }
 
-    public @Nonnull String[] getProviderVolumeIds() {
+    public @Nonnull String[] getProviderVolumeIds(@Nonnull CloudProvider provider) throws CloudException, InternalException {
+        if( providerVolumeIds == null ) {
+            ComputeServices services = provider.getComputeServices();
+
+            if( services == null ) {
+                throw new OperationNotSupportedException("No compute services are defined");
+            }
+            VolumeSupport support = services.getVolumeSupport();
+
+            if( support == null ) {
+                providerVolumeIds = new String[0];
+            }
+            else {
+                TreeSet<String> ids = new TreeSet<String>();
+
+                for( Volume v : support.listVolumes(VolumeFilterOptions.getInstance().attachedTo(providerVirtualMachineId)) ) {
+                    ids.add(v.getProviderVolumeId());
+                }
+                providerVolumeIds = ids.toArray(new String[ids.size()]);
+            }
+        }
         return providerVolumeIds;
     }
 
