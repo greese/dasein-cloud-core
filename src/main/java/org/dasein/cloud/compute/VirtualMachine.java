@@ -30,6 +30,8 @@ import org.dasein.cloud.network.RawAddress;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -401,7 +403,20 @@ public class VirtualMachine implements Networkable, Taggable {
      */
     @Deprecated
     public String[] getPublicIpAddresses() {
-        String[] addrs = new String[publicIpAddresses == null ? 0 : publicIpAddresses.length];
+        if( publicIpAddresses == null || publicIpAddresses.length < 0 ) {
+            if( publicDnsAddress == null ) {
+                return new String[0];
+            }
+            String ip = resolve(publicDnsAddress);
+
+            if( ip != null ) {
+                publicIpAddresses = new RawAddress[] { new RawAddress(ip) };
+            }
+            else {
+                return new String[0];
+            }
+        }
+        String[] addrs = new String[publicIpAddresses.length];
 
         if( publicIpAddresses != null ) {
             for( int i=0; i<addrs.length; i++ ) {
@@ -409,6 +424,26 @@ public class VirtualMachine implements Networkable, Taggable {
             }
         }
         return addrs;
+    }
+
+    private String resolve(String dnsName) {
+        if (dnsName != null && dnsName.length() > 0) {
+            InetAddress[] addresses;
+
+            try {
+                addresses = InetAddress.getAllByName(dnsName);
+            } catch (UnknownHostException e) {
+                addresses = null;
+            }
+            if (addresses != null && addresses.length > 0) {
+                dnsName = addresses[0].getHostAddress();
+            } else {
+                dnsName = dnsName.split("\\.")[0];
+                dnsName = dnsName.replaceAll("-", "\\.");
+                dnsName = dnsName.substring(4);
+            }
+        }
+        return dnsName;
     }
 
     public void setPublicAddresses(@Nonnull RawAddress ... addresses) {
