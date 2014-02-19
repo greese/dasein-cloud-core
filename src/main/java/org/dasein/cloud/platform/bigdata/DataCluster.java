@@ -19,7 +19,6 @@
 
 package org.dasein.cloud.platform.bigdata;
 
-import com.sun.istack.internal.NotNull;
 import org.dasein.cloud.Taggable;
 import org.dasein.cloud.TimeWindow;
 import org.dasein.cloud.network.VLAN;
@@ -30,7 +29,6 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -96,7 +94,6 @@ public class DataCluster implements Taggable {
      * @param name the user-friendly name of the cluster
      * @param description a user-friendly description of the cluster
      * @param providerProductId the unique ID of the product with which the cluster is associated
-     * @param clusterVersion the version of the cluster
      * @param databaseName the name of the database supported by the cluster
      * @param databasePort the port to which you can connect for SQL (or other protocol) queries
      * @param adminUser the administrative user for the database
