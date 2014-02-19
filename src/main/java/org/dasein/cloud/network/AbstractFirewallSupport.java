@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2013 Dell, Inc.
+ * Copyright (C) 2009-2014 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -35,6 +35,8 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Basic implementation of firewall support methods to minimize the work in implementing support in a new cloud.
@@ -42,7 +44,9 @@ import java.util.Collections;
  * @author George Reese
  * @since 2013.04
  * @version 2013.04
+ * @version 2014.03 added support for authorizing with rule create options
  */
+@SuppressWarnings("UnusedDeclaration")
 public abstract class AbstractFirewallSupport implements FirewallSupport {
     private CloudProvider provider;
 
@@ -96,6 +100,20 @@ public abstract class AbstractFirewallSupport implements FirewallSupport {
     }
 
     @Override
+    public @Nonnull String authorize(@Nonnull String firewallId, @Nonnull FirewallRuleCreateOptions options) throws CloudException, InternalException {
+        RuleTarget source = options.getSourceEndpoint();
+        RuleTarget dest = options.getDestinationEndpoint();
+
+        if( source == null ) {
+            source = RuleTarget.getGlobal(firewallId);
+        }
+        if( dest == null ) {
+            dest = RuleTarget.getGlobal(firewallId);
+        }
+        return authorize(firewallId, options.getDirection(), options.getPermission(), source, options.getProtocol(), dest, options.getPortRangeStart(), options.getPortRangeEnd(), options.getPrecedence());
+    }
+
+    @Override
     @Deprecated
     public @Nonnull String create(@Nonnull String name, @Nonnull String description) throws InternalException, CloudException {
         return create(FirewallCreateOptions.getInstance(name, description));
@@ -113,17 +131,6 @@ public abstract class AbstractFirewallSupport implements FirewallSupport {
         return create(FirewallCreateOptions.getInstance(providerVlanId, name, description));
     }
 
-    @Override
-    public @Nullable
-    Firewall getFirewall(@Nonnull String firewallId) throws InternalException, CloudException {
-        for( Firewall fw : list() ) {
-            if( firewallId.equals(fw.getProviderFirewallId()) ) {
-                return fw;
-            }
-        }
-        return null;
-    }
-
     /**
      * @return the current authentication context for any calls through this support object
      * @throws CloudException no context was set
@@ -135,6 +142,45 @@ public abstract class AbstractFirewallSupport implements FirewallSupport {
             throw new CloudException("No context was specified for this request");
         }
         return ctx;
+    }
+
+    @Override
+    public @Nullable Map<FirewallConstraints.Constraint, Object> getActiveConstraintsForFirewall(@Nonnull String firewallId) throws CloudException, InternalException {
+        HashMap<FirewallConstraints.Constraint, Object> active = new HashMap<FirewallConstraints.Constraint, Object>();
+        FirewallConstraints fields = getFirewallConstraintsForCloud();
+
+        if( fields.isOpen() ) {
+            return active;
+        }
+        Firewall firewall = getFirewall(firewallId);
+
+        if( firewall == null ) {
+            return null;
+        }
+        for( FirewallConstraints.Constraint c : fields.getConstraints() ) {
+            FirewallConstraints.Level l = fields.getConstraintLevel(c);
+
+            if( !l.equals(FirewallConstraints.Level.NOT_CONSTRAINED) ) {
+
+                 active.put(c, c.getValue(getProvider(), firewallId));
+            }
+        }
+        return active;
+    }
+
+    @Override
+    public @Nullable  Firewall getFirewall(@Nonnull String firewallId) throws InternalException, CloudException {
+        for( Firewall fw : list() ) {
+            if( firewallId.equals(fw.getProviderFirewallId()) ) {
+                return fw;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public @Nonnull FirewallConstraints getFirewallConstraintsForCloud() throws InternalException, CloudException {
+        return FirewallConstraints.getInstance();
     }
 
     /**
@@ -291,6 +337,11 @@ public abstract class AbstractFirewallSupport implements FirewallSupport {
     @Override
     public boolean supportsFirewallCreation(boolean inVlan) throws CloudException, InternalException {
         return !inVlan;
+    }
+
+    @Override
+    public boolean supportsFirewallDeletion() throws CloudException, InternalException {
+        return true;
     }
 
     @Override

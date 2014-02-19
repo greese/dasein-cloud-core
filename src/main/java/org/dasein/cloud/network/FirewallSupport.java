@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2013 Dell, Inc.
+ * Copyright (C) 2009-2014 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -21,6 +21,7 @@ package org.dasein.cloud.network;
 
 import java.util.Collection;
 import java.util.Locale;
+import java.util.Map;
 
 import org.dasein.cloud.AccessControlledService;
 import org.dasein.cloud.CloudException;
@@ -45,6 +46,8 @@ import javax.annotation.Nullable;
  * @version 2013.02 Added support for rule precedence (issue #33)
  * @version 2013.02 Added specifying both source and destination as {@link RuleTarget} objects (issue #26)
  * @version 2013.02 Added meta-data for source endpoint types (issue #27)
+ * @version 2014.03 Added support for creating firewall rules through a create options object
+ * @version 2014.03 Added support for firewall constraints (issue #99)
  * @since unknown
  */
 public interface FirewallSupport extends AccessControlledService {
@@ -159,6 +162,16 @@ public interface FirewallSupport extends AccessControlledService {
      */
     public @Nonnull String authorize(@Nonnull String firewallId, @Nonnull Direction direction, @Nonnull Permission permission, @Nonnull RuleTarget sourceEndpoint, @Nonnull Protocol protocol, @Nonnull RuleTarget destinationEndpoint, int beginPort, int endPort, @Nonnegative int precedence) throws CloudException, InternalException;
 
+    /**
+     * Provides positive authorization matching the specified options for creating a new firewall rule.
+     * @param firewallId the unique, cloud-specific ID for the firewall being targeted by the new rule
+     * @param ruleOptions the create options that dictate how the rule is added
+     * @return the provider ID of the new rule
+     * @throws CloudException an error occurred with the cloud provider establishing the rule
+     * @throws InternalException an error occurred locally trying to establish the rule
+     * @throws OperationNotSupportedException the specified direction, target, or permission are not supported
+     */
+    public @Nonnull String authorize(@Nonnull String firewallId, @Nonnull FirewallRuleCreateOptions ruleOptions) throws CloudException, InternalException;
 
     /**
      * Creates a new firewall with the specified name.
@@ -203,7 +216,17 @@ public interface FirewallSupport extends AccessControlledService {
      * @throws CloudException an error occurred with the cloud provider while performing the operation
      */
     public void delete(@Nonnull String firewallId) throws InternalException, CloudException;
-    
+
+    /**
+     * Identifies the constraints and values currently active for the specified firewall. The constrained fields
+     * should match the fields defined as being constrained in {@link #getFirewallConstraintsForCloud()}.
+     * @param firewallId the ID for which you are seeking active constraints
+     * @return a map of constraints to the value on which a given rule value is constrained
+     * @throws InternalException an error occurred inside Dasein Cloud processing the request
+     * @throws CloudException an error occurred communicating with the cloud provider in assembling the list
+     */
+    public @Nullable Map<FirewallConstraints.Constraint, Object> getActiveConstraintsForFirewall(@Nonnull String firewallId) throws InternalException, CloudException;
+
     /**
      * Provides the full firewall data for the specified firewall.
      * @param firewallId the unique ID of the desired firewall
@@ -212,7 +235,18 @@ public interface FirewallSupport extends AccessControlledService {
      * @throws CloudException an error occurred with the cloud provider while performing the operation
      */
     public @Nullable Firewall getFirewall(@Nonnull String firewallId) throws InternalException, CloudException;
-    
+
+    /**
+     * Fetches the constraints for firewalls in this cloud. A constraint is a field that all rules
+     * associated with a firewall must share. For example, a firewall constrained on
+     * {@link FirewallConstraints.Constraint#PROTOCOL} requires all rules associated with it to share
+     * the same protocol.
+     * @return the firewall constraints for this cloud
+     * @throws InternalException an internal error occurred assembling the cloud firewall constraints
+     * @throws CloudException an error occurred fetching constraint data from the cloud
+     */
+    public @Nonnull FirewallConstraints getFirewallConstraintsForCloud() throws InternalException, CloudException;
+
     /**
      * Provides the firewall terminology for the concept of a firewall. For example, AWS calls a 
      * firewall a "security group".
@@ -415,6 +449,14 @@ public interface FirewallSupport extends AccessControlledService {
      * @throws InternalException a local error occurred while checking for support
      */
     public boolean supportsFirewallCreation(boolean inVlan) throws CloudException, InternalException;
+
+    /**
+     * Indicates whether or not you can delete firewalls.
+     * @return <code>true</code> if you can call {@link #delete(String)} to delete a firewall
+     * @throws CloudException an error occurred with the cloud provider while checking for support
+     * @throws InternalException a local error occurred while checking for support
+     */
+    public boolean supportsFirewallDeletion() throws CloudException, InternalException;
 
     /**
      * Indicates whether or the sources you specify in your rules may be other firewalls (security group behavior).

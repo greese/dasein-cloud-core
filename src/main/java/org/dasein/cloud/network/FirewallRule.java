@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2013 Dell, Inc.
+ * Copyright (C) 2009-2014 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -560,7 +560,7 @@ public class FirewallRule implements Comparable<FirewallRule> {
 
     @Override
     public @Nonnull String toString() {
-        return (direction + "/" + permission + ": " + sourceEndpoint + "->" + protocol + ":" + destinationEndpoint + " [" + startPort + "-" + endPort + "]");
+        return (direction + " (" + precedence + ")/" + permission + ": " + sourceEndpoint + "->" + protocol + ":" + destinationEndpoint + " [" + startPort + "-" + endPort + "]");
     }
 
     /**
