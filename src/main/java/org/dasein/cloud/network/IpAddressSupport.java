@@ -19,20 +19,14 @@
 
 package org.dasein.cloud.network;
 
-import java.util.Locale;
+import org.dasein.cloud.*;
+import org.dasein.cloud.compute.VirtualMachineSupport;
+import org.dasein.cloud.identity.ServiceAction;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import org.dasein.cloud.AccessControlledService;
-import org.dasein.cloud.CloudException;
-import org.dasein.cloud.InternalException;
-import org.dasein.cloud.OperationNotSupportedException;
-import org.dasein.cloud.Requirement;
-import org.dasein.cloud.ResourceStatus;
-import org.dasein.cloud.compute.VirtualMachine;
-import org.dasein.cloud.compute.VirtualMachineSupport;
-import org.dasein.cloud.identity.ServiceAction;
+import java.util.Locale;
+import java.util.concurrent.Future;
 
 /**
  * Services for retrieving IP addresses managed independently from virtual machines and 
@@ -266,6 +260,19 @@ public interface IpAddressSupport extends AccessControlledService {
      * @throws CloudException an error occurred with the cloud provider while requesting the IP addresses
      */
     public abstract @Nonnull Iterable<IpAddress> listIpPool(@Nonnull IPVersion version, boolean unassignedOnly) throws InternalException, CloudException;
+
+    /**
+     * Lists all IP addresses of the specified IP version that are allocated to the account holder's IP address pool. If
+     * the specified version is not supported, an empty list should be returned.  This method implements a callable so
+     * it can be called concurrently.
+     * @param version the version of the IP protocol for which you are looking for IP addresses
+     * @param unassignedOnly show only IP addresses that have yet to be assigned to cloud resources
+     * @return all matching IP addresses from the IP address pool
+     * @throws InternalException a local error occurred loading the IP addresses
+     * @throws CloudException an error occurred with the cloud provider while requesting the IP addresses
+     */
+    public abstract @Nonnull
+    Future<Iterable<IpAddress>> listIpPoolConcurrently(@Nonnull IPVersion version, boolean unassignedOnly) throws InternalException, CloudException;
 
     /**
      * Lists the status of all IP addresses of the specified IP version that are allocated to the account holder's IP
