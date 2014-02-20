@@ -340,6 +340,11 @@ public abstract class AbstractFirewallSupport implements FirewallSupport {
     }
 
     @Override
+    public boolean requiresRulesOnCreation() throws CloudException, InternalException{
+        return false;
+    }
+
+    @Override
     public boolean supportsFirewallSources() throws CloudException, InternalException {
         return false;
     }

@@ -451,6 +451,14 @@ public interface FirewallSupport extends AccessControlledService {
     public boolean supportsFirewallCreation(boolean inVlan) throws CloudException, InternalException;
 
     /**
+     *
+     * @return true if the cloud requires a new firewall to be created with an initial set of rules
+     * @throws CloudException an error occurred with the cloud provider while checking for support
+     * @throws InternalException a local error occurred while checking for support
+     */
+    public boolean requiresRulesOnCreation() throws CloudException, InternalException;
+
+    /**
      * Indicates whether or the sources you specify in your rules may be other firewalls (security group behavior).
      * @return true if the sources may be other firewalls
      * @throws CloudException an error occurred with the cloud provider while checking for support
