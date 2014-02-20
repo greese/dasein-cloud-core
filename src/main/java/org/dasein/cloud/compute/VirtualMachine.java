@@ -19,6 +19,10 @@
 
 package org.dasein.cloud.compute;
 
+import org.dasein.cloud.CloudException;
+import org.dasein.cloud.CloudProvider;
+import org.dasein.cloud.InternalException;
+import org.dasein.cloud.OperationNotSupportedException;
 import org.dasein.cloud.Tag;
 import org.dasein.cloud.Taggable;
 import org.dasein.cloud.network.Networkable;
@@ -26,8 +30,12 @@ import org.dasein.cloud.network.RawAddress;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeSet;
 import java.util.concurrent.Callable;
 
 /**
@@ -71,6 +79,7 @@ public class VirtualMachine implements Networkable, Taggable {
     private String                providerVlanId;
     private String                providerKeypairId;
     private String[]              providerFirewallIds;
+    private String[]              providerVolumeIds;
     private String                publicDnsAddress;
     private RawAddress[]          publicIpAddresses;
     private boolean               rebootable;
@@ -394,7 +403,20 @@ public class VirtualMachine implements Networkable, Taggable {
      */
     @Deprecated
     public String[] getPublicIpAddresses() {
-        String[] addrs = new String[publicIpAddresses == null ? 0 : publicIpAddresses.length];
+        if( publicIpAddresses == null || publicIpAddresses.length < 0 ) {
+            if( publicDnsAddress == null ) {
+                return new String[0];
+            }
+            String ip = resolve(publicDnsAddress);
+
+            if( ip != null ) {
+                publicIpAddresses = new RawAddress[] { new RawAddress(ip) };
+            }
+            else {
+                return new String[0];
+            }
+        }
+        String[] addrs = new String[publicIpAddresses.length];
 
         if( publicIpAddresses != null ) {
             for( int i=0; i<addrs.length; i++ ) {
@@ -402,6 +424,26 @@ public class VirtualMachine implements Networkable, Taggable {
             }
         }
         return addrs;
+    }
+
+    private String resolve(String dnsName) {
+        if (dnsName != null && dnsName.length() > 0) {
+            InetAddress[] addresses;
+
+            try {
+                addresses = InetAddress.getAllByName(dnsName);
+            } catch (UnknownHostException e) {
+                addresses = null;
+            }
+            if (addresses != null && addresses.length > 0) {
+                dnsName = addresses[0].getHostAddress();
+            } else {
+                dnsName = dnsName.split("\\.")[0];
+                dnsName = dnsName.replaceAll("-", "\\.");
+                dnsName = dnsName.substring(4);
+            }
+        }
+        return dnsName;
     }
 
     public void setPublicAddresses(@Nonnull RawAddress ... addresses) {
@@ -542,6 +584,34 @@ public class VirtualMachine implements Networkable, Taggable {
 
     public @Nonnull String[] getProviderShellKeyIds() {
         return (providerShellKeyIds == null ? new String[0] : providerShellKeyIds);
+    }
+
+    public @Nonnull String[] getProviderVolumeIds(@Nonnull CloudProvider provider) throws CloudException, InternalException {
+        if( providerVolumeIds == null ) {
+            ComputeServices services = provider.getComputeServices();
+
+            if( services == null ) {
+                throw new OperationNotSupportedException("No compute services are defined");
+            }
+            VolumeSupport support = services.getVolumeSupport();
+
+            if( support == null ) {
+                providerVolumeIds = new String[0];
+            }
+            else {
+                TreeSet<String> ids = new TreeSet<String>();
+
+                for( Volume v : support.listVolumes(VolumeFilterOptions.getInstance().attachedTo(providerVirtualMachineId)) ) {
+                    ids.add(v.getProviderVolumeId());
+                }
+                providerVolumeIds = ids.toArray(new String[ids.size()]);
+            }
+        }
+        return providerVolumeIds;
+    }
+
+    public void setProviderVolumeIds(@Nonnull String ... ids) {
+        providerVolumeIds = ids;
     }
 
     public @Nullable Volume[] getVolumes() {

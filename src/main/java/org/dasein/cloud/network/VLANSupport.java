@@ -571,6 +571,29 @@ public interface VLANSupport extends AccessControlledService {
     public abstract void removeSubnet(String providerSubnetId) throws CloudException, InternalException;
 
     /**
+     * Removes meta-data from a subnet. If tag values are set, their removal is dependent on underlying cloud
+     * provider behavior. They may be removed only if the tag value matches or they may be removed regardless of the
+     * value.
+     * @param subnetId the subnet to update
+     * @param tags the meta-data tags to remove
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void removeSubnetTags(@Nonnull String subnetId, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Removes meta-data from multiple subnets. If tag values are set, their removal is dependent on underlying cloud
+     * provider behavior. They may be removed only if the tag value matches or they may be removed regardless of the
+     * value.
+     * @param subnetIds the subnets to update
+     * @param tags  the meta-data tags to remove
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void removeSubnetTags(@Nonnull String[] subnetIds, @Nonnull Tag ... tags) throws CloudException, InternalException;
+
+
+    /**
      * Removes the specified VLAN from the cloud.
      * @param vlanId the unique ID of the VLAN to be removed
      * @throws CloudException an error occurred removing the target VLAN
@@ -617,6 +640,26 @@ public interface VLANSupport extends AccessControlledService {
      * @throws InternalException a local error occurred identifying support
      */
     public abstract boolean supportsRawAddressRouting() throws CloudException, InternalException;
+
+    /**
+     * Updates meta-data for a subnet with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     * @param subnetId the subnet to update
+     * @param tags the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void updateSubnetTags(@Nonnull String subnetId, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Updates meta-data for multiple subnets with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     * @param subnetIds the subnets to update
+     * @param tags  the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void updateSubnetTags(@Nonnull String[] subnetIds, @Nonnull Tag... tags) throws CloudException, InternalException;
 
     /**
      * Updates meta-data for a VLAN with the new values. It will not overwrite any value that currently

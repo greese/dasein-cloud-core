@@ -451,12 +451,21 @@ public interface FirewallSupport extends AccessControlledService {
     public boolean supportsFirewallCreation(boolean inVlan) throws CloudException, InternalException;
 
     /**
+<<<<<<< HEAD
      *
      * @return true if the cloud requires a new firewall to be created with an initial set of rules
      * @throws CloudException an error occurred with the cloud provider while checking for support
      * @throws InternalException a local error occurred while checking for support
      */
     public boolean requiresRulesOnCreation() throws CloudException, InternalException;
+=======
+     * Indicates whether or not you can delete firewalls.
+     * @return <code>true</code> if you can call {@link #delete(String)} to delete a firewall
+     * @throws CloudException an error occurred with the cloud provider while checking for support
+     * @throws InternalException a local error occurred while checking for support
+     */
+    public boolean supportsFirewallDeletion() throws CloudException, InternalException;
+>>>>>>> 95407bc7f7dd698a24585a688cd251e456802c07
 
     /**
      * Indicates whether or the sources you specify in your rules may be other firewalls (security group behavior).

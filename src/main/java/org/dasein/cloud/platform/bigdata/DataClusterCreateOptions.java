@@ -53,7 +53,7 @@ public class DataClusterCreateOptions {
      * @param databaseName the name of the database to be placed in the cluster
      * @return options for creating a data cluster
      */
-    static @Nonnull DataClusterCreateOptions getInstance(@Nonnull String providerProductId, @Nonnull String name, @Nonnull String description, @Nonnull String databaseName) {
+    static public @Nonnull DataClusterCreateOptions getInstance(@Nonnull String providerProductId, @Nonnull String name, @Nonnull String description, @Nonnull String databaseName) {
         return getInstance(providerProductId, null, name, description, null, databaseName, 0, null, null, 1, true);
     }
 
@@ -66,7 +66,7 @@ public class DataClusterCreateOptions {
      * @param databaseName the name of the database to be placed in the cluster
      * @return options for creating a data cluster based on the specified parameters
      */
-    static @Nonnull DataClusterCreateOptions getInstance(@Nonnull String providerProductId, @Nonnull String providerDataCenterId, @Nonnull String name, @Nonnull String description, @Nonnull String databaseName) {
+    static public @Nonnull DataClusterCreateOptions getInstance(@Nonnull String providerProductId, @Nonnull String providerDataCenterId, @Nonnull String name, @Nonnull String description, @Nonnull String databaseName) {
         return getInstance(providerProductId, providerDataCenterId, name, description, null, databaseName, 0, null, null, 1, true);
     }
 
@@ -85,7 +85,7 @@ public class DataClusterCreateOptions {
      * @param encrypted whether or not the data should be encrypted at rest
      * @return options for creating a data cluster based on the specified parameters
      */
-    static @Nonnull DataClusterCreateOptions getInstance(@Nonnull String providerProductId, @Nullable String providerDataCenterId, @Nonnull String name, @Nonnull String description, @Nullable String clusterVersion, @Nonnull String databaseName, @Nonnegative int databasePort, @Nullable String adminUser, @Nullable String adminPassword, @Nonnegative int nodeCount, boolean encrypted) {
+    static public @Nonnull DataClusterCreateOptions getInstance(@Nonnull String providerProductId, @Nullable String providerDataCenterId, @Nonnull String name, @Nonnull String description, @Nullable String clusterVersion, @Nonnull String databaseName, @Nonnegative int databasePort, @Nullable String adminUser, @Nullable String adminPassword, @Nonnegative int nodeCount, boolean encrypted) {
         DataClusterCreateOptions options = new DataClusterCreateOptions();
 
         options.providerProductId = providerProductId;
