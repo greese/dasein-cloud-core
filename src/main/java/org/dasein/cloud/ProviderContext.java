@@ -73,6 +73,7 @@ public class ProviderContext implements Serializable {
     private byte[]     storageX509Key;
     private byte[]     x509Cert;
     private byte[]     x509Key;
+    private byte[]     p12Certificate;
 
     /**
      * Constructs a new, empty provider context for managing the provider context information.
@@ -95,7 +96,7 @@ public class ProviderContext implements Serializable {
      * some peculiar side-effects.
      */
     public void clear() {
-        clear(accessPublic, accessPrivate, storagePublic, storagePrivate, x509Cert, x509Key, storageX509Cert, storageX509Key);
+        clear(accessPublic, accessPrivate, storagePublic, storagePrivate, x509Cert, x509Key, storageX509Cert, storageX509Key, p12Certificate);
     }
     
     /**
@@ -318,6 +319,14 @@ public class ProviderContext implements Serializable {
 
     public void setX509Key(byte[] x509Key) {
         this.x509Key = x509Key;
+    }
+
+    public byte[] getP12Certificate() {
+        return p12Certificate;
+    }
+
+    public void setP12Certificate(byte[] p12Certificate){
+        this.p12Certificate = p12Certificate;
     }
 
     public static Random getRandom() {
