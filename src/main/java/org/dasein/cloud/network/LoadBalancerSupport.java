@@ -19,6 +19,8 @@
 
 package org.dasein.cloud.network;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
 
 import org.dasein.cloud.AccessControlledService;
@@ -53,6 +55,7 @@ public interface LoadBalancerSupport extends AccessControlledService {
     static public final ServiceAction REMOVE_DATA_CENTERS  = new ServiceAction("LB:REMOVE_DC");
     static public final ServiceAction REMOVE_VMS           = new ServiceAction("LB:REMOVE_VM");
     static public final ServiceAction REMOVE_LOAD_BALANCER = new ServiceAction("LB:REMOVE_LOAD_BALANCER");
+    static public final ServiceAction CONFIGURE_HEALTH_CHECK = new ServiceAction("LB:CONFIGURE_HEALTH_CHECK");
 
     /**
      * Adds one or more data centers to the list of data centers associated with the specified load balancer. This method
@@ -327,6 +330,66 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
      */
     public boolean supportsMultipleTrafficTypes() throws CloudException, InternalException;
+
+    /**
+     * Creates a standalone LoadBalancerHealthCheck that can be attached to a LoadBalancer either at a later time
+     * or on create of the LB.
+     * @param name the name of the Health Check if required
+     * @param description a friendly name for the Health Check
+     * @param host an optional hostname that can be set as the target for the health check monitoring
+     * @param protocol the protocol to be used for the health check monitoring
+     * @param port the port to be used for the health check monitoring
+     * @param path the path which is the target for the health check monitoring
+     * @param interval how often to perform the health check
+     * @param timeout timeout after which the health check request is considered a failure
+     * @param healthyCount the number of consecutive successful requests before an unhealthy instance is marked as healthy
+     * @param unhealthyCount the number of consecutive failed requests before a healthy instance is marked as unhealthy
+     * @return the unique ID of the health check
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public LoadBalancerHealthCheck createLoadBalancerHealthCheck(@Nullable String name, @Nullable String description, @Nullable String host, @Nullable LoadBalancerHealthCheck.HCProtocol protocol, int port, @Nullable String path, @Nullable Double interval, @Nullable Double timeout, int healthyCount, int unhealthyCount) throws CloudException, InternalException;
+
+    /**
+     * Creates a standalone LoadBalancerHealthCheck that can be attached to a LoadBalancer either at a later time
+     * or on create of the LB.
+     * @param options the options for creating the health check
+     * @return the unique ID of the health check
+     */
+    public LoadBalancerHealthCheck createLoadBalancerHealthCheck(@Nonnull LBHealthCheckCreateOptions options) throws CloudException, InternalException;
+
+    /**
+     * Attaches an existing Health Check to an existing Load Balancer
+     * @param providerLoadBalancerId the load balancer ID
+     * @param providerLBHealthCheckId the health check ID
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public void attachHealthCheckToLoadBalancer(@Nonnull String providerLoadBalancerId, @Nonnull String providerLBHealthCheckId)throws CloudException, InternalException;
+
+    /**
+     * Gets the health state of the virtual machine(s) being monitored by the health check
+     * @param providerLoadBalancerId the ID of the specific loadbalancer under which the instance(s) belong(s)
+     * @param providerVirtualMachineId the ID of a specific virtual machine if required
+     * @return Hashmap containing the virtual machine ID and it's corresponding health state
+     */
+    public HashMap<String, String> getInstanceHealth(@Nonnull String providerLoadBalancerId, @Nullable String providerVirtualMachineId) throws CloudException, InternalException;
+
+    /**
+     * Removes a health check associated with a particular Load Balancer. Only certain clouds allow this operation
+     * @param providerLoadBalancerId the ID of the Load Balancer that has the health check being removed
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public void removeLoadBalancerHealthCheck(@Nonnull String providerLoadBalancerId) throws CloudException, InternalException;
+
+    /**
+     * Indicates whether a health check can be created independantly of a load balancer
+     * @return false if a health check can exist without having been assigned to a load balancer
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public boolean healthCheckRequiresLoadBalancer() throws CloudException, InternalException;
 
     /********************************** DEPRECATED METHODS *************************************/
 
