@@ -100,6 +100,7 @@ public class VMLaunchOptions {
     private String             standardProductId;
     private String[]           staticIpIds;
     private String             privateIp;
+    private boolean            provisionPublicIp;
     private String             userData;
     private String             vlanId;
     private String             subnetId;
@@ -664,6 +665,23 @@ public class VMLaunchOptions {
     public @Nonnull VMLaunchOptions withPrivateIp(@Nonnull String ipAddr) {
       this.privateIp = ipAddr;
       return this;
+    }
+
+    /**
+     * @return true if the VM was provisioned with a public IP address at launch time
+     */
+    public boolean isProvisionPublicIp() {
+        return preventApiTermination;
+    }
+
+    /**
+     * Tell the cloud provider to automatically provision a public IP for this VM on launch.
+     * @param provisionPublicIp true indicates that a public IP address should be provisioned at launch time
+     * @return this
+     */
+    public @Nonnull VMLaunchOptions withProvisionPublicIp(@Nonnull boolean provisionPublicIp) {
+        this.provisionPublicIp = provisionPublicIp;
+        return this;
     }
 
     /**
