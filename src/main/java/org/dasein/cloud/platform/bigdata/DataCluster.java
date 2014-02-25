@@ -96,7 +96,6 @@ public class DataCluster implements Taggable {
      * @param name the user-friendly name of the cluster
      * @param description a user-friendly description of the cluster
      * @param providerProductId the unique ID of the product with which the cluster is associated
-     * @param clusterVersion the version of the cluster
      * @param databaseName the name of the database supported by the cluster
      * @param databasePort the port to which you can connect for SQL (or other protocol) queries
      * @param adminUser the administrative user for the database
