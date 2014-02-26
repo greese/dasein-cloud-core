@@ -41,7 +41,7 @@ public class DataClusterParameterGroup {
      * @param parameters the parameter names and their associated values
      * @return a newly constructed parameter group based on the specified values
      */
-    static @Nonnull DataClusterParameterGroup getInstance(@Nonnull String providerGroupId, @Nonnull String family, @Nonnull String name, @Nonnull String description, Map<String,Object> parameters) {
+    static public @Nonnull DataClusterParameterGroup getInstance(@Nonnull String providerGroupId, @Nonnull String family, @Nonnull String name, @Nonnull String description, Map<String,Object> parameters) {
         DataClusterParameterGroup group = new DataClusterParameterGroup();
 
         group.providerGroupId = providerGroupId;
