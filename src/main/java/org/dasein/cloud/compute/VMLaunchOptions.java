@@ -671,7 +671,7 @@ public class VMLaunchOptions {
      * @return true if the VM was provisioned with a public IP address at launch time
      */
     public boolean isProvisionPublicIp() {
-        return preventApiTermination;
+        return provisionPublicIp;
     }
 
     /**
