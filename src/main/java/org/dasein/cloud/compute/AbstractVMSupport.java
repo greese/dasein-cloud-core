@@ -77,8 +77,9 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
+    @Deprecated
     public @Nullable VMScalingCapabilities describeVerticalScalingCapabilities() throws CloudException, InternalException {
-        return null;
+        return getCapabilities().getVerticalScalingCapabilities();
     }
 
     @Override
@@ -106,23 +107,9 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
-    public @Nonnull Iterable<VmState> getAlterVMStates(@Nullable VirtualMachine vm) {
-        return new ArrayList<VmState>(Arrays.asList(VmState.values()));
-    }
-
-    @Override
-    public @Nonnull Iterable<VmState> getCloneVMStates(@Nullable VirtualMachine vm) {
-        return new ArrayList<VmState>(Arrays.asList(VmState.values()));
-    }
-
-    @Override
-    public @Nonnull Iterable<VmState> getRebootVMStates(@Nullable VirtualMachine vm) {
-        return new ArrayList<VmState>(Arrays.asList(VmState.values()));
-    }
-
-    @Override
-    public @Nonnull Iterable<VmState> getTerminateVMStates(@Nullable VirtualMachine vm) {
-        return new ArrayList<VmState>(Arrays.asList(VmState.values()));
+    @Deprecated
+    public @Nonnegative int getCostFactor(@Nonnull VmState state) throws CloudException, InternalException {
+        return getCapabilities().getCostFactor(state);
     }
 
     @Override
@@ -136,13 +123,9 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
-    public int getCostFactor(@Nonnull VmState state) throws InternalException, CloudException {
-        return 100;
-    }
-
-    @Override
+    @Deprecated
     public int getMaximumVirtualMachineCount() throws CloudException, InternalException {
-        return -2;
+        return getCapabilities().getMaximumVirtualMachineCount();
     }
 
     @Override
@@ -162,6 +145,17 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
      */
     protected final @Nonnull T getProvider() {
         return provider;
+    }
+
+    @Override
+    @Deprecated
+    public @Nonnull String getProviderTermForServer(@Nonnull Locale locale) {
+        try {
+            return getCapabilities().getProviderTermForVirtualMachine(locale);
+        }
+        catch( Exception ignore ) {
+            return "virtual machine";
+        }
     }
 
     @Override
@@ -185,73 +179,75 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
+    @Deprecated
     public @Nonnull Requirement identifyImageRequirement(@Nonnull ImageClass cls) throws CloudException, InternalException {
-        return (cls.equals(ImageClass.MACHINE) ? Requirement.REQUIRED : Requirement.NONE);
+        return getCapabilities().identifyImageRequirement(cls);
     }
 
     @Override
     @Deprecated
     public @Nonnull Requirement identifyPasswordRequirement() throws CloudException, InternalException {
-        return identifyPasswordRequirement(Platform.UNKNOWN);
+        return getCapabilities().identifyPasswordRequirement(Platform.UNKNOWN);
     }
 
     @Override
+    @Deprecated
     public @Nonnull Requirement identifyPasswordRequirement(Platform platform) throws CloudException, InternalException {
-        return Requirement.NONE;
+        return getCapabilities().identifyPasswordRequirement(platform);
     }
 
     @Override
+    @Deprecated
     public @Nonnull Requirement identifyRootVolumeRequirement() throws CloudException, InternalException {
-        return Requirement.NONE;
+        return getCapabilities().identifyRootVolumeRequirement();
     }
 
     @Override
     @Deprecated
     public @Nonnull Requirement identifyShellKeyRequirement() throws CloudException, InternalException {
-        return identifyShellKeyRequirement(Platform.UNKNOWN);
+        return getCapabilities().identifyShellKeyRequirement(Platform.UNKNOWN);
     }
 
     @Override
+    @Deprecated
     public @Nonnull Requirement identifyShellKeyRequirement(Platform platform) throws CloudException, InternalException {
-        IdentityServices services = getProvider().getIdentityServices();
-
-        if( services == null ) {
-            return Requirement.NONE;
-        }
-        if( services.hasShellKeySupport() ) {
-            return Requirement.OPTIONAL;
-        }
-        return Requirement.NONE;
+        return getCapabilities().identifyShellKeyRequirement(platform);
     }
 
     @Override
+    @Deprecated
     public @Nonnull Requirement identifyStaticIPRequirement() throws CloudException, InternalException {
-        return Requirement.NONE;
+        return getCapabilities().identifyStaticIPRequirement();
     }
 
     @Override
+    @Deprecated
     public @Nonnull Requirement identifyVlanRequirement() throws CloudException, InternalException {
-        return Requirement.NONE;
+        return getCapabilities().identifyVlanRequirement();
     }
 
     @Override
+    @Deprecated
     public boolean isAPITerminationPreventable() throws CloudException, InternalException {
-        return false;
+        return getCapabilities().isAPITerminationPreventable();
     }
 
     @Override
+    @Deprecated
     public boolean isBasicAnalyticsSupported() throws CloudException, InternalException {
-        return false;
+        return getCapabilities().isBasicAnalyticsSupported();
     }
 
     @Override
+    @Deprecated
     public boolean isExtendedAnalyticsSupported() throws CloudException, InternalException {
-        return false;
+        return getCapabilities().isExtendedAnalyticsSupported();
     }
 
     @Override
+    @Deprecated
     public boolean isUserDataSupported() throws CloudException, InternalException {
-        return false;
+        return getCapabilities().isUserDataSupported();
     }
 
     @Override
@@ -529,7 +525,10 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
+    @Deprecated
     public Iterable<Architecture> listSupportedArchitectures() throws InternalException, CloudException {
+        return getCapabilities().listSupportedArchitectures();
+        /*
         Cache<Architecture> cache = Cache.getInstance(getProvider(), "architectures", Architecture.class, CacheLevel.REGION_ACCOUNT, new TimePeriod<Week>(1, TimePeriod.WEEK));
         Iterable<Architecture> architectures = cache.get(getContext());
 
@@ -541,6 +540,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
             cache.put(getContext(), architectures);
         }
         return architectures;
+        */
     }
 
     @Override
@@ -641,23 +641,51 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
+    @Deprecated
     public final boolean supportsAnalytics() throws CloudException, InternalException {
-        return (isBasicAnalyticsSupported() || isExtendedAnalyticsSupported());
+        return (getCapabilities().isBasicAnalyticsSupported() || getCapabilities().isExtendedAnalyticsSupported());
     }
 
     @Override
+    @Deprecated
     public boolean supportsPauseUnpause(@Nonnull VirtualMachine vm) {
-        return false;
+        try {
+            VirtualMachineCapabilities c = getCapabilities();
+            VmState s = vm.getCurrentState();
+
+            return (c.canPause(s) || c.canUnpause(s));
+        }
+        catch( Exception ignore ) {
+            return false;
+        }
     }
 
     @Override
+    @Deprecated
     public boolean supportsStartStop(@Nonnull VirtualMachine vm) {
-        return false;
+        try {
+            VirtualMachineCapabilities c = getCapabilities();
+            VmState s = vm.getCurrentState();
+
+            return (c.canStart(s) || c.canStop(s));
+        }
+        catch( Exception ignore ) {
+            return false;
+        }
     }
 
     @Override
+    @Deprecated
     public boolean supportsSuspendResume(@Nonnull VirtualMachine vm) {
-        return false;
+        try {
+            VirtualMachineCapabilities c = getCapabilities();
+            VmState s = vm.getCurrentState();
+
+            return (c.canSuspend(s) || c.canResume(s));
+        }
+        catch( Exception ignore ) {
+            return false;
+        }
     }
 
     @Override

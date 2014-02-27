@@ -37,6 +37,7 @@ import java.util.Locale;
  * @version 2013.01 Added meta-data for defining kernel and ramdisk image requirements (Issue #7)
  * @version 2013.01 Added status listing (Issue #4)
  * @version 2013.02 Deprecated old requirements meta data for shell key and password and added new ones with platform params (issue #37)
+ * @version 2014.03 Removed getXXXStates() methods, added a capabilities fetcher, and deprecated all capabilities methods
  * @since unknown
  */
 @SuppressWarnings("UnusedDeclaration")
@@ -84,15 +85,6 @@ public interface VirtualMachineSupport extends AccessControlledService {
     public abstract @Nonnull VirtualMachine clone(@Nonnull String vmId, @Nonnull String intoDcId, @Nonnull String name, @Nonnull String description, boolean powerOn, @Nullable String ... firewallIds) throws InternalException, CloudException;
 
     /**
-     * Describes the ways in which this cloud supports the vertical scaling of a virtual machine. A null response
-     * means this cloud just doesn't support vertical scaling.
-     * @return a description of how this cloud supports vertical scaling
-     * @throws InternalException an internal error occurred processing the request
-     * @throws CloudException an error occurred in the cloud processing the request
-     */
-    public abstract @Nullable VMScalingCapabilities describeVerticalScalingCapabilities() throws CloudException, InternalException;
-
-    /**
      * Turns extended analytics off for the target server. If the underlying cloud does not support
      * hypervisor monitoring, this method will be a NO-OP.
      * @param vmId the provider ID for the server to stop monitoring
@@ -111,32 +103,12 @@ public interface VirtualMachineSupport extends AccessControlledService {
     public void enableAnalytics(@Nonnull String vmId) throws InternalException, CloudException;
 
     /**
-     *
-     * @return list of required VmStates in which the Machine must be in order to be altered
-     * @param vm the Virtual Machine object that's being interrogated
+     * Provides access to meta-data about virtual machine capabilities in the current region of this cloud.
+     * @return a description of the features supported by this region of this cloud
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException an error occurred within the cloud provider
      */
-    public abstract @Nonnull Iterable<VmState> getAlterVMStates(@Nullable VirtualMachine vm);
-
-    /**
-     *
-     * @return list of required VmStates in which the Machine must be in order to be cloned
-     * @param vm the Virtual Machine object that's being interrogated
-     */
-    public abstract @Nonnull Iterable<VmState> getCloneVMStates(@Nullable VirtualMachine vm);
-
-    /**
-     *
-     * @return list of required VmStates in which the Machine must be in order to be rebooted
-     * @param vm the Virtual Machine object that's being interrogated
-     */
-    public abstract @Nonnull Iterable<VmState> getRebootVMStates(@Nullable VirtualMachine vm);
-
-    /**
-     *
-     * @return list of required VmStates in which the Machine must be in order to be terminated
-     * @param vm the Virtual Machine object that's being interrogated
-     */
-    public abstract @Nonnull Iterable<VmState> getTerminateVMStates(@Nullable VirtualMachine vm);
+    public abstract @Nonnull VirtualMachineCapabilities getCapabilities() throws InternalException, CloudException;
 
     /**
      * Provides the password as stored by the cloud provider (sometimes encrypted)
@@ -157,25 +129,6 @@ public interface VirtualMachineSupport extends AccessControlledService {
     public abstract @Nonnull String getConsoleOutput(@Nonnull String vmId) throws InternalException, CloudException;
 
     /**
-     * Provides a number between 0 and 100 describing what percentage of the standard VM bill rate should be charged for
-     * virtual machines in the specified state. 0 means that the VM incurs no charges while in the specified state, 100
-     * means it incurs full charges, and a number in between indicates the percent discount that applies.
-     * @param state the VM state being checked
-     * @return the discount factor for VMs in the specified state
-     * @throws InternalException an error occurred within the Dasein Cloud API implementation
-     * @throws CloudException an error occurred within the cloud provider
-     */
-    public abstract @Nonnegative int getCostFactor(@Nonnull VmState state) throws InternalException, CloudException;
-
-    /**
-     * Provides the maximum number of virtual machines that may be launched in this region for the current account.
-     * @return the maximum number of launchable VMs or -1 for unlimited or -2 for unknown
-     * @throws CloudException an error occurred fetching the limits from the cloud provider
-     * @throws InternalException an error occurred within the Dasein Cloud implementation determining the limits
-     */
-    public abstract int getMaximumVirtualMachineCount() throws CloudException, InternalException;
-
-    /**
      * Fetches the VM product associated with a specific product ID.
      * @param productId the virtual machine product ID (flavor, size, etc.)
      * @return the product represented by the specified product ID
@@ -183,14 +136,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws CloudException an error occurred fetching the product from the cloud
      */
     public abstract @Nullable VirtualMachineProduct getProduct(@Nonnull String productId) throws InternalException, CloudException;
-    
-    /**
-     * Assists UIs by providing the cloud-specific term for a virtual server in the cloud.
-     * @param locale the locale for which the term should be translated
-     * @return the provider-specific term for a virtual server
-     */
-    public abstract @Nonnull String getProviderTermForServer(@Nonnull Locale locale);
-    
+
     /**
      * Provides the data from a specific virtual machine.
      * @param vmId the provider ID for the desired server
@@ -227,120 +173,12 @@ public interface VirtualMachineSupport extends AccessControlledService {
     public abstract @Nonnull Iterable<VmStatistics> getVMStatisticsForPeriod(@Nonnull String vmId, @Nonnegative long from, @Nonnegative long to) throws InternalException, CloudException;
 
     /**
-     * Identifies whether images of the specified image class are required for launching a VM. This method should
-     * always return {@link Requirement#REQUIRED} when the image class chosen is {@link ImageClass#MACHINE}.
-     * @param cls the desired image class
-     * @return the requirements level of support for this image class
-     * @throws CloudException an error occurred in the cloud identifying this requirement
-     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this requirement
-     */
-    public abstract @Nonnull Requirement identifyImageRequirement(@Nonnull ImageClass cls) throws CloudException, InternalException;
-
-    /**
-     * Indicates the degree to which specifying a user name and password at launch is required for a Unix operating system.
-     * @return the requirements level for specifying a user name and password at launch
-     * @throws CloudException an error occurred in the cloud identifying this requirement
-     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this requirement
-     * @deprecated Use {@link #identifyPasswordRequirement(Platform)}
-     */
-    @Deprecated
-    public abstract @Nonnull Requirement identifyPasswordRequirement() throws CloudException, InternalException;
-
-    /**
-     * Indicates the degree to which specifying a user name and password at launch is required.
-     * @param platform the platform for which password requirements are being sought
-     * @return the requirements level for specifying a user name and password at launch
-     * @throws CloudException an error occurred in the cloud identifying this requirement
-     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this requirement
-     */
-    public abstract @Nonnull Requirement identifyPasswordRequirement(Platform platform) throws CloudException, InternalException;
-
-    /**
-     * Indicates whether or not a root volume product must be specified when launching a virtual machine.
-     * @return the requirements level for a root volume product
-     * @throws CloudException an error occurred in the cloud identifying this requirement
-     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this requirement
-     */
-    public abstract @Nonnull Requirement identifyRootVolumeRequirement() throws CloudException, InternalException;
-
-    /**
-     * Indicates the degree to which specifying a shell key at launch is required for a Unix operating system.
-     * @return the requirements level for shell key support at launch
-     * @throws CloudException an error occurred in the cloud identifying this requirement
-     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this requirement
-     * @deprecated Use {@link #identifyShellKeyRequirement(Platform)}
-     */
-    @Deprecated
-    public abstract @Nonnull Requirement identifyShellKeyRequirement() throws CloudException, InternalException;
-
-    /**
-     * Indicates the degree to which specifying a shell key at launch is required.
-     * @param platform the target platform for which you are testing
-     * @return the requirements level for shell key support at launch
-     * @throws CloudException an error occurred in the cloud identifying this requirement
-     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this requirement
-     */
-    public abstract @Nonnull Requirement identifyShellKeyRequirement(Platform platform) throws CloudException, InternalException;
-
-    /**
-     * Indicates the degree to which static IP addresses are required when launching a VM.
-     * @return the requirements level for static IP on launch
-     * @throws CloudException an error occurred in the cloud identifying this requirement
-     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this requirement
-     */
-    public abstract @Nonnull Requirement identifyStaticIPRequirement() throws CloudException, InternalException;
-
-    /**
-     * Indicates whether or not specifying a VLAN in your VM launch options is required or optional.
-     * @return the requirements level for a VLAN during launch
-     * @throws CloudException an error occurred in the cloud identifying this requirement
-     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this requirement
-     */
-    public abstract @Nonnull Requirement identifyVlanRequirement() throws CloudException, InternalException;
-
-    /**
-     * Indicates that the ability to terminate the VM via API can be disabled.
-     * @return true if the cloud supports the ability to prevent API termination
-     * @throws CloudException an error occurred in the cloud while determining this capability
-     * @throws InternalException an error occurred in the Dasein Cloud implementation determining this capability
-     */
-    public abstract boolean isAPITerminationPreventable() throws CloudException, InternalException;
-
-    /**
-     * Indicates whether or not this cloud provider supports basic analytics. Basic analytics are analytics
-     * that are being gathered for every virtual machine without any intervention necessary to enable them. Extended
-     * analytics implies basic analytics, so this method should always be true if {@link #isExtendedAnalyticsSupported()} 
-     * is true (even if there are, in fact, only extended analytics).
-     * @return true if the cloud provider supports the gathering of extended analytics
-     * @throws CloudException an error occurred in the cloud provider determining extended analytics support
-     * @throws InternalException an error occurred within the Dasein Cloud implementation determining extended analytics support
-     */
-    public abstract boolean isBasicAnalyticsSupported() throws CloudException, InternalException;
-    
-    /**
-     * Indicates whether or not this cloud provider supports extended analytics. Extended analytics are analytics
-     * that must be specifically enabled above and beyond any basic analytics the cloud provider is gathering.
-     * @return true if the cloud provider supports the gathering of extended analytics
-     * @throws CloudException an error occurred in the cloud provider determining extended analytics support
-     * @throws InternalException an error occurred within the Dasein Cloud implementation determining extended analytics support
-     */
-    public abstract boolean isExtendedAnalyticsSupported() throws CloudException, InternalException;
-    
-    /**
      * Indicates whether this account is subscribed to using virtual machines.
      * @return true if the subscription is valid for using virtual machines
      * @throws CloudException an error occurred querying the cloud for subscription info
      * @throws InternalException an error occurred within the implementation determining subscription state
      */
     public abstract boolean isSubscribed() throws CloudException, InternalException;
-
-    /**
-     * Indicates whether or not the cloud allows bootstrapping with user data.
-     * @return true of user-data bootstrapping is supported
-     * @throws CloudException an error occurred querying the cloud for this kind of support
-     * @throws InternalException an error inside the Dasein Cloud implementation occurred determining support
-     */
-    public abstract boolean isUserDataSupported() throws CloudException, InternalException;
 
     /**
      * Preferred mechanism for launching a virtual machine in the cloud. This method accepts a rich set of launch
@@ -417,14 +255,6 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws CloudException an error occurred within the cloud provider
      */
     public Iterable<VirtualMachineProduct> listProducts(Architecture architecture) throws InternalException, CloudException;
-
-    /**
-     * Identifies what architectures are supported in this cloud.
-     * @return a list of supported architectures
-     * @throws InternalException an error occurred within the Dasein Cloud implementation calculating supported architectures
-     * @throws CloudException an error occurred fetching the list of supported architectures from the cloud
-     */
-    public Iterable<Architecture> listSupportedArchitectures() throws InternalException, CloudException;
 
     /**
      * Lists the status for all virtual machines in the current region.
@@ -518,48 +348,6 @@ public interface VirtualMachineSupport extends AccessControlledService {
     public abstract void stop(@Nonnull String vmId, boolean force) throws InternalException, CloudException;
 
     /**
-     * Identifies whether or not this cloud supports hypervisor-based analytics around usage and performance.
-     * @return true if this cloud supports hypervisor-based analytics
-     * @throws CloudException an error occurred with the cloud provider determining analytics support
-     * @throws InternalException an error occurred within the Dasein Cloud implementation determining analytics support
-     */
-    public abstract boolean supportsAnalytics() throws CloudException, InternalException;
-
-    /**
-     * Indicates whether the ability to pause/unpause a virtual machine is supported for the specified VM.
-     * @param vm the virtual machine to verify
-     * @return true if pause/unpause is supported for this virtual machine
-     * @see #pause(String)
-     * @see #unpause(String)
-     * @see VmState#PAUSING
-     * @see VmState#PAUSED
-     */
-    public abstract boolean supportsPauseUnpause(@Nonnull VirtualMachine vm);
-
-    /**
-     * Indicates whether the ability to start/stop a virtual machine is supported for the specified VM.
-     * @param vm the virtual machine to verify
-     * @return true if start/stop operations are supported for this virtual machine
-     * @see #start(String)
-     * @see #stop(String)
-     * @see VmState#RUNNING
-     * @see VmState#STOPPING
-     * @see VmState#STOPPED
-     */
-    public abstract boolean supportsStartStop(@Nonnull VirtualMachine vm);
-
-    /**
-     * Indicates whether the ability to suspend/resume a virtual machine is supported for the specified VM.
-     * @param vm the virtual machine to verify
-     * @return true if suspend/resume operations are supported for this virtual machine
-     * @see #suspend(String)
-     * @see #resume(String)
-     * @see VmState#SUSPENDING
-     * @see VmState#SUSPENDED
-     */
-    public abstract boolean supportsSuspendResume(@Nonnull VirtualMachine vm);
-
-    /**
      * Suspends a running virtual machine so that the memory is flushed to some kind of persistent storage for
      * the purpose of later resuming the virtual machine in the exact same state.
      * @param vmId the unique ID of the virtual machine to be suspended
@@ -647,5 +435,240 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
     public abstract void removeTags(@Nonnull String[] vmIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+
+    /**************************** DEPRECATED METHODS ************************************/
+
+    /**
+     * Describes the ways in which this cloud supports the vertical scaling of a virtual machine. A null response
+     * means this cloud just doesn't support vertical scaling.
+     * @return a description of how this cloud supports vertical scaling
+     * @throws InternalException an internal error occurred processing the request
+     * @throws CloudException an error occurred in the cloud processing the request
+     * @deprecated use {@link VirtualMachineCapabilities#getVerticalScalingCapabilities()}
+     */
+    @Deprecated
+    public abstract @Nullable VMScalingCapabilities describeVerticalScalingCapabilities() throws CloudException, InternalException;
+
+    /**
+     * Provides a number between 0 and 100 describing what percentage of the standard VM bill rate should be charged for
+     * virtual machines in the specified state. 0 means that the VM incurs no charges while in the specified state, 100
+     * means it incurs full charges, and a number in between indicates the percent discount that applies.
+     * @param state the VM state being checked
+     * @return the discount factor for VMs in the specified state
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException an error occurred within the cloud provider
+     * @deprecated use {@link VirtualMachineCapabilities#getCostFactor(VmState)}
+     */
+    @Deprecated
+    public abstract @Nonnegative int getCostFactor(@Nonnull VmState state) throws InternalException, CloudException;
+
+    /**
+     * Provides the maximum number of virtual machines that may be launched in this region for the current account.
+     * @return the maximum number of launchable VMs or {@link Capabilities#LIMIT_UNLIMITED} for unlimited or {@link Capabilities#LIMIT_UNKNOWN} for unknown
+     * @throws CloudException an error occurred fetching the limits from the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation determining the limits
+     * @deprecated use {@link VirtualMachineCapabilities#getMaximumVirtualMachineCount()}
+     */
+    @Deprecated
+    public abstract int getMaximumVirtualMachineCount() throws CloudException, InternalException;
+
+    /**
+     * Assists UIs by providing the cloud-specific term for a virtual server in the cloud.
+     * @param locale the locale for which the term should be translated
+     * @return the provider-specific term for a virtual server
+     * @deprecated use {@link VirtualMachineCapabilities#getProviderTermForVirtualMachine(Locale)}
+     */
+    @Deprecated
+    public abstract @Nonnull String getProviderTermForServer(@Nonnull Locale locale);
+
+    /**
+     * Identifies whether images of the specified image class are required for launching a VM. This method should
+     * always return {@link Requirement#REQUIRED} when the image class chosen is {@link ImageClass#MACHINE}.
+     * @param cls the desired image class
+     * @return the requirements level of support for this image class
+     * @throws CloudException an error occurred in the cloud identifying this requirement
+     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this requirement
+     * @deprecated use {@link VirtualMachineCapabilities#identifyImageRequirement(ImageClass)}
+     */
+    @Deprecated
+    public abstract @Nonnull Requirement identifyImageRequirement(@Nonnull ImageClass cls) throws CloudException, InternalException;
+
+    /**
+     * Indicates the degree to which specifying a user name and password at launch is required for a Unix operating system.
+     * @return the requirements level for specifying a user name and password at launch
+     * @throws CloudException an error occurred in the cloud identifying this requirement
+     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this requirement
+     * @deprecated use {@link VirtualMachineCapabilities#identifyPasswordRequirement(Platform)}
+     */
+    @Deprecated
+    public abstract @Nonnull Requirement identifyPasswordRequirement() throws CloudException, InternalException;
+
+    /**
+     * Indicates the degree to which specifying a user name and password at launch is required.
+     * @param platform the platform for which password requirements are being sought
+     * @return the requirements level for specifying a user name and password at launch
+     * @throws CloudException an error occurred in the cloud identifying this requirement
+     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this requirement
+     * @deprecated use {@link VirtualMachineCapabilities#identifyPasswordRequirement(Platform)}
+     */
+    @Deprecated
+    public abstract @Nonnull Requirement identifyPasswordRequirement(Platform platform) throws CloudException, InternalException;
+
+    /**
+     * Indicates whether or not a root volume product must be specified when launching a virtual machine.
+     * @return the requirements level for a root volume product
+     * @throws CloudException an error occurred in the cloud identifying this requirement
+     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this requirement
+     * @deprecated use {@link VirtualMachineCapabilities#identifyRootVolumeRequirement()}
+     */
+    @Deprecated
+    public abstract @Nonnull Requirement identifyRootVolumeRequirement() throws CloudException, InternalException;
+
+    /**
+     * Indicates the degree to which specifying a shell key at launch is required for a Unix operating system.
+     * @return the requirements level for shell key support at launch
+     * @throws CloudException an error occurred in the cloud identifying this requirement
+     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this requirement
+     * @deprecated Use {@link VirtualMachineCapabilities#identifyShellKeyRequirement(Platform)}
+     */
+    @Deprecated
+    public abstract @Nonnull Requirement identifyShellKeyRequirement() throws CloudException, InternalException;
+
+    /**
+     * Indicates the degree to which specifying a shell key at launch is required.
+     * @param platform the target platform for which you are testing
+     * @return the requirements level for shell key support at launch
+     * @throws CloudException an error occurred in the cloud identifying this requirement
+     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this requirement
+     * @deprecated use {@link VirtualMachineCapabilities#identifyShellKeyRequirement(Platform)}
+     */
+    @Deprecated
+    public abstract @Nonnull Requirement identifyShellKeyRequirement(Platform platform) throws CloudException, InternalException;
+
+    /**
+     * Indicates the degree to which static IP addresses are required when launching a VM.
+     * @return the requirements level for static IP on launch
+     * @throws CloudException an error occurred in the cloud identifying this requirement
+     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this requirement
+     * @deprecated use {@link VirtualMachineCapabilities#identifyStaticIPRequirement()}
+     */
+    @Deprecated
+    public abstract @Nonnull Requirement identifyStaticIPRequirement() throws CloudException, InternalException;
+
+    /**
+     * Indicates whether or not specifying a VLAN in your VM launch options is required or optional.
+     * @return the requirements level for a VLAN during launch
+     * @throws CloudException an error occurred in the cloud identifying this requirement
+     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this requirement
+     * @deprecated use {@link VirtualMachineCapabilities#identifyVlanRequirement()}
+     */
+    @Deprecated
+    public abstract @Nonnull Requirement identifyVlanRequirement() throws CloudException, InternalException;
+
+    /**
+     * Indicates that the ability to terminate the VM via API can be disabled.
+     * @return true if the cloud supports the ability to prevent API termination
+     * @throws CloudException an error occurred in the cloud while determining this capability
+     * @throws InternalException an error occurred in the Dasein Cloud implementation determining this capability
+     * @deprecated use {@link VirtualMachineCapabilities#isAPITerminationPreventable()}
+     */
+    @Deprecated
+    public boolean isAPITerminationPreventable() throws CloudException, InternalException;
+
+    /**
+     * Indicates whether or not this cloud provider supports basic analytics. Basic analytics are analytics
+     * that are being gathered for every virtual machine without any intervention necessary to enable them. Extended
+     * analytics implies basic analytics, so this method should always be true if {@link #isExtendedAnalyticsSupported()}
+     * is true (even if there are, in fact, only extended analytics).
+     * @return true if the cloud provider supports the gathering of extended analytics
+     * @throws CloudException an error occurred in the cloud provider determining extended analytics support
+     * @throws InternalException an error occurred within the Dasein Cloud implementation determining extended analytics support
+     * @deprecated use {@link VirtualMachineCapabilities#isBasicAnalyticsSupported()}
+     */
+    @Deprecated
+    public abstract boolean isBasicAnalyticsSupported() throws CloudException, InternalException;
+
+    /**
+     * Indicates whether or not this cloud provider supports extended analytics. Extended analytics are analytics
+     * that must be specifically enabled above and beyond any basic analytics the cloud provider is gathering.
+     * @return true if the cloud provider supports the gathering of extended analytics
+     * @throws CloudException an error occurred in the cloud provider determining extended analytics support
+     * @throws InternalException an error occurred within the Dasein Cloud implementation determining extended analytics support
+     * @deprecated use {@link VirtualMachineCapabilities#isExtendedAnalyticsSupported()}
+     */
+    @Deprecated
+    public abstract boolean isExtendedAnalyticsSupported() throws CloudException, InternalException;
+
+    /**
+     * Indicates whether or not the cloud allows bootstrapping with user data.
+     * @return true of user-data bootstrapping is supported
+     * @throws CloudException an error occurred querying the cloud for this kind of support
+     * @throws InternalException an error inside the Dasein Cloud implementation occurred determining support
+     * @deprecated  use {@link VirtualMachineCapabilities#isUserDataSupported()}
+     */
+    @Deprecated
+    public abstract boolean isUserDataSupported() throws CloudException, InternalException;
+
+
+    /**
+     * Identifies what architectures are supported in this cloud.
+     * @return a list of supported architectures
+     * @throws InternalException an error occurred within the Dasein Cloud implementation calculating supported architectures
+     * @throws CloudException an error occurred fetching the list of supported architectures from the cloud
+     * @deprecated use {@link VirtualMachineCapabilities#listSupportedArchitectures()}
+     */
+    @Deprecated
+    public Iterable<Architecture> listSupportedArchitectures() throws InternalException, CloudException;
+
+    /**
+     * Identifies whether or not this cloud supports hypervisor-based analytics around usage and performance.
+     * @return true if this cloud supports hypervisor-based analytics
+     * @throws CloudException an error occurred with the cloud provider determining analytics support
+     * @throws InternalException an error occurred within the Dasein Cloud implementation determining analytics support
+     * @deprecated use {@link VirtualMachineCapabilities#isBasicAnalyticsSupported()} or {@link VirtualMachineCapabilities#isExtendedAnalyticsSupported()}
+     */
+    @Deprecated
+    public boolean supportsAnalytics() throws CloudException, InternalException;
+
+    /**
+     * Indicates whether the ability to pause/unpause a virtual machine is supported for the specified VM.
+     * @param vm the virtual machine to verify
+     * @return true if pause/unpause is supported for this virtual machine
+     * @see #pause(String)
+     * @see #unpause(String)
+     * @see VmState#PAUSING
+     * @see VmState#PAUSED
+     * @deprecated use {@link VirtualMachineCapabilities#canPause(VmState)} or {@link VirtualMachineCapabilities#canUnpause(VmState)}
+     */
+    @Deprecated
+    public boolean supportsPauseUnpause(@Nonnull VirtualMachine vm);
+
+    /**
+     * Indicates whether the ability to start/stop a virtual machine is supported for the specified VM.
+     * @param vm the virtual machine to verify
+     * @return true if start/stop operations are supported for this virtual machine
+     * @see #start(String)
+     * @see #stop(String)
+     * @see VmState#RUNNING
+     * @see VmState#STOPPING
+     * @see VmState#STOPPED
+     * @deprecated use {@link VirtualMachineCapabilities#canStart(VmState)} or {@link VirtualMachineCapabilities#canStop(VmState)}
+     */
+    @Deprecated
+    public abstract boolean supportsStartStop(@Nonnull VirtualMachine vm);
+
+    /**
+     * Indicates whether the ability to suspend/resume a virtual machine is supported for the specified VM.
+     * @param vm the virtual machine to verify
+     * @return true if suspend/resume operations are supported for this virtual machine
+     * @see #suspend(String)
+     * @see #resume(String)
+     * @see VmState#SUSPENDING
+     * @see VmState#SUSPENDED
+     * @deprecated use {@link VirtualMachineCapabilities#canResume(VmState)} or {@link VirtualMachineCapabilities#canSuspend(VmState)}
+     */
+    @Deprecated
+    public abstract boolean supportsSuspendResume(@Nonnull VirtualMachine vm);
 
 }
