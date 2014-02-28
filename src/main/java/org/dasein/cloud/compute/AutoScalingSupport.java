@@ -68,6 +68,15 @@ public interface AutoScalingSupport extends AccessControlledService {
     public String createLaunchConfiguration(String name, String imageId, VirtualMachineProduct size, String keyPairName, String userData, String providerRoleId, Boolean detailedMonitoring, String ... firewalls) throws InternalException, CloudException;
         
     public void deleteAutoScalingGroup(String providerAutoScalingGroupId) throws CloudException, InternalException;
+
+    /**
+     * Allows forceful deletion of an Auto Scaling group and associated resources such as VMs.
+     *
+     * @param providerAutoScalingGroupId the auto scaling group id
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void forcefullyDeleteAutoScalingGroup(@Nonnull String providerAutoScalingGroupId) throws CloudException, InternalException;
     
     public void deleteLaunchConfiguration(String providerLaunchConfigurationId) throws CloudException, InternalException;
     
