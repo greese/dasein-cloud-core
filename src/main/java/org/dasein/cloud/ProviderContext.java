@@ -102,6 +102,30 @@ public class ProviderContext extends ProviderContextCompat implements Serializab
                 return value.toString();
             }
         }
+
+        static public @Nonnull Value<?> parseValue(@Nonnull ContextRequirements.Field field, @Nonnull String ... fromStrings) throws UnsupportedEncodingException {
+            switch( field.type ) {
+                case KEYPAIR:
+                    if( fromStrings.length != 2 ) {
+                        throw new IndexOutOfBoundsException("Should have exactly 2 strings for a keypair value");
+                    }
+                    byte[][] bytes = new byte[2][];
+
+                    bytes[0] = fromStrings[0].getBytes("utf-8");
+                    bytes[1] = fromStrings[1].getBytes("utf-8");
+                    return new Value<byte[][]>(field.name, bytes);
+                case TEXT:
+                    return new Value<String>(field.name, fromStrings[0]);
+                case INTEGER:
+                    return new Value<Integer>(field.name, Integer.parseInt(fromStrings[0]));
+                case FLOAT:
+                    return new Value<Float>(field.name, Float.parseFloat(fromStrings[0]));
+                case PASSWORD:
+                    return new Value<byte[]>(field.name, fromStrings[0].getBytes("utf-8"));
+                default:
+                    throw new RuntimeException("Unsupported type: " + field.type);
+            }
+        }
     }
 
     /**

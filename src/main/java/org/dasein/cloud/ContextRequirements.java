@@ -65,17 +65,20 @@ public class ContextRequirements {
 
         public String    compatName;
         public String    name;
+        public boolean   required;
         public FieldType type;
 
         public Field(@Nonnull String name, @Nonnull FieldType type) {
             this.name = name;
             this.type = type;
+            this.required = true;
         }
 
         public Field(@Nonnull String name, @Nonnull FieldType type, @Nonnull String compatName) {
             this.name = name;
             this.type = type;
             this.compatName = compatName;
+            this.required = true;
         }
     }
 

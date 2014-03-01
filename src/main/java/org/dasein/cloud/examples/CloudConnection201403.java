@@ -1,20 +1,17 @@
-/**
+/*
  * Copyright (C) 2014 Dell, Inc.
- * See annotations for authorship information
  *
- * ====================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *        http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ====================================================================
  */
 package org.dasein.cloud.examples;
 
@@ -59,24 +56,13 @@ public class CloudConnection201403 {
                 String shared = System.getProperty("DSN_" + f.name + "_SHARED");
                 String secret = System.getProperty("DSN_" + f.name + "_SECRET");
 
-                values[i] = new ProviderContext.Value<byte[][]>(f.name, new byte[][] { shared.getBytes("utf-8"), secret.getBytes("utf-8") });
+                values[i] = ProviderContext.Value.parseValue(f, shared, secret);
             }
             else {
                 System.out.println("'DSN_" + f.name + "'");
                 String value = System.getProperty("DSN_" + f.name);
 
-                if( f.type.equals(ContextRequirements.FieldType.PASSWORD) ) {
-                    values[i] = new ProviderContext.Value<byte[]>(f.name, value.getBytes("utf-8"));
-                }
-                else if( f.type.equals(ContextRequirements.FieldType.FLOAT) ) {
-                    values[i] = new ProviderContext.Value<Float>(f.name, Float.parseFloat(value));
-                }
-                else if( f.type.equals(ContextRequirements.FieldType.INTEGER) ) {
-                    values[i] = new ProviderContext.Value<Integer>(f.name, Integer.parseInt(value));
-                }
-                else {
-                    values[i] = new ProviderContext.Value<String>(f.name, value);
-                }
+                values[i] = ProviderContext.Value.parseValue(f, value);
             }
             i++;
         }
