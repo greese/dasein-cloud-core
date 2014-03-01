@@ -20,6 +20,7 @@
 package org.dasein.cloud;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -49,6 +50,57 @@ public class ProviderContext extends ProviderContextCompat implements Serializab
         public Value(@Nonnull String name, @Nonnull T value) {
             this.name = name;
             this.value = value;
+        }
+
+        public byte[][] getKeypair() {
+            return (byte[][])value;
+        }
+
+        public Float getFloat() {
+            if( value instanceof Float ) {
+                return (Float)value;
+            }
+            else if( value instanceof Number ) {
+                return ((Number)value).floatValue();
+            }
+            else if( value instanceof String ) {
+                return Float.parseFloat((String) value);
+            }
+            else throw new ClassCastException("Not a float: " + value);
+        }
+
+        public Integer getInt() {
+            if( value instanceof Integer ) {
+                return (Integer)value;
+            }
+            else if( value instanceof Number ) {
+                return ((Number)value).intValue();
+            }
+            else if( value instanceof String ) {
+                return Integer.parseInt((String)value);
+            }
+            else throw new ClassCastException("Not an integer: " + value);
+        }
+
+        public byte[] getPassword() {
+            if( value instanceof String ) {
+                try {
+                    return ((String)value).getBytes("utf-8");
+                }
+                catch( UnsupportedEncodingException ignore ) {
+                    return (byte[])value;
+                }
+            }
+            return (byte[])value;
+        }
+
+        public String getText() {
+            if( value instanceof String ) {
+                return (String)value;
+            }
+            else {
+                return value.toString();
+            }
         }
     }
 
