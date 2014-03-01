@@ -28,7 +28,7 @@ import javax.annotation.Nullable;
 import static org.junit.Assert.*;
 
 /**
- * Tests for the support classes of the data warehouse support in Dasein Cloud
+ * Tests for the new approach to connection management in Dasein Cloud.
  * <p>Created by George Reese: 2/28/14 11:20 AM</p>
  * @author George Reese
  * @since 2014.03
