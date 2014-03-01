@@ -19,30 +19,21 @@
 
 package org.dasein.cloud;
 
+import org.dasein.cloud.test.TestCloudProvider;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
-public class CloudProviderTestCase extends TestCase {
+@SuppressWarnings("deprecation")
+public class CloudConnectOldTestCase {
     private CloudProvider provider = null;
     
     @Before
     public void setUp() {
-        provider = new AbstractCloud() {
-
-            @Override
-            public String getCloudName() {
-                return "Test";
-            }
-
-            @Override
-            public String getProviderName() {
-                return "Test";
-            } 
-        
-        };
+        provider = new TestCloudProvider();
     }
     
     @After
@@ -54,14 +45,14 @@ public class CloudProviderTestCase extends TestCase {
     }
     
     @Test
-    public void testClose() {
+    public void close() {
         provider.connect(new ProviderContext());
         provider.close();
         assertTrue("Did not close provider", !provider.isConnected());
     }
 
     @Test
-    public void testConnect() {
+    public void connect() {
         provider.connect(new ProviderContext());
         assertTrue("Did not connect to provider", provider.isConnected());
     }
@@ -88,7 +79,7 @@ public class CloudProviderTestCase extends TestCase {
     }
     
     @Test
-    public void testHold() {
+    public void hold() {
         provider.connect(new ProviderContext());
         provider.hold();
         provider.close();
@@ -96,7 +87,7 @@ public class CloudProviderTestCase extends TestCase {
     }
     
     @Test
-    public void testRelease() {
+    public void release() {
         provider.connect(new ProviderContext());
         provider.hold();
         provider.close();

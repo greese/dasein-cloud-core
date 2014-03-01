@@ -20,7 +20,8 @@
 package org.dasein.cloud;
 
 import java.io.Serializable;
-import java.util.Properties;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
@@ -33,13 +34,23 @@ import javax.annotation.Nullable;
  * the cloud. This context includes the account number, operational region, and any number of
  * authentication keys. 
  * </p>
- * @author George Reese @ enstratius (http://www.enstratius.com)
+ * @author George Reese
+ * @version 2014.03 refactored for discoverability of configuration values and better model enforcement (issue #123)
+ * @since 2010.08
  */
-public class ProviderContext implements Serializable {
-    private static final long serialVersionUID = 3503959903660616914L;
-    
+public class ProviderContext extends ProviderContextCompat implements Serializable {
     static private final Random random = new Random();
-    
+
+    static public class Value {
+        public String name;
+        public Object value;
+
+        public Value(@Nonnull String name, @Nonnull Object value) {
+            this.name = name;
+            this.value = value;
+        }
+    }
+
     /**
      * Helper method for clearing out credentials with random data.
      * @param keys a list of credentials to fill with random data
@@ -53,116 +64,131 @@ public class ProviderContext implements Serializable {
             }
         }
     }
-    
-    private byte[]     accessPrivate;
-    private byte[]     accessPublic;
-    private String     accountNumber;
-    private String     cloudName;
-    private Properties customProperties;
-    private String     effectiveAccountNumber;
-    private String     endpoint;
-    private String     providerName;
-    private String     regionId;
-    private String     storage;
-    private String     storageAccountNumber;
-    private Properties storageCustomProperties;
-    private String     storageEndpoint;
-    private byte[]     storagePrivate;
-    private byte[]     storagePublic;
-    private byte[]     storageX509Cert;
-    private byte[]     storageX509Key;
-    private byte[]     x509Cert;
-    private byte[]     x509Key;
 
     /**
-     * Constructs a new, empty provider context for managing the provider context information.
+     * Constructs a provider context from configuration values provided by a client. The preferred mechanism to access
+     * this constructor is via {@link Cloud#createContext(String, String, org.dasein.cloud.ProviderContext.Value...)}.
+     * @param cloud the cloud configuration object to build against
+     * @param accountNumber the account number within the cloud to use for the connection context
+     * @param regionId the ID of the region in which the client will be operating
+     * @param configurationValues one or more configuration values that match the configuration requirements for the cloud
+     * @return an instance of a provider context ready to connect to the target cloud using the specified configuration values
      */
-    public ProviderContext() { }
+    static ProviderContext getContext(@Nonnull Cloud cloud, @Nonnull String accountNumber, @Nullable String regionId, @Nonnull Value ... configurationValues) {
+        ProviderContext ctx = new ProviderContext(cloud, accountNumber, regionId);
+
+        ctx.configurationValues = new HashMap<String,Object>();
+        for( Value v : configurationValues ) {
+            ctx.configurationValues.put(v.name, v.value);
+        }
+        return ctx;
+    }
 
     /**
-     * Constructs a new provider context for the specified account number in the specified region.
-     * @param accountNumber the account number for the account in the cloud
-     * @param inRegionId the region to be referenced by this provider context
+     * @return a pseudo-random number using the context random number generator (not a secure random)
      */
-    public ProviderContext(@Nonnull String accountNumber, @Nonnull String inRegionId) {
+    public static Random getRandom() {
+        return random;
+    }
+
+    private String             accountNumber;
+    private Cloud              cloud;
+    private Map<String,Object> configurationValues;
+    private String             regionId;
+
+    /**
+     * Constructs a provider context from the provided values
+     * @param cloud the cloud configuration object to build against
+     * @param accountNumber the account number within the cloud to use for the connection context
+     * @param regionId the ID of the region in which the client will be operating
+     */
+    private ProviderContext(@Nonnull Cloud cloud, @Nonnull String accountNumber, @Nullable String regionId) {
+        this.cloud = cloud;
         this.accountNumber = accountNumber;
-        regionId = inRegionId;
-    }
-    
-    /**
-     * Clears out all keys being stored by this provider. The keys are overwritten with random data.
-     * If these keys were set from instance variables in other objects, this method will result in
-     * some peculiar side-effects.
-     */
-    public void clear() {
-        clear(accessPublic, accessPrivate, storagePublic, storagePrivate, x509Cert, x509Key, storageX509Cert, storageX509Key);
-    }
-    
-    /**
-     * The private access key is the primary authentication password for web services calls.
-     * In this AWS world, this is your access secret key.
-     * @return the private access key for the cloud provider
-     */
-    public @Nullable byte[] getAccessPrivate() {
-        return accessPrivate;
-    }
-    
-    /**
-     * The public access key is the primary authentication user ID for web services calls. In the
-     * AWS world, this is your access public key.
-     * @return the public access key for the cloud provider
-     */
-    public @Nullable byte[] getAccessPublic() {
-        return accessPublic;
+        this.regionId = regionId;
     }
 
     /**
      * @return the account number that identifies the account to the cloud provider independent of context
      */
     public @Nonnull String getAccountNumber() {
+
+
         return accountNumber;
     }
 
     /**
-     * Provides the name of the cloud being accessed through this API.
-     * For a multi-cloud provider or a multi-cloud implementation of Dasein Cloud, it is useful
-     * to have the cloud name configurable. 
-     * @return the name of the underlying cloud
+     * Connects to the cloud associated with this connection context. The result will be a connected implementation
+     * of the {@link CloudProvider} abstract class specific to the cloud in question.
+     * @return a connected cloud provider instance
+     * @throws CloudException an error occurred with any handshake that might have been necessary to perform a connection (generally not needed)
+     * @throws InternalException an error occurred loading the {@link org.dasein.cloud.CloudProvider} implementation
      */
-    public @Nullable String getCloudName() {
-    	return cloudName;
-    }
-    
-    /**
-     * Provides any properties specific to the underlying Dasein Cloud implementation that will
-     * help it interact with thge underlying cloud.
-     * @return any custom properties supporting cloud connectivity
-     */
-    public @Nullable Properties getCustomProperties() {
-        if( customProperties == null ) {
-            return new Properties();
+    public @Nonnull CloudProvider connect() throws CloudException, InternalException {
+        try {
+            CloudProvider p = cloud.buildProvider();
+
+            p.connect(this);
+            return p;
         }
-    	return customProperties;
+        catch( InstantiationException e ) {
+            throw new InternalException(e);
+        }
+        catch( IllegalAccessException e ) {
+            throw new InternalException(e);
+        }
     }
-    
+
     /**
-     * Provides the endpoint through which cloud API calls are routed. This is typically configured for
-     * private clouds or cloud APIs that support more than one cloud.
-     * @return the cloud API host
+     * Connects to the cloud associated with this connection context. The result will be a connected implementation
+     * of the {@link CloudProvider} abstract class specific to the cloud in question. This variation exists specifically
+     * for clients trying to use a compute provider together with a storage provider to create an apparently unified cloud.
+     * The approach is to first connect to the compute provider, and then connect to the storage provider using this method.
+     * @param computeProvider the compute provider with which the connected storage provider will be associated
+     * @return a connected cloud provider instance
+     * @throws CloudException an error occurred with any handshake that might have been necessary to perform a connection (generally not needed)
+     * @throws InternalException an error occurred loading the {@link org.dasein.cloud.CloudProvider} implementation
      */
-    public @Nullable String getEndpoint() {
-        return endpoint;
+    public @Nonnull CloudProvider connect(@Nonnull CloudProvider computeProvider) throws CloudException, InternalException {
+        try {
+            CloudProvider p = cloud.buildProvider();
+
+            p.connect(this, computeProvider);
+            return p;
+        }
+        catch( InstantiationException e ) {
+            throw new InternalException(e);
+        }
+        catch( IllegalAccessException e ) {
+            throw new InternalException(e);
+        }
     }
-    
+
     /**
-     * Provides the name of the organization providing cloud services. This value is configurable
-     * for multi-provider APIs like the AWS/Eucalyptus APIs.
-     * @return the name of the organization providing the underlying cloud
+     * @return the cloud for which this context is configured
      */
-    public @Nullable String getProviderName() {
-    	return providerName;
+    public @Nonnull Cloud getCloud() {
+        return cloud;
     }
-    
+
+    /**
+     * Looks through the values provided for configuring this context and returns the named value, if set
+     * @param field the name of the field whose configuration value is sought
+     * @return the value matching the named field or <code>null</code> if no value is set
+     */
+    public @Nullable Object getConfigurationValue(@Nonnull String field) {
+        return configurationValues.get(field);
+    }
+
+    /**
+     * Looks through the values provided for configuring this context and returns the matching value, if set
+     * @param field the field from the context requirements whose configuration value is sought
+     * @return the value matching the specified field or <code>null</code> if no value is set
+     */
+    public @Nullable Object getConfigurationValue(@Nonnull ContextRequirements.Field field) {
+        return configurationValues.get(field.name);
+    }
+
     /**
      * @return the cloud's unique identified for the region in which this context is operating
      */
@@ -170,200 +196,46 @@ public class ProviderContext implements Serializable {
         return regionId;
     }
 
+    /******************************** DEPRECATED METHODS ********************************/
+
     /**
-     * The storage private key is the private key used for cloud storage access. The AWS world has
-     * no direct analog to this value, but it is used to represent the AWS private key.
-     * @return the private key for cloud storage services
+     * Constructs a new, empty provider context for managing the provider context information.
+     * @deprecated use {@link ProviderContext#getContext(Cloud, String, String, Value...)}
      */
-    public @Nullable byte[] getStoragePrivate() {
-        return storagePrivate;
-    }
-    
+    @Deprecated
+    public ProviderContext() { }
+
     /**
-     * The storage public key is the public key used for cloud storage access. The AWS world has
-     * no direct analog to this value, but it is used to represent the AWS certificate.
-     * @return the public key for storafe
+     * Constructs a new provider context for the specified account number in the specified region.
+     * @param accountNumber the account number for the account in the cloud
+     * @param inRegionId the region to be referenced by this provider context
+     * @deprecated use {@link ProviderContext#getContext(Cloud, String, String, Value...)}
      */
-    public @Nullable byte[] getStoragePublic() {
-        return storagePublic;
-    }
-    
-    /**
-     * Establishes the access key values.
-     * @param publicKey the public key part of the access key
-     * @param privateKey the private key part of the access key
-     */
-    public void setAccessKeys(@Nullable byte[] publicKey, @Nullable byte[] privateKey) {
-        accessPublic = publicKey;
-        accessPrivate = privateKey;
-    }
-    
-    /**
-     * Sets the private access key.
-     * @param accessPrivate the proper private access key value.
-     */
-    public void setAccessPrivate(@Nullable byte[] accessPrivate) {
-        this.accessPrivate = accessPrivate;
-    }
-    
-    /**
-     * Sets the public access key.
-     * @param accessPublic the proper public access key value
-     */
-    public void setAccessPublic(@Nullable byte[] accessPublic) {
-        this.accessPublic = accessPublic;
-    }
-    
-    /**
-     * Sets the account number for this provider context.
-     * @param accountNumber the account number associated with the provider account
-     */
-    public void setAccountNumber(@Nonnull String accountNumber) {
+    @Deprecated
+    public ProviderContext(@Nonnull String accountNumber, @Nonnull String inRegionId) {
         this.accountNumber = accountNumber;
-    }
-    
-    /**
-     * Sets the name of the cloud supported by this context.
-     * @param name the name of the underlying cloud
-     */
-    public void setCloudName(@Nullable String name) {
-    	cloudName = name;
-    }
-    
-    /**
-     * Establishes any custom properties for use by the Dasein Cloud implementation.
-     * @param properties custom properties for the Dasein Cloud implementation
-     */
-    public void setCustomProperties(@Nonnull Properties properties) {
-    	customProperties = properties;
-    }
-    
-    /**
-     * Sets the cloud endpoint for the provider context.
-     * @param endpoint the host to which cloud API calls are routed
-     */
-    public void setEndpoint(@Nullable String endpoint) {
-        this.endpoint = endpoint;
-    }
-    
-    /**
-     * Sets the name of the organization providing cloud services.
-     * @param name the name of the organization providing cloud services
-     */
-    public void setProviderName(@Nullable String name) {
-    	providerName = name;
-    }
-    
-    /**
-     * Sets the region context for this provider context.
-     * @param regionId the unique cloud ID for the region supporting this context
-     */
-    public void setRegionId(@Nullable String regionId) {
-        this.regionId = regionId;
+        regionId = inRegionId;
     }
 
-    /**
-     * Sets the storage keypair for this provider context.
-     * @param publicKey the storage key public key
-     * @param privateKey the storage key private key
-     */
-    public void setStorageKeys(@Nullable byte[] publicKey, @Nullable byte[] privateKey) {
-        storagePublic = publicKey;
-        storagePrivate = privateKey;
-    }
-
-    /**
-     * Sets the storage private key.
-     * @param storagePrivate the storage private key
-     */
-    public void setStoragePrivate(@Nullable byte[] storagePrivate) {
-        this.storagePrivate = storagePrivate;
-    }
-    
-    /**
-     * Sets the storage public key value.
-     * @param storagePublic the storage public key
-     */
-    public void setStoragePublic(@Nullable byte[] storagePublic) {
-        this.storagePublic = storagePublic;
-    }
-
-    public String getStorage() {
-        return storage;
-    }
-
-    public void setStorage(String storage) {
-        this.storage = storage;
-    }
-
-    public String getStorageAccountNumber() {
-        return storageAccountNumber;
-    }
-
-    public void setStorageAccountNumber(String storageAccountNumber) {
-        this.storageAccountNumber = storageAccountNumber;
-    }
-
-    public byte[] getX509Cert() {
-        return x509Cert;
-    }
-
-    public void setX509Cert(byte[] x509Cert) {
-        this.x509Cert = x509Cert;
-    }
-
-    public byte[] getX509Key() {
-        return x509Key;
-    }
-
-    public void setX509Key(byte[] x509Key) {
-        this.x509Key = x509Key;
-    }
-
-    public static Random getRandom() {
-        return random;
-    }
-
-    public byte[] getStorageX509Cert() {
-        return storageX509Cert;
-    }
-
-    public void setStorageX509Cert(byte[] storageX509Cert) {
-        this.storageX509Cert = storageX509Cert;
-    }
-
-    public byte[] getStorageX509Key() {
-        return storageX509Key;
-    }
-
-    public void setStorageX509Key(byte[] storageX509Key) {
-        this.storageX509Key = storageX509Key;
-    }
-
-    public void setStorageEndpoint(String storageEndpoint) {
-        this.storageEndpoint = storageEndpoint;
-    }
-
-    public String getStorageEndpoint() {
-        return storageEndpoint;
-    }
-
-    public void setEffectiveAccountNumber(String effectiveAccountNumber) {
-        this.effectiveAccountNumber = effectiveAccountNumber;
-    }
-
-    public String getEffectiveAccountNumber() {
-        if( effectiveAccountNumber == null ) {
-            return getAccountNumber();
+    @Override
+    @Deprecated
+    public void setAccountNumber(@Nonnull String accountNumber) {
+        if( this.accountNumber == null ) {
+            this.accountNumber = accountNumber;
         }
-        return effectiveAccountNumber;
+        else {
+            throw new RuntimeException("Cannot double-set the account number. Tried " + accountNumber + ", was already " + this.accountNumber);
+        }
     }
 
-    public void setStorageCustomProperties(Properties storageCustomProperties) {
-        this.storageCustomProperties = storageCustomProperties;
-    }
-
-    public Properties getStorageCustomProperties() {
-        return storageCustomProperties;
+    @Override
+    @Deprecated
+    public void setRegionId(@Nullable String regionId) {
+        if( this.regionId == null ) {
+            this.regionId = regionId;
+        }
+        else {
+            throw new RuntimeException("Cannot double-set the region ID. Tried " + regionId + ", was already " + this.regionId);
+        }
     }
 }

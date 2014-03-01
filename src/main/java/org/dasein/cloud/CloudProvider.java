@@ -58,6 +58,7 @@ import org.dasein.util.CalendarWrapper;
  * @author George Reese @ enstratius (http://www.enstratius.com)
  */
 public abstract class CloudProvider {
+    @SuppressWarnings("UnusedDeclaration")
     static private @Nonnull String getLastItem(@Nonnull String name) {
         int idx = name.lastIndexOf('.');
 
@@ -116,10 +117,12 @@ public abstract class CloudProvider {
         return true;
     }
 
-    private CloudProvider computeCloud = null;
-    private ProviderContext context = null;
-    
-    private int     holdCount = 0;
+    private CloudProvider   computeCloudProvider;
+    private ProviderContext context;
+    private CloudProvider   storageCloudProvider;
+
+
+    private transient int holdCount = 0;
     
     /**
      * Base contructor for a cloud provider.
@@ -158,7 +161,7 @@ public abstract class CloudProvider {
      * context. Prior to initializing itself, this method will close out any existing state.
      * @param context the context for services calls using this provider instance
      */
-    public final void connect(@Nonnull ProviderContext context) {
+    public void connect(@Nonnull ProviderContext context) {
         connect(context, null);
     }
     
@@ -172,7 +175,10 @@ public abstract class CloudProvider {
     public void connect(@Nonnull ProviderContext context, @Nullable CloudProvider computeProvider) {
         close();
         this.context = context;
-        this.computeCloud = computeProvider;
+        this.computeCloudProvider = computeProvider;
+        if( computeProvider != null ) {
+            computeProvider.storageCloudProvider = this;
+        }
     }
 
     public abstract @Nullable AdminServices getAdminServices();
@@ -184,7 +190,7 @@ public abstract class CloudProvider {
      * @return the compute provider (if any) behind this storage provider
      */
     public final CloudProvider getComputeCloud() {
-        return computeCloud;
+        return computeCloudProvider;
     }
     
     /**
@@ -192,7 +198,12 @@ public abstract class CloudProvider {
      * @return the operational context for this instance of this provider implementation
      */
     public final @Nullable ProviderContext getContext() { return context; }
-    
+
+    /**
+     * @return an object containing the fields required for connecting Dasein to the cloud provider
+     */
+    public abstract @Nonnull ContextRequirements getContextRequirements();
+
     /**
      * This value can be the same as {@link #getProviderName()} if it is not a multi-cloud provider. 
      * @return the name of the cloud
@@ -218,23 +229,26 @@ public abstract class CloudProvider {
     public abstract @Nullable NetworkServices getNetworkServices();
     
     public abstract @Nullable PlatformServices getPlatformServices();
-    
+
     /**
      * @return the name of this cloud provider
      */
     public abstract @Nonnull String getProviderName();
     
-    private CloudProvider storageCloudProvider = null;
-    
     /**
      * Provides access to the cloud storage services supported by this cloud provider.
      * @return an implementation of the {@link org.dasein.cloud.storage.StorageServices} API
      */
+    @SuppressWarnings("deprecation")
     public synchronized @Nullable StorageServices getStorageServices() {
         if( storageCloudProvider != null ) {
             return storageCloudProvider.getStorageServices();
         }
         ProviderContext computeContext = getContext();
+
+        if( computeContext == null ) {
+            return null;
+        }
         String storage = computeContext.getStorage();
 
         if( storage == null ) {
@@ -264,7 +278,15 @@ public abstract class CloudProvider {
             return null;
         }
     }
-    
+
+    public boolean hasAdminServices() {
+        return (getAdminServices() != null);
+    }
+
+    public boolean hasCIServices() {
+        return (getCIServices() != null);
+    }
+
     public boolean hasComputeServices() {
         return (getComputeServices() != null);
     }
@@ -286,8 +308,8 @@ public abstract class CloudProvider {
     }
     
     public void hold() {
-        if( computeCloud != null ) {
-            computeCloud.hold();
+        if( computeCloudProvider != null ) {
+            computeCloudProvider.hold();
         }
         else {
             synchronized( this ) {
@@ -301,8 +323,8 @@ public abstract class CloudProvider {
     }
 
     public void release() {
-        if( computeCloud != null ) {
-            computeCloud.release();
+        if( computeCloudProvider != null ) {
+            computeCloudProvider.release();
         }
         else {
             synchronized( this ) {
@@ -336,7 +358,7 @@ public abstract class CloudProvider {
                 }
             }
             try { Thread.sleep(1000L); }
-            catch( InterruptedException e ) { }
+            catch( InterruptedException ignore ) { /* ignore this */ }
         }
         if( context != null) {
             context.clear();
