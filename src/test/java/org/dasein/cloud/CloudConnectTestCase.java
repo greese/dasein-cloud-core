@@ -54,9 +54,9 @@ public class CloudConnectTestCase {
     static public final String ACCOUNT = "account";
     static public final String REGION  = "region";
 
-    static public final ProviderContext.Value KEYS    = new ProviderContext.Value("apiKeys", new byte[][] { "public".getBytes(), "private".getBytes() });
-    static public final ProviderContext.Value VERSION = new ProviderContext.Value("version", "1");
-    static public final ProviderContext.Value X509    = new ProviderContext.Value("x509Keys", new byte[][] { "x509c".getBytes(), "x509k".getBytes() });
+    static public final ProviderContext.Value<byte[][]> KEYS    = new ProviderContext.Value<byte[][]>("apiKeys", new byte[][] { "public".getBytes(), "private".getBytes() });
+    static public final ProviderContext.Value<String>   VERSION = new ProviderContext.Value<String>("version", "1");
+    static public final ProviderContext.Value<byte[][]> X509    = new ProviderContext.Value<byte[][]>("x509Keys", new byte[][] { "x509c".getBytes(), "x509k".getBytes() });
 
     private Cloud  newCloud;
     private String cloudName;
@@ -228,12 +228,12 @@ public class CloudConnectTestCase {
         ProviderContext ctx = new ProviderContext(ACCOUNT, REGION);
 
         ctx.setEndpoint(endpoint);
-        ctx.setAccessKeys(((byte[][])KEYS.value)[0], ((byte[][])KEYS.value)[1]);
-        ctx.setX509Cert(((byte[][]) X509.value)[0]);
-        ctx.setX509Key(((byte[][]) X509.value)[1]);
+        ctx.setAccessKeys(KEYS.value[0], KEYS.value[1]);
+        ctx.setX509Cert(X509.value[0]);
+        ctx.setX509Key(X509.value[1]);
         Properties props = new Properties();
 
-        props.setProperty("version", (String) VERSION.value);
+        props.setProperty("version", VERSION.value);
         ctx.setCustomProperties(props);
         p.connect(ctx);
 
@@ -258,12 +258,12 @@ public class CloudConnectTestCase {
         ProviderContext ctx = new ProviderContext(ACCOUNT, REGION);
 
         ctx.setEndpoint(endpoint);
-        ctx.setAccessKeys(((byte[][])KEYS.value)[0], ((byte[][])KEYS.value)[1]);
-        ctx.setX509Cert(((byte[][]) X509.value)[0]);
-        ctx.setX509Key(((byte[][]) X509.value)[1]);
+        ctx.setAccessKeys(KEYS.value[0], KEYS.value[1]);
+        ctx.setX509Cert(X509.value[0]);
+        ctx.setX509Key(X509.value[1]);
         Properties props = new Properties();
 
-        props.setProperty("version", (String) VERSION.value);
+        props.setProperty("version", VERSION.value);
         ctx.setCustomProperties(props);
         p.connect(ctx);
 
@@ -288,12 +288,12 @@ public class CloudConnectTestCase {
         ProviderContext ctx = new ProviderContext(ACCOUNT, REGION);
 
         ctx.setEndpoint(endpoint);
-        ctx.setAccessKeys(((byte[][])KEYS.value)[0], ((byte[][])KEYS.value)[1]);
-        ctx.setX509Cert(((byte[][]) X509.value)[0]);
-        ctx.setX509Key(((byte[][]) X509.value)[1]);
+        ctx.setAccessKeys(KEYS.value[0], KEYS.value[1]);
+        ctx.setX509Cert(X509.value[0]);
+        ctx.setX509Key(X509.value[1]);
         Properties props = new Properties();
 
-        props.setProperty("version", (String) VERSION.value);
+        props.setProperty("version", VERSION.value);
         ctx.setCustomProperties(props);
         p.connect(ctx);
 
@@ -318,12 +318,12 @@ public class CloudConnectTestCase {
         ProviderContext ctx = new ProviderContext(ACCOUNT, REGION);
 
         ctx.setEndpoint(endpoint);
-        ctx.setAccessKeys(((byte[][])KEYS.value)[0], ((byte[][])KEYS.value)[1]);
-        ctx.setX509Cert(((byte[][]) X509.value)[0]);
-        ctx.setX509Key(((byte[][]) X509.value)[1]);
+        ctx.setAccessKeys(KEYS.value[0], KEYS.value[1]);
+        ctx.setX509Cert(X509.value[0]);
+        ctx.setX509Key(X509.value[1]);
         Properties props = new Properties();
 
-        props.setProperty("version", (String) VERSION.value);
+        props.setProperty("version", VERSION.value);
         ctx.setCustomProperties(props);
         p.connect(ctx);
 
@@ -354,12 +354,12 @@ public class CloudConnectTestCase {
         ProviderContext ctx = new ProviderContext(ACCOUNT, REGION);
 
         ctx.setEndpoint(endpoint);
-        ctx.setAccessKeys(((byte[][])KEYS.value)[0], ((byte[][])KEYS.value)[1]);
-        ctx.setX509Cert(((byte[][]) X509.value)[0]);
-        ctx.setX509Key(((byte[][]) X509.value)[1]);
+        ctx.setAccessKeys(KEYS.value[0], KEYS.value[1]);
+        ctx.setX509Cert(X509.value[0]);
+        ctx.setX509Key(X509.value[1]);
         Properties props = new Properties();
 
-        props.setProperty("version", (String) VERSION.value);
+        props.setProperty("version", VERSION.value);
         ctx.setCustomProperties(props);
         p.connect(ctx);
 
@@ -396,12 +396,12 @@ public class CloudConnectTestCase {
         ProviderContext ctx = new ProviderContext(ACCOUNT, REGION);
 
         ctx.setEndpoint(endpoint);
-        ctx.setAccessKeys(((byte[][])KEYS.value)[0], ((byte[][])KEYS.value)[1]);
-        ctx.setX509Cert(((byte[][]) X509.value)[0]);
-        ctx.setX509Key(((byte[][]) X509.value)[1]);
+        ctx.setAccessKeys(KEYS.value[0], KEYS.value[1]);
+        ctx.setX509Cert(X509.value[0]);
+        ctx.setX509Key(X509.value[1]);
         Properties props = new Properties();
 
-        props.setProperty("version", (String) VERSION.value);
+        props.setProperty("version", VERSION.value);
         ctx.setCustomProperties(props);
         p.connect(ctx);
 
@@ -442,12 +442,12 @@ public class CloudConnectTestCase {
         ProviderContext ctx = new ProviderContext(ACCOUNT, REGION);
 
         ctx.setEndpoint(endpoint);
-        ctx.setAccessKeys(((byte[][])KEYS.value)[0], ((byte[][])KEYS.value)[1]);
-        ctx.setX509Cert(((byte[][]) X509.value)[0]);
-        ctx.setX509Key(((byte[][]) X509.value)[1]);
+        ctx.setAccessKeys(KEYS.value[0], KEYS.value[1]);
+        ctx.setX509Cert(X509.value[0]);
+        ctx.setX509Key(X509.value[1]);
         Properties props = new Properties();
 
-        props.setProperty("version", (String) VERSION.value);
+        props.setProperty("version", VERSION.value);
         ctx.setCustomProperties(props);
         p.connect(ctx);
 
@@ -492,12 +492,12 @@ public class CloudConnectTestCase {
         ProviderContext ctx = new ProviderContext(ACCOUNT, REGION);
 
         ctx.setEndpoint(endpoint);
-        ctx.setAccessKeys(((byte[][])KEYS.value)[0], ((byte[][])KEYS.value)[1]);
-        ctx.setX509Cert(((byte[][]) X509.value)[0]);
-        ctx.setX509Key(((byte[][]) X509.value)[1]);
+        ctx.setAccessKeys(KEYS.value[0], KEYS.value[1]);
+        ctx.setX509Cert(X509.value[0]);
+        ctx.setX509Key(X509.value[1]);
         Properties props = new Properties();
 
-        props.setProperty("version", (String) VERSION.value);
+        props.setProperty("version", VERSION.value);
         ctx.setCustomProperties(props);
         p.connect(ctx);
 

@@ -42,11 +42,11 @@ import javax.annotation.Nullable;
 public class ProviderContext extends ProviderContextCompat implements Serializable {
     static private final Random random = new Random();
 
-    static public class Value {
+    static public class Value<T> {
         public String name;
-        public Object value;
+        public T value;
 
-        public Value(@Nonnull String name, @Nonnull Object value) {
+        public Value(@Nonnull String name, @Nonnull T value) {
             this.name = name;
             this.value = value;
         }
@@ -75,11 +75,11 @@ public class ProviderContext extends ProviderContextCompat implements Serializab
      * @param configurationValues one or more configuration values that match the configuration requirements for the cloud
      * @return an instance of a provider context ready to connect to the target cloud using the specified configuration values
      */
-    static ProviderContext getContext(@Nonnull Cloud cloud, @Nonnull String accountNumber, @Nullable String regionId, @Nonnull Value ... configurationValues) {
+    static ProviderContext getContext(@Nonnull Cloud cloud, @Nonnull String accountNumber, @Nullable String regionId, @Nonnull Value<?> ... configurationValues) {
         ProviderContext ctx = new ProviderContext(cloud, accountNumber, regionId);
 
         ctx.configurationValues = new HashMap<String,Object>();
-        for( Value v : configurationValues ) {
+        for( Value<?> v : configurationValues ) {
             ctx.configurationValues.put(v.name, v.value);
         }
         return ctx;

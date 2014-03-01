@@ -46,10 +46,10 @@ public class HybridCloudConnectTestCase {
     static public final String REGION          = "region";
     static public final String SREGION         = "sregion";
 
-    static public final ProviderContext.Value KEYS    = new ProviderContext.Value("apiKeys", new byte[][] { "public".getBytes(), "private".getBytes() });
-    static public final ProviderContext.Value SKEYS   = new ProviderContext.Value("apiKeys", new byte[][] { "spub".getBytes(), "spriv".getBytes() });
-    static public final ProviderContext.Value VERSION = new ProviderContext.Value("version", "1");
-    static public final ProviderContext.Value X509    = new ProviderContext.Value("x509Keys", new byte[][] { "x509c".getBytes(), "x509k".getBytes() });
+    static public final ProviderContext.Value<byte[][]> KEYS    = new ProviderContext.Value<byte[][]>("apiKeys", new byte[][] { "public".getBytes(), "private".getBytes() });
+    static public final ProviderContext.Value<byte[][]> SKEYS   = new ProviderContext.Value<byte[][]>("apiKeys", new byte[][] { "spub".getBytes(), "spriv".getBytes() });
+    static public final ProviderContext.Value<String>   VERSION = new ProviderContext.Value<String>("version", "1");
+    static public final ProviderContext.Value<byte[][]> X509    = new ProviderContext.Value<byte[][]>("x509Keys", new byte[][] { "x509c".getBytes(), "x509k".getBytes() });
 
     static private class Config {
         private String cloudName;
@@ -218,18 +218,18 @@ public class HybridCloudConnectTestCase {
         ProviderContext cCtx = new ProviderContext(COMPUTE_ACCOUNT, REGION);
 
         cCtx.setEndpoint(compute.endpoint);
-        cCtx.setAccessKeys(((byte[][])KEYS.value)[0], ((byte[][])KEYS.value)[1]);
-        cCtx.setX509Cert(((byte[][]) X509.value)[0]);
-        cCtx.setX509Key(((byte[][]) X509.value)[1]);
+        cCtx.setAccessKeys(KEYS.value[0], KEYS.value[1]);
+        cCtx.setX509Cert( X509.value[0]);
+        cCtx.setX509Key( X509.value[1]);
         Properties props = new Properties();
 
-        props.setProperty("version", (String) VERSION.value);
+        props.setProperty("version", VERSION.value);
         cCtx.setCustomProperties(props);
 
         cCtx.setStorage(TestNewStorageCloudProvider.class.getName());
         cCtx.setStorageAccountNumber(STORAGE_ACCOUNT);
         cCtx.setStorageEndpoint(storage.endpoint);
-        cCtx.setStorageKeys(((byte[][]) SKEYS.value)[0], ((byte[][]) SKEYS.value)[1]);
+        cCtx.setStorageKeys( SKEYS.value[0],  SKEYS.value[1]);
 
         cp.connect(cCtx);
 
@@ -266,18 +266,18 @@ public class HybridCloudConnectTestCase {
         ProviderContext cCtx = new ProviderContext(COMPUTE_ACCOUNT, REGION);
 
         cCtx.setEndpoint(compute.endpoint);
-        cCtx.setAccessKeys(((byte[][])KEYS.value)[0], ((byte[][])KEYS.value)[1]);
-        cCtx.setX509Cert(((byte[][]) X509.value)[0]);
-        cCtx.setX509Key(((byte[][]) X509.value)[1]);
+        cCtx.setAccessKeys(KEYS.value[0], KEYS.value[1]);
+        cCtx.setX509Cert( X509.value[0]);
+        cCtx.setX509Key( X509.value[1]);
         Properties props = new Properties();
 
-        props.setProperty("version", (String) VERSION.value);
+        props.setProperty("version", VERSION.value);
         cCtx.setCustomProperties(props);
 
         cCtx.setStorage(TestNewStorageCloudProvider.class.getName());
         cCtx.setStorageAccountNumber(STORAGE_ACCOUNT);
         cCtx.setStorageEndpoint(storage.endpoint);
-        cCtx.setStorageKeys(((byte[][]) SKEYS.value)[0], ((byte[][]) SKEYS.value)[1]);
+        cCtx.setStorageKeys( SKEYS.value[0],  SKEYS.value[1]);
         cp.connect(cCtx);
 
         checkConnectionIntegrityForOldClientMethods(cCtx, compute, true);
@@ -308,18 +308,18 @@ public class HybridCloudConnectTestCase {
         ProviderContext cCtx = new ProviderContext(COMPUTE_ACCOUNT, REGION);
 
         cCtx.setEndpoint(compute.endpoint);
-        cCtx.setAccessKeys(((byte[][])KEYS.value)[0], ((byte[][])KEYS.value)[1]);
-        cCtx.setX509Cert(((byte[][]) X509.value)[0]);
-        cCtx.setX509Key(((byte[][]) X509.value)[1]);
+        cCtx.setAccessKeys(KEYS.value[0], KEYS.value[1]);
+        cCtx.setX509Cert( X509.value[0]);
+        cCtx.setX509Key( X509.value[1]);
         Properties props = new Properties();
 
-        props.setProperty("version", (String) VERSION.value);
+        props.setProperty("version", VERSION.value);
         cCtx.setCustomProperties(props);
 
         cCtx.setStorage(TestOldStorageCloudProvider.class.getName());
         cCtx.setStorageAccountNumber(STORAGE_ACCOUNT);
         cCtx.setStorageEndpoint(storage.endpoint);
-        cCtx.setStorageKeys(((byte[][])SKEYS.value)[0], ((byte[][])SKEYS.value)[1]);
+        cCtx.setStorageKeys(SKEYS.value[0], SKEYS.value[1]);
         cp.connect(cCtx);
 
         checkConnectionIntegrityForOldClientMethods(cCtx, compute, true);
@@ -348,18 +348,18 @@ public class HybridCloudConnectTestCase {
         ProviderContext cCtx = new ProviderContext(COMPUTE_ACCOUNT, REGION);
 
         cCtx.setEndpoint(compute.endpoint);
-        cCtx.setAccessKeys(((byte[][])KEYS.value)[0], ((byte[][])KEYS.value)[1]);
-        cCtx.setX509Cert(((byte[][]) X509.value)[0]);
-        cCtx.setX509Key(((byte[][]) X509.value)[1]);
+        cCtx.setAccessKeys(KEYS.value[0], KEYS.value[1]);
+        cCtx.setX509Cert( X509.value[0]);
+        cCtx.setX509Key( X509.value[1]);
         Properties props = new Properties();
 
-        props.setProperty("version", (String) VERSION.value);
+        props.setProperty("version", VERSION.value);
         cCtx.setCustomProperties(props);
 
         cCtx.setStorage(TestNewStorageCloudProvider.class.getName());
         cCtx.setStorageAccountNumber(STORAGE_ACCOUNT);
         cCtx.setStorageEndpoint(storage.endpoint);
-        cCtx.setStorageKeys(((byte[][]) SKEYS.value)[0], ((byte[][]) SKEYS.value)[1]);
+        cCtx.setStorageKeys( SKEYS.value[0],  SKEYS.value[1]);
         cp.connect(cCtx);
 
         cp.close();
@@ -388,18 +388,18 @@ public class HybridCloudConnectTestCase {
         ProviderContext cCtx = new ProviderContext(COMPUTE_ACCOUNT, REGION);
 
         cCtx.setEndpoint(compute.endpoint);
-        cCtx.setAccessKeys(((byte[][])KEYS.value)[0], ((byte[][])KEYS.value)[1]);
-        cCtx.setX509Cert(((byte[][]) X509.value)[0]);
-        cCtx.setX509Key(((byte[][]) X509.value)[1]);
+        cCtx.setAccessKeys(KEYS.value[0], KEYS.value[1]);
+        cCtx.setX509Cert( X509.value[0]);
+        cCtx.setX509Key( X509.value[1]);
         Properties props = new Properties();
 
-        props.setProperty("version", (String) VERSION.value);
+        props.setProperty("version", VERSION.value);
         cCtx.setCustomProperties(props);
 
         cCtx.setStorage(TestOldStorageCloudProvider.class.getName());
         cCtx.setStorageAccountNumber(STORAGE_ACCOUNT);
         cCtx.setStorageEndpoint(storage.endpoint);
-        cCtx.setStorageKeys(((byte[][]) SKEYS.value)[0], ((byte[][]) SKEYS.value)[1]);
+        cCtx.setStorageKeys( SKEYS.value[0],  SKEYS.value[1]);
         cp.connect(cCtx);
 
         cp.close();
@@ -434,18 +434,18 @@ public class HybridCloudConnectTestCase {
         ProviderContext cCtx = new ProviderContext(COMPUTE_ACCOUNT, REGION);
 
         cCtx.setEndpoint(compute.endpoint);
-        cCtx.setAccessKeys(((byte[][])KEYS.value)[0], ((byte[][])KEYS.value)[1]);
-        cCtx.setX509Cert(((byte[][]) X509.value)[0]);
-        cCtx.setX509Key(((byte[][]) X509.value)[1]);
+        cCtx.setAccessKeys(KEYS.value[0], KEYS.value[1]);
+        cCtx.setX509Cert( X509.value[0]);
+        cCtx.setX509Key( X509.value[1]);
         Properties props = new Properties();
 
-        props.setProperty("version", (String) VERSION.value);
+        props.setProperty("version", VERSION.value);
         cCtx.setCustomProperties(props);
 
         cCtx.setStorage(TestNewStorageCloudProvider.class.getName());
         cCtx.setStorageAccountNumber(STORAGE_ACCOUNT);
         cCtx.setStorageEndpoint(storage.endpoint);
-        cCtx.setStorageKeys(((byte[][]) SKEYS.value)[0], ((byte[][]) SKEYS.value)[1]);
+        cCtx.setStorageKeys( SKEYS.value[0],  SKEYS.value[1]);
         cp.connect(cCtx);
 
         cp.hold();
@@ -486,18 +486,18 @@ public class HybridCloudConnectTestCase {
         ProviderContext cCtx = new ProviderContext(COMPUTE_ACCOUNT, REGION);
 
         cCtx.setEndpoint(compute.endpoint);
-        cCtx.setAccessKeys(((byte[][])KEYS.value)[0], ((byte[][])KEYS.value)[1]);
-        cCtx.setX509Cert(((byte[][]) X509.value)[0]);
-        cCtx.setX509Key(((byte[][]) X509.value)[1]);
+        cCtx.setAccessKeys(KEYS.value[0], KEYS.value[1]);
+        cCtx.setX509Cert( X509.value[0]);
+        cCtx.setX509Key( X509.value[1]);
         Properties props = new Properties();
 
-        props.setProperty("version", (String) VERSION.value);
+        props.setProperty("version", VERSION.value);
         cCtx.setCustomProperties(props);
 
         cCtx.setStorage(TestOldStorageCloudProvider.class.getName());
         cCtx.setStorageAccountNumber(STORAGE_ACCOUNT);
         cCtx.setStorageEndpoint(storage.endpoint);
-        cCtx.setStorageKeys(((byte[][]) SKEYS.value)[0], ((byte[][]) SKEYS.value)[1]);
+        cCtx.setStorageKeys( SKEYS.value[0],  SKEYS.value[1]);
         cp.connect(cCtx);
 
         cp.hold();
@@ -542,18 +542,18 @@ public class HybridCloudConnectTestCase {
         ProviderContext cCtx = new ProviderContext(COMPUTE_ACCOUNT, REGION);
 
         cCtx.setEndpoint(compute.endpoint);
-        cCtx.setAccessKeys(((byte[][])KEYS.value)[0], ((byte[][])KEYS.value)[1]);
-        cCtx.setX509Cert(((byte[][]) X509.value)[0]);
-        cCtx.setX509Key(((byte[][]) X509.value)[1]);
+        cCtx.setAccessKeys(KEYS.value[0], KEYS.value[1]);
+        cCtx.setX509Cert( X509.value[0]);
+        cCtx.setX509Key( X509.value[1]);
         Properties props = new Properties();
 
-        props.setProperty("version", (String) VERSION.value);
+        props.setProperty("version", VERSION.value);
         cCtx.setCustomProperties(props);
 
         cCtx.setStorage(TestNewStorageCloudProvider.class.getName());
         cCtx.setStorageAccountNumber(STORAGE_ACCOUNT);
         cCtx.setStorageEndpoint(storage.endpoint);
-        cCtx.setStorageKeys(((byte[][]) SKEYS.value)[0], ((byte[][]) SKEYS.value)[1]);
+        cCtx.setStorageKeys( SKEYS.value[0],  SKEYS.value[1]);
         cp.connect(cCtx);
 
         cp.hold();
@@ -602,18 +602,18 @@ public class HybridCloudConnectTestCase {
         ProviderContext cCtx = new ProviderContext(COMPUTE_ACCOUNT, REGION);
 
         cCtx.setEndpoint(compute.endpoint);
-        cCtx.setAccessKeys(((byte[][])KEYS.value)[0], ((byte[][])KEYS.value)[1]);
-        cCtx.setX509Cert(((byte[][]) X509.value)[0]);
-        cCtx.setX509Key(((byte[][]) X509.value)[1]);
+        cCtx.setAccessKeys(KEYS.value[0], KEYS.value[1]);
+        cCtx.setX509Cert( X509.value[0]);
+        cCtx.setX509Key( X509.value[1]);
         Properties props = new Properties();
 
-        props.setProperty("version", (String) VERSION.value);
+        props.setProperty("version", VERSION.value);
         cCtx.setCustomProperties(props);
 
         cCtx.setStorage(TestOldStorageCloudProvider.class.getName());
         cCtx.setStorageAccountNumber(STORAGE_ACCOUNT);
         cCtx.setStorageEndpoint(storage.endpoint);
-        cCtx.setStorageKeys(((byte[][]) SKEYS.value)[0], ((byte[][]) SKEYS.value)[1]);
+        cCtx.setStorageKeys( SKEYS.value[0],  SKEYS.value[1]);
         cp.connect(cCtx);
 
         cp.hold();
