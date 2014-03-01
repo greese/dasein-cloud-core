@@ -28,6 +28,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
 /**
+ * Deprecated in favor of the new connection approach. The connection approach shown in this example still will function,
+ * however, you should use the one in {@link org.dasein.cloud.examples.CloudConnection201403}.
  * Loads a properly configured Dasein Cloud {@link org.dasein.cloud.CloudProvider}. This class looks for the following
  * system properties:
  * <ul>
@@ -49,11 +51,12 @@ import java.util.Properties;
  * @author George Reese
  * @version 2012.09 initial version
  * @since 2012.09
+ * @deprecated refer to {@link org.dasein.cloud.examples.CloudConnection201403}
  */
-public class ProviderLoader {
+public class ProviderLoaderOld {
     private CloudProvider configuredProvider;
 
-    public ProviderLoader() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedEncodingException {
+    public ProviderLoaderOld() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedEncodingException {
         configure();
     }
 

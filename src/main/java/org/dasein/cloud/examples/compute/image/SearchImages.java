@@ -27,7 +27,7 @@ import org.dasein.cloud.compute.ComputeServices;
 import org.dasein.cloud.compute.MachineImage;
 import org.dasein.cloud.compute.MachineImageSupport;
 import org.dasein.cloud.compute.Platform;
-import org.dasein.cloud.examples.ProviderLoader;
+import org.dasein.cloud.examples.ProviderLoaderOld;
 
 import javax.annotation.Nullable;
 
@@ -50,7 +50,7 @@ import javax.annotation.Nullable;
  */
 public class SearchImages {
     static public void main(String ... args) throws Exception {
-        ProviderLoader loader = new ProviderLoader();
+        ProviderLoaderOld loader = new ProviderLoaderOld();
 
         SearchImages searcher = new SearchImages(loader.getConfiguredProvider());
 

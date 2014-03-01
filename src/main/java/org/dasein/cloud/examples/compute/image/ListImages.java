@@ -25,7 +25,7 @@ import org.dasein.cloud.InternalException;
 import org.dasein.cloud.compute.ComputeServices;
 import org.dasein.cloud.compute.MachineImage;
 import org.dasein.cloud.compute.MachineImageSupport;
-import org.dasein.cloud.examples.ProviderLoader;
+import org.dasein.cloud.examples.ProviderLoaderOld;
 
 import java.util.Locale;
 
@@ -38,7 +38,7 @@ import java.util.Locale;
  */
 public class ListImages {
     static public void main(String ... args) throws Exception {
-        ProviderLoader loader = new ProviderLoader();
+        ProviderLoaderOld loader = new ProviderLoaderOld();
 
         ListImages lister = new ListImages(loader.getConfiguredProvider());
 

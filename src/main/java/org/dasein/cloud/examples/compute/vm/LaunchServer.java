@@ -35,7 +35,7 @@ import org.dasein.cloud.compute.VirtualMachineSupport;
 import org.dasein.cloud.compute.VmState;
 import org.dasein.cloud.compute.VolumeProduct;
 import org.dasein.cloud.compute.VolumeSupport;
-import org.dasein.cloud.examples.ProviderLoader;
+import org.dasein.cloud.examples.ProviderLoaderOld;
 import org.dasein.cloud.identity.IdentityServices;
 import org.dasein.cloud.identity.SSHKeypair;
 import org.dasein.cloud.identity.ShellKeySupport;
@@ -69,7 +69,7 @@ import java.util.Iterator;
  */
 public class LaunchServer {
     static public void main(String ... args) throws Exception {
-        ProviderLoader loader = new ProviderLoader();
+        ProviderLoaderOld loader = new ProviderLoaderOld();
 
         LaunchServer launcher = new LaunchServer(loader.getConfiguredProvider());
 

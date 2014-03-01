@@ -26,7 +26,7 @@ import org.dasein.cloud.compute.ComputeServices;
 import org.dasein.cloud.compute.VirtualMachine;
 import org.dasein.cloud.compute.VirtualMachineSupport;
 import org.dasein.cloud.compute.VmState;
-import org.dasein.cloud.examples.ProviderLoader;
+import org.dasein.cloud.examples.ProviderLoaderOld;
 
 import javax.annotation.Nonnull;
 
@@ -55,7 +55,7 @@ import javax.annotation.Nonnull;
  */
 public class ChangeServerState {
     static public void main(String ... args) throws Exception {
-        ProviderLoader loader = new ProviderLoader();
+        ProviderLoaderOld loader = new ProviderLoaderOld();
 
         ChangeServerState changer = new ChangeServerState(loader.getConfiguredProvider());
 
