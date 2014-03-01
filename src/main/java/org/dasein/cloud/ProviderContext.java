@@ -22,6 +22,7 @@ package org.dasein.cloud;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
@@ -87,6 +88,7 @@ public class ProviderContext extends ProviderContextCompat implements Serializab
     /**
      * @return a pseudo-random number using the context random number generator (not a secure random)
      */
+    @SuppressWarnings("UnusedDeclaration")
     public static Random getRandom() {
         return random;
     }
@@ -94,6 +96,7 @@ public class ProviderContext extends ProviderContextCompat implements Serializab
     private String             accountNumber;
     private Cloud              cloud;
     private Map<String,Object> configurationValues;
+    private String             effectiveAccountNumber;
     private String             regionId;
 
     /**
@@ -117,6 +120,41 @@ public class ProviderContext extends ProviderContextCompat implements Serializab
         return accountNumber;
     }
 
+    @SuppressWarnings("deprecation")
+    void configureForDeprecatedConnect(@Nonnull CloudProvider p) {
+        if( configurationValues == null ) {
+            configurationValues = new HashMap<String, Object>();
+            ContextRequirements r = p.getContextRequirements();
+
+            ContextRequirements.Field access = r.getCompatAccessKeys();
+
+            if( access != null ) {
+                byte[] key = getAccessPublic();
+
+                if( key != null ) {
+                    configurationValues.put(access.name, new byte[][] { key, getAccessPrivate() });
+                }
+            }
+            ContextRequirements.Field x509 = r.getCompatAccessX509();
+            if( x509 != null ) {
+                byte[] cert = getX509Cert();
+
+                if( cert != null ) {
+                    configurationValues.put(x509.name, new byte[][] { cert, getX509Key() });
+                }
+            }
+            Properties props = getCustomProperties();
+
+            for( ContextRequirements.Field field : r.getConfigurableValues() ) {
+                if( (access == null || !access.name.equals(field.name)) && (x509 == null || !x509.name.equals(field.name)) ) {
+                    if( props.containsKey(field.name) ) {
+                        configurationValues.put(field.name, props.getProperty(field.name));
+                    }
+                }
+            }
+        }
+    }
+
     /**
      * Connects to the cloud associated with this connection context. The result will be a connected implementation
      * of the {@link CloudProvider} abstract class specific to the cloud in question.
@@ -125,18 +163,7 @@ public class ProviderContext extends ProviderContextCompat implements Serializab
      * @throws InternalException an error occurred loading the {@link org.dasein.cloud.CloudProvider} implementation
      */
     public @Nonnull CloudProvider connect() throws CloudException, InternalException {
-        try {
-            CloudProvider p = cloud.buildProvider();
-
-            p.connect(this);
-            return p;
-        }
-        catch( InstantiationException e ) {
-            throw new InternalException(e);
-        }
-        catch( IllegalAccessException e ) {
-            throw new InternalException(e);
-        }
+        return connect(null);
     }
 
     /**
@@ -149,11 +176,22 @@ public class ProviderContext extends ProviderContextCompat implements Serializab
      * @throws CloudException an error occurred with any handshake that might have been necessary to perform a connection (generally not needed)
      * @throws InternalException an error occurred loading the {@link org.dasein.cloud.CloudProvider} implementation
      */
-    public @Nonnull CloudProvider connect(@Nonnull CloudProvider computeProvider) throws CloudException, InternalException {
+    public @Nonnull CloudProvider connect(@Nullable CloudProvider computeProvider) throws CloudException, InternalException {
         try {
+            ProviderContext computeContext = null;
+
+            if( computeProvider != null ) {
+                computeContext = computeProvider.getContext();
+                if( computeContext == null ) {
+                    throw new InternalException("The compute provider has not yet connected to the compute cloud");
+                }
+            }
             CloudProvider p = cloud.buildProvider();
 
-            p.connect(this, computeProvider);
+            p.connect(this, computeProvider, cloud);
+            if( computeContext != null ) {
+                effectiveAccountNumber = computeContext.getAccountNumber();
+            }
             return p;
         }
         catch( InstantiationException e ) {
@@ -186,7 +224,26 @@ public class ProviderContext extends ProviderContextCompat implements Serializab
      * @return the value matching the specified field or <code>null</code> if no value is set
      */
     public @Nullable Object getConfigurationValue(@Nonnull ContextRequirements.Field field) {
-        return configurationValues.get(field.name);
+        return getConfigurationValue(field.name);
+    }
+
+    /**
+     * The effective account number under which this context operates. It is used for defining ownership of
+     * storage assets so they align with compute assets while the {@link #getAccountNumber()} for this context
+     * is used for interaction with the cloud. This value has meaning only in the scenario in which separate compute
+     * and storage clouds are being "glued together" to create a single virtual cloud within Dasein Cloud. Because they
+     * are separate clouds, they will have different account numbers used in connecting to them. But to make the
+     * storage assets look like they are owned by the compute cloud, the effective account number of the storage
+     * cloud {@link org.dasein.cloud.ProviderContext} is set to the real account number of the compute cloud.
+     * Ownership of storage assets is then set to the effective account number even though in reality their ownership
+     * in the target cloud is the account number.
+     * @return the effective account number for this context
+     */
+    public @Nonnull String getEffectiveAccountNumber() {
+        if( effectiveAccountNumber == null ) {
+            return getAccountNumber();
+        }
+        return effectiveAccountNumber;
     }
 
     /**
@@ -225,6 +282,39 @@ public class ProviderContext extends ProviderContextCompat implements Serializab
         }
         else {
             throw new RuntimeException("Cannot double-set the account number. Tried " + accountNumber + ", was already " + this.accountNumber);
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    @Deprecated
+    public void setCloud(@Nonnull CloudProvider provider) throws InternalException {
+        String endpoint = getEndpoint();
+
+        if( endpoint == null ) {
+            throw new InternalException("The context was not properly configured");
+        }
+        cloud = Cloud.getInstance(endpoint);
+        if( cloud == null ) {
+            String pname = getProviderName();
+            String cname = getCloudName();
+
+            cloud = Cloud.register(pname == null ? provider.getProviderName() : pname, cname == null ? provider.getCloudName() : cname, endpoint, provider.getClass());
+        }
+    }
+
+    /**
+     * Sets the effective account number for the provider context for when this context represents a storage
+     * cloud being merged into a compute cloud.
+     * @param effectiveAccountNumber the account number of the compute cloud associated with this storage context
+     * @deprecated use {@link Cloud#createContext(String, String, org.dasein.cloud.ProviderContext.Value...)} (will automatically set effective account number when connected)
+     */
+    @Deprecated
+    void setEffectiveAccountNumber(@Nonnull String effectiveAccountNumber) {
+        if( this.effectiveAccountNumber == null ) {
+            this.effectiveAccountNumber = effectiveAccountNumber;
+        }
+        else {
+            throw new RuntimeException("Cannot double-set the effective account number. Tried " + effectiveAccountNumber + ", was already " + this.effectiveAccountNumber);
         }
     }
 

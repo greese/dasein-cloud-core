@@ -160,8 +160,11 @@ public abstract class CloudProvider {
      * includes authentication information, the regional context, and any cloud-specific
      * context. Prior to initializing itself, this method will close out any existing state.
      * @param context the context for services calls using this provider instance
+     * @deprecated use {@link org.dasein.cloud.ProviderContext#connect()}
      */
-    public void connect(@Nonnull ProviderContext context) {
+    @SuppressWarnings("deprecation")
+    @Deprecated
+    public final void connect(@Nonnull ProviderContext context) {
         connect(context, null);
     }
     
@@ -171,13 +174,49 @@ public abstract class CloudProvider {
      * context. Prior to initializing itself, this method will close out any existing state.
      * @param context the context for services calls using this provider instance
      * @param computeProvider the compute context if this is a storage-only cloud (the compute context controls the connection)
+     * @deprecated use {@link org.dasein.cloud.ProviderContext#connect(CloudProvider)}
      */
-    public void connect(@Nonnull ProviderContext context, @Nullable CloudProvider computeProvider) {
+    @Deprecated
+    public final void connect(@Nonnull ProviderContext context, @Nullable CloudProvider computeProvider) {
+        try {
+            connect(context, computeProvider, null);
+            context.configureForDeprecatedConnect(this);
+        }
+        catch( CloudException e ) {
+            throw new RuntimeException(e); // can't change the signature for backwards compat reasons
+        }
+        catch( InternalException e ) {
+            throw new RuntimeException(e); // can't change the signature for backwards compat reasons
+        }
+    }
+
+    /**
+     * Establishes a connected state between the Dasein Cloud implementation and the target cloud. This method should
+     * not be directly triggered by Dasein Cloud clients, but instead within the Dasein Cloud {@link ProviderContext#connect(CloudProvider)}
+     * method or the backwards compatible {@link #connect(ProviderContext, CloudProvider)} method. Clients should always
+     * call {@link org.dasein.cloud.ProviderContext#connect()} or {@link ProviderContext#connect(CloudProvider)}.
+     * @param context the provider context representing the context for the connection
+     * @param computeProvider if this connection is to a storage cloud being virtually bound to a compute cloud, the connected provider for the associated compute cloud
+     * @param myCloud if known, the cloud object behind this provider
+     * @throws CloudException an error occurred communicating with the target cloud
+     * @throws InternalException an error occurred within Dasein Cloud while setting up the connection state
+     */
+    @SuppressWarnings("deprecation")
+    void connect(@Nonnull ProviderContext context, @Nullable CloudProvider computeProvider, @Nullable Cloud myCloud) throws CloudException, InternalException {
         close();
         this.context = context;
+
+        if( myCloud == null ) {
+            context.setCloud(this);
+        }
         this.computeCloudProvider = computeProvider;
         if( computeProvider != null ) {
             computeProvider.storageCloudProvider = this;
+            ProviderContext computeContext = computeProvider.getContext();
+
+            if( computeContext != null ) {
+                context.setEffectiveAccountNumber(computeContext.getAccountNumber());
+            }
         }
     }
 
@@ -254,7 +293,7 @@ public abstract class CloudProvider {
         if( storage == null ) {
             return null;
         }
-        try { 
+        try {
             CloudProvider p = (CloudProvider)Class.forName(storage).newInstance();
             ProviderContext ctx = new ProviderContext();
             Properties props = computeContext.getStorageCustomProperties();
@@ -262,7 +301,6 @@ public abstract class CloudProvider {
             ctx.setRegionId(computeContext.getRegionId());
             ctx.setCloudName(computeContext.getCloudName());
             ctx.setProviderName(computeContext.getProviderName());
-            ctx.setEffectiveAccountNumber(computeContext.getEffectiveAccountNumber());
             ctx.setEndpoint(computeContext.getStorageEndpoint());
             ctx.setAccountNumber(computeContext.getStorageAccountNumber());
             ctx.setAccessKeys(computeContext.getStoragePublic(), computeContext.getStoragePrivate());

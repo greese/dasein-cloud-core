@@ -56,7 +56,10 @@ public abstract class AbstractCloud extends CloudProvider {
 
     @Override
     public @Nonnull ContextRequirements getContextRequirements() {
-        return new ContextRequirements();
+        return new ContextRequirements(
+                new ContextRequirements.Field("apiAccessKey", ContextRequirements.FieldType.KEYPAIR),
+                new ContextRequirements.Field("x509", ContextRequirements.FieldType.KEYPAIR)
+        );
     }
 
     @Override

@@ -22,20 +22,24 @@ import org.dasein.cloud.*;
 import org.dasein.cloud.dc.DataCenter;
 import org.dasein.cloud.dc.DataCenterServices;
 import org.dasein.cloud.dc.Region;
+import org.dasein.cloud.storage.AbstractStorageServices;
+import org.dasein.cloud.storage.OfflineStoreSupport;
+import org.dasein.cloud.storage.StorageServices;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Locale;
 
 /**
- * Cloud provider implementation for testing basic functionality not specifically dependent on cloud operations.
- * <p>Created by George Reese: 2/28/14 7:23 PM</p>
+ * Cloud provider implementation for testing a mixed virtual cloud made up of distinct compute and storage
+ * <p>Created by George Reese: 3/1/14 2:01 PM</p>
  * @author George Reese
  * @version 2014.03 initial version (issue #123)
  * @since 2014.03
  */
-public class TestCloudProvider extends AbstractCloud {
+public class TestNewStorageCloudProvider extends AbstractCloud {
     @Override
     public @Nonnull String getCloudName() {
         ProviderContext ctx = getContext();
@@ -43,7 +47,7 @@ public class TestCloudProvider extends AbstractCloud {
         String name = (cloud == null ? null : cloud.getCloudName());
 
         if( name == null ) {
-            return "Test Cloud";
+            return "Test Storage Cloud";
         }
         return name;
     }
@@ -91,13 +95,23 @@ public class TestCloudProvider extends AbstractCloud {
     }
 
     @Override
+    public @Nonnull StorageServices getStorageServices() {
+        return new AbstractStorageServices() {
+            @Override
+            public @Nullable OfflineStoreSupport getOfflineStorageSupport() {
+                return null;
+            }
+        };
+    }
+
+    @Override
     public @Nonnull String getProviderName() {
         ProviderContext ctx = getContext();
         Cloud cloud = (ctx == null ? null : ctx.getCloud());
         String name = (cloud == null ? null : cloud.getProviderName());
 
         if( name == null ) {
-            return "Test Provider";
+            return "Test Storage Provider";
         }
         return name;
     }

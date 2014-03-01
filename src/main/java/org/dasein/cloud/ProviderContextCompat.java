@@ -46,7 +46,6 @@ public abstract class ProviderContextCompat implements Serializable {
     private byte[]     accessPublic;
     private String     cloudName;
     private Properties customProperties;
-    private String     effectiveAccountNumber;
     private String     endpoint;
     private String     providerName;
     private String     storage;
@@ -60,6 +59,7 @@ public abstract class ProviderContextCompat implements Serializable {
     private byte[]     x509Cert;
     private byte[]     x509Key;
 
+
     /**
      * Clears out all keys being stored by this provider. The keys are overwritten with random data.
      * If these keys were set from instance variables in other objects, this method will result in
@@ -67,17 +67,6 @@ public abstract class ProviderContextCompat implements Serializable {
      */
     public void clear() {
         ProviderContext.clear(accessPublic, accessPrivate, storagePublic, storagePrivate, x509Cert, x509Key, storageX509Cert, storageX509Key);
-    }
-
-    public void setEffectiveAccountNumber(String effectiveAccountNumber) {
-        this.effectiveAccountNumber = effectiveAccountNumber;
-    }
-
-    public @Nullable String getEffectiveAccountNumber() {
-        if( effectiveAccountNumber == null ) {
-            return getAccountNumber();
-        }
-        return effectiveAccountNumber;
     }
 
     /************************************** HELPER METHODS ************************************/
@@ -113,36 +102,72 @@ public abstract class ProviderContextCompat implements Serializable {
      * The private access key is the primary authentication password for web services calls.
      * In this AWS world, this is your access secret key.
      * @return the private access key for the cloud provider
+     * @deprecated use {@link #getConfigurationValue(String)}
      */
+    @Deprecated
     public @Nullable byte[] getAccessPrivate() {
         if( accessPrivate != null ) {
             return accessPrivate;
         }
-        Object val = getConfigurationValue(ContextRequirements.Field.ACCESS_KEYS);
+        Cloud c = getCloud();
 
-        if( val == null ) {
+        if( c == null ) {
             return null;
         }
-        accessPrivate = ((byte[][])val)[1];
-        return accessPrivate;
+        try {
+            ContextRequirements.Field f = c.buildProvider().getContextRequirements().getCompatAccessKeys();
+
+            if( f == null ) {
+                return null;
+            }
+            Object val = getConfigurationValue(f.name);
+
+            if( val == null ) {
+                return null;
+            }
+            accessPublic = ((byte[][])val)[0];
+            accessPrivate = ((byte[][])val)[1];
+            return accessPrivate;
+        }
+        catch( Exception ignore ) {
+            return null;
+        }
     }
 
     /**
      * The public access key is the primary authentication user ID for web services calls. In the
      * AWS world, this is your access public key.
      * @return the public access key for the cloud provider
+     * @deprecated use {@link #getConfigurationValue(String)}
      */
+    @Deprecated
     public @Nullable byte[] getAccessPublic() {
         if( accessPublic != null ) {
             return accessPublic;
         }
-        Object val = getConfigurationValue(ContextRequirements.Field.ACCESS_KEYS);
+        Cloud c = getCloud();
 
-        if( val == null ) {
+        if( c == null ) {
             return null;
         }
-        accessPublic = ((byte[][])val)[0];
-        return accessPublic;
+        try {
+            ContextRequirements.Field f = c.buildProvider().getContextRequirements().getCompatAccessKeys();
+
+            if( f == null ) {
+                return null;
+            }
+            Object val = getConfigurationValue(f.name);
+
+            if( val == null ) {
+                return null;
+            }
+            accessPublic = ((byte[][])val)[0];
+            accessPrivate = ((byte[][])val)[1];
+            return accessPublic;
+        }
+        catch( Exception ignore ) {
+            return null;
+        }
     }
 
     /**
@@ -171,11 +196,11 @@ public abstract class ProviderContextCompat implements Serializable {
      * help it interact with thge underlying cloud.
      * @return any custom properties supporting cloud connectivity
      */
-    public @Nullable Properties getCustomProperties() {
+    public @Nonnull Properties getCustomProperties() {
         if( customProperties == null ) {
             Cloud cloud = getCloud();
             if( cloud == null ) {
-                return null;
+                return new Properties();
             }
             Properties p = new Properties();
 
@@ -238,6 +263,58 @@ public abstract class ProviderContextCompat implements Serializable {
         return providerName;
     }
 
+    @Deprecated
+    public String getStorage() {
+        return storage;
+    }
+
+    @Deprecated
+    public String getStorageAccountNumber() {
+        return storageAccountNumber;
+    }
+
+    @Deprecated
+    public Properties getStorageCustomProperties() {
+        return storageCustomProperties;
+    }
+
+    @Deprecated
+    public String getStorageEndpoint() {
+        return storageEndpoint;
+    }
+
+    /**
+     * The storage private key is the private key used for cloud storage access. The AWS world has
+     * no direct analog to this value, but it is used to represent the AWS private key.
+     * @return the private key for cloud storage services
+     * @deprecated not relevant any more
+     */
+    @Deprecated
+    public @Nullable byte[] getStoragePrivate() {
+        return storagePrivate;
+    }
+
+    /**
+     * The storage public key is the public key used for cloud storage access. The AWS world has
+     * no direct analog to this value, but it is used to represent the AWS certificate.
+     * @return the public key for storafe
+     * @deprecated not relevant
+     */
+    @Deprecated
+    public @Nullable byte[] getStoragePublic() {
+        return storagePublic;
+    }
+
+    @Deprecated
+    public byte[] getStorageX509Cert() {
+        return storageX509Cert;
+    }
+
+    @Deprecated
+    public byte[] getStorageX509Key() {
+        return storageX509Key;
+    }
+
     /**
      * @return the contents of the X509 authentication certificate
      * @deprecated use {@link Cloud#createContext(String, String, org.dasein.cloud.ProviderContext.Value...)}
@@ -247,13 +324,29 @@ public abstract class ProviderContextCompat implements Serializable {
         if( x509Cert != null ) {
             return x509Cert;
         }
-        Object val = getConfigurationValue(ContextRequirements.Field.X509);
+        Cloud c = getCloud();
 
-        if( val == null ) {
+        if( c == null ) {
             return null;
         }
-        x509Cert = ((byte[][])val)[0];
-        return x509Cert;
+        try {
+            ContextRequirements.Field f = c.buildProvider().getContextRequirements().getCompatAccessX509();
+
+            if( f == null ) {
+                return null;
+            }
+            Object val = getConfigurationValue(f.name);
+
+            if( val == null ) {
+                return null;
+            }
+            x509Cert = ((byte[][])val)[0];
+            x509Key = ((byte[][])val)[1];
+            return x509Cert;
+        }
+        catch( Exception ignore ) {
+            return null;
+        }
     }
 
     /**
@@ -265,13 +358,29 @@ public abstract class ProviderContextCompat implements Serializable {
         if( x509Key != null ) {
             return x509Key;
         }
-        Object val = getConfigurationValue(ContextRequirements.Field.X509);
+        Cloud c = getCloud();
 
-        if( val == null ) {
+        if( c == null ) {
             return null;
         }
-        x509Key = ((byte[][])val)[1];
-        return x509Key;
+        try {
+            ContextRequirements.Field f = c.buildProvider().getContextRequirements().getCompatAccessX509();
+
+            if( f == null ) {
+                return null;
+            }
+            Object val = getConfigurationValue(f.name);
+
+            if( val == null ) {
+                return null;
+            }
+            x509Cert = ((byte[][])val)[0];
+            x509Key = ((byte[][])val)[1];
+            return x509Key;
+        }
+        catch( Exception ignore ) {
+            return null;
+        }
     }
 
     /**
@@ -291,6 +400,7 @@ public abstract class ProviderContextCompat implements Serializable {
      * @param accessPrivate the proper private access key value.
      * @deprecated use {@link Cloud#createContext(String, String, org.dasein.cloud.ProviderContext.Value...)}
      */
+    @SuppressWarnings("UnusedDeclaration")
     @Deprecated
     public void setAccessPrivate(@Nullable byte[] accessPrivate) {
         this.accessPrivate = accessPrivate;
@@ -301,6 +411,7 @@ public abstract class ProviderContextCompat implements Serializable {
      * @param accessPublic the proper public access key value
      * @deprecated use {@link Cloud#createContext(String, String, org.dasein.cloud.ProviderContext.Value...)}
      */
+    @SuppressWarnings("UnusedDeclaration")
     @Deprecated
     public void setAccessPublic(@Nullable byte[] accessPublic) {
         this.accessPublic = accessPublic;
@@ -346,6 +457,73 @@ public abstract class ProviderContextCompat implements Serializable {
         providerName = name;
     }
 
+    @Deprecated
+    public void setStorage(String storage) {
+        this.storage = storage;
+    }
+
+    @Deprecated
+    public void setStorageAccountNumber(String storageAccountNumber) {
+        this.storageAccountNumber = storageAccountNumber;
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    @Deprecated
+    public void setStorageCustomProperties(Properties storageCustomProperties) {
+        this.storageCustomProperties = storageCustomProperties;
+    }
+
+    @Deprecated
+    public void setStorageEndpoint(String storageEndpoint) {
+        this.storageEndpoint = storageEndpoint;
+    }
+
+    /**
+     * Sets the storage keypair for this provider context.
+     * @param publicKey the storage key public key
+     * @param privateKey the storage key private key
+     * @deprecated create a virtual hybrid cloud by directly connecting compute and storage
+     */
+    @Deprecated
+    public void setStorageKeys(@Nullable byte[] publicKey, @Nullable byte[] privateKey) {
+        storagePublic = publicKey;
+        storagePrivate = privateKey;
+    }
+
+    /**
+     * Sets the storage private key.
+     * @param storagePrivate the storage private key
+     * @deprecated create a virtual hybrid cloud by directly connecting compute and storage
+     */
+    @SuppressWarnings("UnusedDeclaration")
+    @Deprecated
+    public void setStoragePrivate(@Nullable byte[] storagePrivate) {
+        this.storagePrivate = storagePrivate;
+    }
+
+    /**
+     * Sets the storage public key value.
+     * @param storagePublic the storage public key
+     * @deprecated create a virtual hybrid cloud by directly connecting compute and storage
+     */
+    @SuppressWarnings("UnusedDeclaration")
+    @Deprecated
+    public void setStoragePublic(@Nullable byte[] storagePublic) {
+        this.storagePublic = storagePublic;
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    @Deprecated
+    public void setStorageX509Cert(byte[] storageX509Cert) {
+        this.storageX509Cert = storageX509Cert;
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    @Deprecated
+    public void setStorageX509Key(byte[] storageX509Key) {
+        this.storageX509Key = storageX509Key;
+    }
+
     /**
      * Some clouds use X509 certificates to authenticate API calls instead of user name/password or API keys. This
      * sets the X509 certificate for API calls made through this context.
@@ -366,105 +544,5 @@ public abstract class ProviderContextCompat implements Serializable {
     @Deprecated
     public void setX509Key(byte[] x509Key) {
         this.x509Key = x509Key;
-    }
-
-
-
-
-
-
-
-
-
-    /**
-     * The storage private key is the private key used for cloud storage access. The AWS world has
-     * no direct analog to this value, but it is used to represent the AWS private key.
-     * @return the private key for cloud storage services
-     */
-    public @Nullable byte[] getStoragePrivate() {
-        return storagePrivate;
-    }
-
-    /**
-     * The storage public key is the public key used for cloud storage access. The AWS world has
-     * no direct analog to this value, but it is used to represent the AWS certificate.
-     * @return the public key for storafe
-     */
-    public @Nullable byte[] getStoragePublic() {
-        return storagePublic;
-    }
-
-    /**
-     * Sets the storage keypair for this provider context.
-     * @param publicKey the storage key public key
-     * @param privateKey the storage key private key
-     */
-    public void setStorageKeys(@Nullable byte[] publicKey, @Nullable byte[] privateKey) {
-        storagePublic = publicKey;
-        storagePrivate = privateKey;
-    }
-
-    /**
-     * Sets the storage private key.
-     * @param storagePrivate the storage private key
-     */
-    public void setStoragePrivate(@Nullable byte[] storagePrivate) {
-        this.storagePrivate = storagePrivate;
-    }
-
-    /**
-     * Sets the storage public key value.
-     * @param storagePublic the storage public key
-     */
-    public void setStoragePublic(@Nullable byte[] storagePublic) {
-        this.storagePublic = storagePublic;
-    }
-
-    public String getStorage() {
-        return storage;
-    }
-
-    public void setStorage(String storage) {
-        this.storage = storage;
-    }
-
-    public String getStorageAccountNumber() {
-        return storageAccountNumber;
-    }
-
-    public void setStorageAccountNumber(String storageAccountNumber) {
-        this.storageAccountNumber = storageAccountNumber;
-    }
-
-    public byte[] getStorageX509Cert() {
-        return storageX509Cert;
-    }
-
-    public void setStorageX509Cert(byte[] storageX509Cert) {
-        this.storageX509Cert = storageX509Cert;
-    }
-
-    public byte[] getStorageX509Key() {
-        return storageX509Key;
-    }
-
-    public void setStorageX509Key(byte[] storageX509Key) {
-        this.storageX509Key = storageX509Key;
-    }
-
-    public void setStorageEndpoint(String storageEndpoint) {
-        this.storageEndpoint = storageEndpoint;
-    }
-
-    public String getStorageEndpoint() {
-        return storageEndpoint;
-    }
-
-    public void setStorageCustomProperties(Properties storageCustomProperties) {
-        this.storageCustomProperties = storageCustomProperties;
-    }
-
-    public Properties getStorageCustomProperties() {
-        return storageCustomProperties;
     }
 }
