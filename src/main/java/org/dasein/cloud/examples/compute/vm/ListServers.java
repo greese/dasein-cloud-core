@@ -25,7 +25,7 @@ import org.dasein.cloud.InternalException;
 import org.dasein.cloud.compute.ComputeServices;
 import org.dasein.cloud.compute.VirtualMachine;
 import org.dasein.cloud.compute.VirtualMachineSupport;
-import org.dasein.cloud.examples.ProviderLoaderOld;
+import org.dasein.cloud.examples.ProviderLoader;
 
 /**
  * Example for verifying a services supports virtual machine resources and listing out those resources.
@@ -36,7 +36,7 @@ import org.dasein.cloud.examples.ProviderLoaderOld;
  */
 public class ListServers {
     static public void main(String ... args) throws Exception {
-        ProviderLoaderOld loader = new ProviderLoaderOld();
+        ProviderLoader loader = new ProviderLoader();
 
         ListServers lister = new ListServers(loader.getConfiguredProvider());
 

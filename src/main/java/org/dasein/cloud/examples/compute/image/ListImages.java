@@ -22,10 +22,8 @@ package org.dasein.cloud.examples.compute.image;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
-import org.dasein.cloud.compute.ComputeServices;
-import org.dasein.cloud.compute.MachineImage;
-import org.dasein.cloud.compute.MachineImageSupport;
-import org.dasein.cloud.examples.ProviderLoaderOld;
+import org.dasein.cloud.compute.*;
+import org.dasein.cloud.examples.ProviderLoader;
 
 import java.util.Locale;
 
@@ -38,7 +36,7 @@ import java.util.Locale;
  */
 public class ListImages {
     static public void main(String ... args) throws Exception {
-        ProviderLoaderOld loader = new ProviderLoaderOld();
+        ProviderLoader loader = new ProviderLoader();
 
         ListImages lister = new ListImages(loader.getConfiguredProvider());
 
@@ -75,7 +73,7 @@ public class ListImages {
                     int count = 0;
 
                     System.out.println("Machine images in " + provider.getCloudName() + " (may be none in clouds like AWS unless you specifically own some):");
-                    for( MachineImage img : imgSupport.listMachineImages() ) {
+                    for( MachineImage img : imgSupport.listImages(ImageFilterOptions.getInstance(ImageClass.MACHINE)) ) {
                         count++;
                         System.out.println("\t" + img.getName() + "[" + img.getProviderMachineImageId() + "] (" + img.getCurrentState() + ")");
                     }
