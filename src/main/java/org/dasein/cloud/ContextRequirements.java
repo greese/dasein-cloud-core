@@ -64,21 +64,53 @@ public class ContextRequirements {
         static public final String X509        = "x509";
 
         public String    compatName;
+        public String    description;
         public String    name;
         public boolean   required;
         public FieldType type;
 
         public Field(@Nonnull String name, @Nonnull FieldType type) {
-            this.name = name;
-            this.type = type;
-            this.required = true;
+            this(name, type, true);
+        }
+
+        public Field(@Nonnull String name, @Nonnull String description, @Nonnull FieldType type) {
+            this(name, description, type, true);
         }
 
         public Field(@Nonnull String name, @Nonnull FieldType type, @Nonnull String compatName) {
+            this(name, type, compatName, true);
+        }
+
+        public Field(@Nonnull String name, @Nonnull String description, @Nonnull FieldType type, @Nonnull String compatName) {
+            this(name, description, type, compatName, true);
+        }
+
+        public Field(@Nonnull String name, @Nonnull FieldType type, boolean required) {
+            this.name = name;
+            this.type = type;
+            this.required = required;
+        }
+
+        public Field(@Nonnull String name, @Nonnull String description, @Nonnull FieldType type, boolean required) {
+            this.name = name;
+            this.description = description;
+            this.type = type;
+            this.required = required;
+        }
+
+        public Field(@Nonnull String name, @Nonnull FieldType type, @Nonnull String compatName, boolean required) {
             this.name = name;
             this.type = type;
             this.compatName = compatName;
-            this.required = true;
+            this.required = required;
+        }
+
+        public Field(@Nonnull String name, @Nonnull String description, @Nonnull FieldType type, @Nonnull String compatName, boolean required) {
+            this.name = name;
+            this.description = description;
+            this.type = type;
+            this.compatName = compatName;
+            this.required = required;
         }
     }
 

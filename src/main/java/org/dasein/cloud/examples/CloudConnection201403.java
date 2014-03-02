@@ -49,6 +49,18 @@ public class CloudConnection201403 {
         ProviderContext.Value[] values = new ProviderContext.Value[fields.size()];
         int i = 0;
 
+        System.out.println("Required fields:");
+        for(ContextRequirements.Field f : fields ) {
+            if( f.required ) {
+                System.out.println("\t" + f.name + "(" + f.type + "): " + f.description);
+            }
+        }
+        System.out.println("Optional fields:");
+        for(ContextRequirements.Field f : fields ) {
+            if( !f.required ) {
+                System.out.println("\t" + f.name + "(" + f.type + "): " + f.description);
+            }
+        }
         for(ContextRequirements.Field f : fields ) {
             System.out.print("Loading '" + f.name + "' from ");
             if( f.type.equals(ContextRequirements.FieldType.KEYPAIR) ) {
@@ -56,13 +68,23 @@ public class CloudConnection201403 {
                 String shared = System.getProperty("DSN_" + f.name + "_SHARED");
                 String secret = System.getProperty("DSN_" + f.name + "_SECRET");
 
-                values[i] = ProviderContext.Value.parseValue(f, shared, secret);
+                if( shared != null && secret != null ) {
+                    values[i] = ProviderContext.Value.parseValue(f, shared, secret);
+                }
+                else if( f.required ) {
+                    System.out.println("Missing required field: " + f.name);
+                }
             }
             else {
                 System.out.println("'DSN_" + f.name + "'");
                 String value = System.getProperty("DSN_" + f.name);
 
-                values[i] = ProviderContext.Value.parseValue(f, value);
+                if( value != null ) {
+                    values[i] = ProviderContext.Value.parseValue(f, value);
+                }
+                else if( f.required ) {
+                    System.out.println("Missing required field: " + f.name);
+                }
             }
             i++;
         }

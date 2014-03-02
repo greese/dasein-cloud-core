@@ -77,7 +77,7 @@ public class ProviderContext extends ProviderContextCompat implements Serializab
                 return ((Number)value).intValue();
             }
             else if( value instanceof String ) {
-                return Integer.parseInt((String)value);
+                return Integer.parseInt((String) value);
             }
             else throw new ClassCastException("Not an integer: " + value);
         }
@@ -173,8 +173,7 @@ public class ProviderContext extends ProviderContextCompat implements Serializab
     private Cloud              cloud;
     private Map<String,Object> configurationValues;
     private String             effectiveAccountNumber;
-    private String             regionId;
-
+    private String             regionId; 
     /**
      * Constructs a provider context from the provided values
      * @param cloud the cloud configuration object to build against
