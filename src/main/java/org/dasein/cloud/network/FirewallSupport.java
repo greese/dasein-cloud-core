@@ -244,7 +244,9 @@ public interface FirewallSupport extends AccessControlledService {
      * @return the firewall constraints for this cloud
      * @throws InternalException an internal error occurred assembling the cloud firewall constraints
      * @throws CloudException an error occurred fetching constraint data from the cloud
+     * @deprecated use {@link FirewallCapabilities#getFirewallConstraintsForCloud()}
      */
+    @Deprecated
     public @Nonnull FirewallConstraints getFirewallConstraintsForCloud() throws InternalException, CloudException;
 
     /**
@@ -252,7 +254,9 @@ public interface FirewallSupport extends AccessControlledService {
      * firewall a "security group".
      * @param locale the locale for which you should translate the firewall term
      * @return the translated term for firewall with the target cloud provider
+     * @deprecated use {@link FirewallCapabilities#getProviderTermForFirewall(java.util.Locale)}
      */
+    @Deprecated
     public @Nonnull String getProviderTermForFirewall(@Nonnull Locale locale);
     
     /**
@@ -272,7 +276,9 @@ public interface FirewallSupport extends AccessControlledService {
      * @return the degree to which precedence is required
      * @throws InternalException an error occurred locally independent of any events in the cloud
      * @throws CloudException an error occurred with the cloud provider while performing the operation
+     * @deprecated use {@link FirewallCapabilities#identifyPrecedenceRequirement(boolean)}
      */
+    @Deprecated
     public @Nonnull Requirement identifyPrecedenceRequirement(boolean inVlan) throws InternalException, CloudException;
 
     /**
@@ -289,7 +295,9 @@ public interface FirewallSupport extends AccessControlledService {
      * @return true if 0 is the highest precedence for a rule
      * @throws InternalException an error occurred locally independent of any events in the cloud
      * @throws CloudException an error occurred with the cloud provider while performing the operation
+     * @deprecated use {@link FirewallCapabilities#isZeroPrecedenceHighest()}
      */
+    @Deprecated
     public boolean isZeroPrecedenceHighest() throws InternalException, CloudException;
 
     /**
@@ -315,7 +323,9 @@ public interface FirewallSupport extends AccessControlledService {
      * @return a list of supported destinations
      * @throws InternalException an error occurred locally independent of any events in the cloud
      * @throws CloudException an error occurred with the cloud provider while performing the operation
+     * @deprecated use {@link FirewallCapabilities#listSupportedDestinationTypes(boolean)}
      */
+    @Deprecated
     public @Nonnull Iterable<RuleTargetType> listSupportedDestinationTypes(boolean inVlan) throws InternalException, CloudException;
 
     /**
@@ -324,7 +334,9 @@ public interface FirewallSupport extends AccessControlledService {
      * @return a list of supported directions
      * @throws InternalException an error occurred locally independent of any events in the cloud
      * @throws CloudException an error occurred with the cloud provider while performing the operation
+     * @deprecated use {@link FirewallCapabilities#listSupportedDirections(boolean)}
      */
+    @Deprecated
     public @Nonnull Iterable<Direction> listSupportedDirections(boolean inVlan) throws InternalException, CloudException;
 
     /**
@@ -333,7 +345,9 @@ public interface FirewallSupport extends AccessControlledService {
      * @return a list of supported permissions
      * @throws InternalException an error occurred locally independent of any events in the cloud
      * @throws CloudException an error occurred with the cloud provider while performing the operation
+     * @deprecated use {@link FirewallCapabilities#listSupportedPermissions(boolean)}
      */
+    @Deprecated
     public @Nonnull Iterable<Permission> listSupportedPermissions(boolean inVlan) throws InternalException, CloudException;
 
     /**
@@ -343,7 +357,9 @@ public interface FirewallSupport extends AccessControlledService {
      * @return a list of supported source endpoints
      * @throws InternalException an error occurred locally independent of any events in the cloud
      * @throws CloudException an error occurred with the cloud provider while performing the operation
+     * @deprecated use {@link FirewallCapabilities#listSupportedSourceTypes(boolean)}
      */
+    @Deprecated
     public @Nonnull Iterable<RuleTargetType> listSupportedSourceTypes(boolean inVlan) throws InternalException, CloudException;
 
     /**
@@ -438,7 +454,9 @@ public interface FirewallSupport extends AccessControlledService {
      * @return true if the cloud supports the creation of firewall rules in the direction specfied for the type of network specified
      * @throws CloudException an error occurred with the cloud provider while checking for support
      * @throws InternalException a local error occurred while checking for support
+     * @deprecated use {@link FirewallCapabilities#supportsRules(Direction, Permission, boolean)}
      */
+    @Deprecated
     public boolean supportsRules(@Nonnull Direction direction, @Nonnull Permission permission, boolean inVlan) throws CloudException, InternalException;
 
     /**
@@ -447,7 +465,9 @@ public interface FirewallSupport extends AccessControlledService {
      * @return <code>true</code> if you can call {@link #create(String, String)} or {@link #createInVLAN(String, String, String)} to create a firewall
      * @throws CloudException an error occurred with the cloud provider while checking for support
      * @throws InternalException a local error occurred while checking for support
+     * @deprecated use {@link FirewallCapabilities#supportsFirewallCreation(boolean)}
      */
+    @Deprecated
     public boolean supportsFirewallCreation(boolean inVlan) throws CloudException, InternalException;
 
     /**
@@ -455,6 +475,7 @@ public interface FirewallSupport extends AccessControlledService {
      * @return true if the cloud requires a new firewall to be created with an initial set of rules
      * @throws CloudException an error occurred with the cloud provider while checking for support
      * @throws InternalException a local error occurred while checking for support
+     * @deprecated use {@link FirewallCapabilities#requiresRulesOnCreation()}
      */
     public boolean requiresRulesOnCreation() throws CloudException, InternalException;
 
@@ -463,6 +484,7 @@ public interface FirewallSupport extends AccessControlledService {
      * @return <code>true</code> if you can call {@link #delete(String)} to delete a firewall
      * @throws CloudException an error occurred with the cloud provider while checking for support
      * @throws InternalException a local error occurred while checking for support
+     * @deprecated use {@link FirewallCapabilities#supportsFirewallDeletion()}
      */
     public boolean supportsFirewallDeletion() throws CloudException, InternalException;
 

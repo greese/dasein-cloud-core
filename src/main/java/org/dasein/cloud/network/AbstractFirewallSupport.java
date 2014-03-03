@@ -179,6 +179,7 @@ public abstract class AbstractFirewallSupport implements FirewallSupport {
     }
 
     @Override
+    @Deprecated
     public @Nonnull FirewallConstraints getFirewallConstraintsForCloud() throws InternalException, CloudException {
         return FirewallConstraints.getInstance();
     }
@@ -196,11 +197,13 @@ public abstract class AbstractFirewallSupport implements FirewallSupport {
     }
 
     @Override
+    @Deprecated
     public @Nonnull Requirement identifyPrecedenceRequirement(boolean inVlan) throws InternalException, CloudException {
         return Requirement.NONE;
     }
 
     @Override
+    @Deprecated
     public boolean isZeroPrecedenceHighest() throws InternalException, CloudException {
         return true;
     }
@@ -330,25 +333,31 @@ public abstract class AbstractFirewallSupport implements FirewallSupport {
     }
 
     @Override
+    @Deprecated
     public boolean supportsRules(@Nonnull Direction direction, @Nonnull Permission permission, boolean inVlan) throws CloudException, InternalException {
         return (direction.equals(Direction.INGRESS) && permission.equals(Permission.ALLOW) && !inVlan);
     }
 
     @Override
+    @Deprecated
     public boolean supportsFirewallCreation(boolean inVlan) throws CloudException, InternalException {
         return !inVlan;
     }
 
     @Override
+    @Deprecated
     public boolean requiresRulesOnCreation() throws CloudException, InternalException{
         return false;
     }
 
+    @Override
+    @Deprecated
     public boolean supportsFirewallDeletion() throws CloudException, InternalException {
         return true;
     }
 
     @Override
+    @Deprecated
     public boolean supportsFirewallSources() throws CloudException, InternalException {
         return false;
     }
