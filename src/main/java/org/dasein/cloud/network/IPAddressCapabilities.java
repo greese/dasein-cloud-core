@@ -16,6 +16,7 @@
 
 package org.dasein.cloud.network;
 
+import org.dasein.cloud.Capabilities;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.Requirement;
@@ -31,7 +32,7 @@ import java.util.Locale;
  * @version 2014.03 initial version
  * @since 2014.03
  */
-public interface IPAddressCapabilities{
+public interface IPAddressCapabilities extends Capabilities{
     /**
      * The cloud provider-specific term for an IP address. It's hard to fathom what other
      * than "IP address" anyone could use.
