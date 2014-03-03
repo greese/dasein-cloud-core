@@ -102,9 +102,18 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @return the load balancer type
      * @throws CloudException an error occurred with the cloud provider while performing this action
      * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
+     * @deprecated use {@link LoadBalancerCapabilities#getAddressType()}
      */
+    @Deprecated
     public @Nonnull LoadBalancerAddressType getAddressType() throws CloudException, InternalException;
 
+    /**
+     * Provides access to meta-data about load balancer capabilities in the current region of this cloud.
+     * @return a description of the features supported by this region of this cloud
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException an error occurred within the cloud provider
+     */
+    public abstract @Nonnull LoadBalancerCapabilities getCapabilities() throws CloudException, InternalException;
 
     /**
      * Fetches the details for the load balancer associated with the specified load balancer ID from the cloud.
@@ -140,21 +149,27 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @return the maximum number of public ports on which the load balancer can listen
      * @throws CloudException an error occurred while communicating with the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud implementation
+     * @deprecated use {@link LoadBalancerCapabilities#getMaxPublicPorts()}
      */
+    @Deprecated
     public @Nonnegative int getMaxPublicPorts() throws CloudException, InternalException;
 
     /**
      * Gives the cloud provider's term for a load balancer (for example, "ELB" in AWS).
      * @param locale the locale for which the term should be translated
      * @return the provider term for a load balancer
+     * @deprecated use {@link LoadBalancerCapabilities#getProviderTermForLoadBalancer(java.util.Locale)}
      */
+    @Deprecated
     public @Nonnull String getProviderTermForLoadBalancer(@Nonnull Locale locale);
 
     /**
      * @return the degree to which endpoints should or must be part of the load balancer creation process
      * @throws CloudException an error occurred while communicating with the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud implementation
+     * @deprecated use {@link LoadBalancerCapabilities#identifyEndpointsOnCreateRequirement()}
      */
+    @Deprecated
     public @Nonnull Requirement identifyEndpointsOnCreateRequirement() throws CloudException, InternalException;
 
     /**
@@ -162,14 +177,18 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @return the degree to which listeners must be specified during load balancer creation
      * @throws CloudException an error occurred while communicating with the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud implementation
+     * @deprecated use {@link LoadBalancerCapabilities#identifyListenersOnCreateRequirement()}
      */
+    @Deprecated
     public @Nonnull Requirement identifyListenersOnCreateRequirement() throws CloudException, InternalException;
 
     /**
      * @return whether or not you are expected to provide an address as part of the create process or one gets assigned by the provider
      * @throws CloudException an error occurred while communicating with the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud implementation
+     * @deprecated use {@link LoadBalancerCapabilities#isAddressAssignedByProvider()}
      */
+    @Deprecated
     public boolean isAddressAssignedByProvider() throws CloudException, InternalException;
 
     /**
@@ -181,7 +200,9 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @return whether or not VM endpoints are constrained to specific data centers associated with the load balancer
      * @throws CloudException an error occurred with the cloud provider while performing this action
      * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
+     * @deprecated use {@link LoadBalancerCapabilities#isDataCenterLimited()}
      */
+    @Deprecated
     public boolean isDataCenterLimited() throws CloudException, InternalException;
 
     /**
@@ -233,7 +254,9 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @return a list of one or more supported load balancing algorithms
      * @throws CloudException an error occurred while communicating with the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud implementation
+     * @deprecated use {@link LoadBalancerCapabilities#listSupportedAlgorithms()}
      */
+    @Deprecated
     public @Nonnull Iterable<LbAlgorithm> listSupportedAlgorithms() throws CloudException, InternalException;
 
     /**
@@ -241,6 +264,7 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @return a list of one or more supported endpoint types
      * @throws CloudException an error occurred while communicating with the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud implementation
+     * @deprecated use {@link LoadBalancerCapabilities#listSupportedEndpointTypes()}
      */
     public @Nonnull Iterable<LbEndpointType> listSupportedEndpointTypes() throws CloudException, InternalException;
 
@@ -249,7 +273,9 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @return a list of supported versions
      * @throws CloudException an error occurred checking support for IP versions with the cloud provider
      * @throws InternalException a local error occurred preparing the supported version
+     * @deprecated use {@link LoadBalancerCapabilities#listSupportedIPVersions()}
      */
+    @Deprecated
     public @Nonnull Iterable<IPVersion> listSupportedIPVersions() throws CloudException, InternalException;
 
     /**
@@ -257,7 +283,9 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @return a list of one or more load balancer persistence options for session stickiness
      * @throws CloudException an error occurred checking support for IP versions with the cloud provider
      * @throws InternalException a local error occurred preparing the supported version
+     * @deprecated use {@link LoadBalancerCapabilities#listSupportedPersistenceOptions()}
      */
+    @Deprecated
     public @Nonnull Iterable<LbPersistence> listSupportedPersistenceOptions() throws CloudException, InternalException;
 
     /**
@@ -265,7 +293,9 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @return a list of one or more supported network protocols for load balancing
      * @throws CloudException an error occurred while communicating with the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud implementation
+     * @deprecated use {@link LoadBalancerCapabilities#listSupportedProtocols()}
      */
+    @Deprecated
     public @Nonnull Iterable<LbProtocol> listSupportedProtocols() throws CloudException, InternalException;
 
     /**
@@ -311,7 +341,9 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @return true if you can modify the endpoints post-create
      * @throws CloudException an error occurred with the cloud provider while performing this action
      * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
+     * @deprecated use {@link LoadBalancerCapabilities#supportsAddingEndpoints()}
      */
+    @Deprecated
     public boolean supportsAddingEndpoints() throws CloudException, InternalException;
 
     /**
@@ -319,7 +351,9 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @return true if monitoring is supported
      * @throws CloudException an error occurred with the cloud provider while performing this action
      * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
+     * @deprecated use {@link LoadBalancerCapabilities#supportsMonitoring()}
      */
+    @Deprecated
     public boolean supportsMonitoring() throws CloudException, InternalException;
 
     /**
@@ -328,7 +362,9 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @return true if a load balancer can be configured to support simultaneous IPv4 and IPv6 traffic
      * @throws CloudException an error occurred with the cloud provider while performing this action
      * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
+     * @deprecated use {@link LoadBalancerCapabilities#supportsMultipleTrafficTypes()}
      */
+    @Deprecated
     public boolean supportsMultipleTrafficTypes() throws CloudException, InternalException;
 
     /**
@@ -388,7 +424,9 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @return false if a health check can exist without having been assigned to a load balancer
      * @throws CloudException
      * @throws InternalException
+     * @deprecated use {@link LoadBalancerCapabilities#healthCheckRequiresLoadBalancer()}
      */
+    @Deprecated
     public boolean healthCheckRequiresLoadBalancer() throws CloudException, InternalException;
 
     /********************************** DEPRECATED METHODS *************************************/
