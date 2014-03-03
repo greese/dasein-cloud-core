@@ -112,13 +112,18 @@ public interface VLANSupport extends AccessControlledService {
      * @return true if users can self-provision network interfaces
      * @throws CloudException an error occurred checking with the cloud if network interfaces may be self provisioned
      * @throws InternalException an error occurred in the Dasein Cloud implementation determining support
+     * @deprecated use {@link VLANCapabilities#allowsNewNetworkInterfaceCreation()}
      */
+    @Deprecated
     public abstract boolean allowsNewNetworkInterfaceCreation() throws CloudException, InternalException;
 
+    @Deprecated
     public abstract boolean allowsNewVlanCreation() throws CloudException, InternalException;
 
+    @Deprecated
     public abstract boolean allowsNewRoutingTableCreation() throws CloudException, InternalException;
-    
+
+    @Deprecated
     public abstract boolean allowsNewSubnetCreation() throws CloudException, InternalException;
 
     /**
@@ -126,7 +131,9 @@ public interface VLANSupport extends AccessControlledService {
      * @return true if you can run both types of traffic over the same subnet
      * @throws CloudException an error occurred checking with the cloud for support
      * @throws InternalException an error occurred in the Dasein Cloud implementation determining support
+     * @deprecated use {@link VLANCapabilities#allowsMultipleTrafficTypesOverSubnet()}
      */
+    @Deprecated
     public abstract boolean allowsMultipleTrafficTypesOverSubnet() throws CloudException, InternalException;
 
     /**
@@ -134,7 +141,9 @@ public interface VLANSupport extends AccessControlledService {
      * @return true if you can run both types of traffic over the same VLAN
      * @throws CloudException an error occurred checking with the cloud for support
      * @throws InternalException an error occurred in the Dasein Cloud implementation determining support
+     * @deprecated use {@link VLANCapabilities#allowsMultipleTrafficTypesOverVlan()}
      */
+    @Deprecated
     public abstract boolean allowsMultipleTrafficTypesOverVlan() throws CloudException, InternalException;
 
 
@@ -253,20 +262,27 @@ public interface VLANSupport extends AccessControlledService {
      * @return the maximum number of network interfaces that may be provisioned or -1 for no limit or -2 for unknown
      * @throws CloudException an error occurred requesting the limit from the cloud provider
      * @throws InternalException a local error occurred figuring out the limit
+     * @deprecated use {@link VLANCapabilities#getMaxNetworkInterfaceCount()}
      */
+    @Deprecated
     public abstract int getMaxNetworkInterfaceCount() throws CloudException, InternalException;
-    
+
+    @Deprecated
     public abstract int getMaxVlanCount() throws CloudException, InternalException;
 
     /**
      * Identifies the provider term for a network interface.
      * @param locale the locale in which the term should be provided
      * @return a localized term for "network interface" specific to this cloud provider
+     * @deprecated use {@link VLANCapabilities#getProviderTermForNetworkInterface(java.util.Locale)}
      */
+    @Deprecated
     public abstract @Nonnull String getProviderTermForNetworkInterface(@Nonnull Locale locale);
-    
+
+    @Deprecated
     public abstract @Nonnull String getProviderTermForSubnet(@Nonnull Locale locale);
-    
+
+    @Deprecated
     public abstract @Nonnull String getProviderTermForVlan(@Nonnull Locale locale);
 
     /**
@@ -293,7 +309,9 @@ public interface VLANSupport extends AccessControlledService {
      * @return the level of routing table management that is required
      * @throws CloudException an error occurred in the cloud provider determining support
      * @throws InternalException a local error occurred processing the request
+     * @deprecated use {@link VLANCapabilities#getRoutingTableSupport()}
      */
+    @Deprecated
     public abstract @Nonnull Requirement getRoutingTableSupport() throws CloudException, InternalException;
 
     /**
@@ -322,7 +340,9 @@ public interface VLANSupport extends AccessControlledService {
      * @return the level of support for subnets in this cloud
      * @throws CloudException an error occurred in the cloud while determining the support level
      * @throws InternalException a local error occurred determining subnet support level
+     * @deprecated use {@link VLANCapabilities#getSubnetSupport()}
      */
+    @Deprecated
     public abstract @Nonnull Requirement getSubnetSupport() throws CloudException, InternalException;
 
     public abstract @Nullable VLAN getVlan(@Nonnull String vlanId) throws CloudException, InternalException;
@@ -336,7 +356,9 @@ public interface VLANSupport extends AccessControlledService {
      * @return the requirements for specifying a data center when provisioning a subnet
      * @throws CloudException an error occurred with the cloud provider determining support for this functionality
      * @throws InternalException a local error occurred determining support for this functionality
+     * @deprecated use {@link VLANCapabilities#identifySubnetDCRequirement()}
      */
+    @Deprecated
     public abstract @Nonnull Requirement identifySubnetDCRequirement() throws CloudException, InternalException;
 
     /**
@@ -377,9 +399,11 @@ public interface VLANSupport extends AccessControlledService {
     public abstract boolean isNetworkInterfaceSupportEnabled() throws CloudException, InternalException;
 
     public abstract boolean isSubscribed() throws CloudException, InternalException;
-    
+
+    @Deprecated
     public abstract boolean isSubnetDataCenterConstrained() throws CloudException, InternalException;
 
+    @Deprecated
     public abstract boolean isVlanDataCenterConstrained() throws CloudException, InternalException;
 
     /**
@@ -496,7 +520,9 @@ public interface VLANSupport extends AccessControlledService {
      * @return a list of supported versions
      * @throws CloudException an error occurred checking support for IP versions with the cloud provider
      * @throws InternalException a local error occurred preparing the supported version
+     * @deprecated use {@link VLANCapabilities#listSupportedIPVersions()}
      */
+    @Deprecated
     public abstract @Nonnull Iterable<IPVersion> listSupportedIPVersions() throws CloudException, InternalException;
 
     /**
@@ -630,7 +656,9 @@ public interface VLANSupport extends AccessControlledService {
      * @return true if this cloud supports the optional enablement of Internet gateways for VLANS, false if all VLANs are either always or never Internet routable
      * @throws CloudException an error occurred determining this capability from the cloud provider
      * @throws InternalException a local error occurred determining this capability
+     * @deprecated use {@link VLANCapabilities#supportsInternetGatewayCreation()}
      */
+    @Deprecated
     public abstract boolean supportsInternetGatewayCreation() throws CloudException, InternalException;
 
     /**
@@ -638,7 +666,9 @@ public interface VLANSupport extends AccessControlledService {
      * @return true if you can specify raw addresses, false if you need to specify other resources
      * @throws CloudException an error occurred identifying support
      * @throws InternalException a local error occurred identifying support
+     * @deprecated use {@link VLANCapabilities#supportsRawAddressRouting()}
      */
+    @Deprecated
     public abstract boolean supportsRawAddressRouting() throws CloudException, InternalException;
 
     /**

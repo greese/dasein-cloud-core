@@ -190,8 +190,6 @@ public class ProviderContext extends ProviderContextCompat implements Serializab
      * @return the account number that identifies the account to the cloud provider independent of context
      */
     public @Nonnull String getAccountNumber() {
-
-
         return accountNumber;
     }
 

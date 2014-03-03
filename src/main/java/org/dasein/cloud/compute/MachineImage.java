@@ -24,6 +24,7 @@ import java.util.Map;
 
 import org.dasein.cloud.Tag;
 import org.dasein.cloud.Taggable;
+import org.dasein.cloud.VisibleScope;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -177,6 +178,41 @@ public class MachineImage implements Taggable {
         return image;
     }
 
+    /**
+     * Constructs a minimally viable image object of the specified image class of the {@link MachineImageType#STORAGE} format.
+     * @param ownerId the account number for the account that owns the image
+     * @param regionId the region ID with which the image is associated
+     * @param imageId the ID for the newly constructed image
+     * @param imageClass the image class of the image
+     * @param state the current state for the image
+     * @param name the name of the image
+     * @param description a long description of the function of the image
+     * @param architecture the architecture on which this image is based
+     * @param platform the platform built into the image
+     * @param format the storage format for {@link MachineImageType#STORAGE} images
+     * @param visibleScope the scope defining how visible the image is in the cloud
+     * @return an image matching the specified parameters
+     */
+    static public @Nonnull MachineImage getImageInstance(@Nonnull String ownerId, @Nonnull String regionId, @Nonnull String imageId, @Nonnull ImageClass imageClass, @Nonnull MachineImageState state,  @Nonnull String name, @Nonnull String description, @Nonnull Architecture architecture, @Nonnull Platform platform, @Nonnull MachineImageFormat format, @Nullable VisibleScope visibleScope) {
+        @SuppressWarnings("deprecation") MachineImage image = new MachineImage();
+
+        image.providerOwnerId = ownerId;
+        image.providerRegionId = regionId;
+        image.providerMachineImageId = imageId;
+        image.name = name;
+        image.description = description;
+        image.architecture = architecture;
+        image.platform = platform;
+        image.currentState = state;
+        image.imageClass = imageClass;
+        image.type = MachineImageType.STORAGE;
+        image.storageFormat = format;
+        image.creationTimestamp = 0L;
+        image.software = "";
+        image.visibleScope = visibleScope;
+        return image;
+    }
+
     private Architecture       architecture;
     private long               creationTimestamp;
     private MachineImageState  currentState;
@@ -193,6 +229,7 @@ public class MachineImage implements Taggable {
     private MachineImageFormat storageFormat;
     private Map<String,String> tags;
     private MachineImageType   type;
+    private VisibleScope       visibleScope;
 
     /**
      * Constructs an empty machine image.
@@ -375,6 +412,14 @@ public class MachineImage implements Taggable {
      */
     public @Nonnull MachineImageType getType() {
         return type;
+    }
+
+    public void setVisibleScope(VisibleScope visibleScope){
+        this.visibleScope = visibleScope;
+    }
+
+    public VisibleScope getVisibleScope(){
+        return this.visibleScope;
     }
 
     @Override
