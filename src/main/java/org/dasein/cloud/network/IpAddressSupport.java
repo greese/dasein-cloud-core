@@ -126,7 +126,15 @@ public interface IpAddressSupport extends AccessControlledService {
      * @throws org.dasein.cloud.OperationNotSupportedException this cloud provider does not support address forwarding
      */
     public @Nonnull String forward(@Nonnull String addressId, int publicPort, @Nonnull Protocol protocol, int privatePort, @Nonnull String onServerId) throws InternalException, CloudException;
-        
+
+    /**
+     * Provides access to meta-data about IP Address capabilities in the current region of this cloud.
+     * @return a description of the features supported by this region of this cloud
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException an error occurred within the cloud provider
+     */
+    public @Nonnull abstract IPAddressCapabilities getCapabilities()throws CloudException, InternalException;
+
     /**
      * Provides the {@link IpAddress} identified by the specified unique address ID.
      * @param addressId the unique ID of the IP address being requested
