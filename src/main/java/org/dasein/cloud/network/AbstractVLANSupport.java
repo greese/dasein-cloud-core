@@ -66,6 +66,7 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     }
 
     @Override
+    @Deprecated
     public boolean allowsMultipleTrafficTypesOverSubnet() throws CloudException, InternalException {
         if( getSubnetSupport().equals(Requirement.NONE) ) {
             return false;
@@ -82,6 +83,7 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     }
 
     @Override
+    @Deprecated
     public boolean allowsMultipleTrafficTypesOverVlan() throws CloudException, InternalException {
         int count = 0;
 
@@ -96,21 +98,25 @@ public abstract class AbstractVLANSupport implements VLANSupport {
 
 
     @Override
+    @Deprecated
     public boolean allowsNewNetworkInterfaceCreation() throws CloudException, InternalException {
         return false;
     }
 
     @Override
+    @Deprecated
     public boolean allowsNewVlanCreation() throws CloudException, InternalException {
         return false;
     }
 
     @Override
+    @Deprecated
     public boolean allowsNewRoutingTableCreation() throws CloudException, InternalException {
       return false;
     }
 
     @Override
+    @Deprecated
     public boolean allowsNewSubnetCreation() throws CloudException, InternalException {
         return false;
     }
@@ -176,11 +182,13 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     }
 
     @Override
+    @Deprecated
     public int getMaxNetworkInterfaceCount() throws CloudException, InternalException {
         return 0;
     }
 
     @Override
+    @Deprecated
     public int getMaxVlanCount() throws CloudException, InternalException {
         return 0;
     }
@@ -201,6 +209,7 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     }
 
     @Override
+    @Deprecated
     public @Nonnull Requirement getRoutingTableSupport() throws CloudException, InternalException {
         return Requirement.NONE;
     }
@@ -228,6 +237,7 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     }
 
     @Override
+    @Deprecated
     public @Nonnull Requirement getSubnetSupport() throws CloudException, InternalException {
         return Requirement.NONE;
     }
@@ -263,6 +273,7 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     }
 
     @Override
+    @Deprecated
     public @Nonnull Requirement identifySubnetDCRequirement() {
         return Requirement.NONE;
     }
@@ -273,16 +284,19 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     }
 
     @Override
+    @Deprecated
     public boolean isNetworkInterfaceSupportEnabled() throws CloudException, InternalException {
         return false;
     }
 
     @Override
+    @Deprecated
     public boolean isSubnetDataCenterConstrained() throws CloudException, InternalException {
         return false;
     }
 
     @Override
+    @Deprecated
     public boolean isVlanDataCenterConstrained() throws CloudException, InternalException {
         return false;
     }
@@ -417,6 +431,7 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     }
 
     @Override
+    @Deprecated
     public @Nonnull Iterable<IPVersion> listSupportedIPVersions() throws CloudException, InternalException {
         return Collections.singletonList(IPVersion.IPV4);
     }
@@ -496,11 +511,13 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     }
 
     @Override
+    @Deprecated
     public boolean supportsInternetGatewayCreation() throws CloudException, InternalException {
         return false;
     }
 
     @Override
+    @Deprecated
     public boolean supportsRawAddressRouting() throws CloudException, InternalException {
         return false;
     }
