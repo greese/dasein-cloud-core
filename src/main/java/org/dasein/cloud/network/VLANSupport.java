@@ -258,6 +258,14 @@ public interface VLANSupport extends AccessControlledService {
     public abstract void detachNetworkInterface(@Nonnull String nicId) throws CloudException, InternalException;
 
     /**
+     * Provides access to meta-data about VLAN capabilities in the current region of this cloud.
+     * @return a description of the features supported by this region of this cloud
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException an error occurred within the cloud provider
+     */
+    public abstract VLANCapabilities getCapabilities() throws CloudException, InternalException;
+
+    /**
      * Specifies the maximum number of network interfaces that may be provisioned.
      * @return the maximum number of network interfaces that may be provisioned or -1 for no limit or -2 for unknown
      * @throws CloudException an error occurred requesting the limit from the cloud provider

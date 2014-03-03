@@ -228,6 +228,14 @@ public interface FirewallSupport extends AccessControlledService {
     public @Nullable Map<FirewallConstraints.Constraint, Object> getActiveConstraintsForFirewall(@Nonnull String firewallId) throws InternalException, CloudException;
 
     /**
+     * Provides access to meta-data about Firewall capabilities in the current region of this cloud.
+     * @return a description of the features supported by this region of this cloud
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException an error occurred within the cloud provider
+     */
+    public abstract @Nonnull FirewallCapabilities getCapabilities()throws CloudException, InternalException;
+
+    /**
      * Provides the full firewall data for the specified firewall.
      * @param firewallId the unique ID of the desired firewall
      * @return the firewall state for the specified firewall instance
