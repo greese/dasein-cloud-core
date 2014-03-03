@@ -55,15 +55,18 @@ public abstract class AbstractCloud extends CloudProvider {
     }
 
     @Override
+    public @Nonnull ContextRequirements getContextRequirements() {
+        return new ContextRequirements(
+                new ContextRequirements.Field("apiAccessKey", ContextRequirements.FieldType.KEYPAIR),
+                new ContextRequirements.Field("x509", ContextRequirements.FieldType.KEYPAIR)
+        );
+    }
+
+    @Override
     public @Nullable CIServices getCIServices() {
         CloudProvider compute = getComputeCloud();
 
         return (compute == null ? null : compute.getCIServices());
-    }
-
-    @Override
-    public @Nonnull DataCenterServices getDataCenterServices() {
-        throw new NullPointerException("A cloud must have a data center services implementation.");
     }
     
     @Override

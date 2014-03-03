@@ -22,11 +22,7 @@ package org.dasein.cloud.examples.compute.image;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
-import org.dasein.cloud.compute.Architecture;
-import org.dasein.cloud.compute.ComputeServices;
-import org.dasein.cloud.compute.MachineImage;
-import org.dasein.cloud.compute.MachineImageSupport;
-import org.dasein.cloud.compute.Platform;
+import org.dasein.cloud.compute.*;
 import org.dasein.cloud.examples.ProviderLoader;
 
 import javax.annotation.Nullable;
@@ -108,7 +104,7 @@ public class SearchImages {
                     int count = 0;
 
                     System.out.println("Machine images in " + provider.getCloudName() + " matching your terms:");
-                    for( MachineImage img : imgSupport.searchMachineImages(keyword, platform, architecture) ) {
+                    for( MachineImage img : imgSupport.searchImages(null, keyword, platform, architecture, ImageClass.MACHINE) ) {
                         count++;
                         System.out.println("\t" + img.getName() + "[" + img.getProviderMachineImageId() + "] (" + img.getCurrentState() + ")");
                     }

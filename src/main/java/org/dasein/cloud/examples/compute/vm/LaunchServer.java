@@ -23,18 +23,7 @@ import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.Requirement;
-import org.dasein.cloud.compute.Architecture;
-import org.dasein.cloud.compute.ComputeServices;
-import org.dasein.cloud.compute.MachineImage;
-import org.dasein.cloud.compute.MachineImageState;
-import org.dasein.cloud.compute.MachineImageSupport;
-import org.dasein.cloud.compute.VMLaunchOptions;
-import org.dasein.cloud.compute.VirtualMachine;
-import org.dasein.cloud.compute.VirtualMachineProduct;
-import org.dasein.cloud.compute.VirtualMachineSupport;
-import org.dasein.cloud.compute.VmState;
-import org.dasein.cloud.compute.VolumeProduct;
-import org.dasein.cloud.compute.VolumeSupport;
+import org.dasein.cloud.compute.*;
 import org.dasein.cloud.examples.ProviderLoader;
 import org.dasein.cloud.identity.IdentityServices;
 import org.dasein.cloud.identity.SSHKeypair;
@@ -45,6 +34,8 @@ import org.dasein.cloud.network.SubnetState;
 import org.dasein.cloud.network.VLAN;
 import org.dasein.cloud.network.VLANState;
 import org.dasein.cloud.network.VLANSupport;
+import org.dasein.util.uom.storage.Gigabyte;
+import org.dasein.util.uom.storage.Storage;
 
 import javax.annotation.Nonnull;
 import java.util.Iterator;
@@ -105,7 +96,7 @@ public class LaunchServer {
                     VirtualMachineProduct product = null;
                     Architecture targetArchitecture = null;
 
-                    for( Architecture architecture : vmSupport.listSupportedArchitectures() ) {
+                    for( Architecture architecture : vmSupport.getCapabilities().listSupportedArchitectures() ) {
                         Iterator<VirtualMachineProduct> supported = vmSupport.listProducts(architecture).iterator();
 
                         if( supported.hasNext() ) {
@@ -124,11 +115,13 @@ public class LaunchServer {
                         System.err.println("This cloud doesn't support machine images, so launching virtual machines is impossible");
                         return;
                     }
+                    Platform platform = Platform.UNKNOWN;
                     String machineImageId = null;
 
-                    for( MachineImage image : imgSupport.listMachineImages() ) {
+                    for( MachineImage image : imgSupport.listImages(ImageFilterOptions.getInstance(ImageClass.MACHINE)) ) {
                         if( image.getCurrentState().equals(MachineImageState.ACTIVE) && image.getArchitecture().equals(targetArchitecture)) {
                             machineImageId = image.getProviderMachineImageId();
+                            platform = image.getPlatform();
                             break;
                         }
                     }
@@ -138,7 +131,7 @@ public class LaunchServer {
                     }
                     VMLaunchOptions options = VMLaunchOptions.getInstance(product.getProviderProductId(), machineImageId, hostName, friendlyName, friendlyName);
 
-                    if( vmSupport.identifyShellKeyRequirement().equals(Requirement.REQUIRED) ) {
+                    if( vmSupport.getCapabilities().identifyShellKeyRequirement(platform).equals(Requirement.REQUIRED) ) {
                         // you must specify an SSH key when launching the VM
                         // we'll look one up
                         IdentityServices identity = provider.getIdentityServices();
@@ -170,13 +163,15 @@ public class LaunchServer {
                             // create the sample keypair
                             keyId = keySupport.createKeypair("dsnex" + System.currentTimeMillis()).getProviderKeypairId();
                         }
-                        options.withBoostrapKey(keyId);
+                        if( keyId != null ) {
+                            options.withBoostrapKey(keyId);
+                        }
                     }
-                    if( vmSupport.identifyPasswordRequirement().equals(Requirement.REQUIRED) ) {
+                    if( vmSupport.getCapabilities().identifyPasswordRequirement(platform).equals(Requirement.REQUIRED) ) {
                         // you must specify a password when launching a VM
                         options.withBootstrapUser("dsnexample", "pw" + System.currentTimeMillis());
                     }
-                    if( vmSupport.identifyRootVolumeRequirement().equals(Requirement.REQUIRED) ) {
+                    if( vmSupport.getCapabilities().identifyRootVolumeRequirement().equals(Requirement.REQUIRED) ) {
                         // let's look for the product with the smallest volume size
                         VolumeSupport volumeSupport = compute.getVolumeSupport();
 
@@ -186,10 +181,17 @@ public class LaunchServer {
                         }
                         boolean findSmallest = volumeSupport.isVolumeSizeDeterminedByProduct();
                         VolumeProduct vp = null;
+                        long vpSize = 0L;
 
                         for( VolumeProduct prd : volumeSupport.listVolumeProducts() ) {
-                            if( vp == null || (prd.getVolumeSize().getQuantity().longValue() > 0L && prd.getVolumeSize().getQuantity().longValue() < vp.getVolumeSize().getQuantity().longValue()) ) {
+                            Storage<Gigabyte> size = prd.getVolumeSize();
+
+                            if( vp == null || (size != null && size.getQuantity().longValue() > 0L && prd.getVolumeSize().getQuantity().longValue() < vpSize) ) {
                                 vp = prd;
+                                size = vp.getVolumeSize();
+                                if( size != null ) {
+                                    vpSize = size.getQuantity().longValue();
+                                }
                                 if( !findSmallest ) { // size is not included in the product definition
                                     break;
                                 }
@@ -201,7 +203,7 @@ public class LaunchServer {
                         }
                         options.withRootVolumeProduct(vp.getProviderProductId());
                     }
-                    if( vmSupport.identifyVlanRequirement().equals(Requirement.REQUIRED) ) {
+                    if( vmSupport.getCapabilities().identifyVlanRequirement().equals(Requirement.REQUIRED) ) {
                         NetworkServices network = provider.getNetworkServices();
 
                         if( network == null ) {
@@ -222,6 +224,10 @@ public class LaunchServer {
                                 break;
                             }
                         }
+                        if( vlan == null ) {
+                            System.err.println("VLAN support is required, but was not able to identify a VLAN in an available state");
+                            return;
+                        }
                         if( vlanSupport.getSubnetSupport().equals(Requirement.REQUIRED) ) {
                             Subnet subnet = null;
 
@@ -231,7 +237,7 @@ public class LaunchServer {
                                 }
                             }
                             if( subnet != null ) { // let's just hope it works if no active subnet exists, probably won't
-                                options.inVlan(null, subnet.getProviderDataCenterId(), subnet.getProviderSubnetId());
+                                options.inVlan(null, vlan.getProviderDataCenterId(), subnet.getProviderSubnetId());
                             }
                             options.inVlan(null, vlan.getProviderDataCenterId(), vlan.getProviderVlanId());
                         }
@@ -242,13 +248,18 @@ public class LaunchServer {
                     VirtualMachine vm = vmSupport.launch(options);
 
                     System.out.println("Launched: " + vm.getName() + "[" + vm.getProviderVirtualMachineId() + "] (" + vm.getCurrentState() + ")");
-                    while( vm.getCurrentState().equals(VmState.PENDING) ) {
+                    while( vm != null && vm.getCurrentState().equals(VmState.PENDING) ) {
                         System.out.print(".");
                         try { Thread.sleep(5000L); }
                         catch( InterruptedException ignore ) { }
                         vm = vmSupport.getVirtualMachine(vm.getProviderVirtualMachineId());
                     }
-                    System.out.println("Launch complete (" + vm.getCurrentState() + ")");
+                    if( vm == null ) {
+                        System.out.println("VM self-terminated before entering a usable state");
+                    }
+                    else {
+                        System.out.println("Launch complete (" + vm.getCurrentState() + ")");
+                    }
                 }
                 catch( CloudException e ) {
                     System.err.println("An error occurred with the cloud provider: " + e.getMessage());

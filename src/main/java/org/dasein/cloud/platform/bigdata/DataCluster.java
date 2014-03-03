@@ -19,7 +19,6 @@
 
 package org.dasein.cloud.platform.bigdata;
 
-import com.sun.istack.internal.NotNull;
 import org.dasein.cloud.Taggable;
 import org.dasein.cloud.TimeWindow;
 import org.dasein.cloud.network.VLAN;
@@ -30,7 +29,6 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;

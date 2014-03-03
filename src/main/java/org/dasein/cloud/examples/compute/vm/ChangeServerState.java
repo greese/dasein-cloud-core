@@ -22,10 +22,7 @@ package org.dasein.cloud.examples.compute.vm;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
-import org.dasein.cloud.compute.ComputeServices;
-import org.dasein.cloud.compute.VirtualMachine;
-import org.dasein.cloud.compute.VirtualMachineSupport;
-import org.dasein.cloud.compute.VmState;
+import org.dasein.cloud.compute.*;
 import org.dasein.cloud.examples.ProviderLoader;
 
 import javax.annotation.Nonnull;
@@ -94,21 +91,28 @@ public class ChangeServerState {
                         System.err.println("No such VM: " + vmId);
                         return;
                     }
+                    VirtualMachineCapabilities capabilities = vmSupport.getCapabilities();
+                    VmState currentState = vm.getCurrentState();
                     VmState targetState = null;
 
                     if( newState.equalsIgnoreCase("terminate") || newState.equalsIgnoreCase("terminated")) {
-                        targetState = VmState.TERMINATED;
-                        if( vm.getCurrentState().equals(targetState) ) {
-                            System.err.println("VM is already " + targetState);
-                            return;
+                        if( capabilities.canTerminate(vm.getCurrentState()) ) {
+                            targetState = VmState.TERMINATED;
+                            if( currentState.equals(targetState) ) {
+                                System.err.println("VM is already " + targetState);
+                                return;
+                            }
+                            System.out.print("Terminating " + vm.getProviderVirtualMachineId() + "...");
+                            vmSupport.terminate(vmId);
                         }
-                        System.out.print("Terminating " + vm.getProviderVirtualMachineId() + "...");
-                        vmSupport.terminate(vmId);
+                        else {
+                            System.err.println("You cannot terminate a VM in the " + vm.getCurrentState() + " state");
+                        }
                     }
                     else if( newState.equalsIgnoreCase("stop") || newState.equalsIgnoreCase("stopped")) {
-                        if( vmSupport.supportsStartStop(vm) ) {
+                        if( capabilities.canStop(vm.getCurrentState()) ) {
                             targetState = VmState.STOPPED;
-                            if( vm.getCurrentState().equals(targetState) ) {
+                            if( currentState.equals(targetState) ) {
                                 System.err.println("VM is already " + targetState);
                                 return;
                             }
@@ -116,11 +120,11 @@ public class ChangeServerState {
                             vmSupport.stop(vmId);
                         }
                         else {
-                            System.err.println("Cloud does not support start/stop of virtual machines");
+                            System.err.println("Cloud does not support stopping of virtual machines in the " + currentState + " state");
                         }
                     }
                     else if( newState.equalsIgnoreCase("start") ) {
-                        if( vmSupport.supportsStartStop(vm) ) {
+                        if( capabilities.canStart(currentState) ) {
                             targetState = VmState.RUNNING;
                             if( vm.getCurrentState().equals(targetState) ) {
                                 System.err.println("VM is already " + targetState);
@@ -130,11 +134,11 @@ public class ChangeServerState {
                             vmSupport.start(vmId);
                         }
                         else {
-                            System.err.println("Cloud does not support start/stop of virtual machines");
+                            System.err.println("Cloud does not support starting of virtual machines in the " + currentState + " state");
                         }
                     }
                     else if( newState.equalsIgnoreCase("pause") || newState.equalsIgnoreCase("paused")) {
-                        if( vmSupport.supportsPauseUnpause(vm) ) {
+                        if( capabilities.canPause(currentState) ) {
                             targetState = VmState.PAUSED;
                             if( vm.getCurrentState().equals(targetState) ) {
                                 System.err.println("VM is already " + targetState);
@@ -144,11 +148,11 @@ public class ChangeServerState {
                             vmSupport.pause(vmId);
                         }
                         else {
-                            System.err.println("Cloud does not support pause/unpause of virtual machines");
+                            System.err.println("Cloud does not support pausing of virtual machines in the " + currentState + " state");
                         }
                     }
                     else if( newState.equalsIgnoreCase("unpause") ) {
-                        if( vmSupport.supportsPauseUnpause(vm) ) {
+                        if( capabilities.canUnpause(currentState) ) {
                             targetState = VmState.RUNNING;
                             if( vm.getCurrentState().equals(targetState) ) {
                                 System.err.println("VM is already " + targetState);
@@ -158,11 +162,11 @@ public class ChangeServerState {
                             vmSupport.unpause(vmId);
                         }
                         else {
-                            System.err.println("Cloud does not support pause/unpause of virtual machines");
+                            System.err.println("Cloud does not support unpausing of virtual machines in the " + currentState + " state");
                         }
                     }
                     else if( newState.equalsIgnoreCase("suspend") || newState.equalsIgnoreCase("suspended")) {
-                        if( vmSupport.supportsSuspendResume(vm) ) {
+                        if( capabilities.canSuspend(currentState) ) {
                             targetState = VmState.SUSPENDED;
                             if( vm.getCurrentState().equals(targetState) ) {
                                 System.err.println("VM is already " + targetState);
@@ -172,11 +176,11 @@ public class ChangeServerState {
                             vmSupport.suspend(vmId);
                         }
                         else {
-                            System.err.println("Cloud does not support suspend/resume of virtual machines");
+                            System.err.println("Cloud does not support suspending of virtual machines in the " + currentState + " state");
                         }
                     }
                     else if( newState.equalsIgnoreCase("resume") ) {
-                        if( vmSupport.supportsSuspendResume(vm) ) {
+                        if( capabilities.canResume(currentState) ) {
                             targetState = VmState.RUNNING;
                             if( vm.getCurrentState().equals(targetState) ) {
                                 System.err.println("VM is already " + targetState);
@@ -186,31 +190,31 @@ public class ChangeServerState {
                             vmSupport.resume(vmId);
                         }
                         else {
-                            System.err.println("Cloud does not support suspend/resume of virtual machines");
+                            System.err.println("Cloud does not support resuming of virtual machines in the " + currentState + " state");
                         }
                     }
                     else if( newState.equalsIgnoreCase("running") ) {
                         targetState = VmState.RUNNING;
-                        if( vm.getCurrentState().equals(targetState) ) {
+                        if( currentState.equals(targetState) ) {
                             System.err.println("VM is already " + targetState);
                             return;
                         }
-                        if( vm.getCurrentState().equals(VmState.PAUSED) ) {
-                            if( !vmSupport.supportsSuspendResume(vm) ) {
-                                System.err.println("Cloud does not support pause/unpause of virtual machines.");
+                        if( currentState.equals(VmState.PAUSED) ) {
+                            if( !capabilities.canUnpause(currentState) ) {
+                                System.err.println("Cloud does not support unpausing of virtual machines in the " + currentState + " state");
                             }
                             System.out.print("Unpausing " + vm.getProviderVirtualMachineId() + "...");
                             vmSupport.unpause(vmId);
                         }
-                        else if( vm.getCurrentState().equals(VmState.STOPPED) ) {
-                            if( !vmSupport.supportsStartStop(vm) ) {
-                                System.err.println("Cloud does not support start/stop of virtual machines.");
+                        else if( currentState.equals(VmState.STOPPED) ) {
+                            if( !capabilities.canStart(currentState) ) {
+                                System.err.println("Cloud does not support starting of virtual machines in the " + currentState + " state");
                             }
                             System.out.print("Starting " + vm.getProviderVirtualMachineId() + "...");
                             vmSupport.start(vmId);
                         }
-                        else if( vm.getCurrentState().equals(VmState.SUSPENDED) ) {
-                            if( !vmSupport.supportsSuspendResume(vm) ) {
+                        else if( currentState.equals(VmState.SUSPENDED) ) {
+                            if( !capabilities.canResume(currentState) ) {
                                 System.err.println("Cloud does not support suspend/resume of virtual machines.");
                             }
                             System.out.print("Resuming " + vm.getProviderVirtualMachineId() + "...");
