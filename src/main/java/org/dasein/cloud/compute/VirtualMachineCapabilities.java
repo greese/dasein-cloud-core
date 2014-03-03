@@ -170,6 +170,14 @@ public interface VirtualMachineCapabilities extends Capabilities {
     public @Nullable VMScalingCapabilities getVerticalScalingCapabilities() throws CloudException, InternalException;
 
     /**
+     * Indicates whether the VM requires a Data Center to be specified upon launch
+     * @return the requirements for data centers upon VM launch
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public @Nonnull Requirement identifyDataCenterLaunchRequirement() throws CloudException, InternalException;
+
+    /**
      * Identifies whether images of the specified image class are required for launching a VM. This method should
      * always return {@link Requirement#REQUIRED} when the image class chosen is {@link ImageClass#MACHINE}.
      * @param cls the desired image class
@@ -212,6 +220,14 @@ public interface VirtualMachineCapabilities extends Capabilities {
      * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this requirement
      */
     public @Nonnull Requirement identifyStaticIPRequirement() throws CloudException, InternalException;
+
+    /**
+     * Indicates whether a subnet is required to be specified when launching a VM into a VLAN
+     * @return the requirements level for a subnet during launch
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public @Nonnull Requirement identifySubnetRequirement() throws CloudException, InternalException;
 
     /**
      * Indicates whether or not specifying a VLAN in your VM launch options is required or optional.
