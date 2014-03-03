@@ -18,7 +18,11 @@ package org.dasein.cloud;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * Represents a core cloud independent of account-specific connectivity information. You can pre-register cloud objects
@@ -85,10 +89,62 @@ public class Cloud {
     }
 
     /**
+     * Creates a context object based on values specified in a Java {@link Properties} file.
      * Creates a context against this cloud with the specified configuration information. This context can then be used
      * to connect to the cloud for API requests
      * @param forAccountNumber the account number of the account with the cloud provider
-     * @param inRegionId the region to which a connectioon should be made
+     * @param inRegionId the region to which a connection should be made
+     * @param configurationProperties a properties object containing values for the required fields for connecting to this cloud
+     * @return a configured context ready to be connected to the cloud via {@link ProviderContext#connect(CloudProvider)}
+     * @throws InternalException an error occurred loading the {@link CloudProvider} implementation for this cloud or UTF-8 is not supported
+     */
+    public @Nonnull ProviderContext createContext(@Nonnull String forAccountNumber, @Nonnull String inRegionId, @Nonnull Properties configurationProperties) throws InternalException {
+        try {
+            List<ContextRequirements.Field> fields = buildProvider().getContextRequirements().getConfigurableValues();
+            ArrayList<ProviderContext.Value> values = new ArrayList<ProviderContext.Value>();
+
+            for( ContextRequirements.Field f : fields ) {
+                if( f.type.equals(ContextRequirements.FieldType.KEYPAIR) ) {
+                    String[] parts = new String[2];
+
+                    parts[0] = configurationProperties.getProperty(f.name + "_public." + forAccountNumber);
+                    parts[1] = configurationProperties.getProperty(f.name + "_private." + forAccountNumber);
+                    if( parts[0] != null && parts[1] != null ) {
+                        values.add(ProviderContext.Value.parseValue(f, parts));
+                    }
+                    else if( f.required ) {
+                        throw new InternalException("Unable to find configuration value " + f.name + " in the properties");
+                    }
+                }
+                else {
+                    String value = configurationProperties.getProperty(f.name + "." + forAccountNumber);
+
+                    if( value != null ) {
+                        values.add(ProviderContext.Value.parseValue(f, value));
+                    }
+                    else if( f.required ) {
+                        throw new InternalException("Unable to find configuration value " + f.name + " in the properties");
+                    }
+                }
+            }
+            return createContext(forAccountNumber, inRegionId, values.toArray(new ProviderContext.Value<?>[values.size()]));
+        }
+        catch( UnsupportedEncodingException e ) {
+            throw new InternalException(e);
+        }
+        catch( InstantiationException e ) {
+            throw new InternalException(e);
+        }
+        catch( IllegalAccessException e ) {
+            throw new InternalException(e);
+        }
+    }
+
+    /**
+     * Creates a context against this cloud with the specified configuration information. This context can then be used
+     * to connect to the cloud for API requests
+     * @param forAccountNumber the account number of the account with the cloud provider
+     * @param inRegionId the region to which a connection should be made
      * @param values any configuration values to provide (to see what values are expected, query {@link org.dasein.cloud.CloudProvider#getContextRequirements()})
      * @return a configured context ready to be connected to the cloud via {@link ProviderContext#connect(CloudProvider)}
      */
