@@ -57,7 +57,7 @@ public class LBHealthCheckCreateOptions {
             throw new OperationNotSupportedException("Load balancers are not supported in " + provider.getCloudName());
         }
 
-        return support.createLoadBalancerHealthCheck(providerLoadBalancerId, this);
+        return support.createLoadBalancerHealthCheck(this);
     }
 
     public String getName() {
