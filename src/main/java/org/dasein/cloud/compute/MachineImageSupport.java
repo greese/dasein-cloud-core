@@ -134,6 +134,14 @@ public interface MachineImageSupport extends AccessControlledService {
     public abstract void captureImageAsync(@Nonnull ImageCreateOptions options, @Nonnull AsynchronousTask<MachineImage> taskTracker) throws CloudException, InternalException;
 
     /**
+     * Provides access to meta-data about virtual machine capabilities in the current region of this cloud.
+     * @return a description of the features supported by this region of this cloud
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException an error occurred within the cloud provider
+     */
+    public abstract MachineImageCapabilities getCapabilities() throws CloudException, InternalException;
+
+    /**
      * Provides access to the current state of the specified image.
      * @param providerImageId the cloud provider ID uniquely identifying the desired image
      * @return the image matching the desired ID if it exists
@@ -165,7 +173,9 @@ public interface MachineImageSupport extends AccessControlledService {
      * Provides the cloud provider specific term for a public image of the specified image class.
      * @param cls the image class for the desired type
      * @return the term used by the provider to describe a public image
+     * @deprecated use {@link MachineImageCapabilities#getProviderTermForImage(java.util.Locale, ImageClass)}
      */
+    @Deprecated
     public abstract @Nonnull String getProviderTermForImage(@Nonnull Locale locale, @Nonnull ImageClass cls);
 
     /**
@@ -173,22 +183,10 @@ public interface MachineImageSupport extends AccessControlledService {
      * @param locale the locale for which the term should be translated
      * @param cls the image class for the desired type
      * @return the term used by the provider to describe a custom image
+     * @deprecated use {@link MachineImageCapabilities#getProviderTermForCustomImage(java.util.Locale, ImageClass)}
      */
+    @Deprecated
     public abstract @Nonnull String getProviderTermForCustomImage(@Nonnull Locale locale, @Nonnull ImageClass cls);
-
-    /**
-     * Lists the required Virtual Machine state in order for the machineImage to be captured
-     * @param img the MachineImage object that's being interrogated
-     * @return the list of states in which a Virtual Machine must be in order to be captured
-     */
-    public abstract @Nonnull Iterable<VmState> getCaptureImageStates(@Nullable MachineImage img);
-
-    /**
-     * Lists the required Virtual Machine state in order for the VM to be bundled
-     * @param img the MachineImage object that's being interrogated
-     * @return the list of states in which a Virtual Machine must be in order to be bundled
-     */
-    public abstract @Nonnull Iterable<VmState> getBundleVirtualMachineStates(@Nullable MachineImage img);
 
     /**
      * Indicates whether or not a public image library of {@link ImageClass#MACHINE} is supported.
@@ -205,7 +203,9 @@ public interface MachineImageSupport extends AccessControlledService {
      * @return how local bundling is supported
      * @throws CloudException an error occurred with the cloud provider
      * @throws InternalException an error occurred within the Dasein cloud implementation
+     * @deprecated use {@link MachineImageCapabilities#identifyLocalBundlingRequirement()}
      */
+    @Deprecated
     public @Nonnull Requirement identifyLocalBundlingRequirement() throws CloudException, InternalException;
 
     /**
@@ -291,7 +291,9 @@ public interface MachineImageSupport extends AccessControlledService {
      * @return the list of supported formats you can upload to the cloud
      * @throws CloudException an error occurred with the cloud provider
      * @throws InternalException a local error occurred in the Dasein Cloud implementation
+     * @deprecated use {@link MachineImageCapabilities#listSupportedFormats()}
      */
+    @Deprecated
     public abstract @Nonnull Iterable<MachineImageFormat> listSupportedFormats() throws CloudException, InternalException;
 
     /**
@@ -301,7 +303,9 @@ public interface MachineImageSupport extends AccessControlledService {
      * @return the list of supported formats in which you can bundle a virtual machine
      * @throws CloudException an error occurred with the cloud provider
      * @throws InternalException a local error occurred in the Dasein Cloud implementation
+     * @deprecated use {@link MachineImageCapabilities#listSupportedFormatsForBundling()}
      */
+    @Deprecated
     public abstract @Nonnull Iterable<MachineImageFormat> listSupportedFormatsForBundling() throws CloudException, InternalException;
 
 
@@ -341,7 +345,9 @@ public interface MachineImageSupport extends AccessControlledService {
      * @return the supported image classes
      * @throws CloudException an error occurred with the cloud provider
      * @throws InternalException a local error occurred in the Dasein Cloud implementation
+     * @deprecated use {@link MachineImageCapabilities#listSupportedImageClasses()}
      */
+    @Deprecated
     public abstract @Nonnull Iterable<ImageClass> listSupportedImageClasses() throws CloudException, InternalException;
 
     /**
@@ -349,7 +355,9 @@ public interface MachineImageSupport extends AccessControlledService {
      * @return the list of supported image types
      * @throws CloudException an error occurred with the cloud provider
      * @throws InternalException a local error occurred in the Dasein Cloud implementation
+     * @deprecated use {@link MachineImageCapabilities#listSupportedImageTypes()}
      */
+    @Deprecated
     public abstract @Nonnull Iterable<MachineImageType> listSupportedImageTypes() throws CloudException, InternalException;
 
     /**
@@ -488,7 +496,9 @@ public interface MachineImageSupport extends AccessControlledService {
      * @return true if you can do direct uploads into the cloud
      * @throws CloudException an error occurred with the cloud provider when checking this capability
      * @throws InternalException an error occurred within the Dasein cloud implementation while check this capability
+     * @deprecated use {@link MachineImageCapabilities#supportsDirectImageUpload()}
      */
+    @Deprecated
     public abstract boolean supportsDirectImageUpload() throws CloudException, InternalException;
 
     /**
@@ -498,7 +508,9 @@ public interface MachineImageSupport extends AccessControlledService {
      * @return true if you can capture custom images in this cloud
      * @throws CloudException an error occurred with the cloud provider when checking this capability
      * @throws InternalException an error occurred within the Dasein cloud implementation while check this capability
+     * @deprecated use {@link MachineImageCapabilities#supportsImageCapture(MachineImageType)}
      */
+    @Deprecated
     public abstract boolean supportsImageCapture(@Nonnull MachineImageType type) throws CloudException, InternalException;
 
     /**
@@ -506,6 +518,7 @@ public interface MachineImageSupport extends AccessControlledService {
      * @return true if you can share your images with another account
      * @throws CloudException an error occurred with the cloud provider when checking this capability
      * @throws InternalException an error occurred within the Dasein cloud implementation while check this capability
+     * @deprecated use {@link MachineImageCapabilities#supportsImageSharing()}
      */
     public abstract boolean supportsImageSharing() throws CloudException, InternalException;
 
@@ -514,7 +527,9 @@ public interface MachineImageSupport extends AccessControlledService {
      * @return true if you can share your images publicly
      * @throws CloudException an error occurred with the cloud provider when checking this capability
      * @throws InternalException an error occurred within the Dasein cloud implementation while check this capability
+     * @deprecated use {@link MachineImageCapabilities#supportsImageSharingWithPublic()}
      */
+    @Deprecated
     public abstract boolean supportsImageSharingWithPublic() throws CloudException, InternalException;
 
     /**
@@ -524,7 +539,9 @@ public interface MachineImageSupport extends AccessControlledService {
      * @return true if a public image library exists
      * @throws CloudException an error occurred with the cloud provider
      * @throws InternalException an error occurred within the Dasein cloud implementation
+     * @deprecated use {@link MachineImageCapabilities#supportsPublicLibrary(ImageClass)}
      */
+    @Deprecated
     public abstract boolean supportsPublicLibrary(@Nonnull ImageClass cls) throws CloudException, InternalException;
 
     /**

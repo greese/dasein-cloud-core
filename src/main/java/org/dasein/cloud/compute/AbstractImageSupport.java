@@ -165,16 +165,6 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
     }
 
     @Override
-    public @Nonnull Iterable<VmState> getCaptureImageStates(MachineImage img) {
-        return new ArrayList<VmState>(Arrays.asList(VmState.values()));
-    }
-
-    @Override
-    public @Nonnull Iterable<VmState> getBundleVirtualMachineStates(MachineImage img) {
-        return new ArrayList<VmState>(Arrays.asList(VmState.values()));
-    }
-
-    @Override
     public boolean hasPublicLibrary() {
         try {
             return supportsPublicLibrary(ImageClass.MACHINE);
