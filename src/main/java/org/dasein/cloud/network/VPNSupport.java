@@ -61,11 +61,14 @@ public interface VPNSupport extends AccessControlledService {
     public abstract void detachFromVLAN(@Nonnull String providerVpnId, @Nonnull String providerVlanId) throws CloudException, InternalException;
     
     public abstract void disconnectFromGateway(@Nonnull String providerVpnId, @Nonnull String fromGatewayId) throws CloudException, InternalException;
+
+    public abstract @Nonnull VPNCapabilities getCapabilities()throws CloudException, InternalException;
     
     public abstract @Nullable VPNGateway getGateway(@Nonnull String gatewayId) throws CloudException, InternalException;
     
     public abstract @Nullable VPN getVPN(@Nonnull String providerVpnId) throws CloudException, InternalException;
 
+    @Deprecated
     public abstract Requirement getVPNDataCenterConstraint() throws CloudException, InternalException;
 
     public abstract @Nonnull Iterable<VPNConnection> listGatewayConnections(@Nonnull String toGatewayId) throws CloudException, InternalException;
@@ -81,7 +84,8 @@ public interface VPNSupport extends AccessControlledService {
     public abstract @Nonnull Iterable<ResourceStatus> listVPNStatus() throws CloudException, InternalException;
 
     public abstract @Nonnull Iterable<VPN> listVPNs() throws CloudException, InternalException;
-    
+
+    @Deprecated
     public abstract @Nonnull Iterable<VPNProtocol> listSupportedVPNProtocols() throws CloudException, InternalException;
     
     public abstract boolean isSubscribed() throws CloudException, InternalException;
