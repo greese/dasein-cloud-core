@@ -165,16 +165,6 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
     }
 
     @Override
-    public @Nonnull Iterable<VmState> getCaptureImageStates(MachineImage img) {
-        return new ArrayList<VmState>(Arrays.asList(VmState.values()));
-    }
-
-    @Override
-    public @Nonnull Iterable<VmState> getBundleVirtualMachineStates(MachineImage img) {
-        return new ArrayList<VmState>(Arrays.asList(VmState.values()));
-    }
-
-    @Override
     public boolean hasPublicLibrary() {
         try {
             return supportsPublicLibrary(ImageClass.MACHINE);
@@ -185,6 +175,7 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
     }
 
     @Override
+    @Deprecated
     public @Nonnull Requirement identifyLocalBundlingRequirement() throws CloudException, InternalException {
         return Requirement.NONE;
     }
@@ -258,11 +249,13 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
     }
 
     @Override
+    @Deprecated
     public @Nonnull Iterable<MachineImageFormat> listSupportedFormats() throws CloudException, InternalException {
         return Collections.emptyList();
     }
 
     @Override
+    @Deprecated
     public @Nonnull Iterable<MachineImageFormat> listSupportedFormatsForBundling() throws CloudException, InternalException {
         return Collections.emptyList();
     }
@@ -288,11 +281,13 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
     }
 
     @Override
+    @Deprecated
     public @Nonnull Iterable<ImageClass> listSupportedImageClasses() throws CloudException, InternalException {
         return Collections.singletonList(ImageClass.MACHINE);
     }
 
     @Override
+    @Deprecated
     public @Nonnull Iterable<MachineImageType> listSupportedImageTypes() throws CloudException, InternalException {
         return Collections.singletonList(MachineImageType.VOLUME);
     }
@@ -509,6 +504,7 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
     }
 
     @Override
+    @Deprecated
     public boolean supportsCustomImages() throws CloudException, InternalException {
         if( supportsDirectImageUpload() ) {
             return true;
@@ -522,26 +518,31 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
     }
 
     @Override
+    @Deprecated
     public boolean supportsDirectImageUpload() throws CloudException, InternalException {
         return false;
     }
 
     @Override
+    @Deprecated
     public boolean supportsImageCapture(@Nonnull MachineImageType type) throws CloudException, InternalException {
         return false;
     }
 
     @Override
+    @Deprecated
     public boolean supportsImageSharing() throws CloudException, InternalException {
         return false;
     }
 
     @Override
+    @Deprecated
     public boolean supportsImageSharingWithPublic() throws CloudException, InternalException {
         return false;
     }
 
     @Override
+    @Deprecated
     public boolean supportsPublicLibrary(@Nonnull ImageClass cls) throws CloudException, InternalException {
         return false;
     }
