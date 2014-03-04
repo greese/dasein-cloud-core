@@ -109,7 +109,9 @@ public interface VolumeSupport extends AccessControlledService {
      * @return the maximum number of volumes that may be provisioned, -1 for unlimited, or -2 for unknown
      * @throws InternalException an error occurred within the Dasein Cloud implementation determining the limit
      * @throws CloudException an error occurred retrieving the limit from the cloud
+     * @deprecated use {@link VolumeCapabilities#getMaximumVolumeCount()}
      */
+    @Deprecated
     public int getMaximumVolumeCount() throws InternalException, CloudException;
 
     /**
@@ -117,7 +119,9 @@ public interface VolumeSupport extends AccessControlledService {
      * @return the largest provisionable volume or null if a limit is not known
      * @throws InternalException an error occurred within the Dasein Cloud implementation determining the limit
      * @throws CloudException an error occurred retrieving the limit from the cloud
+     * @deprecated use {@link VolumeCapabilities#getMaximumVolumeSize()}
      */
+    @Deprecated
     public @Nullable Storage<Gigabyte> getMaximumVolumeSize() throws InternalException, CloudException;
 
     /**
@@ -125,14 +129,18 @@ public interface VolumeSupport extends AccessControlledService {
      * @return the size of the smallest provisionable volume
      * @throws InternalException an error occurred within the Dasein Cloud implementation determining the limit
      * @throws CloudException an error occurred retrieving the limit from the cloud
+     * @deprecated use {@link VolumeCapabilities#getMinimumVolumeSize()}
      */
+    @Deprecated
     public @Nonnull Storage<Gigabyte> getMinimumVolumeSize() throws InternalException, CloudException;
 
     /**
      * Specifies the provider term for a volume.
      * @param locale the locale into which the term should be translated
      * @return a localized term for a volume using the cloud provider's terminology
+     * @deprecated use {@link VolumeCapabilities#getProviderTermForVolume(java.util.Locale)}
      */
+    @Deprecated
     public @Nonnull String getProviderTermForVolume(@Nonnull Locale locale);
 
     /**
@@ -150,7 +158,9 @@ public interface VolumeSupport extends AccessControlledService {
      * @return whether or not specifying a volume product is required to create a volume
      * @throws InternalException an error occurred in the Dasein Cloud implementation determining the support level
      * @throws CloudException an error occurred with the cloud provider determining the support level
+     * @deprecated use {@link VolumeCapabilities#getVolumeProductRequirement()}
      */
+    @Deprecated
     public @Nonnull Requirement getVolumeProductRequirement() throws InternalException, CloudException;
 
     /**
@@ -159,7 +169,9 @@ public interface VolumeSupport extends AccessControlledService {
      * @return true if the volume size is determined by the product choice
      * @throws InternalException an error occurred within Dasein Cloud determining this feature
      * @throws CloudException an error occurred identifying this requirement from the cloud provider
+     * @deprecated use {@link VolumeCapabilities#isVolumeSizeDeterminedByProduct()}
      */
+    @Deprecated
     public boolean isVolumeSizeDeterminedByProduct() throws InternalException, CloudException;
 
     /**
@@ -168,7 +180,9 @@ public interface VolumeSupport extends AccessControlledService {
      * @return a list of device IDs that may be used in attaching the volume to a virtual machine
      * @throws InternalException an error occurred in the Dasein Cloud implementation while assembling the list
      * @throws CloudException an error occurred fetching a list from the cloud provider
+     * @deprecated use {@link VolumeCapabilities#listPossibleDeviceIds(Platform)}
      */
+    @Deprecated
     public @Nonnull Iterable<String> listPossibleDeviceIds(@Nonnull Platform platform) throws InternalException, CloudException;
 
     /**
@@ -176,7 +190,9 @@ public interface VolumeSupport extends AccessControlledService {
      * @return a list of supported formats
      * @throws InternalException an error occurred in the Dasein Cloud implementation while assembling the list
      * @throws CloudException an error occurred fetching a list from the cloud provider
+     * @deprecated use {@link VolumeCapabilities#listSupportedFormats()}
      */
+    @Deprecated
     public @Nonnull Iterable<VolumeFormat> listSupportedFormats() throws InternalException, CloudException;
 
     /**
@@ -215,20 +231,6 @@ public interface VolumeSupport extends AccessControlledService {
      * @throws CloudException an error occurred with the cloud provider
      */
     public @Nonnull Iterable<Volume> listVolumes(@Nullable VolumeFilterOptions options) throws InternalException, CloudException;
-
-    /**
-     * Lists the states in which a Virtual Machine must be for the Volume to be attached
-     * @param volume the Volume object that's being interrogate
-     * @return the Virtual Machine states required for the volume to be attached
-     */
-    public abstract @Nonnull Iterable<VmState> getAttachStates(@Nullable Volume volume);
-
-    /**
-     * Lists the states in which a Virtual Machine must be for the Volume to be detached
-     * @param volume the Volume object that's being interrogate
-     * @return the Virtual Machine states required for the volume to be detached
-     */
-    public abstract @Nonnull Iterable<VmState> getDetachStates(@Nullable Volume volume);
 
     /**
      * Identifies whether or not the current account has access to volumes in the current region.
