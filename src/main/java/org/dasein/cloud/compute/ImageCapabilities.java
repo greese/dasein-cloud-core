@@ -31,7 +31,7 @@ import java.util.Locale;
  * @version 2014.03 initial version
  * @since 2014.03
  */
-public interface MachineImageCapabilities extends Capabilities{
+public interface ImageCapabilities extends Capabilities{
     /**
      * Indicates whether or not a virtual machine in the specified state can be the target of
      * an {@link MachineImageSupport#bundleVirtualMachine(String, MachineImageFormat, String, String)} call.
