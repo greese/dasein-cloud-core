@@ -16,6 +16,7 @@
 
 package org.dasein.cloud.util;
 
+import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -100,6 +101,51 @@ public class NamingConventionsTest {
         assertNotNull("The conventions are showing symbol constraints", c);
         assertEquals("The length of the symbol constraint should be 0", 0, constraints.length);
 
+        assertFalse("The first character is supposed to be limited to letters for these conventions", c.isFirstCharacterNumericAllowed());
+        assertFalse("The first character is supposed to be limited to letters for these conventions", c.isFirstCharacterSymbolAllowed());
+    }
+
+    @Test
+    public void verifySymbolConstraints() {
+        char[] test = { '_', '=', '-', '+' };
+        NamingConventions c = NamingConventions.getAlphaOnly(5, 10).constrainedBy(test);
+
+        assertEquals("The minimum name length does not match the requested value", 5, c.getMinimumLength());
+        assertEquals("The maximum name length does not match the requested value", 10, c.getMaximumLength());
+
+        assertTrue("The conventions do not register as supporting letters", c.isAlpha());
+        assertFalse("The conventions register as supporting numbers", c.isNumeric());
+        assertFalse("The conventions are registering a latin-1 constraint", c.isLatin1Constrained());
+        assertEquals("The letter case requirements do not match", NamingConventions.Case.MIXED, c.getAlphaCase());
+        assertTrue("The conventions do not register as supporting spaces", c.isSpaces());
+        assertTrue("The conventions do not register as supporting symbols", c.isSymbols());
+
+        char[] symbols = c.getSymbolConstraints();
+
+        assertNotNull("The conventions are showing symbol constraints", c);
+        assertEquals("The supported symbols don't match the target length", test.length, symbols.length);
+        for( char a : symbols ) {
+            boolean found = false;
+
+            for( char b : test ) {
+                if( a == b ) {
+                    found = true;
+                    break;
+                }
+            }
+            assertTrue("Found character " + a + " among the returned symbols", found);
+        }
+        for( char a : test ) {
+            boolean found = false;
+
+            for( char b : symbols ) {
+                if( a == b ) {
+                    found = true;
+                    break;
+                }
+            }
+            assertTrue("Failed to find character " + a + " among the returned symbols", found);
+        }
         assertFalse("The first character is supposed to be limited to letters for these conventions", c.isFirstCharacterNumericAllowed());
         assertFalse("The first character is supposed to be limited to letters for these conventions", c.isFirstCharacterSymbolAllowed());
     }

@@ -125,8 +125,8 @@ public class NamingConventions {
      * Constructs a baseline set of naming conventions that match strict naming often seen in old file systems and programming
      * languages. The resulting conventions will be alphanumeric lower-case and latin-1 only. The first
      * character allowed must be a letter.
-     * @param minLength the minimum length of a valid name
-     * @param maxLength the maximum length of a valid name (will be adjusted to min length if less than min length)
+     * @param minimumLength the minimum length of a valid name
+     * @param maximumLength the maximum length of a valid name (will be adjusted to min length if less than min length)
      * @return naming conventions that match the characteristics described above
      */
     static public NamingConventions getStrictInstance(@Nonnegative int minimumLength, @Nonnegative int maximumLength) {
@@ -171,6 +171,7 @@ public class NamingConventions {
      */
     public @Nonnull NamingConventions constrainedBy(@Nonnull char ... symbols) {
         symbolConstraints = symbols;
+        this.symbols = true;
         return this;
     }
 
