@@ -33,6 +33,7 @@ import org.dasein.cloud.identity.IdentityServices;
 import org.dasein.cloud.network.NetworkServices;
 import org.dasein.cloud.platform.PlatformServices;
 import org.dasein.cloud.storage.StorageServices;
+import org.dasein.cloud.util.NamedItemLoader;
 import org.dasein.util.CalendarWrapper;
 
 /**
@@ -219,6 +220,19 @@ public abstract class CloudProvider {
             }
         }
     }
+
+    /*
+    public @Nonnull String findUniqueName(@Nonnull String desiredName, @Nonnull String defaultName, @Nonnull NamedItemLoader loader) throws CloudException, InternalException {
+        if( desiredName.equals("") ) {
+            desiredName = defaultName;
+        }
+        String baseName = loader.validateBaseName(desiredName);
+
+        while( loader.hasNamedItem(desiredName) ) {
+            desiredName = loader.increment(baseName);
+        }
+    }
+    */
 
     public abstract @Nullable AdminServices getAdminServices();
 
