@@ -119,4 +119,13 @@ public interface VolumeCapabilities extends Capabilities{
      * @throws CloudException an error occurred fetching a list from the cloud provider
      */
     public @Nonnull Iterable<VolumeFormat> listSupportedFormats() throws InternalException, CloudException;
+
+    /**
+     * Indicates whether the volume is required to be created attached to a virtual machine or it it can be created
+     * independantly.
+     * @return requirement level for a VM on create
+     * @throws InternalException an error occurred in the Dasein Cloud implementation while assembling the list
+     * @throws CloudException an error occurred fetching a list from the cloud provider
+     */
+    public @Nonnull Requirement requiresVMOnCreate() throws InternalException, CloudException;
 }
