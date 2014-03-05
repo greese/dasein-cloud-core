@@ -143,6 +143,30 @@ public class VMLaunchOptions {
     }
 
     /**
+     * Launches multiple virtual machines based on the current contents of this set of launch options. The method is a success
+     * if any one virtual machine is provisioned even if any errors occurred provisioning others.
+     * @param provider the cloud provider in which the VM should be provisioned
+     * @param count the number of virtual machines to provision
+     * @return the IDs of the virtual machines that were provisioned
+     * @throws CloudException an error occurred within the cloud provider that prevented the provisioning of any VMs
+     * @throws InternalException an error occurred within Dasein Cloud in preparing the API call (can happen even if a VM gets provisioned)
+     * @throws OperationNotSupportedException the cloud does not support virtual machines
+     */
+    public @Nonnull Iterable<String> buildMany(@Nonnull CloudProvider provider, int count) throws CloudException, InternalException {
+        ComputeServices services = provider.getComputeServices();
+
+        if( services == null ) {
+            throw new OperationNotSupportedException(provider.getCloudName() + " does not support compute services.");
+        }
+        VirtualMachineSupport support = services.getVirtualMachineSupport();
+
+        if( support == null ) {
+            throw new OperationNotSupportedException(provider.getCloudName() + " does not have virtual machine support");
+        }
+        return support.launchMany(this, count);
+    }
+
+    /**
      * Copies the meaningful aspects of this set of VM launch options to be used in a second set of VM launch options. The only
      * things NOT copied are attributes that are inherently instance specific such as IP address, volume attachments,
      * private IP, and NICs. Any volumes and/or NICs to be created, however, are preserved.
