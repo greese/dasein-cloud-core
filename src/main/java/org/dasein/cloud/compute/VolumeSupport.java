@@ -105,6 +105,14 @@ public interface VolumeSupport extends AccessControlledService {
     public void detach(@Nonnull String volumeId, boolean force) throws InternalException, CloudException;
 
     /**
+     * Provides access to meta-data about volume capabilities in the current region of this cloud.
+     * @return a description of the features supported by this region of this cloud
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException an error occurred within the cloud provider
+     */
+    public abstract VolumeCapabilities getCapabilities() throws CloudException, InternalException;
+
+    /**
      * Indicates the maximum number of volumes that may be provisioned in this account.
      * @return the maximum number of volumes that may be provisioned, -1 for unlimited, or -2 for unknown
      * @throws InternalException an error occurred within the Dasein Cloud implementation determining the limit
