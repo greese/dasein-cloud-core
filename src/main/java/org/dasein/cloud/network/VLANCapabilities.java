@@ -39,7 +39,7 @@ public interface VLANCapabilities extends Capabilities{
      * @throws CloudException
      * @throws InternalException
      */
-    public abstract boolean allowsNewNetworkInterfaceCreation() throws CloudException, InternalException;
+    public boolean allowsNewNetworkInterfaceCreation() throws CloudException, InternalException;
 
     /**
      * Indicates whether new VLANs can be self-provisioned
@@ -47,7 +47,7 @@ public interface VLANCapabilities extends Capabilities{
      * @throws CloudException
      * @throws InternalException
      */
-    public abstract boolean allowsNewVlanCreation() throws CloudException, InternalException;
+    public boolean allowsNewVlanCreation() throws CloudException, InternalException;
 
     /**
      * Indicates whether or not Routing Tables can be provisioned
@@ -55,7 +55,7 @@ public interface VLANCapabilities extends Capabilities{
      * @throws CloudException
      * @throws InternalException
      */
-    public abstract boolean allowsNewRoutingTableCreation() throws CloudException, InternalException;
+    public boolean allowsNewRoutingTableCreation() throws CloudException, InternalException;
 
     /**
      * Indicates whether or not the cloud allows the creation of subnets
@@ -63,7 +63,7 @@ public interface VLANCapabilities extends Capabilities{
      * @throws CloudException
      * @throws InternalException
      */
-    public abstract boolean allowsNewSubnetCreation() throws CloudException, InternalException;
+    public boolean allowsNewSubnetCreation() throws CloudException, InternalException;
 
     /**
      * Indicates whether or not you can run both IPv4 and IPv6 over a subnet.
@@ -71,7 +71,7 @@ public interface VLANCapabilities extends Capabilities{
      * @throws CloudException    an error occurred checking with the cloud for support
      * @throws InternalException an error occurred in the Dasein Cloud implementation determining support
      */
-    public abstract boolean allowsMultipleTrafficTypesOverSubnet() throws CloudException, InternalException;
+    public boolean allowsMultipleTrafficTypesOverSubnet() throws CloudException, InternalException;
 
     /**
      * Indicates whether or not you can run both IPv4 and IPv6 over a VLAN.
@@ -79,7 +79,7 @@ public interface VLANCapabilities extends Capabilities{
      * @throws CloudException    an error occurred checking with the cloud for support
      * @throws InternalException an error occurred in the Dasein Cloud implementation determining support
      */
-    public abstract boolean allowsMultipleTrafficTypesOverVlan() throws CloudException, InternalException;
+    public boolean allowsMultipleTrafficTypesOverVlan() throws CloudException, InternalException;
 
     /**
      * Specifies the maximum number of network interfaces that may be provisioned.
@@ -87,7 +87,7 @@ public interface VLANCapabilities extends Capabilities{
      * @throws CloudException    an error occurred requesting the limit from the cloud provider
      * @throws InternalException a local error occurred figuring out the limit
      */
-    public abstract int getMaxNetworkInterfaceCount() throws CloudException, InternalException;
+    public int getMaxNetworkInterfaceCount() throws CloudException, InternalException;
 
     /**
      * Specifies the maximum number of VLANs that may be provisioned
@@ -95,28 +95,28 @@ public interface VLANCapabilities extends Capabilities{
      * @throws CloudException
      * @throws InternalException
      */
-    public abstract int getMaxVlanCount() throws CloudException, InternalException;
+    public int getMaxVlanCount() throws CloudException, InternalException;
 
     /**
      * Identifies the provider term for a network interface.
      * @param locale the locale in which the term should be provided
      * @return a localized term for "network interface" specific to this cloud provider
      */
-    public abstract @Nonnull String getProviderTermForNetworkInterface(@Nonnull Locale locale);
+    public @Nonnull String getProviderTermForNetworkInterface(@Nonnull Locale locale);
 
     /**
      * Identifies the provider term for a subnet
      * @param locale
      * @return a loalized term for "Subnet" specific to this cloud provider
      */
-    public abstract @Nonnull String getProviderTermForSubnet(@Nonnull Locale locale);
+    public @Nonnull String getProviderTermForSubnet(@Nonnull Locale locale);
 
     /**
      * Identifies the provider term for a VLAN
      * @param locale
      * @return a localized term for "VLAN" specific to this cloud provider
      */
-    public abstract @Nonnull String getProviderTermForVlan(@Nonnull Locale locale);
+    public @Nonnull String getProviderTermForVlan(@Nonnull Locale locale);
 
     /**
      * Indicates whether or not you may or must manage routing tables for your VLANs/subnets.
@@ -124,7 +124,7 @@ public interface VLANCapabilities extends Capabilities{
      * @throws CloudException    an error occurred in the cloud provider determining support
      * @throws InternalException a local error occurred processing the request
      */
-    public abstract @Nonnull Requirement getRoutingTableSupport() throws CloudException, InternalException;
+    public @Nonnull Requirement getRoutingTableSupport() throws CloudException, InternalException;
 
     /**
      * Indicates whether subnets in VLANs are required, optional, or not supported.
@@ -132,7 +132,7 @@ public interface VLANCapabilities extends Capabilities{
      * @throws CloudException    an error occurred in the cloud while determining the support level
      * @throws InternalException a local error occurred determining subnet support level
      */
-    public abstract @Nonnull Requirement getSubnetSupport() throws CloudException, InternalException;
+    public @Nonnull Requirement getSubnetSupport() throws CloudException, InternalException;
 
     /**
      * Indicates whether or not you must specify a data center when provisioning your subnet. If {@link
@@ -145,7 +145,7 @@ public interface VLANCapabilities extends Capabilities{
      * @throws CloudException    an error occurred with the cloud provider determining support for this functionality
      * @throws InternalException a local error occurred determining support for this functionality
      */
-    public abstract @Nonnull Requirement identifySubnetDCRequirement() throws CloudException, InternalException;
+    public @Nonnull Requirement identifySubnetDCRequirement() throws CloudException, InternalException;
 
     /**
      * Indicates whether or not this cloud included the concept of network interfaces in its networking support.
@@ -153,7 +153,7 @@ public interface VLANCapabilities extends Capabilities{
      * @throws CloudException    an error occurred with the cloud provider determining support for network interfaces
      * @throws InternalException a local error occurred determining support for network interfaces
      */
-    public abstract boolean isNetworkInterfaceSupportEnabled() throws CloudException, InternalException;
+    public boolean isNetworkInterfaceSupportEnabled() throws CloudException, InternalException;
 
     /**
      * Indicates whether or not the subnet is capable of spanning the datacenter in which it is provisioned
@@ -161,7 +161,7 @@ public interface VLANCapabilities extends Capabilities{
      * @throws CloudException
      * @throws InternalException
      */
-    public abstract boolean isSubnetDataCenterConstrained() throws CloudException, InternalException;
+    public boolean isSubnetDataCenterConstrained() throws CloudException, InternalException;
 
     /**
      * Indicates whether or not the VLAN is capable of spanning the datacenter in which it is provisioned
@@ -169,7 +169,7 @@ public interface VLANCapabilities extends Capabilities{
      * @throws CloudException
      * @throws InternalException
      */
-    public abstract boolean isVlanDataCenterConstrained() throws CloudException, InternalException;
+    public boolean isVlanDataCenterConstrained() throws CloudException, InternalException;
 
     /**
      * Lists all IP protocol versions supported for VLANs in this cloud.
@@ -177,7 +177,7 @@ public interface VLANCapabilities extends Capabilities{
      * @throws CloudException    an error occurred checking support for IP versions with the cloud provider
      * @throws InternalException a local error occurred preparing the supported version
      */
-    public abstract @Nonnull Iterable<IPVersion> listSupportedIPVersions() throws CloudException, InternalException;
+    public @Nonnull Iterable<IPVersion> listSupportedIPVersions() throws CloudException, InternalException;
 
     /**
      * Indicates whether or not this cloud allows enabling of internet gateways for VLANs. This is not relevant if all
@@ -188,7 +188,7 @@ public interface VLANCapabilities extends Capabilities{
      * @throws CloudException    an error occurred determining this capability from the cloud provider
      * @throws InternalException a local error occurred determining this capability
      */
-    public abstract boolean supportsInternetGatewayCreation() throws CloudException, InternalException;
+    public boolean supportsInternetGatewayCreation() throws CloudException, InternalException;
 
     /**
      * Indicates whether you can specify a raw IP address as a target for your routing table.
@@ -196,5 +196,5 @@ public interface VLANCapabilities extends Capabilities{
      * @throws CloudException    an error occurred identifying support
      * @throws InternalException a local error occurred identifying support
      */
-    public abstract boolean supportsRawAddressRouting() throws CloudException, InternalException;
+    public boolean supportsRawAddressRouting() throws CloudException, InternalException;
 }

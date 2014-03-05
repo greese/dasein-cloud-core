@@ -38,5 +38,5 @@ public interface CIServices {
     /**
      * @return indicates whether or not the cloud provider supports complex resource topologies
      */
-    public abstract boolean hasTopologySupport();
+    public boolean hasTopologySupport();
 }

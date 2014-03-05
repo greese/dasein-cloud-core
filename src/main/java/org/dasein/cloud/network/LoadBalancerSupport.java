@@ -113,7 +113,7 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      * @throws CloudException an error occurred within the cloud provider
      */
-    public abstract @Nonnull LoadBalancerCapabilities getCapabilities() throws CloudException, InternalException;
+    public @Nonnull LoadBalancerCapabilities getCapabilities() throws CloudException, InternalException;
 
     /**
      * Fetches the details for the load balancer associated with the specified load balancer ID from the cloud.
