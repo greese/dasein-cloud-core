@@ -210,6 +210,7 @@ public abstract class ProviderContextCompat implements Serializable {
                         Object val = getConfigurationValue(f.name);
 
                         if( val != null ) {
+                            System.out.println("Setting " + f.name + " to " + val);
                             p.setProperty(f.name, val.toString());
                         }
                     }

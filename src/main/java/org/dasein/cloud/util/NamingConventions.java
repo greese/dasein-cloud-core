@@ -19,7 +19,6 @@ package org.dasein.cloud.util;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.Locale;
 import java.util.Random;
 
@@ -254,13 +253,13 @@ public class NamingConventions {
      * Generates a random character that will conform to these naming conventions.
      * @param alphanumericOnly the resulting character should be alphanumeric even if symbols and spaces are normally allowed
      * @param forPosition the string position for which the character is being generated
-     * @return
+     * @return a random character conforming to these naming conventions
      */
     public char getRandomCharacter(boolean alphanumericOnly, int forPosition) {
-        char c = (char)random.nextInt(255);
+        char c = (char)random.nextInt(128);
 
-        while( !isValid(c, forPosition) && (!alphanumericOnly || Character.isLetterOrDigit(c)) ) {
-            c = (char)random.nextInt(255);
+        while( !isValid(c, forPosition) || (alphanumericOnly && !Character.isLetterOrDigit(c)) ) {
+            c = (char)random.nextInt(128);
         }
         return c;
     }
@@ -323,11 +322,10 @@ public class NamingConventions {
      *     }
      * </pre>
      * @param baseName the original name that you hope is unique (this name is assumed to be valid already)
-     * @param locale the locale according to which any adjustments will be made
      * @param count the call count for this call (1 is the first call)
      * @return a name matching these naming conventions with a postfix that should hopefully make it unique
      */
-    public @Nullable String incrementName(@Nonnull String baseName, @Nonnull Locale locale, @Nonnegative int count) {
+    public @Nullable String incrementName(@Nonnull String baseName, @Nonnegative int count) {
 
         baseName = baseName.trim();
         char[] alphabet;
@@ -430,7 +428,7 @@ public class NamingConventions {
                 if( baseName.length() == 1 ) {
                     return null;
                 }
-                return incrementName(baseName.substring(0,baseName.length()-1), locale, count);
+                return incrementName(baseName.substring(0,baseName.length()-1), count);
             }
             else {
                 int cut = (baseName.length() + tmp.length()) - maximumLength;

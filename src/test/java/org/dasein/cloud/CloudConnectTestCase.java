@@ -56,7 +56,7 @@ public class CloudConnectTestCase {
 
     static public final ProviderContext.Value<byte[][]> KEYS    = new ProviderContext.Value<byte[][]>("apiKeys", new byte[][] { "public".getBytes(), "private".getBytes() });
     static public final ProviderContext.Value<String>   VERSION = new ProviderContext.Value<String>("version", "1");
-    static public final ProviderContext.Value<byte[][]> X509    = new ProviderContext.Value<byte[][]>("x509Keys", new byte[][] { "x509c".getBytes(), "x509k".getBytes() });
+    static public final ProviderContext.Value<byte[][]> X509    = new ProviderContext.Value<byte[][]>("x509", new byte[][] { "x509c".getBytes(), "x509k".getBytes() });
 
     private Cloud  newCloud;
     private String cloudName;
@@ -64,7 +64,7 @@ public class CloudConnectTestCase {
     private String providerName;
     private String endpoint;
 
-    private int testNumber = 0;
+    static private int testNumber = 0;
 
     @Before
     public void setUp() {

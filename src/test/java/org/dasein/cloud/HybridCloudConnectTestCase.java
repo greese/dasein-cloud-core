@@ -49,7 +49,7 @@ public class HybridCloudConnectTestCase {
     static public final ProviderContext.Value<byte[][]> KEYS    = new ProviderContext.Value<byte[][]>("apiKeys", new byte[][] { "public".getBytes(), "private".getBytes() });
     static public final ProviderContext.Value<byte[][]> SKEYS   = new ProviderContext.Value<byte[][]>("apiKeys", new byte[][] { "spub".getBytes(), "spriv".getBytes() });
     static public final ProviderContext.Value<String>   VERSION = new ProviderContext.Value<String>("version", "1");
-    static public final ProviderContext.Value<byte[][]> X509    = new ProviderContext.Value<byte[][]>("x509Keys", new byte[][] { "x509c".getBytes(), "x509k".getBytes() });
+    static public final ProviderContext.Value<byte[][]> X509    = new ProviderContext.Value<byte[][]>("x509", new byte[][] { "x509c".getBytes(), "x509k".getBytes() });
 
     static private class Config {
         private String cloudName;
@@ -58,7 +58,7 @@ public class HybridCloudConnectTestCase {
         private String endpoint;
     }
 
-    private int testNumber = 0;
+    static private int testNumber = 0;
 
     private Config compute;
     private Config storage;
@@ -166,13 +166,15 @@ public class HybridCloudConnectTestCase {
         assertEquals("The region values do not match", region, ctx.getRegionId());
         assertEquals("The effective account number does not match the required value", cfg.effectiveAccountNumber, ctx.getEffectiveAccountNumber());
         for( ContextRequirements.Field f : requirements.getConfigurableValues() ) {
-            Object value = ctx.getConfigurationValue(f.name);
+            if( f.required ) {
+                Object value = ctx.getConfigurationValue(f.name);
 
-            assertNotNull("The value for " + f.name + " should have been set for these tests", value);
+                assertNotNull("The value for " + f.name + " should have been set for these tests", value);
 
-            Object full = ctx.getConfigurationValue(f);
+                Object full = ctx.getConfigurationValue(f);
 
-            assertEquals("The two configurable value methods for " + f.name + " should return the same value", full, value);
+                assertEquals("The two configurable value methods for " + f.name + " should return the same value", full, value);
+            }
         }
     }
 
@@ -269,6 +271,8 @@ public class HybridCloudConnectTestCase {
         cCtx.setAccessKeys(KEYS.value[0], KEYS.value[1]);
         cCtx.setX509Cert( X509.value[0]);
         cCtx.setX509Key( X509.value[1]);
+        cCtx.setCloudName(compute.cloudName);
+        cCtx.setProviderName(compute.providerName);
         Properties props = new Properties();
 
         props.setProperty("version", VERSION.value);
@@ -311,6 +315,8 @@ public class HybridCloudConnectTestCase {
         cCtx.setAccessKeys(KEYS.value[0], KEYS.value[1]);
         cCtx.setX509Cert( X509.value[0]);
         cCtx.setX509Key( X509.value[1]);
+        cCtx.setCloudName(compute.cloudName);
+        cCtx.setProviderName(compute.providerName);
         Properties props = new Properties();
 
         props.setProperty("version", VERSION.value);

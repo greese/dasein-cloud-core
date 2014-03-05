@@ -153,11 +153,17 @@ public class ProviderContext extends ProviderContextCompat implements Serializab
      */
     static ProviderContext getContext(@Nonnull Cloud cloud, @Nonnull String accountNumber, @Nullable String regionId, @Nonnull Value<?> ... configurationValues) {
         ProviderContext ctx = new ProviderContext(cloud, accountNumber, regionId);
+        Properties p = new Properties();
 
         ctx.configurationValues = new HashMap<String,Object>();
         for( Value<?> v : configurationValues ) {
             ctx.configurationValues.put(v.name, v.value);
+            if( v.value instanceof String ) {
+                p.setProperty(v.name, (String)v.value);
+            }
         }
+        //noinspection deprecation
+        ctx.setCustomProperties(p);
         return ctx;
     }
 

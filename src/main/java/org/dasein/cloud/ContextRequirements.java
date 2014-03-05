@@ -112,6 +112,10 @@ public class ContextRequirements {
             this.compatName = compatName;
             this.required = required;
         }
+
+        public @Nonnull String toString() {
+            return (name + " (" + type + "): " + description);
+        }
     }
 
     private ArrayList<Field> configurableValues = new ArrayList<Field>();

@@ -52,7 +52,7 @@ public class TestNewCloudProvider extends AbstractCloud {
     public @Nonnull ContextRequirements getContextRequirements() {
         return new ContextRequirements(
                 new ContextRequirements.Field("apiKeys", ContextRequirements.FieldType.KEYPAIR),
-                new ContextRequirements.Field("x509Keys", ContextRequirements.FieldType.KEYPAIR),
+                new ContextRequirements.Field("x509", ContextRequirements.FieldType.KEYPAIR),
                 new ContextRequirements.Field("version", ContextRequirements.FieldType.TEXT)
         );
     }
