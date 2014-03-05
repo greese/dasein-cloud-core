@@ -16,14 +16,12 @@
 
 package org.dasein.cloud.util;
 
-import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.TreeSet;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -38,7 +36,7 @@ import static org.junit.Assert.assertTrue;
  * @version 2014.03 initial version (issue #121)
  * @since 2014.03
  */
-public class NamingConventionsTest {
+public class NamingConstraintsTest {
     @Before
     public void setUp() {
     }
@@ -50,7 +48,7 @@ public class NamingConventionsTest {
 
     @Test
     public void verifyAlphanumeric() {
-        NamingConventions c = NamingConventions.getAlphaNumeric(5, 10);
+        NamingConstraints c = NamingConstraints.getAlphaNumeric(5, 10);
 
         assertEquals("The minimum name length does not match the requested value", 5, c.getMinimumLength());
         assertEquals("The maximum name length does not match the requested value", 10, c.getMaximumLength());
@@ -58,7 +56,7 @@ public class NamingConventionsTest {
         assertTrue("The conventions do not register as supporting letters", c.isAlpha());
         assertTrue("The conventions do not register as supporting numbers", c.isNumeric());
         assertFalse("The conventions are registering a latin-1 constraint", c.isLatin1Constrained());
-        assertEquals("The letter case requirements do not match", NamingConventions.Case.MIXED, c.getAlphaCase());
+        assertEquals("The letter case requirements do not match", NamingConstraints.Case.MIXED, c.getAlphaCase());
         assertTrue("The conventions do not register as supporting spaces", c.isSpaces());
         assertTrue("The conventions do not register as supporting symbols", c.isSymbols());
         assertNull("The conventions are showing symbol constraints", c.getSymbolConstraints());
@@ -68,7 +66,7 @@ public class NamingConventionsTest {
 
     @Test
     public void verifyAlphaOnly() {
-        NamingConventions c = NamingConventions.getAlphaOnly(5, 10);
+        NamingConstraints c = NamingConstraints.getAlphaOnly(5, 10);
 
         assertEquals("The minimum name length does not match the requested value", 5, c.getMinimumLength());
         assertEquals("The maximum name length does not match the requested value", 10, c.getMaximumLength());
@@ -76,7 +74,7 @@ public class NamingConventionsTest {
         assertTrue("The conventions do not register as supporting letters", c.isAlpha());
         assertFalse("The conventions register as supporting numbers", c.isNumeric());
         assertFalse("The conventions are registering a latin-1 constraint", c.isLatin1Constrained());
-        assertEquals("The letter case requirements do not match", NamingConventions.Case.MIXED, c.getAlphaCase());
+        assertEquals("The letter case requirements do not match", NamingConstraints.Case.MIXED, c.getAlphaCase());
         assertTrue("The conventions do not register as supporting spaces", c.isSpaces());
         assertTrue("The conventions do not register as supporting symbols", c.isSymbols());
         assertNull("The conventions are showing symbol constraints", c.getSymbolConstraints());
@@ -86,7 +84,7 @@ public class NamingConventionsTest {
 
     @Test
     public void verifyStrict() {
-        NamingConventions c = NamingConventions.getStrictInstance(5, 10);
+        NamingConstraints c = NamingConstraints.getStrictInstance(5, 10);
 
         assertEquals("The minimum name length does not match the requested value", 5, c.getMinimumLength());
         assertEquals("The maximum name length does not match the requested value", 10, c.getMaximumLength());
@@ -94,7 +92,7 @@ public class NamingConventionsTest {
         assertTrue("The conventions do not register as supporting letters", c.isAlpha());
         assertTrue("The conventions do not register as supporting numbers", c.isNumeric());
         assertTrue("The conventions do not register a latin-1 constraint", c.isLatin1Constrained());
-        assertEquals("The letter case requirements do not match", NamingConventions.Case.LOWER, c.getAlphaCase());
+        assertEquals("The letter case requirements do not match", NamingConstraints.Case.LOWER, c.getAlphaCase());
         assertFalse("The conventions are registering as supporting spaces", c.isSpaces());
         assertFalse("The conventions are registering as supporting symbols", c.isSymbols());
         char[] constraints = c.getSymbolConstraints();
@@ -109,7 +107,7 @@ public class NamingConventionsTest {
     @Test
     public void verifySymbolConstraints() {
         char[] test = { '_', '=', '-', '+' };
-        NamingConventions c = NamingConventions.getAlphaOnly(5, 10).constrainedBy(test);
+        NamingConstraints c = NamingConstraints.getAlphaOnly(5, 10).constrainedBy(test);
 
         assertEquals("The minimum name length does not match the requested value", 5, c.getMinimumLength());
         assertEquals("The maximum name length does not match the requested value", 10, c.getMaximumLength());
@@ -117,7 +115,7 @@ public class NamingConventionsTest {
         assertTrue("The conventions do not register as supporting letters", c.isAlpha());
         assertFalse("The conventions register as supporting numbers", c.isNumeric());
         assertFalse("The conventions are registering a latin-1 constraint", c.isLatin1Constrained());
-        assertEquals("The letter case requirements do not match", NamingConventions.Case.MIXED, c.getAlphaCase());
+        assertEquals("The letter case requirements do not match", NamingConstraints.Case.MIXED, c.getAlphaCase());
         assertTrue("The conventions do not register as supporting spaces", c.isSpaces());
         assertTrue("The conventions do not register as supporting symbols", c.isSymbols());
 
@@ -153,7 +151,7 @@ public class NamingConventionsTest {
 
     @Test
     public void verifyLatin1() {
-        NamingConventions c = NamingConventions.getAlphaOnly(5, 10).limitedToLatin1();
+        NamingConstraints c = NamingConstraints.getAlphaOnly(5, 10).limitedToLatin1();
 
         assertEquals("The minimum name length does not match the requested value", 5, c.getMinimumLength());
         assertEquals("The maximum name length does not match the requested value", 10, c.getMaximumLength());
@@ -161,7 +159,7 @@ public class NamingConventionsTest {
         assertTrue("The conventions do not register as supporting letters", c.isAlpha());
         assertFalse("The conventions register as supporting numbers", c.isNumeric());
         assertTrue("The conventions do not register a latin-1 constraint", c.isLatin1Constrained());
-        assertEquals("The letter case requirements do not match", NamingConventions.Case.MIXED, c.getAlphaCase());
+        assertEquals("The letter case requirements do not match", NamingConstraints.Case.MIXED, c.getAlphaCase());
         assertTrue("The conventions do not register as supporting spaces", c.isSpaces());
         assertTrue("The conventions do not register as supporting symbols", c.isSymbols());
         assertFalse("The first character is supposed to be limited to letters for these conventions", c.isFirstCharacterNumericAllowed());
@@ -170,7 +168,7 @@ public class NamingConventionsTest {
 
     @Test
     public void verifyLowerCaseOnly() {
-        NamingConventions c = NamingConventions.getAlphaOnly(5, 10).lowerCaseOnly();
+        NamingConstraints c = NamingConstraints.getAlphaOnly(5, 10).lowerCaseOnly();
 
         assertEquals("The minimum name length does not match the requested value", 5, c.getMinimumLength());
         assertEquals("The maximum name length does not match the requested value", 10, c.getMaximumLength());
@@ -178,7 +176,7 @@ public class NamingConventionsTest {
         assertTrue("The conventions do not register as supporting letters", c.isAlpha());
         assertFalse("The conventions register as supporting numbers", c.isNumeric());
         assertFalse("The conventions register a latin-1 constraint", c.isLatin1Constrained());
-        assertEquals("The letter case requirements do not match", NamingConventions.Case.LOWER, c.getAlphaCase());
+        assertEquals("The letter case requirements do not match", NamingConstraints.Case.LOWER, c.getAlphaCase());
         assertTrue("The conventions do not register as supporting spaces", c.isSpaces());
         assertTrue("The conventions do not register as supporting symbols", c.isSymbols());
         assertFalse("The first character is supposed to be limited to letters for these conventions", c.isFirstCharacterNumericAllowed());
@@ -187,7 +185,7 @@ public class NamingConventionsTest {
 
     @Test
     public void verifyUpperCaseOnly() {
-        NamingConventions c = NamingConventions.getAlphaOnly(5, 10).upperCaseOnly();
+        NamingConstraints c = NamingConstraints.getAlphaOnly(5, 10).upperCaseOnly();
 
         assertEquals("The minimum name length does not match the requested value", 5, c.getMinimumLength());
         assertEquals("The maximum name length does not match the requested value", 10, c.getMaximumLength());
@@ -195,7 +193,7 @@ public class NamingConventionsTest {
         assertTrue("The conventions do not register as supporting letters", c.isAlpha());
         assertFalse("The conventions register as supporting numbers", c.isNumeric());
         assertFalse("The conventions register a latin-1 constraint", c.isLatin1Constrained());
-        assertEquals("The letter case requirements do not match", NamingConventions.Case.UPPER, c.getAlphaCase());
+        assertEquals("The letter case requirements do not match", NamingConstraints.Case.UPPER, c.getAlphaCase());
         assertTrue("The conventions do not register as supporting spaces", c.isSpaces());
         assertTrue("The conventions do not register as supporting symbols", c.isSymbols());
         assertFalse("The first character is supposed to be limited to letters for these conventions", c.isFirstCharacterNumericAllowed());
@@ -204,7 +202,7 @@ public class NamingConventionsTest {
 
     @Test
     public void verifyNoSpaces() {
-        NamingConventions c = NamingConventions.getAlphaOnly(5, 10).withNoSpaces();
+        NamingConstraints c = NamingConstraints.getAlphaOnly(5, 10).withNoSpaces();
 
         assertEquals("The minimum name length does not match the requested value", 5, c.getMinimumLength());
         assertEquals("The maximum name length does not match the requested value", 10, c.getMaximumLength());
@@ -212,7 +210,7 @@ public class NamingConventionsTest {
         assertTrue("The conventions do not register as supporting letters", c.isAlpha());
         assertFalse("The conventions register as supporting numbers", c.isNumeric());
         assertFalse("The conventions register a latin-1 constraint", c.isLatin1Constrained());
-        assertEquals("The letter case requirements do not match", NamingConventions.Case.MIXED, c.getAlphaCase());
+        assertEquals("The letter case requirements do not match", NamingConstraints.Case.MIXED, c.getAlphaCase());
         assertFalse("The conventions register as supporting spaces", c.isSpaces());
         assertTrue("The conventions do not register as supporting symbols", c.isSymbols());
         assertFalse("The first character is supposed to be limited to letters for these conventions", c.isFirstCharacterNumericAllowed());
@@ -221,7 +219,7 @@ public class NamingConventionsTest {
 
     @Test
     public void verifyNoSymbols() {
-        NamingConventions c = NamingConventions.getAlphaOnly(5, 10).withNoSymbols();
+        NamingConstraints c = NamingConstraints.getAlphaOnly(5, 10).withNoSymbols();
 
         assertEquals("The minimum name length does not match the requested value", 5, c.getMinimumLength());
         assertEquals("The maximum name length does not match the requested value", 10, c.getMaximumLength());
@@ -229,7 +227,7 @@ public class NamingConventionsTest {
         assertTrue("The conventions do not register as supporting letters", c.isAlpha());
         assertFalse("The conventions register as supporting numbers", c.isNumeric());
         assertFalse("The conventions register a latin-1 constraint", c.isLatin1Constrained());
-        assertEquals("The letter case requirements do not match", NamingConventions.Case.MIXED, c.getAlphaCase());
+        assertEquals("The letter case requirements do not match", NamingConstraints.Case.MIXED, c.getAlphaCase());
         assertTrue("The conventions do not register as supporting spaces", c.isSpaces());
         assertFalse("The conventions register as supporting symbols", c.isSymbols());
         assertFalse("The first character is supposed to be limited to letters for these conventions", c.isFirstCharacterNumericAllowed());
@@ -238,7 +236,7 @@ public class NamingConventionsTest {
 
     @Test
     public void checkUniquenessBoundedAlphanumeric() {
-        NamingConventions c = NamingConventions.getAlphaNumeric(5, 12);
+        NamingConstraints c = NamingConstraints.getAlphaNumeric(5, 12);
         ArrayList<String> names = new ArrayList<String>();
         String base = "testthing";
 
@@ -254,7 +252,7 @@ public class NamingConventionsTest {
 
     @Test
     public void checkUniquenessAlmostLargeAlphanumeric() {
-        NamingConventions c = NamingConventions.getAlphaNumeric(5, 12);
+        NamingConstraints c = NamingConstraints.getAlphaNumeric(5, 12);
         ArrayList<String> names = new ArrayList<String>();
         String base = "testthing12";
 
@@ -270,7 +268,7 @@ public class NamingConventionsTest {
 
     @Test
     public void checkUniquenessLargeAlphanumeric() {
-        NamingConventions c = NamingConventions.getAlphaNumeric(5, 12);
+        NamingConstraints c = NamingConstraints.getAlphaNumeric(5, 12);
         ArrayList<String> names = new ArrayList<String>();
         String base = "testthingabcdefghi";
 
@@ -286,28 +284,28 @@ public class NamingConventionsTest {
 
     @Test
     public void upperCase() {
-        String test = NamingConventions.Case.UPPER.convert("tesT", Locale.getDefault());
+        String test = NamingConstraints.Case.UPPER.convert("tesT", Locale.getDefault());
 
         assertEquals("Failed to convert to upper case", "tesT".toUpperCase(), test);
     }
 
     @Test
     public void lowerCase() {
-        String test = NamingConventions.Case.LOWER.convert("tesT", Locale.getDefault());
+        String test = NamingConstraints.Case.LOWER.convert("tesT", Locale.getDefault());
 
         assertEquals("Failed to convert to lower case", "tesT".toLowerCase(), test);
     }
 
     @Test
     public void mixedCase() {
-        String test = NamingConventions.Case.MIXED.convert("tesT", Locale.getDefault());
+        String test = NamingConstraints.Case.MIXED.convert("tesT", Locale.getDefault());
 
         assertEquals("Failed to convert to mixed case", "tesT", test);
     }
 
     @Test
     public void convertNames() {
-        NamingConventions c = NamingConventions.getStrictInstance(5, 10);
+        NamingConstraints c = NamingConstraints.getStrictInstance(5, 10);
         String str = "a";
         String result;
 

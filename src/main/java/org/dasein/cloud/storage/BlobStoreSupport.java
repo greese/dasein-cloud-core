@@ -23,7 +23,7 @@ import org.dasein.cloud.AccessControlledService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.identity.ServiceAction;
-import org.dasein.cloud.util.NamingConventions;
+import org.dasein.cloud.util.NamingConstraints;
 import org.dasein.util.uom.storage.Storage;
 
 import javax.annotation.Nonnull;
@@ -77,9 +77,11 @@ public interface BlobStoreSupport extends AccessControlledService {
 
     public int getMaxObjectsPerBucket() throws CloudException, InternalException;
 
-    public @Nonnull NamingConventions getBucketNameRules() throws CloudException, InternalException;
+    public @Nonnull
+    NamingConstraints getBucketNameRules() throws CloudException, InternalException;
 
-    public @Nonnull NamingConventions getObjectNameRules() throws CloudException, InternalException;
+    public @Nonnull
+    NamingConstraints getObjectNameRules() throws CloudException, InternalException;
 
     public @Nonnull String getProviderTermForBucket(@Nonnull Locale locale);
     

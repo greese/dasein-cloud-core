@@ -31,7 +31,7 @@ import java.util.Random;
  * @version 2014.03 initial version (issue #134 and #121)
  * @since 2014.03
  */
-public class NamingConventions {
+public class NamingConstraints {
     /**
      * Indicates case restrictions on alphabetic components.
      */
@@ -72,8 +72,8 @@ public class NamingConventions {
      * @param maxLength the maximum length of a valid name (will be adjusted to min length if less than min length)
      * @return naming conventions that match the characteristics described above
      */
-    static public NamingConventions getAlphaOnly(@Nonnegative int minLength, @Nonnegative int maxLength) {
-        NamingConventions n = new NamingConventions();
+    static public NamingConstraints getAlphaOnly(@Nonnegative int minLength, @Nonnegative int maxLength) {
+        NamingConstraints n = new NamingConstraints();
 
         n.alpha = true;
         n.alphaCase = Case.MIXED;
@@ -100,8 +100,8 @@ public class NamingConventions {
      * @param maxLength the maximum length of a valid name (will be adjusted to min length if less than min length)
      * @return naming conventions that match the characteristics described above
      */
-    static public NamingConventions getAlphaNumeric(@Nonnegative int minLength, @Nonnegative int maxLength) {
-        NamingConventions n = new NamingConventions();
+    static public NamingConstraints getAlphaNumeric(@Nonnegative int minLength, @Nonnegative int maxLength) {
+        NamingConstraints n = new NamingConstraints();
 
         n.alpha = true;
         n.alphaCase = Case.MIXED;
@@ -128,8 +128,8 @@ public class NamingConventions {
      * @param maximumLength the maximum length of a valid name (will be adjusted to min length if less than min length)
      * @return naming conventions that match the characteristics described above
      */
-    static public NamingConventions getStrictInstance(@Nonnegative int minimumLength, @Nonnegative int maximumLength) {
-        NamingConventions n = new NamingConventions();
+    static public NamingConstraints getStrictInstance(@Nonnegative int minimumLength, @Nonnegative int maximumLength) {
+        NamingConstraints n = new NamingConstraints();
 
         n.alpha = true;
         n.alphaCase = Case.LOWER;
@@ -160,7 +160,7 @@ public class NamingConventions {
     private char[]  symbolConstraints;
     private boolean symbols;
 
-    private NamingConventions() { }
+    private NamingConstraints() { }
 
     /**
      * Alters the naming conventions so that any support for symbols is specifically limited to a certain set of
@@ -168,7 +168,8 @@ public class NamingConventions {
      * @param symbols the valid symbols for names conforming to these conventions
      * @return this
      */
-    public @Nonnull NamingConventions constrainedBy(@Nonnull char ... symbols) {
+    public @Nonnull
+    NamingConstraints constrainedBy(@Nonnull char ... symbols) {
         symbolConstraints = symbols;
         this.symbols = true;
         return this;
@@ -556,7 +557,8 @@ public class NamingConventions {
      * Constrains these naming conventions to the latin 1 character set.
      * @return this
      */
-    public @Nonnull NamingConventions limitedToLatin1() {
+    public @Nonnull
+    NamingConstraints limitedToLatin1() {
         latin1Constrained = true;
         return this;
     }
@@ -565,7 +567,8 @@ public class NamingConventions {
      * Constrains the letters supported by these naming conventions to lower case letters.
      * @return this
      */
-    public @Nonnull NamingConventions lowerCaseOnly() {
+    public @Nonnull
+    NamingConstraints lowerCaseOnly() {
         alphaCase = Case.LOWER;
         return this;
     }
@@ -574,7 +577,8 @@ public class NamingConventions {
      * Constrains the letters supported by these naming conventions to upper case letters.
      * @return this
      */
-    public @Nonnull NamingConventions upperCaseOnly() {
+    public @Nonnull
+    NamingConstraints upperCaseOnly() {
         alphaCase = Case.UPPER;
         return this;
     }
@@ -583,7 +587,8 @@ public class NamingConventions {
      * Disallows spaces in names conforming to these naming conventions.
      * @return this
      */
-    public @Nonnull NamingConventions withNoSpaces() {
+    public @Nonnull
+    NamingConstraints withNoSpaces() {
         spaces = false;
         return this;
     }
@@ -592,7 +597,8 @@ public class NamingConventions {
      * Disallows spaces in names conforming to these naming conventions.
      * @return this
      */
-    public @Nonnull NamingConventions withNoSymbols() {
+    public @Nonnull
+    NamingConstraints withNoSymbols() {
         symbols = false;
         return this;
     }

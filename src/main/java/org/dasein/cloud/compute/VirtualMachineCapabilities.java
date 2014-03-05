@@ -20,6 +20,7 @@ import org.dasein.cloud.Capabilities;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.Requirement;
+import org.dasein.cloud.util.NamingConstraints;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -168,6 +169,14 @@ public interface VirtualMachineCapabilities extends Capabilities {
      * @throws InternalException an internal error occurred processing the request
      */
     public @Nullable VMScalingCapabilities getVerticalScalingCapabilities() throws CloudException, InternalException;
+
+    /**
+     * Identifies the naming conventions that constrain how virtual machines may be named in this cloud.
+     * @return naming conventions that constrain virtual machine naming
+     * @throws CloudException an error occurred querying the cloud for naming constraints
+     * @throws InternalException an error occurred assembling the naming constraints object
+     */
+    public @Nonnull NamingConstraints getVirtualMachineNamingConstraints() throws CloudException, InternalException;
 
     /**
      * Indicates whether the VM requires a Data Center to be specified upon launch
