@@ -29,38 +29,38 @@ import javax.annotation.Nullable;
  * @version 2014.03 added data warehousing support access (issue #100)
  */
 public interface PlatformServices {
-    public abstract @Nullable CDNSupport getCDNSupport();
+    public @Nullable CDNSupport getCDNSupport();
 
     /**
      * @return access to any support for data warehousing functionality, or <code>null</code> if no support exists
      */
-    public abstract @Nullable DataWarehouseSupport getDataWarehouseSupport();
+    public @Nullable DataWarehouseSupport getDataWarehouseSupport();
 
-    public abstract @Nullable KeyValueDatabaseSupport getKeyValueDatabaseSupport();
+    public @Nullable KeyValueDatabaseSupport getKeyValueDatabaseSupport();
     
-    public abstract @Nullable MQSupport getMessageQueueSupport();
+    public @Nullable MQSupport getMessageQueueSupport();
     
-    public abstract @Nullable PushNotificationSupport getPushNotificationSupport();
+    public @Nullable PushNotificationSupport getPushNotificationSupport();
     
-    public abstract @Nullable RelationalDatabaseSupport getRelationalDatabaseSupport();
+    public @Nullable RelationalDatabaseSupport getRelationalDatabaseSupport();
 
-    public abstract @Nullable MonitoringSupport getMonitoringSupport();
+    public @Nullable MonitoringSupport getMonitoringSupport();
     
-    public abstract boolean hasCDNSupport();
+    public boolean hasCDNSupport();
 
     /**
      * @return true if this cloud supports data warehousing functionality in this region
      */
-    public abstract boolean hasDataWarehouseSupport();
+    public boolean hasDataWarehouseSupport();
 
-    public abstract boolean hasKeyValueDatabaseSupport();
+    public boolean hasKeyValueDatabaseSupport();
     
-    public abstract boolean hasMessageQueueSupport();
+    public boolean hasMessageQueueSupport();
     
-    public abstract boolean hasPushNotificationSupport();
+    public boolean hasPushNotificationSupport();
     
-    public abstract boolean hasRelationalDatabaseSupport();
+    public boolean hasRelationalDatabaseSupport();
 
-   public abstract boolean hasMonitoringSupport();
+   public boolean hasMonitoringSupport();
 
 }

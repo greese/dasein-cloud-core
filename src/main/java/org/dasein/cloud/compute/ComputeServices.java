@@ -33,50 +33,50 @@ public interface ComputeServices {
     /**
      * @return access to support for auto-scaling capabilities native to the cloud provider
      */
-    public abstract @Nullable AutoScalingSupport getAutoScalingSupport();
+    public @Nullable AutoScalingSupport getAutoScalingSupport();
 
     /**
      * @return access to support for images/templates in the cloud provider
      */
-    public abstract @Nullable MachineImageSupport getImageSupport();
+    public @Nullable MachineImageSupport getImageSupport();
 
     /**
      * @return access to support for volume snapshots in the cloud provider
      */
-    public abstract @Nullable SnapshotSupport getSnapshotSupport();
+    public @Nullable SnapshotSupport getSnapshotSupport();
 
     /**
      * @return access to support for virtual machines in the cloud provider
      */
-    public abstract @Nullable VirtualMachineSupport getVirtualMachineSupport();
+    public @Nullable VirtualMachineSupport getVirtualMachineSupport();
 
     /**
      * @return access to support for volumes in the cloud provider
      */
-    public abstract @Nullable VolumeSupport getVolumeSupport();
+    public @Nullable VolumeSupport getVolumeSupport();
 
     /**
      * @return indicates whether or not the cloud provider supports native auto-scaling capabilities
      */
-    public abstract boolean hasAutoScalingSupport();
+    public boolean hasAutoScalingSupport();
 
     /**
      * @return indicates whether or not the cloud provider supports images/templates
      */
-    public abstract boolean hasImageSupport();
+    public boolean hasImageSupport();
 
     /**
      * @return indicates whether or not the cloud provider supports snapshotting volumes
      */
-    public abstract boolean hasSnapshotSupport();
+    public boolean hasSnapshotSupport();
 
     /**
      * @return indicates whether or not the cloud provider supports virtual machines
      */
-    public abstract boolean hasVirtualMachineSupport();
+    public boolean hasVirtualMachineSupport();
 
     /**
      * @return indicates whether or not the cloud provider supports block or network volumes
      */
-    public abstract boolean hasVolumeSupport();
+    public boolean hasVolumeSupport();
 }
