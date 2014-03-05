@@ -285,9 +285,29 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
             return Collections.singleton(launch(withLaunchOptions).getProviderVirtualMachineId());
         }
         final ArrayList<Future<String>> results = new ArrayList<Future<String>>();
+        MachineImage image = null;
 
+        ComputeServices services = getProvider().getComputeServices();
+
+        if( services != null ) {
+            MachineImageSupport support = services.getImageSupport();
+
+            if( support != null ) {
+                image = support.getImage(withLaunchOptions.getMachineImageId());
+            }
+        }
+        NamingConstraints c = NamingConstraints.getHostNameInstance(image == null || image.getPlatform().equals(Platform.UNKNOWN) || image.getPlatform().equals(Platform.WINDOWS));
+        String baseHost = c.convertToValidName(withLaunchOptions.getHostName(), Locale.US);
+
+        if( baseHost == null ) {
+            baseHost = withLaunchOptions.getHostName();
+        }
         for( int i=1; i<=count; i++ ) {
-            results.add(launchAsync(withLaunchOptions));
+            String hostName = c.incrementName(baseHost, i);
+            String friendlyName = withLaunchOptions.getFriendlyName() + "-" + i;
+            VMLaunchOptions options = withLaunchOptions.copy(hostName == null ? withLaunchOptions.getHostName() + "-" + i : hostName, friendlyName);
+
+            results.add(launchAsync(options));
         }
 
         PopulatorThread<String> populator = new PopulatorThread<String>(new JiteratorPopulator<String>() {

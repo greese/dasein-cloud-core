@@ -27,9 +27,7 @@ import org.dasein.cloud.network.NICCreateOptions;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Configuration of a virtual machine to be launched prior to launch. Dasein Cloud uses this to create a complete
@@ -79,7 +77,8 @@ public class VMLaunchOptions {
     static public @Nonnull VMLaunchOptions getInstance(@Nonnull String withStandardProductId, @Nonnull String usingMachineImageId, @Nonnull String withHostName, @Nonnull String havingFriendlyName, @Nonnull String withDescription) {
         return new VMLaunchOptions(withStandardProductId, usingMachineImageId,withHostName, havingFriendlyName, withDescription);
     }
-    
+
+    // NOTE: ADDING/REMOVING/CHANGING AN ATTRIBUTE? MAKE SURE YOU REFLECT THE CHANGE IN THE copy() METHOD
     private String             bootstrapKey;
     private String             bootstrapPassword;
     private String             bootstrapUser;
@@ -95,12 +94,12 @@ public class VMLaunchOptions {
     private String             networkProductId;
     private NICConfig[]        networkInterfaces;
     private boolean            preventApiTermination;
+    private String             privateIp;
+    private boolean            provisionPublicIp;
     private String             ramdiskId;
     private String             rootVolumeProductId;
     private String             standardProductId;
     private String[]           staticIpIds;
-    private String             privateIp;
-    private boolean            provisionPublicIp;
     private String             userData;
     private String             vlanId;
     private String             subnetId;
@@ -108,6 +107,7 @@ public class VMLaunchOptions {
     private boolean            ioOptimized;
     private boolean            ipForwardingAllowed;
     private String             roleId;
+    // NOTE: SEE NOTE AT TOP OF ATTRIBUTE LIST WHEN ADDING/REMOVING/CHANGING AN ATTRIBUTE
 
     private VMLaunchOptions() { }
     
@@ -140,6 +140,76 @@ public class VMLaunchOptions {
             throw new OperationNotSupportedException(provider.getCloudName() + " does not have virtual machine support");
         }
         return support.launch(this).getProviderVirtualMachineId();
+    }
+
+    /**
+     * Copies the meaningful aspects of this set of VM launch options to be used in a second set of VM launch options. The only
+     * things NOT copied are attributes that are inherently instance specific such as IP address, volume attachments,
+     * private IP, and NICs. Any volumes and/or NICs to be created, however, are preserved.
+     * @param havingHostName a host name special for this new set of VM create options
+     * @param havingFriendlyName a friendly name special for this new set of VM create options
+     * @return a copy of this set of VM launch options minus any instance-specific elements
+     */
+    public @Nonnull VMLaunchOptions copy(@Nonnull String havingHostName, @Nonnull String havingFriendlyName) {
+        VMLaunchOptions options = new VMLaunchOptions(standardProductId, machineImageId, havingHostName, havingFriendlyName, description);
+
+        options.bootstrapKey = bootstrapKey;
+        options.bootstrapPassword = bootstrapPassword;
+        options.bootstrapUser = bootstrapUser;
+        options.dataCenterId = dataCenterId;
+        options.extendedAnalytics = extendedAnalytics;
+        options.firewallIds = (firewallIds == null ? new String[0] : Arrays.copyOf(options.firewallIds, options.firewallIds.length));
+        options.ioOptimized = ioOptimized;
+        options.ipForwardingAllowed = ipForwardingAllowed;
+        options.kernelId = kernelId;
+        if( metaData != null ) {
+            options.metaData = new HashMap<String, Object>();
+            options.metaData.putAll(metaData);
+        }
+        if( networkInterfaces != null && networkInterfaces.length > 0 ) {
+            ArrayList<NICConfig> cfgs = new ArrayList<NICConfig>();
+
+            for( NICConfig cfg : networkInterfaces ) {
+                if( cfg.nicToCreate != null ) {
+                    NICConfig c = new NICConfig();
+
+                    c.nicToCreate = cfg.nicToCreate.copy(c.nicToCreate.getName() + " - " + hostName);
+                    cfgs.add(c);
+                }
+            }
+            options.networkInterfaces = cfgs.toArray(new NICConfig[cfgs.size()]);
+        }
+        else {
+            options.networkInterfaces = new NICConfig[0];
+        }
+        options.networkProductId = networkProductId;
+        options.preventApiTermination = preventApiTermination;
+        options.privateIp = null;
+        options.provisionPublicIp = provisionPublicIp;
+        options.ramdiskId = ramdiskId;
+        options.rootVolumeProductId = rootVolumeProductId;
+        options.staticIpIds = new String[0];
+        options.userData = userData;
+        options.vlanId = vlanId;
+        options.subnetId = subnetId;
+        options.volumes = new VolumeAttachment[0];
+        options.ioOptimized = ioOptimized;
+        options.ipForwardingAllowed = ipForwardingAllowed;
+        options.roleId = roleId;
+        if( volumes != null && volumes.length > 0 ) {
+            ArrayList<VolumeAttachment> copy = new ArrayList<VolumeAttachment>();
+
+            for( VolumeAttachment a : volumes ) {
+                if( a.volumeToCreate != null ) {
+                    VolumeAttachment nv = new VolumeAttachment();
+
+                    nv.volumeToCreate = a.volumeToCreate.copy(a.volumeToCreate.getName() + "-" + hostName);
+                    copy.add(nv);
+                }
+            }
+            options.volumes = copy.toArray(new VolumeAttachment[copy.size()]);
+        }
+        return options;
     }
 
     /**

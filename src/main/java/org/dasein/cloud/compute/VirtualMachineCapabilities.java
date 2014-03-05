@@ -171,7 +171,7 @@ public interface VirtualMachineCapabilities extends Capabilities {
     public @Nullable VMScalingCapabilities getVerticalScalingCapabilities() throws CloudException, InternalException;
 
     /**
-     * Identifies the naming conventions that constrain how virtual machines may be named in this cloud.
+     * Identifies the naming conventions that constrain how virtual machines may be named (friendly name) in this cloud.
      * @return naming conventions that constrain virtual machine naming
      * @throws CloudException an error occurred querying the cloud for naming constraints
      * @throws InternalException an error occurred assembling the naming constraints object

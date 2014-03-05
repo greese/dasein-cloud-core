@@ -72,7 +72,7 @@ public class NamingConstraints {
      * @param maxLength the maximum length of a valid name (will be adjusted to min length if less than min length)
      * @return naming conventions that match the characteristics described above
      */
-    static public NamingConstraints getAlphaOnly(@Nonnegative int minLength, @Nonnegative int maxLength) {
+    static public @Nonnull NamingConstraints getAlphaOnly(@Nonnegative int minLength, @Nonnegative int maxLength) {
         NamingConstraints n = new NamingConstraints();
 
         n.alpha = true;
@@ -100,7 +100,7 @@ public class NamingConstraints {
      * @param maxLength the maximum length of a valid name (will be adjusted to min length if less than min length)
      * @return naming conventions that match the characteristics described above
      */
-    static public NamingConstraints getAlphaNumeric(@Nonnegative int minLength, @Nonnegative int maxLength) {
+    static public @Nonnull NamingConstraints getAlphaNumeric(@Nonnegative int minLength, @Nonnegative int maxLength) {
         NamingConstraints n = new NamingConstraints();
 
         n.alpha = true;
@@ -121,6 +121,28 @@ public class NamingConstraints {
     }
 
     /**
+     * Provides a convenient set of naming constraints for naming hosts on a network.
+     * @param forWindowsNetwork true if you are targeting a windows host, false otherwise
+     * @return naming constraints supporting host names
+     */
+    static public @Nonnull NamingConstraints getHostNameInstance(boolean forWindowsNetwork) {
+        NamingConstraints n = new NamingConstraints();
+
+        n.minimumLength = 3;
+        n.maximumLength = (forWindowsNetwork ? 15 : 30);
+        n.alpha = true;
+        n.alphaCase = (forWindowsNetwork ? Case.UPPER : Case.MIXED);
+        n.latin1Constrained = true;
+        n.numeric = true;
+        n.spaces = false;
+        n.symbols = !forWindowsNetwork;
+        n.symbolConstraints = (forWindowsNetwork ? null : new char[] { '-' });
+        n.firstCharacterNumericAllowed = false;
+        n.firstCharacterSymbolAllowed = false;
+        return n;
+    }
+
+    /**
      * Constructs a baseline set of naming conventions that match strict naming often seen in old file systems and programming
      * languages. The resulting conventions will be alphanumeric lower-case and latin-1 only. The first
      * character allowed must be a letter.
@@ -128,7 +150,7 @@ public class NamingConstraints {
      * @param maximumLength the maximum length of a valid name (will be adjusted to min length if less than min length)
      * @return naming conventions that match the characteristics described above
      */
-    static public NamingConstraints getStrictInstance(@Nonnegative int minimumLength, @Nonnegative int maximumLength) {
+    static public @Nonnull NamingConstraints getStrictInstance(@Nonnegative int minimumLength, @Nonnegative int maximumLength) {
         NamingConstraints n = new NamingConstraints();
 
         n.alpha = true;
