@@ -19,6 +19,7 @@
 
 package org.dasein.cloud;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
@@ -33,7 +34,8 @@ import org.dasein.cloud.identity.IdentityServices;
 import org.dasein.cloud.network.NetworkServices;
 import org.dasein.cloud.platform.PlatformServices;
 import org.dasein.cloud.storage.StorageServices;
-import org.dasein.cloud.util.NamedItemLoader;
+import org.dasein.cloud.util.ResourceNamespace;
+import org.dasein.cloud.util.NamingConstraints;
 import org.dasein.util.CalendarWrapper;
 
 /**
@@ -57,6 +59,8 @@ import org.dasein.util.CalendarWrapper;
  * {@link org.dasein.cloud.OperationNotSupportedException} to flag the lack of support.
  * </p>
  * @author George Reese @ enstratius (http://www.enstratius.com)
+ * @version 2014.03 added findUniqueName() based on logic by Stas (issue #134)
+ * @since 2010.08
  */
 public abstract class CloudProvider {
     @SuppressWarnings("UnusedDeclaration")
@@ -221,18 +225,40 @@ public abstract class CloudProvider {
         }
     }
 
-    /*
-    public @Nonnull String findUniqueName(@Nonnull String desiredName, @Nonnull String defaultName, @Nonnull NamedItemLoader loader) throws CloudException, InternalException {
-        if( desiredName.equals("") ) {
-            desiredName = defaultName;
+    /**
+     * General purpose method for finding a unique name based upon a desired base name. The name resulting from this
+     * method is guaranteed to be both valid for objects of its type and unique among objects of those type across
+     * the appropriate namespace. Unless, of course, the result is <code>null</code>. A <code>null</code> value
+     * means that no permutation of the base name could result in a valid unique name for these kinds of objects
+     * in this cloud.
+     * @param baseName the name that the user would ideally desire for an object to be created
+     * @param constraints the naming constraints that govern the naming of this kind of object
+     * @param namespace an implementation of an interface responsible for searching efficiently for the availability of a given name
+     * @return a valid, unique name based on the desired base name or <code>null</code> if no unique permutation was achievable
+     * @throws CloudException an error occurred interacting with the cloud provider to find the unique name
+     * @throws InternalException an internal error occurred calculating a unique name
+     */
+    public @Nullable String findUniqueName(@Nonnull String baseName, @Nonnull NamingConstraints constraints, @Nonnull ResourceNamespace namespace) throws CloudException, InternalException {
+        if( !constraints.isValidName(baseName) ) {
+            baseName = constraints.convertToValidName(baseName, Locale.getDefault());
+            if( baseName == null ) {
+                return null;
+            }
         }
-        String baseName = loader.validateBaseName(desiredName);
+        if( !namespace.hasNamedItem(baseName) ) {
+            return baseName;
+        }
+        String name = baseName;
+        int i = 1;
 
-        while( loader.hasNamedItem(desiredName) ) {
-            desiredName = loader.increment(baseName);
+        while( namespace.hasNamedItem(name) ) {
+            name = constraints.incrementName(baseName, i++);
+            if( name == null ) {
+                return null;
+            }
         }
+        return name;
     }
-    */
 
     public abstract @Nullable AdminServices getAdminServices();
 
