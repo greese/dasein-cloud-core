@@ -16,10 +16,13 @@
 
 package org.dasein.cloud.util;
 
+import org.dasein.cloud.*;
+import org.dasein.cloud.test.TestNewCloudProvider;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -322,5 +325,28 @@ public class NamingConstraintsTest {
         result = c.convertToValidName(str, Locale.getDefault());
         assertNull("There should be no way to craft a valid name for " + str + ", but got " + result, result);
 
+    }
+
+    @Test
+    public void findUniqueName() throws CloudException, InternalException {
+        Cloud cloud = Cloud.register("Some Provider", "Some Cloud", "https://example.com", TestNewCloudProvider.class);
+        ProviderContext ctx = cloud.createContext("12345", "antarctica", CloudConnectTestCase.KEYS, CloudConnectTestCase.X509, CloudConnectTestCase.VERSION);
+        NamingConstraints constraints = NamingConstraints.getStrictInstance(2, 20).constrainedBy(new char[] { '_', '-', '=' });
+        final String[] names = { "friend", "friendship", "beta", "softdrink" };
+        CloudProvider p = ctx.connect();
+
+        String unique = p.findUniqueName("friend", constraints, new ResourceNamespace() {
+            @Override
+            public boolean hasNamedItem(@Nonnull String withName) throws CloudException, InternalException {
+                for( String name : names ) {
+                    if( name.equalsIgnoreCase(withName) ) { // a case-insensitive example!
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+        assertNotNull("It should have found a unique name, but it did not", unique);
+        assertFalse("The unique name equals the provided name, which already exists", "friend".equalsIgnoreCase(unique));
     }
 }
