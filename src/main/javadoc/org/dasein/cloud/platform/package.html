@@ -1,0 +1,42 @@
+<!--
+
+    Copyright (C) 2009-2014 Dell, Inc.
+    See annotations for authorship information
+
+    ====================================================================
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+    ====================================================================
+
+-->
+
+<body>
+  <p>
+      Provides access to a variety of Platform as a Service (PaaS) type offerings. What different people call PaaS is
+      a controversial topic in itself. Dasein considers anything a PaaS that is any kind of abstraction on top of core
+      virtual infrastructure. To interact with this service, you will want to first fetch the platform services via
+      {@link org.dasein.cloud.platform.PlatformServices}. This will of coourse give you access to the different kinds
+      of services bundled under the PaaS label.
+  </p>
+  <p>
+      Current PaaS services:
+  </p>
+  <ol>
+      <li>{@link org.dasein.cloud.platform.CDNSupport}</li>
+      <li>{@link org.dasein.cloud.platform.bigdata.DataWarehouseSupport}</li>
+      <li>{@link org.dasein.cloud.platform.KeyValueDatabaseSupport}</li>
+      <li>{@link org.dasein.cloud.platform.MonitoringSupport}</li>
+      <li>{@link org.dasein.cloud.platform.MQSupport}</li>
+      <li>{@link org.dasein.cloud.platform.PushNotificationSupport}</li>
+      <li>{@link org.dasein.cloud.platform.RelationalDatabaseSupport}</li>
+  </ol>
+</body>
