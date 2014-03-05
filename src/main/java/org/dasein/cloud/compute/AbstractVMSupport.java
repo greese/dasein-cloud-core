@@ -34,6 +34,9 @@ import org.dasein.cloud.util.Cache;
 import org.dasein.cloud.util.CacheLevel;
 import org.dasein.cloud.util.NamingConstraints;
 import org.dasein.util.CalendarWrapper;
+import org.dasein.util.Jiterator;
+import org.dasein.util.JiteratorPopulator;
+import org.dasein.util.PopulatorThread;
 import org.dasein.util.uom.storage.Gigabyte;
 import org.dasein.util.uom.storage.Megabyte;
 import org.dasein.util.uom.storage.Storage;
@@ -52,6 +55,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * Default implementation of virtual machine support for clouds with very little support.
@@ -249,6 +256,73 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     @Deprecated
     public boolean isUserDataSupported() throws CloudException, InternalException {
         return getCapabilities().isUserDataSupported();
+    }
+
+    static private final ExecutorService launchPool = Executors.newCachedThreadPool();
+
+    /**
+     * Launches a virtual machine asynchronously from a cached thread pool. All errors are pulled out from the
+     * the {@link java.util.concurrent.Future} result.
+     * @param withLaunchOptions the launch options to use in launching the virtual machine
+     * @return the unique ID of the launched virtual machine
+     */
+    protected Future<String> launchAsync(final @Nonnull VMLaunchOptions withLaunchOptions) {
+        return launchPool.submit(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                return launch(withLaunchOptions).getProviderVirtualMachineId();
+            }
+        });
+    }
+
+    // the default implementation does parallel launches and throws an exception only if it is unable to launch any virtual machines
+    @Override
+    public @Nonnull Iterable<String> launchMany(final @Nonnull VMLaunchOptions withLaunchOptions, final @Nonnegative int count) throws CloudException, InternalException {
+        if( count < 1 ) {
+            throw new InternalException("Invalid attempt to launch less than 1 virtual machine (requested " + count + ").");
+        }
+        if( count == 1 ) {
+            return Collections.singleton(launch(withLaunchOptions).getProviderVirtualMachineId());
+        }
+        final ArrayList<Future<String>> results = new ArrayList<Future<String>>();
+
+        for( int i=1; i<=count; i++ ) {
+            results.add(launchAsync(withLaunchOptions));
+        }
+
+        PopulatorThread<String> populator = new PopulatorThread<String>(new JiteratorPopulator<String>() {
+            @Override
+            public void populate(@Nonnull Jiterator<String> iterator) throws Exception {
+                ArrayList<Future<String>> original = results;
+                ArrayList<Future<String>> copy = new ArrayList<Future<String>>();
+                Exception exception = null;
+                boolean loaded = false;
+
+                while( !original.isEmpty() ) {
+                    for( Future<String> result : original ) {
+                        if( result.isDone() ) {
+                            try {
+                                iterator.push(result.get());
+                                loaded = true;
+                            }
+                            catch( Exception e ) {
+                                exception = e;
+                            }
+                        }
+                        else {
+                            copy.add(result);
+                        }
+                    }
+                    original = copy;
+                }
+                if( exception != null && !loaded ) {
+                    throw exception;
+                }
+            }
+        });
+
+        populator.populate();
+        return populator.getResult();
     }
 
     @Override

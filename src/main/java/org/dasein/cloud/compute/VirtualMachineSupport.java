@@ -235,7 +235,20 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @deprecated use {@link #launch(VMLaunchOptions)}
      */
     public @Nonnull VirtualMachine launch(@Nonnull String fromMachineImageId, @Nonnull VirtualMachineProduct product, @Nonnull String dataCenterId, @Nonnull String name, @Nonnull String description, @Nullable String withKeypairId, @Nullable String inVlanId, boolean withAnalytics, boolean asSandbox, @Nullable String[] firewallIds, @Nullable Tag ... tags) throws InternalException, CloudException;
-    
+
+    /**
+     * Launches multiple virtual machines based on the same set of launch options. In clouds that support launching many VMs
+     * in a single request, it will perform this operation as a single request. In other VMs, however, it may perform this
+     * as parallel calls to {@link #launch(VMLaunchOptions)}. In the event of parallel launches, this method is considered
+     * a success as long as just one virtual machine launches. Thus an error is thrown only if no virtual machines were provisioned.
+     * @param withLaunchOptions the launch options that define how the virtual machines will be configured
+     * @param count the number of virtual machines to launch
+     * @return a list of virtual machines successfully launched (the number launched may not match the requested number)
+     * @throws CloudException the cloud provider failed to provision ANY virtual machines
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation (virtual machines may have been provisioned)
+     */
+    public @Nonnull Iterable<String> launchMany(@Nonnull VMLaunchOptions withLaunchOptions, @Nonnegative int count) throws CloudException, InternalException;
+
     /**
      * Provides a list of firewalls protecting the specified server. If firewalls are not supported
      * in this cloud, the list will be empty.
