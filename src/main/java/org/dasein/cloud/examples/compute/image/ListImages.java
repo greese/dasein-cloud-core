@@ -67,9 +67,9 @@ public class ListImages {
                 System.out.println(provider.getCloudName() + " does not support machine images/templates.");
             }
             else {
-                System.out.println(provider.getCloudName() + " calls machine images \"" + imgSupport.getProviderTermForImage(Locale.getDefault()) + "\".");
-                // enumerate the machine images
                 try {
+                    System.out.println(provider.getCloudName() + " calls machine images \"" + imgSupport.getCapabilities().getProviderTermForImage(Locale.getDefault(), ImageClass.MACHINE) + "\".");
+                    // enumerate the machine images
                     int count = 0;
 
                     System.out.println("Machine images in " + provider.getCloudName() + " (may be none in clouds like AWS unless you specifically own some):");

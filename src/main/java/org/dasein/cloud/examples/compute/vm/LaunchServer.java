@@ -179,7 +179,7 @@ public class LaunchServer {
                             System.err.println("A root volume product definition is required, but no volume support exists.");
                             return;
                         }
-                        boolean findSmallest = volumeSupport.isVolumeSizeDeterminedByProduct();
+                        boolean findSmallest = volumeSupport.getCapabilities().isVolumeSizeDeterminedByProduct();
                         VolumeProduct vp = null;
                         long vpSize = 0L;
 
@@ -228,7 +228,7 @@ public class LaunchServer {
                             System.err.println("VLAN support is required, but was not able to identify a VLAN in an available state");
                             return;
                         }
-                        if( vlanSupport.getSubnetSupport().equals(Requirement.REQUIRED) ) {
+                        if( vlanSupport.getCapabilities().getSubnetSupport().equals(Requirement.REQUIRED) ) {
                             Subnet subnet = null;
 
                             for( Subnet s : vlanSupport.listSubnets(vlan.getProviderVlanId()) ) {
