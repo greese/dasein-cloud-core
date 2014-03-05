@@ -22,7 +22,7 @@ package org.dasein.cloud.admin;
 import javax.annotation.Nullable;
 
 public interface AdminServices {
-    public abstract @Nullable PrepaymentSupport getPrepaymentSupport();
+    public @Nullable PrepaymentSupport getPrepaymentSupport();
     
     public boolean hasPrepaymentSupport();
 }

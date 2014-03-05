@@ -89,7 +89,7 @@ public interface IPAddressCapabilities extends Capabilities{
      * @throws CloudException an error occurred with the cloud provider determining support
      * @throws InternalException a local error occurred determining support
      */
-    public abstract boolean isForwarding(IPVersion version) throws CloudException, InternalException;
+    public boolean isForwarding(IPVersion version) throws CloudException, InternalException;
 
     /**
      * Indicates whether or not you can request static IP addresses of the specified Internet Protocol version.
@@ -106,7 +106,7 @@ public interface IPAddressCapabilities extends Capabilities{
      * @throws CloudException an error occurred checking support for IP versions with the cloud provider
      * @throws InternalException a local error occurred preparing the supported version
      */
-    public abstract @Nonnull Iterable<IPVersion> listSupportedIPVersions() throws CloudException, InternalException;
+    public @Nonnull Iterable<IPVersion> listSupportedIPVersions() throws CloudException, InternalException;
 
     /**
      * Indicates whether or not IP addresses can be allocated for VLAN use. Only makes sense when the cloud

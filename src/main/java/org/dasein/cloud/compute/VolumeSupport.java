@@ -257,7 +257,7 @@ public interface VolumeSupport extends AccessControlledService {
      * @throws CloudException    an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public abstract void removeTags(@Nonnull String volumeId, @Nonnull Tag... tags) throws CloudException, InternalException;
+    public void removeTags(@Nonnull String volumeId, @Nonnull Tag... tags) throws CloudException, InternalException;
 
     /**
      * Removes meta-data from multiple volumes. If tag values are set, their removal is dependent on underlying cloud
@@ -268,7 +268,7 @@ public interface VolumeSupport extends AccessControlledService {
      * @throws CloudException    an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public abstract void removeTags(@Nonnull String[] volumeIds, @Nonnull Tag ... tags) throws CloudException, InternalException;
+    public void removeTags(@Nonnull String[] volumeIds, @Nonnull Tag ... tags) throws CloudException, InternalException;
 
     /**
      * Updates meta-data for a volume with the new values. It will not overwrite any value that currently
@@ -278,7 +278,7 @@ public interface VolumeSupport extends AccessControlledService {
      * @throws CloudException    an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public abstract void updateTags(@Nonnull String volumeId, @Nonnull Tag... tags) throws CloudException, InternalException;
+    public void updateTags(@Nonnull String volumeId, @Nonnull Tag... tags) throws CloudException, InternalException;
 
     /**
      * Updates meta-data for multiple volumes with the new values. It will not overwrite any value that currently
@@ -288,5 +288,5 @@ public interface VolumeSupport extends AccessControlledService {
      * @throws CloudException    an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public abstract void updateTags(@Nonnull String[] volumeIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+    public void updateTags(@Nonnull String[] volumeIds, @Nonnull Tag... tags) throws CloudException, InternalException;
 }

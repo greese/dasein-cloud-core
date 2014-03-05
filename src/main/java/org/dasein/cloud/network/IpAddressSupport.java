@@ -133,7 +133,7 @@ public interface IpAddressSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      * @throws CloudException an error occurred within the cloud provider
      */
-    public @Nonnull abstract IPAddressCapabilities getCapabilities()throws CloudException, InternalException;
+    public @Nonnull IPAddressCapabilities getCapabilities()throws CloudException, InternalException;
 
     /**
      * Provides the {@link IpAddress} identified by the specified unique address ID.
@@ -219,7 +219,7 @@ public interface IpAddressSupport extends AccessControlledService {
      * @deprecated use {@link IPAddressCapabilities#isForwarding(IPVersion)}
      */
     @Deprecated
-    public abstract boolean isForwarding(IPVersion version) throws CloudException, InternalException;
+    public boolean isForwarding(IPVersion version) throws CloudException, InternalException;
     
     /**
      * Indicates whether the underlying cloud allows you to make programmatic requests for
@@ -285,7 +285,7 @@ public interface IpAddressSupport extends AccessControlledService {
      * @throws InternalException a local error occurred loading the IP addresses
      * @throws CloudException an error occurred with the cloud provider while requesting the IP addresses
      */
-    public abstract @Nonnull Iterable<IpAddress> listIpPool(@Nonnull IPVersion version, boolean unassignedOnly) throws InternalException, CloudException;
+    public @Nonnull Iterable<IpAddress> listIpPool(@Nonnull IPVersion version, boolean unassignedOnly) throws InternalException, CloudException;
 
     /**
      * Lists the status of all IP addresses of the specified IP version that are allocated to the account holder's IP
@@ -295,7 +295,7 @@ public interface IpAddressSupport extends AccessControlledService {
      * @throws InternalException a local error occurred loading the IP addresses
      * @throws CloudException an error occurred with the cloud provider while requesting the IP addresses
      */
-    public abstract @Nonnull Iterable<ResourceStatus> listIpPoolStatus(@Nonnull IPVersion version) throws InternalException, CloudException;
+    public @Nonnull Iterable<ResourceStatus> listIpPoolStatus(@Nonnull IPVersion version) throws InternalException, CloudException;
 
     /**
      * Lists the IP forwarding rules associated with the specified public IP address. This method
@@ -316,7 +316,7 @@ public interface IpAddressSupport extends AccessControlledService {
      * @deprecated use {@link IPAddressCapabilities#listSupportedIPVersions()}
      */
     @Deprecated
-    public abstract @Nonnull Iterable<IPVersion> listSupportedIPVersions() throws CloudException, InternalException;
+    public @Nonnull Iterable<IPVersion> listSupportedIPVersions() throws CloudException, InternalException;
 
     /**
      * When a cloud allows for programmatic requesting of new IP addresses, you may also programmaticall

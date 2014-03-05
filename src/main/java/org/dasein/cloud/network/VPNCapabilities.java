@@ -37,7 +37,7 @@ public interface VPNCapabilities extends Capabilities{
      * @throws CloudException
      * @throws InternalException
      */
-    public abstract Requirement getVPNDataCenterConstraint() throws CloudException, InternalException;
+    public Requirement getVPNDataCenterConstraint() throws CloudException, InternalException;
 
     /**
      * Lists the protocols supported for VPNs in the cloud
@@ -45,5 +45,5 @@ public interface VPNCapabilities extends Capabilities{
      * @throws CloudException
      * @throws InternalException
      */
-    public abstract @Nonnull Iterable<VPNProtocol> listSupportedVPNProtocols() throws CloudException, InternalException;
+    public @Nonnull Iterable<VPNProtocol> listSupportedVPNProtocols() throws CloudException, InternalException;
 }

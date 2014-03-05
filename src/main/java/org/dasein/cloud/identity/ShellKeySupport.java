@@ -107,7 +107,7 @@ public interface ShellKeySupport extends AccessControlledService {
      * @throws InternalException a local error occurred assembling the request
      * @throws CloudException an error occurred with the cloud provider while importing the keys
      */
-    public abstract @Nonnull SSHKeypair importKeypair(@Nonnull String name, @Nonnull String publicKey) throws InternalException, CloudException;
+    public @Nonnull SSHKeypair importKeypair(@Nonnull String name, @Nonnull String publicKey) throws InternalException, CloudException;
 
     /**
      * @return true if the cloud provider supports shell keypairs in the current region and the current account can use them

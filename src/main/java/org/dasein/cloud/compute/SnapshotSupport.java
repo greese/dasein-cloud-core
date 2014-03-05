@@ -58,7 +58,7 @@ public interface SnapshotSupport extends AccessControlledService {
      * @throws InternalException a local error occurred in the Dasein Cloud implementation
      * @throws OperationNotSupportedException the cloud does not support sharing snapshots with other accounts
      */
-    public abstract void addSnapshotShare(@Nonnull String providerSnapshotId, @Nonnull String accountNumber) throws CloudException, InternalException;
+    public void addSnapshotShare(@Nonnull String providerSnapshotId, @Nonnull String accountNumber) throws CloudException, InternalException;
 
     /**
      * Shares the specified snapshot with the public.
@@ -67,7 +67,7 @@ public interface SnapshotSupport extends AccessControlledService {
      * @throws InternalException a local error occurred in the Dasein Cloud implementation
      * @throws OperationNotSupportedException the cloud does not support sharing snapshots with the public
      */
-    public abstract void addPublicShare(@Nonnull String providerSnapshotId) throws CloudException, InternalException;
+    public void addPublicShare(@Nonnull String providerSnapshotId) throws CloudException, InternalException;
 
     /**
      * Creates a new snapshot based on the options specified. This method supports both the creation of snapshots from
@@ -98,7 +98,7 @@ public interface SnapshotSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      * @throws CloudException an error occurred within the cloud provider
      */
-    public abstract @Nonnull SnapshotCapabilities getCapabilities()throws CloudException, InternalException;
+    public @Nonnull SnapshotCapabilities getCapabilities()throws CloudException, InternalException;
 
     /**
      * Specifies the provider's term for snapshot in the specified locale.
@@ -165,7 +165,7 @@ public interface SnapshotSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud implementation
      * @throws CloudException an error occurred with the cloud provider
      */
-    public abstract @Nonnull Iterable<ResourceStatus> listSnapshotStatus() throws InternalException, CloudException;
+    public @Nonnull Iterable<ResourceStatus> listSnapshotStatus() throws InternalException, CloudException;
 
     /**
      * Lists snapshots belonging to me or explicitly shared with me in the current region.
@@ -173,7 +173,7 @@ public interface SnapshotSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud implementation
      * @throws CloudException an error occurred with the cloud provider
      */
-    public abstract @Nonnull Iterable<Snapshot> listSnapshots() throws InternalException, CloudException;
+    public @Nonnull Iterable<Snapshot> listSnapshots() throws InternalException, CloudException;
 
     /**
      * Lists all snapshots in the current region with the cloud provider matching the given
@@ -186,7 +186,7 @@ public interface SnapshotSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud implementation
      * @throws CloudException an error occurred with the cloud provider
      */
-    public abstract @Nonnull Iterable<Snapshot> listSnapshots(@Nullable SnapshotFilterOptions options) throws InternalException, CloudException;
+    public @Nonnull Iterable<Snapshot> listSnapshots(@Nullable SnapshotFilterOptions options) throws InternalException, CloudException;
 
     /**
      * Removes the specified snapshot permanently from the cloud.
@@ -194,7 +194,7 @@ public interface SnapshotSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud implementation
      * @throws CloudException an error occurred with the cloud provider
      */
-    public abstract void remove(@Nonnull String snapshotId) throws InternalException, CloudException;
+    public void remove(@Nonnull String snapshotId) throws InternalException, CloudException;
 
     /**
      * Removes ALL specific account shares for the specified snapshot. NOTE THAT THIS METHOD WILL NOT THROW AN EXCEPTION
@@ -203,7 +203,7 @@ public interface SnapshotSupport extends AccessControlledService {
      * @throws CloudException an error occurred with the cloud provider
      * @throws InternalException a local error occurred in the Dasein Cloud implementation
      */
-    public abstract void removeAllSnapshotShares(@Nonnull String providerSnapshotId) throws CloudException, InternalException;
+    public void removeAllSnapshotShares(@Nonnull String providerSnapshotId) throws CloudException, InternalException;
 
     /**
      * Removes the specified account number from the list of accounts with which this snapshot is shared.
@@ -213,7 +213,7 @@ public interface SnapshotSupport extends AccessControlledService {
      * @throws InternalException a local error occurred in the Dasein Cloud implementation
      * @throws OperationNotSupportedException the cloud does not support sharing snapshots with other accounts
      */
-    public abstract void removeSnapshotShare(@Nonnull String providerSnapshotId, @Nonnull String accountNumber) throws CloudException, InternalException;
+    public void removeSnapshotShare(@Nonnull String providerSnapshotId, @Nonnull String accountNumber) throws CloudException, InternalException;
 
     /**
      * Unshares the specified snapshot with the public. This method may be safely called even if sharing is not supported.
@@ -221,7 +221,7 @@ public interface SnapshotSupport extends AccessControlledService {
      * @throws CloudException an error occurred with the cloud provider
      * @throws InternalException a local error occurred in the Dasein Cloud implementation
      */
-    public abstract void removePublicShare(@Nonnull String providerSnapshotId) throws CloudException, InternalException;
+    public void removePublicShare(@Nonnull String providerSnapshotId) throws CloudException, InternalException;
 
     /**
      * Removes meta-data from a snapshot. If tag values are set, their removal is dependent on underlying cloud
@@ -232,7 +232,7 @@ public interface SnapshotSupport extends AccessControlledService {
      * @throws CloudException    an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public abstract void removeTags(@Nonnull String snapshotId, @Nonnull Tag... tags) throws CloudException, InternalException;
+    public void removeTags(@Nonnull String snapshotId, @Nonnull Tag... tags) throws CloudException, InternalException;
 
     /**
      * Removes meta-data from multiple snapshots. If tag values are set, their removal is dependent on underlying cloud
@@ -243,7 +243,7 @@ public interface SnapshotSupport extends AccessControlledService {
      * @throws CloudException    an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public abstract void removeTags(@Nonnull String[] snapshotIds, @Nonnull Tag ... tags) throws CloudException, InternalException;
+    public void removeTags(@Nonnull String[] snapshotIds, @Nonnull Tag ... tags) throws CloudException, InternalException;
 
     /**
      * Searches all snapshots visible to the current account owner (whether owned by the account owner or someone else)
@@ -340,7 +340,7 @@ public interface SnapshotSupport extends AccessControlledService {
      * @throws CloudException    an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public abstract void updateTags(@Nonnull String snapshotId, @Nonnull Tag... tags) throws CloudException, InternalException;
+    public void updateTags(@Nonnull String snapshotId, @Nonnull Tag... tags) throws CloudException, InternalException;
 
     /**
      * Updates meta-data for multiple snapshots with the new values. It will not overwrite any value that currently
@@ -350,5 +350,5 @@ public interface SnapshotSupport extends AccessControlledService {
      * @throws CloudException    an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public abstract void updateTags(@Nonnull String[] snapshotIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+    public void updateTags(@Nonnull String[] snapshotIds, @Nonnull Tag... tags) throws CloudException, InternalException;
 }
