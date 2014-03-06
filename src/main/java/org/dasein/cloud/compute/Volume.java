@@ -37,7 +37,7 @@ import java.util.Map;
  */
 public class Volume implements Networkable, Taggable {
     private long        creationTimestamp;
-	private VolumeState currentState;
+    private VolumeState currentState;
     private String      providerDataCenterId;
     private String      description;
     private String      deviceId;
