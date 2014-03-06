@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2013 Dell, Inc.
+ * Copyright (C) 2009-2014 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -19,17 +19,19 @@
 
 package org.dasein.cloud.compute;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.Callable;
-
-import org.dasein.cloud.Tag;
-import org.dasein.cloud.Taggable;
+import org.dasein.cloud.*;
 import org.dasein.cloud.network.Networkable;
 import org.dasein.cloud.network.RawAddress;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeSet;
+import java.util.concurrent.Callable;
 
 /**
  * <p>
@@ -68,17 +70,24 @@ public class VirtualMachine implements Networkable, Taggable {
     private String[]              providerShellKeyIds;
     private String                providerSubnetId;
     private String                providerVirtualMachineId;
+    private String[]              providerNetworkInterfaceIds;
     private String                providerVlanId;
     private String                providerKeypairId;
     private String[]              providerFirewallIds;
+    private String[]              providerVolumeIds;
     private String                publicDnsAddress;
     private RawAddress[]          publicIpAddresses;
     private boolean               rebootable;
     private String                rootPassword;
     private String                rootUser;
     private long                  terminationTimestamp;
-    
-    public VirtualMachine() { }
+    private Volume[]              volumes;
+    private boolean               ioOptimized;
+    private boolean               ipForwardingAllowed;
+    private String                providerRoleId;
+    private VisibleScope visibleScope;
+
+  public VirtualMachine() { }
     
     public boolean equals(Object ob) {
         if( ob == null ) {
@@ -177,8 +186,7 @@ public class VirtualMachine implements Networkable, Taggable {
             return null;
         }
     }
-    
-    
+
     public String toString() {
         return name + " [" + providerVirtualMachineId + "]";
     }
@@ -391,7 +399,20 @@ public class VirtualMachine implements Networkable, Taggable {
      */
     @Deprecated
     public String[] getPublicIpAddresses() {
-        String[] addrs = new String[publicIpAddresses == null ? 0 : publicIpAddresses.length];
+        if( publicIpAddresses == null || publicIpAddresses.length < 0 ) {
+            if( publicDnsAddress == null ) {
+                return new String[0];
+            }
+            String ip = resolve(publicDnsAddress);
+
+            if( ip != null ) {
+                publicIpAddresses = new RawAddress[] { new RawAddress(ip) };
+            }
+            else {
+                return new String[0];
+            }
+        }
+        String[] addrs = new String[publicIpAddresses.length];
 
         if( publicIpAddresses != null ) {
             for( int i=0; i<addrs.length; i++ ) {
@@ -399,6 +420,26 @@ public class VirtualMachine implements Networkable, Taggable {
             }
         }
         return addrs;
+    }
+
+    private String resolve(String dnsName) {
+        if (dnsName != null && dnsName.length() > 0) {
+            InetAddress[] addresses;
+
+            try {
+                addresses = InetAddress.getAllByName(dnsName);
+            } catch (UnknownHostException e) {
+                addresses = null;
+            }
+            if (addresses != null && addresses.length > 0) {
+                dnsName = addresses[0].getHostAddress();
+            } else {
+                dnsName = dnsName.split("\\.")[0];
+                dnsName = dnsName.replaceAll("-", "\\.");
+                dnsName = dnsName.substring(4);
+            }
+        }
+        return dnsName;
     }
 
     public void setPublicAddresses(@Nonnull RawAddress ... addresses) {
@@ -509,6 +550,14 @@ public class VirtualMachine implements Networkable, Taggable {
       this.providerFirewallIds = providerFirewallIds;
     }
 
+    public String[] getProviderNetworkInterfaceIds() {
+      return (providerNetworkInterfaceIds == null ? new String[0] : providerNetworkInterfaceIds);
+    }
+
+    public void setProviderNetworkInterfaceIds( String[] providerNetworkInterfaceIds ) {
+      this.providerNetworkInterfaceIds = providerNetworkInterfaceIds;
+    }
+
     public @Nullable String getProviderKernelImageId() {
         return providerKernelImageId;
     }
@@ -531,5 +580,73 @@ public class VirtualMachine implements Networkable, Taggable {
 
     public @Nonnull String[] getProviderShellKeyIds() {
         return (providerShellKeyIds == null ? new String[0] : providerShellKeyIds);
+    }
+
+    public @Nonnull String[] getProviderVolumeIds(@Nonnull CloudProvider provider) throws CloudException, InternalException {
+        if( providerVolumeIds == null ) {
+            ComputeServices services = provider.getComputeServices();
+
+            if( services == null ) {
+                throw new OperationNotSupportedException("No compute services are defined");
+            }
+            VolumeSupport support = services.getVolumeSupport();
+
+            if( support == null ) {
+                providerVolumeIds = new String[0];
+            }
+            else {
+                TreeSet<String> ids = new TreeSet<String>();
+
+                for( Volume v : support.listVolumes(VolumeFilterOptions.getInstance().attachedTo(providerVirtualMachineId)) ) {
+                    ids.add(v.getProviderVolumeId());
+                }
+                providerVolumeIds = ids.toArray(new String[ids.size()]);
+            }
+        }
+        return providerVolumeIds;
+    }
+
+    public void setProviderVolumeIds(@Nonnull String ... ids) {
+        providerVolumeIds = ids;
+    }
+
+    public @Nullable Volume[] getVolumes() {
+      return volumes;
+    }
+
+    public void setVolumes( @Nullable Volume[] volumes ) {
+      this.volumes = volumes;
+    }
+
+    public boolean isIoOptimized() {
+      return ioOptimized;
+    }
+
+    public void setIoOptimized(boolean ioOptimized) {
+      this.ioOptimized = ioOptimized;
+    }
+
+    public boolean isIpForwardingAllowed() {
+      return ipForwardingAllowed;
+    }
+
+    public void setIpForwardingAllowed( boolean ipForwardingAllowed ) {
+      this.ipForwardingAllowed = ipForwardingAllowed;
+    }
+
+    public String getProviderRoleId() {
+      return providerRoleId;
+    }
+
+    public void setProviderRoleId(String roleId) {
+      this.providerRoleId = roleId;
+    }
+
+    public void setVisibleScope(VisibleScope visibleScope){
+        this.visibleScope = visibleScope;
+    }
+
+    public VisibleScope getVisibleScope(){
+        return this.visibleScope;
     }
 }

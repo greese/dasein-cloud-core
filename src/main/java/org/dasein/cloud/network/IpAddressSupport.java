@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2013 Dell, Inc.
+ * Copyright (C) 2009-2014 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -126,7 +126,15 @@ public interface IpAddressSupport extends AccessControlledService {
      * @throws org.dasein.cloud.OperationNotSupportedException this cloud provider does not support address forwarding
      */
     public @Nonnull String forward(@Nonnull String addressId, int publicPort, @Nonnull Protocol protocol, int privatePort, @Nonnull String onServerId) throws InternalException, CloudException;
-        
+
+    /**
+     * Provides access to meta-data about IP Address capabilities in the current region of this cloud.
+     * @return a description of the features supported by this region of this cloud
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException an error occurred within the cloud provider
+     */
+    public @Nonnull IPAddressCapabilities getCapabilities()throws CloudException, InternalException;
+
     /**
      * Provides the {@link IpAddress} identified by the specified unique address ID.
      * @param addressId the unique ID of the IP address being requested
@@ -141,7 +149,9 @@ public interface IpAddressSupport extends AccessControlledService {
      * than "IP address" anyone could use.
      * @param locale the locale into which the term should be translated
      * @return the cloud provider-specific term for an IP address
+     * @deprecated use {@link IPAddressCapabilities#getProviderTermForIpAddress(java.util.Locale)}
      */
+    @Deprecated
     public @Nonnull String getProviderTermForIpAddress(@Nonnull Locale locale);
 
     /**
@@ -151,7 +161,9 @@ public interface IpAddressSupport extends AccessControlledService {
      * @return the level of requirement for specifying a VLAN when creating a VLAN IP address
      * @throws CloudException an error occurred processing the request in the cloud
      * @throws InternalException an internal error occurred inside the Dasein Cloud implementation
+     * @deprecated use {@link IPAddressCapabilities#identifyVlanForVlanIPRequirement()}
      */
+    @Deprecated
     public @Nonnull Requirement identifyVlanForVlanIPRequirement() throws CloudException, InternalException;
 
     /**
@@ -169,7 +181,9 @@ public interface IpAddressSupport extends AccessControlledService {
      * @return true if the addresses of the specified version are assignable to cloud resources for public routing
      * @throws CloudException an error occurred with the cloud provider determining support
      * @throws InternalException a local error occurred determining support
+     * @deprecated use {@link IPAddressCapabilities#isAssigned(IPVersion)}
      */
+    @Deprecated
     public boolean isAssigned(@Nonnull IPVersion version) throws CloudException, InternalException;
 
     /**
@@ -181,7 +195,9 @@ public interface IpAddressSupport extends AccessControlledService {
      * @return true if IP addresses of the specified version can be assigned post launch
      * @throws CloudException an error occurred with the cloud provider determining support
      * @throws InternalException a local error occurred determining support
+     * @deprecated use {@link IPAddressCapabilities#isAssignablePostLaunch(IPVersion)}
      */
+    @Deprecated
     public boolean isAssignablePostLaunch(@Nonnull IPVersion version) throws CloudException, InternalException;
 
     /**
@@ -200,8 +216,10 @@ public interface IpAddressSupport extends AccessControlledService {
      * @return true if forwarding is supported
      * @throws CloudException an error occurred with the cloud provider determining support
      * @throws InternalException a local error occurred determining support
+     * @deprecated use {@link IPAddressCapabilities#isForwarding(IPVersion)}
      */
-    public abstract boolean isForwarding(IPVersion version) throws CloudException, InternalException;
+    @Deprecated
+    public boolean isForwarding(IPVersion version) throws CloudException, InternalException;
     
     /**
      * Indicates whether the underlying cloud allows you to make programmatic requests for
@@ -218,7 +236,9 @@ public interface IpAddressSupport extends AccessControlledService {
      * @return true if you can make requests from the cloud provider to add addresses of this version to your pool
      * @throws CloudException an error occurred with the cloud provider while determining if your account has support
      * @throws InternalException a local exception occurred while determining support
+     * @deprecated use {@link IPAddressCapabilities#isRequestable(IPVersion)}
      */
+    @Deprecated
     public boolean isRequestable(@Nonnull IPVersion version) throws CloudException, InternalException;
     
     /**
@@ -265,7 +285,7 @@ public interface IpAddressSupport extends AccessControlledService {
      * @throws InternalException a local error occurred loading the IP addresses
      * @throws CloudException an error occurred with the cloud provider while requesting the IP addresses
      */
-    public abstract @Nonnull Iterable<IpAddress> listIpPool(@Nonnull IPVersion version, boolean unassignedOnly) throws InternalException, CloudException;
+    public @Nonnull Iterable<IpAddress> listIpPool(@Nonnull IPVersion version, boolean unassignedOnly) throws InternalException, CloudException;
 
     /**
      * Lists the status of all IP addresses of the specified IP version that are allocated to the account holder's IP
@@ -275,7 +295,7 @@ public interface IpAddressSupport extends AccessControlledService {
      * @throws InternalException a local error occurred loading the IP addresses
      * @throws CloudException an error occurred with the cloud provider while requesting the IP addresses
      */
-    public abstract @Nonnull Iterable<ResourceStatus> listIpPoolStatus(@Nonnull IPVersion version) throws InternalException, CloudException;
+    public @Nonnull Iterable<ResourceStatus> listIpPoolStatus(@Nonnull IPVersion version) throws InternalException, CloudException;
 
     /**
      * Lists the IP forwarding rules associated with the specified public IP address. This method
@@ -293,8 +313,10 @@ public interface IpAddressSupport extends AccessControlledService {
      * @return a list of supported versions
      * @throws CloudException an error occurred checking support for IP versions with the cloud provider
      * @throws InternalException a local error occurred preparing the supported version
+     * @deprecated use {@link IPAddressCapabilities#listSupportedIPVersions()}
      */
-    public abstract @Nonnull Iterable<IPVersion> listSupportedIPVersions() throws CloudException, InternalException;
+    @Deprecated
+    public @Nonnull Iterable<IPVersion> listSupportedIPVersions() throws CloudException, InternalException;
 
     /**
      * When a cloud allows for programmatic requesting of new IP addresses, you may also programmaticall
@@ -379,6 +401,8 @@ public interface IpAddressSupport extends AccessControlledService {
      * @return true if an IP address may be allocated for use by VLANs
      * @throws InternalException a local error occurred determining support
      * @throws CloudException an error occurred with the cloud provider in determining support
+     * @deprecated use {@link IPAddressCapabilities#supportsVLANAddresses(IPVersion)}
      */
+    @Deprecated
     public boolean supportsVLANAddresses(@Nonnull IPVersion ofVersion) throws InternalException, CloudException;
 }

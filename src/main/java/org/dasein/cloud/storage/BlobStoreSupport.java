@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2013 Dell, Inc.
+ * Copyright (C) 2009-2014 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -19,18 +19,17 @@
 
 package org.dasein.cloud.storage;
 
-import java.io.File;
-import java.util.Locale;
-
 import org.dasein.cloud.AccessControlledService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
-import org.dasein.cloud.NameRules;
 import org.dasein.cloud.identity.ServiceAction;
+import org.dasein.cloud.util.NamingConstraints;
 import org.dasein.util.uom.storage.Storage;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.io.File;
+import java.util.Locale;
 
 /**
  * <p>
@@ -68,6 +67,8 @@ public interface BlobStoreSupport extends AccessControlledService {
 
     public Blob getObject(@Nullable String bucketName, @Nonnull String objectName) throws InternalException, CloudException;
 
+    public @Nullable String getSignedObjectUrl(@Nonnull String bucket,@Nonnull String object, @Nonnull String expiresEpochInSeconds) throws InternalException, CloudException;
+
     public @Nullable Storage<org.dasein.util.uom.storage.Byte> getObjectSize(@Nullable String bucketName, @Nullable String objectName) throws InternalException, CloudException;
 
     public int getMaxBuckets() throws CloudException, InternalException;
@@ -76,9 +77,11 @@ public interface BlobStoreSupport extends AccessControlledService {
 
     public int getMaxObjectsPerBucket() throws CloudException, InternalException;
 
-    public @Nonnull NameRules getBucketNameRules() throws CloudException, InternalException;
+    public @Nonnull
+    NamingConstraints getBucketNameRules() throws CloudException, InternalException;
 
-    public @Nonnull NameRules getObjectNameRules() throws CloudException, InternalException;
+    public @Nonnull
+    NamingConstraints getObjectNameRules() throws CloudException, InternalException;
 
     public @Nonnull String getProviderTermForBucket(@Nonnull Locale locale);
     

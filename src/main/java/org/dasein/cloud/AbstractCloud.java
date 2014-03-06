@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2013 Dell, Inc.
+ * Copyright (C) 2009-2014 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -55,15 +55,18 @@ public abstract class AbstractCloud extends CloudProvider {
     }
 
     @Override
+    public @Nonnull ContextRequirements getContextRequirements() {
+        return new ContextRequirements(
+                new ContextRequirements.Field("apiKeys", ContextRequirements.FieldType.KEYPAIR),
+                new ContextRequirements.Field("x509", ContextRequirements.FieldType.KEYPAIR, false)
+        );
+    }
+
+    @Override
     public @Nullable CIServices getCIServices() {
         CloudProvider compute = getComputeCloud();
 
         return (compute == null ? null : compute.getCIServices());
-    }
-
-    @Override
-    public @Nonnull DataCenterServices getDataCenterServices() {
-        throw new NullPointerException("A cloud must have a data center services implementation.");
     }
     
     @Override

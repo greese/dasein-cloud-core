@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2013 Dell, Inc.
+ * Copyright (C) 2009-2014 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -19,6 +19,7 @@
 
 package org.dasein.cloud;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
@@ -33,6 +34,8 @@ import org.dasein.cloud.identity.IdentityServices;
 import org.dasein.cloud.network.NetworkServices;
 import org.dasein.cloud.platform.PlatformServices;
 import org.dasein.cloud.storage.StorageServices;
+import org.dasein.cloud.util.ResourceNamespace;
+import org.dasein.cloud.util.NamingConstraints;
 import org.dasein.util.CalendarWrapper;
 
 /**
@@ -56,8 +59,11 @@ import org.dasein.util.CalendarWrapper;
  * {@link org.dasein.cloud.OperationNotSupportedException} to flag the lack of support.
  * </p>
  * @author George Reese @ enstratius (http://www.enstratius.com)
+ * @version 2014.03 added findUniqueName() based on logic by Stas (issue #134)
+ * @since 2010.08
  */
 public abstract class CloudProvider {
+    @SuppressWarnings("UnusedDeclaration")
     static private @Nonnull String getLastItem(@Nonnull String name) {
         int idx = name.lastIndexOf('.');
 
@@ -116,10 +122,12 @@ public abstract class CloudProvider {
         return true;
     }
 
-    private CloudProvider computeCloud = null;
-    private ProviderContext context = null;
-    
-    private int     holdCount = 0;
+    private CloudProvider   computeCloudProvider;
+    private ProviderContext context;
+    private CloudProvider   storageCloudProvider;
+
+
+    private transient int holdCount = 0;
     
     /**
      * Base contructor for a cloud provider.
@@ -157,7 +165,10 @@ public abstract class CloudProvider {
      * includes authentication information, the regional context, and any cloud-specific
      * context. Prior to initializing itself, this method will close out any existing state.
      * @param context the context for services calls using this provider instance
+     * @deprecated use {@link org.dasein.cloud.ProviderContext#connect()}
      */
+    @SuppressWarnings("deprecation")
+    @Deprecated
     public final void connect(@Nonnull ProviderContext context) {
         connect(context, null);
     }
@@ -168,11 +179,85 @@ public abstract class CloudProvider {
      * context. Prior to initializing itself, this method will close out any existing state.
      * @param context the context for services calls using this provider instance
      * @param computeProvider the compute context if this is a storage-only cloud (the compute context controls the connection)
+     * @deprecated use {@link org.dasein.cloud.ProviderContext#connect(CloudProvider)}
      */
-    public void connect(@Nonnull ProviderContext context, @Nullable CloudProvider computeProvider) {
+    @Deprecated
+    public final void connect(@Nonnull ProviderContext context, @Nullable CloudProvider computeProvider) {
+        try {
+            connect(context, computeProvider, null);
+            context.configureForDeprecatedConnect(this);
+        }
+        catch( CloudException e ) {
+            throw new RuntimeException(e); // can't change the signature for backwards compat reasons
+        }
+        catch( InternalException e ) {
+            throw new RuntimeException(e); // can't change the signature for backwards compat reasons
+        }
+    }
+
+    /**
+     * Establishes a connected state between the Dasein Cloud implementation and the target cloud. This method should
+     * not be directly triggered by Dasein Cloud clients, but instead within the Dasein Cloud {@link ProviderContext#connect(CloudProvider)}
+     * method or the backwards compatible {@link #connect(ProviderContext, CloudProvider)} method. Clients should always
+     * call {@link org.dasein.cloud.ProviderContext#connect()} or {@link ProviderContext#connect(CloudProvider)}.
+     * @param context the provider context representing the context for the connection
+     * @param computeProvider if this connection is to a storage cloud being virtually bound to a compute cloud, the connected provider for the associated compute cloud
+     * @param myCloud if known, the cloud object behind this provider
+     * @throws CloudException an error occurred communicating with the target cloud
+     * @throws InternalException an error occurred within Dasein Cloud while setting up the connection state
+     */
+    @SuppressWarnings("deprecation")
+    void connect(@Nonnull ProviderContext context, @Nullable CloudProvider computeProvider, @Nullable Cloud myCloud) throws CloudException, InternalException {
         close();
         this.context = context;
-        this.computeCloud = computeProvider;
+
+        if( myCloud == null ) {
+            context.setCloud(this);
+        }
+        this.computeCloudProvider = computeProvider;
+        if( computeProvider != null ) {
+            computeProvider.storageCloudProvider = this;
+            ProviderContext computeContext = computeProvider.getContext();
+
+            if( computeContext != null ) {
+                context.setEffectiveAccountNumber(computeContext.getAccountNumber());
+            }
+        }
+    }
+
+    /**
+     * General purpose method for finding a unique name based upon a desired base name. The name resulting from this
+     * method is guaranteed to be both valid for objects of its type and unique among objects of those type across
+     * the appropriate namespace. Unless, of course, the result is <code>null</code>. A <code>null</code> value
+     * means that no permutation of the base name could result in a valid unique name for these kinds of objects
+     * in this cloud.
+     * @param baseName the name that the user would ideally desire for an object to be created
+     * @param constraints the naming constraints that govern the naming of this kind of object
+     * @param namespace an implementation of an interface responsible for searching efficiently for the availability of a given name
+     * @return a valid, unique name based on the desired base name or <code>null</code> if no unique permutation was achievable
+     * @throws CloudException an error occurred interacting with the cloud provider to find the unique name
+     * @throws InternalException an internal error occurred calculating a unique name
+     */
+    public @Nullable String findUniqueName(@Nonnull String baseName, @Nonnull NamingConstraints constraints, @Nonnull ResourceNamespace namespace) throws CloudException, InternalException {
+        if( !constraints.isValidName(baseName) ) {
+            baseName = constraints.convertToValidName(baseName, Locale.getDefault());
+            if( baseName == null ) {
+                return null;
+            }
+        }
+        if( !namespace.hasNamedItem(baseName) ) {
+            return baseName;
+        }
+        String name = baseName;
+        int i = 1;
+
+        while( namespace.hasNamedItem(name) ) {
+            name = constraints.incrementName(baseName, i++);
+            if( name == null ) {
+                return null;
+            }
+        }
+        return name;
     }
 
     public abstract @Nullable AdminServices getAdminServices();
@@ -184,7 +269,7 @@ public abstract class CloudProvider {
      * @return the compute provider (if any) behind this storage provider
      */
     public final CloudProvider getComputeCloud() {
-        return computeCloud;
+        return computeCloudProvider;
     }
     
     /**
@@ -192,7 +277,12 @@ public abstract class CloudProvider {
      * @return the operational context for this instance of this provider implementation
      */
     public final @Nullable ProviderContext getContext() { return context; }
-    
+
+    /**
+     * @return an object containing the fields required for connecting Dasein to the cloud provider
+     */
+    public abstract @Nonnull ContextRequirements getContextRequirements();
+
     /**
      * This value can be the same as {@link #getProviderName()} if it is not a multi-cloud provider. 
      * @return the name of the cloud
@@ -218,29 +308,32 @@ public abstract class CloudProvider {
     public abstract @Nullable NetworkServices getNetworkServices();
     
     public abstract @Nullable PlatformServices getPlatformServices();
-    
+
     /**
      * @return the name of this cloud provider
      */
     public abstract @Nonnull String getProviderName();
     
-    private CloudProvider storageCloudProvider = null;
-    
     /**
      * Provides access to the cloud storage services supported by this cloud provider.
      * @return an implementation of the {@link org.dasein.cloud.storage.StorageServices} API
      */
+    @SuppressWarnings("deprecation")
     public synchronized @Nullable StorageServices getStorageServices() {
         if( storageCloudProvider != null ) {
             return storageCloudProvider.getStorageServices();
         }
         ProviderContext computeContext = getContext();
+
+        if( computeContext == null ) {
+            return null;
+        }
         String storage = computeContext.getStorage();
 
         if( storage == null ) {
             return null;
         }
-        try { 
+        try {
             CloudProvider p = (CloudProvider)Class.forName(storage).newInstance();
             ProviderContext ctx = new ProviderContext();
             Properties props = computeContext.getStorageCustomProperties();
@@ -248,7 +341,6 @@ public abstract class CloudProvider {
             ctx.setRegionId(computeContext.getRegionId());
             ctx.setCloudName(computeContext.getCloudName());
             ctx.setProviderName(computeContext.getProviderName());
-            ctx.setEffectiveAccountNumber(computeContext.getEffectiveAccountNumber());
             ctx.setEndpoint(computeContext.getStorageEndpoint());
             ctx.setAccountNumber(computeContext.getStorageAccountNumber());
             ctx.setAccessKeys(computeContext.getStoragePublic(), computeContext.getStoragePrivate());
@@ -264,7 +356,15 @@ public abstract class CloudProvider {
             return null;
         }
     }
-    
+
+    public boolean hasAdminServices() {
+        return (getAdminServices() != null);
+    }
+
+    public boolean hasCIServices() {
+        return (getCIServices() != null);
+    }
+
     public boolean hasComputeServices() {
         return (getComputeServices() != null);
     }
@@ -286,8 +386,8 @@ public abstract class CloudProvider {
     }
     
     public void hold() {
-        if( computeCloud != null ) {
-            computeCloud.hold();
+        if( computeCloudProvider != null ) {
+            computeCloudProvider.hold();
         }
         else {
             synchronized( this ) {
@@ -301,8 +401,8 @@ public abstract class CloudProvider {
     }
 
     public void release() {
-        if( computeCloud != null ) {
-            computeCloud.release();
+        if( computeCloudProvider != null ) {
+            computeCloudProvider.release();
         }
         else {
             synchronized( this ) {
@@ -336,7 +436,7 @@ public abstract class CloudProvider {
                 }
             }
             try { Thread.sleep(1000L); }
-            catch( InterruptedException e ) { }
+            catch( InterruptedException ignore ) { /* ignore this */ }
         }
         if( context != null) {
             context.clear();

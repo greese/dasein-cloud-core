@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2013 Dell, Inc.
+ * Copyright (C) 2009-2014 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -155,7 +155,8 @@ public class VolumeCreateOptions {
     static public VolumeCreateOptions getInstanceForSnapshot(@Nonnull String volumeProductId, @Nonnull String snapshotId, @Nonnull Storage<?> size, @Nonnull String name, @Nonnull String description, @Nonnegative int iops) {
         return new VolumeCreateOptions(volumeProductId, snapshotId, size, name, description, iops);
     }
-    
+
+    // NOTE: ADDING/REMOVING/CHANGING AN ATTRIBUTE? MAKE SURE YOU REFLECT THE CHANGE IN THE copy() METHOD
     private String             dataCenterId;
     private String             description;
     private String             deviceId;
@@ -168,7 +169,8 @@ public class VolumeCreateOptions {
     private String             vlanId;
     private String             volumeProductId;
     private Storage<Gigabyte>  volumeSize;
-    
+    // NOTE: SEE NOTE AT TOP OF ATTRIBUTE LIST WHEN ADDING/REMOVING/CHANGING AN ATTRIBUTE
+
     @SuppressWarnings("UnusedDeclaration")
     private VolumeCreateOptions() { }
 
@@ -202,6 +204,25 @@ public class VolumeCreateOptions {
             throw new OperationNotSupportedException(provider.getCloudName() + " does not have volume support");
         }
         return support.createVolume(this);
+    }
+
+    /**
+     * Makes a copy of these creation options so that individual values may be altered as needed.
+     * @return a copy of these creation options
+     */
+    public @Nonnull VolumeCreateOptions copy(@Nonnull String withName) {
+        VolumeCreateOptions options = new VolumeCreateOptions(volumeProductId, snapshotId, volumeSize, withName, description, iops);
+
+        options.dataCenterId = dataCenterId;
+        options.deviceId = deviceId;
+        options.format = format;
+        options.virtualMachineId = virtualMachineId;
+        options.vlanId = vlanId;
+        if( metaData != null ) {
+            options.metaData = new HashMap<String, Object>();
+            options.metaData.putAll(metaData);
+        }
+        return options;
     }
 
     /**

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2013 Dell, Inc.
+ * Copyright (C) 2009-2014 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -35,34 +35,34 @@ public interface StorageServices {
      * @return the highest level blob storage available
      * @deprecated Use {@link #getOnlineStorageSupport()} or {@link #getOfflineStorageSupport()}
      */
-    public abstract @Nullable BlobStoreSupport getBlobStoreSupport();
+    public @Nullable BlobStoreSupport getBlobStoreSupport();
 
     /**
      * @return true if this cloud is configered with any kind of blob storage support
      * @deprecated Use {@link #hasOnlineStorageSupport()} or {@link #hasOfflineStorageSupport()}
      */
-    public abstract boolean hasBlobStoreSupport();
+    public boolean hasBlobStoreSupport();
 
     /**
      * Offline storage is slower storage that is generally less expensive than online storage, but may take hours
      * to fetch.
      * @return blob store support for the offline storage, if it exists
      */
-    public abstract @Nullable OfflineStoreSupport getOfflineStorageSupport();
+    public @Nullable OfflineStoreSupport getOfflineStorageSupport();
 
     /**
      * @return true if the cloud supports offline storage
      */
-    public abstract boolean hasOfflineStorageSupport();
+    public boolean hasOfflineStorageSupport();
 
     /**
      * Online storage is a &quot;real-time&quot; object storage engine such as Riak CS or Amazon S3.
      * @return blob store support for the online storage, if it exists
      */
-    public abstract @Nullable BlobStoreSupport getOnlineStorageSupport();
+    public @Nullable BlobStoreSupport getOnlineStorageSupport();
 
     /**
      * @return true if the cloud supports online storage
      */
-    public abstract boolean hasOnlineStorageSupport();
+    public boolean hasOnlineStorageSupport();
 }

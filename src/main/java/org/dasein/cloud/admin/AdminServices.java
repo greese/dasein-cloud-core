@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2013 Dell, Inc.
+ * Copyright (C) 2009-2014 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -22,7 +22,7 @@ package org.dasein.cloud.admin;
 import javax.annotation.Nullable;
 
 public interface AdminServices {
-    public abstract @Nullable PrepaymentSupport getPrepaymentSupport();
+    public @Nullable PrepaymentSupport getPrepaymentSupport();
     
     public boolean hasPrepaymentSupport();
 }

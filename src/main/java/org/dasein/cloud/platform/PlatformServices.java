@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2013 Dell, Inc.
+ * Copyright (C) 2009-2014 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -19,32 +19,48 @@
 
 package org.dasein.cloud.platform;
 
+import org.dasein.cloud.platform.bigdata.DataWarehouseSupport;
+
 import javax.annotation.Nullable;
 
+/**
+ * Provides access to services that support platform as a service (PaaS) operations.
+ * @since unknown
+ * @version 2014.03 added data warehousing support access (issue #100)
+ */
 public interface PlatformServices {
-    public abstract @Nullable CDNSupport getCDNSupport();
-    
-    public abstract @Nullable KeyValueDatabaseSupport getKeyValueDatabaseSupport();
-    
-    public abstract @Nullable
-    MQSupport getMessageQueueSupport();
-    
-    public abstract @Nullable PushNotificationSupport getPushNotificationSupport();
-    
-    public abstract @Nullable RelationalDatabaseSupport getRelationalDatabaseSupport();
+    public @Nullable CDNSupport getCDNSupport();
 
-    public abstract @Nullable MonitoringSupport getMonitoringSupport();
-    
-    public abstract boolean hasCDNSupport();
-    
-    public abstract boolean hasKeyValueDatabaseSupport();
-    
-    public abstract boolean hasMessageQueueSupport();
-    
-    public abstract boolean hasPushNotificationSupport();
-    
-    public abstract boolean hasRelationalDatabaseSupport();
+    /**
+     * @return access to any support for data warehousing functionality, or <code>null</code> if no support exists
+     */
+    public @Nullable DataWarehouseSupport getDataWarehouseSupport();
 
-   public abstract boolean hasMonitoringSupport();
+    public @Nullable KeyValueDatabaseSupport getKeyValueDatabaseSupport();
+    
+    public @Nullable MQSupport getMessageQueueSupport();
+    
+    public @Nullable PushNotificationSupport getPushNotificationSupport();
+    
+    public @Nullable RelationalDatabaseSupport getRelationalDatabaseSupport();
+
+    public @Nullable MonitoringSupport getMonitoringSupport();
+    
+    public boolean hasCDNSupport();
+
+    /**
+     * @return true if this cloud supports data warehousing functionality in this region
+     */
+    public boolean hasDataWarehouseSupport();
+
+    public boolean hasKeyValueDatabaseSupport();
+    
+    public boolean hasMessageQueueSupport();
+    
+    public boolean hasPushNotificationSupport();
+    
+    public boolean hasRelationalDatabaseSupport();
+
+   public boolean hasMonitoringSupport();
 
 }

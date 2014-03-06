@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2013 Dell, Inc.
+ * Copyright (C) 2009-2014 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -29,7 +29,6 @@ import javax.annotation.Nullable;
  * @since 2012.07
  * @version 2012.07 initial version
  */
-@SuppressWarnings("UnusedDeclaration")
 public class Route {
     static public Route getRouteToAddress(@Nonnull IPVersion version, @Nonnull String destination, @Nonnull String gatewayAddress) {
         Route r = new Route();
@@ -93,28 +92,56 @@ public class Route {
         return destinationCidr;
     }
 
+    public void setDestinationCidr(String destinationCidr) {
+      this.destinationCidr = destinationCidr;
+    }
+
     public @Nullable String getGatewayAddress() {
         return gatewayAddress;
+    }
+
+    public void setGatewayAddress(String gatewayAddress) {
+      this.gatewayAddress = gatewayAddress;
     }
 
     public @Nullable String getGatewayId() {
         return gatewayId;
     }
 
+    public void setGatewayId(String gatewayId) {
+      this.gatewayId = gatewayId;
+    }
+
     public @Nullable String getGatewayNetworkInterfaceId() {
         return gatewayNetworkInterfaceId;
+    }
+
+    public void setGatewayNetworkInterfaceId(String gatewayNetworkInterfaceId) {
+      this.gatewayNetworkInterfaceId = gatewayNetworkInterfaceId;
     }
     
     public @Nullable String getGatewayOwnerId() {
         return gatewayOwnerId;
+    }
+
+    public void setGatewayOwnerId(String gatewayOwnerId) {
+      this.gatewayOwnerId = gatewayOwnerId;
     }
     
     public @Nullable String getGatewayVirtualMachineId() {
         return gatewayVirtualMachineId;
     }
 
+    public void setGatewayVirtualMachineId(String gatewayVirtualMachineId) {
+      this.gatewayVirtualMachineId = gatewayVirtualMachineId;
+    }
+
     public @Nonnull IPVersion getVersion() {
         return version;
+    }
+
+    public void setVersion(IPVersion version) {
+      this.version = version;
     }
 
     public String toString() {

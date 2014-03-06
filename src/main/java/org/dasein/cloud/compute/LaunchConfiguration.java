@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2013 Dell, Inc.
+ * Copyright (C) 2009-2014 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -27,9 +27,14 @@ public class LaunchConfiguration implements Serializable {
     private long     creationTimestamp;
     private String   name;
     private String[] providerFirewallIds;
+    private String   id;
+    private String   providerKeypairName;
+    private String   userData;
     private String   providerImageId;
     private String   providerLaunchConfigurationId;
     private String   serverSizeId;
+    private String   providerRoleId;
+    private Boolean  detailedMonitoring;
     
     public LaunchConfiguration() { }
 
@@ -57,6 +62,30 @@ public class LaunchConfiguration implements Serializable {
         this.providerFirewallIds = providerFirewallIds;
     }
 
+    public void setId(String id) {
+      this.id = id;
+    }
+
+    public String getId(){
+      return this.id;
+    }
+
+    public void setProviderKeypairName(String keyPairName){
+      this.providerKeypairName = keyPairName;
+    }
+
+    public String getProviderKeypairName(){
+      return this.providerKeypairName;
+    }
+
+    public void setUserData(String userData){
+      this.userData = userData;
+    }
+
+    public String getUserData(){
+      return this.userData;
+    }
+
     public String getProviderImageId() {
         return providerImageId;
     }
@@ -79,6 +108,22 @@ public class LaunchConfiguration implements Serializable {
 
     public void setServerSizeId(String serverSizeId) {
         this.serverSizeId = serverSizeId;
+    }
+
+    public String getProviderRoleId() {
+      return providerRoleId;
+    }
+
+    public void setProviderRoleId(String providerRoleId) {
+      this.providerRoleId = providerRoleId;
+    }
+
+    public Boolean getDetailedMonitoring() {
+      return detailedMonitoring;
+    }
+
+    public void setDetailedMonitoring(Boolean detailedMonitoring) {
+      this.detailedMonitoring = detailedMonitoring;
     }
     
 }

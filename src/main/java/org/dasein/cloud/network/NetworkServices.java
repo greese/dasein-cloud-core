@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2013 Dell, Inc.
+ * Copyright (C) 2009-2014 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -22,31 +22,31 @@ package org.dasein.cloud.network;
 import javax.annotation.Nullable;
 
 public interface NetworkServices {
-    public abstract @Nullable DNSSupport getDnsSupport();
+    public @Nullable DNSSupport getDnsSupport();
     
-    public abstract @Nullable FirewallSupport getFirewallSupport();
+    public @Nullable FirewallSupport getFirewallSupport();
     
-    public abstract @Nullable IpAddressSupport getIpAddressSupport();
+    public @Nullable IpAddressSupport getIpAddressSupport();
     
-    public abstract @Nullable LoadBalancerSupport getLoadBalancerSupport();
+    public @Nullable LoadBalancerSupport getLoadBalancerSupport();
 
-    public abstract @Nullable NetworkFirewallSupport getNetworkFirewallSupport();
+    public @Nullable NetworkFirewallSupport getNetworkFirewallSupport();
 
-    public abstract @Nullable VLANSupport getVlanSupport();
+    public @Nullable VLANSupport getVlanSupport();
     
-    public abstract @Nullable VPNSupport getVpnSupport();
+    public @Nullable VPNSupport getVpnSupport();
     
-    public abstract boolean hasDnsSupport();
+    public boolean hasDnsSupport();
     
-    public abstract boolean hasFirewallSupport();
+    public boolean hasFirewallSupport();
     
-    public abstract boolean hasIpAddressSupport();
+    public boolean hasIpAddressSupport();
     
-    public abstract boolean hasLoadBalancerSupport();
+    public boolean hasLoadBalancerSupport();
 
-    public abstract boolean hasNetworkFirewallSupport();
+    public boolean hasNetworkFirewallSupport();
 
-    public abstract boolean hasVlanSupport();
+    public boolean hasVlanSupport();
     
-    public abstract boolean hasVpnSupport();
+    public boolean hasVpnSupport();
 }

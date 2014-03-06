@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2013 Dell, Inc.
+ * Copyright (C) 2009-2014 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -44,7 +44,7 @@ public class Blob implements Comparable<Blob> {
         return blob;
     }
 
-    static public @Nonnull Blob getInstance(@Nonnull String providerRegionId, @Nonnull String location, @Nullable String bucketName, @Nonnull String objectName, @Nonnegative long creationTimestamp, @Nonnull Storage<?> size) {
+    static public @Nonnull Blob getInstance(@Nonnull String providerRegionId, @Nonnull String location, @Nullable String bucketName, String objectName, @Nonnegative long creationTimestamp, @Nonnull Storage<?> size) {
         Blob blob = new Blob();
 
         blob.creationTimestamp = creationTimestamp;

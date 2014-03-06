@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2013 Dell, Inc.
+ * Copyright (C) 2009-2014 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -20,6 +20,7 @@
 package org.dasein.cloud.network;
 
 import org.dasein.cloud.Taggable;
+import org.dasein.cloud.VisibleScope;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -44,6 +45,7 @@ public class VLAN implements Taggable {
     private String    networkType;
     private IPVersion[]        supportedTraffic;
     private Map<String,String> tags;
+    private VisibleScope visibleScope;
     
     public VLAN() { }
 
@@ -197,6 +199,14 @@ public class VLAN implements Taggable {
 
     public @Nonnull Map<String,String> getTags() {
         return (tags == null ? new HashMap<String, String>() : tags);
+    }
+
+    public void setVisibleScope(VisibleScope visibleScope){
+        this.visibleScope = visibleScope;
+    }
+
+    public VisibleScope getVisibleScope(){
+        return this.visibleScope;
     }
 
     public void setDomainName(String domainName) {

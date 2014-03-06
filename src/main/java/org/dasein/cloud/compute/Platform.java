@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2013 Dell, Inc.
+ * Copyright (C) 2009-2014 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -101,7 +101,7 @@ public enum Platform {
         else if( name.contains("debian") ) {
             return DEBIAN;
         }
-        else if( name.contains("suse") ) {
+        else if( name.contains("suse") || name.contains("sles")  ) {
             return SUSE;
         }
         else if( name.contains("bsd") ) {
@@ -121,7 +121,7 @@ public enum Platform {
         else if( name.contains("linux") ) {
             return UNIX;
         }
-        return Platform.UNKNOWN;
+        return UNKNOWN;
     }
     
     /**

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2013 Dell, Inc.
+ * Copyright (C) 2009-2014 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -26,6 +26,8 @@ import org.dasein.cloud.OperationNotSupportedException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,6 +38,7 @@ import java.util.Map;
  * @author George Reese
  * @since 2013.04
  * @version 2013.04 initial version (issue greese/dasein-cloud-aws/#8)
+ * @version 2014.04 support for rules on create and constraints
  */
 public class FirewallCreateOptions {
     /**
@@ -49,6 +52,23 @@ public class FirewallCreateOptions {
 
         options.name = name;
         options.description = description;
+        return options;
+    }
+
+    /**
+     * Constructs options for creating a firewall having the specified name and description with a defined set of initial rules.
+     * @param name the name of the firewall to be created
+     * @param description a description of the purpose of the firewall to be created
+     * @param ruleOptions a list of one or more options to be created as the same time as the firewall
+     * @return options for creating the firewall based on the specified parameters
+     */
+    static public FirewallCreateOptions getInstance(@Nonnull String name, @Nonnull String description, @Nonnull FirewallRuleCreateOptions ... ruleOptions) {
+        FirewallCreateOptions options = new FirewallCreateOptions();
+
+        options.name = name;
+        options.description = description;
+        options.initialRules = new ArrayList<FirewallRuleCreateOptions>();
+        Collections.addAll(options.initialRules, ruleOptions);
         return options;
     }
 
@@ -68,15 +88,38 @@ public class FirewallCreateOptions {
         return options;
     }
 
-    private String             description;
-    private Map<String,String> metaData;
-    private String             name;
-    private String             providerVlanId;
+    /**
+     * Constructs options for creating a firewall in the specified VLAN having the specified name and description with a defined set of initial rules.
+     * @param inVlanId the VLAN ID with which the firewall is associated
+     * @param name the name of the firewall to be created
+     * @param description a description of the purpose of the firewall to be created
+     * @param ruleOptions a list of one or more options to be created as the same time as the firewall
+     * @return options for creating the firewall based on the specified parameters
+     */
+    static public FirewallCreateOptions getInstance(@Nonnull String inVlanId, @Nonnull String name, @Nonnull String description, @Nonnull FirewallRuleCreateOptions ... ruleOptions) {
+        FirewallCreateOptions options = new FirewallCreateOptions();
+
+        options.providerVlanId = inVlanId;
+        options.name = name;
+        options.description = description;
+        options.initialRules = new ArrayList<FirewallRuleCreateOptions>();
+        Collections.addAll(options.initialRules, ruleOptions);
+        return options;
+    }
+
+    private Map<FirewallConstraints.Constraint,Object> constraints;
+    private String                                     description;
+    private ArrayList<FirewallRuleCreateOptions>       initialRules;
+    private Map<String,String>                         metaData;
+    private String                                     name;
+    private String                                     providerVlanId;
 
     private FirewallCreateOptions() { }
 
     /**
-     * Provisions a firewall in the specified cloud based on the options described in this object.
+     * Provisions a firewall in the specified cloud based on the options described in this object. Note that a
+     * {@link Firewall} object may represents many different kinds of firewalls, and this class can be used to create
+     * many of them as well. This build method, however, is limited to building firewalls for compute resources.
      * @param provider the cloud provider in which the firewall will be created
      * @param asNetworkFirewall if the provisioned firewall should be provisioned as a network firewall
      * @return the unique ID of the firewall that is provisioned
@@ -109,10 +152,41 @@ public class FirewallCreateOptions {
     }
 
     /**
+     * @param constraint the constraint being checked
+     * @return the value to which rules in this firewall will be constrained for the specified constraint
+     */
+    public @Nullable Object getConstraintValue(@Nonnull FirewallConstraints.Constraint constraint) {
+        return (constraints == null ? null : constraints.get(constraint));
+    }
+
+    /**
+     * @return a list of all constraints
+     */
+    public Iterable<FirewallConstraints.Constraint> getConstraints() {
+        return (constraints == null ? new ArrayList<FirewallConstraints.Constraint>() : constraints.keySet());
+    }
+
+    /**
      * @return text describing the purpose of the firewall
      */
     public @Nonnull String getDescription() {
         return description;
+    }
+
+    /**
+     * @return the initial set of rules with which the firewall should be created
+     */
+    public @Nonnull FirewallRuleCreateOptions[] getInitialRules() {
+        FirewallRuleCreateOptions[] options = new FirewallRuleCreateOptions[initialRules == null ? 0 : initialRules.size()];
+
+        if( initialRules != null ) {
+            int idx = 0;
+
+            for( FirewallRuleCreateOptions option : initialRules ) {
+                options[idx++] = option;
+            }
+        }
+        return options;
     }
 
     /**
@@ -137,12 +211,41 @@ public class FirewallCreateOptions {
     }
 
     /**
+     * Adds one or more firewall rule creation options to the list of rules that should be created at the
+     * same time as the firewall. This method is additive, meaning it will add to any rule options set in
+     * prior calls.
+     * @param options one or more firewall rule options to be used in authorizing rules during the firewall create process
+     * @return this
+     */
+    public @Nonnull FirewallCreateOptions havingInitialRules(@Nonnull FirewallRuleCreateOptions ... options) {
+        if( initialRules == null ) {
+            initialRules = new ArrayList<FirewallRuleCreateOptions>();
+        }
+        Collections.addAll(initialRules, options);
+        return this;
+    }
+
+    /**
      * Adds a VLAN onto the set of parameters with which the firewall will be created.
      * @param vlanId the unique ID of the VLAN with which the firewall will be associated on creation
      * @return this
      */
     public @Nonnull FirewallCreateOptions inVlanId(@Nonnull String vlanId) {
         providerVlanId = vlanId;
+        return this;
+    }
+
+    /**
+     * Adds a constraint value to a constrained firewall. All rules must match the specified value when added.
+     * @param constraint the rule field being constrained
+     * @param value the value to which it is constrained
+     * @return this
+     */
+    public @Nonnull FirewallCreateOptions withConstraint(@Nonnull FirewallConstraints.Constraint constraint, @Nonnull Object value) {
+        if( constraints == null ) {
+            constraints = new HashMap<FirewallConstraints.Constraint, Object>();
+        }
+        constraints.put(constraint, value);
         return this;
     }
 

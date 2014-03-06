@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2013 Dell, Inc.
+ * Copyright (C) 2009-2014 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -56,6 +56,12 @@ public class Volume implements Networkable, Taggable {
     private String      providerSnapshotId;
     private Map<String,String> tags;
     private VolumeType  type;
+
+    /**
+     * deleteOnVirtualMachineTermination is needed for listing volumes on a virtualmachine, but set to null
+     * for when listing volumes through VolumeSupport as some providers (AWS) don't provide this info there.
+     */
+    private Boolean     deleteOnVirtualMachineTermination = null;
 
     public Volume() { }
 
@@ -318,4 +324,13 @@ public class Volume implements Networkable, Taggable {
     public void setTag(@Nonnull String key, @Nonnull String value) {
         getTags().put(key, value);
     }
+
+    public Boolean isDeleteOnVirtualMachineTermination() {
+      return deleteOnVirtualMachineTermination;
+    }
+
+    public void setDeleteOnVirtualMachineTermination( Boolean deleteOnVirtualMachineTermination ) {
+      this.deleteOnVirtualMachineTermination = deleteOnVirtualMachineTermination;
+    }
+
 }

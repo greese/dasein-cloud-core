@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2013 Dell, Inc.
+ * Copyright (C) 2009-2014 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -19,6 +19,7 @@
 
 package org.dasein.cloud.compute;
 
+import org.dasein.cloud.VisibleScope;
 import org.dasein.util.uom.storage.Gigabyte;
 import org.dasein.util.uom.storage.Megabyte;
 import org.dasein.util.uom.storage.Storage;
@@ -37,6 +38,7 @@ public class VirtualMachineProduct implements Serializable {
     private String            providerProductId;
     private Storage<Megabyte> ramSize;
     private float             standardHourlyRate;
+    private VisibleScope      visibleScope;
     
     public VirtualMachineProduct() { }
 
@@ -98,6 +100,14 @@ public class VirtualMachineProduct implements Serializable {
 
     public void setStandardHourlyRate(float standardHourlyRate) {
         this.standardHourlyRate = standardHourlyRate;
+    }
+
+    public void setVisibleScope(VisibleScope visibleScope){
+        this.visibleScope = visibleScope;
+    }
+
+    public VisibleScope getVisibleScope(){
+        return this.visibleScope;
     }
 
     public String toString() {

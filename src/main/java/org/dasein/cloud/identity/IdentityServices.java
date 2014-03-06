@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2013 Dell, Inc.
+ * Copyright (C) 2009-2014 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -30,12 +30,12 @@ import javax.annotation.Nullable;
  * @version 2012.02 - Added support for user and group management and access controls
  */
 public interface IdentityServices {
-    public abstract @Nullable
+    public @Nullable
     IdentityAndAccessSupport getIdentityAndAccessSupport();
 
-    public abstract @Nullable ShellKeySupport getShellKeySupport();
+    public @Nullable ShellKeySupport getShellKeySupport();
 
-    public abstract boolean hasIdentityAndAccessSupport();
+    public boolean hasIdentityAndAccessSupport();
 
-    public abstract boolean hasShellKeySupport();
+    public boolean hasShellKeySupport();
 }

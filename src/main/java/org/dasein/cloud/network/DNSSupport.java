@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2013 Dell, Inc.
+ * Copyright (C) 2009-2014 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -59,7 +59,7 @@ public interface DNSSupport extends AccessControlledService {
      * @throws CloudException an error occurred with the cloud provider when adding the record
      * @throws InternalException an error occurred within the Dasein Cloud implementation in trying to add the record
      */
-    public abstract @Nonnull DNSRecord addDnsRecord(@Nonnull String providerDnsZoneId, @Nonnull DNSRecordType recordType, @Nonnull String name, @Nonnegative int ttl, @Nonnull String ... values) throws CloudException, InternalException;
+    public @Nonnull DNSRecord addDnsRecord(@Nonnull String providerDnsZoneId, @Nonnull DNSRecordType recordType, @Nonnull String name, @Nonnegative int ttl, @Nonnull String ... values) throws CloudException, InternalException;
     
     /**
      * Creates a new DNS zone with the cloud DNS provider. You must be an owner of the specified domain or you are
@@ -71,7 +71,7 @@ public interface DNSSupport extends AccessControlledService {
      * @throws CloudException an error occurred in the cloud provider attempting to add the zone
      * @throws InternalException an error occurred within the Dasein Cloud implementation attempting to add the zone
      */
-    public abstract @Nonnull String createDnsZone(@Nonnull String domainName, @Nonnull String name, @Nonnull String description) throws CloudException, InternalException;
+    public @Nonnull String createDnsZone(@Nonnull String domainName, @Nonnull String name, @Nonnull String description) throws CloudException, InternalException;
         
     /**
      * Removes one or more DNS records from the zones with which they are associated in the cloud.
@@ -79,7 +79,7 @@ public interface DNSSupport extends AccessControlledService {
      * @throws CloudException an error occurred in the cloud provider while attempting to remove the records
      * @throws InternalException an error occurred in the Dasein Cloud implementation while attempting to remove the records
      */
-    public abstract void deleteDnsRecords(@Nonnull DNSRecord ... dnsRecords) throws CloudException, InternalException;
+    public void deleteDnsRecords(@Nonnull DNSRecord ... dnsRecords) throws CloudException, InternalException;
     
     /**
      * Removes the specified DNS zone from the DNS cloud provider. This is a very dangerous operation as it obviously 
@@ -88,7 +88,7 @@ public interface DNSSupport extends AccessControlledService {
      * @throws CloudException an error occurred in the cloud provider while attempting to remove the zone
      * @throws InternalException an error occurred in the Dasein Cloud implementation while attempting to remove the zone
      */
-    public abstract void deleteDnsZone(@Nonnull String providerDnsZoneId) throws CloudException, InternalException;
+    public void deleteDnsZone(@Nonnull String providerDnsZoneId) throws CloudException, InternalException;
     
     /**
      * Retrieves the specified DNS zone.
@@ -97,21 +97,21 @@ public interface DNSSupport extends AccessControlledService {
      * @throws CloudException an error occurred in the cloud provider while retrieving the specified zone
      * @throws InternalException an error occurred in the Dasein Cloud implementation while retrieving the specified zone
      */
-    public abstract @Nullable DNSZone getDnsZone(@Nonnull String providerDnsZoneId) throws CloudException, InternalException;
+    public @Nullable DNSZone getDnsZone(@Nonnull String providerDnsZoneId) throws CloudException, InternalException;
     
     /**
      * Provides a user-friendly term for a DNS record using the cloud provider's terminology
      * @param locale the locale into which the term should be translated
      * @return the provider-specific, user-friendly term for a DNS record
      */
-    public abstract @Nonnull String getProviderTermForRecord(@Nonnull Locale locale);
+    public @Nonnull String getProviderTermForRecord(@Nonnull Locale locale);
     
     /**
      * Provides a user-friendly term for a DNS zone using the cloud provider's terminology
      * @param locale the locale into which the term should be translated
      * @return the provider-specific, user-friendly term for a DNS zone
      */
-    public abstract @Nonnull String getProviderTermForZone(@Nonnull Locale locale);
+    public @Nonnull String getProviderTermForZone(@Nonnull Locale locale);
 
     /**
      * Lists all DNS records attached to the zone matching the optional type and name.
@@ -122,7 +122,7 @@ public interface DNSSupport extends AccessControlledService {
      * @throws CloudException an error occurred in the cloud provider listing DNS records
      * @throws InternalException an error occurred in Dasein Cloud implementation while retrieving the DNS records
      */
-    public abstract @Nonnull Iterable<DNSRecord> listDnsRecords(@Nonnull String providerDnsZoneId, @Nullable DNSRecordType forType, @Nullable String name) throws CloudException, InternalException;
+    public @Nonnull Iterable<DNSRecord> listDnsRecords(@Nonnull String providerDnsZoneId, @Nullable DNSRecordType forType, @Nullable String name) throws CloudException, InternalException;
 
     /**
      * Lists the status of all DNS zones associated with this account
@@ -130,7 +130,7 @@ public interface DNSSupport extends AccessControlledService {
      * @throws CloudException an error occurred in the cloud provider listing zones
      * @throws InternalException an error occurred in the Dasein Cloud implementation while listing zones
      */
-    public abstract @Nonnull Iterable<ResourceStatus> listDnsZoneStatus() throws CloudException, InternalException;
+    public @Nonnull Iterable<ResourceStatus> listDnsZoneStatus() throws CloudException, InternalException;
 
     /**
      * Lists all DNS zones associated with your account.
@@ -138,7 +138,7 @@ public interface DNSSupport extends AccessControlledService {
      * @throws CloudException an error occurred in the cloud provider listing zones
      * @throws InternalException an error occurred in the Dasein Cloud implementation while listing zones
      */
-    public abstract @Nonnull Iterable<DNSZone> listDnsZones() throws CloudException, InternalException;
+    public @Nonnull Iterable<DNSZone> listDnsZones() throws CloudException, InternalException;
     
     /**
      * Indicates whether or not the account associated with the current Dasein Cloud context is subscribed.
@@ -148,5 +148,5 @@ public interface DNSSupport extends AccessControlledService {
      * @throws CloudException an error occurred in the cloud provider checking the subscription state
      * @throws InternalException an error occurred in the Dasein Cloud implementation while checking the subscription state
      */
-    public abstract boolean isSubscribed() throws CloudException, InternalException;
+    public boolean isSubscribed() throws CloudException, InternalException;
 }

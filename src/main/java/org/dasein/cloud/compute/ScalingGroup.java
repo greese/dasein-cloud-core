@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2013 Dell, Inc.
+ * Copyright (C) 2009-2014 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -20,32 +20,109 @@
 package org.dasein.cloud.compute;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 public class ScalingGroup implements Serializable {
     private static final long serialVersionUID = -5317003700769693511L;
     
-    private int      cooldown;
-    private long     creationTimestamp;
-    private String   description;
-    private int      maxServers;
-    private int      minServers;
-    private String   name;
-    private String[] providerDataCenterIds;
-    private String   providerLaunchConfigurationId;
-    private String   providerOwnerId;
-    private String   providerRegionId;
-    private String   providerScalingGroupId;
-    private String[] providerServerIds;
-    private int      targetCapacity;
+    private int                   defaultCooldown;
+    private long                  creationTimestamp;
+    private String                description;
+    private int                   maxServers;
+    private int                   minServers;
+    private String                name;
+    private String[]              providerDataCenterIds;
+    private String                providerLaunchConfigurationId;
+    private String                providerOwnerId;
+    private String                providerRegionId;
+    private String                providerScalingGroupId;
+    private String[]              providerServerIds;
+    private int                   targetCapacity;
+    private String                id;
+    private String[]              enabledMetrics;
+    private int                   healthCheckGracePeriod;
+    private String                healthCheckType;
+    private String[]              providerLoadBalancerNames;
+    private String                status;
+    private Collection<String[]>  suspendedProcesses;
+    private String[]              terminationPolicies;
+    private AutoScalingTag[]      tags;
+    // comma seperated list
+    private String                subnetIds;
+
     
     public ScalingGroup() { }
 
-    public int getCooldown() {
-        return cooldown;
+    public String getId() {
+      return id;
     }
 
-    public void setCooldown(int cooldown) {
-        this.cooldown = cooldown;
+    public void setId(String id) {
+      this.id = id;
+    }
+
+    public String[] getEnabledMetrics() {
+      return enabledMetrics;
+    }
+
+    public void setEnabledMetrics(String[] metrics) {
+      this.enabledMetrics = metrics;
+    }
+
+    public int getHealthCheckGracePeriod() {
+      return healthCheckGracePeriod;
+    }
+
+    public void setHealthCheckGracePeriod(int healthCheckGracePeriod) {
+      this.healthCheckGracePeriod = healthCheckGracePeriod;
+    }
+
+    public String getHealthCheckType() {
+      return healthCheckType;
+    }
+
+    public void setHealthCheckType(String healthCheckType) {
+      this.healthCheckType = healthCheckType;
+    }
+
+    public String[] getProviderLoadBalancerNames() {
+      return providerLoadBalancerNames;
+    }
+
+    public void setProviderLoadBalancerNames(String[] providerLoadBalancerNames) {
+      this.providerLoadBalancerNames = providerLoadBalancerNames;
+    }
+
+    public String getStatus() {
+      return status;
+    }
+
+    public void setStatus(String status) {
+      this.status = status;
+    }
+
+    public Collection<String[]> getSuspendedProcesses() {
+      return suspendedProcesses;
+    }
+
+    public void setSuspendedProcesses(Collection<String[]> suspendedProcesses) {
+      this.suspendedProcesses = suspendedProcesses;
+    }
+
+    public String[] getTerminationPolicies() {
+      return terminationPolicies;
+    }
+
+    public void setTerminationPolicies(String[] terminationPolicies) {
+      this.terminationPolicies = terminationPolicies;
+    }
+
+    public int getDefaultCoolcown() {
+        return defaultCooldown;
+    }
+
+    public void setDefaultCoolcown(int cooldown) {
+        this.defaultCooldown = cooldown;
     }
 
     public String getDescription() {
@@ -142,6 +219,22 @@ public class ScalingGroup implements Serializable {
 
     public int getTargetCapacity() {
         return targetCapacity;
+    }
+
+    public AutoScalingTag[] getTags() {
+      return tags;
+    }
+
+    public void setTags(AutoScalingTag[] tags) {
+      this.tags = tags;
+    }
+
+    public String getSubnetIds() {
+      return subnetIds;
+    }
+
+    public void setSubnetIds(String subnetIds) {
+      this.subnetIds = subnetIds;
     }
     
 }

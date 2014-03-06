@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2013 Dell, Inc.
+ * Copyright (C) 2009-2014 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -27,9 +27,7 @@ import org.dasein.cloud.network.NICCreateOptions;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Configuration of a virtual machine to be launched prior to launch. Dasein Cloud uses this to create a complete
@@ -79,7 +77,8 @@ public class VMLaunchOptions {
     static public @Nonnull VMLaunchOptions getInstance(@Nonnull String withStandardProductId, @Nonnull String usingMachineImageId, @Nonnull String withHostName, @Nonnull String havingFriendlyName, @Nonnull String withDescription) {
         return new VMLaunchOptions(withStandardProductId, usingMachineImageId,withHostName, havingFriendlyName, withDescription);
     }
-    
+
+    // NOTE: ADDING/REMOVING/CHANGING AN ATTRIBUTE? MAKE SURE YOU REFLECT THE CHANGE IN THE copy() METHOD
     private String             bootstrapKey;
     private String             bootstrapPassword;
     private String             bootstrapUser;
@@ -95,13 +94,20 @@ public class VMLaunchOptions {
     private String             networkProductId;
     private NICConfig[]        networkInterfaces;
     private boolean            preventApiTermination;
+    private String             privateIp;
+    private boolean            provisionPublicIp;
     private String             ramdiskId;
     private String             rootVolumeProductId;
     private String             standardProductId;
     private String[]           staticIpIds;
     private String             userData;
     private String             vlanId;
+    private String             subnetId;
     private VolumeAttachment[] volumes;
+    private boolean            ioOptimized;
+    private boolean            ipForwardingAllowed;
+    private String             roleId;
+    // NOTE: SEE NOTE AT TOP OF ATTRIBUTE LIST WHEN ADDING/REMOVING/CHANGING AN ATTRIBUTE
 
     private VMLaunchOptions() { }
     
@@ -134,6 +140,100 @@ public class VMLaunchOptions {
             throw new OperationNotSupportedException(provider.getCloudName() + " does not have virtual machine support");
         }
         return support.launch(this).getProviderVirtualMachineId();
+    }
+
+    /**
+     * Launches multiple virtual machines based on the current contents of this set of launch options. The method is a success
+     * if any one virtual machine is provisioned even if any errors occurred provisioning others.
+     * @param provider the cloud provider in which the VM should be provisioned
+     * @param count the number of virtual machines to provision
+     * @return the IDs of the virtual machines that were provisioned
+     * @throws CloudException an error occurred within the cloud provider that prevented the provisioning of any VMs
+     * @throws InternalException an error occurred within Dasein Cloud in preparing the API call (can happen even if a VM gets provisioned)
+     * @throws OperationNotSupportedException the cloud does not support virtual machines
+     */
+    public @Nonnull Iterable<String> buildMany(@Nonnull CloudProvider provider, int count) throws CloudException, InternalException {
+        ComputeServices services = provider.getComputeServices();
+
+        if( services == null ) {
+            throw new OperationNotSupportedException(provider.getCloudName() + " does not support compute services.");
+        }
+        VirtualMachineSupport support = services.getVirtualMachineSupport();
+
+        if( support == null ) {
+            throw new OperationNotSupportedException(provider.getCloudName() + " does not have virtual machine support");
+        }
+        return support.launchMany(this, count);
+    }
+
+    /**
+     * Copies the meaningful aspects of this set of VM launch options to be used in a second set of VM launch options. The only
+     * things NOT copied are attributes that are inherently instance specific such as IP address, volume attachments,
+     * private IP, and NICs. Any volumes and/or NICs to be created, however, are preserved.
+     * @param havingHostName a host name special for this new set of VM create options
+     * @param havingFriendlyName a friendly name special for this new set of VM create options
+     * @return a copy of this set of VM launch options minus any instance-specific elements
+     */
+    public @Nonnull VMLaunchOptions copy(@Nonnull String havingHostName, @Nonnull String havingFriendlyName) {
+        VMLaunchOptions options = new VMLaunchOptions(standardProductId, machineImageId, havingHostName, havingFriendlyName, description);
+
+        options.bootstrapKey = bootstrapKey;
+        options.bootstrapPassword = bootstrapPassword;
+        options.bootstrapUser = bootstrapUser;
+        options.dataCenterId = dataCenterId;
+        options.extendedAnalytics = extendedAnalytics;
+        options.firewallIds = (firewallIds == null ? new String[0] : Arrays.copyOf(options.firewallIds, options.firewallIds.length));
+        options.ioOptimized = ioOptimized;
+        options.ipForwardingAllowed = ipForwardingAllowed;
+        options.kernelId = kernelId;
+        if( metaData != null ) {
+            options.metaData = new HashMap<String, Object>();
+            options.metaData.putAll(metaData);
+        }
+        if( networkInterfaces != null && networkInterfaces.length > 0 ) {
+            ArrayList<NICConfig> cfgs = new ArrayList<NICConfig>();
+
+            for( NICConfig cfg : networkInterfaces ) {
+                if( cfg.nicToCreate != null ) {
+                    NICConfig c = new NICConfig();
+
+                    c.nicToCreate = cfg.nicToCreate.copy(c.nicToCreate.getName() + " - " + hostName);
+                    cfgs.add(c);
+                }
+            }
+            options.networkInterfaces = cfgs.toArray(new NICConfig[cfgs.size()]);
+        }
+        else {
+            options.networkInterfaces = new NICConfig[0];
+        }
+        options.networkProductId = networkProductId;
+        options.preventApiTermination = preventApiTermination;
+        options.privateIp = null;
+        options.provisionPublicIp = provisionPublicIp;
+        options.ramdiskId = ramdiskId;
+        options.rootVolumeProductId = rootVolumeProductId;
+        options.staticIpIds = new String[0];
+        options.userData = userData;
+        options.vlanId = vlanId;
+        options.subnetId = subnetId;
+        options.volumes = new VolumeAttachment[0];
+        options.ioOptimized = ioOptimized;
+        options.ipForwardingAllowed = ipForwardingAllowed;
+        options.roleId = roleId;
+        if( volumes != null && volumes.length > 0 ) {
+            ArrayList<VolumeAttachment> copy = new ArrayList<VolumeAttachment>();
+
+            for( VolumeAttachment a : volumes ) {
+                if( a.volumeToCreate != null ) {
+                    VolumeAttachment nv = new VolumeAttachment();
+
+                    nv.volumeToCreate = a.volumeToCreate.copy(a.volumeToCreate.getName() + "-" + hostName);
+                    copy.add(nv);
+                }
+            }
+            options.volumes = copy.toArray(new VolumeAttachment[copy.size()]);
+        }
+        return options;
     }
 
     /**
@@ -280,6 +380,13 @@ public class VMLaunchOptions {
     }
 
     /**
+     * @return the private ip when VM is launched in VLAN
+     */
+    public @Nonnull String getPrivateIp() {
+      return privateIp;
+    }
+
+    /**
      * @return the user data that will be provided to the guest OS post-launch
      */
     public @Nullable String getUserData() {
@@ -298,6 +405,13 @@ public class VMLaunchOptions {
      */
     public @Nonnull VolumeAttachment[] getVolumes() {
         return (volumes == null ? new VolumeAttachment[0] : volumes);
+    }
+
+    /**
+     * @return true/false for i/o optimized
+     */
+    public boolean isIoOptimized() {
+      return ioOptimized;
     }
     
     /**
@@ -355,6 +469,22 @@ public class VMLaunchOptions {
         this.networkProductId = networkProductId;
         this.dataCenterId = dataCenterId;
         this.vlanId = vlanId;
+        return this;
+    }
+
+    /**
+     * Indicates specifically the subnet into which the virtual machine should be launched
+     * @param networkProductId the network product, if any, for the VLAN/subnet into which the VM is being launched
+     * @param dataCenterId the data center into which the VM is being launched
+     * @param vlanId optionally provide the vlanId containing the subnet if the cloud requires it
+     * @param subnetId the subnet into which the virtual machine is being launched
+     * @return this
+     */
+    public @Nonnull VMLaunchOptions inSubnet(@Nullable String networkProductId, @Nonnull String dataCenterId, @Nullable String vlanId, @Nonnull String subnetId) {
+        this.networkProductId = networkProductId;
+        this.dataCenterId = dataCenterId;
+        this.vlanId = vlanId;
+        this.subnetId = subnetId;
         return this;
     }
 
@@ -615,4 +745,73 @@ public class VMLaunchOptions {
         this.staticIpIds = ipIds;
         return this;
     }
+
+    public @Nonnull VMLaunchOptions withIoOptimized(boolean ioOptimized) {
+      this.ioOptimized = ioOptimized;
+      return this;
+    }
+
+    /**
+     * Identifies the private ip address to assign to the VM when launched in a VLAN
+     * @param ipAddr an ip address within the subnet cidr range which the VM is being launched into
+     * @return this
+     */
+    public @Nonnull VMLaunchOptions withPrivateIp(@Nonnull String ipAddr) {
+      this.privateIp = ipAddr;
+      return this;
+    }
+
+    /**
+     * @return true if the VM was provisioned with a public IP address at launch time
+     */
+    public boolean isProvisionPublicIp() {
+        return provisionPublicIp;
+    }
+
+    /**
+     * Tell the cloud provider to automatically provision a public IP for this VM on launch.
+     * @param provisionPublicIp true indicates that a public IP address should be provisioned at launch time
+     * @return this
+     */
+    public @Nonnull VMLaunchOptions withProvisionPublicIp(@Nonnull boolean provisionPublicIp) {
+        this.provisionPublicIp = provisionPublicIp;
+        return this;
+    }
+
+    /**
+     * Specifies if the VM can forward IP packets that don't match the IP address of the
+     * VM sending the packet. This allows VMs to act as NAT instances.
+     *
+     * @return if IP forwarding is enabled
+     */
+    public boolean isIpForwardingAllowed() {
+      return ipForwardingAllowed;
+    }
+
+    /**
+     * See {@link #isIpForwardingAllowed()}
+     * @return this
+     */
+    public @Nonnull VMLaunchOptions withIpForwardingAllowed( boolean ipForwardingAllowed ) {
+      this.ipForwardingAllowed = ipForwardingAllowed;
+      return this;
+    }
+
+    /**
+     * Identifies a service account/role that the virtual machine will be able to use
+     * @param roleId the role Id from the provider
+     * @return this
+     */
+    public @Nonnull VMLaunchOptions withRoleId(@Nonnull String roleId) {
+      this.roleId = roleId;
+      return this;
+    }
+
+    /**
+     * @return the role id
+     */
+    public @Nullable String getRoleId() {
+      return roleId;
+    }
+
 }
