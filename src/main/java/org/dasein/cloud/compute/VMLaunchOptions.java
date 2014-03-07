@@ -48,13 +48,6 @@ public class VMLaunchOptions {
         public String nicId;
         public NICCreateOptions nicToCreate;
     }
-    
-    static public class VolumeAttachment {
-        public String deviceId;
-        public String existingVolumeId;
-        public boolean rootVolume;
-        public VolumeCreateOptions volumeToCreate;
-    }
 
     /**
      * Constructs a new set of launch options from a minimum required configuration.
