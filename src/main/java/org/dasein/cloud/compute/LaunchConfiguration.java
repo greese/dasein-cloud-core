@@ -35,7 +35,7 @@ public class LaunchConfiguration implements Serializable {
     private String   serverSizeId;
     private String   providerRoleId;
     private boolean  detailedMonitoring;
-    private boolean  associatePublicIPAddress;
+    private Boolean  associatePublicIPAddress;
     private VolumeAttachment[] volumeAttachment;
     private boolean ioOptimized;
     private String imageId;
@@ -130,11 +130,11 @@ public class LaunchConfiguration implements Serializable {
       this.detailedMonitoring = detailedMonitoring;
     }
 
-    public boolean getAssociatePublicIPAddress() {
+    public Boolean getAssociatePublicIPAddress() {
       return associatePublicIPAddress;
     }
 
-    public void setAssociatePublicIPAddress(boolean associatePublicIPAddress) {
+    public void setAssociatePublicIPAddress(Boolean associatePublicIPAddress) {
       this.associatePublicIPAddress = associatePublicIPAddress;
     }
 
