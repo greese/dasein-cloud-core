@@ -102,6 +102,7 @@ public class VMLaunchOptions {
     private boolean            ioOptimized;
     private boolean            ipForwardingAllowed;
     private String             roleId;
+    private boolean            associatePublicIpAddress;
 
     private VMLaunchOptions() { }
     
@@ -714,6 +715,24 @@ public class VMLaunchOptions {
      */
     public @Nullable String getRoleId() {
       return roleId;
+    }
+
+    /**
+     * Associate a public IP address at launch.
+     *
+     * @param publicIpAddress
+     * @return this
+     */
+    public VMLaunchOptions withAssociatePublicIpAddress( final boolean publicIpAddress ) {
+      this.associatePublicIpAddress = publicIpAddress;
+      return this;
+    }
+
+    /**
+     * @see #withAssociatePublicIpAddress(boolean)
+     */
+    public boolean isAssociatePublicIpAddress() {
+      return associatePublicIpAddress;
     }
 
 }
