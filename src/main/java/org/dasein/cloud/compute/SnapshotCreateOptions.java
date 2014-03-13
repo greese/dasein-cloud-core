@@ -72,6 +72,24 @@ public class SnapshotCreateOptions {
         return options;
     }
 
+    /**
+     * Constructs an options object that supports the creation of a new snapshot from the specified volume.
+     * @param volumeId the volume to be snapshotted
+     * @param name the name of the new snapshot
+     * @param description a description of the snapshot
+     * @param snapshotId the unique ID of snapshots to be set
+     * @return an options object that will support the creation of a snapshot from the specified volume
+     */
+    static public SnapshotCreateOptions getInstanceForCreate(@Nonnull String volumeId, @Nullable String snapshotId, @Nonnull String name, @Nonnull String description) {
+        SnapshotCreateOptions options = new SnapshotCreateOptions();
+
+        options.name = name;
+        options.description = description;
+        options.volumeId = volumeId;
+        options.snapshotId = snapshotId;
+        return options;
+    }
+
     private String             description;
     private Map<String,String> metaData;
     private String             name;
