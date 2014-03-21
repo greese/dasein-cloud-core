@@ -334,6 +334,8 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
                         }
                     }
                     original = copy;
+                    // copy has to be a new list else we'll get into concurrently modified list state
+                    copy = new ArrayList<Future<String>>();
                 }
                 if( exception != null && !loaded ) {
                     throw exception;
