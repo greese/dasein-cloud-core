@@ -109,6 +109,9 @@ public class ProviderContext extends ProviderContextCompat implements Serializab
                     if( fromStrings.length != 2 ) {
                         throw new IndexOutOfBoundsException("Should have exactly 2 strings for a keypair value");
                     }
+                    if( fromStrings[0] == null || fromStrings[1] == null ) {
+                        throw new RuntimeException("Keypair values can not be null");
+                    }
                     byte[][] bytes = new byte[2][];
 
                     bytes[0] = fromStrings[0].getBytes("utf-8");
