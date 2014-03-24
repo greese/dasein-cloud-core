@@ -90,7 +90,7 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
         boolean supported = false;
 
         for( MachineImageType type : MachineImageType.values() ) {
-            if( supportsImageCapture(type) ) {
+            if( getCapabilities().supportsImageCapture(type) ) {
                 supported = true;
             }
         }
@@ -105,7 +105,7 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
         boolean supported = false;
 
         for( MachineImageType type : MachineImageType.values() ) {
-            if( supportsImageCapture(type) ) {
+            if( getCapabilities().supportsImageCapture(type) ) {
                 supported = true;
             }
         }
@@ -156,18 +156,28 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
 
     @Override
     public @Nonnull String getProviderTermForImage(@Nonnull Locale locale) {
-        return getProviderTermForImage(locale, ImageClass.MACHINE);
+        try {
+            return getCapabilities().getProviderTermForImage(locale, ImageClass.MACHINE);
+        }
+        catch ( Throwable t) {
+            throw new RuntimeException(t);
+        }
     }
 
     @Override
     public @Nonnull String getProviderTermForCustomImage(@Nonnull Locale locale, @Nonnull ImageClass cls) {
-        return getProviderTermForImage(locale, cls);
+        try {
+            return getCapabilities().getProviderTermForImage(locale, cls);
+        }
+        catch (Throwable t) {
+            throw new RuntimeException(t);
+        }
     }
 
     @Override
     public boolean hasPublicLibrary() {
         try {
-            return supportsPublicLibrary(ImageClass.MACHINE);
+            return getCapabilities().supportsPublicLibrary(ImageClass.MACHINE);
         }
         catch( Throwable t ) {
             throw new RuntimeException(t);
@@ -509,11 +519,11 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
     @Override
     @Deprecated
     public boolean supportsCustomImages() throws CloudException, InternalException {
-        if( supportsDirectImageUpload() ) {
+        if( getCapabilities().supportsDirectImageUpload() ) {
             return true;
         }
         for( MachineImageType type : MachineImageType.values() ) {
-            if( supportsImageCapture(type) ) {
+            if( getCapabilities().supportsImageCapture(type) ) {
                 return true;
             }
         }
