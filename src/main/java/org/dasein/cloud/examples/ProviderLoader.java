@@ -19,12 +19,11 @@
 
 package org.dasein.cloud.examples;
 
-import org.dasein.cloud.CloudException;
-import org.dasein.cloud.CloudProvider;
-import org.dasein.cloud.ProviderContext;
+import org.dasein.cloud.*;
 
 import javax.annotation.Nonnull;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -35,25 +34,26 @@ import java.util.Properties;
  *     <li>DSN_ENDPOINT</li>
  *     <li>DSN_REGION</li>
  *     <li>DSN_ACCOUNT</li>
- *     <li>DSN_API_SHARED</li>
- *     <li>DSN_API_SECRET</li>
- *     <li>DSN_API_VERSION</li>
  *     <li>DSN_CLOUD_NAME</li>
  *     <li>DSN_CLOUD_PROVIDER</li>
  * </ul>
- * The only required values are DSN_PROVIDER_CLASS, DSN_ENDPOINT, DSN_PROVIDER_REGION, DSN_API_SHARED,
- * and DSN_API_SECRET. The DSN_API_SHARED will be used for DSN_ACCOUNT if DSN_ACCOUNT is omitted.
- * In addition, you may specify implementation-specific properties using the system property DSN_CUSTOM_prop_name. For
- * example, the custom property "domain" would be specified through DSN_CUSTOM_domain.
+ * <p>
+ *     In addition, it looks for fields needed for authenticating with the target provider (as specified in your
+ *     provider class). If you don't know, this loader will first print out the expected fields so you can set
+ *     them.
+ * </p>
+ * The core required values are DSN_PROVIDER_CLASS, DSN_ENDPOINT, DSN_PROVIDER_REGION, and DSN_ACCOUNT, but you also
+ * need to set the provider-specific values.
  * <p>Created by George Reese: 10/3/12 12:18 PM</p>
  * @author George Reese
  * @version 2012.09 initial version
+ * @version 2014.03 updated for changes to the connection process (issue #123)
  * @since 2012.09
  */
 public class ProviderLoader {
     private CloudProvider configuredProvider;
 
-    public ProviderLoader() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedEncodingException {
+    public ProviderLoader() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedEncodingException, CloudException, InternalException {
         configure();
     }
 
@@ -61,40 +61,45 @@ public class ProviderLoader {
         return configuredProvider;
     }
 
-    private void configure() throws ClassNotFoundException, IllegalAccessException, InstantiationException, UnsupportedEncodingException {
+    private void configure() throws ClassNotFoundException, IllegalAccessException, InstantiationException, UnsupportedEncodingException, CloudException, InternalException {
+        // First, read the basic configuration data from system properties
         String cname = System.getProperty("DSN_PROVIDER_CLASS");
-
-        configuredProvider = (CloudProvider)Class.forName(cname).newInstance();
-
         String endpoint = System.getProperty("DSN_ENDPOINT");
         String regionId = System.getProperty("DSN_REGION");
-        String shared = System.getProperty("DSN_API_SHARED");
-        String account = System.getProperty("DSN_ACCOUNT", shared);
-        String secret = System.getProperty("DSN_API_SECRET");
-        String version = System.getProperty("DSN_API_VERSION");
-        String cloudName = System.getProperty("DSN_CLOUD_NAME");
-        String providerName = System.getProperty("DSN_CLOUD_PROVIDER");
+        String cloudName = System.getProperty("DSN_CLOUD_NAME", "Unkown");
+        String providerName = System.getProperty("DSN_PROVIDER_NAME", "Unknown");
+        String account = System.getProperty("DSN_ACCOUNT");
 
-        ProviderContext ctx = new ProviderContext();
+        // Use that information to register the cloud
+        @SuppressWarnings("unchecked") Cloud cloud = Cloud.register(providerName, cloudName, endpoint, (Class<? extends CloudProvider>)Class.forName(cname));
 
-        ctx.setEndpoint(endpoint);
-        if( providerName != null ) { ctx.setProviderName(providerName); }
-        if( cloudName != null ) { ctx.setCloudName(cloudName); }
-        if( regionId != null ) { ctx.setRegionId(regionId); }
-        ctx.setAccountNumber(account);
-        ctx.setAccessKeys(shared.getBytes("utf-8"), secret.getBytes("utf-8"));
+        // Find what additional fields are necessary to connect to the cloud
+        ContextRequirements requirements = cloud.buildProvider().getContextRequirements();
+        List<ContextRequirements.Field> fields = requirements.getConfigurableValues();
 
-        Properties properties = new Properties();
+        // Load the values for the required fields from the system properties
+        ProviderContext.Value[] values = new ProviderContext.Value[fields.size()];
+        int i = 0;
 
-        if( version != null ) {
-            properties.setProperty("apiVersion", version);
-        }
-        for( String prop : System.getProperties().stringPropertyNames() ) {
-            if( prop.startsWith("DSN_CUSTOM_") ) {
-                properties.put(prop.substring("DSN_CUSTOM_".length()), System.getProperty(prop));
+        for(ContextRequirements.Field f : fields ) {
+            System.out.print("Loading '" + f.name + "' from ");
+            if( f.type.equals(ContextRequirements.FieldType.KEYPAIR) ) {
+                System.out.println("'DSN_" + f.name + "_SHARED' and 'DSN_" + f.name + "_SECRET'");
+                String shared = System.getProperty("DSN_" + f.name + "_SHARED");
+                String secret = System.getProperty("DSN_" + f.name + "_SECRET");
+
+                values[i] = ProviderContext.Value.parseValue(f, shared, secret);
             }
+            else {
+                System.out.println("'DSN_" + f.name + "'");
+                String value = System.getProperty("DSN_" + f.name);
+
+                values[i] = ProviderContext.Value.parseValue(f, value);
+            }
+            i++;
         }
-        ctx.setCustomProperties(properties);
-        configuredProvider.connect(ctx);
+
+        ProviderContext ctx = cloud.createContext(account, regionId, values);
+        configuredProvider = ctx.connect();
     }
 }

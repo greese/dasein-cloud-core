@@ -46,43 +46,47 @@ public interface VPNSupport extends AccessControlledService {
     static public final ServiceAction REMOVE_GATEWAY     = new ServiceAction("VPN:REMOVE_GATEWAY");
     static public final ServiceAction REMOVE_VPN         = new ServiceAction("VPN:REMOVE_VPN");
 
-    public abstract void attachToVLAN(@Nonnull String providerVpnId, @Nonnull String providerVlanId) throws CloudException, InternalException;
+    public void attachToVLAN(@Nonnull String providerVpnId, @Nonnull String providerVlanId) throws CloudException, InternalException;
     
-    public abstract void connectToGateway(@Nonnull String providerVpnId, @Nonnull String toGatewayId) throws CloudException, InternalException;
+    public void connectToGateway(@Nonnull String providerVpnId, @Nonnull String toGatewayId) throws CloudException, InternalException;
     
-    public abstract @Nonnull VPN createVPN(@Nullable String inProviderDataCenterId, @Nonnull String name, @Nonnull String description, @Nonnull VPNProtocol protocol) throws CloudException, InternalException;
+    public @Nonnull VPN createVPN(@Nullable String inProviderDataCenterId, @Nonnull String name, @Nonnull String description, @Nonnull VPNProtocol protocol) throws CloudException, InternalException;
     
-    public abstract @Nonnull VPNGateway createVPNGateway(@Nonnull String endpoint, @Nonnull String name, @Nonnull String description, @Nonnull VPNProtocol protocol, @Nonnull String bgpAsn) throws CloudException, InternalException;
+    public @Nonnull VPNGateway createVPNGateway(@Nonnull String endpoint, @Nonnull String name, @Nonnull String description, @Nonnull VPNProtocol protocol, @Nonnull String bgpAsn) throws CloudException, InternalException;
     
-    public abstract void deleteVPN(@Nonnull String providerVpnId) throws CloudException, InternalException;
+    public void deleteVPN(@Nonnull String providerVpnId) throws CloudException, InternalException;
     
-    public abstract void deleteVPNGateway(@Nonnull String providerVPNGatewayId) throws CloudException, InternalException;
+    public void deleteVPNGateway(@Nonnull String providerVPNGatewayId) throws CloudException, InternalException;
     
-    public abstract void detachFromVLAN(@Nonnull String providerVpnId, @Nonnull String providerVlanId) throws CloudException, InternalException;
+    public void detachFromVLAN(@Nonnull String providerVpnId, @Nonnull String providerVlanId) throws CloudException, InternalException;
     
-    public abstract void disconnectFromGateway(@Nonnull String providerVpnId, @Nonnull String fromGatewayId) throws CloudException, InternalException;
-    
-    public abstract @Nullable VPNGateway getGateway(@Nonnull String gatewayId) throws CloudException, InternalException;
-    
-    public abstract @Nullable VPN getVPN(@Nonnull String providerVpnId) throws CloudException, InternalException;
+    public void disconnectFromGateway(@Nonnull String providerVpnId, @Nonnull String fromGatewayId) throws CloudException, InternalException;
 
-    public abstract Requirement getVPNDataCenterConstraint() throws CloudException, InternalException;
-
-    public abstract @Nonnull Iterable<VPNConnection> listGatewayConnections(@Nonnull String toGatewayId) throws CloudException, InternalException;
-
-    public abstract @Nonnull Iterable<ResourceStatus> listGatewayStatus() throws CloudException, InternalException;
-
-    public abstract @Nonnull Iterable<VPNGateway> listGateways() throws CloudException, InternalException;
-
-    public abstract @Nonnull Iterable<VPNGateway> listGatewaysWithBgpAsn(@Nonnull String bgpAsn) throws CloudException, InternalException;
-
-    public abstract @Nonnull Iterable<VPNConnection> listVPNConnections(@Nonnull String toVpnId) throws CloudException, InternalException;
-
-    public abstract @Nonnull Iterable<ResourceStatus> listVPNStatus() throws CloudException, InternalException;
-
-    public abstract @Nonnull Iterable<VPN> listVPNs() throws CloudException, InternalException;
+    public @Nonnull VPNCapabilities getCapabilities()throws CloudException, InternalException;
     
-    public abstract @Nonnull Iterable<VPNProtocol> listSupportedVPNProtocols() throws CloudException, InternalException;
+    public @Nullable VPNGateway getGateway(@Nonnull String gatewayId) throws CloudException, InternalException;
     
-    public abstract boolean isSubscribed() throws CloudException, InternalException;
+    public @Nullable VPN getVPN(@Nonnull String providerVpnId) throws CloudException, InternalException;
+
+    @Deprecated
+    public Requirement getVPNDataCenterConstraint() throws CloudException, InternalException;
+
+    public @Nonnull Iterable<VPNConnection> listGatewayConnections(@Nonnull String toGatewayId) throws CloudException, InternalException;
+
+    public @Nonnull Iterable<ResourceStatus> listGatewayStatus() throws CloudException, InternalException;
+
+    public @Nonnull Iterable<VPNGateway> listGateways() throws CloudException, InternalException;
+
+    public @Nonnull Iterable<VPNGateway> listGatewaysWithBgpAsn(@Nonnull String bgpAsn) throws CloudException, InternalException;
+
+    public @Nonnull Iterable<VPNConnection> listVPNConnections(@Nonnull String toVpnId) throws CloudException, InternalException;
+
+    public @Nonnull Iterable<ResourceStatus> listVPNStatus() throws CloudException, InternalException;
+
+    public @Nonnull Iterable<VPN> listVPNs() throws CloudException, InternalException;
+
+    @Deprecated
+    public @Nonnull Iterable<VPNProtocol> listSupportedVPNProtocols() throws CloudException, InternalException;
+    
+    public boolean isSubscribed() throws CloudException, InternalException;
 }

@@ -49,7 +49,7 @@ public interface DataWarehouseSupport {
      * @throws InternalException a local error occurred in the Dasein Cloud implementation
      * @throws OperationNotSupportedException the cloud does not support sharing snapshots with other accounts
      */
-    public abstract void addSnapshotShare(@Nonnull String snapshotId, @Nonnull String accountNumber) throws CloudException, InternalException;
+    public void addSnapshotShare(@Nonnull String snapshotId, @Nonnull String accountNumber) throws CloudException, InternalException;
 
     /**
      * Authorizes access to data clusters associated with a specified data cluster firewall by the compute firewalls
@@ -272,7 +272,7 @@ public interface DataWarehouseSupport {
      * @throws CloudException an error occurred with the cloud provider
      * @throws InternalException a local error occurred in the Dasein Cloud implementation
      */
-    public abstract void removeAllSnapshotShares(@Nonnull String snapshotId) throws CloudException, InternalException;
+    public void removeAllSnapshotShares(@Nonnull String snapshotId) throws CloudException, InternalException;
 
     /**
      * Removes the specified data cluster from the cloud.
@@ -425,7 +425,7 @@ public interface DataWarehouseSupport {
      * @throws CloudException    an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public abstract void updateClusterTags(@Nonnull String clusterId, @Nonnull Tag... tags) throws CloudException, InternalException;
+    public void updateClusterTags(@Nonnull String clusterId, @Nonnull Tag... tags) throws CloudException, InternalException;
 
     /**
      * Updates meta-data for multiple data clusters with the new values. It will not overwrite any value that currently
@@ -435,7 +435,7 @@ public interface DataWarehouseSupport {
      * @throws CloudException    an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public abstract void updateClusterTags(@Nonnull String[] clusterIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+    public void updateClusterTags(@Nonnull String[] clusterIds, @Nonnull Tag... tags) throws CloudException, InternalException;
 
     /**
      * Updates meta-data for a data cluster snapshot with the new values. It will not overwrite any value that currently
@@ -445,7 +445,7 @@ public interface DataWarehouseSupport {
      * @throws CloudException    an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public abstract void updateSnapshotTags(@Nonnull String snapshotId, @Nonnull Tag... tags) throws CloudException, InternalException;
+    public void updateSnapshotTags(@Nonnull String snapshotId, @Nonnull Tag... tags) throws CloudException, InternalException;
 
     /**
      * Updates meta-data for multiple data cluster snapshots with the new values. It will not overwrite any value that currently
@@ -455,5 +455,5 @@ public interface DataWarehouseSupport {
      * @throws CloudException    an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public abstract void updateSnapshotTags(@Nonnull String[] snapshotIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+    public void updateSnapshotTags(@Nonnull String[] snapshotIds, @Nonnull Tag... tags) throws CloudException, InternalException;
 }

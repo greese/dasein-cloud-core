@@ -19,12 +19,7 @@
 
 package org.dasein.cloud.compute;
 
-import org.dasein.cloud.CloudException;
-import org.dasein.cloud.CloudProvider;
-import org.dasein.cloud.InternalException;
-import org.dasein.cloud.OperationNotSupportedException;
-import org.dasein.cloud.Tag;
-import org.dasein.cloud.Taggable;
+import org.dasein.cloud.*;
 import org.dasein.cloud.network.Networkable;
 import org.dasein.cloud.network.RawAddress;
 
@@ -93,6 +88,7 @@ public class VirtualMachine implements Networkable, Taggable {
     private String                providerRoleId;
     private VmStatus              providerHostStatus;
     private VmStatus              providerVmStatus;
+    private VisibleScope          visibleScope;
 
   public VirtualMachine() { }
     
@@ -673,4 +669,11 @@ public class VirtualMachine implements Networkable, Taggable {
       this.providerHostStatus = vmStatus;
     }
 
+    public void setVisibleScope(VisibleScope visibleScope){
+        this.visibleScope = visibleScope;
+    }
+
+    public VisibleScope getVisibleScope(){
+        return this.visibleScope;
+    }
 }

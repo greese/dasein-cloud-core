@@ -22,9 +22,7 @@ package org.dasein.cloud.examples.compute.image;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
-import org.dasein.cloud.compute.ComputeServices;
-import org.dasein.cloud.compute.MachineImage;
-import org.dasein.cloud.compute.MachineImageSupport;
+import org.dasein.cloud.compute.*;
 import org.dasein.cloud.examples.ProviderLoader;
 
 import java.util.Locale;
@@ -69,13 +67,13 @@ public class ListImages {
                 System.out.println(provider.getCloudName() + " does not support machine images/templates.");
             }
             else {
-                System.out.println(provider.getCloudName() + " calls machine images \"" + imgSupport.getProviderTermForImage(Locale.getDefault()) + "\".");
-                // enumerate the machine images
                 try {
+                    System.out.println(provider.getCloudName() + " calls machine images \"" + imgSupport.getCapabilities().getProviderTermForImage(Locale.getDefault(), ImageClass.MACHINE) + "\".");
+                    // enumerate the machine images
                     int count = 0;
 
                     System.out.println("Machine images in " + provider.getCloudName() + " (may be none in clouds like AWS unless you specifically own some):");
-                    for( MachineImage img : imgSupport.listMachineImages() ) {
+                    for( MachineImage img : imgSupport.listImages(ImageFilterOptions.getInstance(ImageClass.MACHINE)) ) {
                         count++;
                         System.out.println("\t" + img.getName() + "[" + img.getProviderMachineImageId() + "] (" + img.getCurrentState() + ")");
                     }

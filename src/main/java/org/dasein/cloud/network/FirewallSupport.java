@@ -228,6 +228,14 @@ public interface FirewallSupport extends AccessControlledService {
     public @Nullable Map<FirewallConstraints.Constraint, Object> getActiveConstraintsForFirewall(@Nonnull String firewallId) throws InternalException, CloudException;
 
     /**
+     * Provides access to meta-data about Firewall capabilities in the current region of this cloud.
+     * @return a description of the features supported by this region of this cloud
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException an error occurred within the cloud provider
+     */
+    public @Nonnull FirewallCapabilities getCapabilities()throws CloudException, InternalException;
+
+    /**
      * Provides the full firewall data for the specified firewall.
      * @param firewallId the unique ID of the desired firewall
      * @return the firewall state for the specified firewall instance
@@ -244,7 +252,9 @@ public interface FirewallSupport extends AccessControlledService {
      * @return the firewall constraints for this cloud
      * @throws InternalException an internal error occurred assembling the cloud firewall constraints
      * @throws CloudException an error occurred fetching constraint data from the cloud
+     * @deprecated use {@link FirewallCapabilities#getFirewallConstraintsForCloud()}
      */
+    @Deprecated
     public @Nonnull FirewallConstraints getFirewallConstraintsForCloud() throws InternalException, CloudException;
 
     /**
@@ -252,7 +262,9 @@ public interface FirewallSupport extends AccessControlledService {
      * firewall a "security group".
      * @param locale the locale for which you should translate the firewall term
      * @return the translated term for firewall with the target cloud provider
+     * @deprecated use {@link FirewallCapabilities#getProviderTermForFirewall(java.util.Locale)}
      */
+    @Deprecated
     public @Nonnull String getProviderTermForFirewall(@Nonnull Locale locale);
     
     /**
@@ -272,7 +284,9 @@ public interface FirewallSupport extends AccessControlledService {
      * @return the degree to which precedence is required
      * @throws InternalException an error occurred locally independent of any events in the cloud
      * @throws CloudException an error occurred with the cloud provider while performing the operation
+     * @deprecated use {@link FirewallCapabilities#identifyPrecedenceRequirement(boolean)}
      */
+    @Deprecated
     public @Nonnull Requirement identifyPrecedenceRequirement(boolean inVlan) throws InternalException, CloudException;
 
     /**
@@ -289,7 +303,9 @@ public interface FirewallSupport extends AccessControlledService {
      * @return true if 0 is the highest precedence for a rule
      * @throws InternalException an error occurred locally independent of any events in the cloud
      * @throws CloudException an error occurred with the cloud provider while performing the operation
+     * @deprecated use {@link FirewallCapabilities#isZeroPrecedenceHighest()}
      */
+    @Deprecated
     public boolean isZeroPrecedenceHighest() throws InternalException, CloudException;
 
     /**
@@ -315,7 +331,9 @@ public interface FirewallSupport extends AccessControlledService {
      * @return a list of supported destinations
      * @throws InternalException an error occurred locally independent of any events in the cloud
      * @throws CloudException an error occurred with the cloud provider while performing the operation
+     * @deprecated use {@link FirewallCapabilities#listSupportedDestinationTypes(boolean)}
      */
+    @Deprecated
     public @Nonnull Iterable<RuleTargetType> listSupportedDestinationTypes(boolean inVlan) throws InternalException, CloudException;
 
     /**
@@ -324,7 +342,9 @@ public interface FirewallSupport extends AccessControlledService {
      * @return a list of supported directions
      * @throws InternalException an error occurred locally independent of any events in the cloud
      * @throws CloudException an error occurred with the cloud provider while performing the operation
+     * @deprecated use {@link FirewallCapabilities#listSupportedDirections(boolean)}
      */
+    @Deprecated
     public @Nonnull Iterable<Direction> listSupportedDirections(boolean inVlan) throws InternalException, CloudException;
 
     /**
@@ -333,7 +353,9 @@ public interface FirewallSupport extends AccessControlledService {
      * @return a list of supported permissions
      * @throws InternalException an error occurred locally independent of any events in the cloud
      * @throws CloudException an error occurred with the cloud provider while performing the operation
+     * @deprecated use {@link FirewallCapabilities#listSupportedPermissions(boolean)}
      */
+    @Deprecated
     public @Nonnull Iterable<Permission> listSupportedPermissions(boolean inVlan) throws InternalException, CloudException;
 
     /**
@@ -343,7 +365,9 @@ public interface FirewallSupport extends AccessControlledService {
      * @return a list of supported source endpoints
      * @throws InternalException an error occurred locally independent of any events in the cloud
      * @throws CloudException an error occurred with the cloud provider while performing the operation
+     * @deprecated use {@link FirewallCapabilities#listSupportedSourceTypes(boolean)}
      */
+    @Deprecated
     public @Nonnull Iterable<RuleTargetType> listSupportedSourceTypes(boolean inVlan) throws InternalException, CloudException;
 
     /**
@@ -355,7 +379,7 @@ public interface FirewallSupport extends AccessControlledService {
      * @throws CloudException    an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public abstract void removeTags(@Nonnull String firewallId, @Nonnull Tag... tags) throws CloudException, InternalException;
+    public void removeTags(@Nonnull String firewallId, @Nonnull Tag... tags) throws CloudException, InternalException;
 
     /**
      * Removes meta-data from multiple firewalls. If tag values are set, their removal is dependent on underlying cloud
@@ -366,7 +390,7 @@ public interface FirewallSupport extends AccessControlledService {
      * @throws CloudException    an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public abstract void removeTags(@Nonnull String[] firewallIds, @Nonnull Tag ... tags) throws CloudException, InternalException;
+    public void removeTags(@Nonnull String[] firewallIds, @Nonnull Tag ... tags) throws CloudException, InternalException;
 
     /**
      * Revokes the uniquely identified firewall rule.
@@ -374,7 +398,7 @@ public interface FirewallSupport extends AccessControlledService {
      * @throws InternalException an error occurred locally independent of any events in the cloud
      * @throws CloudException an error occurred with the cloud provider while performing the operation
      */
-    public abstract void revoke(@Nonnull String providerFirewallRuleId) throws InternalException, CloudException;
+    public void revoke(@Nonnull String providerFirewallRuleId) throws InternalException, CloudException;
 
     /**
      * Revokes the specified INGRESS + ALLOW access from the named firewall.
@@ -438,7 +462,9 @@ public interface FirewallSupport extends AccessControlledService {
      * @return true if the cloud supports the creation of firewall rules in the direction specfied for the type of network specified
      * @throws CloudException an error occurred with the cloud provider while checking for support
      * @throws InternalException a local error occurred while checking for support
+     * @deprecated use {@link FirewallCapabilities#supportsRules(Direction, Permission, boolean)}
      */
+    @Deprecated
     public boolean supportsRules(@Nonnull Direction direction, @Nonnull Permission permission, boolean inVlan) throws CloudException, InternalException;
 
     /**
@@ -447,14 +473,26 @@ public interface FirewallSupport extends AccessControlledService {
      * @return <code>true</code> if you can call {@link #create(String, String)} or {@link #createInVLAN(String, String, String)} to create a firewall
      * @throws CloudException an error occurred with the cloud provider while checking for support
      * @throws InternalException a local error occurred while checking for support
+     * @deprecated use {@link FirewallCapabilities#supportsFirewallCreation(boolean)}
      */
+    @Deprecated
     public boolean supportsFirewallCreation(boolean inVlan) throws CloudException, InternalException;
+
+    /**
+     *
+     * @return true if the cloud requires a new firewall to be created with an initial set of rules
+     * @throws CloudException an error occurred with the cloud provider while checking for support
+     * @throws InternalException a local error occurred while checking for support
+     * @deprecated use {@link FirewallCapabilities#requiresRulesOnCreation()}
+     */
+    public boolean requiresRulesOnCreation() throws CloudException, InternalException;
 
     /**
      * Indicates whether or not you can delete firewalls.
      * @return <code>true</code> if you can call {@link #delete(String)} to delete a firewall
      * @throws CloudException an error occurred with the cloud provider while checking for support
      * @throws InternalException a local error occurred while checking for support
+     * @deprecated use {@link FirewallCapabilities#supportsFirewallDeletion()}
      */
     public boolean supportsFirewallDeletion() throws CloudException, InternalException;
 
@@ -475,7 +513,7 @@ public interface FirewallSupport extends AccessControlledService {
      * @throws CloudException    an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public abstract void updateTags(@Nonnull String firewallId, @Nonnull Tag... tags) throws CloudException, InternalException;
+    public void updateTags(@Nonnull String firewallId, @Nonnull Tag... tags) throws CloudException, InternalException;
 
     /**
      * Updates meta-data for multiple firewalls with the new values. It will not overwrite any value that currently
@@ -485,5 +523,5 @@ public interface FirewallSupport extends AccessControlledService {
      * @throws CloudException    an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public abstract void updateTags(@Nonnull String[] firewallIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+    public void updateTags(@Nonnull String[] firewallIds, @Nonnull Tag... tags) throws CloudException, InternalException;
 }

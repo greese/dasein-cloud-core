@@ -172,16 +172,6 @@ public abstract class AbstractVolumeSupport implements VolumeSupport {
         throw new OperationNotSupportedException("Detaching volumes is not currently implemented for " + getProvider().getCloudName());
     }
 
-    @Override
-    public @Nonnull Iterable<VmState> getAttachStates(@Nullable Volume volume) {
-        return new ArrayList<VmState>(Arrays.asList(VmState.values()));
-    }
-
-    @Override
-    public @Nonnull Iterable<VmState> getDetachStates(@Nullable Volume volume) {
-        return new ArrayList<VmState>(Arrays.asList(VmState.values()));
-    }
-
     /**
      * @return the provider context under which the instance is operating
      * @throws CloudException no context was set for this request

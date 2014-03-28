@@ -32,7 +32,11 @@ import org.dasein.cloud.identity.ServiceAction;
 import org.dasein.cloud.util.APITrace;
 import org.dasein.cloud.util.Cache;
 import org.dasein.cloud.util.CacheLevel;
+import org.dasein.cloud.util.NamingConstraints;
 import org.dasein.util.CalendarWrapper;
+import org.dasein.util.Jiterator;
+import org.dasein.util.JiteratorPopulator;
+import org.dasein.util.PopulatorThread;
 import org.dasein.util.uom.storage.Gigabyte;
 import org.dasein.util.uom.storage.Megabyte;
 import org.dasein.util.uom.storage.Storage;
@@ -51,6 +55,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * Default implementation of virtual machine support for clouds with very little support.
@@ -77,8 +85,9 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
+    @Deprecated
     public @Nullable VMScalingCapabilities describeVerticalScalingCapabilities() throws CloudException, InternalException {
-        return null;
+        return getCapabilities().getVerticalScalingCapabilities();
     }
 
     @Override
@@ -106,23 +115,9 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
-    public @Nonnull Iterable<VmState> getAlterVMStates(@Nullable VirtualMachine vm) {
-        return new ArrayList<VmState>(Arrays.asList(VmState.values()));
-    }
-
-    @Override
-    public @Nonnull Iterable<VmState> getCloneVMStates(@Nullable VirtualMachine vm) {
-        return new ArrayList<VmState>(Arrays.asList(VmState.values()));
-    }
-
-    @Override
-    public @Nonnull Iterable<VmState> getRebootVMStates(@Nullable VirtualMachine vm) {
-        return new ArrayList<VmState>(Arrays.asList(VmState.values()));
-    }
-
-    @Override
-    public @Nonnull Iterable<VmState> getTerminateVMStates(@Nullable VirtualMachine vm) {
-        return new ArrayList<VmState>(Arrays.asList(VmState.values()));
+    @Deprecated
+    public @Nonnegative int getCostFactor(@Nonnull VmState state) throws CloudException, InternalException {
+        return getCapabilities().getCostFactor(state);
     }
 
     @Override
@@ -136,13 +131,9 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
-    public int getCostFactor(@Nonnull VmState state) throws InternalException, CloudException {
-        return 100;
-    }
-
-    @Override
+    @Deprecated
     public int getMaximumVirtualMachineCount() throws CloudException, InternalException {
-        return -2;
+        return getCapabilities().getMaximumVirtualMachineCount();
     }
 
     @Override
@@ -162,6 +153,17 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
      */
     protected final @Nonnull T getProvider() {
         return provider;
+    }
+
+    @Override
+    @Deprecated
+    public @Nonnull String getProviderTermForServer(@Nonnull Locale locale) {
+        try {
+            return getCapabilities().getProviderTermForVirtualMachine(locale);
+        }
+        catch( Exception ignore ) {
+            return "virtual machine";
+        }
     }
 
     @Override
@@ -185,73 +187,164 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
+    @Deprecated
     public @Nonnull Requirement identifyImageRequirement(@Nonnull ImageClass cls) throws CloudException, InternalException {
-        return (cls.equals(ImageClass.MACHINE) ? Requirement.REQUIRED : Requirement.NONE);
+        return getCapabilities().identifyImageRequirement(cls);
     }
 
     @Override
     @Deprecated
     public @Nonnull Requirement identifyPasswordRequirement() throws CloudException, InternalException {
-        return identifyPasswordRequirement(Platform.UNKNOWN);
+        return getCapabilities().identifyPasswordRequirement(Platform.UNKNOWN);
     }
 
     @Override
+    @Deprecated
     public @Nonnull Requirement identifyPasswordRequirement(Platform platform) throws CloudException, InternalException {
-        return Requirement.NONE;
+        return getCapabilities().identifyPasswordRequirement(platform);
     }
 
     @Override
+    @Deprecated
     public @Nonnull Requirement identifyRootVolumeRequirement() throws CloudException, InternalException {
-        return Requirement.NONE;
+        return getCapabilities().identifyRootVolumeRequirement();
     }
 
     @Override
     @Deprecated
     public @Nonnull Requirement identifyShellKeyRequirement() throws CloudException, InternalException {
-        return identifyShellKeyRequirement(Platform.UNKNOWN);
+        return getCapabilities().identifyShellKeyRequirement(Platform.UNKNOWN);
     }
 
     @Override
+    @Deprecated
     public @Nonnull Requirement identifyShellKeyRequirement(Platform platform) throws CloudException, InternalException {
-        IdentityServices services = getProvider().getIdentityServices();
-
-        if( services == null ) {
-            return Requirement.NONE;
-        }
-        if( services.hasShellKeySupport() ) {
-            return Requirement.OPTIONAL;
-        }
-        return Requirement.NONE;
+        return getCapabilities().identifyShellKeyRequirement(platform);
     }
 
     @Override
+    @Deprecated
     public @Nonnull Requirement identifyStaticIPRequirement() throws CloudException, InternalException {
-        return Requirement.NONE;
+        return getCapabilities().identifyStaticIPRequirement();
     }
 
     @Override
+    @Deprecated
     public @Nonnull Requirement identifyVlanRequirement() throws CloudException, InternalException {
-        return Requirement.NONE;
+        return getCapabilities().identifyVlanRequirement();
     }
 
     @Override
+    @Deprecated
     public boolean isAPITerminationPreventable() throws CloudException, InternalException {
-        return false;
+        return getCapabilities().isAPITerminationPreventable();
     }
 
     @Override
+    @Deprecated
     public boolean isBasicAnalyticsSupported() throws CloudException, InternalException {
-        return false;
+        return getCapabilities().isBasicAnalyticsSupported();
     }
 
     @Override
+    @Deprecated
     public boolean isExtendedAnalyticsSupported() throws CloudException, InternalException {
-        return false;
+        return getCapabilities().isExtendedAnalyticsSupported();
     }
 
     @Override
+    @Deprecated
     public boolean isUserDataSupported() throws CloudException, InternalException {
-        return false;
+        return getCapabilities().isUserDataSupported();
+    }
+
+    static private final ExecutorService launchPool = Executors.newCachedThreadPool();
+
+    /**
+     * Launches a virtual machine asynchronously from a cached thread pool. All errors are pulled out from the
+     * the {@link java.util.concurrent.Future} result.
+     * @param withLaunchOptions the launch options to use in launching the virtual machine
+     * @return the unique ID of the launched virtual machine
+     */
+    protected Future<String> launchAsync(final @Nonnull VMLaunchOptions withLaunchOptions) {
+        return launchPool.submit(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                return launch(withLaunchOptions).getProviderVirtualMachineId();
+            }
+        });
+    }
+
+    // the default implementation does parallel launches and throws an exception only if it is unable to launch any virtual machines
+    @Override
+    public @Nonnull Iterable<String> launchMany(final @Nonnull VMLaunchOptions withLaunchOptions, final @Nonnegative int count) throws CloudException, InternalException {
+        if( count < 1 ) {
+            throw new InternalException("Invalid attempt to launch less than 1 virtual machine (requested " + count + ").");
+        }
+        if( count == 1 ) {
+            return Collections.singleton(launch(withLaunchOptions).getProviderVirtualMachineId());
+        }
+        final ArrayList<Future<String>> results = new ArrayList<Future<String>>();
+        MachineImage image = null;
+
+        ComputeServices services = getProvider().getComputeServices();
+
+        if( services != null ) {
+            MachineImageSupport support = services.getImageSupport();
+
+            if( support != null ) {
+                image = support.getImage(withLaunchOptions.getMachineImageId());
+            }
+        }
+        NamingConstraints c = NamingConstraints.getHostNameInstance(image == null || image.getPlatform().equals(Platform.UNKNOWN) || image.getPlatform().equals(Platform.WINDOWS));
+        String baseHost = c.convertToValidName(withLaunchOptions.getHostName(), Locale.US);
+
+        if( baseHost == null ) {
+            baseHost = withLaunchOptions.getHostName();
+        }
+        for( int i=1; i<=count; i++ ) {
+            String hostName = c.incrementName(baseHost, i);
+            String friendlyName = withLaunchOptions.getFriendlyName() + "-" + i;
+            VMLaunchOptions options = withLaunchOptions.copy(hostName == null ? withLaunchOptions.getHostName() + "-" + i : hostName, friendlyName);
+
+            results.add(launchAsync(options));
+        }
+
+        PopulatorThread<String> populator = new PopulatorThread<String>(new JiteratorPopulator<String>() {
+            @Override
+            public void populate(@Nonnull Jiterator<String> iterator) throws Exception {
+                ArrayList<Future<String>> original = results;
+                ArrayList<Future<String>> copy = new ArrayList<Future<String>>();
+                Exception exception = null;
+                boolean loaded = false;
+
+                while( !original.isEmpty() ) {
+                    for( Future<String> result : original ) {
+                        if( result.isDone() ) {
+                            try {
+                                iterator.push(result.get());
+                                loaded = true;
+                            }
+                            catch( Exception e ) {
+                                exception = e;
+                            }
+                        }
+                        else {
+                            copy.add(result);
+                        }
+                    }
+                    original = copy;
+                    // copy has to be a new list else we'll get into concurrently modified list state
+                    copy = new ArrayList<Future<String>>();
+                }
+                if( exception != null && !loaded ) {
+                    throw exception;
+                }
+            }
+        });
+
+        populator.populate();
+        return populator.getResult();
     }
 
     @Override
@@ -529,7 +622,10 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
+    @Deprecated
     public Iterable<Architecture> listSupportedArchitectures() throws InternalException, CloudException {
+        return getCapabilities().listSupportedArchitectures();
+        /*
         Cache<Architecture> cache = Cache.getInstance(getProvider(), "architectures", Architecture.class, CacheLevel.REGION_ACCOUNT, new TimePeriod<Week>(1, TimePeriod.WEEK));
         Iterable<Architecture> architectures = cache.get(getContext());
 
@@ -541,6 +637,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
             cache.put(getContext(), architectures);
         }
         return architectures;
+        */
     }
 
     @Override
@@ -641,23 +738,51 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
+    @Deprecated
     public final boolean supportsAnalytics() throws CloudException, InternalException {
-        return (isBasicAnalyticsSupported() || isExtendedAnalyticsSupported());
+        return (getCapabilities().isBasicAnalyticsSupported() || getCapabilities().isExtendedAnalyticsSupported());
     }
 
     @Override
+    @Deprecated
     public boolean supportsPauseUnpause(@Nonnull VirtualMachine vm) {
-        return false;
+        try {
+            VirtualMachineCapabilities c = getCapabilities();
+            VmState s = vm.getCurrentState();
+
+            return (c.canPause(s) || c.canUnpause(s));
+        }
+        catch( Exception ignore ) {
+            return false;
+        }
     }
 
     @Override
+    @Deprecated
     public boolean supportsStartStop(@Nonnull VirtualMachine vm) {
-        return false;
+        try {
+            VirtualMachineCapabilities c = getCapabilities();
+            VmState s = vm.getCurrentState();
+
+            return (c.canStart(s) || c.canStop(s));
+        }
+        catch( Exception ignore ) {
+            return false;
+        }
     }
 
     @Override
+    @Deprecated
     public boolean supportsSuspendResume(@Nonnull VirtualMachine vm) {
-        return false;
+        try {
+            VirtualMachineCapabilities c = getCapabilities();
+            VmState s = vm.getCurrentState();
+
+            return (c.canSuspend(s) || c.canResume(s));
+        }
+        catch( Exception ignore ) {
+            return false;
+        }
     }
 
     @Override
