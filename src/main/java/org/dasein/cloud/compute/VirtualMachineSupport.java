@@ -246,6 +246,16 @@ public interface VirtualMachineSupport extends AccessControlledService {
     public abstract @Nullable Iterable<VirtualMachineStatus> getVMStatus(@Nullable String ... vmIds) throws InternalException, CloudException;
 
     /**
+     * Lists all virtual machines status(es) matching the given {@link VmStatusFilterOptions) belonging to the account owner
+     * currently in the cloud. The filtering functionality is delegated to the cloud provider.
+     * @param filterOptions filter options
+     * @return the status(es) of the virtual machines
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException an error occurred within the cloud provider
+     */
+    public abstract @Nullable Iterable<VirtualMachineStatus> getVMStatus(@Nullable VmStatusFilterOptions filterOptions) throws InternalException, CloudException;
+
+    /**
      * Identifies whether images of the specified image class are required for launching a VM. This method should
      * always return {@link Requirement#REQUIRED} when the image class chosen is {@link ImageClass#MACHINE}.
      * @param cls the desired image class
