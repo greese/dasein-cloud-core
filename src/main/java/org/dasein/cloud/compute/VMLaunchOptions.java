@@ -392,7 +392,14 @@ public class VMLaunchOptions {
     public @Nullable String getUserData() {
         return userData;
     }
-    
+
+    /**
+     * @return the subnet which the launch VM is going to be assigned to
+     */
+    public @Nullable String getSubnetId() {
+        return subnetId;
+    }
+
     /**
      * @return the VLAN or subnet into which the virtual machine will be launched
      */
