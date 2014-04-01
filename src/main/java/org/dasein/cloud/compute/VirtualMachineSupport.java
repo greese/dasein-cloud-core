@@ -190,7 +190,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws CloudException an error occurred within the cloud provider
      */
     public abstract @Nullable Iterable<VirtualMachineStatus> getVMStatus(@Nullable String ... vmIds) throws InternalException, CloudException;
-
+    
     /**
      * Indicates whether this account is subscribed to using virtual machines.
      * @return true if the subscription is valid for using virtual machines
