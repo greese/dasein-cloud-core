@@ -190,7 +190,17 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws CloudException an error occurred within the cloud provider
      */
     public abstract @Nullable Iterable<VirtualMachineStatus> getVMStatus(@Nullable String ... vmIds) throws InternalException, CloudException;
-    
+
+    /**
+     * Lists all virtual machines status(es) matching the given {@link VmStatusFilterOptions) belonging to the account owner
+     * currently in the cloud. The filtering functionality is delegated to the cloud provider.
+     * @param filterOptions filter options
+     * @return the status(es) of the virtual machines
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException an error occurred within the cloud provider
+     */
+    public abstract @Nullable Iterable<VirtualMachineStatus> getVMStatus(@Nullable VmStatusFilterOptions filterOptions) throws InternalException, CloudException;
+
     /**
      * Indicates whether this account is subscribed to using virtual machines.
      * @return true if the subscription is valid for using virtual machines
