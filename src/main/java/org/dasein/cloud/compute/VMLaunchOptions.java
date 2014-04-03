@@ -385,7 +385,7 @@ public class VMLaunchOptions {
     /**
      * @return the private ip when VM is launched in VLAN
      */
-    public @Nonnull String getPrivateIp() {
+    public @Nullable String getPrivateIp() {
       return privateIp;
     }
 
