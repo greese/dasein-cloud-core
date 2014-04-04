@@ -117,11 +117,11 @@ public class ScalingGroup implements Serializable {
       this.terminationPolicies = terminationPolicies;
     }
 
-    public int getDefaultCoolcown() {
+    public int getDefaultCooldown() {
         return defaultCooldown;
     }
 
-    public void setDefaultCoolcown(int cooldown) {
+    public void setDefaultCooldown(int cooldown) {
         this.defaultCooldown = cooldown;
     }
 
