@@ -212,7 +212,6 @@ public class FirewallCreateOptions {
     }
 
     /**
-<<<<<<< HEAD
      * @return  source labels to assign to firewall
      */
     public Collection<String> getSourceLabels() {
