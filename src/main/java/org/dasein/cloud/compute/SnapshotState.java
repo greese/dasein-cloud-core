@@ -31,5 +31,9 @@ public enum SnapshotState {
     /**
      * The snapshot has been deleted.
      */
-    DELETED;
+    DELETED,
+    /**
+     * The snapshot is in an error state.
+     */
+    ERROR;
 }
