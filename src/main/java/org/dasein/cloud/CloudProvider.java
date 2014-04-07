@@ -230,7 +230,6 @@ public abstract class CloudProvider {
      * the appropriate namespace. Unless, of course, the result is <code>null</code>. A <code>null</code> value
      * means that no permutation of the base name could result in a valid unique name for these kinds of objects
      * in this cloud.
-     *
      * @param baseName    the name that the user would ideally desire for an object to be created
      * @param constraints the naming constraints that govern the naming of this kind of object
      * @param namespace   an implementation of an interface responsible for searching efficiently for the availability of a given name
@@ -287,21 +286,18 @@ public abstract class CloudProvider {
 
     /**
      * This value can be the same as {@link #getProviderName()} if it is not a multi-cloud provider.
-     *
      * @return the name of the cloud
      */
     public abstract @Nonnull String getCloudName();
 
     /**
      * Provides access to the data center services that describe the physical structure of the underlying cloud provider.
-     *
      * @return an implementation of the {@link org.dasein.cloud.dc.DataCenterServices} API
      */
     public abstract @Nonnull DataCenterServices getDataCenterServices();
 
     /**
      * Provides access to support for complex topologies managed through converged infrastructure as a cloudy environment.
-     *
      * @return the services representing converged infrastructure, if any
      */
     public abstract @Nullable CIServices getCIServices();
@@ -321,7 +317,6 @@ public abstract class CloudProvider {
 
     /**
      * Provides access to the cloud storage services supported by this cloud provider.
-     *
      * @return an implementation of the {@link org.dasein.cloud.storage.StorageServices} API
      */
     @SuppressWarnings("deprecation")
@@ -426,7 +421,6 @@ public abstract class CloudProvider {
      * user. For those scenarios, the return value will return the true account number and not the one the
      * user thinks it is. If the connection fails for any reason, this method should return <code>null</code>
      * to indicate the failure.
-     *
      * @return On success, the true account number for the account. On failure, <code>null</code>.
      */
     public String testContext() {
@@ -442,9 +436,7 @@ public abstract class CloudProvider {
                     break;
                 }
             }
-            try {
-                Thread.sleep(1000L);
-            }
+            try { Thread.sleep(1000L); }
             catch (InterruptedException ignore) { /* ignore this */ }
         }
         if (context != null) {
