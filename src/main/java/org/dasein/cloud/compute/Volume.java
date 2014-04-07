@@ -36,26 +36,26 @@ import java.util.Map;
  * @version 2012-07 updated to match new volume enhancements, including UoM, type, and root volume awareness
  */
 public class Volume implements Networkable, Taggable {
-    private long        creationTimestamp;
-    private VolumeState currentState;
-    private String      providerDataCenterId;
-    private String      description;
-    private String      deviceId;
-    private VolumeFormat format;
-    private Platform    guestOperatingSystem;
-    private int         iops;
-    private String      mediaLink;
-    private String      name;
-    private String      providerProductId;
-    private String      providerVolumeId;
-    private String      providerRegionId;
-    private String      providerVirtualMachineId;
-    private String      providerVlanId;
-    private boolean     rootVolume;
-    private Storage<Gigabyte> size;
-    private String      providerSnapshotId;
-    private Map<String,String> tags;
-    private VolumeType  type;
+    private long                creationTimestamp;
+    private VolumeState         currentState;
+    private String              providerDataCenterId;
+    private String              description;
+    private String              deviceId;
+    private VolumeFormat        format;
+    private Platform            guestOperatingSystem;
+    private int                 iops;
+    private String              mediaLink;
+    private String              name;
+    private String              providerProductId;
+    private String              providerVolumeId;
+    private String              providerRegionId;
+    private String              providerVirtualMachineId;
+    private String              providerVlanId;
+    private boolean             rootVolume;
+    private Storage<Gigabyte>   size;
+    private String              providerSnapshotId;
+    private Map<String,String>  tags;
+    private VolumeType          type;
 
     /**
      * deleteOnVirtualMachineTermination is needed for listing volumes on a virtualmachine, but set to null

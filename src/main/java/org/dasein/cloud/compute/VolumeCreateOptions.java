@@ -169,7 +169,7 @@ public class VolumeCreateOptions {
     private String             vlanId;
     private String             volumeProductId;
     private Storage<Gigabyte>  volumeSize;
-  // NOTE: SEE NOTE AT TOP OF ATTRIBUTE LIST WHEN ADDING/REMOVING/CHANGING AN ATTRIBUTE
+    // NOTE: SEE NOTE AT TOP OF ATTRIBUTE LIST WHEN ADDING/REMOVING/CHANGING AN ATTRIBUTE
 
     public void setDataCenterId(String dataCenterId) {
       this.dataCenterId = dataCenterId;
