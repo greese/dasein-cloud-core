@@ -57,21 +57,19 @@ import java.util.Properties;
  * some of the operations of the service. Such methods should throw an
  * {@link org.dasein.cloud.OperationNotSupportedException} to flag the lack of support.
  * </p>
- *
  * @author George Reese @ enstratius (http://www.enstratius.com)
  * @version 2014.03 added findUniqueName() based on logic by Stas (issue #134)
  * @since 2010.08
  */
 public abstract class CloudProvider {
     @SuppressWarnings("UnusedDeclaration")
-    static private
-    @Nonnull
-    String getLastItem(@Nonnull String name) {
+    static private @Nonnull String getLastItem(@Nonnull String name) {
         int idx = name.lastIndexOf('.');
 
         if (idx < 0) {
             return name;
-        } else if (idx == (name.length() - 1)) {
+        }
+        else if (idx == (name.length() - 1)) {
             return "";
         }
         return name.substring(idx + 1);
@@ -133,8 +131,7 @@ public abstract class CloudProvider {
     /**
      * Base contructor for a cloud provider.
      */
-    public CloudProvider() {
-    }
+    public CloudProvider() { }
 
     /**
      * Empties out all credentials and removes any other context information from the cloud provider
@@ -156,7 +153,8 @@ public abstract class CloudProvider {
             t.setName("Close Hold for " + this);
             t.setDaemon(true);
             t.start();
-        } else {
+        }
+        else {
             waitForHold();
         }
     }
@@ -165,7 +163,6 @@ public abstract class CloudProvider {
      * Called to initialize a cloud provider with an operational context. The operational context
      * includes authentication information, the regional context, and any cloud-specific
      * context. Prior to initializing itself, this method will close out any existing state.
-     *
      * @param context the context for services calls using this provider instance
      * @deprecated use {@link org.dasein.cloud.ProviderContext#connect()}
      */
@@ -179,7 +176,6 @@ public abstract class CloudProvider {
      * Called to initialize a cloud provider with an operational context. The operational context
      * includes authentication information, the regional context, and any cloud-specific
      * context. Prior to initializing itself, this method will close out any existing state.
-     *
      * @param context         the context for services calls using this provider instance
      * @param computeProvider the compute context if this is a storage-only cloud (the compute context controls the connection)
      * @deprecated use {@link org.dasein.cloud.ProviderContext#connect(CloudProvider)}
@@ -189,9 +185,11 @@ public abstract class CloudProvider {
         try {
             connect(context, computeProvider, null);
             context.configureForDeprecatedConnect(this);
-        } catch (CloudException e) {
+        }
+        catch (CloudException e) {
             throw new RuntimeException(e); // can't change the signature for backwards compat reasons
-        } catch (InternalException e) {
+        }
+        catch (InternalException e) {
             throw new RuntimeException(e); // can't change the signature for backwards compat reasons
         }
     }
@@ -201,7 +199,6 @@ public abstract class CloudProvider {
      * not be directly triggered by Dasein Cloud clients, but instead within the Dasein Cloud {@link ProviderContext#connect(CloudProvider)}
      * method or the backwards compatible {@link #connect(ProviderContext, CloudProvider)} method. Clients should always
      * call {@link org.dasein.cloud.ProviderContext#connect()} or {@link ProviderContext#connect(CloudProvider)}.
-     *
      * @param context         the provider context representing the context for the connection
      * @param computeProvider if this connection is to a storage cloud being virtually bound to a compute cloud, the connected provider for the associated compute cloud
      * @param myCloud         if known, the cloud object behind this provider
@@ -241,9 +238,7 @@ public abstract class CloudProvider {
      * @throws CloudException    an error occurred interacting with the cloud provider to find the unique name
      * @throws InternalException an internal error occurred calculating a unique name
      */
-    public
-    @Nullable
-    String findUniqueName(@Nonnull String baseName, @Nonnull NamingConstraints constraints, @Nonnull ResourceNamespace namespace) throws CloudException, InternalException {
+    public @Nullable String findUniqueName(@Nonnull String baseName, @Nonnull NamingConstraints constraints, @Nonnull ResourceNamespace namespace) throws CloudException, InternalException {
         if (!constraints.isValidName(baseName)) {
             baseName = constraints.convertToValidName(baseName, Locale.getDefault());
             if (baseName == null) {
@@ -265,15 +260,12 @@ public abstract class CloudProvider {
         return name;
     }
 
-    public abstract
-    @Nullable
-    AdminServices getAdminServices();
+    public abstract @Nullable AdminServices getAdminServices();
 
     /**
      * If this is a pure storage implementation that is being paired with a compute implementation,
      * the compute implementation holds precedence. This value references the compute provider
      * behind this storage provider
-     *
      * @return the compute provider (if any) behind this storage provider
      */
     public final CloudProvider getComputeCloud() {
@@ -282,71 +274,50 @@ public abstract class CloudProvider {
 
     /**
      * This value will be null unless {@link #connect(ProviderContext)} has been called.
-     *
      * @return the operational context for this instance of this provider implementation
      */
-    public final
-    @Nullable
-    ProviderContext getContext() {
+    public final @Nullable ProviderContext getContext() {
         return context;
     }
 
     /**
      * @return an object containing the fields required for connecting Dasein to the cloud provider
      */
-    public abstract
-    @Nonnull
-    ContextRequirements getContextRequirements();
+    public abstract @Nonnull ContextRequirements getContextRequirements();
 
     /**
      * This value can be the same as {@link #getProviderName()} if it is not a multi-cloud provider.
      *
      * @return the name of the cloud
      */
-    public abstract
-    @Nonnull
-    String getCloudName();
+    public abstract @Nonnull String getCloudName();
 
     /**
      * Provides access to the data center services that describe the physical structure of the underlying cloud provider.
      *
      * @return an implementation of the {@link org.dasein.cloud.dc.DataCenterServices} API
      */
-    public abstract
-    @Nonnull
-    DataCenterServices getDataCenterServices();
+    public abstract @Nonnull DataCenterServices getDataCenterServices();
 
     /**
      * Provides access to support for complex topologies managed through converged infrastructure as a cloudy environment.
      *
      * @return the services representing converged infrastructure, if any
      */
-    public abstract
-    @Nullable
-    CIServices getCIServices();
+    public abstract @Nullable CIServices getCIServices();
 
-    public abstract
-    @Nullable
-    ComputeServices getComputeServices();
+    public abstract @Nullable ComputeServices getComputeServices();
 
-    public abstract
-    @Nullable
-    IdentityServices getIdentityServices();
+    public abstract @Nullable IdentityServices getIdentityServices();
 
-    public abstract
-    @Nullable
-    NetworkServices getNetworkServices();
+    public abstract @Nullable NetworkServices getNetworkServices();
 
-    public abstract
-    @Nullable
-    PlatformServices getPlatformServices();
+    public abstract @Nullable PlatformServices getPlatformServices();
 
     /**
      * @return the name of this cloud provider
      */
-    public abstract
-    @Nonnull
-    String getProviderName();
+    public abstract @Nonnull String getProviderName();
 
     /**
      * Provides access to the cloud storage services supported by this cloud provider.
@@ -354,9 +325,7 @@ public abstract class CloudProvider {
      * @return an implementation of the {@link org.dasein.cloud.storage.StorageServices} API
      */
     @SuppressWarnings("deprecation")
-    public synchronized
-    @Nullable
-    StorageServices getStorageServices() {
+    public synchronized @Nullable StorageServices getStorageServices() {
         if (storageCloudProvider != null) {
             return storageCloudProvider.getStorageServices();
         }
@@ -387,7 +356,8 @@ public abstract class CloudProvider {
             p.connect(ctx, this);
             storageCloudProvider = p;
             return p.getStorageServices();
-        } catch (Throwable t) {
+        }
+        catch (Throwable t) {
             t.printStackTrace();
             return null;
         }
@@ -424,7 +394,8 @@ public abstract class CloudProvider {
     public void hold() {
         if (computeCloudProvider != null) {
             computeCloudProvider.hold();
-        } else {
+        }
+        else {
             synchronized (this) {
                 holdCount++;
             }
@@ -438,7 +409,8 @@ public abstract class CloudProvider {
     public void release() {
         if (computeCloudProvider != null) {
             computeCloudProvider.release();
-        } else {
+        }
+        else {
             synchronized (this) {
                 holdCount--;
                 notifyAll();
@@ -472,7 +444,8 @@ public abstract class CloudProvider {
             }
             try {
                 Thread.sleep(1000L);
-            } catch (InterruptedException ignore) { /* ignore this */ }
+            }
+            catch (InterruptedException ignore) { /* ignore this */ }
         }
         if (context != null) {
             context.clear();
