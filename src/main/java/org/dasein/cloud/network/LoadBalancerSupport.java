@@ -19,7 +19,6 @@
 
 package org.dasein.cloud.network;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -164,6 +163,15 @@ public interface LoadBalancerSupport extends AccessControlledService {
     public @Nonnull String getProviderTermForLoadBalancer(@Nonnull Locale locale);
 
     /**
+     * Fetched the details of an SSL certificate associated with the given name.
+     * @param certificateName the certificate name to search for.
+     * @return server certificate name or null if no certificate exists with the given name.
+     * @throws CloudException an error occurred while communicating with the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     */
+    public @Nullable ServerCertificate getServerCertificate(@Nonnull String certificateName) throws CloudException, InternalException;
+
+    /**
      * @return the degree to which endpoints should or must be part of the load balancer creation process
      * @throws CloudException an error occurred while communicating with the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud implementation
@@ -250,6 +258,14 @@ public interface LoadBalancerSupport extends AccessControlledService {
     public @Nonnull Iterable<ResourceStatus> listLoadBalancerStatus() throws CloudException, InternalException;
 
     /**
+     * Lists all available server certificates associated with the account in the current region.
+     * @return all server certificates associated with the account in the current region.
+     * @throws CloudException an error occurred while communicating with the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     */
+    public @Nonnull Iterable<ServerCertificateMetadata> listServerCertificates() throws CloudException, InternalException;
+
+    /**
      * Lists the load balancing algorithms from which you can choose when setting up a load balancer listener.
      * @return a list of one or more supported load balancing algorithms
      * @throws CloudException an error occurred while communicating with the cloud provider
@@ -327,6 +343,15 @@ public interface LoadBalancerSupport extends AccessControlledService {
     public void removeLoadBalancer(@Nonnull String loadBalancerId) throws CloudException, InternalException;
 
     /**
+     * Removes a given server certificate from the account in current region.
+     * <strong>Note:</strong> be sure to first unset this certificate from any load balancer it is used by.
+     * @param certificateName name of the certificate to remove
+     * @throws CloudException an error occurred with the cloud provider, certificate does not exist by given name etc
+     * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
+     */
+    public void removeServerCertificate(@Nonnull String certificateName) throws CloudException, InternalException;
+
+    /**
      * Removes one or more virtual machine endpoints from the load balancer resource pool.
      * @param fromLoadBalancerId the load balancer from which the endpoints are being removed
      * @param serverIdsToRemove the IDs of the virtual machines to be removed
@@ -335,6 +360,14 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @throws OperationNotSupportedException this load balancer does not support VM endpoints, or does not support removing them post-create
      */
     public void removeServers(@Nonnull String fromLoadBalancerId, @Nonnull String ... serverIdsToRemove) throws CloudException, InternalException;
+
+    /**
+     * Assigns an SSL certificate to specified port of a load balancer.
+     * @param options request options: load balancer name, port number and certificate ID.
+     * @throws CloudException thrown if load balancer or certificate do not exist or other error occurs in the cloud.
+     * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
+     */
+    public void setSSLCertificate(@Nonnull SetLoadBalancerSSLCertificateOptions options) throws CloudException, InternalException;
 
     /**
      * Indicates whether or not endpoints may be added to or removed from a load balancer once the load balancer has been created.
@@ -385,6 +418,15 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @throws InternalException
      */
     public LoadBalancerHealthCheck createLoadBalancerHealthCheck(@Nullable String name, @Nullable String description, @Nullable String host, @Nullable LoadBalancerHealthCheck.HCProtocol protocol, int port, @Nullable String path, @Nullable Double interval, @Nullable Double timeout, int healthyCount, int unhealthyCount) throws CloudException, InternalException;
+
+    /**
+     * Uploads a new server certificate associated with the account and current region.
+     * @param options the details of the certificate to upload
+     * @return details of created server certificate
+     * @throws CloudException an error occurred with the cloud provider or request parameters were incorrect
+     * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
+     */
+    public ServerCertificateMetadata createServerCertificate(@Nonnull ServerCertificateCreateOptions options) throws CloudException, InternalException;
 
     /**
      * Creates a standalone LoadBalancerHealthCheck that can be attached to a LoadBalancer either at a later time
