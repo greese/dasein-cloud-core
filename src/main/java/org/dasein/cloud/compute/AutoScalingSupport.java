@@ -111,6 +111,8 @@ public interface AutoScalingSupport extends AccessControlledService {
 
     public Collection<ScalingGroup> listScalingGroups(AutoScalingGroupFilterOptions options) throws CloudException, InternalException;
 
+	public Collection<ScalingGroup> listScalingGroups() throws CloudException, InternalException;
+
     public Iterable<ResourceStatus> listLaunchConfigurationStatus() throws CloudException, InternalException;
 
     public Collection<LaunchConfiguration> listLaunchConfigurations() throws CloudException, InternalException;
