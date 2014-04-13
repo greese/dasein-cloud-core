@@ -89,7 +89,7 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
     }
 
     @Override
-    public ServerCertificateMetadata createServerCertificate(@Nonnull ServerCertificateCreateOptions options)
+    public SSLCertificateMetadata createSSLCertificate(@Nonnull SSLCertificateCreateOptions options)
             throws CloudException, InternalException {
         throw new OperationNotSupportedException("Creating a server certificate is not implemented in " +
                                                  getContext().getRegionId() + " of " + getProvider().getCloudName());
@@ -185,7 +185,8 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
     }
 
     @Override
-    public @Nullable ServerCertificate getServerCertificate( @Nonnull String certificateName )
+    public @Nullable
+    SSLCertificate getSSLCertificate(@Nonnull String certificateName)
             throws CloudException, InternalException {
         throw new OperationNotSupportedException("Getting server certificates is not implemented in " +
                                                  getContext().getRegionId() + " of " + getProvider().getCloudName());
@@ -268,7 +269,7 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
     }
 
     @Override
-    public @Nonnull Iterable<ServerCertificateMetadata> listServerCertificates() throws CloudException, InternalException {
+    public @Nonnull Iterable<SSLCertificateMetadata> listSSLCertificates() throws CloudException, InternalException {
         throw new OperationNotSupportedException("Listing server certificates is not implemented in " +
                                                  getContext().getRegionId() + " of " + getProvider().getCloudName());
     }
@@ -331,7 +332,7 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
     }
 
     @Override
-    public void removeServerCertificate( @Nonnull String certificateName ) throws CloudException, InternalException {
+    public void removeSSLCertificate(@Nonnull String certificateName) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Removing server certificate is not implemented in " +
                                                  getContext().getRegionId() + " of " + getProvider().getCloudName());
     }

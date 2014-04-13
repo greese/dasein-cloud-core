@@ -8,7 +8,7 @@ import java.util.Date;
  *
  * @author Bulat Badretdinov
  */
-public class ServerCertificateMetadata implements Networkable {
+public class SSLCertificateMetadata implements Networkable {
 
     private String arn;
     private String path;

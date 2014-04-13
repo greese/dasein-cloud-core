@@ -7,7 +7,7 @@ import javax.annotation.Nonnull;
  *
  * @author Bulat Badretdinov
  */
-public class ServerCertificateCreateOptions {
+public class SSLCertificateCreateOptions {
 
     /**
      * Creates new parameters for a request to create a server certificate.
@@ -15,28 +15,29 @@ public class ServerCertificateCreateOptions {
      * @param certificateChain certificate chain
      * @param path certificate path to use
      * @param privateKey private key as string
-     * @param serverCertificateName the name to assign to created certificate
-     * @return new instance of {@link ServerCertificateCreateOptions}
+     * @param sslCertificateName the name to assign to created certificate
+     * @return new instance of {@link SSLCertificateCreateOptions}
      */
-    public static @Nonnull ServerCertificateCreateOptions getInstance(
+    public static @Nonnull
+    SSLCertificateCreateOptions getInstance(
             @Nonnull String certificateBody, @Nonnull String certificateChain, @Nonnull String path,
-            @Nonnull String privateKey, @Nonnull String serverCertificateName) {
-        ServerCertificateCreateOptions options = new ServerCertificateCreateOptions();
+            @Nonnull String privateKey, @Nonnull String sslCertificateName) {
+        SSLCertificateCreateOptions options = new SSLCertificateCreateOptions();
         options.certificateBody = certificateBody;
         options.certificateChain = certificateChain;
         options.path = path;
         options.privateKey = privateKey;
-        options.serverCertificateName = serverCertificateName;
+        options.sslCertificateName = sslCertificateName;
         return options;
     }
 
-    private ServerCertificateCreateOptions() {}
+    private SSLCertificateCreateOptions() {}
 
     private String certificateBody;
     private String certificateChain;
     private String path;
     private String privateKey;
-    private String serverCertificateName;
+    private String sslCertificateName;
 
     /**
      * @return the body of certificate to be created
@@ -69,7 +70,7 @@ public class ServerCertificateCreateOptions {
     /**
      * @return the name of certificate to be created
      */
-    public @Nonnull String getServerCertificateName() {
-        return serverCertificateName;
+    public @Nonnull String getSSLCertificateName() {
+        return sslCertificateName;
     }
 }
