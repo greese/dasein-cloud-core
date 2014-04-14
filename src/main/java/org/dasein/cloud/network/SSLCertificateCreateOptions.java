@@ -1,6 +1,7 @@
 package org.dasein.cloud.network;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Parameters used to create a new server certificate.
@@ -18,9 +19,8 @@ public class SSLCertificateCreateOptions {
      * @param sslCertificateName the name to assign to created certificate
      * @return new instance of {@link SSLCertificateCreateOptions}
      */
-    public static @Nonnull
-    SSLCertificateCreateOptions getInstance(
-            @Nonnull String certificateBody, @Nonnull String certificateChain, @Nonnull String path,
+    public static @Nonnull SSLCertificateCreateOptions getInstance(
+            @Nonnull String certificateBody, @Nullable String certificateChain, @Nullable String path,
             @Nonnull String privateKey, @Nonnull String sslCertificateName) {
         SSLCertificateCreateOptions options = new SSLCertificateCreateOptions();
         options.certificateBody = certificateBody;
@@ -49,14 +49,14 @@ public class SSLCertificateCreateOptions {
     /**
      * @return the chain of certificate to be created
      */
-    public @Nonnull String getCertificateChain() {
+    public @Nullable String getCertificateChain() {
         return certificateChain;
     }
 
     /**
      * @return the path of certificate to be created
      */
-    public @Nonnull String getPath() {
+    public @Nullable String getPath() {
         return path;
     }
 

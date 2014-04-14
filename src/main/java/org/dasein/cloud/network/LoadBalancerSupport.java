@@ -43,18 +43,23 @@ import javax.annotation.Nullable;
  * @since unknown
  */
 public interface LoadBalancerSupport extends AccessControlledService {
-    static public final ServiceAction ANY                  = new ServiceAction("LB:ANY");
+    static public final ServiceAction ANY                       = new ServiceAction("LB:ANY");
 
-    static public final ServiceAction ADD_DATA_CENTERS     = new ServiceAction("LB:ADD_DC");
-    static public final ServiceAction ADD_VMS              = new ServiceAction("LB:ADD_VM");
-    static public final ServiceAction CREATE_LOAD_BALANCER = new ServiceAction("LB:CREATE_LOAD_BALANCER");
-    static public final ServiceAction GET_LOAD_BALANCER    = new ServiceAction("LB:GET_LOAD_BALANCER");
-    static public final ServiceAction LIST_LOAD_BALANCER   = new ServiceAction("LB:LIST_LOAD_BALANCER");
+    static public final ServiceAction ADD_DATA_CENTERS          = new ServiceAction("LB:ADD_DC");
+    static public final ServiceAction ADD_VMS                   = new ServiceAction("LB:ADD_VM");
+    static public final ServiceAction CREATE_LOAD_BALANCER      = new ServiceAction("LB:CREATE_LOAD_BALANCER");
+    static public final ServiceAction GET_LOAD_BALANCER         = new ServiceAction("LB:GET_LOAD_BALANCER");
+    static public final ServiceAction LIST_LOAD_BALANCER        = new ServiceAction("LB:LIST_LOAD_BALANCER");
     static public final ServiceAction GET_LOAD_BALANCER_SERVER_HEALTH   = new ServiceAction("LB:GET_LOAD_BALANCER_SERVER_HEALTH");
-    static public final ServiceAction REMOVE_DATA_CENTERS  = new ServiceAction("LB:REMOVE_DC");
-    static public final ServiceAction REMOVE_VMS           = new ServiceAction("LB:REMOVE_VM");
-    static public final ServiceAction REMOVE_LOAD_BALANCER = new ServiceAction("LB:REMOVE_LOAD_BALANCER");
-    static public final ServiceAction CONFIGURE_HEALTH_CHECK = new ServiceAction("LB:CONFIGURE_HEALTH_CHECK");
+    static public final ServiceAction REMOVE_DATA_CENTERS       = new ServiceAction("LB:REMOVE_DC");
+    static public final ServiceAction REMOVE_VMS                = new ServiceAction("LB:REMOVE_VM");
+    static public final ServiceAction REMOVE_LOAD_BALANCER      = new ServiceAction("LB:REMOVE_LOAD_BALANCER");
+    static public final ServiceAction CONFIGURE_HEALTH_CHECK    = new ServiceAction("LB:CONFIGURE_HEALTH_CHECK");
+    static public final ServiceAction LIST_SSL_CERTIFICATES     = new ServiceAction("LB:LIST_SSL_CERTIFICATES");
+    static public final ServiceAction GET_SSL_CERTIFICATE       = new ServiceAction("LB:GET_SSL_CERTIFICATE");
+    static public final ServiceAction CREATE_SSL_CERTIFICATE    = new ServiceAction("LB:CREATE_SSL_CERTIFICATE");
+    static public final ServiceAction DELETE_SSL_CERTIFICATE    = new ServiceAction("LB:DELETE_SSL_CERTIFICATE");
+    static public final ServiceAction SET_LB_SSL_CERTIFICATE    = new ServiceAction("LB:SET_SSL_CERTIFICATE");
 
     /**
      * Adds one or more data centers to the list of data centers associated with the specified load balancer. This method
