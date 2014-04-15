@@ -77,13 +77,13 @@ public class FirewallCreateOptions {
      * @return options for creating the firewall based on the specified parameters
      */
     static public FirewallCreateOptions getInstance(@Nonnull String inVlanId, @Nonnull String name, @Nonnull String description ) {
-      FirewallCreateOptions options = new FirewallCreateOptions();
+        FirewallCreateOptions options = new FirewallCreateOptions();
 
-      options.name = name;
-      options.description = description;
-      options.providerVlanId = inVlanId;
-      options.initialRules = new ArrayList<FirewallRuleCreateOptions>();
-      return options;
+        options.name = name;
+        options.description = description;
+        options.providerVlanId = inVlanId;
+        options.initialRules = new ArrayList<FirewallRuleCreateOptions>();
+        return options;
     }
 
     /**
@@ -262,11 +262,11 @@ public class FirewallCreateOptions {
      * @param rulesToAdd a Collection of type FirewallRule
      */
     public @Nonnull FirewallCreateOptions withAuthorizeRules(@Nonnull Collection<FirewallRule> rulesToAdd) {
-      if (authorizeRules == null) {
-        authorizeRules = new ArrayList<FirewallRule>();
-      }
-      authorizeRules.addAll(rulesToAdd);
-      return this;
+        if (authorizeRules == null) {
+            authorizeRules = new ArrayList<FirewallRule>();
+        }
+        authorizeRules.addAll(rulesToAdd);
+        return this;
     }
 
     /**
@@ -277,11 +277,11 @@ public class FirewallCreateOptions {
      * @return this
      */
     public @Nonnull FirewallCreateOptions havingInitialRules(@Nonnull FirewallRuleCreateOptions ... options) {
-      if( initialRules == null ) {
-        initialRules = new ArrayList<FirewallRuleCreateOptions>();
-      }
-      Collections.addAll(initialRules, options);
-      return this;
+        if( initialRules == null ) {
+            initialRules = new ArrayList<FirewallRuleCreateOptions>();
+        }
+        Collections.addAll(initialRules, options);
+        return this;
     }
 
     /**
