@@ -125,7 +125,12 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
       return null;
     }
 
-    @Override
+	@Override
+	public @Nullable String getUserData(@Nonnull String vmId) throws InternalException, CloudException {
+		return null;
+	}
+
+	@Override
     public @Nonnull String getConsoleOutput(@Nonnull String vmId) throws InternalException, CloudException {
         return "";
     }
