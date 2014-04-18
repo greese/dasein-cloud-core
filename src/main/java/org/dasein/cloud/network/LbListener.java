@@ -54,6 +54,22 @@ public class LbListener {
     }
 
     /**
+     * Constructs a listener that routes traffic of the specified protocol in a round-robin format from the specified
+     * public port to the specified private port. SSL certificate can be attached if protocol is HTTPS.
+     * @param protocol the network protocol being load balanced
+     * @param publicPort the public port on which the load balancer is listening
+     * @param privatePort the private port on which endpoints are listening
+     * @param sslCertificateId SSL certificate resource ID (ARN) to use for this listener in case protocol is HTTPS.
+     *                         See also {@link LoadBalancerSupport#createSSLCertificate(SSLCertificateCreateOptions)}.
+     * @return a newly constructed listener
+     */
+    static public LbListener getInstance(@Nonnull LbProtocol protocol, int publicPort, int privatePort,
+                                         String sslCertificateId) {
+        return new LbListener(LbAlgorithm.ROUND_ROBIN, LbPersistence.NONE, protocol, publicPort, privatePort,
+                              sslCertificateId);
+    }
+
+    /**
      * Constructs a listener that routes traffic of the specified protocol in accordance with the specified
      * load balancing algorithm based on server cookies for persistence from the specified
      * public port to the specified private port.
@@ -92,6 +108,7 @@ public class LbListener {
     private LbPersistence persistence;
     private int           privatePort;
     private int           publicPort;
+    private String        sslCertificateId;
 
     /**
      * Constructs an empty listener object.
@@ -100,11 +117,17 @@ public class LbListener {
     public LbListener() { }
 
     public LbListener(@Nonnull LbAlgorithm algorithm, @Nonnull LbPersistence persistence, @Nonnull LbProtocol protocol, int publicPort, int privatePort) {
+        this(algorithm, persistence, protocol, publicPort, privatePort, null);
+    }
+
+    public LbListener(@Nonnull LbAlgorithm algorithm, @Nonnull LbPersistence persistence, @Nonnull LbProtocol protocol,
+                      int publicPort, int privatePort, @Nullable String sslCertificateId) {
         this.algorithm = algorithm;
         this.persistence = persistence;
         this.networkProtocol = protocol;
         this.publicPort = publicPort;
         this.privatePort = privatePort;
+        this.sslCertificateId = sslCertificateId;
     }
 
     /**
@@ -155,6 +178,15 @@ public class LbListener {
      */
     public int getPublicPort() {
         return publicPort;
+    }
+
+    /**
+     * The ARN string of the server certificate. To create a server certificate, call the
+     * {@link LoadBalancerSupport#createSSLCertificate(SSLCertificateCreateOptions)}.
+     * @return the SSL certificate ID.
+     */
+    public String getSSLCertificateId() {
+        return sslCertificateId;
     }
 
     @Override
