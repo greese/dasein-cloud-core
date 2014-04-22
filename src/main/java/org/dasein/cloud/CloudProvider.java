@@ -206,7 +206,7 @@ public abstract class CloudProvider {
      * @throws InternalException an error occurred within Dasein Cloud while setting up the connection state
      */
     @SuppressWarnings("deprecation")
-    void connect(@Nonnull ProviderContext context, @Nullable CloudProvider computeProvider, @Nullable Cloud myCloud) throws CloudException, InternalException {
+    protected void connect(@Nonnull ProviderContext context, @Nullable CloudProvider computeProvider, @Nullable Cloud myCloud) throws CloudException, InternalException {
         close();
         this.context = context;
 
