@@ -229,8 +229,10 @@ public class ScalingGroup implements Serializable {
 
 	public Map<String, String> getTagsAsMap() {
 		Map<String, String> tagsAsMap = new HashMap<String, String>();
-		for (AutoScalingTag tag : tags) {
-			tagsAsMap.put(tag.getKey(), tag.getValue());
+		if (tags != null) {
+			for (AutoScalingTag tag : tags) {
+				tagsAsMap.put(tag.getKey(), tag.getValue());
+			}
 		}
 		return tagsAsMap;
 	}
