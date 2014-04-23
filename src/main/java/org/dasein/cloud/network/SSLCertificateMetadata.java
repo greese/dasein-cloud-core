@@ -44,4 +44,10 @@ public class SSLCertificateMetadata implements Networkable {
     public @Nullable Long getUploadDate() {
         return uploadDate;
     }
+
+    @Override
+    public @Nonnull String toString() {
+        return certificateId + " (" + uploadDate + ") [#" + providerCertificateId + "]";
+    }
+
 }

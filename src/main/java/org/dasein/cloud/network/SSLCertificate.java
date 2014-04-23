@@ -44,4 +44,10 @@ public class SSLCertificate implements Networkable {
     public @Nonnull SSLCertificateMetadata getMetadata() {
         return metadata;
     }
+
+    @Override
+    public @Nonnull String toString() {
+        return metadata == null ? "[no SSL certificate metadata]" : metadata.toString();
+    }
+
 }
