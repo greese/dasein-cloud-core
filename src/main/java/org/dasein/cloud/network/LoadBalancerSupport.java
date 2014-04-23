@@ -169,12 +169,12 @@ public interface LoadBalancerSupport extends AccessControlledService {
 
     /**
      * Fetched the details of an SSL certificate associated with the given name.
-     * @param certificateName the certificate name to search for.
+     * @param certificateId the certificate ID to search for.
      * @return server certificate name or null if no certificate exists with the given name.
      * @throws CloudException an error occurred while communicating with the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud implementation
      */
-    public @Nullable SSLCertificate getSSLCertificate(@Nonnull String certificateName) throws CloudException, InternalException;
+    public @Nullable SSLCertificate getSSLCertificate(@Nonnull String certificateId) throws CloudException, InternalException;
 
     /**
      * @return the degree to which endpoints should or must be part of the load balancer creation process
@@ -350,11 +350,11 @@ public interface LoadBalancerSupport extends AccessControlledService {
     /**
      * Removes a given server certificate from the account in current region.
      * <strong>Note:</strong> be sure to first unset this certificate from any load balancer it is used by.
-     * @param certificateName name of the certificate to remove
+     * @param certificateId ID of the certificate to remove
      * @throws CloudException an error occurred with the cloud provider, certificate does not exist by given name etc
      * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
      */
-    public void removeSSLCertificate(@Nonnull String certificateName) throws CloudException, InternalException;
+    public void removeSSLCertificate(@Nonnull String certificateId) throws CloudException, InternalException;
 
     /**
      * Removes one or more virtual machine endpoints from the load balancer resource pool.

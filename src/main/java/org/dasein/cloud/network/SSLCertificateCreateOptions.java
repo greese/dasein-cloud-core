@@ -14,20 +14,20 @@ public class SSLCertificateCreateOptions {
      * Creates new parameters for a request to create a server certificate.
      * @param certificateBody certificate body as string
      * @param certificateChain certificate chain
-     * @param path certificate path to use
      * @param privateKey private key as string
-     * @param sslCertificateName the name to assign to created certificate
+     * @param certificateId the ID to assign to created certificate
+     * @param path certificate path to use
      * @return new instance of {@link SSLCertificateCreateOptions}
      */
     public static @Nonnull SSLCertificateCreateOptions getInstance(
-            @Nonnull String certificateBody, @Nullable String certificateChain, @Nullable String path,
-            @Nonnull String privateKey, @Nonnull String sslCertificateName) {
+            @Nonnull String certificateBody, @Nullable String certificateChain,
+            @Nonnull String privateKey, @Nonnull String certificateId, @Nullable String path) {
         SSLCertificateCreateOptions options = new SSLCertificateCreateOptions();
         options.certificateBody = certificateBody;
         options.certificateChain = certificateChain;
         options.path = path;
         options.privateKey = privateKey;
-        options.sslCertificateName = sslCertificateName;
+        options.certificateId = certificateId;
         return options;
     }
 
@@ -37,7 +37,7 @@ public class SSLCertificateCreateOptions {
     private String certificateChain;
     private String path;
     private String privateKey;
-    private String sslCertificateName;
+    private String certificateId;
 
     /**
      * @return the body of certificate to be created
@@ -68,9 +68,9 @@ public class SSLCertificateCreateOptions {
     }
 
     /**
-     * @return the name of certificate to be created
+     * @return the ID of certificate to be created
      */
-    public @Nonnull String getSSLCertificateName() {
-        return sslCertificateName;
+    public @Nonnull String getCertificateId() {
+        return certificateId;
     }
 }

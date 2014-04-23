@@ -11,30 +11,30 @@ import javax.annotation.Nonnull;
 public class SetLoadBalancerSSLCertificateOptions {
 
     public static @Nonnull SetLoadBalancerSSLCertificateOptions getInstance(
-            @Nonnull String loadBalancerName, @Nonnull String sslCertificateAssignToPort,
-            @Nonnull String sslCertificateResourceId) {
+            @Nonnull String loadBalancerName, @Nonnull int sslCertificateAssignToPort,
+            @Nonnull String providerSslCertificateId ) {
         SetLoadBalancerSSLCertificateOptions options = new SetLoadBalancerSSLCertificateOptions();
         options.loadBalancerName = loadBalancerName;
         options.sslCertificateAssignToPort = sslCertificateAssignToPort;
-        options.sslCertificateResourceId = sslCertificateResourceId;
+        options.providerSslCertificateId = providerSslCertificateId ;
         return options;
     }
 
     private SetLoadBalancerSSLCertificateOptions() {}
 
     private String loadBalancerName;
-    private String sslCertificateAssignToPort;
-    private String sslCertificateResourceId;
+    private int    sslCertificateAssignToPort;
+    private String providerSslCertificateId;
 
     public @Nonnull String getLoadBalancerName() {
         return loadBalancerName;
     }
 
-    public @Nonnull String getSslCertificateAssignToPort() {
+    public @Nonnull int getSslCertificateAssignToPort() {
         return sslCertificateAssignToPort;
     }
 
-    public @Nonnull String getSslCertificateResourceId() {
-        return sslCertificateResourceId;
+    public @Nonnull String getProviderSslCertificateId() {
+        return providerSslCertificateId;
     }
 }
