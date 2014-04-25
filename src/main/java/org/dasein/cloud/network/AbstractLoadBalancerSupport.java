@@ -373,4 +373,9 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
     public boolean healthCheckRequiresLoadBalancer() throws CloudException, InternalException{
         return true;
     }
+
+    @Override
+    public void attachFirewalls(@Nonnull String providerLoadBalancerId, @Nonnull String... firewallIds) throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Attach firewalls have not been implemented for " + getProvider().getCloudName());
+    }
 }

@@ -93,6 +93,7 @@ public class LoadBalancer implements Networkable, Taggable {
     private int[]                   publicPorts;
     private IPVersion[]             supportedTraffic;
     private Map<String,String>      tags;
+    private String[]                firewallIds;
 
     /**
      * Constructs a load balancer object with no data.
@@ -312,6 +313,14 @@ public class LoadBalancer implements Networkable, Taggable {
      */
     public void setTags(@Nonnull Map<String,String> tags) {
         this.tags = tags;
+    }
+
+    public String[] getFirewallIds() {
+        return firewallIds;
+    }
+
+    public void setFirewallIds(String[] firewallIds) {
+        this.firewallIds = firewallIds;
     }
 
     /**
