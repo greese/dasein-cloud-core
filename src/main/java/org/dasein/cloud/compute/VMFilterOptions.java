@@ -23,7 +23,9 @@ import org.dasein.cloud.CloudProvider;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.EnumSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Options for filtering virtual machines when querying the cloud provider. You may optionally filter on
@@ -36,7 +38,7 @@ import java.util.Map;
  */
 public class VMFilterOptions {
     /**
-     * Constructs an empty set of filtering options that will force match against ay VM by default.
+     * Constructs an empty set of filtering options that will force match against any VM by default.
      * @return an empty filtering options objects
      */
     static public @Nonnull VMFilterOptions getInstance() {
@@ -78,9 +80,11 @@ public class VMFilterOptions {
         return options;
     }
 
+    private String[]           labels;
     private boolean            matchesAny;
     private String             regex;
     private Map<String,String> tags;
+    private Set<VmState>       vmStates;
 
     private VMFilterOptions(boolean matchesAny) {
         this.matchesAny = matchesAny;
@@ -101,11 +105,26 @@ public class VMFilterOptions {
     }
 
     /**
+     * @return the labels, if any, on which filtering should be done (<code>null</code> means don't filter on labels)
+     */
+    public @Nullable String[] getLabels() {
+        return labels;
+    }
+
+    /**
+     * @return the VM states, if any, on which filtering should be done (<code>null</code> means don't filter on VM states)
+     */
+    public @Nullable Set<VmState> getVmStates() {
+        return vmStates;
+    }
+
+    /**
      * Indicates whether there are any criteria associated with these options.
      * @return <code>true</code> if this filter options object has any criteria associated with it
      */
     public boolean hasCriteria() {
-        return ((tags != null && !tags.isEmpty()) || regex != null);
+        return ((tags != null && !tags.isEmpty()) || (labels != null && labels.length > 0)
+                || (vmStates != null && !vmStates.isEmpty()) || regex != null );
     }
 
     /**
@@ -192,6 +211,26 @@ public class VMFilterOptions {
      */
     public @Nonnull VMFilterOptions withTags(@Nonnull Map<String, String> tags) {
         this.tags = tags;
+        return this;
+    }
+
+    /**
+     * Builds filtering options that will force filtering on the specified labels.
+     * @param labels the labels on which to filter
+     * @return this
+     */
+    public @Nonnull VMFilterOptions withLabels(@Nonnull String... labels) {
+        this.labels = labels;
+        return this;
+    }
+
+    /**
+     * Builds filtering options that will force filtering on the specified VM states.
+     * @param vmStates the VM states on which to filter
+     * @return this
+     */
+    public @Nonnull VMFilterOptions withVmStates(@Nonnull Set<VmState> vmStates) {
+        this.vmStates = vmStates;
         return this;
     }
 

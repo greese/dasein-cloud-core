@@ -48,7 +48,8 @@ public class VirtualMachine implements Networkable, Taggable {
     private boolean               clonable;
     private long                  creationTimestamp;
     private VmState               currentState;
-    private Map<String,String>    tags;    
+    private Map<String,String>    tags;
+    private String[]              labels;
     private String                description;
     private boolean               imagable;
     private long                  lastBootTimestamp;
@@ -80,12 +81,16 @@ public class VirtualMachine implements Networkable, Taggable {
     private boolean               rebootable;
     private String                rootPassword;
     private String                rootUser;
+    private String                stateReasonMessage;
     private long                  terminationTimestamp;
     private Volume[]              volumes;
     private boolean               ioOptimized;
     private boolean               ipForwardingAllowed;
     private String                providerRoleId;
-    private VisibleScope visibleScope;
+    private VmStatus              providerHostStatus;
+    private VmStatus              providerVmStatus;
+    private VisibleScope          visibleScope;
+	private String                userData;
 
   public VirtualMachine() { }
     
@@ -475,6 +480,14 @@ public class VirtualMachine implements Networkable, Taggable {
         this.rootUser = rootUser;
     }
 
+    public String getStateReasonMessage() {
+        return stateReasonMessage;
+    }
+
+    public void setStateReasonMessage(String stateReasonMessage) {
+        this.stateReasonMessage = stateReasonMessage;
+    }
+
     public long getTerminationTimestamp() {
         return terminationTimestamp;
     }
@@ -493,6 +506,14 @@ public class VirtualMachine implements Networkable, Taggable {
 
     public String getProductId() {
         return productId;
+    }
+
+    public void setLabels(String[] labels) {
+        this.labels = labels;
+    }
+
+    public String[] getLabels() {
+        return (labels == null ? new String[0] : labels);
     }
 
     public Object getTag(String tag) {
@@ -642,6 +663,22 @@ public class VirtualMachine implements Networkable, Taggable {
       this.providerRoleId = roleId;
     }
 
+    public VmStatus getProviderVmStatus() {
+      return providerVmStatus;
+    }
+
+    public void setProviderVmStatus(VmStatus vmStatus) {
+      this.providerVmStatus = vmStatus;
+    }
+
+    public VmStatus getProviderHostStatus() {
+      return providerHostStatus;
+    }
+
+    public void setProviderHostStatus(VmStatus vmStatus) {
+      this.providerHostStatus = vmStatus;
+    }
+
     public void setVisibleScope(VisibleScope visibleScope){
         this.visibleScope = visibleScope;
     }
@@ -649,4 +686,13 @@ public class VirtualMachine implements Networkable, Taggable {
     public VisibleScope getVisibleScope(){
         return this.visibleScope;
     }
+
+	public String getUserData() {
+		return userData;
+	}
+
+	public void setUserData(String userData) {
+		this.userData = userData;
+	}
+
 }

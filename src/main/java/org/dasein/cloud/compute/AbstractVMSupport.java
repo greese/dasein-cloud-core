@@ -125,7 +125,12 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
       return null;
     }
 
-    @Override
+	@Override
+	public @Nullable String getUserData(@Nonnull String vmId) throws InternalException, CloudException {
+		return null;
+	}
+
+	@Override
     public @Nonnull String getConsoleOutput(@Nonnull String vmId) throws InternalException, CloudException {
         return "";
     }
@@ -870,6 +875,11 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
             else {
                 prd.setRamSize(new Storage<Megabyte>(512, Storage.MEGABYTE));
             }
+            if( json.has("generation") ) {
+                prd.setGeneration(json.getString("generation"));
+            } else {
+                prd.setGeneration("current");
+            }
             if( json.has("standardHourlyRates") ) {
                 JSONArray rates = json.getJSONArray("standardHourlyRates");
 
@@ -886,6 +896,16 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
             throw new InternalException(e);
         }
         return prd;
+    }
+
+    @Override
+    public @Nullable Iterable<VirtualMachineStatus> getVMStatus( @Nullable String... vmIds ) throws InternalException, CloudException {
+        throw new OperationNotSupportedException("Virtual Machine Status is not currently implemented for " + getProvider().getCloudName());
+    }
+
+    @Override
+    public @Nullable Iterable<VirtualMachineStatus> getVMStatus(@Nullable VmStatusFilterOptions filterOptions) throws InternalException, CloudException {
+        throw new OperationNotSupportedException("Virtual Machine Status is not currently implemented for " + getProvider().getCloudName());
     }
 
 }

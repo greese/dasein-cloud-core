@@ -21,6 +21,8 @@ package org.dasein.cloud.compute;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ScalingGroup implements Serializable {
     private static final long serialVersionUID = -5317003700769693511L;
@@ -224,6 +226,16 @@ public class ScalingGroup implements Serializable {
     public AutoScalingTag[] getTags() {
       return tags;
     }
+
+	public Map<String, String> getTagsAsMap() {
+		Map<String, String> tagsAsMap = new HashMap<String, String>();
+		if (tags != null) {
+			for (AutoScalingTag tag : tags) {
+				tagsAsMap.put(tag.getKey(), tag.getValue());
+			}
+		}
+		return tagsAsMap;
+	}
 
     public void setTags(AutoScalingTag[] tags) {
       this.tags = tags;

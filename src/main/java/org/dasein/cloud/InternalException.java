@@ -55,4 +55,11 @@ public class InternalException extends Exception {
      * @param cause the underlying exception that caused this error condition to be raised
      */
     public InternalException(@Nonnull Throwable cause) { super(cause); }
+
+    /**
+     * Constructs a local exception caused by the specified exception with error message.
+     * @param msg a message indicating the nature of the exception
+     * @param cause the underlying exception that caused this error condition to be raised
+     */
+    public InternalException(String msg, Throwable cause) { super(msg, cause); }
 }

@@ -71,6 +71,16 @@ public interface VirtualMachineSupport extends AccessControlledService {
     public VirtualMachine alterVirtualMachine(@Nonnull String vmId, @Nonnull VMScalingOptions options) throws InternalException, CloudException;
 
     /**
+     * Allows certain properties of a virtual machine  to be changed in accordance with the specified  options.
+     * @param vmId the virtual machine to scale
+     * @param firewalls the options governing how the virtual machine is scaled
+     * @return a virtual machine representing the scaled virtual machine
+     * @throws InternalException an internal error occurred processing the request
+     * @throws CloudException an error occurred in the cloud processing the request
+     */
+    public abstract VirtualMachine modifyInstance(@Nonnull String vmId, @Nonnull String[] firewalls) throws InternalException, CloudException;
+
+    /**
      * Clones an existing virtual machine into a new copy.
      * @param vmId the ID of the server to be cloned
      * @param intoDcId the ID of the data center in which the new server will operate
@@ -118,6 +128,15 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws CloudException an error occurred within the cloud provider
      */
     public @Nullable String getPassword(@Nonnull String vmId) throws InternalException, CloudException;
+
+	/**
+	 * Provides the userData as stored by the cloud provider (encrypted)
+	 * @param vmId the unique ID of the target server
+	 * @return the current userData of the virtual machine as stored by the provider
+	 * @throws InternalException an error occurred within the Dasein Cloud API implementation
+	 * @throws CloudException an error occurred within the cloud provider
+	 */
+	public @Nullable String getUserData(@Nonnull String vmId) throws InternalException, CloudException;
 
     /**
      * Provides all output from the console of the target server since the specified Unix time.
@@ -171,6 +190,25 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws CloudException an error occurred within the cloud provider
      */
     public @Nonnull Iterable<VmStatistics> getVMStatisticsForPeriod(@Nonnull String vmId, @Nonnegative long from, @Nonnegative long to) throws InternalException, CloudException;
+
+    /**
+     * Provides the status as determined by the cloud provider
+     * @param vmIds the unique ID(s) of the target server(s)
+     * @return the status(es) of the virtual machines
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException an error occurred within the cloud provider
+     */
+    public abstract @Nullable Iterable<VirtualMachineStatus> getVMStatus(@Nullable String ... vmIds) throws InternalException, CloudException;
+
+    /**
+     * Lists all virtual machines status(es) matching the given {@link VmStatusFilterOptions) belonging to the account owner
+     * currently in the cloud. The filtering functionality is delegated to the cloud provider.
+     * @param filterOptions filter options
+     * @return the status(es) of the virtual machines
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException an error occurred within the cloud provider
+     */
+    public abstract @Nullable Iterable<VirtualMachineStatus> getVMStatus(@Nullable VmStatusFilterOptions filterOptions) throws InternalException, CloudException;
 
     /**
      * Indicates whether this account is subscribed to using virtual machines.

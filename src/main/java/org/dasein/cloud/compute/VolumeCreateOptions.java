@@ -171,6 +171,54 @@ public class VolumeCreateOptions {
     private Storage<Gigabyte>  volumeSize;
     // NOTE: SEE NOTE AT TOP OF ATTRIBUTE LIST WHEN ADDING/REMOVING/CHANGING AN ATTRIBUTE
 
+    public void setDataCenterId(String dataCenterId) {
+      this.dataCenterId = dataCenterId;
+    }
+
+    public void setDescription(String description) {
+      this.description = description;
+    }
+
+    public void setDeviceId(String deviceId) {
+      this.deviceId = deviceId;
+    }
+
+    public void setFormat(VolumeFormat format) {
+      this.format = format;
+    }
+
+    public void setIops(int iops) {
+      this.iops = iops;
+    }
+
+    public void setMetaData(Map<String, Object> metaData) {
+      this.metaData = metaData;
+    }
+
+    public void setName(String name) {
+      this.name = name;
+    }
+
+    public void setSnapshotId(String snapshotId) {
+      this.snapshotId = snapshotId;
+    }
+
+    public void setVirtualMachineId(String virtualMachineId) {
+      this.virtualMachineId = virtualMachineId;
+    }
+
+    public void setVlanId(String vlanId) {
+      this.vlanId = vlanId;
+    }
+
+    public void setVolumeProductId(String volumeProductId) {
+      this.volumeProductId = volumeProductId;
+    }
+
+    public void setVolumeSize(Storage<Gigabyte> volumeSize) {
+      this.volumeSize = volumeSize;
+    }
+
     @SuppressWarnings("UnusedDeclaration")
     private VolumeCreateOptions() { }
 

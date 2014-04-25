@@ -46,12 +46,6 @@ public class VMLaunchOptions {
         public String nicId;
         public NICCreateOptions nicToCreate;
     }
-    
-    static public class VolumeAttachment {
-        public String deviceId;
-        public String existingVolumeId;
-        public VolumeCreateOptions volumeToCreate;
-    }
 
     /**
      * Constructs a new set of launch options from a minimum required configuration.
@@ -91,6 +85,7 @@ public class VMLaunchOptions {
     private String             kernelId;
     private String             machineImageId;
     private Map<String,Object> metaData;
+    private String[]           labels;
     private String             networkProductId;
     private NICConfig[]        networkInterfaces;
     private boolean            preventApiTermination;
@@ -107,6 +102,7 @@ public class VMLaunchOptions {
     private boolean            ioOptimized;
     private boolean            ipForwardingAllowed;
     private String             roleId;
+    private boolean            associatePublicIpAddress;
     // NOTE: SEE NOTE AT TOP OF ATTRIBUTE LIST WHEN ADDING/REMOVING/CHANGING AN ATTRIBUTE
 
     private VMLaunchOptions() { }
@@ -289,6 +285,13 @@ public class VMLaunchOptions {
     }
 
     /**
+     * @return any labels to assign to this virtual machine
+     */
+    public @Nonnull String[] getLabels() {
+        return (labels == null ? new String[0] : labels);
+    }
+
+    /**
      * @return the friendly name of the virtual machine
      */
     public @Nonnull String getFriendlyName() {
@@ -382,7 +385,7 @@ public class VMLaunchOptions {
     /**
      * @return the private ip when VM is launched in VLAN
      */
-    public @Nonnull String getPrivateIp() {
+    public @Nullable String getPrivateIp() {
       return privateIp;
     }
 
@@ -442,6 +445,18 @@ public class VMLaunchOptions {
                 tmp[i++] = id;
             }
             this.firewallIds = tmp;
+        }
+        return this;
+    }
+
+    /**
+     * Specifies any labels to be added to the virtual machine at launch time
+     * @param labels one or more labels to be added to new VM
+     * @return this
+     */
+    public @Nonnull VMLaunchOptions withLabels(String... labels) {
+        if (labels != null) {
+            this.labels = Arrays.copyOf(labels, labels.length);
         }
         return this;
     }
@@ -819,6 +834,24 @@ public class VMLaunchOptions {
      */
     public @Nullable String getRoleId() {
       return roleId;
+    }
+
+    /**
+     * Associate a public IP address at launch.
+     *
+     * @param publicIpAddress
+     * @return this
+     */
+    public VMLaunchOptions withAssociatePublicIpAddress( final boolean publicIpAddress ) {
+      this.associatePublicIpAddress = publicIpAddress;
+      return this;
+    }
+
+    /**
+     * @see #withAssociatePublicIpAddress(boolean)
+     */
+    public boolean isAssociatePublicIpAddress() {
+      return associatePublicIpAddress;
     }
 
 }

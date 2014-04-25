@@ -19,21 +19,30 @@
 
 package org.dasein.cloud.compute;
 
-public enum SnapshotState {
-    /**
-     * The snapshot has been request and is in process.
-     */
-    PENDING, 
-    /**
-     * The snapshot is ready for use.
-     */
-    AVAILABLE,
-    /**
-     * The snapshot has been deleted.
-     */
-    DELETED,
-    /**
-     * The snapshot is in an error state.
-     */
-    ERROR;
+/**
+ * @author Chris Kelners (http://github.com/ckelner)
+ * @since 2014-02-28
+ */
+public class AutoScalingGroupDeleteOptions {
+
+  private String providerAutoScalingGroupId;
+  private Boolean forceDelete;
+
+  public AutoScalingGroupDeleteOptions(final String providerAutoScalingGroupId) {
+    this.providerAutoScalingGroupId = providerAutoScalingGroupId;
+  }
+
+  public String getProviderAutoScalingGroupId() {
+    return providerAutoScalingGroupId;
+  }
+
+  public Boolean getForceDelete() {
+    return forceDelete;
+  }
+
+  public AutoScalingGroupDeleteOptions setForceDelete( final Boolean forceDelete ) {
+    this.forceDelete = forceDelete;
+    return this;
+  }
+
 }

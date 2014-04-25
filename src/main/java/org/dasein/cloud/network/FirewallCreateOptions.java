@@ -26,10 +26,7 @@ import org.dasein.cloud.OperationNotSupportedException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Encapsulates values to be used in the creation of {@link Firewall} instances either for virtual machine or
@@ -79,12 +76,13 @@ public class FirewallCreateOptions {
      * @param description a description of the purpose of the firewall to be created
      * @return options for creating the firewall based on the specified parameters
      */
-    static public FirewallCreateOptions getInstance(@Nonnull String inVlanId, @Nonnull String name, @Nonnull String description) {
+    static public FirewallCreateOptions getInstance(@Nonnull String inVlanId, @Nonnull String name, @Nonnull String description ) {
         FirewallCreateOptions options = new FirewallCreateOptions();
 
         options.name = name;
         options.description = description;
         options.providerVlanId = inVlanId;
+        options.initialRules = new ArrayList<FirewallRuleCreateOptions>();
         return options;
     }
 
@@ -99,20 +97,23 @@ public class FirewallCreateOptions {
     static public FirewallCreateOptions getInstance(@Nonnull String inVlanId, @Nonnull String name, @Nonnull String description, @Nonnull FirewallRuleCreateOptions ... ruleOptions) {
         FirewallCreateOptions options = new FirewallCreateOptions();
 
-        options.providerVlanId = inVlanId;
         options.name = name;
         options.description = description;
+        options.providerVlanId = inVlanId;
         options.initialRules = new ArrayList<FirewallRuleCreateOptions>();
         Collections.addAll(options.initialRules, ruleOptions);
         return options;
     }
 
-    private Map<FirewallConstraints.Constraint,Object> constraints;
-    private String                                     description;
-    private ArrayList<FirewallRuleCreateOptions>       initialRules;
-    private Map<String,String>                         metaData;
-    private String                                     name;
-    private String                                     providerVlanId;
+    private Map<FirewallConstraints.Constraint,Object>  constraints;
+    private String                                      description;
+    private ArrayList<FirewallRuleCreateOptions>        initialRules;
+    private Map<String,String>                          metaData;
+    private Collection<String>                          sourceLabels;
+    private Collection<String>                          targetLabels;
+    private String                                      name;
+    private String                                      providerVlanId;
+    private Collection<FirewallRule>                    authorizeRules;
 
     private FirewallCreateOptions() { }
 
@@ -208,6 +209,64 @@ public class FirewallCreateOptions {
      */
     public @Nullable String getProviderVlanId() {
         return providerVlanId;
+    }
+
+    /**
+     * @return  source labels to assign to firewall
+     */
+    public Collection<String> getSourceLabels() {
+        return sourceLabels;
+    }
+
+    /**
+     * @return  target labels to assign to firewall
+     */
+    public @Nonnull Collection<String> getTargetLabels() {
+        return targetLabels;
+    }
+
+    /**
+     * Identifies which source labels will be attached to this firewall
+   	 * @param sourceLabelsToAdd source labels to assign to the firewall
+   	 */
+   	public @Nonnull FirewallCreateOptions withSourceLabels(@Nonnull Collection<String> sourceLabelsToAdd) {
+        if (sourceLabels == null) {
+            sourceLabels = new ArrayList<String>();
+        }
+        sourceLabels.addAll(sourceLabelsToAdd);
+        return this;
+   	}
+
+   	/**
+   	 * Identifies which target labels will be attached to this firewall
+   	 * @param targetLabelsToAdd labels to assign to the firewall
+   	 */
+   	public @Nonnull FirewallCreateOptions withTargetLabels(@Nonnull Collection<String> targetLabelsToAdd) {
+        if (targetLabels == null) {
+            targetLabels = new ArrayList<String>();
+        }
+        targetLabels.addAll(targetLabelsToAdd);
+        return this;
+   	}
+
+    /**
+     * Provides a Collection of initial authorize FirewallRules
+     * @return a Collection of FirewallRule
+     */
+    public @Nonnull Collection<FirewallRule> getAuthorizeRules() {
+        return authorizeRules == null ? Collections.<FirewallRule>emptyList() : authorizeRules;
+    }
+
+    /**
+     * Defines the initial authorize firewall rules.
+     * @param rulesToAdd a Collection of type FirewallRule
+     */
+    public @Nonnull FirewallCreateOptions withAuthorizeRules(@Nonnull Collection<FirewallRule> rulesToAdd) {
+        if (authorizeRules == null) {
+            authorizeRules = new ArrayList<FirewallRule>();
+        }
+        authorizeRules.addAll(rulesToAdd);
+        return this;
     }
 
     /**
