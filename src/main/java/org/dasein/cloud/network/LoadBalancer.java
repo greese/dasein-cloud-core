@@ -24,10 +24,7 @@ import org.dasein.cloud.Taggable;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Represents a virtual load balancer operating in a cloud. Load balancers have an address/virtual IP (VIP) to which
@@ -315,10 +312,19 @@ public class LoadBalancer implements Networkable, Taggable {
         this.tags = tags;
     }
 
+    /**
+     * Returns array of associated firewall ids
+     * @return array of associated firewall ids
+     */
     public String[] getFirewallIds() {
         return firewallIds;
     }
 
+    /**
+     * Sets the firewall ids.
+     * @param firewallIds the firewall ids
+     * @return this
+     */
     public void setFirewallIds(String[] firewallIds) {
         this.firewallIds = firewallIds;
     }
