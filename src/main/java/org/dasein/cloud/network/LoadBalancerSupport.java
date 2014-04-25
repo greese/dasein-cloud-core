@@ -413,14 +413,6 @@ public interface LoadBalancerSupport extends AccessControlledService {
      */
     public void removeLoadBalancerHealthCheck(@Nonnull String providerLoadBalancerId) throws CloudException, InternalException;
 
-    /**
-     * Attaches an existing Load Balancer to an existing firewalls
-     * @param providerLoadBalancerId the load balancer ID
-     * @param firewallIds the firewalls
-     * @throws CloudException
-     * @throws InternalException
-     */
-    public void attachFirewalls(@Nonnull String providerLoadBalancerId, @Nonnull String... firewallIds) throws CloudException, InternalException;
 
     /**
      * Indicates whether a health check can be created independantly of a load balancer
@@ -477,9 +469,11 @@ public interface LoadBalancerSupport extends AccessControlledService {
     public boolean requiresServerOnCreate() throws CloudException, InternalException;
 
     /**
-     * Attaches firewalls to load balancer
-     * @param loadBalancerId load balancer id
-     * @param firewallIds firewalls ids
+     * Attaches an existing Load Balancer to an existing firewalls
+     * @param providerLoadBalancerId the load balancer ID
+     * @param firewallIds the firewalls
+     * @throws CloudException
+     * @throws InternalException
      */
-    public void attachFirewalls(@Nonnull String loadBalancerId, @Nonnull String... firewallIds) throws CloudException, InternalException;
+    public void attachFirewalls(@Nonnull String providerLoadBalancerId, @Nonnull String... firewallIds) throws CloudException, InternalException;
 }

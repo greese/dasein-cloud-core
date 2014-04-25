@@ -330,11 +330,6 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
     }
 
     @Override
-    public void attachFirewalls(@Nonnull String loadBalancerId, @Nonnull String... firewallIds) throws CloudException, InternalException {
-        throw new OperationNotSupportedException("Attaching firewalls feature have not been implemented for " + getProvider().getCloudName());
-    }
-
-    @Override
     public boolean supportsAddingEndpoints() throws CloudException, InternalException {
         return true;
     }
@@ -381,6 +376,6 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
 
     @Override
     public void attachFirewalls(@Nonnull String providerLoadBalancerId, @Nonnull String... firewallIds) throws CloudException, InternalException {
-        throw new OperationNotSupportedException("Attach firewalls have not been implemented for " + getProvider().getCloudName());
+        throw new OperationNotSupportedException("Attaching firewalls have not been implemented for " + getProvider().getCloudName());
     }
 }
