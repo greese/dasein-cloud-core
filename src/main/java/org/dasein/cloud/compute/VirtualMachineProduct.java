@@ -39,6 +39,7 @@ public class VirtualMachineProduct implements Serializable {
     private Storage<Megabyte> ramSize;
     private float             standardHourlyRate;
     private VisibleScope      visibleScope;
+    private String			  generation;
     
     public VirtualMachineProduct() { }
 
@@ -110,7 +111,15 @@ public class VirtualMachineProduct implements Serializable {
         return this.visibleScope;
     }
 
-    public String toString() {
+    public String getGeneration() {
+		return generation;
+	}
+
+	public void setGeneration(String generation) {
+		this.generation = generation;
+	}
+
+	public String toString() {
         return (name + " [" + providerProductId + "]");
     }
 }
