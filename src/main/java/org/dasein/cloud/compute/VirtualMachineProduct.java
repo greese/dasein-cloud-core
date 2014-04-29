@@ -118,10 +118,10 @@ public class VirtualMachineProduct implements Serializable {
 		return status;
 	}
 
-	public void setStatus(String status) {
-		if (status.equalsIgnoreCase("deprecated")) {
-			this.status = Status.DEPRECATED;
-		}
+	public void setStatusDeprecated() {
+		
+		System.out.println("Status <= DEPRECATED");
+		this.status = Status.DEPRECATED;
 	}
 
 	public String toString() {

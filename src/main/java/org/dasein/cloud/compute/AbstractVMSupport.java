@@ -874,9 +874,6 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
             }
             else {
                 prd.setRamSize(new Storage<Megabyte>(512, Storage.MEGABYTE));
-            }
-            if( json.has("generation") ) {
-                prd.setStatus(json.getString("generation"));
             } 
             if( json.has("standardHourlyRates") ) {
                 JSONArray rates = json.getJSONArray("standardHourlyRates");
