@@ -39,7 +39,10 @@ public class VirtualMachineProduct implements Serializable {
     private Storage<Megabyte> ramSize;
     private float             standardHourlyRate;
     private VisibleScope      visibleScope;
-    private String			  generation;
+    
+    public enum	Status { CURRENT, DEPRECATED; }
+    
+    private Status status = Status.CURRENT;
     
     public VirtualMachineProduct() { }
 
@@ -111,12 +114,14 @@ public class VirtualMachineProduct implements Serializable {
         return this.visibleScope;
     }
 
-    public String getGeneration() {
-		return generation;
+    public Status getStatus() {
+		return status;
 	}
 
-	public void setGeneration(String generation) {
-		this.generation = generation;
+	public void setStatus(String status) {
+		if (status.equalsIgnoreCase("deprecated")) {
+			this.status = Status.DEPRECATED;
+		}
 	}
 
 	public String toString() {
