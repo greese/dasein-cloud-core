@@ -29,102 +29,100 @@ import java.io.Serializable;
 
 @SuppressWarnings("UnusedDeclaration")
 public class VirtualMachineProduct implements Serializable {
-    private static final long serialVersionUID = -6761551014614219494L;
-    
-    private int               cpuCount;
-    private String            description;
-    private Storage<Gigabyte> rootVolumeSize;
-    private String            name;
-    private String            providerProductId;
-    private Storage<Megabyte> ramSize;
-    private float             standardHourlyRate;
-    private VisibleScope      visibleScope;
-    
-    public enum	Status { CURRENT, DEPRECATED; }
-    
-    private Status status = Status.CURRENT;
-    
-    public VirtualMachineProduct() { }
+	private static final long serialVersionUID = -6761551014614219494L;
 
-    public boolean equals(Object ob) {
-        return (ob != null && (ob == this || getClass().getName().equals(ob.getClass().getName()) && getProviderProductId().equals(((VirtualMachineProduct) ob).getProviderProductId())));
-    }
-    
-    public String getName() {
-        return name;
-    }
+	private int               cpuCount;
+	private String            description;
+	private Storage<Gigabyte> rootVolumeSize;
+	private String            name;
+	private String            providerProductId;
+	private Storage<Megabyte> ramSize;
+	private float             standardHourlyRate;
+	private VisibleScope      visibleScope;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public enum	Status { CURRENT, DEPRECATED; }
 
-    public int getCpuCount() {
-        return cpuCount;
-    }
+	private Status status = Status.CURRENT;
 
-    public void setCpuCount(int cpuCount) {
-        this.cpuCount = cpuCount;
-    }
+	public VirtualMachineProduct() { }
 
-    public String getDescription() {
-        return description;
-    }
+	public boolean equals(Object ob) {
+		return (ob != null && (ob == this || getClass().getName().equals(ob.getClass().getName()) && getProviderProductId().equals(((VirtualMachineProduct) ob).getProviderProductId())));
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-    
-    public String getProviderProductId() {
-        return providerProductId;
-    }
-    
-    public void setProviderProductId(@Nonnull String providerProductId) {
-        this.providerProductId = providerProductId;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public Storage<Gigabyte> getRootVolumeSize() {
-        return rootVolumeSize;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setRootVolumeSize(Storage<?> rootVolumeSize) {
-        this.rootVolumeSize = (Storage<Gigabyte>)rootVolumeSize.convertTo(Storage.GIGABYTE);
-    }
+	public int getCpuCount() {
+		return cpuCount;
+	}
 
-    public Storage<Megabyte> getRamSize() {
-        return ramSize;
-    }
+	public void setCpuCount(int cpuCount) {
+		this.cpuCount = cpuCount;
+	}
 
-    public void setRamSize(Storage<?> ramSize) {
-        this.ramSize = (Storage<Megabyte>)ramSize.convertTo(Storage.MEGABYTE);
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public float getStandardHourlyRate() {
-        return standardHourlyRate;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public void setStandardHourlyRate(float standardHourlyRate) {
-        this.standardHourlyRate = standardHourlyRate;
-    }
+	public String getProviderProductId() {
+		return providerProductId;
+	}
 
-    public void setVisibleScope(VisibleScope visibleScope){
-        this.visibleScope = visibleScope;
-    }
+	public void setProviderProductId(@Nonnull String providerProductId) {
+		this.providerProductId = providerProductId;
+	}
 
-    public VisibleScope getVisibleScope(){
-        return this.visibleScope;
-    }
+	public Storage<Gigabyte> getRootVolumeSize() {
+		return rootVolumeSize;
+	}
 
-    public Status getStatus() {
+	public void setRootVolumeSize(Storage<?> rootVolumeSize) {
+		this.rootVolumeSize = (Storage<Gigabyte>)rootVolumeSize.convertTo(Storage.GIGABYTE);
+	}
+
+	public Storage<Megabyte> getRamSize() {
+		return ramSize;
+	}
+
+	public void setRamSize(Storage<?> ramSize) {
+		this.ramSize = (Storage<Megabyte>)ramSize.convertTo(Storage.MEGABYTE);
+	}
+
+	public float getStandardHourlyRate() {
+		return standardHourlyRate;
+	}
+
+	public void setStandardHourlyRate(float standardHourlyRate) {
+		this.standardHourlyRate = standardHourlyRate;
+	}
+
+	public void setVisibleScope(VisibleScope visibleScope){
+		this.visibleScope = visibleScope;
+	}
+
+	public VisibleScope getVisibleScope(){
+		return this.visibleScope;
+	}
+
+	public Status getStatus() {
 		return status;
 	}
 
 	public void setStatusDeprecated() {
-		
-		System.out.println("Status <= DEPRECATED");
 		this.status = Status.DEPRECATED;
 	}
 
 	public String toString() {
-        return (name + " [" + providerProductId + "]");
-    }
+		return (name + " [" + providerProductId + "]");
+	}
 }
