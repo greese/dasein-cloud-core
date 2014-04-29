@@ -12,11 +12,11 @@ public class SetLoadBalancerSSLCertificateOptions {
 
     public static @Nonnull SetLoadBalancerSSLCertificateOptions getInstance(
             @Nonnull String loadBalancerName, @Nonnull int sslCertificateAssignToPort,
-            @Nonnull String providerSslCertificateId ) {
+            @Nonnull String sslCertificateId ) {
         SetLoadBalancerSSLCertificateOptions options = new SetLoadBalancerSSLCertificateOptions();
         options.loadBalancerName = loadBalancerName;
         options.sslCertificateAssignToPort = sslCertificateAssignToPort;
-        options.providerSslCertificateId = providerSslCertificateId ;
+        options.sslCertificateId = sslCertificateId ;
         return options;
     }
 
@@ -24,7 +24,7 @@ public class SetLoadBalancerSSLCertificateOptions {
 
     private String loadBalancerName;
     private int    sslCertificateAssignToPort;
-    private String providerSslCertificateId;
+    private String sslCertificateId;
 
     public @Nonnull String getLoadBalancerName() {
         return loadBalancerName;
@@ -34,7 +34,7 @@ public class SetLoadBalancerSSLCertificateOptions {
         return sslCertificateAssignToPort;
     }
 
-    public @Nonnull String getProviderSslCertificateId() {
-        return providerSslCertificateId;
+    public @Nonnull String getSslCertificateId() {
+        return sslCertificateId;
     }
 }

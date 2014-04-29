@@ -89,7 +89,7 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
     }
 
     @Override
-    public SSLCertificateMetadata createSSLCertificate(@Nonnull SSLCertificateCreateOptions options)
+    public SSLCertificate createSSLCertificate(@Nonnull SSLCertificateCreateOptions options)
             throws CloudException, InternalException {
         throw new OperationNotSupportedException("Creating a server certificate is not implemented in " +
                                                  getContext().getRegionId() + " of " + getProvider().getCloudName());
@@ -269,7 +269,7 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
     }
 
     @Override
-    public @Nonnull Iterable<SSLCertificateMetadata> listSSLCertificates() throws CloudException, InternalException {
+    public @Nonnull Iterable<SSLCertificate> listSSLCertificates() throws CloudException, InternalException {
         throw new OperationNotSupportedException("Listing server certificates is not implemented in " +
                                                  getContext().getRegionId() + " of " + getProvider().getCloudName());
     }
