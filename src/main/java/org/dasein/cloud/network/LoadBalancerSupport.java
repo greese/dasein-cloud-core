@@ -264,7 +264,8 @@ public interface LoadBalancerSupport extends AccessControlledService {
 
     /**
      * Lists all available server certificates associated with the account in the current region.
-     * @return all server certificates associated with the account in the current region.
+     * @return all server certificates associated with the account in the current region. Certificates may not contain
+     * all fields, e.g. a body. To get all information use {@link #getSSLCertificate(String)}.
      * @throws CloudException an error occurred while communicating with the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud implementation
      */

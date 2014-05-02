@@ -14,15 +14,15 @@ public class SSLCertificate implements Networkable {
      * Create new instance of SSL certificate details.
      * @param certificateId SSL certificate ID
      * @param providerCertificateId provider-specific SSL certificate ID
-     * @param uploadDate the timestamp when certificate was uploaded
+     * @param createdTimestamp the timestamp when certificate was uploaded
      * @param certificateBody the certificate body
      * @param certificateChain certificate chain
      * @param path certificate path
      * @return the SSL certificate object
      */
     public static @Nonnull SSLCertificate getInstance(@Nonnull String certificateId,
-                                          @Nonnull String providerCertificateId, @Nullable Long uploadDate,
-                                          @Nonnull String certificateBody, @Nullable String certificateChain,
+                                          @Nonnull String providerCertificateId, @Nullable Long createdTimestamp,
+                                          @Nullable String certificateBody, @Nullable String certificateChain,
                                           @Nonnull String path) {
         SSLCertificate c = new SSLCertificate();
         c.certificateBody = certificateBody;
@@ -30,7 +30,7 @@ public class SSLCertificate implements Networkable {
         c.providerCertificateId = providerCertificateId;
         c.path = path;
         c.certificateId = certificateId;
-        c.uploadDate = uploadDate;
+        c.createdTimestamp = createdTimestamp;
         return c;
     }
 
@@ -38,24 +38,24 @@ public class SSLCertificate implements Networkable {
 
     private String certificateId;
     private String providerCertificateId;
-    private Long   uploadDate;
+    private Long   createdTimestamp;
     private String certificateBody;
     private String certificateChain;
     private String path;
 
-    public String getCertificateId() {
+    public @Nonnull String getCertificateId() {
         return certificateId;
     }
 
-    public String getProviderCertificateId() {
+    public @Nonnull String getProviderCertificateId() {
         return providerCertificateId;
     }
 
-    public Long getUploadDate() {
-        return uploadDate;
+    public @Nullable Long getCreatedTimestamp() {
+        return createdTimestamp;
     }
 
-    public @Nonnull String getCertificateBody() {
+    public @Nullable String getCertificateBody() {
         return certificateBody;
     }
 
@@ -63,13 +63,13 @@ public class SSLCertificate implements Networkable {
         return certificateChain;
     }
 
-    public String getPath() {
+    public @Nullable String getPath() {
         return path;
     }
 
     @Override
     public @Nonnull String toString() {
-        return certificateId + " (" + uploadDate + ") [#" + providerCertificateId + "]";
+        return certificateId + " (" + createdTimestamp + ") [#" + providerCertificateId + "]";
     }
 
 }
