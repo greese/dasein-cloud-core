@@ -81,6 +81,7 @@ public class VirtualMachine implements Networkable, Taggable {
     private boolean               rebootable;
     private String                rootPassword;
     private String                rootUser;
+    private String                stateReasonMessage;
     private long                  terminationTimestamp;
     private Volume[]              volumes;
     private boolean               ioOptimized;
@@ -477,6 +478,14 @@ public class VirtualMachine implements Networkable, Taggable {
 
     public void setRootUser(String rootUser) {
         this.rootUser = rootUser;
+    }
+
+    public String getStateReasonMessage() {
+        return stateReasonMessage;
+    }
+
+    public void setStateReasonMessage(String stateReasonMessage) {
+        this.stateReasonMessage = stateReasonMessage;
     }
 
     public long getTerminationTimestamp() {
