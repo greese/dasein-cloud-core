@@ -694,5 +694,4 @@ public class VirtualMachine implements Networkable, Taggable {
 	public void setUserData(String userData) {
 		this.userData = userData;
 	}
-
 }
