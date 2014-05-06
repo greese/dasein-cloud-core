@@ -49,7 +49,7 @@ public interface LoadBalancerSupport extends AccessControlledService {
     static public final ServiceAction REMOVE_VMS           = new ServiceAction("LB:REMOVE_VM");
     static public final ServiceAction REMOVE_LOAD_BALANCER = new ServiceAction("LB:REMOVE_LOAD_BALANCER");
     static public final ServiceAction CONFIGURE_HEALTH_CHECK = new ServiceAction("LB:CONFIGURE_HEALTH_CHECK");
-    static public final ServiceAction ATTACH_FIREWALLS     = new ServiceAction("LB:ATTACH_FIREWALLS");
+    static public final ServiceAction SET_FIREWALLS        = new ServiceAction("LB:SET_FIREWALLS");
 
     /**
      * Adds one or more data centers to the list of data centers associated with the specified load balancer. This method
@@ -475,5 +475,5 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @throws CloudException
      * @throws InternalException
      */
-    public void attachFirewalls(@Nonnull String providerLoadBalancerId, @Nonnull String... firewallIds) throws CloudException, InternalException;
+    public void setFirewalls(@Nonnull String providerLoadBalancerId, @Nonnull String... firewallIds) throws CloudException, InternalException;
 }
