@@ -59,14 +59,14 @@ public class LbListener {
      * @param protocol the network protocol being load balanced
      * @param publicPort the public port on which the load balancer is listening
      * @param privatePort the private port on which endpoints are listening
-     * @param sslCertificateId SSL certificate ID to use for this listener in case protocol is HTTPS.
+     * @param sslCertificateName SSL certificate name to use for this listener in case protocol is HTTPS.
      *                         See also {@link LoadBalancerSupport#createSSLCertificate(SSLCertificateCreateOptions)}.
      * @return a newly constructed listener
      */
     static public LbListener getInstance(@Nonnull LbProtocol protocol, int publicPort, int privatePort,
-                                         String sslCertificateId) {
+                                         String sslCertificateName) {
         return new LbListener(LbAlgorithm.ROUND_ROBIN, LbPersistence.NONE, protocol, publicPort, privatePort,
-                              sslCertificateId);
+                              sslCertificateName);
     }
 
     /**
@@ -108,7 +108,7 @@ public class LbListener {
     private LbPersistence persistence;
     private int           privatePort;
     private int           publicPort;
-    private String        sslCertificateId;
+    private String        sslCertificateName;
 
     /**
      * Constructs an empty listener object.
@@ -121,13 +121,13 @@ public class LbListener {
     }
 
     public LbListener(@Nonnull LbAlgorithm algorithm, @Nonnull LbPersistence persistence, @Nonnull LbProtocol protocol,
-                      int publicPort, int privatePort, @Nullable String sslCertificateId) {
+                      int publicPort, int privatePort, @Nullable String sslCertificateName) {
         this.algorithm = algorithm;
         this.persistence = persistence;
         this.networkProtocol = protocol;
         this.publicPort = publicPort;
         this.privatePort = privatePort;
-        this.sslCertificateId = sslCertificateId;
+        this.sslCertificateName = sslCertificateName;
     }
 
     /**
@@ -185,8 +185,8 @@ public class LbListener {
      * {@link LoadBalancerSupport#createSSLCertificate(SSLCertificateCreateOptions)}.
      * @return the SSL certificate ID.
      */
-    public String getSslCertificateId() {
-        return sslCertificateId;
+    public String getSslCertificateName() {
+        return sslCertificateName;
     }
 
     @Override

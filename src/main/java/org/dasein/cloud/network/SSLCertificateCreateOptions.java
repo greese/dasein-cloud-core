@@ -15,19 +15,19 @@ public class SSLCertificateCreateOptions {
      * @param certificateBody certificate body as string
      * @param certificateChain certificate chain
      * @param privateKey private key as string
-     * @param certificateId the ID to assign to created certificate
+     * @param certificateName the ID to assign to created certificate
      * @param path certificate path to use
      * @return new instance of {@link SSLCertificateCreateOptions}
      */
     public static @Nonnull SSLCertificateCreateOptions getInstance(
             @Nonnull String certificateBody, @Nullable String certificateChain,
-            @Nonnull String privateKey, @Nonnull String certificateId, @Nullable String path) {
+            @Nonnull String privateKey, @Nonnull String certificateName, @Nullable String path) {
         SSLCertificateCreateOptions options = new SSLCertificateCreateOptions();
         options.certificateBody = certificateBody;
         options.certificateChain = certificateChain;
         options.path = path;
         options.privateKey = privateKey;
-        options.certificateId = certificateId;
+        options.certificateName = certificateName;
         return options;
     }
 
@@ -37,7 +37,7 @@ public class SSLCertificateCreateOptions {
     private String certificateChain;
     private String path;
     private String privateKey;
-    private String certificateId;
+    private String certificateName;
 
     /**
      * @return the body of certificate to be created
@@ -70,7 +70,7 @@ public class SSLCertificateCreateOptions {
     /**
      * @return the ID of certificate to be created
      */
-    public @Nonnull String getCertificateId() {
-        return certificateId;
+    public @Nonnull String getCertificateName() {
+        return certificateName;
     }
 }

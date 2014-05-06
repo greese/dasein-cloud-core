@@ -12,7 +12,7 @@ public class SSLCertificate implements Networkable {
 
     /**
      * Create new instance of SSL certificate details.
-     * @param certificateId SSL certificate ID
+     * @param certificateName SSL certificate ID
      * @param providerCertificateId provider-specific SSL certificate ID
      * @param createdTimestamp the timestamp when certificate was uploaded
      * @param certificateBody the certificate body
@@ -20,7 +20,7 @@ public class SSLCertificate implements Networkable {
      * @param path certificate path
      * @return the SSL certificate object
      */
-    public static @Nonnull SSLCertificate getInstance(@Nonnull String certificateId,
+    public static @Nonnull SSLCertificate getInstance(@Nonnull String certificateName,
                                           @Nonnull String providerCertificateId, @Nullable Long createdTimestamp,
                                           @Nullable String certificateBody, @Nullable String certificateChain,
                                           @Nonnull String path) {
@@ -29,22 +29,22 @@ public class SSLCertificate implements Networkable {
         c.certificateChain = certificateChain;
         c.providerCertificateId = providerCertificateId;
         c.path = path;
-        c.certificateId = certificateId;
+        c.certificateName = certificateName;
         c.createdTimestamp = createdTimestamp;
         return c;
     }
 
     private SSLCertificate() {}
 
-    private String certificateId;
+    private String certificateName;
     private String providerCertificateId;
     private Long   createdTimestamp;
     private String certificateBody;
     private String certificateChain;
     private String path;
 
-    public @Nonnull String getCertificateId() {
-        return certificateId;
+    public @Nonnull String getCertificateName() {
+        return certificateName;
     }
 
     public @Nonnull String getProviderCertificateId() {
@@ -69,7 +69,7 @@ public class SSLCertificate implements Networkable {
 
     @Override
     public @Nonnull String toString() {
-        return certificateId + " (" + createdTimestamp + ") [#" + providerCertificateId + "]";
+        return certificateName + " (" + createdTimestamp + ") [#" + providerCertificateId + "]";
     }
 
 }
