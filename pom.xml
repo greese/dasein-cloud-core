@@ -224,17 +224,18 @@
     </plugins>
   </build>
 
-  <distributionManagement>
+<distributionManagement>
     <repository>
-      <id>sonatype-nexus-staging</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-      <uniqueVersion>false</uniqueVersion>
+        <id>twcgrid</id>
+        <name>twcgrid-releases</name>
+        <url>http://twcgrid.artifactoryonline.com/twcgrid/grid-dasien-snapshots</url>
     </repository>
     <snapshotRepository>
-      <id>sonatype-nexus-snapshots</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        <id>twcgrid</id>
+        <name>twcgrid-snapshots</name>
+        <url>http://twcgrid.artifactoryonline.com/twcgrid/grid-dasien-snapshots</url>
     </snapshotRepository>
-  </distributionManagement>
+</distributionManagement>
 
   <developers>
     <developer>
