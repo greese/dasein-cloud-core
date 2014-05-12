@@ -80,6 +80,11 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
+    public VirtualMachine modifyInstance(@Nonnull String vmId, @Nonnull String[] firewalls) throws InternalException, CloudException {
+        throw new OperationNotSupportedException("Instance firewall modifications are not currently supported for " + getProvider().getCloudName());
+    }
+
+    @Override
     public @Nonnull VirtualMachine clone(@Nonnull String vmId, @Nonnull String intoDcId, @Nonnull String name, @Nonnull String description, boolean powerOn, @Nullable String... firewallIds) throws InternalException, CloudException {
         throw new OperationNotSupportedException("VM cloning is not currently supported for " + getProvider().getCloudName());
     }
