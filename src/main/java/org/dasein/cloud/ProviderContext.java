@@ -170,6 +170,20 @@ public class ProviderContext extends ProviderContextCompat implements Serializab
         return ctx;
     }
 
+    static ProviderContext getContext(@Nonnull Cloud cloud, @Nonnull String accountNumber, @Nullable String regionId, @Nullable String zoneId, @Nonnull Value<?> ... configurationValues) {
+        ProviderContext ctx = new ProviderContext(cloud, accountNumber, regionId, zoneId);
+        Properties p = new Properties();
+        ctx.configurationValues = new HashMap<String,Object>();
+        for( Value<?> v : configurationValues ) {
+            ctx.configurationValues.put(v.name, v.value);
+            if( v.value instanceof String ) {
+                p.setProperty(v.name, (String)v.value);
+            }
+        }
+        //noinspection deprecation
+        ctx.setCustomProperties(p);
+        return ctx;
+    }
     /**
      * @return a pseudo-random number using the context random number generator (not a secure random)
      */
@@ -183,6 +197,7 @@ public class ProviderContext extends ProviderContextCompat implements Serializab
     private Map<String,Object> configurationValues;
     private String             effectiveAccountNumber;
     private String             regionId; 
+    private String             zoneId; 
     /**
      * Constructs a provider context from the provided values
      * @param cloud the cloud configuration object to build against
@@ -193,6 +208,13 @@ public class ProviderContext extends ProviderContextCompat implements Serializab
         this.cloud = cloud;
         this.accountNumber = accountNumber;
         this.regionId = regionId;
+    }
+
+    private ProviderContext(@Nonnull Cloud cloud, @Nonnull String accountNumber, @Nullable String regionId, @Nullable String zoneId) {
+        this.cloud = cloud;
+        this.accountNumber = accountNumber;
+        this.regionId = regionId;
+        this.zoneId = zoneId;
     }
 
     /**
@@ -335,6 +357,12 @@ public class ProviderContext extends ProviderContextCompat implements Serializab
         return regionId;
     }
 
+    /**
+     * @return the cloud's unique identifier for the zone in which this context is operating
+     */
+    public @Nullable String getZoneId() {
+        return zoneId;
+    }
     /******************************** DEPRECATED METHODS ********************************/
 
     /**

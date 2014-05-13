@@ -170,6 +170,10 @@ public class Cloud {
         return ProviderContext.getContext(this, forAccountNumber, inRegionId, values);
     }
 
+    public @Nonnull ProviderContext createContext(@Nonnull String forAccountNumber, @Nonnull String inRegionId, @Nonnull String inZoneId, ProviderContext.Value<?> ... values) {
+        return ProviderContext.getContext(this, forAccountNumber, inRegionId, inZoneId, values);
+    }
+
     @Override
     public boolean equals(Object other) {
         return other != null && (other == this || getClass().getName().equals(other.getClass().getName()) && endpoint.equals(((Cloud) other).endpoint));
