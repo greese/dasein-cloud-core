@@ -231,8 +231,8 @@
       <uniqueVersion>false</uniqueVersion>
     </repository>
     <snapshotRepository>
-       <id>sonatype-nexus-snapshots</id>
-       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <id>sonatype-nexus-snapshots</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </snapshotRepository>
   </distributionManagement>
 
