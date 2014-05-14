@@ -167,7 +167,11 @@ public class Cloud {
      * @return a configured context ready to be connected to the cloud via {@link ProviderContext#connect(CloudProvider)}
      */
     public @Nonnull ProviderContext createContext(@Nonnull String forAccountNumber, @Nonnull String inRegionId, ProviderContext.Value<?> ... values) {
-        return ProviderContext.getContext(this, forAccountNumber, inRegionId, values);
+        return createContext(forAccountNumber, inRegionId, null, values);
+    }
+
+    public @Nonnull ProviderContext createContext(@Nonnull String forAccountNumber, @Nonnull String inRegionId, @Nonnull String inDataCenterId, ProviderContext.Value<?> ... values) {
+        return ProviderContext.getContext(this, forAccountNumber, inRegionId, inDataCenterId, values);
     }
 
     @Override

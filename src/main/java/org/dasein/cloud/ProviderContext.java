@@ -156,6 +156,11 @@ public class ProviderContext extends ProviderContextCompat implements Serializab
      */
     static ProviderContext getContext(@Nonnull Cloud cloud, @Nonnull String accountNumber, @Nullable String regionId, @Nonnull Value<?> ... configurationValues) {
         ProviderContext ctx = new ProviderContext(cloud, accountNumber, regionId);
+        return getContext(cloud, accountNumber, regionId, null, configurationValues);
+    }
+
+    static ProviderContext getContext(@Nonnull Cloud cloud, @Nonnull String accountNumber, @Nullable String regionId, @Nullable String dataCenterId, @Nonnull Value<?> ... configurationValues) {
+        ProviderContext ctx = new ProviderContext(cloud, accountNumber, regionId, dataCenterId);
         Properties p = new Properties();
 
         ctx.configurationValues = new HashMap<String,Object>();
@@ -182,7 +187,8 @@ public class ProviderContext extends ProviderContextCompat implements Serializab
     private Cloud              cloud;
     private Map<String,Object> configurationValues;
     private String             effectiveAccountNumber;
-    private String             regionId; 
+    private String             regionId;
+    private String             dataCenterId = null;
     /**
      * Constructs a provider context from the provided values
      * @param cloud the cloud configuration object to build against
@@ -193,6 +199,13 @@ public class ProviderContext extends ProviderContextCompat implements Serializab
         this.cloud = cloud;
         this.accountNumber = accountNumber;
         this.regionId = regionId;
+    }
+
+    private ProviderContext(@Nonnull Cloud cloud, @Nonnull String accountNumber, @Nullable String regionId, @Nullable String dataCenterId) {
+    	this.cloud = cloud;
+    	this.accountNumber = accountNumber;
+    	this.regionId = regionId;
+    	this.dataCenterId = dataCenterId;
     }
 
     /**
@@ -409,5 +422,9 @@ public class ProviderContext extends ProviderContextCompat implements Serializab
         else {
             throw new RuntimeException("Cannot double-set the region ID. Tried " + regionId + ", was already " + this.regionId);
         }
+    }
+    
+    public String getDataCenterId() {
+    	return dataCenterId;
     }
 }
