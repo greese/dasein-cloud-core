@@ -37,6 +37,7 @@ public class Prepayment implements Serializable {
     private boolean  forVLAN;
     private String   providerPrepaymentId;
     private String   size;
+    private String   utilization;
     private String   software;
     private double   usageFee;
     private double   hourlyFee;
@@ -187,5 +188,13 @@ public class Prepayment implements Serializable {
 
     public void setHourlyFee(double hrFee) {
       this.hourlyFee = hrFee;
+    }
+
+    public String getUtilization() {
+      return utilization;
+    }
+
+    public void setUtilization(String utilization) {
+      this.utilization = utilization;
     }
 }

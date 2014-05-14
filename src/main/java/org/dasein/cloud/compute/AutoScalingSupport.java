@@ -66,8 +66,26 @@ public interface AutoScalingSupport extends AccessControlledService {
     public void updateAutoScalingGroup(String scalingGroupId, @Nullable String launchConfigurationId, @Nullable Integer minServers, @Nullable Integer maxServers, @Nullable Integer cooldown, @Nullable Integer desiredCapacity, @Nullable Integer healthCheckGracePeriod, @Nullable String healthCheckType, @Nullable String vpcZones, @Nullable String ... zoneIds) throws InternalException, CloudException;
         
     public String createLaunchConfiguration(String name, String imageId, VirtualMachineProduct size, String keyPairName, String userData, String providerRoleId, Boolean detailedMonitoring, String ... firewalls) throws InternalException, CloudException;
+
+    /**
+     * Created an Auto Scaling Launch Configuration based on passed options
+     *
+     * @param options the auto scaling launch configuration options
+     * @throws CloudException an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public String createLaunchConfiguration(@Nonnull LaunchConfigurationCreateOptions options) throws InternalException, CloudException;
         
     public void deleteAutoScalingGroup(String providerAutoScalingGroupId) throws CloudException, InternalException;
+
+    /**
+     * Deletes an Auto Scaling group based on passed options
+     *
+     * @param options the auto scaling group delete options
+     * @throws CloudException an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void deleteAutoScalingGroup(@Nonnull AutoScalingGroupDeleteOptions options) throws CloudException, InternalException;
     
     public void deleteLaunchConfiguration(String providerLaunchConfigurationId) throws CloudException, InternalException;
     
@@ -91,7 +109,9 @@ public interface AutoScalingSupport extends AccessControlledService {
 
     public Iterable<ResourceStatus> listScalingGroupStatus() throws CloudException, InternalException;
 
-    public Collection<ScalingGroup> listScalingGroups() throws CloudException, InternalException;
+    public Collection<ScalingGroup> listScalingGroups(AutoScalingGroupFilterOptions options) throws CloudException, InternalException;
+
+	public Collection<ScalingGroup> listScalingGroups() throws CloudException, InternalException;
 
     public Iterable<ResourceStatus> listLaunchConfigurationStatus() throws CloudException, InternalException;
 
