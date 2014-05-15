@@ -266,6 +266,13 @@ public class LoadBalancer implements Networkable, Taggable {
         return (supportedTraffic == null ? new IPVersion[] { IPVersion.IPV4 } : supportedTraffic);
     }
 
+    /**
+     * @return the ID of a Health Check is one is attached. Othwise null.
+     */
+    public @Nullable String getProviderLBHealthCheckId(){
+        return providerLBHealthCheckId;
+    }
+
     @Override
     public int hashCode() {
         return (providerOwnerId + ":" + providerRegionId + ":" + providerLoadBalancerId).hashCode();
