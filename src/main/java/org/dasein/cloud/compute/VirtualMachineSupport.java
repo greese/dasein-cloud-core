@@ -306,6 +306,10 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws CloudException an error occurred within the cloud provider
      */
     public Iterable<VirtualMachineProduct> listProducts(Architecture architecture) throws InternalException, CloudException;
+    /*
+     * @param dataCenterId the desired dataCenterId size offerings
+     */
+    public Iterable<VirtualMachineProduct> listProducts(Architecture architecture, String dataCenterId) throws InternalException, CloudException;
 
     /**
      * Lists the status for all virtual machines in the current region.
