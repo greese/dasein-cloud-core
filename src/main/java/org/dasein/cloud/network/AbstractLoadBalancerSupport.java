@@ -176,23 +176,27 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
     }
 
     @Override
+    @Deprecated
     public @Nonnull Requirement identifyEndpointsOnCreateRequirement() throws CloudException, InternalException {
-        return Requirement.NONE;
+        return getCapabilities().identifyEndpointsOnCreateRequirement();
     }
 
     @Override
+    @Deprecated
     public @Nonnull Requirement identifyListenersOnCreateRequirement() throws CloudException, InternalException {
-        return Requirement.REQUIRED;
+        return getCapabilities().identifyListenersOnCreateRequirement();
     }
 
     @Override
+    @Deprecated
     public boolean isAddressAssignedByProvider() throws CloudException, InternalException {
-        return true;
+        return getCapabilities().isAddressAssignedByProvider();
     }
 
     @Override
+    @Deprecated
     public boolean isDataCenterLimited() throws CloudException, InternalException {
-        return true;
+        return getCapabilities().isDataCenterLimited();
     }
 
     @Override
