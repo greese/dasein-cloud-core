@@ -21,6 +21,11 @@ package org.dasein.cloud.network;
 
 import java.io.Serializable;
 
+/**
+ * @deprecated
+ * @see org.dasein.cloud.network.LoadBalancerEndpoint
+ */
+@Deprecated
 public class LoadBalancerServer implements Serializable {
     private static final long serialVersionUID = -2396639777723684882L;
 

@@ -277,6 +277,7 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud implementation
      * @deprecated use {@link LoadBalancerCapabilities#listSupportedEndpointTypes()}
      */
+    @Deprecated
     public @Nonnull Iterable<LbEndpointType> listSupportedEndpointTypes() throws CloudException, InternalException;
 
     /**

@@ -129,7 +129,6 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
                 server.setCurrentState(LoadBalancerServerState.valueOf(endpoint.getCurrentState().name()));
                 server.setCurrentStateDescription(endpoint.getStateDescription());
                 server.setCurrentStateReason(endpoint.getStateReason());
-                // TODO: the rest
                 servers.add(server);
             }
         }
@@ -157,8 +156,6 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
                     server.setCurrentState(LoadBalancerServerState.valueOf(endpoint.getCurrentState().name()));
                     server.setCurrentStateDescription(endpoint.getStateDescription());
                     server.setCurrentStateReason(endpoint.getStateReason());
-                    // TODO: the rest
-
                     servers.add(server);
                 }
             }
@@ -256,28 +253,33 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
 
 
     @Override
+    @Deprecated
     public @Nonnull Iterable<LbAlgorithm> listSupportedAlgorithms() throws CloudException, InternalException {
-        return Collections.singletonList(LbAlgorithm.ROUND_ROBIN);
+        return getCapabilities().listSupportedAlgorithms();
     }
 
     @Override
+    @Deprecated
     public @Nonnull Iterable<LbEndpointType> listSupportedEndpointTypes() throws CloudException, InternalException {
-        return Collections.singletonList(LbEndpointType.VM);
+        return getCapabilities().listSupportedEndpointTypes();
     }
 
     @Override
+    @Deprecated
     public @Nonnull Iterable<LbPersistence> listSupportedPersistenceOptions() throws CloudException, InternalException {
-        return Collections.singletonList(LbPersistence.NONE);
+        return getCapabilities().listSupportedPersistenceOptions();
     }
 
     @Override
+    @Deprecated
     public @Nonnull Iterable<LbProtocol> listSupportedProtocols() throws CloudException, InternalException {
-        return Collections.singletonList(LbProtocol.RAW_TCP);
+        return getCapabilities().listSupportedProtocols();
     }
 
     @Override
+    @Deprecated
     public @Nonnull Iterable<IPVersion> listSupportedIPVersions() throws CloudException, InternalException {
-        return Collections.singletonList(IPVersion.IPV4);
+        return getCapabilities().listSupportedIPVersions();
     }
 
     @Override
@@ -326,22 +328,24 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
     @Override
     @Deprecated
     public final boolean requiresServerOnCreate() throws CloudException, InternalException {
-        return identifyEndpointsOnCreateRequirement().equals(Requirement.REQUIRED);
+        return getCapabilities().identifyEndpointsOnCreateRequirement().equals(Requirement.REQUIRED);
     }
 
     @Override
     public boolean supportsAddingEndpoints() throws CloudException, InternalException {
-        return true;
+        return getCapabilities().supportsAddingEndpoints();
     }
 
     @Override
+    @Deprecated
     public boolean supportsMonitoring() throws CloudException, InternalException {
-        return false;
+        return getCapabilities().supportsMonitoring();
     }
 
     @Override
+    @Deprecated
     public boolean supportsMultipleTrafficTypes() throws CloudException, InternalException {
-        return false;
+        return getCapabilities().supportsMultipleTrafficTypes();
     }
 
     @Override
