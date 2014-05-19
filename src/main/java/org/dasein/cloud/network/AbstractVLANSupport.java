@@ -81,7 +81,7 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     @Override
     @Deprecated
     public boolean allowsNewNetworkInterfaceCreation() throws CloudException, InternalException {
-        getCapabilities().allowsNewNetworkInterfaceCreation();
+        return getCapabilities().allowsNewNetworkInterfaceCreation();
     }
 
     @Override
@@ -256,7 +256,12 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     @Override
     @Deprecated
     public @Nonnull Requirement identifySubnetDCRequirement() {
-        return getCapabilities().identifySubnetDCRequirement();
+        try {
+            return getCapabilities().identifySubnetDCRequirement();
+        } catch( CloudException e ) {
+        } catch( InternalException e ) {
+        }
+        throw new RuntimeException("Unable to identify subnet DC requirement.");
     }
 
     @Override
