@@ -51,7 +51,7 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
 
     @Override
     public void addDataCenters(@Nonnull String toLoadBalancerId, @Nonnull String ... dataCenterIdsToAdd) throws CloudException, InternalException {
-        if( isDataCenterLimited() ) {
+        if( getCapabilities().isDataCenterLimited() ) {
             throw new OperationNotSupportedException("Adding data centers has not been implemented for " + getContext().getRegionId() + " of " + getProvider().getCloudName());
         }
         else {
@@ -299,7 +299,7 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
 
     @Override
     public void removeDataCenters(@Nonnull String fromLoadBalancerId, @Nonnull String... dataCenterIdsToRemove) throws CloudException, InternalException {
-        if( isDataCenterLimited() ) {
+        if( getCapabilities().isDataCenterLimited() ) {
             throw new OperationNotSupportedException("Removing data centers has not been implemented for " + getContext().getRegionId() + " of " + getProvider().getCloudName());
         }
         else {
@@ -326,7 +326,7 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
     @Override
     @Deprecated
     public final boolean requiresListenerOnCreate() throws CloudException, InternalException {
-        return identifyListenersOnCreateRequirement().equals(Requirement.REQUIRED);
+        return getCapabilities().identifyListenersOnCreateRequirement().equals(Requirement.REQUIRED);
     }
 
     @Override
