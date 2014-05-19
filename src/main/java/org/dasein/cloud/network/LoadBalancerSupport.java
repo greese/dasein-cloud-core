@@ -436,14 +436,6 @@ public interface LoadBalancerSupport extends AccessControlledService {
     public void attachHealthCheckToLoadBalancer(@Nonnull String providerLoadBalancerId, @Nonnull String providerLBHealthCheckId)throws CloudException, InternalException;
 
     /**
-     * Lists the LB Health Checks in the current region
-     * @return a list of LoadBalancerHealthChecks in the current region
-     * @throws CloudException
-     * @throws InternalException
-     */
-    public Iterable<LoadBalancerHealthCheck> listLBHealthChecks(@Nullable HealthCheckFilterOptions opts) throws CloudException, InternalException;
-
-    /**
      * Gets the health state of the virtual machine(s) being monitored by the health check
      * @param providerLoadBalancerId the ID of the specific loadbalancer under which the instance(s) belong(s)
      * @param providerVirtualMachineId the ID of a specific virtual machine if required
