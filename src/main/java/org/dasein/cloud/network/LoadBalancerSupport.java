@@ -98,6 +98,17 @@ public interface LoadBalancerSupport extends AccessControlledService {
     public @Nonnull String createLoadBalancer(@Nonnull LoadBalancerCreateOptions options) throws CloudException, InternalException;
 
     /**
+     * Provisions a new cloud load balancer along with a configured, attached, health check in the target region based on the specified creation options.
+     * If any part of the operation fails the underlying implementation should rollback everything created up to that point.
+     * @param lbOptions the options for creating the new load balancer
+     * @param lbhcOptions the options for creating/configuring the new Health Check
+     * @return the unique ID of the new load balancer
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public @Nonnull String createLBWithHealthCheck(@Nonnull LoadBalancerCreateOptions lbOptions, @Nonnull LBHealthCheckCreateOptions lbhcOptions) throws CloudException, InternalException;
+
+    /**
      * Indicates the type of load balancer supported by this cloud.
      * @return the load balancer type
      * @throws CloudException an error occurred with the cloud provider while performing this action
@@ -266,6 +277,7 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud implementation
      * @deprecated use {@link LoadBalancerCapabilities#listSupportedEndpointTypes()}
      */
+    @Deprecated
     public @Nonnull Iterable<LbEndpointType> listSupportedEndpointTypes() throws CloudException, InternalException;
 
     /**
@@ -395,6 +407,26 @@ public interface LoadBalancerSupport extends AccessControlledService {
     public LoadBalancerHealthCheck createLoadBalancerHealthCheck(@Nonnull LBHealthCheckCreateOptions options) throws CloudException, InternalException;
 
     /**
+     * Gets the specified Health Check from the cloud
+     * @param providerLBHealthCheckId the unique ID of the LB Health Check
+     * @param providerLoadBalancerId optionally can provide the ID of a load balancer to with the Health Check is attached
+     * @return the specified LoadBalancerHealthCheck
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public LoadBalancerHealthCheck getLoadBalancerHealthCheck(@Nonnull String providerLBHealthCheckId, @Nullable String providerLoadBalancerId) throws CloudException, InternalException;
+
+    /**
+     * Lists all health checks matching the given HealthCheckFilterOptions belonging to the account owner currently in
+     * the cloud. The filtering functionality is delegated to the cloud provider.
+     * @param options the filter options
+     * @return all health checks belonging to the account owner
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public Iterable<LoadBalancerHealthCheck> listLBHealthChecks(@Nullable HealthCheckFilterOptions options) throws CloudException, InternalException;
+
+    /**
      * Attaches an existing Health Check to an existing Load Balancer
      * @param providerLoadBalancerId the load balancer ID
      * @param providerLBHealthCheckId the health check ID
@@ -408,8 +440,21 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @param providerLoadBalancerId the ID of the specific loadbalancer under which the instance(s) belong(s)
      * @param providerVirtualMachineId the ID of a specific virtual machine if required
      * @return Hashmap containing the virtual machine ID and it's corresponding health state
+     * @deprecated
      */
+    @Deprecated
     public HashMap<String, String> getInstanceHealth(@Nonnull String providerLoadBalancerId, @Nullable String providerVirtualMachineId) throws CloudException, InternalException;
+
+    /**
+     * Allows an existing LB Health Check to be modified
+     * @param providerLBHealthCheckId the ID of the Health Check being adjusted
+     * @param providerLoadBalancerId optionally the ID of the Load Balancer to which the Health Check is attached
+     * @param options the new options to which the Health Check will be modified to meet
+     * @return the modified LoadBalancerHealthCheck object
+     * @throws InternalException
+     * @throws CloudException
+     */
+    public LoadBalancerHealthCheck modifyHealthCheck(@Nonnull String providerLBHealthCheckId, @Nullable String providerLoadBalancerId, @Nonnull LBHealthCheckCreateOptions options) throws InternalException, CloudException;
 
     /**
      * Removes a health check associated with a particular Load Balancer. Only certain clouds allow this operation
