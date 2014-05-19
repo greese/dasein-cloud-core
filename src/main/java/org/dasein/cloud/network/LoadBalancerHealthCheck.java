@@ -33,32 +33,34 @@ import java.util.ArrayList;
  */
 public class LoadBalancerHealthCheck implements Networkable{
 
-    private String     name;
-    private String     description;
+    private String            providerLBHealthCheckId;
+    private String            name;
+    private String            description;
     private ArrayList<String> providerLoadBalancerIds;
-    private String     host;
-    private HCProtocol protocol;
-    private int        port;
-    private String     path;
-    private Double     interval;
-    private Double     timeout;
+    private String            host;
+    private HCProtocol        protocol;
+    private int               port;
+    private String            path;
+    private Double            interval;
+    private Double            timeout;
     //If left as 0 assume to use the default values for the underlying cloud
-    private int        unhealthyCount = 0;
-    private int        healthyCount = 0;
+    private int               unhealthyCount = 0;
+    private int               healthyCount = 0;
 
     public enum HCProtocol{
         HTTP, HTTPS, SSL, TCP
     }
 
-    public static LoadBalancerHealthCheck getInstance(@Nonnull HCProtocol protocol, int port, @Nullable String path, @Nullable Double interval, @Nullable Double timeout, int healthyCount, int unhealthyCount){
-        return new LoadBalancerHealthCheck(null, null, null, protocol, port, path, interval, timeout, unhealthyCount, healthyCount);
+    public static LoadBalancerHealthCheck getInstance(@Nonnull String providerLBHealthCheckId, @Nonnull HCProtocol protocol, int port, @Nullable String path, @Nullable Double interval, @Nullable Double timeout, int healthyCount, int unhealthyCount){
+        return new LoadBalancerHealthCheck(providerLBHealthCheckId, null, null, null, protocol, port, path, interval, timeout, unhealthyCount, healthyCount);
     }
 
-    public static LoadBalancerHealthCheck getInstance(@Nonnull String name, @Nullable String description, @Nullable String host, @Nullable HCProtocol protocol, int port, @Nullable String path, @Nullable Double interval, @Nullable Double timeout, int healthyCount, int unhealthyCount){
-        return new LoadBalancerHealthCheck(name, description, host, null, port, path, interval, timeout, unhealthyCount, healthyCount);
+    public static LoadBalancerHealthCheck getInstance(@Nonnull String providerLBHealthCheckId, @Nonnull String name, @Nullable String description, @Nullable String host, @Nullable HCProtocol protocol, int port, @Nullable String path, @Nullable Double interval, @Nullable Double timeout, int healthyCount, int unhealthyCount){
+        return new LoadBalancerHealthCheck(providerLBHealthCheckId, name, description, host, null, port, path, interval, timeout, unhealthyCount, healthyCount);
     }
 
-    private LoadBalancerHealthCheck(@Nullable String name, @Nullable String description, @Nullable String host, @Nullable HCProtocol protocol, int port, @Nullable String path, @Nullable Double interval, @Nullable Double timeout, int healthyCount, int unhealthyCount){
+    private LoadBalancerHealthCheck(@Nonnull String providerLBHealthCheckId, @Nullable String name, @Nullable String description, @Nullable String host, @Nullable HCProtocol protocol, int port, @Nullable String path, @Nullable Double interval, @Nullable Double timeout, int healthyCount, int unhealthyCount){
+        this.providerLBHealthCheckId = providerLBHealthCheckId;
         this.name = name;
         this.description = description;
         this.host = host;
@@ -69,6 +71,10 @@ public class LoadBalancerHealthCheck implements Networkable{
         this.unhealthyCount = unhealthyCount;
         this.healthyCount = healthyCount;
         this.providerLoadBalancerIds = new ArrayList<String>();
+    }
+
+    public String getProviderLBHealthCheckId() {
+        return providerLBHealthCheckId;
     }
 
     public String getName() {
@@ -87,7 +93,7 @@ public class LoadBalancerHealthCheck implements Networkable{
         this.description = description;
     }
 
-    public ArrayList<String> getProviderLoadBalancerId(){
+    public ArrayList<String> getProviderLoadBalancerIds(){
         return providerLoadBalancerIds;
     }
 
