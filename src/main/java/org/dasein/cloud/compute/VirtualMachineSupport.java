@@ -71,14 +71,29 @@ public interface VirtualMachineSupport extends AccessControlledService {
     public VirtualMachine alterVirtualMachine(@Nonnull String vmId, @Nonnull VMScalingOptions options) throws InternalException, CloudException;
 
     /**
-     * Allows modification of assigned firewalls of a virtual machine to be changed.
-     * @param vmId the virtual machine to modify
-     * @param firewalls the list of firewalls to be assigned to the virtual machine
-     * @return a virtual machine with the updated firewall assignments
+     * Allows certain properties of a virtual machine  to be changed in accordance with the specified  options.
+     * @param vmId the virtual machine to scale
+     * @param firewalls the options governing how the virtual machine is scaled
+     * @return a virtual machine representing the scaled virtual machine
      * @throws InternalException an internal error occurred processing the request
      * @throws CloudException an error occurred in the cloud processing the request
      */
-    public VirtualMachine modifyInstance(@Nonnull String vmId, @Nonnull String[] firewalls) throws InternalException, CloudException;
+    public abstract VirtualMachine modifyInstance(@Nonnull String vmId, @Nonnull String[] firewalls) throws InternalException, CloudException;
+
+    /**
+     * Cancels the data feed for Spot Instances
+     * @throws CloudException an error occurred in the cloud processing the request
+     * @throws InternalException an internal error occurred processing the request
+     */
+    public void cancelSpotDataFeedSubscription() throws CloudException, InternalException;
+
+    /**
+     * Cancels and removes a request for Spot Instances
+     * @param providerSpotInstanceRequestID the ID of the SpotInstanceRequest to be cancelled
+     * @throws CloudException an error occurred in the cloud processing the request
+     * @throws InternalException an internal error occurred processing the request
+     */
+    public void cancelSpotInstanceRequest(String providerSpotInstanceRequestID) throws CloudException, InternalException;
 
     /**
      * Clones an existing virtual machine into a new copy.
@@ -93,6 +108,15 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws CloudException an error occurred in the cloud processing the request
      */
     public @Nonnull VirtualMachine clone(@Nonnull String vmId, @Nonnull String intoDcId, @Nonnull String name, @Nonnull String description, boolean powerOn, @Nullable String ... firewallIds) throws InternalException, CloudException;
+
+    /**
+     * Creates a SpotInstanceRequset fitting the options specified in the SIRequestCreateOptions
+     * @param options the configuration options for the spot instance request
+     * @return a newly created SpotInstanceRequest
+     * @throws CloudException an error occurred in the cloud processing the request
+     * @throws InternalException an internal error occurred processing the request
+     */
+    public @Nonnull SpotInstanceRequest createSpotInstanceRequest(SIRequestCreateOptions options) throws CloudException, InternalException;
 
     /**
      * Turns extended analytics off for the target server. If the underlying cloud does not support
@@ -111,6 +135,14 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws CloudException an error occurred within the cloud provider
      */
     public void enableAnalytics(@Nonnull String vmId) throws InternalException, CloudException;
+
+    /**
+     * Creates the datafeed for Spot Instances, enabling you to view Spot Instance usage logs.
+     * @param s3BucketName the S3 bucket to which the logs will be written
+     * @throws CloudException an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void enableSpotDataFeedSubscription(String s3BucketName) throws CloudException, InternalException;
 
     /**
      * Provides access to meta-data about virtual machine capabilities in the current region of this cloud.
@@ -310,6 +342,15 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @param dataCenterId the desired dataCenterId size offerings
      */
     public Iterable<VirtualMachineProduct> listProducts(Architecture architecture, String dataCenterId) throws InternalException, CloudException;
+
+    /**
+     * Provides a list of price history records for Spot Instances
+     * @param options filter options
+     * @return all price history entries that match the specified filter
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public Iterable<SpotPriceHistory> listSpotPriceHistories(SPHistoryFilterOptions options) throws CloudException, InternalException;
 
     /**
      * Lists the status for all virtual machines in the current region.

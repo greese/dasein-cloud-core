@@ -400,6 +400,9 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
     public @Nonnull Iterable<MachineImage> searchImages(@Nullable String accountNumber, @Nullable String keyword, @Nullable Platform platform, @Nullable Architecture architecture, @Nullable ImageClass ... imageClasses) throws CloudException, InternalException {
         ImageFilterOptions options = ImageFilterOptions.getInstance();
 
+        if (accountNumber != null) {
+            options.withAccountNumber(accountNumber);
+        }
         if( keyword != null ) {
             options.matchingRegex(keyword);
         }
