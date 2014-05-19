@@ -147,7 +147,7 @@ public abstract class AbstractFirewallSupport implements FirewallSupport {
     @Override
     public @Nullable Map<FirewallConstraints.Constraint, Object> getActiveConstraintsForFirewall(@Nonnull String firewallId) throws CloudException, InternalException {
         HashMap<FirewallConstraints.Constraint, Object> active = new HashMap<FirewallConstraints.Constraint, Object>();
-        FirewallConstraints fields = getFirewallConstraintsForCloud();
+        FirewallConstraints fields = getCapabilities().getFirewallConstraintsForCloud();
 
         if( fields.isOpen() ) {
             return active;
