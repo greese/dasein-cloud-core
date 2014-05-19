@@ -341,6 +341,7 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
     }
 
     @Override
+    @Deprecated
     public boolean supportsAddingEndpoints() throws CloudException, InternalException {
         return getCapabilities().supportsAddingEndpoints();
     }
@@ -399,8 +400,9 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
     }
 
     @Override
+    @Deprecated
     public boolean healthCheckRequiresLoadBalancer() throws CloudException, InternalException{
-        return true;
+        return getCapabilities().healthCheckRequiresLoadBalancer();
     }
 
     @Override
