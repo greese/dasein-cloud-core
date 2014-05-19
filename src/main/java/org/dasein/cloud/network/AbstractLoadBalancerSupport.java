@@ -89,6 +89,10 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
         return create(options.getName(), options.getDescription(), options.getProviderIpAddressId(), options.getProviderDataCenterIds(), options.getListeners(), serverIds.toArray(new String[serverIds.size()]), options.getProviderSubnetIds(), options.getType());
     }
 
+    @Override
+    public @Nonnull String createLBWithHealthCheck(@Nonnull LoadBalancerCreateOptions lbOptions, @Nonnull LBHealthCheckCreateOptions lbchOptions) throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Health Checks have not been implemented in " + getProvider().getCloudName());
+    }
 
     @Override
     public @Nonnull LoadBalancerAddressType getAddressType() throws CloudException, InternalException {
