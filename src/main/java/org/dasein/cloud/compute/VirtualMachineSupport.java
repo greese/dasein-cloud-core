@@ -71,16 +71,6 @@ public interface VirtualMachineSupport extends AccessControlledService {
     public VirtualMachine alterVirtualMachine(@Nonnull String vmId, @Nonnull VMScalingOptions options) throws InternalException, CloudException;
 
     /**
-     * Allows certain properties of a virtual machine  to be changed in accordance with the specified  options.
-     * @param vmId the virtual machine to scale
-     * @param firewalls the options governing how the virtual machine is scaled
-     * @return a virtual machine representing the scaled virtual machine
-     * @throws InternalException an internal error occurred processing the request
-     * @throws CloudException an error occurred in the cloud processing the request
-     */
-    public abstract VirtualMachine modifyInstance(@Nonnull String vmId, @Nonnull String[] firewalls) throws InternalException, CloudException;
-
-    /**
      * Cancels the data feed for Spot Instances
      * @throws CloudException an error occurred in the cloud processing the request
      * @throws InternalException an internal error occurred processing the request

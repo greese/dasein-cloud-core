@@ -80,11 +80,6 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
-    public VirtualMachine modifyInstance(@Nonnull String vmId, @Nonnull String[] firewalls) throws InternalException, CloudException {
-        throw new OperationNotSupportedException("Instance firewall modifications are not currently supported for " + getProvider().getCloudName());
-    }
-
-    @Override
     public void cancelSpotDataFeedSubscription() throws CloudException, InternalException{
         throw new OperationNotSupportedException("Spot Instances are not supported for " + getProvider().getCloudName());
     }
@@ -120,6 +115,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
         // NO-OP
     }
 
+    @Override
     public void enableSpotDataFeedSubscription(String s3BucketName) throws CloudException, InternalException{
         throw new OperationNotSupportedException("Spot Instances are not supported for " + getProvider().getCloudName());
     }
