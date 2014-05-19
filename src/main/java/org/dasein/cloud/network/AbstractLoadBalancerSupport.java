@@ -34,6 +34,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Locale;
 
 /**
  * Provides a basic implementation of load balancer support that you can extend and customize to support your cloud.
@@ -412,5 +413,16 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
     @Override
     public boolean healthCheckRequiresLoadBalancer() throws CloudException, InternalException{
         return true;
+    }
+
+    @Override
+    @Deprecated
+    public @Nonnull String getProviderTermForLoadBalancer( @Nonnull Locale locale ) {
+        try {
+            return getCapabilities().getProviderTermForLoadBalancer(locale);
+        } catch( CloudException e ) {
+        } catch( InternalException e ) {
+        }
+        throw new RuntimeException("Unable to get a provider term for load balancer.");
     }
 }
