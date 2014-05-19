@@ -142,15 +142,10 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
 
     @Override
     public @Nullable String getPassword(@Nonnull String vmId) throws InternalException, CloudException {
-      return null;
+        return null;
     }
 
-	@Override
-	public @Nullable String getUserData(@Nonnull String vmId) throws InternalException, CloudException {
-		return null;
-	}
-
-	@Override
+    @Override
     public @Nonnull String getConsoleOutput(@Nonnull String vmId) throws InternalException, CloudException {
         return "";
     }
@@ -651,6 +646,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
         throw new OperationNotSupportedException("Spot Instances are not supported for " + getProvider().getCloudName());
     }
 
+
     @Override
     @Deprecated
     public Iterable<Architecture> listSupportedArchitectures() throws InternalException, CloudException {
@@ -916,16 +912,6 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
             throw new InternalException(e);
         }
         return prd;
-    }
-
-    @Override
-    public @Nullable Iterable<VirtualMachineStatus> getVMStatus( @Nullable String... vmIds ) throws InternalException, CloudException {
-        throw new OperationNotSupportedException("Virtual Machine Status is not currently implemented for " + getProvider().getCloudName());
-    }
-
-    @Override
-    public @Nullable Iterable<VirtualMachineStatus> getVMStatus(@Nullable VmStatusFilterOptions filterOptions) throws InternalException, CloudException {
-        throw new OperationNotSupportedException("Virtual Machine Status is not currently implemented for " + getProvider().getCloudName());
     }
 
 }

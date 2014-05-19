@@ -80,8 +80,8 @@ public interface VirtualMachineSupport extends AccessControlledService {
     /**
      * Cancels and removes a request for Spot Instances
      * @param providerSpotInstanceRequestID the ID of the SpotInstanceRequest to be cancelled
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException an error occurred in the cloud processing the request
+     * @throws InternalException an internal error occurred processing the request
      */
     public void cancelSpotInstanceRequest(String providerSpotInstanceRequestID) throws CloudException, InternalException;
 
@@ -116,7 +116,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws CloudException an error occurred within the cloud provider
      */
     public void disableAnalytics(@Nonnull String vmId) throws InternalException, CloudException;
-    
+
     /**
      * Turns extended hypervisor analytics for the target server. If the underlying cloud does not support
      * extended analytics, this method will be a NO-OP.
@@ -150,15 +150,6 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws CloudException an error occurred within the cloud provider
      */
     public @Nullable String getPassword(@Nonnull String vmId) throws InternalException, CloudException;
-
-	/**
-	 * Provides the userData as stored by the cloud provider (encrypted)
-	 * @param vmId the unique ID of the target server
-	 * @return the current userData of the virtual machine as stored by the provider
-	 * @throws InternalException an error occurred within the Dasein Cloud API implementation
-	 * @throws CloudException an error occurred within the cloud provider
-	 */
-	public @Nullable String getUserData(@Nonnull String vmId) throws InternalException, CloudException;
 
     /**
      * Provides all output from the console of the target server since the specified Unix time.
@@ -199,7 +190,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws CloudException an error occurred within the cloud provider
      */
     public @Nonnull VmStatistics getVMStatistics(@Nonnull String vmId, @Nonnegative long from, @Nonnegative long to) throws InternalException, CloudException;
-    
+
     /**
      * Provides hypervisor statistics for the specified server that fit within the defined time range.
      * For clouds that do not provide hypervisor statistics, this method should return an empty
@@ -212,25 +203,6 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws CloudException an error occurred within the cloud provider
      */
     public @Nonnull Iterable<VmStatistics> getVMStatisticsForPeriod(@Nonnull String vmId, @Nonnegative long from, @Nonnegative long to) throws InternalException, CloudException;
-
-    /**
-     * Provides the status as determined by the cloud provider
-     * @param vmIds the unique ID(s) of the target server(s)
-     * @return the status(es) of the virtual machines
-     * @throws InternalException an error occurred within the Dasein Cloud API implementation
-     * @throws CloudException an error occurred within the cloud provider
-     */
-    public abstract @Nullable Iterable<VirtualMachineStatus> getVMStatus(@Nullable String ... vmIds) throws InternalException, CloudException;
-
-    /**
-     * Lists all virtual machines status(es) matching the given {@link VmStatusFilterOptions) belonging to the account owner
-     * currently in the cloud. The filtering functionality is delegated to the cloud provider.
-     * @param filterOptions filter options
-     * @return the status(es) of the virtual machines
-     * @throws InternalException an error occurred within the Dasein Cloud API implementation
-     * @throws CloudException an error occurred within the cloud provider
-     */
-    public abstract @Nullable Iterable<VirtualMachineStatus> getVMStatus(@Nullable VmStatusFilterOptions filterOptions) throws InternalException, CloudException;
 
     /**
      * Indicates whether this account is subscribed to using virtual machines.
@@ -252,7 +224,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
     public @Nonnull VirtualMachine launch(@Nonnull VMLaunchOptions withLaunchOptions) throws CloudException, InternalException;
-    
+
     /**
      * Launches a virtual machine in the cloud. If the cloud supports persistent servers, this method will
      * first define a server and then boot it. The end result of this operation should be a server
@@ -318,7 +290,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws CloudException an error occurred within the cloud provider
      */
     public @Nonnull Iterable<String> listFirewalls(@Nonnull String vmId) throws InternalException, CloudException;
-    
+
     /**
      * Provides a list of instance types, service offerings, or server sizes (however the underlying cloud
      * might describe it) for a particular architecture
@@ -375,7 +347,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @see #unpause(String)
      */
     public void pause(@Nonnull String vmId) throws InternalException, CloudException;
-    
+
     /**
      * Executes a virtual machine reboot for the target virtual machine.
      * @param vmId the provider ID for the server to reboot
