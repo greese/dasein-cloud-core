@@ -51,15 +51,19 @@ public class LoadBalancerHealthCheck implements Networkable{
         HTTP, HTTPS, SSL, TCP
     }
 
-    public static LoadBalancerHealthCheck getInstance(@Nonnull String providerLBHealthCheckId, @Nonnull HCProtocol protocol, int port, @Nullable String path, @Nullable Double interval, @Nullable Double timeout, int healthyCount, int unhealthyCount){
+    public static LoadBalancerHealthCheck getInstance(@Nonnull HCProtocol protocol, int port, @Nullable String path, @Nullable Double interval, @Nullable Double timeout, int healthyCount, int unhealthyCount){
+        return new LoadBalancerHealthCheck(null, null, null, null, protocol, port, path, interval, timeout, unhealthyCount, healthyCount);
+    }
+
+    public static LoadBalancerHealthCheck getInstance(@Nullable String providerLBHealthCheckId, @Nonnull HCProtocol protocol, int port, @Nullable String path, @Nullable Double interval, @Nullable Double timeout, int healthyCount, int unhealthyCount){
         return new LoadBalancerHealthCheck(providerLBHealthCheckId, null, null, null, protocol, port, path, interval, timeout, unhealthyCount, healthyCount);
     }
 
-    public static LoadBalancerHealthCheck getInstance(@Nonnull String providerLBHealthCheckId, @Nonnull String name, @Nullable String description, @Nullable String host, @Nullable HCProtocol protocol, int port, @Nullable String path, @Nullable Double interval, @Nullable Double timeout, int healthyCount, int unhealthyCount){
+    public static LoadBalancerHealthCheck getInstance(@Nullable String providerLBHealthCheckId, @Nonnull String name, @Nullable String description, @Nullable String host, @Nullable HCProtocol protocol, int port, @Nullable String path, @Nullable Double interval, @Nullable Double timeout, int healthyCount, int unhealthyCount){
         return new LoadBalancerHealthCheck(providerLBHealthCheckId, name, description, host, null, port, path, interval, timeout, unhealthyCount, healthyCount);
     }
 
-    private LoadBalancerHealthCheck(@Nonnull String providerLBHealthCheckId, @Nullable String name, @Nullable String description, @Nullable String host, @Nullable HCProtocol protocol, int port, @Nullable String path, @Nullable Double interval, @Nullable Double timeout, int healthyCount, int unhealthyCount){
+    private LoadBalancerHealthCheck(@Nullable String providerLBHealthCheckId, @Nullable String name, @Nullable String description, @Nullable String host, @Nullable HCProtocol protocol, int port, @Nullable String path, @Nullable Double interval, @Nullable Double timeout, int healthyCount, int unhealthyCount){
         this.providerLBHealthCheckId = providerLBHealthCheckId;
         this.name = name;
         this.description = description;
