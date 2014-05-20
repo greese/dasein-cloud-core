@@ -33,18 +33,18 @@ import javax.annotation.Nullable;
  * created at the same time and dependant on the life cycle of the LB they're attached to
  */
 public class HealthCheckOptions{
-    private String     name;
-    private String     description;
-    private String providerLoadBalancerId;
-    private String     host;
+    private String                             name;
+    private String                             description;
+    private String                             providerLoadBalancerId;
+    private String                             host;
     private LoadBalancerHealthCheck.HCProtocol protocol;
-    private int        port;
-    private String     path;
-    private Double     interval;
-    private Double     timeout;
+    private int                                port;
+    private String                             path;
+    private Double                             interval;
+    private Double                             timeout;
     //If left as 0 assume to use the default values for the underlying cloud
-    private int        unhealthyCount = 0;
-    private int        healthyCount = 0;
+    private int                                unhealthyCount = 0;
+    private int                                healthyCount = 0;
 
     public static HealthCheckOptions getInstance(@Nullable String name, @Nullable String description, @Nullable String providerLoadBalancerId, @Nullable String host, @Nullable LoadBalancerHealthCheck.HCProtocol protocol, int port, @Nullable String path, @Nullable Double interval, @Nullable Double timeout, int healthyCount, int unhealthyCount){
         HealthCheckOptions options = new HealthCheckOptions();
@@ -164,5 +164,16 @@ public class HealthCheckOptions{
 
     public void setHealthyCount(int healthyCount) {
         this.healthyCount = healthyCount;
+    }
+
+    /**
+     * The providerLoadBalancerId might not be known at the original creation point of the options
+     * so this method allows it to be added after creation
+     * @param providerLoadBalancerId the ID of the Load Balancer to which the Health Check is attached
+     * @return this
+     */
+    public @Nonnull HealthCheckOptions withProviderLoadBalancerId(@Nonnull String providerLoadBalancerId){
+        this.providerLoadBalancerId = providerLoadBalancerId;
+        return this;
     }
 }
