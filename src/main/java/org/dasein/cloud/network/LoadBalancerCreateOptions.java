@@ -86,6 +86,7 @@ public class LoadBalancerCreateOptions {
     private Map<String,Object>              metaData;
     private String                          name;
     private LbType                          type;
+    private HealthCheckOptions              healthCheckOptions;
 
     private LoadBalancerCreateOptions() { }
 
@@ -140,7 +141,11 @@ public class LoadBalancerCreateOptions {
                 }
             }
         }
-        return support.createLoadBalancer(this);
+        String providerLoadBalancerId = support.createLoadBalancer(this);
+        if(this.healthCheckOptions != null){
+            support.createLoadBalancerHealthCheck(healthCheckOptions.withProviderLoadBalancerId(providerLoadBalancerId));
+        }
+        return providerLoadBalancerId;
     }
 
     /**
@@ -210,6 +215,10 @@ public class LoadBalancerCreateOptions {
      */
     public LbType getType() {
       return type;
+    }
+
+    public HealthCheckOptions getHealthCheckOptions(){
+        return this.healthCheckOptions;
     }
 
     /**
@@ -310,6 +319,17 @@ public class LoadBalancerCreateOptions {
     public LoadBalancerCreateOptions asType( LbType type ) {
       this.type = type;
       return this;
+    }
+
+    /**
+     * Adds the specified health check options to be associated with the load balancer on creation.
+     * When provided Dasein will attempt to create a health check along side the load balancer
+     * @param options the Health Check Options
+     * @return this
+     */
+    public @Nonnull LoadBalancerCreateOptions withHealthCheckOptions(HealthCheckOptions options){
+        this.healthCheckOptions = options;
+        return this;
     }
 
 }

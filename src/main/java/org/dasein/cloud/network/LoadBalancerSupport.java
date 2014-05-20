@@ -97,17 +97,6 @@ public interface LoadBalancerSupport extends AccessControlledService {
     public @Nonnull String createLoadBalancer(@Nonnull LoadBalancerCreateOptions options) throws CloudException, InternalException;
 
     /**
-     * Provisions a new cloud load balancer along with a configured, attached, health check in the target region based on the specified creation options.
-     * If any part of the operation fails the underlying implementation should rollback everything created up to that point.
-     * @param lbOptions the options for creating the new load balancer
-     * @param lbhcOptions the options for creating/configuring the new Health Check
-     * @return the unique ID of the new load balancer
-     * @throws CloudException
-     * @throws InternalException
-     */
-    public @Nonnull String createLBWithHealthCheck(@Nonnull LoadBalancerCreateOptions lbOptions, @Nonnull HealthCheckOptions lbhcOptions) throws CloudException, InternalException;
-
-    /**
      * Indicates the type of load balancer supported by this cloud.
      * @return the load balancer type
      * @throws CloudException an error occurred with the cloud provider while performing this action
