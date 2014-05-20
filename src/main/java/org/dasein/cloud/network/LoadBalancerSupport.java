@@ -447,7 +447,6 @@ public interface LoadBalancerSupport extends AccessControlledService {
     /**
      * Allows an existing LB Health Check to be modified
      * @param providerLBHealthCheckId the ID of the Health Check being adjusted
-     * @param providerLoadBalancerId optionally the ID of the Load Balancer to which the Health Check is attached
      * @param options the new options to which the Health Check will be modified to meet
      * @return the modified LoadBalancerHealthCheck object
      * @throws InternalException
