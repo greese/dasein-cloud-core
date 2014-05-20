@@ -22,11 +22,7 @@
 
   <groupId>org.dasein</groupId>
   <artifactId>dasein-cloud-core</artifactId>
-<<<<<<< HEAD
   <version>2014.07.1-SNAPSHOT</version>
-=======
-  <version>2014.05.1-SNAPSHOT</version>
->>>>>>> 2014.05
   <packaging>jar</packaging>
 
   <name>dasein-cloud-core</name>
