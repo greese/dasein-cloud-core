@@ -26,14 +26,13 @@ import org.dasein.cloud.OperationNotSupportedException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 
 /**
  * Options for adding a Health Check to a LoadBalancer. Different clouds have very different
  * requirements when specifying what is required for a Health Check with many requiring them to be
  * created at the same time and dependant on the life cycle of the LB they're attached to
  */
-public class LBHealthCheckCreateOptions {
+public class HealthCheckOptions{
     private String     name;
     private String     description;
     private String providerLoadBalancerId;
@@ -47,8 +46,8 @@ public class LBHealthCheckCreateOptions {
     private int        unhealthyCount = 0;
     private int        healthyCount = 0;
 
-    public static LBHealthCheckCreateOptions getInstance(@Nullable String name, @Nullable String description, @Nullable String providerLoadBalancerId, @Nullable String host, @Nullable LoadBalancerHealthCheck.HCProtocol protocol, int port, @Nullable String path, @Nullable Double interval, @Nullable Double timeout, int healthyCount, int unhealthyCount){
-        LBHealthCheckCreateOptions options = new LBHealthCheckCreateOptions();
+    public static HealthCheckOptions getInstance(@Nullable String name, @Nullable String description, @Nullable String providerLoadBalancerId, @Nullable String host, @Nullable LoadBalancerHealthCheck.HCProtocol protocol, int port, @Nullable String path, @Nullable Double interval, @Nullable Double timeout, int healthyCount, int unhealthyCount){
+        HealthCheckOptions options = new HealthCheckOptions();
         options.name = name;
         options.description = description;
         options.providerLoadBalancerId = providerLoadBalancerId;
