@@ -126,7 +126,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws CloudException an error occurred within the cloud provider
      */
     public void disableAnalytics(@Nonnull String vmId) throws InternalException, CloudException;
-    
+
     /**
      * Turns extended hypervisor analytics for the target server. If the underlying cloud does not support
      * extended analytics, this method will be a NO-OP.
@@ -209,7 +209,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws CloudException an error occurred within the cloud provider
      */
     public @Nonnull VmStatistics getVMStatistics(@Nonnull String vmId, @Nonnegative long from, @Nonnegative long to) throws InternalException, CloudException;
-    
+
     /**
      * Provides hypervisor statistics for the specified server that fit within the defined time range.
      * For clouds that do not provide hypervisor statistics, this method should return an empty
@@ -262,7 +262,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
     public @Nonnull VirtualMachine launch(@Nonnull VMLaunchOptions withLaunchOptions) throws CloudException, InternalException;
-    
+
     /**
      * Launches a virtual machine in the cloud. If the cloud supports persistent servers, this method will
      * first define a server and then boot it. The end result of this operation should be a server
@@ -328,7 +328,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws CloudException an error occurred within the cloud provider
      */
     public @Nonnull Iterable<String> listFirewalls(@Nonnull String vmId) throws InternalException, CloudException;
-    
+
     /**
      * Provides a list of instance types, service offerings, or server sizes (however the underlying cloud
      * might describe it) for a particular architecture
@@ -389,7 +389,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @see #unpause(String)
      */
     public void pause(@Nonnull String vmId) throws InternalException, CloudException;
-    
+
     /**
      * Executes a virtual machine reboot for the target virtual machine.
      * @param vmId the provider ID for the server to reboot

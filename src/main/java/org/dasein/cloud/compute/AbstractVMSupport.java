@@ -84,6 +84,10 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
         throw new OperationNotSupportedException("Instance firewall modifications are not currently supported for " + getProvider().getCloudName());
     }
 
+    public void cancelSpotDataFeedSubscription() throws CloudException, InternalException{
+        throw new OperationNotSupportedException("Spot Instances are not supported for " + getProvider().getCloudName());
+    }
+
     @Override
     public void cancelSpotInstanceRequest(String providerSpotInstanceRequestID) throws CloudException, InternalException{
         throw new OperationNotSupportedException("Spot Instances are not supported for " + getProvider().getCloudName());
@@ -142,7 +146,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
 
     @Override
     public @Nullable String getPassword(@Nonnull String vmId) throws InternalException, CloudException {
-      return null;
+        return null;
     }
 
 	@Override
