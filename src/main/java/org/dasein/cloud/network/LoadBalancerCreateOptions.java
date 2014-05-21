@@ -110,21 +110,21 @@ public class LoadBalancerCreateOptions {
         if( support == null ) {
             throw new OperationNotSupportedException("Load balancers are not supported in " + provider.getCloudName());
         }
-        if( support.identifyListenersOnCreateRequirement().equals(Requirement.REQUIRED) && (listeners == null || listeners.isEmpty()) ) {
+        if( support.getCapabilities().identifyListenersOnCreateRequirement().equals(Requirement.REQUIRED) && (listeners == null || listeners.isEmpty()) ) {
             throw new CloudException("You must specify at least one listener when creating a load balancer in " + provider.getCloudName());
         }
-        if( support.identifyEndpointsOnCreateRequirement().equals(Requirement.REQUIRED) && (endpoints == null || endpoints.isEmpty()) ) {
+        if( support.getCapabilities().identifyEndpointsOnCreateRequirement().equals(Requirement.REQUIRED) && (endpoints == null || endpoints.isEmpty()) ) {
             throw new CloudException("You must specify at least one endpoint when creating a load balancer in " + provider.getCloudName());
         }
-        if( support.isDataCenterLimited() && (providerDataCenterIds == null || providerDataCenterIds.isEmpty()) ) {
+        if( support.getCapabilities().isDataCenterLimited() && (providerDataCenterIds == null || providerDataCenterIds.isEmpty()) ) {
             throw new CloudException("You must specify at least one data center when creating a load balancer in " + provider.getCloudName());
         }
-        if( !support.isAddressAssignedByProvider() && providerIpAddressId == null ) {
+        if( !support.getCapabilities().isAddressAssignedByProvider() && providerIpAddressId == null ) {
             // attempt to find an address
             IpAddressSupport as = services.getIpAddressSupport();
 
             if( as != null ) {
-                for( IPVersion version : support.listSupportedIPVersions() ) {
+                for( IPVersion version : support.getCapabilities().listSupportedIPVersions() ) {
                     Iterator<IpAddress> addresses = as.listIpPool(version, true).iterator();
 
                     if( addresses.hasNext() ) {
@@ -133,8 +133,8 @@ public class LoadBalancerCreateOptions {
                     }
                 }
                 if( providerIpAddressId == null ) {
-                    for( IPVersion version : support.listSupportedIPVersions() ) {
-                        if( as.isRequestable(version) ) {
+                    for( IPVersion version : support.getCapabilities().listSupportedIPVersions() ) {
+                        if( as.getCapabilities().isRequestable(version) ) {
                             providerIpAddressId = as.request(version);
                         }
                     }
