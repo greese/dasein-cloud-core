@@ -141,11 +141,7 @@ public class LoadBalancerCreateOptions {
                 }
             }
         }
-        String providerLoadBalancerId = support.createLoadBalancer(this);
-        if(this.healthCheckOptions != null){
-            support.createLoadBalancerHealthCheck(healthCheckOptions.withProviderLoadBalancerId(providerLoadBalancerId));
-        }
-        return providerLoadBalancerId;
+        return support.createLoadBalancer(this);
     }
 
     /**
