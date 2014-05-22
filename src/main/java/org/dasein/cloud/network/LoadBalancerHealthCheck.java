@@ -22,6 +22,7 @@ package org.dasein.cloud.network;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents a Health Check attached to a Load Balancer. Specifies metrics used to determine the health of virtual machines attached to the load balancer.
@@ -36,7 +37,7 @@ public class LoadBalancerHealthCheck implements Networkable{
     private String            providerLBHealthCheckId;
     private String            name;
     private String            description;
-    private ArrayList<String> providerLoadBalancerIds;
+    private List<String>      providerLoadBalancerIds = new ArrayList<String>();
     private String            host;
     private HCProtocol        protocol;
     private int               port;
@@ -69,12 +70,12 @@ public class LoadBalancerHealthCheck implements Networkable{
         this.description = description;
         this.host = host;
         this.protocol = protocol;
+        this.port = port;
         this.path = path;
         this.interval = interval;
         this.timeout = timeout;
         this.unhealthyCount = unhealthyCount;
         this.healthyCount = healthyCount;
-        this.providerLoadBalancerIds = new ArrayList<String>();
     }
 
     public String getProviderLBHealthCheckId() {
@@ -97,7 +98,7 @@ public class LoadBalancerHealthCheck implements Networkable{
         this.description = description;
     }
 
-    public ArrayList<String> getProviderLoadBalancerIds(){
+    public List<String> getProviderLoadBalancerIds(){
         return providerLoadBalancerIds;
     }
 
