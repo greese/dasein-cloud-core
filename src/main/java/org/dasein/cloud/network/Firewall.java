@@ -20,6 +20,7 @@
 package org.dasein.cloud.network;
 
 import org.dasein.cloud.Taggable;
+import org.dasein.cloud.VisibleScope;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -40,16 +41,17 @@ import java.util.Map;
  * @version 2013.05 added support for network firewalls and subnet associations (issue greese/dasein-cloud-aws/#8)
  */
 public class Firewall implements Networkable, Taggable {
-    private boolean                 active;
-    private boolean                 available;
-    private String                  description;
-    private String                  name;
-    private String                  providerFirewallId;
-    private String                  providerVlanId;
-    private String                  regionId;
-    private String[]                subnetAssociations;
-    private Map<String,String>      tags;
+    private boolean                  active;
+    private boolean                  available;
+    private String                   description;
+    private String                   name;
+    private String                   providerFirewallId;
+    private String                   providerVlanId;
+    private String                   regionId;
+    private String[]                 subnetAssociations;
+    private Map<String,String>       tags;
     private Collection<FirewallRule> rules;
+    private VisibleScope             visibleScope;
 
     public Firewall() { }
 
@@ -222,6 +224,14 @@ public class Firewall implements Networkable, Taggable {
     @SuppressWarnings("unused")
     public @Nonnull void setRules( Collection<FirewallRule> ruleList ) {
       rules = ruleList;
+    }
+
+    public void setVisibleScope(VisibleScope visibleScope){
+        this.visibleScope = visibleScope;
+    }
+
+    public VisibleScope getVisibleScope(){
+        return this.visibleScope;
     }
 
     @Override
