@@ -41,8 +41,8 @@ public class LoadBalancerHealthCheck implements Networkable{
     private HCProtocol        protocol;
     private int               port;
     private String            path;
-    private Double            interval;
-    private Double            timeout;
+    private int               interval;
+    private int               timeout;
     //If left as 0 assume to use the default values for the underlying cloud
     private int               unhealthyCount = 0;
     private int               healthyCount = 0;
@@ -51,19 +51,19 @@ public class LoadBalancerHealthCheck implements Networkable{
         HTTP, HTTPS, SSL, TCP
     }
 
-    public static LoadBalancerHealthCheck getInstance(@Nonnull HCProtocol protocol, int port, @Nullable String path, @Nullable Double interval, @Nullable Double timeout, int healthyCount, int unhealthyCount){
+    public static LoadBalancerHealthCheck getInstance(@Nonnull HCProtocol protocol, int port, @Nullable String path, int interval, int timeout, int healthyCount, int unhealthyCount){
         return new LoadBalancerHealthCheck(null, null, null, null, protocol, port, path, interval, timeout, unhealthyCount, healthyCount);
     }
 
-    public static LoadBalancerHealthCheck getInstance(@Nullable String providerLBHealthCheckId, @Nonnull HCProtocol protocol, int port, @Nullable String path, @Nullable Double interval, @Nullable Double timeout, int healthyCount, int unhealthyCount){
+    public static LoadBalancerHealthCheck getInstance(@Nullable String providerLBHealthCheckId, @Nonnull HCProtocol protocol, int port, @Nullable String path, int interval, int timeout, int healthyCount, int unhealthyCount){
         return new LoadBalancerHealthCheck(providerLBHealthCheckId, null, null, null, protocol, port, path, interval, timeout, unhealthyCount, healthyCount);
     }
 
-    public static LoadBalancerHealthCheck getInstance(@Nullable String providerLBHealthCheckId, @Nonnull String name, @Nullable String description, @Nullable String host, @Nullable HCProtocol protocol, int port, @Nullable String path, @Nullable Double interval, @Nullable Double timeout, int healthyCount, int unhealthyCount){
+    public static LoadBalancerHealthCheck getInstance(@Nullable String providerLBHealthCheckId, @Nonnull String name, @Nullable String description, @Nullable String host, @Nullable HCProtocol protocol, int port, @Nullable String path, int interval, int timeout, int healthyCount, int unhealthyCount){
         return new LoadBalancerHealthCheck(providerLBHealthCheckId, name, description, host, null, port, path, interval, timeout, unhealthyCount, healthyCount);
     }
 
-    private LoadBalancerHealthCheck(@Nullable String providerLBHealthCheckId, @Nullable String name, @Nullable String description, @Nullable String host, @Nullable HCProtocol protocol, int port, @Nullable String path, @Nullable Double interval, @Nullable Double timeout, int healthyCount, int unhealthyCount){
+    private LoadBalancerHealthCheck(@Nullable String providerLBHealthCheckId, @Nullable String name, @Nullable String description, @Nullable String host, @Nullable HCProtocol protocol, int port, @Nullable String path, int interval, int timeout, int healthyCount, int unhealthyCount){
         this.providerLBHealthCheckId = providerLBHealthCheckId;
         this.name = name;
         this.description = description;
@@ -141,19 +141,19 @@ public class LoadBalancerHealthCheck implements Networkable{
         this.path = path;
     }
 
-    public Double getInterval() {
+    public int getInterval() {
         return interval;
     }
 
-    public void setInterval(Double interval) {
+    public void setInterval(int interval) {
         this.interval = interval;
     }
 
-    public Double getTimeout() {
+    public int getTimeout() {
         return timeout;
     }
 
-    public void setTimeout(Double timeout) {
+    public void setTimeout(int timeout) {
         this.timeout = timeout;
     }
 
