@@ -73,7 +73,7 @@ public class HealthCheckOptions{
      *          Number of consecutive unsuccessful checks required to mark VM instance as unhealthy.
      * @return HealthCheckOptions instance
      */
-    public static HealthCheckOptions getInstance(@Nullable String name, @Nullable String description, @Nullable String providerLoadBalancerId, @Nullable String host, @Nullable LoadBalancerHealthCheck.HCProtocol protocol, int port, @Nullable String path, @Nullable int interval, @Nullable int timeout, int healthyCount, int unhealthyCount){
+    public static HealthCheckOptions getInstance(@Nullable String name, @Nullable String description, @Nullable String providerLoadBalancerId, @Nullable String host, @Nullable LoadBalancerHealthCheck.HCProtocol protocol, int port, @Nullable String path, int interval, int timeout, int healthyCount, int unhealthyCount){
         HealthCheckOptions options = new HealthCheckOptions();
         options.name = name;
         options.description = description;
