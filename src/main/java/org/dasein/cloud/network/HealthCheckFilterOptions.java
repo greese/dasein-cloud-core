@@ -126,14 +126,21 @@ public class HealthCheckFilterOptions {
      */
     public boolean matches(@Nonnull LoadBalancerHealthCheck lbhc) {
         boolean matches = false;
-        if(regex != null){
-            matches = (lbhc.getName().matches(regex) || lbhc.getDescription().matches(regex) || lbhc.getPath().matches(regex));
+        if( regex != null ){
+            matches = ((lbhc.getName() != null && lbhc.getName().matches(regex))
+                    || (lbhc.getDescription() != null && lbhc.getDescription().matches(regex))
+                    || (lbhc.getPath() != null && lbhc.getPath().matches(regex)));
         }
-        if(protocol != null){
-            matches = lbhc.getProtocol().equals(protocol);
+        if( protocol != null ) {
+            matches = protocol.equals(lbhc.getProtocol());
+            if( !matchesAny && !matches )
+                return false;
         }
-        if(port > 0){
+        if( port > 0 ) {
             matches = (lbhc.getPort() == port);
+            if( !matchesAny && !matches ) {
+                return false;
+            }
         }
         if(!matches && !matchesAny) {
             return false;

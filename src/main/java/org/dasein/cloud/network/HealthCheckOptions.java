@@ -73,7 +73,7 @@ public class HealthCheckOptions{
      *          Number of consecutive unsuccessful checks required to mark VM instance as unhealthy.
      * @return HealthCheckOptions instance
      */
-    public static HealthCheckOptions getInstance(@Nullable String name, @Nullable String description, @Nullable String providerLoadBalancerId, @Nullable String host, @Nullable LoadBalancerHealthCheck.HCProtocol protocol, int port, @Nullable String path, @Nullable int interval, @Nullable int timeout, int healthyCount, int unhealthyCount){
+    public static HealthCheckOptions getInstance(@Nullable String name, @Nullable String description, @Nullable String providerLoadBalancerId, @Nullable String host, @Nullable LoadBalancerHealthCheck.HCProtocol protocol, int port, @Nullable String path, int interval, int timeout, int healthyCount, int unhealthyCount){
         HealthCheckOptions options = new HealthCheckOptions();
         options.name = name;
         options.description = description;
@@ -90,7 +90,7 @@ public class HealthCheckOptions{
         return options;
     }
 
-    public @Nonnull LoadBalancerHealthCheck build(@Nonnull CloudProvider provider, @Nullable String providerLoadBalancerId) throws CloudException, InternalException {
+    public @Nonnull LoadBalancerHealthCheck build(@Nonnull CloudProvider provider) throws CloudException, InternalException {
         NetworkServices services = provider.getNetworkServices();
 
         if( services == null ) {
@@ -113,7 +113,7 @@ public class HealthCheckOptions{
         this.name = name;
     }
 
-    public String getDescription() {
+    public @Nullable String getDescription() {
         return description;
     }
 
@@ -129,7 +129,7 @@ public class HealthCheckOptions{
         this.providerLoadBalancerId = providerLoadBalancerId;
     }
 
-    public String getHost() {
+    public @Nullable String getHost() {
         return host;
     }
 
@@ -153,7 +153,7 @@ public class HealthCheckOptions{
         this.port = port;
     }
 
-    public String getPath() {
+    public @Nullable String getPath() {
         return path;
     }
 
