@@ -40,13 +40,40 @@ public class HealthCheckOptions{
     private LoadBalancerHealthCheck.HCProtocol protocol;
     private int                                port;
     private String                             path;
-    private Double                             interval;
-    private Double                             timeout;
+    private int                             interval;
+    private int                             timeout;
     //If left as 0 assume to use the default values for the underlying cloud
     private int                                unhealthyCount = 0;
     private int                                healthyCount = 0;
 
-    public static HealthCheckOptions getInstance(@Nullable String name, @Nullable String description, @Nullable String providerLoadBalancerId, @Nullable String host, @Nullable LoadBalancerHealthCheck.HCProtocol protocol, int port, @Nullable String path, @Nullable Double interval, @Nullable Double timeout, int healthyCount, int unhealthyCount){
+    /**
+     * Create HealthCheckOptions instance
+     *
+     * @param name
+     *          Name/ID of the health check.
+     * @param description
+     *          Description of the health check.
+     * @param providerLoadBalancerId
+     *          Name/ID of the LoadBalancer this HealthCheck is for.
+     * @param host
+     *          Hostname of the VM instance being checked.
+     * @param protocol
+     *          Network protocol being used for the check.
+     * @param port
+     *          Network port on the VM instance used for the check.
+     * @param path
+     *          For HTTP/HTTPS protocols a path on the host that must return 200 OK.
+     * @param interval
+     *          Approximate interval, in seconds, between the checks.
+     * @param timeout
+     *          Timeout, in seconds, that is allowed before the check fails.
+     * @param healthyCount
+     *          Number of consecutive successful checks required to mark VM instance as healthy.
+     * @param unhealthyCount
+     *          Number of consecutive unsuccessful checks required to mark VM instance as unhealthy.
+     * @return HealthCheckOptions instance
+     */
+    public static HealthCheckOptions getInstance(@Nullable String name, @Nullable String description, @Nullable String providerLoadBalancerId, @Nullable String host, @Nullable LoadBalancerHealthCheck.HCProtocol protocol, int port, @Nullable String path, @Nullable int interval, @Nullable int timeout, int healthyCount, int unhealthyCount){
         HealthCheckOptions options = new HealthCheckOptions();
         options.name = name;
         options.description = description;
@@ -63,7 +90,7 @@ public class HealthCheckOptions{
         return options;
     }
 
-    public @Nonnull LoadBalancerHealthCheck build(@Nonnull CloudProvider provider, @Nullable String providerLoadBalancerId)throws CloudException, InternalException {
+    public @Nonnull LoadBalancerHealthCheck build(@Nonnull CloudProvider provider, @Nullable String providerLoadBalancerId) throws CloudException, InternalException {
         NetworkServices services = provider.getNetworkServices();
 
         if( services == null ) {
@@ -134,19 +161,19 @@ public class HealthCheckOptions{
         this.path = path;
     }
 
-    public Double getInterval() {
+    public int getInterval() {
         return interval;
     }
 
-    public void setInterval(Double interval) {
+    public void setInterval(int interval) {
         this.interval = interval;
     }
 
-    public Double getTimeout() {
+    public int getTimeout() {
         return timeout;
     }
 
-    public void setTimeout(Double timeout) {
+    public void setTimeout(int timeout) {
         this.timeout = timeout;
     }
 
