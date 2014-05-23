@@ -205,15 +205,15 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @param protocol the protocol to be used for the health check monitoring
      * @param port the port to be used for the health check monitoring
      * @param path the path which is the target for the health check monitoring
-     * @param interval how often to perform the health check
-     * @param timeout timeout after which the health check request is considered a failure
+     * @param interval how often to perform the health check, in seconds
+     * @param timeout timeout after which the health check request is considered a failure, in seconds
      * @param healthyCount the number of consecutive successful requests before an unhealthy instance is marked as healthy
      * @param unhealthyCount the number of consecutive failed requests before a healthy instance is marked as unhealthy
      * @return the unique ID of the health check
      * @throws CloudException
      * @throws InternalException
      */
-    public LoadBalancerHealthCheck createLoadBalancerHealthCheck(@Nullable String name, @Nullable String description, @Nullable String host, @Nullable LoadBalancerHealthCheck.HCProtocol protocol, int port, @Nullable String path, @Nullable Double interval, @Nullable Double timeout, int healthyCount, int unhealthyCount) throws CloudException, InternalException;
+    public LoadBalancerHealthCheck createLoadBalancerHealthCheck(@Nullable String name, @Nullable String description, @Nullable String host, @Nullable LoadBalancerHealthCheck.HCProtocol protocol, int port, @Nullable String path, int interval, int timeout, int healthyCount, int unhealthyCount) throws CloudException, InternalException;
 
     /**
      * Creates a standalone LoadBalancerHealthCheck that can be attached to a LoadBalancer either at a later time
