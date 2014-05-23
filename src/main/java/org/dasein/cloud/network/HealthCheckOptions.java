@@ -32,7 +32,7 @@ import javax.annotation.Nullable;
  * requirements when specifying what is required for a Health Check with many requiring them to be
  * created at the same time and dependant on the life cycle of the LB they're attached to
  */
-public class HealthCheckOptions{
+public class HealthCheckOptions {
     private String                             name;
     private String                             description;
     private String                             providerLoadBalancerId;
