@@ -266,7 +266,7 @@ public final class SingletonCache<T> {
             }
         }
         CacheEntry<T> entry = null;
-        String endpoint = ctx.getEndpoint();
+        String endpoint = ctx.getCloud().getEndpoint();
 
         if( cloudCache != null ) {
             entry = cloudCache.get(endpoint);
@@ -313,7 +313,7 @@ public final class SingletonCache<T> {
      */
     public void put(@Nonnull ProviderContext ctx, @Nonnull T item) {
         CacheEntry<T> entry = new CacheEntry<T>();
-        String endpoint = ctx.getEndpoint();
+        String endpoint = ctx.getCloud().getEndpoint();
 
         entry.item = new SoftReference<T>(item);
         entry.lastCacheClear = System.currentTimeMillis();

@@ -273,7 +273,7 @@ public final class Cache<T> {
             }
         }
         CacheEntry<T> entry = null;
-        String endpoint = ctx.getEndpoint();
+        String endpoint = ctx.getCloud().getEndpoint();
 
         if( cloudCache != null ) {
             entry = cloudCache.get(endpoint);
@@ -320,7 +320,7 @@ public final class Cache<T> {
      */
     public void put(@Nonnull ProviderContext ctx, @Nonnull Iterable<T> list) {
         CacheEntry<T> entry = new CacheEntry<T>();
-        String endpoint = ctx.getEndpoint();
+        String endpoint = ctx.getCloud().getEndpoint();
 
         entry.items = new SoftReference<Iterable<T>>(list);
         entry.lastCacheClear = System.currentTimeMillis();
