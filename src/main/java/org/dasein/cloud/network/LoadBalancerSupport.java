@@ -38,6 +38,7 @@ import javax.annotation.Nullable;
  * Implements support for cloud load balancing services.
  * @author George Reese
  * @author Cameron Stokes
+ * @version 2014.05 overhaul of health checks support
  * @version 2013.04 added Javadoc and did some refactoring
  * @version 2013.02 added support for health checks
  * @since unknown
@@ -97,16 +98,6 @@ public interface LoadBalancerSupport extends AccessControlledService {
     public @Nonnull String createLoadBalancer(@Nonnull LoadBalancerCreateOptions options) throws CloudException, InternalException;
 
     /**
-     * Indicates the type of load balancer supported by this cloud.
-     * @return the load balancer type
-     * @throws CloudException an error occurred with the cloud provider while performing this action
-     * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
-     * @deprecated use {@link LoadBalancerCapabilities#getAddressType()}
-     */
-    @Deprecated
-    public @Nonnull LoadBalancerAddressType getAddressType() throws CloudException, InternalException;
-
-    /**
      * Provides access to meta-data about load balancer capabilities in the current region of this cloud.
      * @return a description of the features supported by this region of this cloud
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
@@ -124,6 +115,174 @@ public interface LoadBalancerSupport extends AccessControlledService {
     public @Nullable LoadBalancer getLoadBalancer(@Nonnull String loadBalancerId) throws CloudException, InternalException;
 
     /**
+     * Indicates whether the current account has access to load balancer services in the current region.
+     * @return true if the current account has access to load balancer services in the current region
+     * @throws CloudException an error occurred with the cloud provider while performing this action
+     * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
+     */
+    public boolean isSubscribed() throws CloudException, InternalException;
+
+    /**
+     * Lists the endpoints associated with the specified load balancer.
+     * @param forLoadBalancerId the load balancer for which you are listing the balanced endpoints
+     * @return a list of balanced endpoints
+     * @throws CloudException an error occurred while communicating with the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     */
+    public @Nonnull Iterable<LoadBalancerEndpoint> listEndpoints(@Nonnull String forLoadBalancerId) throws CloudException, InternalException;
+
+    /**
+     * Lists the endpoints associated with the specified load balancer that match the desired values.
+     * @param forLoadBalancerId the load balancer for which you are listing the balanced endpoints
+     * @param type the type of endpoint being sought
+     * @param endpoints the VM ID or addresses of the endpoints being sought
+     * @return a list of balanced endpoints matching the desired criteria
+     * @throws CloudException an error occurred while communicating with the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     */
+    public @Nonnull Iterable<LoadBalancerEndpoint> listEndpoints(@Nonnull String forLoadBalancerId, @Nonnull LbEndpointType type, @Nonnull String ... endpoints) throws CloudException, InternalException;
+
+    /**
+     * Lists the load balancers in the current region.
+     * @return a list of load balancers in the current region
+     * @throws CloudException an error occurred while communicating with the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     */
+    public @Nonnull Iterable<LoadBalancer> listLoadBalancers() throws CloudException, InternalException;
+
+    /**
+     * Lists the current status of all load balancers associated with the account in the current region.
+     * @return the status of all load balancers associated with the account in the current region
+     * @throws CloudException an error occurred while communicating with the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     */
+    public @Nonnull Iterable<ResourceStatus> listLoadBalancerStatus() throws CloudException, InternalException;
+
+    /**
+     * Removes one or more data centers from the rotation behind this load balancer
+     * @param fromLoadBalancerId the load balancer to remove data centers from
+     * @param dataCenterIdsToRemove the data centers to be removed
+     * @throws CloudException an error occurred while communicating with the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     * @throws OperationNotSupportedException this load balancer is not data-center aware
+     */
+    public void removeDataCenters(@Nonnull String fromLoadBalancerId, @Nonnull String ... dataCenterIdsToRemove) throws CloudException, InternalException;
+
+    /**
+     * Removes one or more IP endpoints from the load balancer resource pool.
+     * @param fromLoadBalancerId the load balancer from which the endpoints are being removed
+     * @param addresses the IP addresses to be removed
+     * @throws CloudException an error occurred with the cloud provider while performing this action
+     * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
+     * @throws OperationNotSupportedException this load balancer does not support IP endpoints, or does not support removing them post-create
+     */
+    public void removeIPEndpoints(@Nonnull String fromLoadBalancerId, @Nonnull String ... addresses) throws CloudException, InternalException;
+
+    /**
+     * Removes the specified load balancer from the cloud.
+     * @param loadBalancerId the load balancer to be removed
+     * @throws CloudException an error occurred with the cloud provider while performing this action
+     * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
+     */
+    public void removeLoadBalancer(@Nonnull String loadBalancerId) throws CloudException, InternalException;
+
+    /**
+     * Removes one or more virtual machine endpoints from the load balancer resource pool.
+     * @param fromLoadBalancerId the load balancer from which the endpoints are being removed
+     * @param serverIdsToRemove the IDs of the virtual machines to be removed
+     * @throws CloudException an error occurred with the cloud provider while performing this action
+     * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
+     * @throws OperationNotSupportedException this load balancer does not support VM endpoints, or does not support removing them post-create
+     */
+    public void removeServers(@Nonnull String fromLoadBalancerId, @Nonnull String ... serverIdsToRemove) throws CloudException, InternalException;
+
+    /**
+     * Creates a standalone LoadBalancerHealthCheck that can be attached to a LoadBalancer either at a later time
+     * or on create of the LB.
+     * @param name the name of the Health Check if required
+     * @param description a friendly name for the Health Check
+     * @param host an optional hostname that can be set as the target for the health check monitoring
+     * @param protocol the protocol to be used for the health check monitoring
+     * @param port the port to be used for the health check monitoring
+     * @param path the path which is the target for the health check monitoring
+     * @param interval how often to perform the health check, in seconds
+     * @param timeout timeout after which the health check request is considered a failure, in seconds
+     * @param healthyCount the number of consecutive successful requests before an unhealthy instance is marked as healthy
+     * @param unhealthyCount the number of consecutive failed requests before a healthy instance is marked as unhealthy
+     * @return the unique ID of the health check
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public LoadBalancerHealthCheck createLoadBalancerHealthCheck(@Nullable String name, @Nullable String description, @Nullable String host, @Nullable LoadBalancerHealthCheck.HCProtocol protocol, int port, @Nullable String path, int interval, int timeout, int healthyCount, int unhealthyCount) throws CloudException, InternalException;
+
+    /**
+     * Creates a standalone LoadBalancerHealthCheck that can be attached to a LoadBalancer either at a later time
+     * or on create of the LB.
+     * @param options the options for creating the health check
+     * @return the unique ID of the health check
+     */
+    public LoadBalancerHealthCheck createLoadBalancerHealthCheck(@Nonnull HealthCheckOptions options) throws CloudException, InternalException;
+
+    /**
+     * Gets the specified Health Check from the cloud
+     * @param providerLBHealthCheckId the unique ID of the LB Health Check
+     * @param providerLoadBalancerId optionally can provide the ID of a load balancer to with the Health Check is attached
+     * @return the specified LoadBalancerHealthCheck
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public LoadBalancerHealthCheck getLoadBalancerHealthCheck(@Nonnull String providerLBHealthCheckId, @Nullable String providerLoadBalancerId) throws CloudException, InternalException;
+
+    /**
+     * Lists all health checks matching the given HealthCheckFilterOptions belonging to the account owner currently in
+     * the cloud. The filtering functionality is delegated to the cloud provider.
+     * @param options the filter options
+     * @return all health checks belonging to the account owner
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public Iterable<LoadBalancerHealthCheck> listLBHealthChecks(@Nullable HealthCheckFilterOptions options) throws CloudException, InternalException;
+
+    /**
+     * Attaches an existing Health Check to an existing Load Balancer
+     * @param providerLoadBalancerId the load balancer ID
+     * @param providerLBHealthCheckId the health check ID
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public void attachHealthCheckToLoadBalancer(@Nonnull String providerLoadBalancerId, @Nonnull String providerLBHealthCheckId)throws CloudException, InternalException;
+
+    /**
+     * Allows an existing LB Health Check to be modified
+     * @param providerLBHealthCheckId the ID of the Health Check being adjusted
+     * @param options the new options to which the Health Check will be modified to meet
+     * @return the modified LoadBalancerHealthCheck object
+     * @throws InternalException
+     * @throws CloudException
+     */
+    public LoadBalancerHealthCheck modifyHealthCheck(@Nonnull String providerLBHealthCheckId, @Nonnull HealthCheckOptions options) throws InternalException, CloudException;
+
+    /**
+     * Removes a health check associated with a particular Load Balancer. Only certain clouds allow this operation
+     * @param providerLoadBalancerId the ID of the Load Balancer that has the health check being removed
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public void removeLoadBalancerHealthCheck(@Nonnull String providerLoadBalancerId) throws CloudException, InternalException;
+
+    /********************************** DEPRECATED METHODS *************************************/
+
+    /**
+     * Indicates the type of load balancer supported by this cloud.
+     * @return the load balancer type
+     * @throws CloudException an error occurred with the cloud provider while performing this action
+     * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
+     * @deprecated use {@link LoadBalancerCapabilities#getAddressType()}
+     */
+    @Deprecated
+    public @Nonnull LoadBalancerAddressType getAddressType() throws CloudException, InternalException;
+
+    /**
      * Lists all servers along with their load balancer health status for the specified load balancer.
      * @param loadBalancerId the unique ID of the load balancer being checked
      * @return all servers with their current health status
@@ -131,6 +290,7 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud implementation
      * @deprecated Use {@link #listEndpoints(String)}
      */
+    @Deprecated
     public @Nonnull Iterable<LoadBalancerServer> getLoadBalancerServerHealth(@Nonnull String loadBalancerId) throws CloudException, InternalException;
 
     /**
@@ -142,6 +302,7 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud implementation
      * @deprecated Use {@link #listEndpoints(String, LbEndpointType, String...)}
      */
+    @Deprecated
     public @Nonnull Iterable<LoadBalancerServer> getLoadBalancerServerHealth(@Nonnull String loadBalancerId, @Nonnull String ... serverIdsToCheck) throws CloudException, InternalException;
 
     /**
@@ -205,50 +366,6 @@ public interface LoadBalancerSupport extends AccessControlledService {
     public boolean isDataCenterLimited() throws CloudException, InternalException;
 
     /**
-     * Indicates whether the current account has access to load balancer services in the current region.
-     * @return true if the current account has access to load balancer services in the current region
-     * @throws CloudException an error occurred with the cloud provider while performing this action
-     * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
-     */
-    public boolean isSubscribed() throws CloudException, InternalException;
-
-    /**
-     * Lists the endpoints associated with the specified load balancer.
-     * @param forLoadBalancerId the load balancer for which you are listing the balanced endpoints
-     * @return a list of balanced endpoints
-     * @throws CloudException an error occurred while communicating with the cloud provider
-     * @throws InternalException an error occurred within the Dasein Cloud implementation
-     */
-    public @Nonnull Iterable<LoadBalancerEndpoint> listEndpoints(@Nonnull String forLoadBalancerId) throws CloudException, InternalException;
-
-    /**
-     * Lists the endpoints associated with the specified load balancer that match the desired values.
-     * @param forLoadBalancerId the load balancer for which you are listing the balanced endpoints
-     * @param type the type of endpoint being sought
-     * @param endpoints the VM ID or addresses of the endpoints being sought
-     * @return a list of balanced endpoints matching the desired criteria
-     * @throws CloudException an error occurred while communicating with the cloud provider
-     * @throws InternalException an error occurred within the Dasein Cloud implementation
-     */
-    public @Nonnull Iterable<LoadBalancerEndpoint> listEndpoints(@Nonnull String forLoadBalancerId, @Nonnull LbEndpointType type, @Nonnull String ... endpoints) throws CloudException, InternalException;
-
-    /**
-     * Lists the load balancers in the current region.
-     * @return a list of load balancers in the current region
-     * @throws CloudException an error occurred while communicating with the cloud provider
-     * @throws InternalException an error occurred within the Dasein Cloud implementation
-     */
-    public @Nonnull Iterable<LoadBalancer> listLoadBalancers() throws CloudException, InternalException;
-
-    /**
-     * Lists the current status of all load balancers associated with the account in the current region.
-     * @return the status of all load balancers associated with the account in the current region
-     * @throws CloudException an error occurred while communicating with the cloud provider
-     * @throws InternalException an error occurred within the Dasein Cloud implementation
-     */
-    public @Nonnull Iterable<ResourceStatus> listLoadBalancerStatus() throws CloudException, InternalException;
-
-    /**
      * Lists the load balancing algorithms from which you can choose when setting up a load balancer listener.
      * @return a list of one or more supported load balancing algorithms
      * @throws CloudException an error occurred while communicating with the cloud provider
@@ -299,44 +416,6 @@ public interface LoadBalancerSupport extends AccessControlledService {
     public @Nonnull Iterable<LbProtocol> listSupportedProtocols() throws CloudException, InternalException;
 
     /**
-     * Removes one or more data centers from the rotation behind this load balancer
-     * @param fromLoadBalancerId the load balancer to remove data centers from
-     * @param dataCenterIdsToRemove the data centers to be removed
-     * @throws CloudException an error occurred while communicating with the cloud provider
-     * @throws InternalException an error occurred within the Dasein Cloud implementation
-     * @throws OperationNotSupportedException this load balancer is not data-center aware
-     */
-    public void removeDataCenters(@Nonnull String fromLoadBalancerId, @Nonnull String ... dataCenterIdsToRemove) throws CloudException, InternalException;
-
-    /**
-     * Removes one or more IP endpoints from the load balancer resource pool.
-     * @param fromLoadBalancerId the load balancer from which the endpoints are being removed
-     * @param addresses the IP addresses to be removed
-     * @throws CloudException an error occurred with the cloud provider while performing this action
-     * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
-     * @throws OperationNotSupportedException this load balancer does not support IP endpoints, or does not support removing them post-create
-     */
-    public void removeIPEndpoints(@Nonnull String fromLoadBalancerId, @Nonnull String ... addresses) throws CloudException, InternalException;
-
-    /**
-     * Removes the specified load balancer from the cloud.
-     * @param loadBalancerId the load balancer to be removed
-     * @throws CloudException an error occurred with the cloud provider while performing this action
-     * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
-     */
-    public void removeLoadBalancer(@Nonnull String loadBalancerId) throws CloudException, InternalException;
-
-    /**
-     * Removes one or more virtual machine endpoints from the load balancer resource pool.
-     * @param fromLoadBalancerId the load balancer from which the endpoints are being removed
-     * @param serverIdsToRemove the IDs of the virtual machines to be removed
-     * @throws CloudException an error occurred with the cloud provider while performing this action
-     * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
-     * @throws OperationNotSupportedException this load balancer does not support VM endpoints, or does not support removing them post-create
-     */
-    public void removeServers(@Nonnull String fromLoadBalancerId, @Nonnull String ... serverIdsToRemove) throws CloudException, InternalException;
-
-    /**
      * Indicates whether or not endpoints may be added to or removed from a load balancer once the load balancer has been created.
      * @return true if you can modify the endpoints post-create
      * @throws CloudException an error occurred with the cloud provider while performing this action
@@ -368,62 +447,6 @@ public interface LoadBalancerSupport extends AccessControlledService {
     public boolean supportsMultipleTrafficTypes() throws CloudException, InternalException;
 
     /**
-     * Creates a standalone LoadBalancerHealthCheck that can be attached to a LoadBalancer either at a later time
-     * or on create of the LB.
-     * @param name the name of the Health Check if required
-     * @param description a friendly name for the Health Check
-     * @param host an optional hostname that can be set as the target for the health check monitoring
-     * @param protocol the protocol to be used for the health check monitoring
-     * @param port the port to be used for the health check monitoring
-     * @param path the path which is the target for the health check monitoring
-     * @param interval how often to perform the health check
-     * @param timeout timeout after which the health check request is considered a failure
-     * @param healthyCount the number of consecutive successful requests before an unhealthy instance is marked as healthy
-     * @param unhealthyCount the number of consecutive failed requests before a healthy instance is marked as unhealthy
-     * @return the unique ID of the health check
-     * @throws CloudException
-     * @throws InternalException
-     */
-    public LoadBalancerHealthCheck createLoadBalancerHealthCheck(@Nullable String name, @Nullable String description, @Nullable String host, @Nullable LoadBalancerHealthCheck.HCProtocol protocol, int port, @Nullable String path, @Nullable Double interval, @Nullable Double timeout, int healthyCount, int unhealthyCount) throws CloudException, InternalException;
-
-    /**
-     * Creates a standalone LoadBalancerHealthCheck that can be attached to a LoadBalancer either at a later time
-     * or on create of the LB.
-     * @param options the options for creating the health check
-     * @return the unique ID of the health check
-     */
-    public LoadBalancerHealthCheck createLoadBalancerHealthCheck(@Nonnull HealthCheckOptions options) throws CloudException, InternalException;
-
-    /**
-     * Gets the specified Health Check from the cloud
-     * @param providerLBHealthCheckId the unique ID of the LB Health Check
-     * @param providerLoadBalancerId optionally can provide the ID of a load balancer to with the Health Check is attached
-     * @return the specified LoadBalancerHealthCheck
-     * @throws CloudException
-     * @throws InternalException
-     */
-    public LoadBalancerHealthCheck getLoadBalancerHealthCheck(@Nonnull String providerLBHealthCheckId, @Nullable String providerLoadBalancerId) throws CloudException, InternalException;
-
-    /**
-     * Lists all health checks matching the given HealthCheckFilterOptions belonging to the account owner currently in
-     * the cloud. The filtering functionality is delegated to the cloud provider.
-     * @param options the filter options
-     * @return all health checks belonging to the account owner
-     * @throws CloudException
-     * @throws InternalException
-     */
-    public Iterable<LoadBalancerHealthCheck> listLBHealthChecks(@Nullable HealthCheckFilterOptions options) throws CloudException, InternalException;
-
-    /**
-     * Attaches an existing Health Check to an existing Load Balancer
-     * @param providerLoadBalancerId the load balancer ID
-     * @param providerLBHealthCheckId the health check ID
-     * @throws CloudException
-     * @throws InternalException
-     */
-    public void attachHealthCheckToLoadBalancer(@Nonnull String providerLoadBalancerId, @Nonnull String providerLBHealthCheckId)throws CloudException, InternalException;
-
-    /**
      * Gets the health state of the virtual machine(s) being monitored by the health check
      * @param providerLoadBalancerId the ID of the specific loadbalancer under which the instance(s) belong(s)
      * @param providerVirtualMachineId the ID of a specific virtual machine if required
@@ -434,25 +457,7 @@ public interface LoadBalancerSupport extends AccessControlledService {
     public HashMap<String, String> getInstanceHealth(@Nonnull String providerLoadBalancerId, @Nullable String providerVirtualMachineId) throws CloudException, InternalException;
 
     /**
-     * Allows an existing LB Health Check to be modified
-     * @param providerLBHealthCheckId the ID of the Health Check being adjusted
-     * @param options the new options to which the Health Check will be modified to meet
-     * @return the modified LoadBalancerHealthCheck object
-     * @throws InternalException
-     * @throws CloudException
-     */
-    public LoadBalancerHealthCheck modifyHealthCheck(@Nonnull String providerLBHealthCheckId, @Nonnull HealthCheckOptions options) throws InternalException, CloudException;
-
-    /**
-     * Removes a health check associated with a particular Load Balancer. Only certain clouds allow this operation
-     * @param providerLoadBalancerId the ID of the Load Balancer that has the health check being removed
-     * @throws CloudException
-     * @throws InternalException
-     */
-    public void removeLoadBalancerHealthCheck(@Nonnull String providerLoadBalancerId) throws CloudException, InternalException;
-
-    /**
-     * Indicates whether a health check can be created independantly of a load balancer
+     * Indicates whether a health check can be created independently of a load balancer
      * @return false if a health check can exist without having been assigned to a load balancer
      * @throws CloudException
      * @throws InternalException
@@ -460,8 +465,6 @@ public interface LoadBalancerSupport extends AccessControlledService {
      */
     @Deprecated
     public boolean healthCheckRequiresLoadBalancer() throws CloudException, InternalException;
-
-    /********************************** DEPRECATED METHODS *************************************/
 
     /**
      * Creates a new load balancer matching the specified characteristics in the cloud.
@@ -478,6 +481,7 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
      * @deprecated Use {@link #createLoadBalancer(LoadBalancerCreateOptions)}
      */
+    @Deprecated
     public @Nonnull String create(@Nonnull String name, @Nonnull String description, @Nullable String addressId, @Nullable String[] dataCenterIds, @Nullable LbListener[] listeners, @Nullable String[] serverIds, @Nullable String[] subnetIds, @Nullable LbType type) throws CloudException, InternalException;
 
     /**
@@ -487,6 +491,7 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
      * @deprecated Use {@link #removeLoadBalancer(String)}
      */
+    @Deprecated
     public void remove(@Nonnull String loadBalancerId) throws CloudException, InternalException;
 
     /**
@@ -495,6 +500,7 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
      * @deprecated Use {@link #identifyListenersOnCreateRequirement()}
      */
+    @Deprecated
     public boolean requiresListenerOnCreate() throws CloudException, InternalException;
 
     /**
@@ -503,5 +509,6 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
      * @deprecated Use {@link #identifyEndpointsOnCreateRequirement()}
      */
+    @Deprecated
     public boolean requiresServerOnCreate() throws CloudException, InternalException;
 }
