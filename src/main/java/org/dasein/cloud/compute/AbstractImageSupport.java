@@ -155,6 +155,7 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
     }
 
     @Override
+    @Deprecated
     public @Nonnull String getProviderTermForImage(@Nonnull Locale locale) {
         try {
             return getCapabilities().getProviderTermForImage(locale, ImageClass.MACHINE);
@@ -165,6 +166,18 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
     }
 
     @Override
+    @Deprecated
+    public @Nonnull String getProviderTermForImage(@Nonnull Locale locale, @Nonnull ImageClass cls) {
+        try {
+            return getCapabilities().getProviderTermForImage(locale, cls);
+        }
+        catch (Throwable t) {
+            throw new RuntimeException(t);
+        }
+    }
+
+    @Override
+    @Deprecated
     public @Nonnull String getProviderTermForCustomImage(@Nonnull Locale locale, @Nonnull ImageClass cls) {
         try {
             return getCapabilities().getProviderTermForImage(locale, cls);
@@ -175,6 +188,7 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
     }
 
     @Override
+    @Deprecated
     public boolean hasPublicLibrary() {
         try {
             return getCapabilities().supportsPublicLibrary(ImageClass.MACHINE);
