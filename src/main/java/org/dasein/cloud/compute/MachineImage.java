@@ -464,7 +464,7 @@ public class MachineImage implements Taggable {
      * @deprecated Use {@link #setTag(String, String)}
      */
     public void addTag(Tag t) {
-        addTag(t.getKey(), t.getValue());
+        setTag(t.getKey(), t.getValue());
     }
 
     /**
@@ -474,7 +474,7 @@ public class MachineImage implements Taggable {
      * @deprecated Use {@link #setTag(String, String)}
      */
     public void addTag(String key, String value) {
-        getTags().put(key, value);
+        setTag(key, value);
     }
 
     /**
