@@ -71,6 +71,21 @@ public interface VirtualMachineSupport extends AccessControlledService {
     public VirtualMachine alterVirtualMachine(@Nonnull String vmId, @Nonnull VMScalingOptions options) throws InternalException, CloudException;
 
     /**
+     * Cancels the data feed for Spot Instances
+     * @throws CloudException an error occurred in the cloud processing the request
+     * @throws InternalException an internal error occurred processing the request
+     */
+    public void cancelSpotDataFeedSubscription() throws CloudException, InternalException;
+
+    /**
+     * Cancels and removes a request for Spot Instances
+     * @param providerSpotInstanceRequestID the ID of the SpotInstanceRequest to be cancelled
+     * @throws CloudException an error occurred in the cloud processing the request
+     * @throws InternalException an internal error occurred processing the request
+     */
+    public void cancelSpotInstanceRequest(String providerSpotInstanceRequestID) throws CloudException, InternalException;
+
+    /**
      * Clones an existing virtual machine into a new copy.
      * @param vmId the ID of the server to be cloned
      * @param intoDcId the ID of the data center in which the new server will operate
@@ -85,6 +100,15 @@ public interface VirtualMachineSupport extends AccessControlledService {
     public @Nonnull VirtualMachine clone(@Nonnull String vmId, @Nonnull String intoDcId, @Nonnull String name, @Nonnull String description, boolean powerOn, @Nullable String ... firewallIds) throws InternalException, CloudException;
 
     /**
+     * Creates a SpotInstanceRequset fitting the options specified in the SIRequestCreateOptions
+     * @param options the configuration options for the spot instance request
+     * @return a newly created SpotInstanceRequest
+     * @throws CloudException an error occurred in the cloud processing the request
+     * @throws InternalException an internal error occurred processing the request
+     */
+    public @Nonnull SpotInstanceRequest createSpotInstanceRequest(SIRequestCreateOptions options) throws CloudException, InternalException;
+
+    /**
      * Turns extended analytics off for the target server. If the underlying cloud does not support
      * hypervisor monitoring, this method will be a NO-OP.
      * @param vmId the provider ID for the server to stop monitoring
@@ -92,7 +116,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws CloudException an error occurred within the cloud provider
      */
     public void disableAnalytics(@Nonnull String vmId) throws InternalException, CloudException;
-    
+
     /**
      * Turns extended hypervisor analytics for the target server. If the underlying cloud does not support
      * extended analytics, this method will be a NO-OP.
@@ -101,6 +125,14 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws CloudException an error occurred within the cloud provider
      */
     public void enableAnalytics(@Nonnull String vmId) throws InternalException, CloudException;
+
+    /**
+     * Creates the datafeed for Spot Instances, enabling you to view Spot Instance usage logs.
+     * @param s3BucketName the S3 bucket to which the logs will be written
+     * @throws CloudException an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void enableSpotDataFeedSubscription(String s3BucketName) throws CloudException, InternalException;
 
     /**
      * Provides access to meta-data about virtual machine capabilities in the current region of this cloud.
@@ -158,7 +190,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws CloudException an error occurred within the cloud provider
      */
     public @Nonnull VmStatistics getVMStatistics(@Nonnull String vmId, @Nonnegative long from, @Nonnegative long to) throws InternalException, CloudException;
-    
+
     /**
      * Provides hypervisor statistics for the specified server that fit within the defined time range.
      * For clouds that do not provide hypervisor statistics, this method should return an empty
@@ -192,7 +224,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
     public @Nonnull VirtualMachine launch(@Nonnull VMLaunchOptions withLaunchOptions) throws CloudException, InternalException;
-    
+
     /**
      * Launches a virtual machine in the cloud. If the cloud supports persistent servers, this method will
      * first define a server and then boot it. The end result of this operation should be a server
@@ -258,7 +290,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws CloudException an error occurred within the cloud provider
      */
     public @Nonnull Iterable<String> listFirewalls(@Nonnull String vmId) throws InternalException, CloudException;
-    
+
     /**
      * Provides a list of instance types, service offerings, or server sizes (however the underlying cloud
      * might describe it) for a particular architecture
@@ -268,6 +300,15 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws CloudException an error occurred within the cloud provider
      */
     public Iterable<VirtualMachineProduct> listProducts(Architecture architecture) throws InternalException, CloudException;
+
+    /**
+     * Provides a list of price history records for Spot Instances
+     * @param options filter options
+     * @return all price history entries that match the specified filter
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public Iterable<SpotPriceHistory> listSpotPriceHistories(SPHistoryFilterOptions options) throws CloudException, InternalException;
 
     /**
      * Lists the status for all virtual machines in the current region.
@@ -306,7 +347,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @see #unpause(String)
      */
     public void pause(@Nonnull String vmId) throws InternalException, CloudException;
-    
+
     /**
      * Executes a virtual machine reboot for the target virtual machine.
      * @param vmId the provider ID for the server to reboot

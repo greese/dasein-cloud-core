@@ -80,8 +80,23 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
+    public void cancelSpotDataFeedSubscription() throws CloudException, InternalException{
+        throw new OperationNotSupportedException("Spot Instances are not supported for " + getProvider().getCloudName());
+    }
+
+    @Override
+    public void cancelSpotInstanceRequest(String providerSpotInstanceRequestID) throws CloudException, InternalException{
+        throw new OperationNotSupportedException("Spot Instances are not supported for " + getProvider().getCloudName());
+    }
+
+    @Override
     public @Nonnull VirtualMachine clone(@Nonnull String vmId, @Nonnull String intoDcId, @Nonnull String name, @Nonnull String description, boolean powerOn, @Nullable String... firewallIds) throws InternalException, CloudException {
         throw new OperationNotSupportedException("VM cloning is not currently supported for " + getProvider().getCloudName());
+    }
+
+    @Override
+    public @Nonnull SpotInstanceRequest createSpotInstanceRequest(SIRequestCreateOptions options) throws CloudException, InternalException{
+        throw new OperationNotSupportedException("Spot Instances are not supported for " + getProvider().getCloudName());
     }
 
     @Override
@@ -98,6 +113,11 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     @Override
     public void enableAnalytics(@Nonnull String vmId) throws InternalException, CloudException {
         // NO-OP
+    }
+
+    @Override
+    public void enableSpotDataFeedSubscription(String s3BucketName) throws CloudException, InternalException{
+        throw new OperationNotSupportedException("Spot Instances are not supported for " + getProvider().getCloudName());
     }
 
     /**
@@ -122,7 +142,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
 
     @Override
     public @Nullable String getPassword(@Nonnull String vmId) throws InternalException, CloudException {
-      return null;
+        return null;
     }
 
     @Override
@@ -620,6 +640,12 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
             APITrace.end();
         }
     }
+
+    @Override
+    public Iterable<SpotPriceHistory> listSpotPriceHistories(SPHistoryFilterOptions options) throws CloudException, InternalException{
+        throw new OperationNotSupportedException("Spot Instances are not supported for " + getProvider().getCloudName());
+    }
+
 
     @Override
     @Deprecated
