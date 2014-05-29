@@ -60,6 +60,8 @@ public interface LoadBalancerSupport extends AccessControlledService {
     static public final ServiceAction CREATE_SSL_CERTIFICATE    = new ServiceAction("LB:CREATE_SSL_CERTIFICATE");
     static public final ServiceAction DELETE_SSL_CERTIFICATE    = new ServiceAction("LB:DELETE_SSL_CERTIFICATE");
     static public final ServiceAction SET_LB_SSL_CERTIFICATE    = new ServiceAction("LB:SET_SSL_CERTIFICATE");
+    static public final ServiceAction ATTACH_LB_TO_SUBNETS    = new ServiceAction("LB:ATTACH_LB_TO_SUBNETS");
+    static public final ServiceAction DETACH_LB_FROM_SUBNETS    = new ServiceAction("LB:DETACH_LB_FROM_SUBNETS");
 
     /**
      * Adds one or more data centers to the list of data centers associated with the specified load balancer. This method
@@ -511,7 +513,30 @@ public interface LoadBalancerSupport extends AccessControlledService {
      */
     public void removeLoadBalancerHealthCheck(@Nonnull String providerLoadBalancerId) throws CloudException, InternalException;
 
-    /**
+	/**
+	 * Adds subnets to the loadbalancer
+	 *
+	 * @param toLoadBalancerId the ID of the loadbalancer the subnets need to be attached
+	 * @param subnetIdsToAdd subnets IDs to be attached to the specified loadbalancer
+	 * @throws CloudException
+	 * @throws InternalException
+	 */
+	public void attachLoadBalancerToSubnets(@Nonnull String toLoadBalancerId, @Nonnull String ... subnetIdsToAdd) throws CloudException, InternalException;
+
+	/**
+	 * Removes subnet from the loadbalancer
+	 *
+	 * @param fromLoadBalancerId the ID of loadbalancer the subnets need to be detached
+	 * @param subnetIdsToDelete subnets IDs to be detached from the specified loadbalancer
+	 * @throws CloudException
+	 * @throws InternalException
+	 */
+	public void detachLoadBalancerFromSubnets(@Nonnull String fromLoadBalancerId, @Nonnull String ... subnetIdsToDelete) throws CloudException, InternalException;
+
+
+	/********************************** DEPRECATED METHODS *************************************/
+
+	/**
      * Indicates whether a health check can be created independantly of a load balancer
      * @return false if a health check can exist without having been assigned to a load balancer
      * @throws CloudException
@@ -520,8 +545,6 @@ public interface LoadBalancerSupport extends AccessControlledService {
      */
     @Deprecated
     public boolean healthCheckRequiresLoadBalancer() throws CloudException, InternalException;
-
-    /********************************** DEPRECATED METHODS *************************************/
 
     /**
      * Creates a new load balancer matching the specified characteristics in the cloud.
