@@ -224,7 +224,7 @@
     </plugins>
   </build>
 
-<distributionManagement>
+  <distributionManagement>
     <repository>
         <id>twcgrid</id>
         <name>twcgrid-releases</name>
@@ -235,7 +235,7 @@
         <name>twcgrid-snapshots</name>
         <url>http://twcgrid.artifactoryonline.com/twcgrid/libs-snapshots-local</url>
     </snapshotRepository>
-</distributionManagement>
+  </distributionManagement>
 
   <developers>
     <developer>

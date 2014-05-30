@@ -73,6 +73,27 @@ public class LoadBalancer implements Networkable, Taggable {
       return lb;
     }
 
+    /**
+     * Constructs a load balancer with the minimally acceptable data set.
+     * @param ownerId the account number that owns this load balancer
+     * @param regionId the region ID of the region in which the load balancer operates
+     * @param lbId the unique ID of the load balancer in the target cloud
+     * @param state the current operational state for the load balancer
+     * @param name the name of the load balancer
+     * @param description a user-friendly description of the load balancer
+     * @param addressType what kind of address is represented by the load balancer address
+     * @param address the load balancer CNAME, IPv4, or IPv6 address
+     * @param providerLBHealthCheckId the ID of the Health Check if one is attached
+     * @param publicPorts one or more public ports on which the load balancer is listening
+     * @return a load balancer instance representing the specified state
+     */
+    static public LoadBalancer getInstance(@Nonnull String ownerId, @Nonnull String regionId, @Nonnull String lbId, @Nonnull LoadBalancerState state, @Nonnull String name, @Nonnull String description, @Nonnull LbType type, @Nonnull LoadBalancerAddressType addressType, @Nonnull String address, @Nonnull String providerLBHealthCheckId, @Nonnull int ... publicPorts) {
+        LoadBalancer lb = new LoadBalancer(ownerId, regionId, lbId, state, name, description, addressType, address, publicPorts);
+        lb.setType( type );
+        lb.setProviderLBHealthCheckId(providerLBHealthCheckId);
+        return lb;
+    }
+
     private String                  address;
     private LoadBalancerAddressType addressType;
     private long                    creationTimestamp;
@@ -90,6 +111,7 @@ public class LoadBalancer implements Networkable, Taggable {
     private int[]                   publicPorts;
     private IPVersion[]             supportedTraffic;
     private Map<String,String>      tags;
+    private String                  providerLBHealthCheckId;
     private String[]                providerFirewallIds;
 
     /**
@@ -240,6 +262,13 @@ public class LoadBalancer implements Networkable, Taggable {
      */
     public @Nonnull IPVersion[] getSupportedTraffic() {
         return (supportedTraffic == null ? new IPVersion[] { IPVersion.IPV4 } : supportedTraffic);
+    }
+
+    /**
+     * @return the ID of a Health Check is one is attached. Othwise null.
+     */
+    public @Nullable String getProviderLBHealthCheckId(){
+        return providerLBHealthCheckId;
     }
 
     @Override
@@ -420,6 +449,14 @@ public class LoadBalancer implements Networkable, Taggable {
      */
     public void setType( LbType type ) {
       this.type = type;
+    }
+
+    /**
+     * Sets a load balancer Health Check ID if one is attached
+     * @param providerLBHealthCheckId
+     */
+    public void setProviderLBHealthCheckId(@Nonnull String providerLBHealthCheckId){
+        this.providerLBHealthCheckId = providerLBHealthCheckId;
     }
 
     /**
