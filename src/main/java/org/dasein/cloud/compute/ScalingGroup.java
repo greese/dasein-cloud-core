@@ -51,8 +51,8 @@ public class ScalingGroup implements Serializable {
     private AutoScalingTag[]      tags;
     // comma seperated list
     private String                subnetIds;
+    private String[]              subnets;
 
-    
     public ScalingGroup() { }
 
     public String getId() {
@@ -245,8 +245,12 @@ public class ScalingGroup implements Serializable {
       return subnetIds;
     }
 
-    public void setSubnetIds(String subnetIds) {
-      this.subnetIds = subnetIds;
+    public void setSubnetIds(String subnetIds) { this.subnetIds = subnetIds; }
+
+    public String[] getSubnets() {
+        return (this.subnetIds == null) ? new String[0] : this.subnetIds.split("\\s*,\\s*");
     }
+
+    public void setSubnets(String[] subnets) {  this.subnets = subnets;  }
     
 }
