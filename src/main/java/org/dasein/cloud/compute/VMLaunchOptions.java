@@ -103,6 +103,7 @@ public class VMLaunchOptions {
     private boolean            ipForwardingAllowed;
     private String             roleId;
     private boolean            associatePublicIpAddress;
+    private String             virtualMachineGroup;
     // NOTE: SEE NOTE AT TOP OF ATTRIBUTE LIST WHEN ADDING/REMOVING/CHANGING AN ATTRIBUTE
 
     private VMLaunchOptions() { }
@@ -182,6 +183,7 @@ public class VMLaunchOptions {
         options.ioOptimized = ioOptimized;
         options.ipForwardingAllowed = ipForwardingAllowed;
         options.kernelId = kernelId;
+        options.virtualMachineGroup = virtualMachineGroup;
         if( metaData != null ) {
             options.metaData = new HashMap<String, Object>();
             options.metaData.putAll(metaData);
@@ -404,6 +406,13 @@ public class VMLaunchOptions {
     }
 
     /**
+     * @return an optional group association with other virtual machines
+     */
+    public @Nullable String getVirtualMachineGroup() {
+        return virtualMachineGroup;
+    }
+
+    /**
      * @return the VLAN or subnet into which the virtual machine will be launched
      */
     public @Nullable String getVlanId() {
@@ -468,6 +477,17 @@ public class VMLaunchOptions {
      */
     public @Nonnull VMLaunchOptions inDataCenter(@Nonnull String dataCenterId) {
         this.dataCenterId = dataCenterId;
+        return this;
+    }
+
+    /**
+     * Creates an informal association under a group name for the launched VM with other virtual machines in
+     * the system. The underlying cloud may interpret this in any number of ways.
+     * @param group the name of the group to which the virtual machine belongs
+     * @return this
+     */
+    public @Nonnull VMLaunchOptions inVirtualMachineGroup(@Nonnull String group) {
+        this.virtualMachineGroup = group;
         return this;
     }
 
