@@ -434,4 +434,9 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
         }
         throw new RuntimeException("Unable to get a provider term for load balancer.");
     }
+
+    @Override
+    public void setFirewalls(@Nonnull String providerLoadBalancerId, @Nonnull String... firewallIds) throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Setting firewalls have not been implemented for " + getProvider().getCloudName());
+    }
 }

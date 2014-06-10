@@ -33,6 +33,8 @@ import org.dasein.cloud.identity.ServiceAction;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Locale;
 
 /**
  * Implements support for cloud load balancing services.
@@ -60,6 +62,7 @@ public interface LoadBalancerSupport extends AccessControlledService {
     static public final ServiceAction CREATE_SSL_CERTIFICATE    = new ServiceAction("LB:CREATE_SSL_CERTIFICATE");
     static public final ServiceAction DELETE_SSL_CERTIFICATE    = new ServiceAction("LB:DELETE_SSL_CERTIFICATE");
     static public final ServiceAction SET_LB_SSL_CERTIFICATE    = new ServiceAction("LB:SET_SSL_CERTIFICATE");
+    static public final ServiceAction SET_FIREWALLS        = new ServiceAction("LB:SET_FIREWALLS");
     static public final ServiceAction ATTACH_LB_TO_SUBNETS    = new ServiceAction("LB:ATTACH_LB_TO_SUBNETS");
     static public final ServiceAction DETACH_LB_FROM_SUBNETS    = new ServiceAction("LB:DETACH_LB_FROM_SUBNETS");
 
@@ -587,4 +590,13 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @deprecated Use {@link #identifyEndpointsOnCreateRequirement()}
      */
     public boolean requiresServerOnCreate() throws CloudException, InternalException;
+
+    /**
+     * Attaches an existing Load Balancer to an existing firewalls
+     * @param providerLoadBalancerId the load balancer ID
+     * @param firewallIds the firewalls
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public void setFirewalls(@Nonnull String providerLoadBalancerId, @Nonnull String... firewallIds) throws CloudException, InternalException;
 }
