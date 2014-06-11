@@ -65,6 +65,7 @@ public interface LoadBalancerSupport extends AccessControlledService {
     static public final ServiceAction SET_FIREWALLS        = new ServiceAction("LB:SET_FIREWALLS");
     static public final ServiceAction ATTACH_LB_TO_SUBNETS    = new ServiceAction("LB:ATTACH_LB_TO_SUBNETS");
     static public final ServiceAction DETACH_LB_FROM_SUBNETS    = new ServiceAction("LB:DETACH_LB_FROM_SUBNETS");
+    static public final ServiceAction MODIFY_LB_ATTRIBUTES    = new ServiceAction("LB:MODIFY_LB_ATTRIBUTES");
 
     /**
      * Adds one or more data centers to the list of data centers associated with the specified load balancer. This method
@@ -599,4 +600,14 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @throws InternalException
      */
     public void setFirewalls(@Nonnull String providerLoadBalancerId, @Nonnull String... firewallIds) throws CloudException, InternalException;
+
+    /**
+     * Modifies the attributes of a specified load balancer
+     * @param id  firewall id
+     * @param crossZone
+     * @param connectionDraining
+     * @param connectionDrainingTimeout
+     * @throws OperationNotSupportedException
+     */
+    public void modifyLoadBalancerAttributes(@Nonnull String id, boolean crossZone, boolean connectionDraining, int connectionDrainingTimeout) throws CloudException, InternalException;
 }
