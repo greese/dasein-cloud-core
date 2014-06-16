@@ -22,33 +22,34 @@ package org.dasein.cloud.storage;
 import org.dasein.cloud.AsynchronousTask;
 
 public class FileTransfer extends AsynchronousTask<Object> {
-	private long             bytesToTransfer;
-	private long             bytesTransferred;
-	
-	public FileTransfer() { } 
-	
-	public long getBytesToTransfer() {
-		return bytesToTransfer;
-	}
+    private long bytesToTransfer;
+    private long bytesTransferred;
 
-	public void setBytesToTransfer(long bytesToTransfer) {
-		this.bytesToTransfer = bytesToTransfer;
-	}
+    public FileTransfer() {
+    }
 
-	public long getBytesTransferred() {
-		return bytesTransferred;
-	}
+    public long getBytesToTransfer() {
+        return bytesToTransfer;
+    }
 
-	public void setBytesTransferred(long bytesTransferred) {
-		this.bytesTransferred = bytesTransferred;
-		setPercentComplete(((double)bytesTransferred)/((double)bytesToTransfer));
-	}
+    public void setBytesToTransfer( long bytesToTransfer ) {
+        this.bytesToTransfer = bytesToTransfer;
+    }
 
-	public Throwable getTransferError() {
-		return getTaskError();
-	}
-	
-	public double getTransferRateInKilobytesPerSecond() {
-		return ((double)getBytesTransferred())/((double)getDuration());
-	}
+    public long getBytesTransferred() {
+        return bytesTransferred;
+    }
+
+    public void setBytesTransferred( long bytesTransferred ) {
+        this.bytesTransferred = bytesTransferred;
+        setPercentComplete(( ( double ) bytesTransferred ) / ( ( double ) bytesToTransfer ));
+    }
+
+    public Throwable getTransferError() {
+        return getTaskError();
+    }
+
+    public double getTransferRateInKilobytesPerSecond() {
+        return ( ( double ) getBytesTransferred() ) / ( ( double ) getDuration() );
+    }
 }

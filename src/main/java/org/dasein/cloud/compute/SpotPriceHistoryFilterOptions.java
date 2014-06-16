@@ -19,6 +19,7 @@
 
 package org.dasein.cloud.compute;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
 /**
@@ -29,13 +30,13 @@ import javax.annotation.Nonnull;
  * @version 2014.05 initial version
  * @since 2014.05
  */
-public class SPHistoryFilterOptions{
+public class SpotPriceHistoryFilterOptions {
     /**
      * Constructs an empty set of filtering options that will force match against any History Record by default.
      * @return an empty filtering options objects
      */
-    static public @Nonnull SPHistoryFilterOptions getInstance() {
-        return new SPHistoryFilterOptions(false);
+    static public @Nonnull SpotPriceHistoryFilterOptions getInstance() {
+        return new SpotPriceHistoryFilterOptions(false);
     }
 
     /**
@@ -44,15 +45,17 @@ public class SPHistoryFilterOptions{
      * @param matchesAny <code>true</code> if it is sufficient that just one of the criteria are matched, false if all are needed to be matched
      * @return a newly constructed set of Spot History filtering options
      */
-    static public @Nonnull SPHistoryFilterOptions getInstance(boolean matchesAny) {
-        return new SPHistoryFilterOptions(matchesAny);
+    static public @Nonnull SpotPriceHistoryFilterOptions getInstance(boolean matchesAny) {
+        return new SpotPriceHistoryFilterOptions(matchesAny);
     }
 
     private String[] dataCenterIds;
     private String[] productIds;
     private boolean  matchesAny;
+    private long startTimestamp;
+    private long endTimestamp;
 
-    private SPHistoryFilterOptions(boolean matchesAny){
+    private SpotPriceHistoryFilterOptions( boolean matchesAny ){
         this.matchesAny = matchesAny;
     }
 
@@ -80,7 +83,7 @@ public class SPHistoryFilterOptions{
      * Indicates that the criteria associated with this filter must match all set criteria.
      * @return this
      */
-    public @Nonnull SPHistoryFilterOptions matchingAll() {
+    public @Nonnull SpotPriceHistoryFilterOptions matchingAll() {
         this.matchesAny = false;
         return this;
     }
@@ -89,18 +92,25 @@ public class SPHistoryFilterOptions{
      * Indicates that the criteria associated with this filter must match just one single criterion.
      * @return this
      */
-    public @Nonnull SPHistoryFilterOptions matchingAny() {
+    public @Nonnull SpotPriceHistoryFilterOptions matchingAny() {
         this.matchesAny = true;
         return this;
     }
 
-    public @Nonnull SPHistoryFilterOptions matchingDataCenters(@Nonnull String[] dataCenterIds) {
+    public @Nonnull SpotPriceHistoryFilterOptions matchingDataCenters(@Nonnull String[] dataCenterIds) {
         this.dataCenterIds = dataCenterIds;
         return this;
     }
 
-    public @Nonnull SPHistoryFilterOptions matchingProducts(@Nonnull String[] productIds) {
+    public @Nonnull SpotPriceHistoryFilterOptions matchingProducts(@Nonnull String[] productIds) {
         this.productIds = productIds;
+        return this;
+    }
+
+    public @Nonnull SpotPriceHistoryFilterOptions matchingInterval(
+            @Nonnegative long startTimestamp, @Nonnegative long endTimestamp) {
+        this.startTimestamp = startTimestamp;
+        this.endTimestamp = endTimestamp;
         return this;
     }
 
