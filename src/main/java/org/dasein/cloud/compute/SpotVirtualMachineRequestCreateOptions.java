@@ -28,44 +28,46 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Options for creating Spot Instance Requests.
+ * Options for creating Spot VM Requests.
+ *
  * @author Drew Lyall
  * @version 2014.05 initial version
  * @since 2014.05
  */
-public class SIRequestCreateOptions{
-    private String        providerMachineImageId;
-    private String        providerProductId;
-    private int           instanceCount;
-    private double        maximumPrice;
-    private String        launchGroup;
-    private long          startDateTime;
-    private long          expiryDateTime;
-    private SIRequestType type;
-    private String        providerVlanId;
-    private String        providerSubnetId;
-    private boolean       isAutoAssignIP;
-    private String        providerIAMRoleId;
-    private boolean       isMonitoring;
-    private String        userData;
+public class SpotVirtualMachineRequestCreateOptions {
+    private String providerMachineImageId;
+    private String providerProductId;
+    private int vmCount;
+    private double maximumPrice;
+    private String launchGroup;
+    private long startTimestamp;
+    private long expiryTimestamp;
+    private SpotVirtualMachineRequestType type;
+    private String providerVlanId;
+    private String providerSubnetId;
+    private boolean isAutoAssignIp;
+    private String providerIAMRoleId;
+    private boolean isMonitoring;
+    private String userData;
 
     /**
-     * Provides options for creating a Spot Instance Request
-     * @return an object representing the options for creating a Spot Instance
+     * Provides options for creating a Spot VM Request
+     *
+     * @return an object representing the options for creating a Spot VM
      */
-    static public SIRequestCreateOptions getInstance(@Nonnull String providerMachineImageId, @Nonnull String providerProductId, int instanceCount, double maximumPrice, @Nullable String launchGroup, long startDateTime, long expiryDateTime, @Nonnull SIRequestType type, @Nonnull String providerVlanId, @Nullable String providerSubnetId, boolean autoAssignIP, @Nullable String providerIAMRoleId, boolean monitoring, @Nullable String userData){
-        SIRequestCreateOptions opts = new SIRequestCreateOptions();
+    static public SpotVirtualMachineRequestCreateOptions getInstance( @Nonnull String providerMachineImageId, @Nonnull String providerProductId, int vmCount, double maximumPrice, @Nullable String launchGroup, long startTimestamp, long expiryTimestamp, @Nonnull SpotVirtualMachineRequestType type, @Nonnull String providerVlanId, @Nullable String providerSubnetId, boolean autoAssignIp, @Nullable String providerIAMRoleId, boolean monitoring, @Nullable String userData ) {
+        SpotVirtualMachineRequestCreateOptions opts = new SpotVirtualMachineRequestCreateOptions();
         opts.providerMachineImageId = providerMachineImageId;
         opts.providerProductId = providerProductId;
-        opts.instanceCount = instanceCount;
+        opts.vmCount = vmCount;
         opts.maximumPrice = maximumPrice;
         opts.launchGroup = launchGroup;
-        opts.startDateTime = startDateTime;
-        opts.expiryDateTime = expiryDateTime;
+        opts.startTimestamp = startTimestamp;
+        opts.expiryTimestamp = expiryTimestamp;
         opts.type = type;
         opts.providerVlanId = providerVlanId;
         opts.providerSubnetId = providerSubnetId;
-        opts.isAutoAssignIP = autoAssignIP;
+        opts.isAutoAssignIp = autoAssignIp;
         opts.providerIAMRoleId = providerIAMRoleId;
         opts.isMonitoring = monitoring;
         opts.userData = userData;
@@ -73,65 +75,65 @@ public class SIRequestCreateOptions{
         return opts;
     }
 
-    public String getProviderMachineImageId(){
+    public String getProviderMachineImageId() {
         return providerMachineImageId;
     }
 
-    public String getProviderProductId(){
+    public String getProviderProductId() {
         return providerProductId;
     }
 
-    public int getInstanceCount(){
-        return instanceCount;
+    public int getVmCount() {
+        return vmCount;
     }
 
-    public double getMaximumPrice(){
+    public double getMaximumPrice() {
         return maximumPrice;
     }
 
-    public String getLaunchGroup(){
+    public String getLaunchGroup() {
         return launchGroup;
     }
 
-    public long getStartDateTime(){
-        return startDateTime;
+    public long getStartTimestamp() {
+        return startTimestamp;
     }
 
-    public long getExpiryDateTime(){
-        return expiryDateTime;
+    public long getExpiryTimestamp() {
+        return expiryTimestamp;
     }
 
-    public SIRequestType getType(){
+    public SpotVirtualMachineRequestType getType() {
         return type;
     }
 
-    public String getProviderVlanId(){
+    public String getProviderVlanId() {
         return providerVlanId;
     }
 
-    public String getProviderSubnetId(){
+    public String getProviderSubnetId() {
         return providerSubnetId;
     }
 
-    public boolean isAutoAssignIP(){
-        return isAutoAssignIP;
+    public boolean isAutoAssignIp() {
+        return isAutoAssignIp;
     }
 
-    public String getProviderIAMRoleId(){
+    public String getProviderIAMRoleId() {
         return providerIAMRoleId;
     }
 
-    public @Nonnull SpotInstanceRequest build(CloudProvider provider)throws CloudException, InternalException{
+    public @Nonnull SpotVirtualMachineRequest build( CloudProvider provider ) throws CloudException, InternalException {
         ComputeServices services = provider.getComputeServices();
-        if(services == null){
+        if( services == null ) {
             throw new OperationNotSupportedException(provider.getCloudName() + " does not have support for compute services");
         }
 
         VirtualMachineSupport support = services.getVirtualMachineSupport();
-        if(support == null){
+        if( support == null ) {
             throw new OperationNotSupportedException(provider.getCloudName() + " does not have VM support");
         }
 
-        return support.createSpotInstanceRequest(this);
+        return support.createSpotVirtualMachineRequest(this);
     }
 }

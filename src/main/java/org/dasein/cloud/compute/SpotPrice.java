@@ -1,23 +1,24 @@
 package org.dasein.cloud.compute;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
-public class SpotPrice{
-    private long   timeStamp;
-    private double price;
+public class SpotPrice {
+    private long   timestamp;
+    private String price;
 
-    public @Nonnull SpotPrice getInstance(long timeStamp, double price){
+    public static @Nonnull SpotPrice getInstance(@Nonnegative long timestamp, @Nonnull String price){
         SpotPrice sp = new SpotPrice();
-        sp.timeStamp = timeStamp;
+        sp.timestamp = timestamp;
         sp.price = price;
         return sp;
     }
 
-    public long getTimeStamp(){
-        return timeStamp;
+    public @Nonnegative long getTimestamp(){
+        return timestamp;
     }
 
-    public double getPrice(){
+    public @Nonnull String getPrice(){
         return price;
     }
 }

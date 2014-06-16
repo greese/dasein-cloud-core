@@ -22,40 +22,26 @@ package org.dasein.cloud.compute;
 import javax.annotation.Nonnull;
 
 /**
- * The history of the price of Spot Instances for a specified datacenter and VM Product type.
+ * The history of the price of Spot VMs for a specified datacenter and VM Product type.
  */
-public class SpotPriceHistory{
-    private long startDateTime;
-    private long stopDateTime;
+public class SpotPriceHistory {
     private String providerDataCenterId;
     private String productId;
     private SpotPrice[] priceHistory;
 
     /**
      * Creates a new instance of a Spot Price History Object.
-     * @param startDateTime the start time for the earliest price entry
-     * @param stopDateTime the end time for the most latest price entry
      * @param providerDataCenterId the datacenter being queried
      * @param productId the product type being queried
      * @param priceHistory an array showing price history records of timestamp against price
      * @return
      */
-    public static SpotPriceHistory getInstance(long startDateTime, long stopDateTime, @Nonnull String providerDataCenterId, @Nonnull String productId, @Nonnull SpotPrice[] priceHistory){
+    public static SpotPriceHistory getInstance(@Nonnull String providerDataCenterId, @Nonnull String productId, @Nonnull SpotPrice[] priceHistory){
         SpotPriceHistory sph = new SpotPriceHistory();
-        sph.startDateTime = startDateTime;
-        sph.stopDateTime = stopDateTime;
         sph.providerDataCenterId = providerDataCenterId;
         sph.productId = productId;
         sph.priceHistory = priceHistory;
         return sph;
-    }
-
-    public long getStartDateTime(){
-        return startDateTime;
-    }
-
-    public long getStopDateTime(){
-        return stopDateTime;
     }
 
     public String getProviderDataCenterId(){
