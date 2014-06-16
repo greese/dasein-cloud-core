@@ -23,68 +23,68 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nullable;
 
 public class AsynchronousTask<T> {
-	private double           percentComplete;
-	private long             endTime;
-	private T                result;
-	private long             startTime;
-	private Throwable        taskError;
-	
-	public AsynchronousTask() { 
-		startTime = System.currentTimeMillis();
-		endTime = -1L;
-	}
+    private double    percentComplete;
+    private long      endTime;
+    private T         result;
+    private long      startTime;
+    private Throwable taskError;
 
-	public synchronized void complete(@Nullable Throwable withError) {
-		taskError = withError;
-		endTime = System.currentTimeMillis();
-		notifyAll();
-	}
-	
-	public synchronized void completeWithResult(@Nullable T result) {
-		this.result = result;
-		endTime = System.currentTimeMillis();
-		notifyAll();
-	}
-	
-	public synchronized boolean isComplete() {
-		return endTime > -1L;
-	}
-	
-	public synchronized long getDuration() {
-		if( endTime == -1L ) {
-			return System.currentTimeMillis() - startTime;
-		}
-		else {
-			return endTime - startTime;
-		}
-	}
-	
-	public synchronized @Nonnegative double getPercentComplete() {
-		return percentComplete;
-	}
+    public AsynchronousTask() {
+        startTime = System.currentTimeMillis();
+        endTime = -1L;
+    }
 
-	public synchronized void setPercentComplete(@Nonnegative double percentComplete) {
-		this.percentComplete = percentComplete;
-		notifyAll();
-	}
+    public synchronized void complete( @Nullable Throwable withError ) {
+        taskError = withError;
+        endTime = System.currentTimeMillis();
+        notifyAll();
+    }
 
-	public synchronized @Nonnegative long getEndTime() {
-		return endTime;
-	}
-	
-	public @Nullable T getResult() {
-		return result; 
-	}
+    public synchronized void completeWithResult( @Nullable T result ) {
+        this.result = result;
+        endTime = System.currentTimeMillis();
+        notifyAll();
+    }
 
-	public @Nonnegative long getStartTime() {
-		return startTime;
-	}
+    public synchronized boolean isComplete() {
+        return endTime > -1L;
+    }
 
-	public void setStartTime(@Nonnegative long startTime) {
-		this.startTime = startTime;
-	}
+    public synchronized long getDuration() {
+        if( endTime == -1L ) {
+            return System.currentTimeMillis() - startTime;
+        }
+        else {
+            return endTime - startTime;
+        }
+    }
 
-	public @Nullable Throwable getTaskError() {
-		return taskError;
-	}
+    public synchronized @Nonnegative double getPercentComplete() {
+        return percentComplete;
+    }
+
+    public synchronized void setPercentComplete( @Nonnegative double percentComplete ) {
+        this.percentComplete = percentComplete;
+        notifyAll();
+    }
+
+    public synchronized @Nonnegative long getEndTime() {
+        return endTime;
+    }
+
+    public @Nullable T getResult() {
+        return result;
+    }
+
+    public @Nonnegative long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime( @Nonnegative long startTime ) {
+        this.startTime = startTime;
+    }
+
+    public @Nullable Throwable getTaskError() {
+        return taskError;
+    }
 }

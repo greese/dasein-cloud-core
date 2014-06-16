@@ -27,21 +27,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Snapshot implements Taggable {
-    private SnapshotState currentState;
-    private String        description;
-    private String        name;
-    private String        owner;
-    private String        progress;
-    private String        providerSnapshotId;
-    private String        regionId;
-    private int           sizeInGb;
-    private long          snapshotTimestamp;
-    private Map<String,String> tags;
-    private String        volumeId;
-    
-    public Snapshot() { }
-    
-    public boolean equals(Object ob) {
+    private SnapshotState       currentState;
+    private String              description;
+    private String              name;
+    private String              owner;
+    private String              progress;
+    private String              providerSnapshotId;
+    private String              regionId;
+    private int                 sizeInGb;
+    private long                snapshotTimestamp;
+    private Map<String, String> tags;
+    private String              volumeId;
+
+    public Snapshot() {
+    }
+
+    public boolean equals( Object ob ) {
         if( ob == null ) {
             return false;
         }
@@ -51,8 +52,8 @@ public class Snapshot implements Taggable {
         if( !getClass().getName().equals(ob.getClass().getName()) ) {
             return false;
         }
-        Snapshot other = (Snapshot)ob;
-        
+        Snapshot other = ( Snapshot ) ob;
+
         if( !owner.equals(other.owner) ) {
             return false;
         }
@@ -61,60 +62,60 @@ public class Snapshot implements Taggable {
         }
         return providerSnapshotId.equals(other.providerSnapshotId);
     }
-    
+
     public SnapshotState getCurrentState() {
         return currentState;
     }
-    
-    public String getName() { 
+
+    public String getName() {
         return name;
     }
-    
+
     public String getOwner() {
         return owner;
     }
-    
+
     public String getProviderSnapshotId() {
         return providerSnapshotId;
     }
-    
+
     public String getRegionId() {
         return regionId;
     }
-    
+
     public long getSnapshotTimestamp() {
         return snapshotTimestamp;
     }
-    
+
     public String getVolumeId() {
         return volumeId;
     }
-    
-    public void setCurrentState(SnapshotState currentState) {
+
+    public void setCurrentState( SnapshotState currentState ) {
         this.currentState = currentState;
     }
-    
-    public void setName(String name) {
+
+    public void setName( String name ) {
         this.name = name;
     }
-    
-    public void setOwner(String owner) {
+
+    public void setOwner( String owner ) {
         this.owner = owner;
     }
-    
-    public void setProviderSnapshotId(String providerSnapshotId) {
+
+    public void setProviderSnapshotId( String providerSnapshotId ) {
         this.providerSnapshotId = providerSnapshotId;
     }
-    
-    public void setRegionId(String regionId) {
+
+    public void setRegionId( String regionId ) {
         this.regionId = regionId;
     }
-    
-    public void setSnapshotTimestamp(long snapshotTimestamp) {
+
+    public void setSnapshotTimestamp( long snapshotTimestamp ) {
         this.snapshotTimestamp = snapshotTimestamp;
     }
-    
-    public void setVolumeId(String volumeId) {
+
+    public void setVolumeId( String volumeId ) {
         this.volumeId = volumeId;
     }
 
@@ -126,52 +127,52 @@ public class Snapshot implements Taggable {
         return progress;
     }
 
-    public void setDescription(String description) {
+    public void setDescription( String description ) {
         this.description = description;
     }
 
-    public void setProgress(String progress) {
+    public void setProgress( String progress ) {
         this.progress = progress;
     }
 
-	public int getSizeInGb() {
-		return sizeInGb;
-	}
+    public int getSizeInGb() {
+        return sizeInGb;
+    }
 
-	public void setSizeInGb(int sizeInGb) {
-		this.sizeInGb = sizeInGb;
-	}
+    public void setSizeInGb( int sizeInGb ) {
+        this.sizeInGb = sizeInGb;
+    }
 
 
-    public void addTag(Tag t) {
+    public void addTag( Tag t ) {
         addTag(t.getKey(), t.getValue());
     }
 
-    public void addTag(String key, String value) {
+    public void addTag( String key, String value ) {
         getTags().put(key, value);
     }
 
-    public Object getTag(String tag) {
+    public Object getTag( String tag ) {
         return getTags().get(tag);
     }
 
-    public synchronized @Nonnull Map<String,String> getTags() {
+    public synchronized @Nonnull Map<String, String> getTags() {
         if( tags == null ) {
-            tags = new HashMap<String,String>();
+            tags = new HashMap<String, String>();
         }
         return tags;
     }
 
-    public void setTag(@Nonnull String key, @Nonnull String value) {
+    public void setTag( @Nonnull String key, @Nonnull String value ) {
         getTags().put(key, value);
     }
 
-    public synchronized void setTags(Map<String,String> properties) {
+    public synchronized void setTags( Map<String, String> properties ) {
         getTags().clear();
         getTags().putAll(properties);
     }
 
     public String toString() {
-	    return (name + " [" + providerSnapshotId + "]");
-	}
+        return ( name + " [" + providerSnapshotId + "]" );
+    }
 }
