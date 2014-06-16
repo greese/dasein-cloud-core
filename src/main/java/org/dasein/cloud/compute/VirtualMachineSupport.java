@@ -375,7 +375,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws CloudException
      * @throws InternalException
      */
-    public Iterable<SpotPriceHistory> listSpotPriceHistories( SpotPriceHistoryFilterOptions options ) throws CloudException, InternalException;
+    public Iterable<SpotPriceHistory> listSpotPriceHistories( @Nullable SpotPriceHistoryFilterOptions options ) throws CloudException, InternalException;
 
     /**
      * Lists the status for all virtual machines in the current region.
