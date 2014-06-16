@@ -30,7 +30,7 @@ import java.io.Serializable;
 @SuppressWarnings("UnusedDeclaration")
 public class VirtualMachineProduct implements Serializable {
     private static final long serialVersionUID = -6761551014614219494L;
-
+    
     private int               cpuCount;
     private String            description;
     private Storage<Gigabyte> rootVolumeSize;
@@ -45,11 +45,11 @@ public class VirtualMachineProduct implements Serializable {
     private Status status = Status.CURRENT;
 
     public VirtualMachineProduct() { }
-
+    
     public boolean equals(Object ob) {
         return (ob != null && (ob == this || getClass().getName().equals(ob.getClass().getName()) && getProviderProductId().equals(((VirtualMachineProduct) ob).getProviderProductId())));
     }
-
+    
     public String getName() {
         return name;
     }
@@ -73,11 +73,11 @@ public class VirtualMachineProduct implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
-
+    
     public String getProviderProductId() {
         return providerProductId;
     }
-
+    
     public void setProviderProductId(@Nonnull String providerProductId) {
         this.providerProductId = providerProductId;
     }
