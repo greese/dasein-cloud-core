@@ -519,7 +519,7 @@ public interface LoadBalancerSupport extends AccessControlledService {
     @Deprecated
     public HashMap<String, String> getInstanceHealth(@Nonnull String providerLoadBalancerId, @Nullable String providerVirtualMachineId) throws CloudException, InternalException;
 
-     /*
+     /**
      * Indicates whether a health check can be created independently of a load balancer
      * @return false if a health check can exist without having been assigned to a load balancer
      * @throws CloudException
