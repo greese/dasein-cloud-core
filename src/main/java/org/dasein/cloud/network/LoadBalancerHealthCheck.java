@@ -61,7 +61,7 @@ public class LoadBalancerHealthCheck implements Networkable{
     }
 
     public static LoadBalancerHealthCheck getInstance(@Nullable String providerLBHealthCheckId, @Nonnull String name, @Nullable String description, @Nullable String host, @Nullable HCProtocol protocol, int port, @Nullable String path, int interval, int timeout, int healthyCount, int unhealthyCount){
-        return new LoadBalancerHealthCheck(providerLBHealthCheckId, name, description, host, null, port, path, interval, timeout, healthyCount, unhealthyCount);
+        return new LoadBalancerHealthCheck(providerLBHealthCheckId, name, description, host, protocol, port, path, interval, timeout, healthyCount, unhealthyCount);
     }
 
     private LoadBalancerHealthCheck(@Nullable String providerLBHealthCheckId, @Nullable String name, @Nullable String description, @Nullable String host, @Nullable HCProtocol protocol, int port, @Nullable String path, int interval, int timeout, int healthyCount, int unhealthyCount){
