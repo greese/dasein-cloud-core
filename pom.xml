@@ -226,14 +226,13 @@
 
   <distributionManagement>
     <repository>
-        <id>twcgrid</id>
-        <name>twcgrid-releases</name>
-        <url>http://twcgrid.artifactoryonline.com/twcgrid/libs-releases-local</url>
+      <id>sonatype-nexus-staging</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+      <uniqueVersion>false</uniqueVersion>
     </repository>
     <snapshotRepository>
-        <id>twcgrid</id>
-        <name>twcgrid-snapshots</name>
-        <url>http://twcgrid.artifactoryonline.com/twcgrid/libs-snapshots-local</url>
+      <id>sonatype-nexus-snapshots</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </snapshotRepository>
   </distributionManagement>
 
