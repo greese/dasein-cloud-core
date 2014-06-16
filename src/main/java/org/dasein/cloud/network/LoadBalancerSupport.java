@@ -537,6 +537,16 @@ public interface LoadBalancerSupport extends AccessControlledService {
 	 */
 	public void detachLoadBalancerFromSubnets(@Nonnull String fromLoadBalancerId, @Nonnull String ... subnetIdsToDelete) throws CloudException, InternalException;
 
+    /**
+     * Modifies the attributes of a specified load balancer
+     * @param id firewall id
+     * @param crossZone if enabled, the load balancer routes the request traffic evenly across all
+     * @param connectionDraining specifies whether connection draining is enabled for the load balancer.
+     * @param connectionDrainingTimeout specifies the maximum time (in seconds) to keep the existing connections open before deregistering the instances.
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public void modifyLoadBalancerAttributes(@Nonnull String id, boolean crossZone, boolean connectionDraining, @Nullable Integer connectionDrainingTimeout) throws CloudException, InternalException;
 
 	/********************************** DEPRECATED METHODS *************************************/
 
@@ -600,14 +610,4 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @throws InternalException
      */
     public void setFirewalls(@Nonnull String providerLoadBalancerId, @Nonnull String... firewallIds) throws CloudException, InternalException;
-
-    /**
-     * Modifies the attributes of a specified load balancer
-     * @param id  firewall id
-     * @param crossZone
-     * @param connectionDraining
-     * @param connectionDrainingTimeout
-     * @throws OperationNotSupportedException
-     */
-    public void modifyLoadBalancerAttributes(@Nonnull String id, boolean crossZone, boolean connectionDraining, int connectionDrainingTimeout) throws CloudException, InternalException;
 }
