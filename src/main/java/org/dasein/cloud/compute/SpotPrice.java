@@ -5,9 +5,9 @@ import javax.annotation.Nonnull;
 
 public class SpotPrice {
     private long   timestamp;
-    private String price;
+    private float price;
 
-    public static @Nonnull SpotPrice getInstance(@Nonnegative long timestamp, @Nonnull String price){
+    public static @Nonnull SpotPrice getInstance(@Nonnegative long timestamp, @Nonnegative float price){
         SpotPrice sp = new SpotPrice();
         sp.timestamp = timestamp;
         sp.price = price;
@@ -18,7 +18,7 @@ public class SpotPrice {
         return timestamp;
     }
 
-    public @Nonnull String getPrice(){
+    public @Nonnegative float getPrice(){
         return price;
     }
 }
