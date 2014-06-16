@@ -89,6 +89,7 @@ public class VirtualMachine implements Networkable, Taggable {
     private String                providerRoleId;
     private VmStatus              providerHostStatus;
     private VmStatus              providerVmStatus;
+    private String                virtualMachineGroup;
     private VisibleScope          visibleScope;
 	private String                userData;
 
@@ -425,6 +426,15 @@ public class VirtualMachine implements Networkable, Taggable {
             }
         }
         return addrs;
+    }
+
+    /**
+     * Creates an informal association under a group name for the launched VM with other virtual machines in
+     * the system. The underlying cloud may interpret this in any number of ways.
+     * @return the virtual machine group association
+     */
+    public @Nullable String getVirtualMachineGroup() {
+        return virtualMachineGroup;
     }
 
     private String resolve(String dnsName) {
