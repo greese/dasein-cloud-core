@@ -52,8 +52,8 @@ public class SpotPriceHistoryFilterOptions {
     private String[] dataCenterIds;
     private String[] productIds;
     private boolean  matchesAny;
-    private long startTimestamp;
-    private long endTimestamp;
+    private long startTimestamp = -1;
+    private long endTimestamp = -1;
 
     private SpotPriceHistoryFilterOptions( boolean matchesAny ){
         this.matchesAny = matchesAny;
@@ -71,12 +71,21 @@ public class SpotPriceHistoryFilterOptions {
         return matchesAny;
     }
 
+    public long getStartTimestamp() {
+        return startTimestamp;
+    }
+
+    public long getEndTimestamp() {
+        return endTimestamp;
+    }
     /**
      * Indicates whether there are any criteria associated with these options.
      * @return <code>true</code> if this filter options object has any criteria associated with it
      */
     public boolean hasCriteria() {
-        return ((productIds != null && productIds.length > 0) || (dataCenterIds != null && dataCenterIds.length > 0));
+        return ((productIds != null && productIds.length > 0) ||
+                (dataCenterIds != null && dataCenterIds.length > 0) ||
+                (startTimestamp > 0 && endTimestamp > 0));
     }
 
     /**
@@ -109,6 +118,9 @@ public class SpotPriceHistoryFilterOptions {
 
     public @Nonnull SpotPriceHistoryFilterOptions matchingInterval(
             @Nonnegative long startTimestamp, @Nonnegative long endTimestamp) {
+        if( endTimestamp <= startTimestamp ) {
+            throw new RuntimeException("Start timestamp should be greater than end timestamp");
+        }
         this.startTimestamp = startTimestamp;
         this.endTimestamp = endTimestamp;
         return this;
