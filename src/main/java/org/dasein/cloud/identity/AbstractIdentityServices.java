@@ -30,8 +30,7 @@ import javax.annotation.Nullable;
  */
 public abstract class AbstractIdentityServices implements IdentityServices {
     @Override
-    public @Nullable
-    IdentityAndAccessSupport getIdentityAndAccessSupport() {
+    public @Nullable IdentityAndAccessSupport getIdentityAndAccessSupport() {
         return null;
     }
 

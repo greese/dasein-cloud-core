@@ -53,15 +53,15 @@ public class LoadBalancerHealthCheck implements Networkable{
     }
 
     public static LoadBalancerHealthCheck getInstance(@Nonnull HCProtocol protocol, int port, @Nullable String path, int interval, int timeout, int healthyCount, int unhealthyCount){
-        return new LoadBalancerHealthCheck(null, null, null, null, protocol, port, path, interval, timeout, unhealthyCount, healthyCount);
+        return new LoadBalancerHealthCheck(null, null, null, null, protocol, port, path, interval, timeout, healthyCount, unhealthyCount);
     }
 
     public static LoadBalancerHealthCheck getInstance(@Nullable String providerLBHealthCheckId, @Nonnull HCProtocol protocol, int port, @Nullable String path, int interval, int timeout, int healthyCount, int unhealthyCount){
-        return new LoadBalancerHealthCheck(providerLBHealthCheckId, null, null, null, protocol, port, path, interval, timeout, unhealthyCount, healthyCount);
+        return new LoadBalancerHealthCheck(providerLBHealthCheckId, null, null, null, protocol, port, path, interval, timeout, healthyCount, unhealthyCount);
     }
 
     public static LoadBalancerHealthCheck getInstance(@Nullable String providerLBHealthCheckId, @Nonnull String name, @Nullable String description, @Nullable String host, @Nullable HCProtocol protocol, int port, @Nullable String path, int interval, int timeout, int healthyCount, int unhealthyCount){
-        return new LoadBalancerHealthCheck(providerLBHealthCheckId, name, description, host, null, port, path, interval, timeout, unhealthyCount, healthyCount);
+        return new LoadBalancerHealthCheck(providerLBHealthCheckId, name, description, host, protocol, port, path, interval, timeout, healthyCount, unhealthyCount);
     }
 
     private LoadBalancerHealthCheck(@Nullable String providerLBHealthCheckId, @Nullable String name, @Nullable String description, @Nullable String host, @Nullable HCProtocol protocol, int port, @Nullable String path, int interval, int timeout, int healthyCount, int unhealthyCount){
