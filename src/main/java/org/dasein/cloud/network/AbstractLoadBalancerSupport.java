@@ -441,7 +441,7 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
     }
 
     @Override
-    public void modifyLoadBalancerAttributes(@Nonnull String id, boolean crossZone, boolean connectionDraining, @Nullable Integer connectionDrainingTimeout) throws CloudException, InternalException {
+    public void modifyLoadBalancerAttributes(@Nonnull String id, @Nullable Boolean crossZone, @Nullable Boolean connectionDraining, @Nullable Integer connectionDrainingTimeout) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Modify attributes have not been implemented for " + getProvider().getCloudName());
     }
 }
