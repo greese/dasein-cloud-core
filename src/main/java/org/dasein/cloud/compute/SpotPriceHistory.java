@@ -44,15 +44,15 @@ public class SpotPriceHistory {
         return sph;
     }
 
-    public String getProviderDataCenterId(){
+    public @Nonnull String getProviderDataCenterId(){
         return providerDataCenterId;
     }
 
-    public String getProductId(){
+    public @Nonnull String getProductId(){
         return productId;
     }
 
-    public SpotPrice[] getPriceHistory(){
+    public @Nonnull SpotPrice[] getPriceHistory(){
         return priceHistory;
     }
 }
