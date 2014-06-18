@@ -144,11 +144,11 @@ public interface VirtualMachineSupport extends AccessControlledService {
     /**
      * Creates the datafeed for Spot VMs, enabling you to view Spot VMs usage logs.
      *
-     * @param s3BucketName the S3 bucket to which the logs will be written
+     * @param bucketName the object storage bucket to which the logs will be written
      * @throws CloudException    an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public void enableSpotDataFeedSubscription( String s3BucketName ) throws CloudException, InternalException;
+    public void enableSpotDataFeedSubscription( String bucketName ) throws CloudException, InternalException;
 
     /**
      * Provides access to meta-data about virtual machine capabilities in the current region of this cloud.
