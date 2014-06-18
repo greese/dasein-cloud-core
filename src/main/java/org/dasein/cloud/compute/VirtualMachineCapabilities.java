@@ -293,5 +293,11 @@ public interface VirtualMachineCapabilities extends Capabilities {
      */
     public @Nonnull Iterable<Architecture> listSupportedArchitectures() throws InternalException, CloudException;
 
-
+    /**
+     * Indicates whether or not the spot virtual machines are supported by the cloud provider.
+     * @return true if spot vms are supported
+     * @throws InternalException
+     * @throws CloudException
+     */
+    public boolean supportsSpotVirtualMachines() throws InternalException, CloudException;
 }
