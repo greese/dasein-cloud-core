@@ -21,24 +21,24 @@ package org.dasein.cloud.compute;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * The Spot VM request as it is held with the cloud provider. As long as this request exists
  * in an active state within the cloud then the provider will spin up VMs as the price history allows.
  */
 public class SpotVirtualMachineRequest {
-    private String                  providerSpotVmRequestId;
-    private String                  spotPrice;
+    private String                        providerSpotVmRequestId;
+    private float                         spotPrice;
     private SpotVirtualMachineRequestType type;
-    private long                    fulfillmentTimestamp;
-    private String                  providerMachineImageId;
-    private String                  productId;
-    private long                    createdTimestamp;
-    private String                  fulfillmentDataCenterId;
-    private String                  launchGroup;
+    private long                          fulfillmentTimestamp;
+    private String                        providerMachineImageId;
+    private String                        productId;
+    private long                          createdTimestamp;
+    private String                        fulfillmentDataCenterId;
+    private String                        launchGroup;
 
     /**
-     *
      * @param providerSpotVmRequestId
      * @param spotPrice
      * @param type
@@ -50,7 +50,7 @@ public class SpotVirtualMachineRequest {
      * @param launchGroup
      * @return
      */
-    public static @Nonnull SpotVirtualMachineRequest getInstance(@Nonnull String providerSpotVmRequestId, @Nonnull String spotPrice, @Nonnull SpotVirtualMachineRequestType type, @Nonnegative long fulfillmentTimestamp, @Nonnull String providerMachineImageId, @Nonnull String productId, @Nonnegative long createdTimestamp, @Nonnull String fulfillmentDataCenterId, @Nonnull String launchGroup){
+    public static @Nonnull SpotVirtualMachineRequest getInstance( @Nonnull String providerSpotVmRequestId, @Nonnegative float spotPrice, @Nonnull SpotVirtualMachineRequestType type, long fulfillmentTimestamp, @Nonnull String providerMachineImageId, @Nonnull String productId, @Nonnegative long createdTimestamp, @Nullable String fulfillmentDataCenterId, @Nullable String launchGroup ) {
         SpotVirtualMachineRequest sir = new SpotVirtualMachineRequest();
         sir.providerSpotVmRequestId = providerSpotVmRequestId;
         sir.spotPrice = spotPrice;
@@ -64,39 +64,39 @@ public class SpotVirtualMachineRequest {
         return sir;
     }
 
-    public String getProviderSpotVmRequestId(){
+    public @Nonnull String getProviderSpotVmRequestId() {
         return providerSpotVmRequestId;
     }
 
-    public String getSpotPrice(){
+    public @Nonnegative float getSpotPrice() {
         return spotPrice;
     }
 
-    public SpotVirtualMachineRequestType getType(){
+    public @Nonnull SpotVirtualMachineRequestType getType() {
         return type;
     }
 
-    public long getFulfillmentDateTime(){
+    public long getFulfillmentTimestamp() {
         return fulfillmentTimestamp;
     }
 
-    public String getProviderMachineImageId(){
+    public @Nonnull String getProviderMachineImageId() {
         return providerMachineImageId;
     }
 
-    public String getProductId(){
+    public @Nonnull String getProductId() {
         return productId;
     }
 
-    public long getCreatedTimestamp(){
+    public @Nonnegative long getCreatedTimestamp() {
         return createdTimestamp;
     }
 
-    public String getFulfilledDataCenterId(){
+    public @Nullable String getFulfillmentDataCenterId() {
         return fulfillmentDataCenterId;
     }
 
-    public String getLaunchGroup(){
+    public @Nullable String getLaunchGroup() {
         return launchGroup;
     }
 }

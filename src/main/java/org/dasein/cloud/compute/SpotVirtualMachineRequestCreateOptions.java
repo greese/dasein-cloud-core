@@ -38,7 +38,7 @@ public class SpotVirtualMachineRequestCreateOptions {
     private String providerMachineImageId;
     private String providerProductId;
     private int vmCount;
-    private double maximumPrice;
+    private float maximumPrice;
     private String launchGroup;
     private long startTimestamp;
     private long expiryTimestamp;
@@ -55,7 +55,7 @@ public class SpotVirtualMachineRequestCreateOptions {
      *
      * @return an object representing the options for creating a Spot VM
      */
-    static public SpotVirtualMachineRequestCreateOptions getInstance( @Nonnull String providerMachineImageId, @Nonnull String providerProductId, int vmCount, double maximumPrice, @Nullable String launchGroup, long startTimestamp, long expiryTimestamp, @Nonnull SpotVirtualMachineRequestType type, @Nonnull String providerVlanId, @Nullable String providerSubnetId, boolean autoAssignIp, @Nullable String providerIAMRoleId, boolean monitoring, @Nullable String userData ) {
+    static public SpotVirtualMachineRequestCreateOptions getInstance( @Nonnull String providerMachineImageId, @Nonnull String providerProductId, int vmCount, float maximumPrice, @Nullable String launchGroup, long startTimestamp, long expiryTimestamp, @Nonnull SpotVirtualMachineRequestType type, @Nonnull String providerVlanId, @Nullable String providerSubnetId, boolean autoAssignIp, @Nullable String providerIAMRoleId, boolean monitoring, @Nullable String userData ) {
         SpotVirtualMachineRequestCreateOptions opts = new SpotVirtualMachineRequestCreateOptions();
         opts.providerMachineImageId = providerMachineImageId;
         opts.providerProductId = providerProductId;
@@ -87,7 +87,7 @@ public class SpotVirtualMachineRequestCreateOptions {
         return vmCount;
     }
 
-    public double getMaximumPrice() {
+    public float getMaximumPrice() {
         return maximumPrice;
     }
 
@@ -121,6 +121,14 @@ public class SpotVirtualMachineRequestCreateOptions {
 
     public String getProviderIAMRoleId() {
         return providerIAMRoleId;
+    }
+
+    public boolean isMonitoring() {
+        return isMonitoring;
+    }
+
+    public String getUserData() {
+        return userData;
     }
 
     public @Nonnull SpotVirtualMachineRequest build( CloudProvider provider ) throws CloudException, InternalException {
