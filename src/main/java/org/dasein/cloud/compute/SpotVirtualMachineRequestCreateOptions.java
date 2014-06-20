@@ -33,32 +33,31 @@ import javax.annotation.Nullable;
  *
  * @author Drew Lyall
  * @author Stas Maksimov
- * @version 2014.05 initial version
  * @version 2014.07 replaced take-all getInstance method with a single parameter method taking only mandatory spot price
  * @since 2014.05
  */
 public class SpotVirtualMachineRequestCreateOptions {
-    private String providerMachineImageId;
-    private String providerProductId;
-    private int vmCount;
-    private float maximumPrice;
-    private String launchGroup;
-    private long startTimestamp;
-    private long expiryTimestamp;
+    private String                        providerMachineImageId;
+    private String                        providerProductId;
+    private int                           vmCount;
+    private float                         maximumPrice;
+    private String                        launchGroup;
+    private long                          startTimestamp;
+    private long                          expiryTimestamp;
     private SpotVirtualMachineRequestType type;
-    private String providerVlanId;
-    private String providerSubnetId;
-    private boolean autoAssignIp;
-    private String providerIAMRoleId;
-    private boolean monitoring;
-    private String userData;
+    private String                        providerVlanId;
+    private String                        providerSubnetId;
+    private boolean                       autoAssignIp;
+    private String                        providerIAMRoleId;
+    private boolean                       monitoring;
+    private String                        userData;
 
     /**
      * Provides options for creating a Spot VM Request
      *
      * @return an object representing the options for creating a Spot VM
      */
-    static @Nonnull public SpotVirtualMachineRequestCreateOptions getInstance(@Nonnegative float maximumPrice) {
+    public static @Nonnull SpotVirtualMachineRequestCreateOptions getInstance( @Nonnegative float maximumPrice ) {
         SpotVirtualMachineRequestCreateOptions opts = new SpotVirtualMachineRequestCreateOptions();
         opts.maximumPrice = maximumPrice;
         return opts;
@@ -74,7 +73,7 @@ public class SpotVirtualMachineRequestCreateOptions {
         return this;
     }
 
-    public @Nonnull SpotVirtualMachineRequestCreateOptions withVirtualMachineCount(int vmCount) {
+    public @Nonnull SpotVirtualMachineRequestCreateOptions withVirtualMachineCount( int vmCount ) {
         this.vmCount = vmCount;
         return this;
     }
