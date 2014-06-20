@@ -33,7 +33,7 @@ import javax.annotation.Nullable;
  *
  * @author Drew Lyall
  * @author Stas Maksimov
- * @version 2014.07 replaced take-all getInstance method with a single parameter method taking only mandatory spot price
+ * @version 2014.07 reduced number of parameters in getInstance to mandatory only
  * @since 2014.05
  */
 public class SpotVirtualMachineRequestCreateOptions {
@@ -57,20 +57,12 @@ public class SpotVirtualMachineRequestCreateOptions {
      *
      * @return an object representing the options for creating a Spot VM
      */
-    public static @Nonnull SpotVirtualMachineRequestCreateOptions getInstance( @Nonnegative float maximumPrice ) {
+    public static @Nonnull SpotVirtualMachineRequestCreateOptions getInstance( @Nonnull String providerMachineImageId, @Nonnull String providerProductId, @Nonnegative float maximumPrice ) {
         SpotVirtualMachineRequestCreateOptions opts = new SpotVirtualMachineRequestCreateOptions();
         opts.maximumPrice = maximumPrice;
+        opts.providerMachineImageId = providerMachineImageId;
+        opts.providerProductId = providerProductId;
         return opts;
-    }
-
-    public @Nonnull SpotVirtualMachineRequestCreateOptions withProviderMachineImageId( @Nonnull String providerMachineImageId ) {
-        this.providerMachineImageId = providerMachineImageId;
-        return this;
-    }
-
-    public @Nonnull SpotVirtualMachineRequestCreateOptions withProviderProductId( @Nonnull String providerProductId ) {
-        this.providerProductId = providerProductId;
-        return this;
     }
 
     public @Nonnull SpotVirtualMachineRequestCreateOptions withVirtualMachineCount( int vmCount ) {
