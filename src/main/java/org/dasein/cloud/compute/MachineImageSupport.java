@@ -54,6 +54,7 @@ public interface MachineImageSupport extends AccessControlledService {
     static public final ServiceAction DOWNLOAD_IMAGE    = new ServiceAction("IMAGE:DOWNLOAD_IMAGE");
     static public final ServiceAction GET_IMAGE         = new ServiceAction("IMAGE:GET_IMAGE");
     static public final ServiceAction IMAGE_VM          = new ServiceAction("IMAGE:IMAGE_VM");
+    static public final ServiceAction COPY_IMAGE        = new ServiceAction("IMAGE:COPY_IMAGE");
     static public final ServiceAction LIST_IMAGE        = new ServiceAction("IMAGE:LIST_IMAGE");
     static public final ServiceAction MAKE_PUBLIC       = new ServiceAction("IMAGE:MAKE_PUBLIC");
     static public final ServiceAction REGISTER_IMAGE    = new ServiceAction("IMAGE:REGISTER_IMAGE");
@@ -132,6 +133,15 @@ public interface MachineImageSupport extends AccessControlledService {
      * @throws OperationNotSupportedException the cloud does not support custom image creation
      */
     public void captureImageAsync(@Nonnull ImageCreateOptions options, @Nonnull AsynchronousTask<MachineImage> taskTracker) throws CloudException, InternalException;
+
+    /**
+     * Copies a machine image from another region to the current region of the user.
+     * @param options the options used to copy the machine image.
+     * @return new machine image created as a result of the copying.
+     * @throws CloudException an error occurred with the cloud provider
+     * @throws InternalException a local error occurred in the Dasein Cloud implementation
+     */
+    public @Nonnull MachineImage copyImage(@Nonnull ImageCopyOptions options) throws CloudException, InternalException;
 
     /**
      * Provides access to meta-data about virtual machine capabilities in the current region of this cloud.
