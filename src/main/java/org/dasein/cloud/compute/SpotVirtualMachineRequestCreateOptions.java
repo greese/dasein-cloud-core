@@ -24,6 +24,7 @@ import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.OperationNotSupportedException;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -31,103 +32,147 @@ import javax.annotation.Nullable;
  * Options for creating Spot VM Requests.
  *
  * @author Drew Lyall
- * @version 2014.05 initial version
+ * @author Stas Maksimov
+ * @version 2014.07 reduced number of parameters in getInstance to mandatory only
  * @since 2014.05
  */
 public class SpotVirtualMachineRequestCreateOptions {
-    private String providerMachineImageId;
-    private String providerProductId;
-    private int vmCount;
-    private float maximumPrice;
-    private String launchGroup;
-    private long startTimestamp;
-    private long expiryTimestamp;
+    private String                        providerMachineImageId;
+    private String                        providerProductId;
+    private int                           vmCount;
+    private float                         maximumPrice;
+    private String                        launchGroup;
+    private long                          startTimestamp;
+    private long                          expiryTimestamp;
     private SpotVirtualMachineRequestType type;
-    private String providerVlanId;
-    private String providerSubnetId;
-    private boolean isAutoAssignIp;
-    private String providerIAMRoleId;
-    private boolean isMonitoring;
-    private String userData;
+    private String                        providerVlanId;
+    private String                        providerSubnetId;
+    private boolean                       autoAssignIp;
+    private String                        providerIAMRoleId;
+    private boolean                       monitoring;
+    private String                        userData;
 
     /**
      * Provides options for creating a Spot VM Request
      *
      * @return an object representing the options for creating a Spot VM
      */
-    static public SpotVirtualMachineRequestCreateOptions getInstance( @Nonnull String providerMachineImageId, @Nonnull String providerProductId, int vmCount, float maximumPrice, @Nullable String launchGroup, long startTimestamp, long expiryTimestamp, @Nonnull SpotVirtualMachineRequestType type, @Nonnull String providerVlanId, @Nullable String providerSubnetId, boolean autoAssignIp, @Nullable String providerIAMRoleId, boolean monitoring, @Nullable String userData ) {
+    public static @Nonnull SpotVirtualMachineRequestCreateOptions getInstance( @Nonnull String providerMachineImageId, @Nonnull String providerProductId, @Nonnegative float maximumPrice ) {
         SpotVirtualMachineRequestCreateOptions opts = new SpotVirtualMachineRequestCreateOptions();
+        opts.maximumPrice = maximumPrice;
         opts.providerMachineImageId = providerMachineImageId;
         opts.providerProductId = providerProductId;
-        opts.vmCount = vmCount;
-        opts.maximumPrice = maximumPrice;
-        opts.launchGroup = launchGroup;
-        opts.startTimestamp = startTimestamp;
-        opts.expiryTimestamp = expiryTimestamp;
-        opts.type = type;
-        opts.providerVlanId = providerVlanId;
-        opts.providerSubnetId = providerSubnetId;
-        opts.isAutoAssignIp = autoAssignIp;
-        opts.providerIAMRoleId = providerIAMRoleId;
-        opts.isMonitoring = monitoring;
-        opts.userData = userData;
-
         return opts;
     }
 
-    public String getProviderMachineImageId() {
+    public @Nonnull SpotVirtualMachineRequestCreateOptions withVirtualMachineCount( int vmCount ) {
+        this.vmCount = vmCount;
+        return this;
+    }
+
+    public @Nonnull SpotVirtualMachineRequestCreateOptions withLaunchGroup( @Nonnull String launchGroup ) {
+        this.launchGroup = launchGroup;
+        return this;
+    }
+
+    public @Nonnull SpotVirtualMachineRequestCreateOptions withStartTimestamp( @Nonnegative long startTimestamp ) {
+        this.startTimestamp = startTimestamp;
+        return this;
+    }
+
+    public @Nonnull SpotVirtualMachineRequestCreateOptions withExpiryTimestamp( @Nonnegative long expiryTimestamp ) {
+        this.expiryTimestamp = expiryTimestamp;
+        return this;
+    }
+
+    public @Nonnull SpotVirtualMachineRequestCreateOptions withRequestType( @Nonnull SpotVirtualMachineRequestType type ) {
+        this.type = type;
+        return this;
+    }
+
+    public @Nonnull SpotVirtualMachineRequestCreateOptions withProviderVlanId( @Nonnull String providerVlanId ) {
+        this.providerVlanId = providerVlanId;
+        return this;
+    }
+
+    public @Nonnull SpotVirtualMachineRequestCreateOptions withProviderSubnetId( @Nonnull String providerSubnetId ) {
+        this.providerSubnetId = providerSubnetId;
+        return this;
+    }
+
+    public @Nonnull SpotVirtualMachineRequestCreateOptions withAutoAssignIp() {
+        this.autoAssignIp = true;
+        return this;
+    }
+
+    public @Nonnull SpotVirtualMachineRequestCreateOptions withProviderIAMRoleId( @Nonnull String providerIAMRoleId ) {
+        this.providerIAMRoleId = providerIAMRoleId;
+        return this;
+    }
+
+    public @Nonnull SpotVirtualMachineRequestCreateOptions withMonitoring() {
+        this.monitoring = true;
+        return this;
+    }
+
+    public @Nonnull SpotVirtualMachineRequestCreateOptions withUserData( @Nonnull String userData ) {
+        this.userData = userData;
+        return this;
+    }
+
+    public @Nullable String getProviderMachineImageId() {
         return providerMachineImageId;
     }
 
-    public String getProviderProductId() {
+    public @Nullable String getProviderProductId() {
         return providerProductId;
     }
 
-    public int getVmCount() {
+    public @Nonnegative int getVmCount() {
         return vmCount;
     }
 
-    public float getMaximumPrice() {
+    public @Nonnegative float getMaximumPrice() {
         return maximumPrice;
     }
 
-    public String getLaunchGroup() {
+    public @Nullable String getLaunchGroup() {
         return launchGroup;
     }
 
-    public long getStartTimestamp() {
+    public @Nonnegative long getStartTimestamp() {
         return startTimestamp;
     }
 
-    public long getExpiryTimestamp() {
+    public @Nonnegative long getExpiryTimestamp() {
         return expiryTimestamp;
     }
 
-    public SpotVirtualMachineRequestType getType() {
+    public @Nullable SpotVirtualMachineRequestType getType() {
         return type;
     }
 
-    public String getProviderVlanId() {
+    public @Nullable String getProviderVlanId() {
         return providerVlanId;
     }
 
-    public String getProviderSubnetId() {
+    public @Nullable String getProviderSubnetId() {
         return providerSubnetId;
     }
 
     public boolean isAutoAssignIp() {
-        return isAutoAssignIp;
+        return autoAssignIp;
     }
 
-    public String getProviderIAMRoleId() {
+    public @Nullable String getProviderIAMRoleId() {
         return providerIAMRoleId;
     }
 
     public boolean isMonitoring() {
-        return isMonitoring;
+        return monitoring;
     }
 
-    public String getUserData() {
+    public @Nullable String getUserData() {
         return userData;
     }
 
