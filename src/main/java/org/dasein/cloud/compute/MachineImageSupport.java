@@ -135,13 +135,13 @@ public interface MachineImageSupport extends AccessControlledService {
     public void captureImageAsync(@Nonnull ImageCreateOptions options, @Nonnull AsynchronousTask<MachineImage> taskTracker) throws CloudException, InternalException;
 
     /**
-     * Copies a machine image from another region to the current region of the user.
+     * Copies a machine image from current region of the user to another region.
      * @param options the options used to copy the machine image.
-     * @return new machine image created as a result of the copying.
+     * @return ID of the new machine image created as a result of the copying.
      * @throws CloudException an error occurred with the cloud provider
      * @throws InternalException a local error occurred in the Dasein Cloud implementation
      */
-    public @Nonnull MachineImage copyImage(@Nonnull ImageCopyOptions options) throws CloudException, InternalException;
+    public @Nonnull String copyImage(@Nonnull ImageCopyOptions options) throws CloudException, InternalException;
 
     /**
      * Provides access to meta-data about virtual machine capabilities in the current region of this cloud.

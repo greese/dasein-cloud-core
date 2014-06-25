@@ -11,17 +11,17 @@ import javax.annotation.Nullable;
  */
 public class ImageCopyOptions {
 
-    public static @Nonnull ImageCopyOptions getInstance(@Nonnull String sourceRegionId, @Nonnull String providerImageId,
+    public static @Nonnull ImageCopyOptions getInstance(@Nonnull String targetRegionId, @Nonnull String providerImageId,
                                                         @Nullable String name, @Nullable String description) {
         ImageCopyOptions options = new ImageCopyOptions();
-        options.sourceRegionId = sourceRegionId;
+        options.targetRegionId = targetRegionId;
         options.providerImageId = providerImageId;
         options.name = name;
         options.description = description;
         return options;
     }
 
-    private String sourceRegionId;
+    private String targetRegionId;
     private String providerImageId;
     private String name;
     private String description;
@@ -29,11 +29,11 @@ public class ImageCopyOptions {
     private ImageCopyOptions() { }
 
     /**
-     * The name of the region that contains the image to copy.
+     * The name of the region where the image will be copied.
      * @return source region ID
      */
-    public @Nonnull String getSourceRegionId() {
-        return sourceRegionId;
+    public @Nonnull String getTargetRegionId() {
+        return targetRegionId;
     }
 
     /**

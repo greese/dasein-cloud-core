@@ -145,7 +145,7 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
     }
 
     @Override
-    public @Nonnull MachineImage copyImage(@Nonnull ImageCopyOptions options) throws CloudException, InternalException {
+    public @Nonnull String copyImage(@Nonnull ImageCopyOptions options) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Image copying is not currently implemented");
     }
 
