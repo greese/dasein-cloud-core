@@ -509,6 +509,11 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     }
 
     @Override
+    public void updateRoutingTableTags(@Nonnull String routingTableId, @Nonnull Tag... tags) throws CloudException, InternalException{
+        throw new OperationNotSupportedException("Routing table tags are not supported in " + provider.getCloudName());
+    }
+
+    @Override
     public void updateSubnetTags(@Nonnull String subnetId, @Nonnull Tag... tags) throws CloudException, InternalException {
         // NO-OP
     }
@@ -533,6 +538,11 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     }
 
     @Override
+    public void updateInternetGatewayTags(@Nonnull String internetGatewayId, @Nonnull Tag... tags) throws CloudException, InternalException{
+        throw new OperationNotSupportedException("Internet Gateway tags are not supported in " + provider.getCloudName());
+    }
+
+    @Override
     public void updateInternetGatewayTags(@Nonnull String[] internetGatewayIds, @Nonnull Tag... tags) throws CloudException, InternalException {
         for (String internetGatewayId : internetGatewayIds) {
             updateInternetGatewayTags(internetGatewayId, tags);
@@ -554,9 +564,19 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     }
 
     @Override
+    public void removeInternetGatewayTags(@Nonnull String internetGatewayId, @Nonnull Tag... tags) throws CloudException, InternalException{
+        throw new OperationNotSupportedException("Internet Gateway tags are not supported in " + provider.getCloudName());
+    }
+
+    @Override
     public void removeInternetGatewayTags(@Nonnull String[] internetGatewayIds, @Nonnull Tag... tags) throws CloudException, InternalException {
         for (String internetGatewayId : internetGatewayIds) {
             removeInternetGatewayTags(internetGatewayId, tags);
         }
+    }
+
+    @Override
+    public void removeRoutingTableTags(@Nonnull String routingTableId, @Nonnull Tag... tags) throws CloudException, InternalException{
+        throw new OperationNotSupportedException("Routing table tags are not supported in " + provider.getCloudName());
     }
 }

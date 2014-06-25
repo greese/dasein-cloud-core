@@ -1,5 +1,5 @@
 package org.dasein.cloud.compute;
 
-public enum SIRequestStatus{
+public enum SpotVirtualMachineRequestStatus {
     OPEN, ACTIVE, CLOSED, CANCELLED, FAILED;
 }
