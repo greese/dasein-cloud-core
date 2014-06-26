@@ -80,6 +80,7 @@ public class LoadBalancerCreateOptions {
     private ArrayList<LoadBalancerEndpoint> endpoints;
     private ArrayList<String>               providerDataCenterIds;
     private ArrayList<String>               providerSubnetIds;
+    private ArrayList<String>               firewallIds;
     private String                          providerIpAddressId;
     private String                          description;
     private ArrayList<LbListener>           listeners;
@@ -199,7 +200,17 @@ public class LoadBalancerCreateOptions {
       return providerSubnetIds.toArray(new String[providerSubnetIds.size()]);
     }
 
-    /**
+	/**
+	 * @return the security groups to which this load balancer will be added
+	 */
+    public String[] getFirewallIds() {
+      if( firewallIds == null ) {
+        return new String[0];
+      }
+      return firewallIds.toArray(new String[firewallIds.size()]);
+	}
+
+	/**
      * @return the IP address you are assigning to this load balancer if the address is required
      */
     public @Nullable String getProviderIpAddressId() {
@@ -253,6 +264,19 @@ public class LoadBalancerCreateOptions {
         this.providerSubnetIds = new ArrayList<String>();
       }
       Collections.addAll(this.providerSubnetIds, providerSubnetIds);
+      return this;
+    }
+
+    /**
+     * Adds the specified firewalls into this list of firewalls to which this load balancer rotation will be added.
+     * @param firewallIds the IDs of the firewalls to add the load balancer to
+     * @return this
+     */
+    public @Nonnull LoadBalancerCreateOptions withFirewalls(@Nonnull String ... firewallIds) {
+      if ( this.firewallIds == null ) {
+        this.firewallIds = new ArrayList<String>();
+      }
+      Collections.addAll(this.firewallIds, firewallIds);
       return this;
     }
 
