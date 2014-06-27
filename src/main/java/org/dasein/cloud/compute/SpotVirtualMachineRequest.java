@@ -31,34 +31,40 @@ public class SpotVirtualMachineRequest {
     private String                        providerSpotVmRequestId;
     private float                         spotPrice;
     private SpotVirtualMachineRequestType type;
-    private long                          fulfillmentTimestamp;
     private String                        providerMachineImageId;
     private String                        productId;
+    private long                          validUntilTimestamp;
+    private long                          validFromTimestamp;
     private long                          createdTimestamp;
+    private long                          fulfillmentTimestamp;
     private String                        fulfillmentDataCenterId;
     private String                        launchGroup;
 
     /**
-     * @param providerSpotVmRequestId
-     * @param spotPrice
-     * @param type
-     * @param fulfillmentTimestamp
-     * @param providerMachineImageId
-     * @param productId
-     * @param createdTimestamp
-     * @param fulfillmentDataCenterId
-     * @param launchGroup
+     * @param providerSpotVmRequestId the id of the request
+     * @param spotPrice maximum spot vm price when the request should be fulfilled
+     * @param type type of the request
+     * @param providerMachineImageId machine image which needs to be used for fulfillment
+     * @param productId product which needs to be used for fulfillment
+     * @param createdTimestamp when the request has been created
+     * @param validFromTimestamp when the request is valid from
+     * @param validUntilTimestamp when the request expires
+     * @param fulfillmentTimestamp when the request has been fulfilled
+     * @param fulfillmentDataCenterId which data center the request has been fulfilled in
+     * @param launchGroup launch group used to launch instances together
      * @return
      */
-    public static @Nonnull SpotVirtualMachineRequest getInstance( @Nonnull String providerSpotVmRequestId, @Nonnegative float spotPrice, @Nonnull SpotVirtualMachineRequestType type, long fulfillmentTimestamp, @Nonnull String providerMachineImageId, @Nonnull String productId, @Nonnegative long createdTimestamp, @Nullable String fulfillmentDataCenterId, @Nullable String launchGroup ) {
+    public static @Nonnull SpotVirtualMachineRequest getInstance( @Nonnull String providerSpotVmRequestId, @Nonnegative float spotPrice, @Nonnull SpotVirtualMachineRequestType type, @Nonnull String providerMachineImageId, @Nonnull String productId, @Nonnegative long createdTimestamp, @Nonnegative long validFromTimestamp, @Nonnegative long validUntilTimestamp, long fulfillmentTimestamp, @Nullable String fulfillmentDataCenterId, @Nullable String launchGroup ) {
         SpotVirtualMachineRequest sir = new SpotVirtualMachineRequest();
         sir.providerSpotVmRequestId = providerSpotVmRequestId;
         sir.spotPrice = spotPrice;
         sir.type = type;
-        sir.fulfillmentTimestamp = fulfillmentTimestamp;
         sir.providerMachineImageId = providerMachineImageId;
         sir.productId = productId;
         sir.createdTimestamp = createdTimestamp;
+        sir.validFromTimestamp = validFromTimestamp;
+        sir.validUntilTimestamp = validUntilTimestamp;
+        sir.fulfillmentTimestamp = fulfillmentTimestamp;
         sir.fulfillmentDataCenterId = fulfillmentDataCenterId;
         sir.launchGroup = launchGroup;
         return sir;
@@ -98,5 +104,13 @@ public class SpotVirtualMachineRequest {
 
     public @Nullable String getLaunchGroup() {
         return launchGroup;
+    }
+
+    public @Nonnegative long getValidUntilTimestamp() {
+        return validUntilTimestamp;
+    }
+
+    public @Nonnegative long getValidFromTimestamp() {
+        return validFromTimestamp;
     }
 }
