@@ -59,6 +59,7 @@ public interface LoadBalancerSupport extends AccessControlledService {
     static public final ServiceAction ATTACH_LB_TO_SUBNETS    = new ServiceAction("LB:ATTACH_LB_TO_SUBNETS");
     static public final ServiceAction DETACH_LB_FROM_SUBNETS    = new ServiceAction("LB:DETACH_LB_FROM_SUBNETS");
     static public final ServiceAction MODIFY_LB_ATTRIBUTES    = new ServiceAction("LB:MODIFY_LB_ATTRIBUTES");
+    static public final ServiceAction DESCRIBE_LOADBALANCER_ATTRIBUTES    = new ServiceAction("LB:DESCRIBE_LOADBALANCER_ATTRIBUTES");
 
     /**
      * Adds one or more data centers to the list of data centers associated with the specified load balancer. This method
@@ -349,14 +350,20 @@ public interface LoadBalancerSupport extends AccessControlledService {
     /**
      * Modifies the attributes of a specified load balancer
      * @param id firewall id
-     * @param crossZone if enabled, the load balancer routes the request traffic evenly across all
-     * @param connectionDraining specifies whether connection draining is enabled for the load balancer.
-     * @param connectionDrainingTimeout specifies the maximum time (in seconds) to keep the existing connections open before deregistering the instances.
+     * @param options attributes options
      * @throws CloudException
      * @throws InternalException
      */
-    public void modifyLoadBalancerAttributes(@Nonnull String id, @Nullable Boolean crossZone, @Nullable Boolean connectionDraining, @Nullable Integer connectionDrainingTimeout) throws CloudException, InternalException;
+    public void modifyLoadBalancerAttributes(@Nonnull String id, @Nonnull AttributesOptions options) throws CloudException, InternalException;
 
+
+    /**
+     * Get load balancer attributes
+     * @param id - load balancer id
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public AttributesOptions getLoadBalancerAttributes(@Nonnull String id) throws CloudException, InternalException;
 
     /********************************** DEPRECATED METHODS *************************************/
 

@@ -87,6 +87,9 @@ public class LoadBalancerCreateOptions {
     private String                          name;
     private LbType                          type;
     private HealthCheckOptions              healthCheckOptions;
+    private Boolean                         crossZone;
+    private Boolean                         connectionDraining;
+    private Integer                         connectionDrainingTimeout;
 
     private LoadBalancerCreateOptions() { }
 
@@ -217,6 +220,18 @@ public class LoadBalancerCreateOptions {
         return this.healthCheckOptions;
     }
 
+    public Boolean getCrossZone() {
+        return crossZone;
+    }
+
+    public Boolean getConnectionDraining() {
+        return connectionDraining;
+    }
+
+    public Integer getConnectionDrainingTimeout() {
+        return connectionDrainingTimeout;
+    }
+
     /**
      * Adds the specified listeners into the list of listeners that will be part of the load balancer creation.
      * @param listeners the listeners to include in the creation
@@ -328,4 +343,35 @@ public class LoadBalancerCreateOptions {
         return this;
     }
 
+    /**
+     * Adds the specified the maximum time (in seconds) to keep the existing connections open before
+     * deregistering the instances.
+     * @param connectionDrainingTimeout the timeout options
+     * @return this
+     */
+    public @Nonnull LoadBalancerCreateOptions withConnectionDrainingTimeout(Integer connectionDrainingTimeout) {
+        this.connectionDrainingTimeout = connectionDrainingTimeout;
+        return this;
+    }
+
+    /**
+     * Adds the specified whether connection draining is enabled for the load balancer.
+     * @param connectionDraining the connection draining options
+     * @return this
+     */
+    public @Nonnull LoadBalancerCreateOptions withConnectionDraining(Boolean connectionDraining) {
+        this.connectionDraining = connectionDraining;
+        return this;
+    }
+
+    /**
+     * Adds the specified cross zone. If enabled, the load balancer routes the request traffic evenly
+     * across all back-end instances regardless of the Availability Zones
+     * @param crossZone then cross zone options
+     * @return
+     */
+    public @Nonnull LoadBalancerCreateOptions withCrossZone(Boolean crossZone) {
+        this.crossZone = crossZone;
+        return this;
+    }
 }
