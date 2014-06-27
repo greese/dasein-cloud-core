@@ -619,11 +619,23 @@ public class VMLaunchOptions {
      * Identifies the SSH key to use in bootstrapping the virtual machine.
      * @param key the SSH key to be used in bootstrapping the VM
      * @return this
+     * @deprecated since 2014.07
+     *
      */
     public @Nonnull VMLaunchOptions withBoostrapKey(@Nonnull String key) {
+        return withBootstrapKey(key);
+    }
+
+    /**
+     * Identifies the SSH key to use in bootstrapping the virtual machine.
+     * @param key the SSH key to be used in bootstrapping the VM
+     * @return this
+     */
+    public @Nonnull VMLaunchOptions withBootstrapKey(@Nonnull String key) {
         this.bootstrapKey = key;
         return this;
     }
+
 
     /**
      * Identifies the user and password to use in bootstrapping this virtual machine.

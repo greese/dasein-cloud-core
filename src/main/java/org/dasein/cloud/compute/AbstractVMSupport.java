@@ -102,6 +102,10 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
         throw new OperationNotSupportedException("Spot Instances are not supported for " + getProvider().getCloudName());
     }
 
+    public @Nonnull Iterable<SpotVirtualMachineRequest> listSpotVirtualMachineRequests( SpotVirtualMachineRequestFilterOptions options ) throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Spot Instances are not supported for " + getProvider().getCloudName());
+    }
+
     @Override
     @Deprecated
     public @Nullable VMScalingCapabilities describeVerticalScalingCapabilities() throws CloudException, InternalException {
@@ -119,7 +123,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
-    public void enableSpotDataFeedSubscription( String s3BucketName ) throws CloudException, InternalException {
+    public void enableSpotDataFeedSubscription( String bucketName ) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Spot Instances are not supported for " + getProvider().getCloudName());
     }
 
