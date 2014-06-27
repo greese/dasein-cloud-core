@@ -29,7 +29,7 @@ public class ImageCopyOptions {
     private ImageCopyOptions() { }
 
     /**
-     * The name of the region where the image will be copied.
+     * The name of the region where the image will be copied to.
      * @return source region ID
      */
     public @Nonnull String getTargetRegionId() {
