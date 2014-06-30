@@ -19,13 +19,11 @@
 
 package org.dasein.cloud.network;
 
-import org.dasein.cloud.Capabilities;
-import org.dasein.cloud.CloudException;
-import org.dasein.cloud.InternalException;
-import org.dasein.cloud.Requirement;
+import org.dasein.cloud.*;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Locale;
 
 /**
@@ -59,6 +57,12 @@ public interface LoadBalancerCapabilities extends Capabilities{
      * @return the provider term for a load balancer
      */
     public @Nonnull String getProviderTermForLoadBalancer(@Nonnull Locale locale);
+
+    /**
+     * Returns the visible scope of the load balancer or null if not applicable for the specific cloud
+     * @return The Visible Scope for the load balancer
+     */
+    public @Nullable VisibleScope getLoadBalancerVisibleScope();
 
     /**
      * Indicates whether a health check can be created independantly of a load balancer
