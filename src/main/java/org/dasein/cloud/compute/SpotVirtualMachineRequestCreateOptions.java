@@ -37,31 +37,31 @@ import javax.annotation.Nullable;
  * @since 2014.05
  */
 public class SpotVirtualMachineRequestCreateOptions {
-    private String                        providerMachineImageId;
-    private String                        providerProductId;
+    private String                        machineImageId;
+    private String                        standardProductId;
     private int                           vmCount;
     private float                         maximumPrice;
     private String                        launchGroup;
-    private long                          startTimestamp;
-    private long                          expiryTimestamp;
+    private long                          validFromTimestamp;
+    private long                          validUntilTimestamp;
     private SpotVirtualMachineRequestType type;
-    private String                        providerVlanId;
     private String                        providerSubnetId;
     private boolean                       autoAssignIp;
-    private String                        providerIAMRoleId;
+    private String                        roleId;
     private boolean                       monitoring;
     private String                        userData;
+    private String                        bootstrapKey;
 
     /**
      * Provides options for creating a Spot VM Request
      *
      * @return an object representing the options for creating a Spot VM
      */
-    public static @Nonnull SpotVirtualMachineRequestCreateOptions getInstance( @Nonnull String providerMachineImageId, @Nonnull String providerProductId, @Nonnegative float maximumPrice ) {
+    public static @Nonnull SpotVirtualMachineRequestCreateOptions getInstance( @Nonnull String standardProductId, @Nonnull String machineImageId, @Nonnegative float maximumPrice ) {
         SpotVirtualMachineRequestCreateOptions opts = new SpotVirtualMachineRequestCreateOptions();
         opts.maximumPrice = maximumPrice;
-        opts.providerMachineImageId = providerMachineImageId;
-        opts.providerProductId = providerProductId;
+        opts.machineImageId = machineImageId;
+        opts.standardProductId = standardProductId;
         return opts;
     }
 
@@ -70,32 +70,27 @@ public class SpotVirtualMachineRequestCreateOptions {
         return this;
     }
 
-    public @Nonnull SpotVirtualMachineRequestCreateOptions withLaunchGroup( @Nonnull String launchGroup ) {
+    public @Nonnull SpotVirtualMachineRequestCreateOptions inLaunchGroup( @Nonnull String launchGroup ) {
         this.launchGroup = launchGroup;
         return this;
     }
 
-    public @Nonnull SpotVirtualMachineRequestCreateOptions withStartTimestamp( @Nonnegative long startTimestamp ) {
-        this.startTimestamp = startTimestamp;
+    public @Nonnull SpotVirtualMachineRequestCreateOptions validFrom( @Nonnegative long startTimestamp ) {
+        this.validFromTimestamp = startTimestamp;
         return this;
     }
 
-    public @Nonnull SpotVirtualMachineRequestCreateOptions withExpiryTimestamp( @Nonnegative long expiryTimestamp ) {
-        this.expiryTimestamp = expiryTimestamp;
+    public @Nonnull SpotVirtualMachineRequestCreateOptions validUntil( @Nonnegative long expiryTimestamp ) {
+        this.validUntilTimestamp = expiryTimestamp;
         return this;
     }
 
-    public @Nonnull SpotVirtualMachineRequestCreateOptions withRequestType( @Nonnull SpotVirtualMachineRequestType type ) {
+    public @Nonnull SpotVirtualMachineRequestCreateOptions ofType( @Nonnull SpotVirtualMachineRequestType type ) {
         this.type = type;
         return this;
     }
 
-    public @Nonnull SpotVirtualMachineRequestCreateOptions withProviderVlanId( @Nonnull String providerVlanId ) {
-        this.providerVlanId = providerVlanId;
-        return this;
-    }
-
-    public @Nonnull SpotVirtualMachineRequestCreateOptions withProviderSubnetId( @Nonnull String providerSubnetId ) {
+    public @Nonnull SpotVirtualMachineRequestCreateOptions inSubnet( @Nonnull String providerSubnetId ) {
         this.providerSubnetId = providerSubnetId;
         return this;
     }
@@ -105,8 +100,8 @@ public class SpotVirtualMachineRequestCreateOptions {
         return this;
     }
 
-    public @Nonnull SpotVirtualMachineRequestCreateOptions withProviderIAMRoleId( @Nonnull String providerIAMRoleId ) {
-        this.providerIAMRoleId = providerIAMRoleId;
+    public @Nonnull SpotVirtualMachineRequestCreateOptions withRoleId( @Nonnull String roleId ) {
+        this.roleId = roleId;
         return this;
     }
 
@@ -120,12 +115,17 @@ public class SpotVirtualMachineRequestCreateOptions {
         return this;
     }
 
-    public @Nullable String getProviderMachineImageId() {
-        return providerMachineImageId;
+    public @Nonnull SpotVirtualMachineRequestCreateOptions withBootstrapKey( @Nonnull String bootstrapKey ) {
+        this.bootstrapKey = bootstrapKey;
+        return this;
     }
 
-    public @Nullable String getProviderProductId() {
-        return providerProductId;
+    public @Nullable String getMachineImageId() {
+        return machineImageId;
+    }
+
+    public @Nullable String getStandardProductId() {
+        return standardProductId;
     }
 
     public @Nonnegative int getVmCount() {
@@ -140,20 +140,16 @@ public class SpotVirtualMachineRequestCreateOptions {
         return launchGroup;
     }
 
-    public @Nonnegative long getStartTimestamp() {
-        return startTimestamp;
+    public @Nonnegative long getValidFromTimestamp() {
+        return validFromTimestamp;
     }
 
-    public @Nonnegative long getExpiryTimestamp() {
-        return expiryTimestamp;
+    public @Nonnegative long getValidUntilTimestamp() {
+        return validUntilTimestamp;
     }
 
     public @Nullable SpotVirtualMachineRequestType getType() {
         return type;
-    }
-
-    public @Nullable String getProviderVlanId() {
-        return providerVlanId;
     }
 
     public @Nullable String getProviderSubnetId() {
@@ -164,8 +160,8 @@ public class SpotVirtualMachineRequestCreateOptions {
         return autoAssignIp;
     }
 
-    public @Nullable String getProviderIAMRoleId() {
-        return providerIAMRoleId;
+    public @Nullable String getRoleId() {
+        return roleId;
     }
 
     public boolean isMonitoring() {
@@ -174,6 +170,10 @@ public class SpotVirtualMachineRequestCreateOptions {
 
     public @Nullable String getUserData() {
         return userData;
+    }
+
+    public @Nullable String getBootstrapKey() {
+        return bootstrapKey;
     }
 
     public @Nonnull SpotVirtualMachineRequest build( CloudProvider provider ) throws CloudException, InternalException {
