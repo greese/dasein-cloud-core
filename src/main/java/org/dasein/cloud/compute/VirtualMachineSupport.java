@@ -161,14 +161,14 @@ public interface VirtualMachineSupport extends AccessControlledService {
      */
     public @Nullable String getPassword(@Nonnull String vmId) throws InternalException, CloudException;
 
-	/**
-	 * Provides the userData as stored by the cloud provider (encrypted)
-	 * @param vmId the unique ID of the target server
-	 * @return the current userData of the virtual machine as stored by the provider
-	 * @throws InternalException an error occurred within the Dasein Cloud API implementation
-	 * @throws CloudException an error occurred within the cloud provider
-	 */
-	public @Nullable String getUserData(@Nonnull String vmId) throws InternalException, CloudException;
+    /**
+     * Provides the userData as stored by the cloud provider (encrypted)
+     * @param vmId the unique ID of the target server
+     * @return the current userData of the virtual machine as stored by the provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException an error occurred within the cloud provider
+     */
+    public @Nullable String getUserData(@Nonnull String vmId) throws InternalException, CloudException;
 
     /**
      * Provides all output from the console of the target server since the specified Unix time.
@@ -507,6 +507,30 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
     public void updateTags(@Nonnull String[] vmIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Updates meta-data for a virtual machine with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     *
+     * @param vmId the virtual machine to update
+     * @param asynchronous the type of update, if true - will add asynchronously
+     * @param tags the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void updateTags(@Nonnull String vmId, boolean asynchronous, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Updates meta-data for multiple virtual machines with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     *
+     * @param vmIds the virtual machines to update
+     * @param asynchronous the type of update, if true - will add asynchronously
+     * @param tags the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void updateTags(@Nonnull String[] vmIds, boolean asynchronous, @Nonnull Tag... tags) throws CloudException, InternalException;
 
     /**
      * Removes meta-data from a virtual machine. If tag values are set, their removal is dependent on underlying cloud

@@ -149,12 +149,12 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
         return null;
     }
 
-	@Override
-	public @Nullable String getUserData(@Nonnull String vmId) throws InternalException, CloudException {
-		return null;
-	}
+    @Override
+    public @Nullable String getUserData(@Nonnull String vmId) throws InternalException, CloudException {
+        return null;
+    }
 
-	@Override
+    @Override
     public @Nonnull String getConsoleOutput(@Nonnull String vmId) throws InternalException, CloudException {
         return "";
     }
@@ -532,9 +532,9 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
 
     @Override
     public @Nonnull Iterable<VirtualMachineProduct> listProducts(@Nonnull Architecture architecture) throws InternalException, CloudException {
-    	return listProducts(architecture, null);
+        return listProducts(architecture, null);
     }
-    
+
     @Override
     public @Nonnull Iterable<VirtualMachineProduct> listProducts(@Nonnull Architecture architecture, String preferedDataCenterId) throws InternalException, CloudException {
         APITrace.begin(getProvider(), "VM.listProducts");
@@ -853,6 +853,18 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
+    public void updateTags(@Nonnull String vmId, boolean asynchronous, @Nonnull Tag... tags) throws CloudException, InternalException {
+        // NO-OP
+    }
+
+    @Override
+    public void updateTags(@Nonnull String[] vmIds, boolean asynchronous, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for( String id : vmIds ) {
+            updateTags(id, asynchronous, tags);
+        }
+    }
+
+    @Override
     public void removeTags(@Nonnull String vmId, @Nonnull Tag... tags) throws CloudException, InternalException {
         // NO-OP
     }
@@ -908,7 +920,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
             }
             else {
                 prd.setRamSize(new Storage<Megabyte>(512, Storage.MEGABYTE));
-            } 
+            }
             if( json.has("standardHourlyRates") ) {
                 JSONArray rates = json.getJSONArray("standardHourlyRates");
 
