@@ -36,7 +36,7 @@ import java.util.Map;
 public class RoutingTable implements Networkable, Taggable {
     private String  description;
     private String  name;
-    private Boolean main;
+    private boolean main;
     private String  providerOwnerId;
     private String  providerRegionId;
     private String  providerRoutingTableId;
@@ -131,11 +131,11 @@ public class RoutingTable implements Networkable, Taggable {
         this.name = name;
     }
 
-    public Boolean getMain() {
+    public boolean isMain() {
         return main;
     }
 
-    public void setMain(Boolean main) {
+    public void setMain(boolean main) {
         this.main = main;
     }
 
