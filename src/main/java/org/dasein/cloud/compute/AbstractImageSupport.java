@@ -33,7 +33,6 @@ import org.dasein.cloud.identity.ServiceAction;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Locale;
 
@@ -143,6 +142,11 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
             throw new CloudException("No context has been set for this request");
         }
         return ctx;
+    }
+
+    @Override
+    public @Nonnull String copyImage(@Nonnull ImageCopyOptions options) throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Image copying is not currently implemented");
     }
 
     @Override
