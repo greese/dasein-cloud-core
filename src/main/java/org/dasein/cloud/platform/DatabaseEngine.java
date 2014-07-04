@@ -20,7 +20,7 @@
 package org.dasein.cloud.platform;
 
 public enum DatabaseEngine {
-    MYSQL, MYSQL50, MYSQL51, MYSQL55, MYSQL56, ORACLE11G, ORACLE11GX, ORACLE11GEX;
+    MYSQL, MYSQL50, MYSQL51, MYSQL55, MYSQL56, ORACLE11G, ORACLE11GX, ORACLE11GEX, MSSQL, POSTGRES;
     
     public String getVersion() {
         switch( this ) {
@@ -29,9 +29,11 @@ public enum DatabaseEngine {
             case MYSQL51: return "5.1";
             case MYSQL55: return "5.5";
             case MYSQL56: return "5.6";
-            case ORACLE11G: return "11g (standard)"; 
+            case MSSQL: return "10 (standard)";
+            case ORACLE11G: return "11g (standard)";
             case ORACLE11GX: return "11g (standard, byol)";
             case ORACLE11GEX: return "11g (enterprise, byol)";
+            case POSTGRES: return "9.3";
         }
         return null;
     }
@@ -42,6 +44,7 @@ public enum DatabaseEngine {
     
     public String toString() {
         switch( this ) {
+            case MSSQL: return "SQL Server 10 Standard";
             case MYSQL: return "MySQL (Any)";
             case MYSQL50: return "MySQL 5.0";
             case MYSQL51: return "MySQL 5.1";
