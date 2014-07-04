@@ -104,6 +104,7 @@ public class VMLaunchOptions {
     private String             roleId;
     private boolean            associatePublicIpAddress;
     private String             virtualMachineGroup;
+    private String             resourcePoolId;
     // NOTE: SEE NOTE AT TOP OF ATTRIBUTE LIST WHEN ADDING/REMOVING/CHANGING AN ATTRIBUTE
 
     private VMLaunchOptions() { }
@@ -184,6 +185,7 @@ public class VMLaunchOptions {
         options.ipForwardingAllowed = ipForwardingAllowed;
         options.kernelId = kernelId;
         options.virtualMachineGroup = virtualMachineGroup;
+        options.resourcePoolId = resourcePoolId;
         if( metaData != null ) {
             options.metaData = new HashMap<String, Object>();
             options.metaData.putAll(metaData);
@@ -356,6 +358,13 @@ public class VMLaunchOptions {
      */
     public String getRamdiskId() {
         return ramdiskId;
+    }
+
+    /**
+     * @return the resource pool id to use in launching the vm
+     */
+    public String getResourcePoolId() {
+        return resourcePoolId;
     }
 
     /**
@@ -771,6 +780,16 @@ public class VMLaunchOptions {
             }
             networkInterfaces = tmp;
         }
+        return this;
+    }
+
+    /**
+     * Indicates that the virtual machine is to be launched with the specified resource pool.
+     * @param resourcePoolId the resource pool ID
+     * @return this
+     */
+    public @Nonnull VMLaunchOptions withResourcePoolId(@Nonnull String resourcePoolId) {
+        this.resourcePoolId = resourcePoolId;
         return this;
     }
 
