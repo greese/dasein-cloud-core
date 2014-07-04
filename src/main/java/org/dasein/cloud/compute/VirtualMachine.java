@@ -93,6 +93,7 @@ public class VirtualMachine implements Networkable, Taggable {
     private String                  userData;
     private VirtualMachineLifecycle lifecycle;
     private String                  spotRequestId; // TODO - add filtering by, add setter/getter
+    private String                  resourcePoolId;
 
     public VirtualMachine() {
     }
@@ -727,5 +728,13 @@ public class VirtualMachine implements Networkable, Taggable {
 
     public void setSpotRequestId( String spotRequestId ) {
         this.spotRequestId = spotRequestId;
+    }
+
+    public String getResourcePoolId() {
+        return resourcePoolId;
+    }
+
+    public void setResourcePoolId(String resourcePoolId) {
+        this.resourcePoolId = resourcePoolId;
     }
 }
