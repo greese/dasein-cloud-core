@@ -20,10 +20,7 @@
 package org.dasein.cloud.test;
 
 import org.dasein.cloud.*;
-import org.dasein.cloud.dc.DataCenter;
-import org.dasein.cloud.dc.DataCenterServices;
-import org.dasein.cloud.dc.Region;
-import org.dasein.cloud.dc.ResourcePool;
+import org.dasein.cloud.dc.*;
 import org.dasein.cloud.storage.AbstractStorageServices;
 import org.dasein.cloud.storage.OfflineStoreSupport;
 import org.dasein.cloud.storage.StorageServices;
@@ -64,6 +61,12 @@ public class TestNewStorageCloudProvider extends AbstractCloud {
     @Override
     public @Nonnull DataCenterServices getDataCenterServices() {
         return new DataCenterServices() {
+            @Nonnull
+            @Override
+            public DataCenterCapabilities getCapabilities() throws InternalException, CloudException {
+                return null;  //To change body of implemented methods use File | Settings | File Templates.
+            }
+
             @Override
             public DataCenter getDataCenter(String providerDataCenterId) throws InternalException, CloudException {
                 return null;
@@ -94,10 +97,6 @@ public class TestNewStorageCloudProvider extends AbstractCloud {
                 return Collections.emptyList();
             }
 
-            @Override
-            public boolean supportsResourcePools() {
-                return false;  //To change body of implemented methods use File | Settings | File Templates.
-            }
 
             @Override
             public Collection<ResourcePool> listResourcePools(String providerDataCenterId) throws InternalException, CloudException {
