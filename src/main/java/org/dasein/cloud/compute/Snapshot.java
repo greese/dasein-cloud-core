@@ -21,6 +21,7 @@ package org.dasein.cloud.compute;
 
 import org.dasein.cloud.Tag;
 import org.dasein.cloud.Taggable;
+import org.dasein.cloud.VisibleScope;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
@@ -38,6 +39,7 @@ public class Snapshot implements Taggable {
     private long                snapshotTimestamp;
     private Map<String, String> tags;
     private String              volumeId;
+    private VisibleScope        visibleScope;
 
     public Snapshot() {
     }
@@ -170,6 +172,14 @@ public class Snapshot implements Taggable {
     public synchronized void setTags( Map<String, String> properties ) {
         getTags().clear();
         getTags().putAll(properties);
+    }
+
+    public void setVisibleScope(VisibleScope visibleScope){
+        this.visibleScope = visibleScope;
+    }
+
+    public VisibleScope getVisibleScope(){
+        return visibleScope;
     }
 
     public String toString() {

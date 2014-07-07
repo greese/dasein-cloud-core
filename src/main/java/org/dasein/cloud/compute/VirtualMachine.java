@@ -43,54 +43,57 @@ import java.util.concurrent.Callable;
  * @version 2013.04 added access to shell key IDs
  */
 public class VirtualMachine implements Networkable, Taggable {
-    private Architecture        architecture;
-    private boolean             clonable;
-    private long                creationTimestamp;
-    private VmState             currentState;
-    private Map<String, String> tags;
-    private String[]            labels;
-    private String              description;
-    private boolean             imagable;
-    private long                lastBootTimestamp;
-    private long                lastPauseTimestamp;
-    private String              name;
-    private boolean             pausable;
-    private boolean             persistent;
-    private Platform            platform;
-    private String              privateDnsAddress;
-    private RawAddress[]        privateIpAddresses;
-    private String              productId;
-    private String              providerAssignedIpAddressId;
-    private String              providerDataCenterId;
-    private String              providerKernelImageId;
-    private String              providerMachineImageId;
-    private String              providerOwnerId;
-    private String              providerRamdiskImageId;
-    private String              providerRegionId;
-    private String[]            providerShellKeyIds;
-    private String              providerSubnetId;
-    private String              providerVirtualMachineId;
-    private String[]            providerNetworkInterfaceIds;
-    private String              providerVlanId;
-    private String              providerKeypairId;
-    private String[]            providerFirewallIds;
-    private String[]            providerVolumeIds;
-    private String              publicDnsAddress;
-    private RawAddress[]        publicIpAddresses;
-    private boolean             rebootable;
-    private String              rootPassword;
-    private String              rootUser;
-    private String              stateReasonMessage;
-    private long                terminationTimestamp;
-    private Volume[]            volumes;
-    private boolean             ioOptimized;
-    private boolean             ipForwardingAllowed;
-    private String              providerRoleId;
-    private VmStatus            providerHostStatus;
-    private VmStatus            providerVmStatus;
-    private String              virtualMachineGroup;
-    private VisibleScope        visibleScope;
-    private String              userData;
+    private Architecture            architecture;
+    private boolean                 clonable;
+    private long                    creationTimestamp;
+    private VmState                 currentState;
+    private Map<String, String>     tags;
+    private String[]                labels;
+    private String                  description;
+    private boolean                 imagable;
+    private long                    lastBootTimestamp;
+    private long                    lastPauseTimestamp;
+    private String                  name;
+    private boolean                 pausable;
+    private boolean                 persistent;
+    private Platform                platform;
+    private String                  privateDnsAddress;
+    private RawAddress[]            privateIpAddresses;
+    private String                  productId;
+    private String                  providerAssignedIpAddressId;
+    private String                  providerDataCenterId;
+    private String                  providerKernelImageId;
+    private String                  providerMachineImageId;
+    private String                  providerOwnerId;
+    private String                  providerRamdiskImageId;
+    private String                  providerRegionId;
+    private String[]                providerShellKeyIds;
+    private String                  providerSubnetId;
+    private String                  providerVirtualMachineId;
+    private String[]                providerNetworkInterfaceIds;
+    private String                  providerVlanId;
+    private String                  providerKeypairId;
+    private String[]                providerFirewallIds;
+    private String[]                providerVolumeIds;
+    private String                  publicDnsAddress;
+    private RawAddress[]            publicIpAddresses;
+    private boolean                 rebootable;
+    private String                  rootPassword;
+    private String                  rootUser;
+    private String                  stateReasonMessage;
+    private long                    terminationTimestamp;
+    private Volume[]                volumes;
+    private boolean                 ioOptimized;
+    private boolean                 ipForwardingAllowed;
+    private String                  providerRoleId;
+    private VmStatus                providerHostStatus;
+    private VmStatus                providerVmStatus;
+    private String                  virtualMachineGroup;
+    private VisibleScope            visibleScope;
+    private String                  userData;
+    private VirtualMachineLifecycle lifecycle;
+    private String                  spotRequestId; // TODO - add filtering by, add setter/getter
+    private String                  resourcePoolId;
 
     public VirtualMachine() {
     }
@@ -706,5 +709,32 @@ public class VirtualMachine implements Networkable, Taggable {
 
     public void setUserData( String userData ) {
         this.userData = userData;
+    }
+
+    public VirtualMachineLifecycle getLifecycle() {
+        if( lifecycle == null ) {
+            lifecycle = VirtualMachineLifecycle.NORMAL;
+        }
+        return lifecycle;
+    }
+
+    public void setLifecycle( VirtualMachineLifecycle lifecycle ) {
+        this.lifecycle = lifecycle;
+    }
+
+    public String getSpotRequestId() {
+        return spotRequestId;
+    }
+
+    public void setSpotRequestId( String spotRequestId ) {
+        this.spotRequestId = spotRequestId;
+    }
+
+    public String getResourcePoolId() {
+        return resourcePoolId;
+    }
+
+    public void setResourcePoolId(String resourcePoolId) {
+        this.resourcePoolId = resourcePoolId;
     }
 }

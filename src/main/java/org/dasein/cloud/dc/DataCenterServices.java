@@ -25,6 +25,8 @@ import java.util.Locale;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
 
+import javax.annotation.Nonnull;
+
 /**
  * <p>
  * Describe the physical configuration of the underlying cloud provider so applications
@@ -48,6 +50,16 @@ import org.dasein.cloud.InternalException;
  */
 public interface DataCenterServices {
     /**
+     * Provides access to meta-data about region capabilities in this cloud.
+     *
+     * @return a description of the features supported by this region of this cloud
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException    an error occurred within the cloud provider
+     */
+    public @Nonnull
+    DataCenterCapabilities getCapabilities() throws InternalException, CloudException;
+
+    /**
      * Provides access to the full data center information for the specified data center.
      * @param providerDataCenterId the provider-specific identifier that the provider uses to identify the data center
      * @return the current state of the desired data center
@@ -61,6 +73,7 @@ public interface DataCenterServices {
      * @param locale the locale into which the term should be translated
      * @return the term for a data center
      */
+    @Deprecated
     public String getProviderTermForDataCenter(Locale locale);
     
     /**
@@ -68,6 +81,7 @@ public interface DataCenterServices {
      * @param locale the locale into which the term should be translated
      * @return the term for a region
      */
+    @Deprecated
     public String getProviderTermForRegion(Locale locale);
     
     /**
@@ -95,4 +109,23 @@ public interface DataCenterServices {
      * @throws CloudException an error occurred within the cloud provider or the cloud provider did not approve of the request
      */
     public Collection<Region> listRegions() throws InternalException, CloudException;
+
+    /**
+     * Lists all resource pools
+     *
+     * @param providerDataCenterId the datacenter in which you are searching for resource pools
+     * @return all resource pools supported for this cloud in the given datacenter
+     * @throws InternalException an error occurred locally in processing the request
+     * @throws CloudException    an error occurred within the cloud provider or the cloud provider did not approve of the request
+     */
+    public Collection<ResourcePool> listResourcePools(String providerDataCenterId) throws InternalException, CloudException;
+
+    /**
+     * Provides access to the full resource pool information for the specified resource pool.
+     * @param providerResourcePoolId the provider-specific identifier that the provider uses to identify the resource pool
+     * @return the current state of the desired resource pool
+     * @throws InternalException an error occurred locally in processing the request
+     * @throws CloudException an error occurred within the cloud provider or the cloud provider did not approve of the request
+     */
+    public ResourcePool getResourcePool(String providerResourcePoolId) throws InternalException, CloudException;
 }

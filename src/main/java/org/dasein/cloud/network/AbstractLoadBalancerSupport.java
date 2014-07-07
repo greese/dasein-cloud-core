@@ -419,6 +419,11 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
     }
 
     @Override
+    public void detatchHealthCheck(String loadBalancerId, String heathcheckId) throws CloudException, InternalException{
+        throw new OperationNotSupportedException("Health Checks have not been implemented for " + getProvider().getCloudName());
+    }
+
+    @Override
     @Deprecated
     public boolean healthCheckRequiresLoadBalancer() throws CloudException, InternalException{
         return getCapabilities().healthCheckRequiresLoadBalancer();

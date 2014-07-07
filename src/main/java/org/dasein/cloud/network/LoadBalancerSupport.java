@@ -345,6 +345,13 @@ public interface LoadBalancerSupport extends AccessControlledService {
      */
     public void detachLoadBalancerFromSubnets(@Nonnull String fromLoadBalancerId, @Nonnull String ... subnetIdsToDelete) throws CloudException, InternalException;
 
+    /*
+     * Detach named healthCheck from named loadBalancer without deleting either.
+     * @throws CloudException an error occurred with the cloud provider while performing this action
+     * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
+     */
+    public void detatchHealthCheck(String loadBalancerId, String heathcheckId) throws CloudException, InternalException;
+
     /********************************** DEPRECATED METHODS *************************************/
 
     /**

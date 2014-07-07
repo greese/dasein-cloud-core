@@ -19,12 +19,10 @@
 
 package org.dasein.cloud.compute;
 
-import org.dasein.cloud.Capabilities;
-import org.dasein.cloud.CloudException;
-import org.dasein.cloud.InternalException;
-import org.dasein.cloud.Requirement;
+import org.dasein.cloud.*;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Locale;
 
 /**
@@ -41,6 +39,12 @@ public interface SnapshotCapabilities extends Capabilities{
      * @return the term for snapshot in the target cloud
      */
     public @Nonnull String getProviderTermForSnapshot(@Nonnull Locale locale);
+
+    /**
+     * Returns the visible scope of the Snapshot or null if not applicable for the specific cloud
+     * @return the Visible Scope of the Snapshot
+     */
+    public @Nullable VisibleScope getSnapshotVisibleScope();
 
     /**
      * Indicates whether or not the cloud requires a volume to be attached when performing a snapshot. {@link org.dasein.cloud.Requirement#REQUIRED}
