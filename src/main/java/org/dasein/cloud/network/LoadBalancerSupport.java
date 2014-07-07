@@ -19,20 +19,14 @@
 
 package org.dasein.cloud.network;
 
-import java.util.HashMap;
-import java.util.Locale;
-
-import org.dasein.cloud.AccessControlledService;
-import org.dasein.cloud.CloudException;
-import org.dasein.cloud.InternalException;
-import org.dasein.cloud.OperationNotSupportedException;
-import org.dasein.cloud.Requirement;
-import org.dasein.cloud.ResourceStatus;
+import org.dasein.cloud.*;
 import org.dasein.cloud.identity.ServiceAction;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Locale;
 
 /**
  * Implements support for cloud load balancing services.
@@ -61,6 +55,9 @@ public interface LoadBalancerSupport extends AccessControlledService {
     static public final ServiceAction CREATE_SSL_CERTIFICATE    = new ServiceAction("LB:CREATE_SSL_CERTIFICATE");
     static public final ServiceAction DELETE_SSL_CERTIFICATE    = new ServiceAction("LB:DELETE_SSL_CERTIFICATE");
     static public final ServiceAction SET_LB_SSL_CERTIFICATE    = new ServiceAction("LB:SET_SSL_CERTIFICATE");
+    static public final ServiceAction SET_FIREWALLS        = new ServiceAction("LB:SET_FIREWALLS");
+    static public final ServiceAction ATTACH_LB_TO_SUBNETS    = new ServiceAction("LB:ATTACH_LB_TO_SUBNETS");
+    static public final ServiceAction DETACH_LB_FROM_SUBNETS    = new ServiceAction("LB:DETACH_LB_FROM_SUBNETS");
 
     /**
      * Adds one or more data centers to the list of data centers associated with the specified load balancer. This method
@@ -318,6 +315,35 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud implementation
      */
     public @Nullable SSLCertificate getSSLCertificate(@Nonnull String certificateName) throws CloudException, InternalException;
+
+    /**
+     * Attaches an existing Load Balancer to an existing firewalls
+     * @param providerLoadBalancerId the load balancer ID
+     * @param firewallIds the firewalls
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public void setFirewalls(@Nonnull String providerLoadBalancerId, @Nonnull String... firewallIds) throws CloudException, InternalException;
+
+    /**
+     * Adds subnets to the loadbalancer
+     *
+     * @param toLoadBalancerId the ID of the loadbalancer the subnets need to be attached
+     * @param subnetIdsToAdd subnets IDs to be attached to the specified loadbalancer
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public void attachLoadBalancerToSubnets(@Nonnull String toLoadBalancerId, @Nonnull String ... subnetIdsToAdd) throws CloudException, InternalException;
+
+    /**
+     * Removes subnet from the loadbalancer
+     *
+     * @param fromLoadBalancerId the ID of loadbalancer the subnets need to be detached
+     * @param subnetIdsToDelete subnets IDs to be detached from the specified loadbalancer
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public void detachLoadBalancerFromSubnets(@Nonnull String fromLoadBalancerId, @Nonnull String ... subnetIdsToDelete) throws CloudException, InternalException;
 
     /********************************** DEPRECATED METHODS *************************************/
 

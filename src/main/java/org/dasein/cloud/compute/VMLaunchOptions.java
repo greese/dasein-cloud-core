@@ -103,6 +103,7 @@ public class VMLaunchOptions {
     private boolean            ipForwardingAllowed;
     private String             roleId;
     private boolean            associatePublicIpAddress;
+    private String             placementGroupId;
     private String             virtualMachineGroup;
     // NOTE: SEE NOTE AT TOP OF ATTRIBUTE LIST WHEN ADDING/REMOVING/CHANGING AN ATTRIBUTE
 
@@ -231,6 +232,7 @@ public class VMLaunchOptions {
             }
             options.volumes = copy.toArray(new VolumeAttachment[copy.size()]);
         }
+        options.placementGroupId = placementGroupId;
         return options;
     }
 
@@ -872,6 +874,24 @@ public class VMLaunchOptions {
      */
     public boolean isAssociatePublicIpAddress() {
       return associatePublicIpAddress;
+    }
+
+    /**
+     * @see #withPlacementGroupId(String)
+     */
+    public String getPlacementGroupId() {
+        return placementGroupId;
+    }
+
+    /**
+     * Specifies the placement group to launch the instance within. Placement groups are a logical grouping of instances
+     * meant for low-latency clusters. Placement groups are not supported by all providers.
+     * @param placementGroupId the placement group id
+     * @return this
+     */
+    public VMLaunchOptions withPlacementGroupId( @Nonnull String placementGroupId ) {
+        this.placementGroupId = placementGroupId;
+        return this;
     }
 
 }
