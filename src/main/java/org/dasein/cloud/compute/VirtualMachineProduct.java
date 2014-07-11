@@ -30,7 +30,7 @@ import java.io.Serializable;
 @SuppressWarnings("UnusedDeclaration")
 public class VirtualMachineProduct implements Serializable {
     private static final long serialVersionUID = -6761551014614219494L;
-    
+
     private int               cpuCount;
     private String            description;
     private Storage<Gigabyte> rootVolumeSize;
@@ -40,7 +40,7 @@ public class VirtualMachineProduct implements Serializable {
     private float             standardHourlyRate;
     private VisibleScope      visibleScope;
 
-    public enum	Status { CURRENT, DEPRECATED; }
+    public enum Status        { CURRENT, DEPRECATED; }
 
     private Status status = Status.CURRENT;
 
