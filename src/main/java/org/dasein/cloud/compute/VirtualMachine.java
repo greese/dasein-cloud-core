@@ -43,6 +43,7 @@ import java.util.concurrent.Callable;
  * @version 2013.04 added access to shell key IDs
  */
 public class VirtualMachine implements Networkable, Taggable {
+    private String                  affinityGroupId;
     private Architecture            architecture;
     private boolean                 clonable;
     private long                    creationTimestamp;
@@ -199,6 +200,14 @@ public class VirtualMachine implements Networkable, Taggable {
 
     public String toString() {
         return name + " [" + providerVirtualMachineId + "]";
+    }
+
+    public String getAffinityGroupId(){
+        return affinityGroupId;
+    }
+
+    public void setAffinityGroupId(){
+        this.affinityGroupId = affinityGroupId;
     }
 
     public Architecture getArchitecture() {
