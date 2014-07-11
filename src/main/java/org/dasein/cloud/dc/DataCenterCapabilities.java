@@ -27,6 +27,12 @@ public interface DataCenterCapabilities extends Capabilities {
     public String getProviderTermForRegion(Locale locale);
 
     /**
+     * Inficates whether the underlying cloud supports affinity groups
+     * @return true indicating support for affinity groups
+     */
+    public boolean supportsAffinityGroups();
+
+    /**
      * Specifies whether the given cloud supports the concept of resource pools
      */
     public boolean supportsResourcePools();
