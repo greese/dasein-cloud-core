@@ -45,4 +45,8 @@ public class ResourcePool {
     public void setDataCenterId(String dataCenterId) {
         this.dataCenterId = dataCenterId;
     }
+
+    public String toString() {
+        return name;
+    }
 }
