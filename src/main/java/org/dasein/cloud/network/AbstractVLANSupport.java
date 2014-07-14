@@ -559,4 +559,25 @@ public abstract class AbstractVLANSupport implements VLANSupport {
             removeInternetGatewayTags(internetGatewayId, tags);
         }
     }
+
+    @Override
+    public void setSubnetTags(@Nonnull String[] subnetIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for(String id:subnetIds) {
+            setSubnetTags(id, tags);
+        }
+    }
+
+    @Override
+    public void setRoutingTableTags(@Nonnull String[] routingTableIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for (String id: routingTableIds) {
+            setRoutingTableTags(id, tags);
+        }
+    }
+
+    @Override
+    public void setInternetGatewayTags(@Nonnull String[] internetGatewayIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for(String id:internetGatewayIds) {
+            setInternetGatewayTags(id, tags);
+        }
+    }
 }

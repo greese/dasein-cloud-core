@@ -590,4 +590,25 @@ public interface MachineImageSupport extends AccessControlledService {
      */
     public void removeTags(@Nonnull String[] imageIds, @Nonnull Tag... tags) throws CloudException, InternalException;
 
+    /**
+     * Set meta-data for an image. Remove any tags that were not provided by the incoming tags, and add or
+     * overwrite any new or pre-existing tags.
+     *
+     * @param imageId the image to update
+     * @param tags     the meta-data tags to remove
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void setTags(@Nonnull String imageId, @Nonnull Tag... tags)  throws CloudException, InternalException;
+
+    /**
+     * Set meta-data for multiple images. Remove any tags that were not provided by the incoming tags, and add or
+     * overwrite any new or pre-existing tags.
+     *
+     * @param imageIds the images to update
+     * @param tags     the meta-data tags to remove
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void setTags(@Nonnull String[] imageIds, @Nonnull Tag... tags)  throws CloudException, InternalException;
 }

@@ -144,4 +144,25 @@ public interface AutoScalingSupport extends AccessControlledService {
      */
     public void removeTags(@Nonnull String[] providerScalingGroupIds, @Nonnull AutoScalingTag... tags) throws CloudException, InternalException;
 
+    /**
+     * Set meta-data for auto scaling group. Remove any tags that were not provided by the incoming tags, and add or
+     * overwrite any new or pre-existing tags.
+     *
+     * @param providerScalingGroupId the auto scaling group to set
+     * @param tags the meta-data tags to set
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public void setTags(@Nonnull String providerScalingGroupId, @Nonnull AutoScalingTag... tags)  throws CloudException, InternalException;
+
+    /**
+     * Set meta-data for multiple auto scaling groups. Remove any tags that were not provided by the incoming tags, and add or
+     * overwrite any new or pre-existing tags.
+     *
+     * @param providerScalingGroupIds the auto scaling groups to set
+     * @param tags the meta-data tags to set
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public void setTags(@Nonnull String[] providerScalingGroupIds, @Nonnull AutoScalingTag... tags)  throws CloudException, InternalException;
 }
