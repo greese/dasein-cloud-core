@@ -19,8 +19,13 @@
 
 package org.dasein.cloud.compute;
 
+import org.dasein.cloud.Tag;
+import org.dasein.cloud.Taggable;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A logical container for cloud resources. Resources within the same affinity group should trend towards low-latency (but non-HA) placement within the cloud.
@@ -29,12 +34,13 @@ import javax.annotation.Nullable;
  * @version 2014.07 initial version
  * @since 2014.07
  */
-public class AffinityGroup{
-    private String affinityGroupId;
-    private String affinityGroupName;
-    private String description;
-    private String dataCenterId;
-    private Long   creationTimestamp;
+public class AffinityGroup implements Taggable{
+    private String              affinityGroupId;
+    private String              affinityGroupName;
+    private String              description;
+    private String              dataCenterId;
+    private Long                creationTimestamp;
+    private Map<String, String> tags;
 
     public static @Nonnull AffinityGroup getInstance(@Nonnull String affinityGroupId, @Nonnull String affinityGroupName, @Nullable String description, @Nonnull String dataCenterId, @Nullable Long creationTimestamp){
         AffinityGroup affinityGroup = new AffinityGroup();
@@ -64,5 +70,36 @@ public class AffinityGroup{
 
     public @Nullable Long getCreationTimestamp(){
         return creationTimestamp;
+    }
+
+    public void addTag(Tag t){
+        addTag(t.getKey(), t.getValue());
+    }
+
+    public void addTag(String key, String value){
+        getTags().put(key, value);
+    }
+
+    public Object getTag( String tag ) {
+        return getTags().get(tag);
+    }
+
+    public synchronized Map<String, String> getTags(){
+        if(tags == null){
+            tags = new HashMap<String, String>();
+        }
+        return tags;
+    }
+
+    public void setTag(@Nonnull String key, @Nonnull String value){
+        if( tags == null ) {
+            tags = new HashMap<String, String>();
+        }
+        tags.put(key, value);
+    }
+
+    public synchronized void setTags(Map<String, String> properties){
+        getTags().clear();
+        getTags().putAll(properties);
     }
 }
