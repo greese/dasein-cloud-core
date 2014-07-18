@@ -62,6 +62,11 @@ public abstract class AbstractComputeServices implements ComputeServices {
     }
 
     @Override
+    public boolean hasAffinityGroupSupport(){
+        return (getAffinityGroupSupport() != null);
+    }
+
+    @Override
     public boolean hasAutoScalingSupport() {
         return (getAutoScalingSupport() != null);
     }
