@@ -9,8 +9,8 @@ import javax.annotation.Nullable;
  */
 public class SnapshotVolume {
 
-    static public @Nonnull
-    SnapshotVolume getSnapshotVolumeInstance(@Nonnull String deviceName, @Nonnull String snapshotId, @Nonnull Integer volumeSize, @Nonnull String volumeType, @Nullable String iops) {
+    static public
+    @Nonnull SnapshotVolume getSnapshotVolumeInstance(@Nonnull String deviceName, @Nonnull String snapshotId, @Nonnull Integer volumeSize, @Nonnull String volumeType, @Nullable Integer iops) {
         @SuppressWarnings("deprecation") SnapshotVolume snapshotVolume = new SnapshotVolume();
 
         snapshotVolume.deviceName = deviceName;
@@ -22,13 +22,13 @@ public class SnapshotVolume {
         return snapshotVolume;
     }
 
-    public SnapshotVolume() { }
+    public SnapshotVolume() {}
 
-    private String             deviceName;
-    private String             snapshotId;
-    private Integer            volumeSize;
-    private String             volumeType;
-    private String             iops;
+    private String deviceName;
+    private String snapshotId;
+    private Integer volumeSize;
+    private String volumeType;
+    private Integer iops;
 
     public String getDeviceName() {
         return deviceName;
@@ -62,11 +62,11 @@ public class SnapshotVolume {
         this.volumeType = volumeType;
     }
 
-    public String getIops() {
+    public Integer getIops() {
         return iops;
     }
 
-    public void setIops(String iops) {
+    public void setIops(Integer iops) {
         this.iops = iops;
     }
 }
