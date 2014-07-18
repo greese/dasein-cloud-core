@@ -31,6 +31,10 @@ import javax.annotation.Nullable;
  * @since unknown
  */
 public abstract class AbstractComputeServices implements ComputeServices {
+    @Override
+    public @Nullable AffinityGroupSupport getAffinityGroupSupport(){
+        return null;
+    }
 
     @Override
     public @Nullable  AutoScalingSupport getAutoScalingSupport() {
