@@ -19,40 +19,61 @@
 
 package org.dasein.cloud.platform;
 
+/**
+ * Database Engine
+ *
+ * @author Stas Maksimov
+ * @version 2014.07 broken down engines into editions as per AWS model
+ * @since ?
+ */
 public enum DatabaseEngine {
-    MYSQL, MYSQL50, MYSQL51, MYSQL55, MYSQL56, ORACLE11G, ORACLE11GX, ORACLE11GEX, MSSQL, POSTGRES;
-    
-    public String getVersion() {
-        switch( this ) {
-            case MYSQL: return "5.5";
-            case MYSQL50: return "5.0";
-            case MYSQL51: return "5.1";
-            case MYSQL55: return "5.5";
-            case MYSQL56: return "5.6";
-            case MSSQL: return "10 (standard)";
-            case ORACLE11G: return "11g (standard)";
-            case ORACLE11GX: return "11g (standard, byol)";
-            case ORACLE11GEX: return "11g (enterprise, byol)";
-            case POSTGRES: return "9.3";
-        }
-        return null;
-    }
-    
-    public boolean isMySQL() {
-        return (equals(MYSQL) || equals(MYSQL50) || equals(MYSQL51) || equals(MYSQL55) || equals(MYSQL56));
-    }
-    
+
+    SQLSERVER_EE, // sql server enterprise edition
+    SQLSERVER_EX, // sql server express edition
+    SQLSERVER_SE, // sql server standard edition
+    SQLSERVER_WEB, // sql server web edition
+
+    MYSQL, // mysql
+
+    ORACLE_EE, // oracle enterprise edition
+    ORACLE_SE, // oracle standard edition
+    ORACLE_SE1, // oracle standard edition one
+
+    POSTGRES; // postgres
+
+//    public String getVersion() {
+//        switch( this ) {
+//            case MYSQL: return "5.5";
+//            case MSSQL: return "10 (standard)";
+//            case ORACLE11G: return "11g (standard)";
+//            case ORACLE11GX: return "11g (standard, byol)";
+//            case ORACLE11GEX: return "11g (enterprise, byol)";
+//            case POSTGRES: return "9.3";
+//        }
+//        return null;
+//    }
+//
+
     public String toString() {
         switch( this ) {
-            case MSSQL: return "SQL Server 10 Standard";
-            case MYSQL: return "MySQL (Any)";
-            case MYSQL50: return "MySQL 5.0";
-            case MYSQL51: return "MySQL 5.1";
-            case MYSQL55: return "MySQL 5.5";
-            case MYSQL56: return "MySQL 5.6";
-            case ORACLE11G: return "Oracle 11g Standard";
-            case ORACLE11GX: return "Oracle 11g Standard (BYOL)";
-            case ORACLE11GEX: return "Oracle 11g Enterprise";
+            case SQLSERVER_SE:
+                return "SQL Server Standard";
+            case SQLSERVER_EE:
+                return "SQL Server Enterprise";
+            case SQLSERVER_EX:
+                return "SQL Server Express";
+            case SQLSERVER_WEB:
+                return "SQL Server Web";
+            case MYSQL:
+                return "MySQL";
+            case ORACLE_SE:
+                return "Oracle Standard";
+            case ORACLE_SE1:
+                return "Oracle Standard One";
+            case ORACLE_EE:
+                return "Oracle Enterprise";
+            case POSTGRES:
+                return "PostgreSQL";
         }
         return super.toString();
     }
