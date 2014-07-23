@@ -206,7 +206,7 @@ public class VirtualMachine implements Networkable, Taggable {
         return affinityGroupId;
     }
 
-    public void setAffinityGroupId(){
+    public void setAffinityGroupId(String affinityGroupId){
         this.affinityGroupId = affinityGroupId;
     }
 
