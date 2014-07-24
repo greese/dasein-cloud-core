@@ -26,6 +26,7 @@ import org.dasein.cloud.dc.DataCenterServices;
 import org.dasein.cloud.identity.IdentityServices;
 import org.dasein.cloud.network.NetworkServices;
 import org.dasein.cloud.platform.PlatformServices;
+import org.dasein.cloud.quotas.QuotaServices;
 import org.dasein.cloud.storage.StorageServices;
 import org.dasein.cloud.util.NamingConstraints;
 import org.dasein.cloud.util.ResourceNamespace;
@@ -309,6 +310,8 @@ public abstract class CloudProvider {
     public abstract @Nullable NetworkServices getNetworkServices();
 
     public abstract @Nullable PlatformServices getPlatformServices();
+
+    public abstract @Nullable QuotaServices getQuotaServices();
 
     /**
      * @return the name of this cloud provider
