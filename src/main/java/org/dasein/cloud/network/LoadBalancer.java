@@ -20,6 +20,7 @@
 package org.dasein.cloud.network;
 
 import org.dasein.cloud.Taggable;
+import org.dasein.cloud.VisibleScope;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -94,6 +95,28 @@ public class LoadBalancer implements Networkable, Taggable {
         return lb;
     }
 
+    /**
+     * Constructs a load balancer with the minimally acceptable data set.
+     * @param ownerId the account number that owns this load balancer
+     * @param regionId the region ID of the region in which the load balancer operates
+     * @param lbId the unique ID of the load balancer in the target cloud
+     * @param state the current operational state for the load balancer
+     * @param name the name of the load balancer
+     * @param description a user-friendly description of the load balancer
+     * @param addressType what kind of address is represented by the load balancer address
+     * @param address the load balancer CNAME, IPv4, or IPv6 address
+     * @param providerLBHealthCheckId the ID of the Health Check if one is attached
+     * @param visibleScope the VisbleScope of the LoadBalancer
+     * @param publicPorts one or more public ports on which the load balancer is listening
+     * @return a load balancer instance representing the specified state
+     */
+    static public LoadBalancer getInstance(@Nonnull String ownerId, @Nonnull String regionId, @Nonnull String lbId, @Nonnull LoadBalancerState state, @Nonnull String name, @Nonnull String description, @Nonnull LbType type, @Nonnull LoadBalancerAddressType addressType, @Nonnull String address, @Nonnull String providerLBHealthCheckId, @Nonnull VisibleScope visibleScope, @Nonnull int ... publicPorts) {
+        LoadBalancer lb = new LoadBalancer(ownerId, regionId, lbId, state, name, description, addressType, address, visibleScope, publicPorts);
+        lb.setType( type );
+        lb.setProviderLBHealthCheckId(providerLBHealthCheckId);
+        return lb;
+    }
+
     private String                  address;
     private LoadBalancerAddressType addressType;
     private long                    creationTimestamp;
@@ -113,6 +136,7 @@ public class LoadBalancer implements Networkable, Taggable {
     private Map<String,String>      tags;
     private String                  providerLBHealthCheckId;
     private String[]                providerFirewallIds;
+    private VisibleScope            visibleScope;
 
     /**
      * Constructs a load balancer object with no data.
@@ -133,6 +157,22 @@ public class LoadBalancer implements Networkable, Taggable {
         this.publicPorts = publicPorts;
         this.creationTimestamp = 0L;
         this.supportedTraffic = new IPVersion[] { IPVersion.IPV4 };
+    }
+
+    private LoadBalancer(@Nonnull String ownerId, @Nonnull String regionId, @Nonnull String lbId, @Nonnull LoadBalancerState state, @Nonnull String name, @Nonnull String description, @Nonnull LoadBalancerAddressType addressType, @Nonnull String address, @Nullable VisibleScope visibleScope, @Nonnull int ... publicPorts){
+        this.providerOwnerId = ownerId;
+        this.providerRegionId = regionId;
+        this.providerLoadBalancerId = lbId;
+        this.currentState = state;
+        this.name = name;
+        this.description = description;
+        this.type = type;
+        this.address = address;
+        this.addressType = addressType;
+        this.publicPorts = publicPorts;
+        this.creationTimestamp = 0L;
+        this.supportedTraffic = new IPVersion[] { IPVersion.IPV4 };
+        this.visibleScope = visibleScope;
     }
 
     /**
@@ -269,6 +309,10 @@ public class LoadBalancer implements Networkable, Taggable {
      */
     public @Nullable String getProviderLBHealthCheckId(){
         return providerLBHealthCheckId;
+    }
+
+    public @Nullable VisibleScope getVisibleScope(){
+        return visibleScope;
     }
 
     @Override

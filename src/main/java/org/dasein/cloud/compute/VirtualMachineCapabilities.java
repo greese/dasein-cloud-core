@@ -19,10 +19,7 @@
 
 package org.dasein.cloud.compute;
 
-import org.dasein.cloud.Capabilities;
-import org.dasein.cloud.CloudException;
-import org.dasein.cloud.InternalException;
-import org.dasein.cloud.Requirement;
+import org.dasein.cloud.*;
 import org.dasein.cloud.util.NamingConstraints;
 
 import javax.annotation.Nonnegative;
@@ -182,6 +179,18 @@ public interface VirtualMachineCapabilities extends Capabilities {
     public @Nonnull NamingConstraints getVirtualMachineNamingConstraints() throws CloudException, InternalException;
 
     /**
+     * Returns the visible scope of the Virtual Machine or null if not applicable for the specific cloud
+     * @return the Visible Scope of the Virtual Machine
+     */
+    public @Nullable VisibleScope getVirtualMachineVisibleScope();
+
+    /**
+     * Returns the visible scope of the VM Product or null if not applicable for the specific cloud
+     * @return the Visible Scope of the VM Product
+     */
+    public @Nullable VisibleScope getVirtualMachineProductVisibleScope();
+
+    /**
      * Indicates whether the VM requires a Data Center to be specified upon launch
      * @return the requirements for data centers upon VM launch
      * @throws CloudException
@@ -293,5 +302,11 @@ public interface VirtualMachineCapabilities extends Capabilities {
      */
     public @Nonnull Iterable<Architecture> listSupportedArchitectures() throws InternalException, CloudException;
 
-
+    /**
+     * Indicates whether or not the spot virtual machines are supported by the cloud provider.
+     * @return true if spot vms are supported
+     * @throws InternalException
+     * @throws CloudException
+     */
+    public boolean supportsSpotVirtualMachines() throws InternalException, CloudException;
 }

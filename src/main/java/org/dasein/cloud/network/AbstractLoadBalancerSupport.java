@@ -419,6 +419,11 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
     }
 
     @Override
+    public void detatchHealthCheck(String loadBalancerId, String heathcheckId) throws CloudException, InternalException{
+        throw new OperationNotSupportedException("Health Checks have not been implemented for " + getProvider().getCloudName());
+    }
+
+    @Override
     @Deprecated
     public boolean healthCheckRequiresLoadBalancer() throws CloudException, InternalException{
         return getCapabilities().healthCheckRequiresLoadBalancer();
@@ -438,5 +443,16 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
     @Override
     public void setFirewalls(@Nonnull String providerLoadBalancerId, @Nonnull String... firewallIds) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Setting firewalls have not been implemented for " + getProvider().getCloudName());
+    }
+
+
+    @Override
+    public void attachLoadBalancerToSubnets(@Nonnull String toLoadBalancerId, @Nonnull String... subnetIdsToAdd) throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Attaching load balancer to subnets has not been implemented for " + getProvider().getCloudName());
+    }
+
+    @Override
+    public void detachLoadBalancerFromSubnets(@Nonnull String fromLoadBalancerId, @Nonnull String... subnetIdsToDelete) throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Detaching load balancer to subnets has not been implemented for " + getProvider().getCloudName());
     }
 }

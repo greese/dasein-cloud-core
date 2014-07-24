@@ -40,16 +40,16 @@ public class VirtualMachineProduct implements Serializable {
     private float             standardHourlyRate;
     private VisibleScope      visibleScope;
 
-    public enum	Status { CURRENT, DEPRECATED; }
+    public enum Status        { CURRENT, DEPRECATED; }
 
     private Status status = Status.CURRENT;
 
     public VirtualMachineProduct() { }
-
+    
     public boolean equals(Object ob) {
         return (ob != null && (ob == this || getClass().getName().equals(ob.getClass().getName()) && getProviderProductId().equals(((VirtualMachineProduct) ob).getProviderProductId())));
     }
-
+    
     public String getName() {
         return name;
     }
@@ -73,11 +73,11 @@ public class VirtualMachineProduct implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
-
+    
     public String getProviderProductId() {
         return providerProductId;
     }
-
+    
     public void setProviderProductId(@Nonnull String providerProductId) {
         this.providerProductId = providerProductId;
     }

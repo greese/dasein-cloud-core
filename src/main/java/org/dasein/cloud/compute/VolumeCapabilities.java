@@ -24,6 +24,7 @@ import org.dasein.cloud.Capabilities;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.Requirement;
+import org.dasein.cloud.util.NamingConstraints;
 import org.dasein.util.uom.storage.Gigabyte;
 import org.dasein.util.uom.storage.Storage;
 
@@ -80,6 +81,14 @@ public interface VolumeCapabilities extends Capabilities{
      * @throws CloudException an error occurred retrieving the limit from the cloud
      */
     public @Nonnull Storage<Gigabyte> getMinimumVolumeSize() throws InternalException, CloudException;
+
+    /**
+     * Identifies the naming conventions that constrain how volumes may be named (friendly name) in this cloud.
+     * @return naming conventions that constrain volume naming
+     * @throws CloudException an error occurred querying the cloud for naming constraints
+     * @throws InternalException an error occurred assembling the naming constraints object
+     */
+    public @Nonnull NamingConstraints getVolumeNamingConstraints() throws CloudException, InternalException;
 
     /**
      * Specifies the provider term for a volume.
