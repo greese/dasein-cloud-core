@@ -8,12 +8,12 @@ import javax.annotation.Nullable;
  */
 public class AttributesOptions {
 
-    boolean crossZone;
-    boolean connectionDraining;
+    Boolean crossZone;
+    Boolean connectionDraining;
     Integer connectionDrainingTimeout;
     Integer idleConnectionTimeout;
 
-    public static AttributesOptions getInstance(boolean crossZone, boolean connectionDraining, @Nullable Integer connectionDrainingTimeout,
+    public static AttributesOptions getInstance(Boolean crossZone, Boolean connectionDraining, @Nullable Integer connectionDrainingTimeout,
                                                 @Nullable Integer idleConnectionTimeout) {
         AttributesOptions options = new AttributesOptions();
         options.crossZone = crossZone;
