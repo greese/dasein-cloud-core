@@ -11,12 +11,15 @@ public class AttributesOptions {
     boolean crossZone;
     boolean connectionDraining;
     Integer connectionDrainingTimeout;
+    Integer idleConnectionTimeout;
 
-    public static AttributesOptions getInstance(boolean crossZone, boolean connectionDraining, @Nullable Integer connectionDrainingTimeout) {
-        AttributesOptions options =new AttributesOptions();
+    public static AttributesOptions getInstance(boolean crossZone, boolean connectionDraining, @Nullable Integer connectionDrainingTimeout,
+                                                @Nullable Integer idleConnectionTimeout) {
+        AttributesOptions options = new AttributesOptions();
         options.crossZone = crossZone;
         options.connectionDraining = connectionDraining;
         options.connectionDrainingTimeout = connectionDrainingTimeout;
+        options.idleConnectionTimeout = idleConnectionTimeout;
         return options;
     }
 
@@ -42,5 +45,13 @@ public class AttributesOptions {
 
     public void setConnectionDrainingTimeout(Integer connectionDrainingTimeout) {
         this.connectionDrainingTimeout = connectionDrainingTimeout;
+    }
+
+    public Integer getIdleConnectionTimeout() {
+        return idleConnectionTimeout;
+    }
+
+    public void setIdleConnectionTimeout(Integer idleConnectionTimeout) {
+        this.idleConnectionTimeout = idleConnectionTimeout;
     }
 }
