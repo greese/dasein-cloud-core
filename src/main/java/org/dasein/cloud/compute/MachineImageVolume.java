@@ -11,7 +11,7 @@ public class MachineImageVolume {
 
     static public
     @Nonnull
-    MachineImageVolume getSnapshotVolumeInstance(@Nonnull String deviceName, @Nonnull String snapshotId, @Nonnull Integer volumeSize, @Nonnull String volumeType, @Nullable Integer iops) {
+    MachineImageVolume getMachineImageVolumeInstance(@Nonnull String deviceName, @Nonnull String snapshotId, @Nonnull Integer volumeSize, @Nonnull String volumeType, @Nullable Integer iops) {
         @SuppressWarnings("deprecation") MachineImageVolume machineImageVolume = new MachineImageVolume();
 
         machineImageVolume.deviceName = deviceName;
