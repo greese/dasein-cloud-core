@@ -7,22 +7,23 @@ import javax.annotation.Nullable;
  * @author Eugene Yaroslavtsev
  * @since 18.07.2014
  */
-public class SnapshotVolume {
+public class MachineImageVolume {
 
     static public
-    @Nonnull SnapshotVolume getSnapshotVolumeInstance(@Nonnull String deviceName, @Nonnull String snapshotId, @Nonnull Integer volumeSize, @Nonnull String volumeType, @Nullable Integer iops) {
-        @SuppressWarnings("deprecation") SnapshotVolume snapshotVolume = new SnapshotVolume();
+    @Nonnull
+    MachineImageVolume getSnapshotVolumeInstance(@Nonnull String deviceName, @Nonnull String snapshotId, @Nonnull Integer volumeSize, @Nonnull String volumeType, @Nullable Integer iops) {
+        @SuppressWarnings("deprecation") MachineImageVolume machineImageVolume = new MachineImageVolume();
 
-        snapshotVolume.deviceName = deviceName;
-        snapshotVolume.iops = iops;
-        snapshotVolume.snapshotId = snapshotId;
-        snapshotVolume.volumeSize = volumeSize;
-        snapshotVolume.volumeType = volumeType;
+        machineImageVolume.deviceName = deviceName;
+        machineImageVolume.iops = iops;
+        machineImageVolume.snapshotId = snapshotId;
+        machineImageVolume.volumeSize = volumeSize;
+        machineImageVolume.volumeType = volumeType;
 
-        return snapshotVolume;
+        return machineImageVolume;
     }
 
-    public SnapshotVolume() {}
+    public MachineImageVolume() {}
 
     private String deviceName;
     private String snapshotId;

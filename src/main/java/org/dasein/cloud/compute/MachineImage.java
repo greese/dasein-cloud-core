@@ -231,7 +231,7 @@ public class MachineImage implements Taggable {
     private Map<String,String> tags;
     private MachineImageType   type;
     private VisibleScope       visibleScope;
-    private Collection<SnapshotVolume> snapshotVolume;
+    private Collection<MachineImageVolume> volumes;
 
     /**
      * Constructs an empty machine image.
@@ -443,12 +443,12 @@ public class MachineImage implements Taggable {
         getTags().putAll(properties);
     }
 
-    public @Nullable Collection<SnapshotVolume> getSnapshotVolume() {
-        return snapshotVolume;
+    public @Nullable Collection<MachineImageVolume> getVolumes() {
+        return volumes;
     }
 
-    public void setSnapshotVolume(@Nullable Collection<SnapshotVolume> snapshotVolume) {
-        this.snapshotVolume = snapshotVolume;
+    public void setVolumes(@Nullable Collection<MachineImageVolume> volumes) {
+        this.volumes = volumes;
     }
 
     @Override
