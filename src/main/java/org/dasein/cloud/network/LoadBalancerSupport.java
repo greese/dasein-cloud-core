@@ -58,6 +58,8 @@ public interface LoadBalancerSupport extends AccessControlledService {
     static public final ServiceAction SET_FIREWALLS        = new ServiceAction("LB:SET_FIREWALLS");
     static public final ServiceAction ATTACH_LB_TO_SUBNETS    = new ServiceAction("LB:ATTACH_LB_TO_SUBNETS");
     static public final ServiceAction DETACH_LB_FROM_SUBNETS    = new ServiceAction("LB:DETACH_LB_FROM_SUBNETS");
+    static public final ServiceAction MODIFY_LB_ATTRIBUTES    = new ServiceAction("LB:MODIFY_LB_ATTRIBUTES");
+    static public final ServiceAction DESCRIBE_LOADBALANCER_ATTRIBUTES    = new ServiceAction("LB:DESCRIBE_LOADBALANCER_ATTRIBUTES");
 
     /**
      * Adds one or more data centers to the list of data centers associated with the specified load balancer. This method
@@ -344,6 +346,24 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @throws InternalException
      */
     public void detachLoadBalancerFromSubnets(@Nonnull String fromLoadBalancerId, @Nonnull String ... subnetIdsToDelete) throws CloudException, InternalException;
+
+    /**
+     * Modifies the attributes of a specified load balancer
+     * @param id firewall id
+     * @param options attributes options
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public void modifyLoadBalancerAttributes(@Nonnull String id, @Nonnull LbAttributesOptions options) throws CloudException, InternalException;
+
+
+    /**
+     * Get load balancer attributes
+     * @param id - load balancer id
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public LbAttributesOptions getLoadBalancerAttributes(@Nonnull String id) throws CloudException, InternalException;
 
     /********************************** DEPRECATED METHODS *************************************/
 
