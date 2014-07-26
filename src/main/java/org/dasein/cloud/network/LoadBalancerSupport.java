@@ -354,7 +354,7 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @throws CloudException
      * @throws InternalException
      */
-    public void modifyLoadBalancerAttributes(@Nonnull String id, @Nonnull AttributesOptions options) throws CloudException, InternalException;
+    public void modifyLoadBalancerAttributes(@Nonnull String id, @Nonnull LbAttributesOptions options) throws CloudException, InternalException;
 
 
     /**
@@ -363,7 +363,7 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @throws CloudException
      * @throws InternalException
      */
-    public AttributesOptions getLoadBalancerAttributes(@Nonnull String id) throws CloudException, InternalException;
+    public LbAttributesOptions getLoadBalancerAttributes(@Nonnull String id) throws CloudException, InternalException;
 
     /********************************** DEPRECATED METHODS *************************************/
 

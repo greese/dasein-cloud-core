@@ -6,29 +6,29 @@ import javax.annotation.Nullable;
  * User: mgulimonov
  * Date: 20.06.2014
  */
-public class AttributesOptions {
+public class LbAttributesOptions {
 
-    Boolean crossZone;
+    Boolean crossDataCenter;
     Boolean connectionDraining;
     Integer connectionDrainingTimeout;
     Integer idleConnectionTimeout;
 
-    public static AttributesOptions getInstance(Boolean crossZone, Boolean connectionDraining, @Nullable Integer connectionDrainingTimeout,
+    public static LbAttributesOptions getInstance(Boolean crossDataCenter, Boolean connectionDraining, @Nullable Integer connectionDrainingTimeout,
                                                 @Nullable Integer idleConnectionTimeout) {
-        AttributesOptions options = new AttributesOptions();
-        options.crossZone = crossZone;
+        LbAttributesOptions options = new LbAttributesOptions();
+        options.crossDataCenter = crossDataCenter;
         options.connectionDraining = connectionDraining;
         options.connectionDrainingTimeout = connectionDrainingTimeout;
         options.idleConnectionTimeout = idleConnectionTimeout;
         return options;
     }
 
-    public Boolean getCrossZone() {
-        return crossZone;
+    public Boolean getCrossDataCenter() {
+        return crossDataCenter;
     }
 
-    public void setCrossZone(Boolean crossZone) {
-        this.crossZone = crossZone;
+    public void setCrossDataCenter( Boolean crossDataCenter ) {
+        this.crossDataCenter = crossDataCenter;
     }
 
     public Boolean getConnectionDraining() {

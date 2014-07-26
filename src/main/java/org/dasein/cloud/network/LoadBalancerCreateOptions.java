@@ -87,7 +87,7 @@ public class LoadBalancerCreateOptions {
     private String                          name;
     private LbType                          type;
     private HealthCheckOptions              healthCheckOptions;
-    private Boolean                         crossZone;
+    private Boolean                         crossDataCenter;
     private Boolean                         connectionDraining;
     private Integer                         connectionDrainingTimeout;
     private Integer                         idleConnectionTimeout;
@@ -221,8 +221,8 @@ public class LoadBalancerCreateOptions {
         return this.healthCheckOptions;
     }
 
-    public Boolean getCrossZone() {
-        return crossZone;
+    public Boolean getCrossDataCenter() {
+        return crossDataCenter;
     }
 
     public Boolean getConnectionDraining() {
@@ -381,13 +381,13 @@ public class LoadBalancerCreateOptions {
     }
 
     /**
-     * Adds the specified cross zone. If enabled, the load balancer routes the request traffic evenly
-     * across all back-end instances regardless of the Availability Zones
-     * @param crossZone then cross zone options
+     * Adds the specified cross data centers. If enabled, the load balancer routes the request traffic evenly
+     * across all back-end instances regardless of the data center.
+     * @param crossDataCenter then cross zone options
      * @return
      */
-    public @Nonnull LoadBalancerCreateOptions withCrossZone(Boolean crossZone) {
-        this.crossZone = crossZone;
+    public @Nonnull LoadBalancerCreateOptions withCrossDataCenter(Boolean crossDataCenter) {
+        this.crossDataCenter = crossDataCenter;
         return this;
     }
 }
