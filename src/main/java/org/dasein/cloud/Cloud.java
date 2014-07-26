@@ -71,26 +71,11 @@ public class Cloud {
         clouds.put(endpoint, cloud);
         return cloud;
     }
-    
-    static public @Nonnull Cloud register(@Nonnull String providerName, @Nonnull String cloudName, @Nonnull String endpoint, @Nonnull String userName, @Nonnull Class<? extends CloudProvider> providerClass) {
-        if( clouds.containsKey(endpoint) ) {
-            return clouds.get(endpoint);
-        }
-        Cloud cloud = new Cloud();
 
-        cloud.setUserName(userName);
-        cloud.endpoint = endpoint;
-        cloud.cloudName = cloudName;
-        cloud.providerClass = providerClass;
-        cloud.providerName = providerName;
-        clouds.put(endpoint, cloud);
-        return cloud;
-    }
     private String cloudName;
     private String endpoint;
     private Class<? extends CloudProvider> providerClass;
     private String providerName;
-    private String userName = "";
 
     private Cloud() { }
 
@@ -212,12 +197,4 @@ public class Cloud {
     public @Nonnull String toString() {
         return endpoint;
     }
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
 }

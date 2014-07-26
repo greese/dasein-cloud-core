@@ -378,7 +378,7 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
     }
 
     @Override
-    public LoadBalancerHealthCheck createLoadBalancerHealthCheck(@Nullable String name, @Nullable String description, @Nullable String host, @Nullable LoadBalancerHealthCheck.HCProtocol protocol, int port, @Nullable String path, @Nullable Double interval, @Nullable Double timeout, int healthyCount, int unhealthyCount) throws CloudException, InternalException{
+    public LoadBalancerHealthCheck createLoadBalancerHealthCheck(@Nullable String name, @Nullable String description, @Nullable String host, @Nullable LoadBalancerHealthCheck.HCProtocol protocol, int port, @Nullable String path, int interval, int timeout, int healthyCount, int unhealthyCount) throws CloudException, InternalException{
         throw new OperationNotSupportedException("Health Checks have not been implemented for " + getProvider().getCloudName());
     }
 
@@ -433,5 +433,20 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
         } catch( InternalException e ) {
         }
         throw new RuntimeException("Unable to get a provider term for load balancer.");
+    }
+
+    @Override
+    public void setFirewalls(@Nonnull String providerLoadBalancerId, @Nonnull String... firewallIds) throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Setting firewalls have not been implemented for " + getProvider().getCloudName());
+    }
+
+    @Override
+    public void modifyLoadBalancerAttributes(@Nonnull String id, @Nonnull LbAttributesOptions options) throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Modify attributes have not been implemented for " + getProvider().getCloudName());
+    }
+
+    @Override
+    public LbAttributesOptions getLoadBalancerAttributes(@Nonnull String id) throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Get attributes have not been implemented for " + getProvider().getCloudName());
     }
 }

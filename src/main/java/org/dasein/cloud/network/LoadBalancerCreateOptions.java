@@ -87,6 +87,10 @@ public class LoadBalancerCreateOptions {
     private String                          name;
     private LbType                          type;
     private HealthCheckOptions              healthCheckOptions;
+    private Boolean                         crossDataCenter;
+    private Boolean                         connectionDraining;
+    private Integer                         connectionDrainingTimeout;
+    private Integer                         idleConnectionTimeout;
 
     private LoadBalancerCreateOptions() { }
 
@@ -217,6 +221,22 @@ public class LoadBalancerCreateOptions {
         return this.healthCheckOptions;
     }
 
+    public Boolean getCrossDataCenter() {
+        return crossDataCenter;
+    }
+
+    public Boolean getConnectionDraining() {
+        return connectionDraining;
+    }
+
+    public Integer getConnectionDrainingTimeout() {
+        return connectionDrainingTimeout;
+    }
+
+    public Integer getIdleConnectionTimeout() {
+        return idleConnectionTimeout;
+    }
+
     /**
      * Adds the specified listeners into the list of listeners that will be part of the load balancer creation.
      * @param listeners the listeners to include in the creation
@@ -328,4 +348,46 @@ public class LoadBalancerCreateOptions {
         return this;
     }
 
+    /**
+     * Adds the specified the maximum time (in seconds) to keep the existing connections open before
+     * deregistering the instances.
+     * @param connectionDrainingTimeout the timeout options
+     * @return this
+     */
+    public @Nonnull LoadBalancerCreateOptions withConnectionDrainingTimeout(Integer connectionDrainingTimeout) {
+        this.connectionDrainingTimeout = connectionDrainingTimeout;
+        return this;
+    }
+
+    /**
+     * Adds the specifies the time (in seconds) the connection is allowed to be idle
+     * before it is closed by the load balancer
+     * @param idleConnectionTimeout the timeout options
+     * @return this
+     */
+    public @Nonnull LoadBalancerCreateOptions withIdleConnectionTimeout(Integer idleConnectionTimeout) {
+        this.idleConnectionTimeout = idleConnectionTimeout;
+        return this;
+    }
+
+    /**
+     * Adds the specified whether connection draining is enabled for the load balancer.
+     * @param connectionDraining the connection draining options
+     * @return this
+     */
+    public @Nonnull LoadBalancerCreateOptions withConnectionDraining(Boolean connectionDraining) {
+        this.connectionDraining = connectionDraining;
+        return this;
+    }
+
+    /**
+     * Adds the specified cross data centers. If enabled, the load balancer routes the request traffic evenly
+     * across all back-end instances regardless of the data center.
+     * @param crossDataCenter then cross zone options
+     * @return
+     */
+    public @Nonnull LoadBalancerCreateOptions withCrossDataCenter(Boolean crossDataCenter) {
+        this.crossDataCenter = crossDataCenter;
+        return this;
+    }
 }

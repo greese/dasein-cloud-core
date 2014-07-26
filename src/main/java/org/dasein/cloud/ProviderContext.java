@@ -21,7 +21,9 @@ package org.dasein.cloud;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
@@ -282,6 +284,35 @@ public class ProviderContext extends ProviderContextCompat implements Serializab
         catch( IllegalAccessException e ) {
             throw new InternalException(e);
         }
+    }
+
+    /**
+     * Creates a copy of this context with some parameters replaced by new values.
+     * @param havingRegionId the region to set into copied context.
+     * @return a new provider context.
+     * @throws InternalException an error occurred loading the {@link org.dasein.cloud.CloudProvider} implementation
+     */
+    public @Nonnull ProviderContext copy(@Nonnull String havingRegionId) throws InternalException {
+        try {
+            CloudProvider provider = this.getCloud().buildProvider();
+            List<ContextRequirements.Field> fields = provider.getContextRequirements().getConfigurableValues();
+            List<Value<Object>> values = new ArrayList<Value<Object>>();
+            for ( ContextRequirements.Field f : fields ) {
+                Object value = this.getConfigurationValue(f);
+                if (value != null) {
+                    values.add(new Value<Object>(f.name, value));
+                }
+            }
+            return this.getCloud().createContext(
+                    getAccountNumber(), havingRegionId, values.toArray( new Value[ values.size() ] ) );
+        }
+        catch (IllegalAccessException e) {
+            throw new InternalException(e);
+        }
+        catch (InstantiationException e) {
+            throw new InternalException(e);
+        }
+
     }
 
     /**

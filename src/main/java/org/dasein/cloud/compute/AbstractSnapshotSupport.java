@@ -102,7 +102,7 @@ public abstract class AbstractSnapshotSupport implements SnapshotSupport {
     @Override
     @Deprecated
     public @Nonnull Requirement identifyAttachmentRequirement() throws InternalException, CloudException {
-        return Requirement.OPTIONAL;
+        return getCapabilities().identifyAttachmentRequirement();
     }
 
     @Override
@@ -244,25 +244,25 @@ public abstract class AbstractSnapshotSupport implements SnapshotSupport {
     @Override
     @Deprecated
     public boolean supportsSnapshotCopying() throws CloudException, InternalException {
-        return false;
+        return getCapabilities().supportsSnapshotCopying();
     }
 
     @Override
     @Deprecated
     public boolean supportsSnapshotCreation() throws CloudException, InternalException {
-        return false;
+        return getCapabilities().supportsSnapshotCreation();
     }
 
     @Override
     @Deprecated
     public boolean supportsSnapshotSharing() throws InternalException, CloudException {
-        return false;
+        return getCapabilities().supportsSnapshotSharing();
     }
 
     @Override
     @Deprecated
     public boolean supportsSnapshotSharingWithPublic() throws InternalException, CloudException {
-        return false;
+        return getCapabilities().supportsSnapshotSharingWithPublic();
     }
 
     @Override

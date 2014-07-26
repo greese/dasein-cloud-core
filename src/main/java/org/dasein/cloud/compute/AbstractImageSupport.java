@@ -33,7 +33,6 @@ import org.dasein.cloud.identity.ServiceAction;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Locale;
 
@@ -146,6 +145,11 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
     }
 
     @Override
+    public @Nonnull String copyImage(@Nonnull ImageCopyOptions options) throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Image copying is not currently implemented");
+    }
+
+    @Override
     public final @Nullable MachineImage getMachineImage(@Nonnull String providerImageId) throws CloudException, InternalException {
         return getImage(providerImageId);
     }
@@ -155,6 +159,7 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
     }
 
     @Override
+    @Deprecated
     public @Nonnull String getProviderTermForImage(@Nonnull Locale locale) {
         try {
             return getCapabilities().getProviderTermForImage(locale, ImageClass.MACHINE);
@@ -165,6 +170,18 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
     }
 
     @Override
+    @Deprecated
+    public @Nonnull String getProviderTermForImage(@Nonnull Locale locale, @Nonnull ImageClass cls) {
+        try {
+            return getCapabilities().getProviderTermForImage(locale, cls);
+        }
+        catch (Throwable t) {
+            throw new RuntimeException(t);
+        }
+    }
+
+    @Override
+    @Deprecated
     public @Nonnull String getProviderTermForCustomImage(@Nonnull Locale locale, @Nonnull ImageClass cls) {
         try {
             return getCapabilities().getProviderTermForImage(locale, cls);
@@ -175,6 +192,7 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
     }
 
     @Override
+    @Deprecated
     public boolean hasPublicLibrary() {
         try {
             return getCapabilities().supportsPublicLibrary(ImageClass.MACHINE);
@@ -187,7 +205,7 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
     @Override
     @Deprecated
     public @Nonnull Requirement identifyLocalBundlingRequirement() throws CloudException, InternalException {
-        return Requirement.NONE;
+        return getCapabilities().identifyLocalBundlingRequirement();
     }
 
     @Override
@@ -261,13 +279,13 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
     @Override
     @Deprecated
     public @Nonnull Iterable<MachineImageFormat> listSupportedFormats() throws CloudException, InternalException {
-        return Collections.emptyList();
+        return getCapabilities().listSupportedFormats();
     }
 
     @Override
     @Deprecated
     public @Nonnull Iterable<MachineImageFormat> listSupportedFormatsForBundling() throws CloudException, InternalException {
-        return Collections.emptyList();
+        return getCapabilities().listSupportedFormatsForBundling();
     }
 
     @Override
@@ -293,13 +311,13 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
     @Override
     @Deprecated
     public @Nonnull Iterable<ImageClass> listSupportedImageClasses() throws CloudException, InternalException {
-        return Collections.singletonList(ImageClass.MACHINE);
+        return getCapabilities().listSupportedImageClasses();
     }
 
     @Override
     @Deprecated
     public @Nonnull Iterable<MachineImageType> listSupportedImageTypes() throws CloudException, InternalException {
-        return Collections.singletonList(MachineImageType.VOLUME);
+        return getCapabilities().listSupportedImageTypes();
     }
 
     @Override
@@ -533,31 +551,31 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
     @Override
     @Deprecated
     public boolean supportsDirectImageUpload() throws CloudException, InternalException {
-        return false;
+        return getCapabilities().supportsDirectImageUpload();
     }
 
     @Override
     @Deprecated
     public boolean supportsImageCapture(@Nonnull MachineImageType type) throws CloudException, InternalException {
-        return false;
+        return getCapabilities().supportsImageCapture(type);
     }
 
     @Override
     @Deprecated
     public boolean supportsImageSharing() throws CloudException, InternalException {
-        return false;
+        return getCapabilities().supportsImageSharing();
     }
 
     @Override
     @Deprecated
     public boolean supportsImageSharingWithPublic() throws CloudException, InternalException {
-        return false;
+        return getCapabilities().supportsImageSharingWithPublic();
     }
 
     @Override
     @Deprecated
     public boolean supportsPublicLibrary(@Nonnull ImageClass cls) throws CloudException, InternalException {
-        return false;
+        return getCapabilities().supportsPublicLibrary(cls);
     }
 
     @Override
