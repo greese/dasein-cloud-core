@@ -61,10 +61,6 @@ import java.util.*;
  */
 public abstract class CloudProvider {
 
-    public Collection<? extends Tag> getTags(@Nullable String resourceId) throws CloudException, InternalException {
-        throw new OperationNotSupportedException();
-    }
-
     @SuppressWarnings("UnusedDeclaration")
     static private @Nonnull String getLastItem(@Nonnull String name) {
         int idx = name.lastIndexOf('.');

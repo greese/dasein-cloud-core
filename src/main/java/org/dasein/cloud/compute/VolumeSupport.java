@@ -321,12 +321,4 @@ public interface VolumeSupport extends AccessControlledService {
      */
     public void setTags(@Nonnull String[] volumeIds, @Nonnull Tag... tags) throws CloudException, InternalException;
 
-    /**
-     * Get meta-data for for a volume.
-     *
-     * @param resourceId the auto scaling groups to set
-     * @throws CloudException
-     * @throws InternalException
-     */
-    public Collection<? extends Tag> getTags(@Nullable String resourceId) throws CloudException, InternalException;
 }

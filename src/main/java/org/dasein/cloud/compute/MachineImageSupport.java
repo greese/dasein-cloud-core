@@ -623,12 +623,4 @@ public interface MachineImageSupport extends AccessControlledService {
      */
     public void setTags(@Nonnull String[] imageIds, @Nonnull Tag... tags)  throws CloudException, InternalException;
 
-    /**
-     * Get meta-data for for an image.
-     *
-     * @param resourceId the auto scaling groups to set
-     * @throws CloudException
-     * @throws InternalException
-     */
-    public Collection<? extends Tag> getTags(@Nullable String resourceId) throws CloudException, InternalException;
 }

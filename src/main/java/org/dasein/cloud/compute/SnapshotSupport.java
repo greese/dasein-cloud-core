@@ -375,12 +375,4 @@ public interface SnapshotSupport extends AccessControlledService {
      */
     public void setTags(@Nonnull String[] snapshotIds, @Nonnull Tag... tags) throws CloudException, InternalException;
 
-    /**
-     * Get meta-data for for a snapshot.
-     *
-     * @param resourceId the auto scaling groups to set
-     * @throws CloudException
-     * @throws InternalException
-     */
-    public Collection<? extends Tag> getTags(@Nullable String resourceId) throws CloudException, InternalException;
 }

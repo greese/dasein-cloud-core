@@ -286,14 +286,15 @@ public abstract class AbstractVolumeSupport implements VolumeSupport {
 
     @Override
     public void setTags(@Nonnull String[] volumeIds, @Nonnull Tag... tags) throws CloudException, InternalException {
-        for (String vmId : volumeIds) {
-            Collection<Tag> collectionForDelete = TagUtils.getTagsForDelete(getTags(vmId), tags);
+        for (String id : volumeIds) {
+
+            Collection<Tag> collectionForDelete = TagUtils.getTagsForDelete(getVolume(id).getTags(), tags);
 
             if (collectionForDelete != null) {
-                removeTags(vmId, collectionForDelete.toArray(new Tag[collectionForDelete.size()]));
+                removeTags(id, collectionForDelete.toArray(new Tag[collectionForDelete.size()]));
             }
 
-            updateTags(vmId, tags);
+            updateTags(id, tags);
         }
     }
 
@@ -307,8 +308,4 @@ public abstract class AbstractVolumeSupport implements VolumeSupport {
         return (getProvider().getProviderName() + "/" + getProvider().getCloudName() + "/Compute/Volumes");
     }
 
-    @Override
-    public Collection<? extends Tag> getTags(@Nullable String resourceId) throws CloudException, InternalException {
-        return provider.getTags(resourceId);
-    }
 }

@@ -563,40 +563,41 @@ public abstract class AbstractVLANSupport implements VLANSupport {
 
     @Override
     public void setSubnetTags(@Nonnull String[] subnetIds, @Nonnull Tag... tags) throws CloudException, InternalException {
-        for (String vmId : subnetIds) {
-            Collection<Tag> collectionForDelete = TagUtils.getTagsForDelete(getTags(vmId), tags);
+        for (String id : subnetIds) {
+
+            Collection<Tag> collectionForDelete = TagUtils.getTagsForDelete(getSubnet(id).getTags(), tags);
 
             if (collectionForDelete != null) {
-                removeSubnetTags(vmId, collectionForDelete.toArray(new Tag[collectionForDelete.size()]));
+                removeSubnetTags(id, collectionForDelete.toArray(new Tag[collectionForDelete.size()]));
             }
 
-            updateSubnetTags(vmId, tags);
+            updateSubnetTags(id, tags);
         }
     }
 
     @Override
     public void setRoutingTableTags(@Nonnull String[] routingTableIds, @Nonnull Tag... tags) throws CloudException, InternalException {
-        for (String vmId : routingTableIds) {
-            Collection<Tag> collectionForDelete = TagUtils.getTagsForDelete(getTags(vmId), tags);
+        for (String id : routingTableIds) {
+            Collection<Tag> collectionForDelete = TagUtils.getTagsForDelete( getRoutingTable(id).getTags(), tags);
 
             if (collectionForDelete != null) {
-                removeRoutingTableTags(vmId, collectionForDelete.toArray(new Tag[collectionForDelete.size()]));
+                removeRoutingTableTags(id, collectionForDelete.toArray(new Tag[collectionForDelete.size()]));
             }
 
-            updateRoutingTableTags(vmId, tags);
+            updateRoutingTableTags(id, tags);
         }
     }
 
     @Override
     public void setInternetGatewayTags(@Nonnull String[] internetGatewayIds, @Nonnull Tag... tags) throws CloudException, InternalException {
-        for (String vmId : internetGatewayIds) {
-            Collection<Tag> collectionForDelete = TagUtils.getTagsForDelete(getTags(vmId), tags);
+        for (String id : internetGatewayIds) {
+            Collection<Tag> collectionForDelete = TagUtils.getTagsForDelete(getInternetGatewayById(id).getTags(), tags);
 
             if (collectionForDelete != null) {
-                removeInternetGatewayTags(vmId, collectionForDelete.toArray(new Tag[collectionForDelete.size()]));
+                removeInternetGatewayTags(id, collectionForDelete.toArray(new Tag[collectionForDelete.size()]));
             }
 
-            updateInternetGatewayTags(vmId, tags);
+            updateInternetGatewayTags(id, tags);
         }
     }
 
@@ -615,8 +616,4 @@ public abstract class AbstractVLANSupport implements VLANSupport {
         setInternetGatewayTags(new String[]{internetGatewayId}, tags);
     }
 
-    @Override
-    public Collection<? extends Tag> getTags(@Nullable String resourceId) throws CloudException, InternalException {
-        return provider.getTags(resourceId);
-    }
 }

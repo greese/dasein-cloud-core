@@ -4,6 +4,7 @@ import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.Tag;
+import org.dasein.cloud.util.TagUtils;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -28,37 +29,29 @@ public abstract class AbstractAutoScalingSupport implements AutoScalingSupport {
 
     @Override
     public void setTags(@Nonnull String[] providerScalingGroupIds, @Nonnull AutoScalingTag... tags) throws CloudException, InternalException {
-        for (String vmId : providerScalingGroupIds) {
-            Collection<AutoScalingTag> collectionForDelete = getTagsForDelete(getTags(vmId), tags);
+        for (String id : providerScalingGroupIds) {
+
+            Collection<AutoScalingTag> collectionForDelete = getTagsForDelete(getScalingGroup(id).getTags(), tags);
 
             if (collectionForDelete != null) {
-                removeTags(new String[]{vmId}, collectionForDelete.toArray(new AutoScalingTag[collectionForDelete.size()]));
+                removeTags(new String[]{id}, collectionForDelete.toArray(new AutoScalingTag[collectionForDelete.size()]));
             }
 
-            updateTags(new String[]{vmId}, tags);
+            updateTags(new String[]{id}, tags);
         }
     }
 
-    private Collection<AutoScalingTag> getTagsForDelete(Collection<AutoScalingTag> all, Tag[] tags ) {
+    static public Collection<AutoScalingTag> getTagsForDelete(AutoScalingTag[] all, Tag[] tags) {
         Collection<AutoScalingTag> result = null;
         if (all != null) {
             result = new ArrayList<AutoScalingTag>();
             for (AutoScalingTag tag : all) {
-                if (!isTagInTags(tag, tags)) {
+                if (!TagUtils.isKeyInTags(tag.getKey(), tags)) {
                     result.add(tag);
                 }
             }
         }
         return result;
-    }
-
-    static public boolean isTagInTags(Tag tag, Tag[] tags) {
-        for (Tag t : tags) {
-            if (t.getKey().equals(tag.getKey())) {
-                return true;
-            }
-        }
-        return false;
     }
 
 }

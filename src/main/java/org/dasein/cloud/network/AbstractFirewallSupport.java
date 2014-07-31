@@ -382,19 +382,15 @@ public abstract class AbstractFirewallSupport implements FirewallSupport {
 
     @Override
     public void setTags(@Nonnull String[] firewallIds, @Nonnull Tag... tags) throws CloudException, InternalException {
-        for (String vmId : firewallIds) {
-            Collection<Tag> collectionForDelete = TagUtils.getTagsForDelete(getTags(vmId), tags);
+        for (String id : firewallIds) {
+            Collection<Tag> collectionForDelete = TagUtils.getTagsForDelete(getFirewall(id).getTags(), tags);
 
             if (collectionForDelete != null) {
-                removeTags(vmId, collectionForDelete.toArray(new Tag[collectionForDelete.size()]));
+                removeTags(id, collectionForDelete.toArray(new Tag[collectionForDelete.size()]));
             }
 
-            updateTags(vmId, tags);
+            updateTags(id, tags);
         }
     }
 
-    @Override
-    public Collection<? extends Tag> getTags(@Nullable String resourceId) throws CloudException, InternalException {
-        return provider.getTags(resourceId);
-    }
 }

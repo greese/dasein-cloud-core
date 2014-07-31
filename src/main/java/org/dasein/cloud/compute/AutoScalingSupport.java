@@ -163,12 +163,4 @@ public interface AutoScalingSupport extends AccessControlledService {
      */
     public void setTags(@Nonnull String[] providerScalingGroupIds, @Nonnull AutoScalingTag... tags)  throws CloudException, InternalException;
 
-    /**
-     * Get meta-data for auto scaling group.
-     *
-     * @param resourceId the auto scaling groups to set
-     * @throws CloudException
-     * @throws InternalException
-     */
-    public Collection<AutoScalingTag> getTags(@Nullable String resourceId) throws CloudException, InternalException;
 }
