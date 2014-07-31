@@ -25,6 +25,7 @@ import org.dasein.cloud.identity.ServiceAction;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.Locale;
 
 /**
@@ -507,6 +508,15 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
     public void updateTags(@Nonnull String[] vmIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Get meta-data for for a virtual machine.
+     *
+     * @param resourceId the auto scaling groups to set
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public Collection<? extends Tag> getTags(@Nullable String resourceId) throws CloudException, InternalException;
 
     /**
      * Set meta-data for a virtual machine. Remove any tags that were not provided by the incoming tags, and add or

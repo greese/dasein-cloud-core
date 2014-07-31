@@ -546,4 +546,13 @@ public interface FirewallSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
     public void setTags(@Nonnull String[] firewallIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Get meta-data for for a firewall.
+     *
+     * @param resourceId the auto scaling groups to set
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public Collection<? extends Tag> getTags(@Nullable String resourceId) throws CloudException, InternalException;
 }

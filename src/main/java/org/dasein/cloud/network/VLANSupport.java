@@ -867,4 +867,13 @@ public interface VLANSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
     public void setInternetGatewayTags(@Nonnull String[] internetGatewayIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Get meta-data for for a internet gateway.
+     *
+     * @param resourceId the auto scaling groups to set
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public Collection<? extends Tag> getTags(@Nullable String resourceId) throws CloudException, InternalException;
 }

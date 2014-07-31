@@ -19,6 +19,7 @@
 
 package org.dasein.cloud.compute;
 
+import java.util.Collection;
 import java.util.Locale;
 
 import org.dasein.cloud.AccessControlledService;
@@ -310,7 +311,7 @@ public interface VolumeSupport extends AccessControlledService {
     public void setTags(@Nonnull String volumeId, @Nonnull Tag... tags) throws CloudException, InternalException;
 
     /**
-     * Set meta-data for mulriple volumes. Remove any tags that were not provided by the incoming tags, and add or
+     * Set meta-data for multiple volumes. Remove any tags that were not provided by the incoming tags, and add or
      * overwrite any new or pre-existing tags.
      *
      * @param volumeIds the volumes to set
@@ -319,4 +320,13 @@ public interface VolumeSupport extends AccessControlledService {
      * @throws InternalException
      */
     public void setTags(@Nonnull String[] volumeIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Get meta-data for for a volume.
+     *
+     * @param resourceId the auto scaling groups to set
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public Collection<? extends Tag> getTags(@Nullable String resourceId) throws CloudException, InternalException;
 }

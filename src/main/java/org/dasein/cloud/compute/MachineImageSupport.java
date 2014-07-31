@@ -20,6 +20,7 @@
 package org.dasein.cloud.compute;
 
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
@@ -621,4 +622,13 @@ public interface MachineImageSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
     public void setTags(@Nonnull String[] imageIds, @Nonnull Tag... tags)  throws CloudException, InternalException;
+
+    /**
+     * Get meta-data for for an image.
+     *
+     * @param resourceId the auto scaling groups to set
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public Collection<? extends Tag> getTags(@Nullable String resourceId) throws CloudException, InternalException;
 }

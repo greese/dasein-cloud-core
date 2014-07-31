@@ -19,6 +19,7 @@
 
 package org.dasein.cloud.compute;
 
+import java.util.Collection;
 import java.util.Locale;
 
 import org.dasein.cloud.AccessControlledService;
@@ -373,4 +374,13 @@ public interface SnapshotSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
     public void setTags(@Nonnull String[] snapshotIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Get meta-data for for a snapshot.
+     *
+     * @param resourceId the auto scaling groups to set
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public Collection<? extends Tag> getTags(@Nullable String resourceId) throws CloudException, InternalException;
 }
