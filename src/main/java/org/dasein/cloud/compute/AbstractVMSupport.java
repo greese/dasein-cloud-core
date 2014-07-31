@@ -29,10 +29,7 @@ import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.Tag;
 import org.dasein.cloud.identity.IdentityServices;
 import org.dasein.cloud.identity.ServiceAction;
-import org.dasein.cloud.util.APITrace;
-import org.dasein.cloud.util.Cache;
-import org.dasein.cloud.util.CacheLevel;
-import org.dasein.cloud.util.NamingConstraints;
+import org.dasein.cloud.util.*;
 import org.dasein.util.CalendarWrapper;
 import org.dasein.util.Jiterator;
 import org.dasein.util.JiteratorPopulator;
@@ -847,7 +844,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
 
     @Override
     public void updateTags(@Nonnull String[] vmIds, @Nonnull Tag... tags) throws CloudException, InternalException {
-        for( String id : vmIds ) {
+        for (String id : vmIds) {
             updateTags(id, tags);
         }
     }
@@ -861,6 +858,24 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     public void removeTags(@Nonnull String[] vmIds, @Nonnull Tag... tags) throws CloudException, InternalException {
         for( String id : vmIds ) {
             removeTags(id, tags);
+        }
+    }
+
+    @Override
+    public void setTags(@Nonnull String vmId, @Nonnull Tag... tags) throws CloudException, InternalException {
+        setTags(new String[]{vmId}, tags);
+    }
+
+    @Override
+    public void setTags(@Nonnull String[] vmIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for (String vmId : vmIds) {
+            Collection<Tag> collectionForDelete = TagUtils.getTagsForDelete(getTags(vmId), tags);
+
+            if (collectionForDelete != null) {
+                removeTags(vmId, collectionForDelete.toArray(new Tag[collectionForDelete.size()]));
+            }
+
+            updateTags(vmId, tags);
         }
     }
 
