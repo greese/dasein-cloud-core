@@ -306,4 +306,9 @@ public abstract class AbstractVolumeSupport implements VolumeSupport {
     public @Nonnull String toString() {
         return (getProvider().getProviderName() + "/" + getProvider().getCloudName() + "/Compute/Volumes");
     }
+
+    @Override
+    public Collection<? extends Tag> getTags(@Nullable String resourceId) throws CloudException, InternalException {
+        return provider.getTags(resourceId);
+    }
 }

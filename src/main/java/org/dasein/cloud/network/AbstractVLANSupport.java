@@ -614,4 +614,9 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     public void setInternetGatewayTags(@Nonnull String internetGatewayId, @Nonnull Tag... tags) throws CloudException, InternalException {
         setInternetGatewayTags(new String[]{internetGatewayId}, tags);
     }
+
+    @Override
+    public Collection<? extends Tag> getTags(@Nullable String resourceId) throws CloudException, InternalException {
+        return provider.getTags(resourceId);
+    }
 }

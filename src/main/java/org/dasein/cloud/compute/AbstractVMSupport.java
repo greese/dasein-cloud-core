@@ -880,6 +880,11 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
+    public Collection<? extends Tag> getTags(@Nullable String resourceId) throws CloudException, InternalException {
+        return provider.getTags(resourceId);
+    }
+
+    @Override
     public @Nonnull String[] mapServiceAction(@Nonnull ServiceAction action) {
         return new String[0];
     }

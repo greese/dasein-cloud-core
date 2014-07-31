@@ -621,4 +621,9 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
             updateTags(vmId, tags);
         }
     }
+
+    @Override
+    public Collection<? extends Tag> getTags(@Nullable String resourceId) throws CloudException, InternalException {
+        return provider.getTags(resourceId);
+    }
 }

@@ -244,4 +244,9 @@ public abstract class AbstractNetworkFirewallSupport implements NetworkFirewallS
     public void setTags(@Nonnull String firewallId, @Nonnull Tag... tags) throws CloudException, InternalException {
         setTags(new String[]{firewallId}, tags);
     }
+
+    @Override
+    public Collection<? extends Tag> getTags(@Nullable String resourceId) throws CloudException, InternalException {
+        return provider.getTags(resourceId);
+    }
 }

@@ -301,4 +301,9 @@ public abstract class AbstractSnapshotSupport implements SnapshotSupport {
             updateTags(vmId, tags);
         }
     }
+
+    @Override
+    public Collection<? extends Tag> getTags(@Nullable String resourceId) throws CloudException, InternalException {
+        return provider.getTags(resourceId);
+    }
 }
