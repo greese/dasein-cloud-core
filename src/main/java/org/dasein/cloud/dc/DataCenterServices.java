@@ -128,4 +128,13 @@ public interface DataCenterServices {
      * @throws CloudException an error occurred within the cloud provider or the cloud provider did not approve of the request
      */
     public ResourcePool getResourcePool(String providerResourcePoolId) throws InternalException, CloudException;
+
+    /**
+     * Lists all storage pools
+     *
+     * @return all storage pools supported for this cloud in the context region
+     * @throws InternalException an error occurred locally in processing the request
+     * @throws CloudException    an error occurred within the cloud provider or the cloud provider did not approve of the request
+     */
+    public Collection<StoragePool> listStoragePools() throws InternalException, CloudException;
 }

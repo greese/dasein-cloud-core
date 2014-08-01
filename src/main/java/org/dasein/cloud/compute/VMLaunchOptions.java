@@ -106,6 +106,7 @@ public class VMLaunchOptions {
     private String             affinityGroupId;
     private String             virtualMachineGroup;
     private String             resourcePoolId;
+    private String             storagePoolId;
     // NOTE: SEE NOTE AT TOP OF ATTRIBUTE LIST WHEN ADDING/REMOVING/CHANGING AN ATTRIBUTE
 
     private VMLaunchOptions() { }
@@ -235,6 +236,7 @@ public class VMLaunchOptions {
             options.volumes = copy.toArray(new VolumeAttachment[copy.size()]);
         }
         options.affinityGroupId = affinityGroupId;
+        options.storagePoolId = storagePoolId;
         return options;
     }
 
@@ -925,4 +927,21 @@ public class VMLaunchOptions {
         return this;
     }
 
+    /**
+     * @see #withStoragePoolId(String)
+     */
+    public String getStoragePoolId() {
+        return storagePoolId;
+    }
+
+    /**
+     * Specifies the stroage pool to launch the instance within. Storage pools are the physical location
+     * of the vm disk files. Storage pools are not supported by all providers.
+     * @param storagePoolId the storage pool id
+     * @return this
+     */
+    public VMLaunchOptions withStoragePoolId( @Nonnull String storagePoolId ) {
+        this.storagePoolId = storagePoolId;
+        return this;
+    }
 }
