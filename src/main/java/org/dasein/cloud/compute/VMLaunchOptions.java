@@ -930,7 +930,7 @@ public class VMLaunchOptions {
     /**
      * @see #withStoragePoolId(String)
      */
-    public String getStoragePoolId() {
+    public @Nullable String getStoragePoolId() {
         return storagePoolId;
     }
 
