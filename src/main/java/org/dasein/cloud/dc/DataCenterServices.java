@@ -26,6 +26,7 @@ import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * <p>
@@ -118,6 +119,7 @@ public interface DataCenterServices {
      * @throws InternalException an error occurred locally in processing the request
      * @throws CloudException    an error occurred within the cloud provider or the cloud provider did not approve of the request
      */
+    @Nonnull
     public Collection<ResourcePool> listResourcePools(String providerDataCenterId) throws InternalException, CloudException;
 
     /**
@@ -127,5 +129,16 @@ public interface DataCenterServices {
      * @throws InternalException an error occurred locally in processing the request
      * @throws CloudException an error occurred within the cloud provider or the cloud provider did not approve of the request
      */
+    @Nullable
     public ResourcePool getResourcePool(String providerResourcePoolId) throws InternalException, CloudException;
+
+    /**
+     * Lists all storage pools
+     *
+     * @return all storage pools supported for this cloud in the context region
+     * @throws InternalException an error occurred locally in processing the request
+     * @throws CloudException    an error occurred within the cloud provider or the cloud provider did not approve of the request
+     */
+    @Nonnull
+    public Collection<StoragePool> listStoragePools() throws InternalException, CloudException;
 }
