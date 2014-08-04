@@ -59,6 +59,15 @@ public interface RelationalDatabaseSupport extends AccessControlledService {
 
     public String createFromTimestamp(String dataSourceName, String providerDatabaseId, long beforeTimestamp, String productSize, String providerDataCenterId, int hostPort) throws InternalException, CloudException;
 
+    /**
+     * Provides access to meta-data about RDS capabilities in the current region of this cloud.
+     *
+     * @return a description of the features supported by this region of this cloud
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException    an error occurred within the cloud provider
+     */
+    public @Nonnull RelationalDatabaseCapabilities getCapabilities() throws InternalException, CloudException;
+
     public DatabaseConfiguration getConfiguration(String providerConfigurationId) throws CloudException, InternalException;
 
     public Database getDatabase(String providerDatabaseId) throws CloudException, InternalException;
@@ -70,23 +79,30 @@ public interface RelationalDatabaseSupport extends AccessControlledService {
     public Iterable<String> getSupportedVersions(DatabaseEngine forEngine) throws CloudException, InternalException;
     
     public Iterable<DatabaseProduct> getDatabaseProducts(DatabaseEngine forEngine) throws CloudException, InternalException;
-    
+
+    @Deprecated
     public String getProviderTermForDatabase(Locale locale);
-    
+
+    @Deprecated
     public String getProviderTermForSnapshot(Locale locale);
 
     public DatabaseSnapshot getSnapshot(String providerDbSnapshotId) throws CloudException, InternalException;
     
     public boolean isSubscribed() throws CloudException, InternalException;
-    
+
+    @Deprecated
     public boolean isSupportsFirewallRules();
-    
+
+    @Deprecated
     public boolean isSupportsHighAvailability() throws CloudException, InternalException;
 
+    @Deprecated
     public boolean isSupportsLowAvailability() throws CloudException, InternalException;
 
+    @Deprecated
     public boolean isSupportsMaintenanceWindows();
-    
+
+    @Deprecated
     public boolean isSupportsSnapshots();
     
     public Iterable<String> listAccess(String toProviderDatabaseId) throws CloudException, InternalException;

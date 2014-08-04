@@ -56,9 +56,19 @@ public interface PushNotificationSupport extends AccessControlledService {
      */
     public @Nullable Topic getTopic( @Nonnull String providerTopicId ) throws CloudException, InternalException;
 
+    @Deprecated
     public String getProviderTermForSubscription(Locale locale);
-    
+
+    @Deprecated
     public String getProviderTermForTopic(Locale locale);
+
+    /**
+     * Provides access to meta-data about Push Notification capabilities in the current region of this cloud.
+     * @return a description of the features supported by this region of this cloud
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException    an error occurred within the cloud provider
+     */
+    public @Nonnull PushNotificationCapabilities getCapabilities() throws InternalException, CloudException;
     
     public boolean isSubscribed() throws CloudException, InternalException;
     
