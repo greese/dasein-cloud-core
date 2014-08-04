@@ -23,7 +23,7 @@ package org.dasein.cloud.platform;
  * Database Engine
  *
  * @author Stas Maksimov
- * @version 2014.07 broken down engines into editions as per AWS model
+ * @version 2014.08 broken down engines into editions as per AWS model
  * @since ?
  */
 public enum DatabaseEngine {

@@ -200,7 +200,7 @@ public interface LoadBalancerSupport extends AccessControlledService {
 
     /**
      * Creates a standalone LoadBalancerHealthCheck that can be attached to a LoadBalancer either at a later time
-     * or on create of the LB.
+     * or on creation of the LB.
      * @param name the name of the Health Check if required
      * @param description a friendly name for the Health Check
      * @param host an optional hostname that can be set as the target for the health check monitoring
@@ -218,8 +218,9 @@ public interface LoadBalancerSupport extends AccessControlledService {
     public LoadBalancerHealthCheck createLoadBalancerHealthCheck(@Nullable String name, @Nullable String description, @Nullable String host, @Nullable LoadBalancerHealthCheck.HCProtocol protocol, int port, @Nullable String path, int interval, int timeout, int healthyCount, int unhealthyCount) throws CloudException, InternalException;
 
     /**
-     * Creates a standalone LoadBalancerHealthCheck that can be attached to a LoadBalancer either at a later time
-     * or on create of the LB.
+     * Creates a LoadBalancerHealthCheck object. For some clouds the Health Checks can exist as standalone objects but for others
+     * (indicated by LoadBalancerCapabilities.healthCheckRequiresLoadBalancer()) they must only exist connected to a Load Balancer.
+     * In those cases the HealthCheckOptions dialog must have a valid providerLoadBalancerId
      * @param options the options for creating the health check
      * @return the unique ID of the health check
      */

@@ -31,8 +31,8 @@ import java.util.Map;
  * A logical container for cloud resources. Resources within the same affinity group should trend towards low-latency (but non-HA) placement within the cloud.
  * <p>Created by Drew Lyall: 09/07/14 15:00 AM</p>
  * @author Drew Lyall
- * @version 2014.07 initial version
- * @since 2014.07
+ * @version 2014.08 initial version
+ * @since 2014.08
  */
 public class AffinityGroup implements Taggable{
     private String              affinityGroupId;

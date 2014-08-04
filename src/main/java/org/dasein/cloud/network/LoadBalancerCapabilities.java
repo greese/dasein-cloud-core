@@ -73,6 +73,14 @@ public interface LoadBalancerCapabilities extends Capabilities{
     public boolean healthCheckRequiresLoadBalancer() throws CloudException, InternalException;
 
     /**
+     * Indicates whether a name is required when creating a health check
+     * @return Requirement for health check name
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public Requirement healthCheckRequiresName() throws CloudException, InternalException;
+
+    /**
      * @return the degree to which endpoints should or must be part of the load balancer creation process
      * @throws CloudException    an error occurred while communicating with the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud implementation

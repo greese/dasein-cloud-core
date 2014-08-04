@@ -362,10 +362,26 @@ public interface VirtualMachineSupport extends AccessControlledService {
      */
     public Iterable<VirtualMachineProduct> listProducts( Architecture architecture ) throws InternalException, CloudException;
 
-    /*
-     * @param dataCenterId the desired dataCenterId size offerings
+    /**
+     * Lists all virtual machine products matching the given VirtualMachineProductFilterOptions belonging to the account owner currently in
+     * the cloud. The filtering functionality is delegated to the cloud provider.
+     * @param options the filter options
+     * @return the list of server sizes available matching the filter
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException    an error occurred within the cloud provider
      */
-    public Iterable<VirtualMachineProduct> listProducts( Architecture architecture, String dataCenterId ) throws InternalException, CloudException;
+    public Iterable<VirtualMachineProduct> listProducts(VirtualMachineProductFilterOptions options) throws InternalException, CloudException;
+
+    /**
+     * Lists all virtual machine products matching the given VirtualMachineProductFilterOptions and specified architecture belonging to the account owner currently in
+     * the cloud. The filtering functionality is delegated to the cloud provider.
+     * @param architecture the desired architecture size offerings
+     * @param options the filter options
+     * @return the list of server sizes available matching the filter
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException    an error occurred within the cloud provider
+     */
+    public Iterable<VirtualMachineProduct> listProducts(VirtualMachineProductFilterOptions options, Architecture architecture) throws InternalException, CloudException;
 
     /**
      * Provides a list of price history records for Spot VMs
