@@ -31,8 +31,8 @@ import javax.annotation.Nullable;
  * process.
  * <p>Created by Drew Lyall: 04/07/14 15:00 AM</p>
  * @author Drew Lyall
- * @version 2014.07 initial version
- * @since 2014.07
+ * @version 2014.08 initial version
+ * @since 2014.08
  */
 public class VirtualMachineProductFilterOptions{
     private boolean           matchesAny;

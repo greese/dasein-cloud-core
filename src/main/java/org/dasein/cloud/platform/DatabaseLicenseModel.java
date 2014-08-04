@@ -23,8 +23,8 @@ package org.dasein.cloud.platform;
  * <p>Created by stas: 18/07/2014 10:47</p>
  *
  * @author Stas Maksimov
- * @version 2014.07 initial version
- * @since 2014.07
+ * @version 2014.08 initial version
+ * @since 2014.08
  */
 public enum DatabaseLicenseModel {
     GENERAL_PUBLIC_LICENSE,

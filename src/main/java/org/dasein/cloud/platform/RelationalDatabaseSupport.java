@@ -35,7 +35,7 @@ import javax.annotation.Nonnull;
  * Relational Database Support methods
  *
  * @author Stas Maksimov
- * @version 2014.07 renamed getDatabaseProducts to listDatabaseProducts for API consistency
+ * @version 2014.08 renamed getDatabaseProducts to listDatabaseProducts for API consistency
  * @since ?
  */
 public interface RelationalDatabaseSupport extends AccessControlledService {
@@ -91,7 +91,7 @@ public interface RelationalDatabaseSupport extends AccessControlledService {
      * @return iteration of the database products supported by the engine
      * @throws CloudException
      * @throws InternalException
-     * @deprecated since 2014.07 for consistency
+     * @deprecated since 2014.08 for consistency
      * @see org.dasein.cloud.platform.RelationalDatabaseSupport#listDatabaseProducts(DatabaseEngine)
      *
      */
@@ -104,7 +104,7 @@ public interface RelationalDatabaseSupport extends AccessControlledService {
      * @return iteration of the database products supported by the engine
      * @throws CloudException
      * @throws InternalException
-     * @since 2014.07 for consistency
+     * @since 2014.08 for consistency
      */
     public Iterable<DatabaseProduct> listDatabaseProducts(DatabaseEngine forEngine) throws CloudException, InternalException;
 

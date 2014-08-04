@@ -29,8 +29,8 @@ import java.util.Locale;
 /**
  * Describes the capabilities of a KeyValue Database within a cloud for a specific account.
  * @author Drew Lyall
- * @version 2014.07
- * @since 2014.07
+ * @version 2014.08
+ * @since 2014.08
  */
 
 public interface KeyValueDatabaseCapabilities extends Capabilities{

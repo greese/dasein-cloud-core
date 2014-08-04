@@ -33,7 +33,7 @@ import javax.annotation.Nullable;
  *
  * @author Drew Lyall
  * @author Stas Maksimov
- * @version 2014.07 reduced number of parameters in getInstance to mandatory only
+ * @version 2014.08 reduced number of parameters in getInstance to mandatory only
  * @since 2014.05
  */
 public class SpotVirtualMachineRequestCreateOptions {
