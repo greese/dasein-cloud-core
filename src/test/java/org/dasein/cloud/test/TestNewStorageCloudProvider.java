@@ -100,12 +100,17 @@ public class TestNewStorageCloudProvider extends AbstractCloud {
 
             @Override
             public Collection<ResourcePool> listResourcePools(String providerDataCenterId) throws InternalException, CloudException {
-                return Collections.emptyList();  //To change body of implemented methods use File | Settings | File Templates.
+                return Collections.emptyList();
             }
 
             @Override
             public ResourcePool getResourcePool(String providerResourcePoolId) throws InternalException, CloudException {
-                return null;  //To change body of implemented methods use File | Settings | File Templates.
+                return null;
+            }
+
+            @Override
+            public Collection<StoragePool> listStoragePools() throws InternalException, CloudException{
+                return Collections.emptyList();
             }
         };
     }
