@@ -309,4 +309,28 @@ public interface VirtualMachineCapabilities extends Capabilities {
      * @throws CloudException
      */
     public boolean supportsSpotVirtualMachines() throws InternalException, CloudException;
+
+    /**
+     * Non VMState Defined lifecycle supported operations
+     * The 'can' operations return similar values but based on a specific VM state. These return whether or not there is support at all.
+     */
+    public boolean supportsAlterVM();
+
+    public boolean supportsClone();
+
+    public boolean supportsPause();
+
+    public boolean supportsReboot();
+
+    public boolean supportsResume();
+
+    public boolean supportsStart();
+
+    public boolean supportsStop();
+
+    public boolean supportsSuspend();
+
+    public boolean supportsTerminate();
+
+    public boolean supportsUnPause();
 }
