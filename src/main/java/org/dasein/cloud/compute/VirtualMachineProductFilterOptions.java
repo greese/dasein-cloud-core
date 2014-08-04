@@ -35,10 +35,11 @@ import javax.annotation.Nullable;
  * @since 2014.07
  */
 public class VirtualMachineProductFilterOptions{
-    private boolean matchesAny;
-    private String  regex;
-    private int     cpuCount = 0;
+    private boolean           matchesAny;
+    private String            regex;
+    private int               cpuCount = 0;
     private Storage<Megabyte> ramSize;
+    private String            datacenterId;
 
     /**
      * Constructs an empty set of filtering options that will force match against any VM Product by default.
@@ -99,12 +100,16 @@ public class VirtualMachineProductFilterOptions{
         return ramSize;
     }
 
+    public @Nullable String getDatacenterId(){
+        return datacenterId;
+    }
+
     /**
      * Indicates whether there are any criteria associated with these options.
      * @return true if this filter options object has any criteria associated with it
      */
     public boolean hasCriteria() {
-        return (cpuCount > 0 || (ramSize != null && ramSize.intValue() > 0) || regex != null);
+        return (cpuCount > 0 || (ramSize != null && ramSize.intValue() > 0) || regex != null || datacenterId != null);
     }
 
     /**
@@ -155,6 +160,11 @@ public class VirtualMachineProductFilterOptions{
         return this;
     }
 
+    public @Nonnull VirtualMachineProductFilterOptions withDatacenterId(@Nonnull String datacenterId){
+        this.datacenterId = datacenterId;
+        return this;
+    }
+
     /**
      * Matches a VM Product against the criteria in this set of filter options.
      * @param product the VM Product to test
@@ -163,9 +173,33 @@ public class VirtualMachineProductFilterOptions{
     public boolean matches(@Nonnull VirtualMachineProduct product) {
         if( regex != null ) {
             boolean matches = (product.getName().matches(regex) || product.getDescription().matches(regex));
-            if(!matches){
-                matches = (product.getCpuCount() == cpuCount || product.getRamSize() == ramSize);
+            if( !matches && !matchesAny ) {
+                return false;
             }
+            else if( matches && matchesAny ) {
+                return true;
+            }
+        }
+        else if(cpuCount > 0){
+            boolean matches = product.getCpuCount() == cpuCount;
+            if( !matches && !matchesAny ) {
+                return false;
+            }
+            else if( matches && matchesAny ) {
+                return true;
+            }
+        }
+        else if(ramSize != null){
+            boolean matches = product.getRamSize() == ramSize;
+            if( !matches && !matchesAny ) {
+                return false;
+            }
+            else if( matches && matchesAny ) {
+                return true;
+            }
+        }
+        else if(datacenterId != null){
+            boolean matches = product.getDataCenterId().equals(datacenterId);
             if( !matches && !matchesAny ) {
                 return false;
             }

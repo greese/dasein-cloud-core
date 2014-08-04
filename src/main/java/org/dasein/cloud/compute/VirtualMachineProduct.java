@@ -39,6 +39,7 @@ public class VirtualMachineProduct implements Serializable {
     private Storage<Megabyte> ramSize;
     private float             standardHourlyRate;
     private VisibleScope      visibleScope;
+    private String            dataCenterId;
 
     public enum Status        { CURRENT, DEPRECATED; }
 
@@ -112,6 +113,14 @@ public class VirtualMachineProduct implements Serializable {
 
     public VisibleScope getVisibleScope(){
         return this.visibleScope;
+    }
+
+    public String getDataCenterId(){
+        return this.dataCenterId;
+    }
+
+    public void setDataCenterId(String dataCenterId){
+        this.dataCenterId = dataCenterId;
     }
 
     public Status getStatus() {
