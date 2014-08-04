@@ -657,6 +657,21 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
+    public Iterable<VirtualMachineProduct> listProducts(VirtualMachineProductFilterOptions options) throws InternalException, CloudException{
+        throw new OperationNotSupportedException("Product size filtering not implemented for " + getProvider().getCloudName());
+    }
+
+    @Override
+    public Iterable<VirtualMachineProduct> listProducts(VirtualMachineProductFilterOptions options, Architecture architecture) throws InternalException, CloudException{
+        throw new OperationNotSupportedException("Product size filtering not implemented for " + getProvider().getCloudName());
+    }
+
+    @Override
+    public Iterable<VirtualMachineProduct> listProducts(VirtualMachineProductFilterOptions options, Architecture architecture, String datacenterId) throws InternalException, CloudException{
+        throw new OperationNotSupportedException("Product size filtering not implemented for " + getProvider().getCloudName());
+    }
+
+    @Override
     public Iterable<SpotPriceHistory> listSpotPriceHistories( SpotPriceHistoryFilterOptions options ) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Spot Instances are not supported for " + getProvider().getCloudName());
     }
