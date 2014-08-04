@@ -398,7 +398,7 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
     }
 
     @Override
-    public LoadBalancerHealthCheck getLoadBalancerHealthCheck(@Nullable String providerLBHealthCheckId, @Nullable String providerLoadBalancerId)throws CloudException, InternalException{
+    public LoadBalancerHealthCheck getLoadBalancerHealthCheck(@Nonnull String providerLBHealthCheckId, @Nullable String providerLoadBalancerId)throws CloudException, InternalException{
         throw new OperationNotSupportedException("Health Checks have not been implemented for " + getProvider().getCloudName());
     }
 

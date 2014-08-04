@@ -156,7 +156,7 @@ public class DNSRecord implements Serializable {
     public String toString() {
         StringBuilder str = new StringBuilder();
         
-        str.append(type.toString() + " " + ttl);
+        str.append(type.toString()).append(" ").append(ttl);
         if( values != null ) {
             for( String value : values ) {
                 str.append(" ");
