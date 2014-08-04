@@ -30,7 +30,7 @@ import java.io.Serializable;
 @SuppressWarnings("UnusedDeclaration")
 public class VirtualMachineProduct implements Serializable {
     private static final long serialVersionUID = -6761551014614219494L;
-    
+
     private int               cpuCount;
     private String            description;
     private Storage<Gigabyte> rootVolumeSize;
@@ -39,9 +39,14 @@ public class VirtualMachineProduct implements Serializable {
     private Storage<Megabyte> ramSize;
     private float             standardHourlyRate;
     private VisibleScope      visibleScope;
-    
-    public VirtualMachineProduct() { }
+    private String            dataCenterId;
 
+    public enum Status        { CURRENT, DEPRECATED; }
+
+    private Status status = Status.CURRENT;
+
+    public VirtualMachineProduct() { }
+    
     public boolean equals(Object ob) {
         return (ob != null && (ob == this || getClass().getName().equals(ob.getClass().getName()) && getProviderProductId().equals(((VirtualMachineProduct) ob).getProviderProductId())));
     }
@@ -108,6 +113,22 @@ public class VirtualMachineProduct implements Serializable {
 
     public VisibleScope getVisibleScope(){
         return this.visibleScope;
+    }
+
+    public String getDataCenterId(){
+        return this.dataCenterId;
+    }
+
+    public void setDataCenterId(String dataCenterId){
+        this.dataCenterId = dataCenterId;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatusDeprecated() {
+        this.status = Status.DEPRECATED;
     }
 
     public String toString() {

@@ -65,6 +65,14 @@ public interface CDNSupport extends AccessControlledService {
      * @throws CloudException an error occurred with the cloud provider
      */
     public void delete(@Nonnull String distributionId) throws InternalException, CloudException;
+
+    /**
+     * Provides access to meta-data about CDN capabilities in the current region of this cloud.
+     * @return a description of the features supported by this region of this cloud
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException    an error occurred within the cloud provider
+     */
+    public @Nonnull CDNCapabilities getCapabilities() throws InternalException, CloudException;
     
     /**
      * Provides encapsulated information about a specific distribution.
@@ -79,7 +87,9 @@ public interface CDNSupport extends AccessControlledService {
      * The term the provider uses to describe distributions.
      * @param locale the language in which the term should be presented
      * @return the provider term for distributions
+     * @deprecated Use {@link CDNCapabilities#getProviderTermForDistribution(java.util.Locale)}
      */
+    @Deprecated
     public @Nonnull String getProviderTermForDistribution(@Nonnull Locale locale);
     
     /**

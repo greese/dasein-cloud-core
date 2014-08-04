@@ -34,7 +34,11 @@ public class LaunchConfiguration implements Serializable {
     private String   providerLaunchConfigurationId;
     private String   serverSizeId;
     private String   providerRoleId;
-    private Boolean  detailedMonitoring;
+    private boolean  detailedMonitoring;
+    private Boolean  associatePublicIPAddress;
+    private VolumeAttachment[] volumeAttachment;
+    private boolean ioOptimized;
+    private String imageId;
     
     public LaunchConfiguration() { }
 
@@ -118,12 +122,44 @@ public class LaunchConfiguration implements Serializable {
       this.providerRoleId = providerRoleId;
     }
 
-    public Boolean getDetailedMonitoring() {
+    public boolean getDetailedMonitoring() {
       return detailedMonitoring;
     }
 
-    public void setDetailedMonitoring(Boolean detailedMonitoring) {
+    public void setDetailedMonitoring(boolean detailedMonitoring) {
       this.detailedMonitoring = detailedMonitoring;
+    }
+
+    public Boolean getAssociatePublicIPAddress() {
+      return associatePublicIPAddress;
+    }
+
+    public void setAssociatePublicIPAddress(Boolean associatePublicIPAddress) {
+      this.associatePublicIPAddress = associatePublicIPAddress;
+    }
+
+    public VolumeAttachment[] getVolumeAttachment() {
+      return volumeAttachment;
+    }
+
+    public void setVolumeAttachment(VolumeAttachment[] volumeAttachments) {
+      this.volumeAttachment = volumeAttachments;
+    }
+
+    public boolean getIoOptimized() {
+      return ioOptimized;
+    }
+
+    public void setIoOptimized(boolean ioOptimized) {
+      this.ioOptimized = ioOptimized;
+    }
+
+    public String getImageId() {
+      return imageId;
+    }
+
+    public void setImageId(String imageId) {
+      this.imageId = imageId;
     }
     
 }

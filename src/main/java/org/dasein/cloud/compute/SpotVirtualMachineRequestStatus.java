@@ -19,6 +19,6 @@
 
 package org.dasein.cloud.compute;
 
-public enum SIRequestType{
-    ONE_TIME, PERSISTENT;
+public enum SpotVirtualMachineRequestStatus {
+    OPEN, ACTIVE, CLOSED, CANCELLED, FAILED;
 }

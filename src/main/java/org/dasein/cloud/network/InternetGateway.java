@@ -19,19 +19,26 @@
 
 package org.dasein.cloud.network;
 
+import org.dasein.cloud.Taggable;
+
+import javax.annotation.Nonnull;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * An AWS specific component used to make a private subnet into a public subnet.  Private subnet traffic to be
  * forwarded to a NAT that routes traffic to the Internet Gateway in the public subnet allowing internet communications.
  * <p>Created by Chris Kelner: 7/11/13 5:07 PM</p>
  * @author Chris Kelner (chris.kelner@weather.com)
  */
-public class InternetGateway {
+public class InternetGateway implements Taggable {
 
     private String                            providerInternetGatewayId;
     private String                            providerVlanId;
     private InternetGatewayAttachmentState    attachmentState;
     private String                            providerOwnerId;
     private String                            providerRegionId;
+    private Map<String, String>               tags;
 
     public InternetGateway() { }
 
@@ -73,6 +80,30 @@ public class InternetGateway {
 
     public void setProviderRegionId(String providerRegionId) {
       this.providerRegionId = providerRegionId;
+    }
+
+    @Override
+    public @Nonnull Map<String,String> getTags() {
+        if( tags == null ) {
+            tags = new HashMap<String, String>();
+        }
+        return tags;
+    }
+
+    @Override
+    public void setTag(@Nonnull String key, @Nonnull String value) {
+        if( tags == null ) {
+            tags = new HashMap<String,String>();
+        }
+        tags.put(key, value);
+    }
+
+    /**
+     * Sets the meta-data tags and overwrites any existing values.
+     * @param tags the tags to be set
+     */
+    public void setTags(@Nonnull Map<String,String> tags) {
+        this.tags = tags;
     }
 
 }

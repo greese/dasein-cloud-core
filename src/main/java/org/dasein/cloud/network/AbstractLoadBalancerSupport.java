@@ -90,6 +90,11 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
     }
 
     @Override
+    public SSLCertificate createSSLCertificate(@Nonnull SSLCertificateCreateOptions options) throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Creating a server certificate is not implemented in " + getContext().getRegionId() + " of " + getProvider().getCloudName());
+    }
+
+    @Override
     public @Nonnull LoadBalancerAddressType getAddressType() throws CloudException, InternalException {
         return LoadBalancerAddressType.DNS;
     }
@@ -176,6 +181,10 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
     }
 
     @Override
+    public @Nullable SSLCertificate getSSLCertificate(@Nonnull String certificateName) throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Getting server certificates is not implemented in " + getContext().getRegionId() + " of " + getProvider().getCloudName());
+    }
+
     @Deprecated
     public @Nonnull Requirement identifyEndpointsOnCreateRequirement() throws CloudException, InternalException {
         return getCapabilities().identifyEndpointsOnCreateRequirement();
@@ -255,6 +264,10 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
         return matches;
     }
 
+    @Override
+    public @Nonnull Iterable<SSLCertificate> listSSLCertificates() throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Listing server certificates is not implemented in " + getContext().getRegionId() + " of " + getProvider().getCloudName());
+    }
 
     @Override
     @Deprecated
@@ -319,6 +332,12 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
     }
 
     @Override
+    public void removeSSLCertificate(@Nonnull String certificateName) throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Removing server certificate is not implemented in " +
+                                                 getContext().getRegionId() + " of " + getProvider().getCloudName());
+    }
+
+    @Override
     public void removeServers(@Nonnull String fromLoadBalancerId, @Nonnull String... serverIdsToRemove) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Removing VM endpoints from an existing load balancer is not currently implemented for " + getContext().getRegionId() + " of " + getProvider().getCloudName());
     }
@@ -333,6 +352,11 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
     @Deprecated
     public final boolean requiresServerOnCreate() throws CloudException, InternalException {
         return getCapabilities().identifyEndpointsOnCreateRequirement().equals(Requirement.REQUIRED);
+    }
+
+    @Override
+    public void setSSLCertificate( @Nonnull SetLoadBalancerSSLCertificateOptions options ) throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Setting SSL certificate is not implemented in " + getContext().getRegionId() + " of " + getProvider().getCloudName());
     }
 
     @Override
@@ -374,7 +398,7 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
     }
 
     @Override
-    public LoadBalancerHealthCheck getLoadBalancerHealthCheck(@Nullable String providerLBHealthCheckId, @Nullable String providerLoadBalancerId)throws CloudException, InternalException{
+    public LoadBalancerHealthCheck getLoadBalancerHealthCheck(@Nonnull String providerLBHealthCheckId, @Nullable String providerLoadBalancerId)throws CloudException, InternalException{
         throw new OperationNotSupportedException("Health Checks have not been implemented for " + getProvider().getCloudName());
     }
 
@@ -395,6 +419,11 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
     }
 
     @Override
+    public void detatchHealthCheck(String loadBalancerId, String heathcheckId) throws CloudException, InternalException{
+        throw new OperationNotSupportedException("Health Checks have not been implemented for " + getProvider().getCloudName());
+    }
+
+    @Override
     @Deprecated
     public boolean healthCheckRequiresLoadBalancer() throws CloudException, InternalException{
         return getCapabilities().healthCheckRequiresLoadBalancer();
@@ -409,5 +438,21 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
         } catch( InternalException e ) {
         }
         throw new RuntimeException("Unable to get a provider term for load balancer.");
+    }
+
+    @Override
+    public void setFirewalls(@Nonnull String providerLoadBalancerId, @Nonnull String... firewallIds) throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Setting firewalls have not been implemented for " + getProvider().getCloudName());
+    }
+
+
+    @Override
+    public void attachLoadBalancerToSubnets(@Nonnull String toLoadBalancerId, @Nonnull String... subnetIdsToAdd) throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Attaching load balancer to subnets has not been implemented for " + getProvider().getCloudName());
+    }
+
+    @Override
+    public void detachLoadBalancerFromSubnets(@Nonnull String fromLoadBalancerId, @Nonnull String... subnetIdsToDelete) throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Detaching load balancer to subnets has not been implemented for " + getProvider().getCloudName());
     }
 }

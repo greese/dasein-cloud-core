@@ -66,15 +66,40 @@ public class CloudException extends Exception {
     public CloudException(@Nonnull Throwable cause) {
         super(cause);
     }
+
+    /**
+     * Constructs a cloud exception with a specific error message and cause.
+     * @param msg the message for the error that occurred
+     * @param cause the error that caused this exception to be thrown
+     */
+    public CloudException(@Nonnull String msg, @Nonnull Throwable cause) {
+        super(msg, cause);
+    }
     
     /**
      * Constructs a cloud exception with cloud provider data added in
+     * @param type cloud error type
      * @param httpCode the HTTP error code
      * @param providerCode the provider-specific error code
      * @param msg the error message
      */
     public CloudException(@Nonnull CloudErrorType type, @Nonnegative int httpCode, @Nullable String providerCode, @Nonnull String msg) {
         super(msg);
+        this.errorType = type;
+        this.httpCode = httpCode;
+        this.providerCode = providerCode;
+    }
+
+    /**
+     * Constructs a cloud exception with cloud provider data added in
+     * @param type cloud error type
+     * @param httpCode the HTTP error code
+     * @param providerCode the provider-specific error code
+     * @param msg the error message
+     * @param cause the error that caused this exception to be thrown
+     */
+    public CloudException(@Nonnull CloudErrorType type, @Nonnegative int httpCode, @Nullable String providerCode, @Nonnull String msg, @Nonnull Throwable cause) {
+        super(msg, cause);
         this.errorType = type;
         this.httpCode = httpCode;
         this.providerCode = providerCode;

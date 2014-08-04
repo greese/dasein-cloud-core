@@ -65,7 +65,7 @@ public class LoadBalancerHealthCheck implements Networkable{
     }
 
     private LoadBalancerHealthCheck(@Nullable String providerLBHealthCheckId, @Nullable String name, @Nullable String description, @Nullable String host, @Nullable HCProtocol protocol, int port, @Nullable String path, int interval, int timeout, int healthyCount, int unhealthyCount){
-    	this.providerLBHealthCheckId = providerLBHealthCheckId;
+        this.providerLBHealthCheckId = providerLBHealthCheckId;
         this.name = name;
         this.description = description;
         this.host = host;

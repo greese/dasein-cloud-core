@@ -19,6 +19,11 @@
 
 package org.dasein.cloud.network;
 
+/**
+ * @deprecated
+ * @see org.dasein.cloud.network.LbEndpointState
+ */
+@Deprecated
 public enum LoadBalancerServerState {
     ACTIVE, INACTIVE;
 }

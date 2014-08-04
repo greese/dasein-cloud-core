@@ -19,20 +19,14 @@
 
 package org.dasein.cloud.network;
 
-import java.util.HashMap;
-import java.util.Locale;
-
-import org.dasein.cloud.AccessControlledService;
-import org.dasein.cloud.CloudException;
-import org.dasein.cloud.InternalException;
-import org.dasein.cloud.OperationNotSupportedException;
-import org.dasein.cloud.Requirement;
-import org.dasein.cloud.ResourceStatus;
+import org.dasein.cloud.*;
 import org.dasein.cloud.identity.ServiceAction;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Locale;
 
 /**
  * Implements support for cloud load balancing services.
@@ -44,18 +38,26 @@ import javax.annotation.Nullable;
  * @since unknown
  */
 public interface LoadBalancerSupport extends AccessControlledService {
-    static public final ServiceAction ANY                  = new ServiceAction("LB:ANY");
+    static public final ServiceAction ANY                       = new ServiceAction("LB:ANY");
 
-    static public final ServiceAction ADD_DATA_CENTERS     = new ServiceAction("LB:ADD_DC");
-    static public final ServiceAction ADD_VMS              = new ServiceAction("LB:ADD_VM");
-    static public final ServiceAction CREATE_LOAD_BALANCER = new ServiceAction("LB:CREATE_LOAD_BALANCER");
-    static public final ServiceAction GET_LOAD_BALANCER    = new ServiceAction("LB:GET_LOAD_BALANCER");
-    static public final ServiceAction LIST_LOAD_BALANCER   = new ServiceAction("LB:LIST_LOAD_BALANCER");
+    static public final ServiceAction ADD_DATA_CENTERS          = new ServiceAction("LB:ADD_DC");
+    static public final ServiceAction ADD_VMS                   = new ServiceAction("LB:ADD_VM");
+    static public final ServiceAction CREATE_LOAD_BALANCER      = new ServiceAction("LB:CREATE_LOAD_BALANCER");
+    static public final ServiceAction GET_LOAD_BALANCER         = new ServiceAction("LB:GET_LOAD_BALANCER");
+    static public final ServiceAction LIST_LOAD_BALANCER        = new ServiceAction("LB:LIST_LOAD_BALANCER");
     static public final ServiceAction GET_LOAD_BALANCER_SERVER_HEALTH   = new ServiceAction("LB:GET_LOAD_BALANCER_SERVER_HEALTH");
-    static public final ServiceAction REMOVE_DATA_CENTERS  = new ServiceAction("LB:REMOVE_DC");
-    static public final ServiceAction REMOVE_VMS           = new ServiceAction("LB:REMOVE_VM");
-    static public final ServiceAction REMOVE_LOAD_BALANCER = new ServiceAction("LB:REMOVE_LOAD_BALANCER");
-    static public final ServiceAction CONFIGURE_HEALTH_CHECK = new ServiceAction("LB:CONFIGURE_HEALTH_CHECK");
+    static public final ServiceAction REMOVE_DATA_CENTERS       = new ServiceAction("LB:REMOVE_DC");
+    static public final ServiceAction REMOVE_VMS                = new ServiceAction("LB:REMOVE_VM");
+    static public final ServiceAction REMOVE_LOAD_BALANCER      = new ServiceAction("LB:REMOVE_LOAD_BALANCER");
+    static public final ServiceAction CONFIGURE_HEALTH_CHECK    = new ServiceAction("LB:CONFIGURE_HEALTH_CHECK");
+    static public final ServiceAction LIST_SSL_CERTIFICATES     = new ServiceAction("LB:LIST_SSL_CERTIFICATES");
+    static public final ServiceAction GET_SSL_CERTIFICATE       = new ServiceAction("LB:GET_SSL_CERTIFICATE");
+    static public final ServiceAction CREATE_SSL_CERTIFICATE    = new ServiceAction("LB:CREATE_SSL_CERTIFICATE");
+    static public final ServiceAction DELETE_SSL_CERTIFICATE    = new ServiceAction("LB:DELETE_SSL_CERTIFICATE");
+    static public final ServiceAction SET_LB_SSL_CERTIFICATE    = new ServiceAction("LB:SET_SSL_CERTIFICATE");
+    static public final ServiceAction SET_FIREWALLS        = new ServiceAction("LB:SET_FIREWALLS");
+    static public final ServiceAction ATTACH_LB_TO_SUBNETS    = new ServiceAction("LB:ATTACH_LB_TO_SUBNETS");
+    static public final ServiceAction DETACH_LB_FROM_SUBNETS    = new ServiceAction("LB:DETACH_LB_FROM_SUBNETS");
 
     /**
      * Adds one or more data centers to the list of data centers associated with the specified load balancer. This method
@@ -198,7 +200,7 @@ public interface LoadBalancerSupport extends AccessControlledService {
 
     /**
      * Creates a standalone LoadBalancerHealthCheck that can be attached to a LoadBalancer either at a later time
-     * or on create of the LB.
+     * or on creation of the LB.
      * @param name the name of the Health Check if required
      * @param description a friendly name for the Health Check
      * @param host an optional hostname that can be set as the target for the health check monitoring
@@ -216,8 +218,9 @@ public interface LoadBalancerSupport extends AccessControlledService {
     public LoadBalancerHealthCheck createLoadBalancerHealthCheck(@Nullable String name, @Nullable String description, @Nullable String host, @Nullable LoadBalancerHealthCheck.HCProtocol protocol, int port, @Nullable String path, int interval, int timeout, int healthyCount, int unhealthyCount) throws CloudException, InternalException;
 
     /**
-     * Creates a standalone LoadBalancerHealthCheck that can be attached to a LoadBalancer either at a later time
-     * or on create of the LB.
+     * Creates a LoadBalancerHealthCheck object. For some clouds the Health Checks can exist as standalone objects but for others
+     * (indicated by LoadBalancerCapabilities.healthCheckRequiresLoadBalancer()) they must only exist connected to a Load Balancer.
+     * In those cases the HealthCheckOptions dialog must have a valid providerLoadBalancerId
      * @param options the options for creating the health check
      * @return the unique ID of the health check
      */
@@ -269,6 +272,86 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @throws InternalException
      */
     public void removeLoadBalancerHealthCheck(@Nonnull String providerLoadBalancerId) throws CloudException, InternalException;
+
+    /**
+     * Uploads a new server certificate associated with the account and current region.
+     * @param options the details of the certificate to upload
+     * @return details of created server certificate
+     * @throws CloudException an error occurred with the cloud provider or request parameters were incorrect
+     * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
+     */
+    public SSLCertificate createSSLCertificate(@Nonnull SSLCertificateCreateOptions options) throws CloudException, InternalException;
+
+    /**
+     * Lists all available server certificates associated with the account in the current region.
+     * @return all server certificates associated with the account in the current region. Certificates may not contain
+     * all fields, e.g. a body. To get all information use {@link #getSSLCertificate(String)}.
+     * @throws CloudException an error occurred while communicating with the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     */
+    public @Nonnull Iterable<SSLCertificate> listSSLCertificates() throws CloudException, InternalException;
+
+    /**
+     * Removes a given server certificate from the account in current region.
+     * <strong>Note:</strong> be sure to first unset this certificate from any load balancer it is used by.
+     * @param certificateName name of the certificate to remove
+     * @throws CloudException an error occurred with the cloud provider, certificate does not exist by given name etc
+     * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
+     */
+    public void removeSSLCertificate(@Nonnull String certificateName) throws CloudException, InternalException;
+
+    /**
+     * Assigns an SSL certificate to specified port of a load balancer.
+     * @param options request options: load balancer name, port number and certificate ID.
+     * @throws CloudException thrown if load balancer or certificate do not exist or other error occurs in the cloud.
+     * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
+     */
+    public void setSSLCertificate(@Nonnull SetLoadBalancerSSLCertificateOptions options) throws CloudException, InternalException;
+
+    /**
+     * Fetched the details of an SSL certificate associated with the given name.
+     * @param certificateName the certificate name to search for.
+     * @return server certificate name or null if no certificate exists with the given name.
+     * @throws CloudException an error occurred while communicating with the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     */
+    public @Nullable SSLCertificate getSSLCertificate(@Nonnull String certificateName) throws CloudException, InternalException;
+
+    /**
+     * Attaches an existing Load Balancer to an existing firewalls
+     * @param providerLoadBalancerId the load balancer ID
+     * @param firewallIds the firewalls
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public void setFirewalls(@Nonnull String providerLoadBalancerId, @Nonnull String... firewallIds) throws CloudException, InternalException;
+
+    /**
+     * Adds subnets to the loadbalancer
+     *
+     * @param toLoadBalancerId the ID of the loadbalancer the subnets need to be attached
+     * @param subnetIdsToAdd subnets IDs to be attached to the specified loadbalancer
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public void attachLoadBalancerToSubnets(@Nonnull String toLoadBalancerId, @Nonnull String ... subnetIdsToAdd) throws CloudException, InternalException;
+
+    /**
+     * Removes subnet from the loadbalancer
+     *
+     * @param fromLoadBalancerId the ID of loadbalancer the subnets need to be detached
+     * @param subnetIdsToDelete subnets IDs to be detached from the specified loadbalancer
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public void detachLoadBalancerFromSubnets(@Nonnull String fromLoadBalancerId, @Nonnull String ... subnetIdsToDelete) throws CloudException, InternalException;
+
+    /*
+     * Detach named healthCheck from named loadBalancer without deleting either.
+     * @throws CloudException an error occurred with the cloud provider while performing this action
+     * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
+     */
+    public void detatchHealthCheck(String loadBalancerId, String heathcheckId) throws CloudException, InternalException;
 
     /********************************** DEPRECATED METHODS *************************************/
 

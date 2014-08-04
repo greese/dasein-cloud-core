@@ -68,57 +68,38 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     @Override
     @Deprecated
     public boolean allowsMultipleTrafficTypesOverSubnet() throws CloudException, InternalException {
-        if( getSubnetSupport().equals(Requirement.NONE) ) {
-            return false;
-        }
-        int count = 0;
-
-        for( IPVersion version : listSupportedIPVersions() ) {
-            count++;
-            if( count > 1 ) {
-                return true;
-            }
-        }
-        return false;
+        return getCapabilities().allowsMultipleTrafficTypesOverSubnet();
     }
 
     @Override
     @Deprecated
     public boolean allowsMultipleTrafficTypesOverVlan() throws CloudException, InternalException {
-        int count = 0;
-
-        for( IPVersion version : listSupportedIPVersions() ) {
-            count++;
-            if( count > 1 ) {
-                return true;
-            }
-        }
-        return false;
+        return getCapabilities().allowsMultipleTrafficTypesOverVlan();
     }
 
 
     @Override
     @Deprecated
     public boolean allowsNewNetworkInterfaceCreation() throws CloudException, InternalException {
-        return false;
+        return getCapabilities().allowsNewNetworkInterfaceCreation();
     }
 
     @Override
     @Deprecated
     public boolean allowsNewVlanCreation() throws CloudException, InternalException {
-        return false;
+        return getCapabilities().allowsNewVlanCreation();
     }
 
     @Override
     @Deprecated
     public boolean allowsNewRoutingTableCreation() throws CloudException, InternalException {
-      return false;
+      return getCapabilities().allowsNewRoutingTableCreation();
     }
 
     @Override
     @Deprecated
     public boolean allowsNewSubnetCreation() throws CloudException, InternalException {
-        return false;
+        return getCapabilities().allowsNewSubnetCreation();
     }
 
     @Override
@@ -184,13 +165,13 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     @Override
     @Deprecated
     public int getMaxNetworkInterfaceCount() throws CloudException, InternalException {
-        return 0;
+        return getCapabilities().getMaxNetworkInterfaceCount();
     }
 
     @Override
     @Deprecated
     public int getMaxVlanCount() throws CloudException, InternalException {
-        return 0;
+        return getCapabilities().getMaxVlanCount();
     }
 
     @Override
@@ -211,7 +192,7 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     @Override
     @Deprecated
     public @Nonnull Requirement getRoutingTableSupport() throws CloudException, InternalException {
-        return Requirement.NONE;
+        return getCapabilities().getRoutingTableSupport();
     }
 
     @Override
@@ -239,7 +220,7 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     @Override
     @Deprecated
     public @Nonnull Requirement getSubnetSupport() throws CloudException, InternalException {
-        return Requirement.NONE;
+        return getCapabilities().getSubnetSupport();
     }
 
     @Override
@@ -275,7 +256,12 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     @Override
     @Deprecated
     public @Nonnull Requirement identifySubnetDCRequirement() {
-        return Requirement.NONE;
+        try {
+            return getCapabilities().identifySubnetDCRequirement();
+        } catch( CloudException e ) {
+        } catch( InternalException e ) {
+        }
+        throw new RuntimeException("Unable to identify subnet DC requirement.");
     }
 
     @Override
@@ -286,19 +272,19 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     @Override
     @Deprecated
     public boolean isNetworkInterfaceSupportEnabled() throws CloudException, InternalException {
-        return false;
+        return getCapabilities().isNetworkInterfaceSupportEnabled();
     }
 
     @Override
     @Deprecated
     public boolean isSubnetDataCenterConstrained() throws CloudException, InternalException {
-        return false;
+        return getCapabilities().isSubnetDataCenterConstrained();
     }
 
     @Override
     @Deprecated
     public boolean isVlanDataCenterConstrained() throws CloudException, InternalException {
-        return false;
+        return getCapabilities().isVlanDataCenterConstrained();
     }
 
     @Override
@@ -376,7 +362,7 @@ public abstract class AbstractVLANSupport implements VLANSupport {
             IpAddressSupport ipSupport = network.getIpAddressSupport();
 
             if( ipSupport != null ) {
-                for( IPVersion version : ipSupport.listSupportedIPVersions() ) {
+                for( IPVersion version : ipSupport.getCapabilities().listSupportedIPVersions() ) {
                     for( IpAddress addr : ipSupport.listIpPool(version, false) ) {
                         if( inVlanId.equals(addr.getProviderVlanId()) ) {
                             resources.add(addr);
@@ -433,7 +419,7 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     @Override
     @Deprecated
     public @Nonnull Iterable<IPVersion> listSupportedIPVersions() throws CloudException, InternalException {
-        return Collections.singletonList(IPVersion.IPV4);
+        return getCapabilities().listSupportedIPVersions();
     }
 
     @Override
@@ -513,13 +499,18 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     @Override
     @Deprecated
     public boolean supportsInternetGatewayCreation() throws CloudException, InternalException {
-        return false;
+        return getCapabilities().supportsInternetGatewayCreation();
     }
 
     @Override
     @Deprecated
     public boolean supportsRawAddressRouting() throws CloudException, InternalException {
-        return false;
+        return getCapabilities().supportsRawAddressRouting();
+    }
+
+    @Override
+    public void updateRoutingTableTags(@Nonnull String routingTableId, @Nonnull Tag... tags) throws CloudException, InternalException{
+        throw new OperationNotSupportedException("Routing table tags are not supported in " + provider.getCloudName());
     }
 
     @Override
@@ -544,5 +535,48 @@ public abstract class AbstractVLANSupport implements VLANSupport {
         for( String id : vlanIds ) {
             updateVLANTags(id, tags);
         }
+    }
+
+    @Override
+    public void updateInternetGatewayTags(@Nonnull String internetGatewayId, @Nonnull Tag... tags) throws CloudException, InternalException{
+        throw new OperationNotSupportedException("Internet Gateway tags are not supported in " + provider.getCloudName());
+    }
+
+    @Override
+    public void updateInternetGatewayTags(@Nonnull String[] internetGatewayIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for (String internetGatewayId : internetGatewayIds) {
+            updateInternetGatewayTags(internetGatewayId, tags);
+        }
+    }
+
+    @Override
+    public void updateRoutingTableTags(@Nonnull String[] routingTableIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for (String routingTableId : routingTableIds) {
+            updateRoutingTableTags(routingTableId, tags);
+        }
+    }
+
+    @Override
+    public void removeRoutingTableTags(@Nonnull String[] routingTableIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for (String routingTableId : routingTableIds) {
+            removeRoutingTableTags(routingTableId, tags);
+        }
+    }
+
+    @Override
+    public void removeInternetGatewayTags(@Nonnull String internetGatewayId, @Nonnull Tag... tags) throws CloudException, InternalException{
+        throw new OperationNotSupportedException("Internet Gateway tags are not supported in " + provider.getCloudName());
+    }
+
+    @Override
+    public void removeInternetGatewayTags(@Nonnull String[] internetGatewayIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for (String internetGatewayId : internetGatewayIds) {
+            removeInternetGatewayTags(internetGatewayId, tags);
+        }
+    }
+
+    @Override
+    public void removeRoutingTableTags(@Nonnull String routingTableId, @Nonnull Tag... tags) throws CloudException, InternalException{
+        throw new OperationNotSupportedException("Routing table tags are not supported in " + provider.getCloudName());
     }
 }

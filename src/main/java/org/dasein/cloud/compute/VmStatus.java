@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2013 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -19,6 +19,32 @@
 
 package org.dasein.cloud.compute;
 
-public enum SIRequestStatus{
-    OPEN, ACTIVE, CLOSED, CANCELLED, FAILED;
+/**
+ * <p>
+ * The various possible status a server can have. Implementors should do their best to
+ * map cloud-specific states to these states.
+ * </p>
+ */
+public enum VmStatus {
+  /**
+   * The server is functioning as expected - set by provider.
+   */
+  OK,
+  /**
+   * The server is not functioning as expected - set by provider.
+   */
+  IMPAIRED,
+  /**
+   * Not enough data to detect status - set by provider.
+   */
+  INSUFFICIENT_DATA,
+  /**
+   * VM status cannot be applied to this type of server - set by provider.
+   */
+  NOT_APPLICABLE,
+  /**
+   * Could not get status from provider.  Set by dasein.  Should be used in cases of null or empty
+   * values from provider
+   */
+  STATUS_UNAVAILABLE
 }

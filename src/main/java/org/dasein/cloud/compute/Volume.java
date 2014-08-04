@@ -31,41 +31,43 @@ import java.util.Map;
 
 /**
  * Represents a block storage volume in the cloud.
+ *
  * @author George Reese (george.reese@imaginary.com)
- * @since unknown
  * @version 2012-07 updated to match new volume enhancements, including UoM, type, and root volume awareness
+ * @since unknown
  */
 public class Volume implements Networkable, Taggable {
-    private long        creationTimestamp;
-	private VolumeState currentState;
-    private String      providerDataCenterId;
-    private String      description;
-    private String      deviceId;
-    private VolumeFormat format;
-    private Platform    guestOperatingSystem;
-    private int         iops;
-    private String      mediaLink;
-    private String      name;
-    private String      providerProductId;
-    private String      providerVolumeId;
-    private String      providerRegionId;
-    private String      providerVirtualMachineId;
-    private String      providerVlanId;
-    private boolean     rootVolume;
-    private Storage<Gigabyte> size;
-    private String      providerSnapshotId;
-    private Map<String,String> tags;
-    private VolumeType  type;
+    private long                creationTimestamp;
+    private VolumeState         currentState;
+    private String              providerDataCenterId;
+    private String              description;
+    private String              deviceId;
+    private VolumeFormat        format;
+    private Platform            guestOperatingSystem;
+    private int                 iops;
+    private String              mediaLink;
+    private String              name;
+    private String              providerProductId;
+    private String              providerVolumeId;
+    private String              providerRegionId;
+    private String              providerVirtualMachineId;
+    private String              providerVlanId;
+    private boolean             rootVolume;
+    private Storage<Gigabyte>   size;
+    private String              providerSnapshotId;
+    private Map<String, String> tags;
+    private VolumeType          type;
 
     /**
      * deleteOnVirtualMachineTermination is needed for listing volumes on a virtualmachine, but set to null
      * for when listing volumes through VolumeSupport as some providers (AWS) don't provide this info there.
      */
-    private Boolean     deleteOnVirtualMachineTermination = null;
+    private Boolean deleteOnVirtualMachineTermination = null;
 
-    public Volume() { }
+    public Volume() {
+    }
 
-    public boolean equals(Object ob) {
+    public boolean equals( Object ob ) {
         if( ob == null ) {
             return false;
         }
@@ -75,35 +77,35 @@ public class Volume implements Networkable, Taggable {
         if( !getClass().getName().equals(ob.getClass().getName()) ) {
             return false;
         }
-        Volume other = (Volume)ob;
-        
+        Volume other = ( Volume ) ob;
+
         if( !providerRegionId.equals(other.providerRegionId) ) {
             return false;
         }
         return providerVolumeId.equals(other.providerVolumeId);
     }
-    
+
     /**
      * @deprecated Use {@link #getProviderSnapshotId()}
      */
     public String getSnapshotId() {
-		return getProviderSnapshotId();
-	}
+        return getProviderSnapshotId();
+    }
 
     public String getProviderSnapshotId() {
         return providerSnapshotId;
     }
-    
+
     /**
      * @deprecated use {@link #setProviderSnapshotId(String)}
      */
-	public void setSnapshotId(String snapshotId) {
-		this.providerSnapshotId = snapshotId;
-	}
+    public void setSnapshotId( String snapshotId ) {
+        this.providerSnapshotId = snapshotId;
+    }
 
-	public void setProviderSnapshotId(String snapshotId) {
-	    this.providerSnapshotId = snapshotId;
-	}
+    public void setProviderSnapshotId( String snapshotId ) {
+        this.providerSnapshotId = snapshotId;
+    }
 
     public VolumeState getCurrentState() {
         return currentState;
@@ -115,7 +117,7 @@ public class Volume implements Networkable, Taggable {
     public String getDataCenterId() {
         return getProviderDataCenterId();
     }
-    
+
     public String getProviderDataCenterId() {
         return providerDataCenterId;
     }
@@ -123,7 +125,7 @@ public class Volume implements Networkable, Taggable {
     public String getDeviceId() {
         return deviceId;
     }
-    
+
     public String getName() {
         return name;
     }
@@ -138,7 +140,7 @@ public class Volume implements Networkable, Taggable {
     public String getRegionId() {
         return getProviderRegionId();
     }
-    
+
     public String getProviderRegionId() {
         return providerRegionId;
     }
@@ -153,93 +155,93 @@ public class Volume implements Networkable, Taggable {
     public String getProviderVirtualMachineId() {
         return providerVirtualMachineId;
     }
-    
+
     public Storage<Gigabyte> getSize() {
         return size;
     }
-    
-    public void setSize(Storage<?> size) {
-        this.size = (Storage<Gigabyte>)size.convertTo(Storage.GIGABYTE);
-    }
-    
-    public int getSizeInGigabytes() {
-        return (size == null ? 0 : size.getQuantity().intValue());
+
+    public void setSize( Storage<?> size ) {
+        this.size = ( Storage<Gigabyte> ) size.convertTo(Storage.GIGABYTE);
     }
 
-    public void setCurrentState(VolumeState currentState) {
+    public int getSizeInGigabytes() {
+        return ( size == null ? 0 : size.getQuantity().intValue() );
+    }
+
+    public void setCurrentState( VolumeState currentState ) {
         this.currentState = currentState;
     }
 
     /**
-     * @deprecated use {@link #setProviderDataCenterId(String)} 
+     * @deprecated use {@link #setProviderDataCenterId(String)}
      */
-    public void setDataCenterId(String dataCenterId) {
+    public void setDataCenterId( String dataCenterId ) {
         setProviderDataCenterId(dataCenterId);
     }
-    
-    public void setProviderDataCenterId(String dataCenterId) {
+
+    public void setProviderDataCenterId( String dataCenterId ) {
         this.providerDataCenterId = dataCenterId;
     }
 
-    public void setDeviceId(String deviceId) {
+    public void setDeviceId( String deviceId ) {
         this.deviceId = deviceId;
     }
-    
-    public void setName(String name) {
+
+    public void setName( String name ) {
         this.name = name;
     }
 
-    public void setProviderVolumeId(String providerVolumeId) {
+    public void setProviderVolumeId( String providerVolumeId ) {
         this.providerVolumeId = providerVolumeId;
     }
 
     /**
      * @deprecated use {@link #setProviderRegionId(String)}
      */
-    public void setRegionId(String regionId) {
+    public void setRegionId( String regionId ) {
         setProviderRegionId(regionId);
     }
-    
-    public void setProviderRegionId(String regionId) {
+
+    public void setProviderRegionId( String regionId ) {
         this.providerRegionId = regionId;
     }
 
     /**
      * @deprecated use {@link #setProviderVirtualMachineId(String)}
      */
-    public void setServerId(String serverId) {
+    public void setServerId( String serverId ) {
         setProviderVirtualMachineId(serverId);
     }
-    
-    public void setProviderVirtualMachineId(String serverId) {
+
+    public void setProviderVirtualMachineId( String serverId ) {
         this.providerVirtualMachineId = serverId;
     }
 
-	public long getCreationTimestamp() {
-		return creationTimestamp;
-	}
+    public long getCreationTimestamp() {
+        return creationTimestamp;
+    }
 
-	public void setCreationTimestamp(long creationTimestamp) {
-		this.creationTimestamp = creationTimestamp;
-	}
-	
+    public void setCreationTimestamp( long creationTimestamp ) {
+        this.creationTimestamp = creationTimestamp;
+    }
+
     public VolumeType getType() {
         return type;
     }
-    
-    public void setType(VolumeType t) {
+
+    public void setType( VolumeType t ) {
         type = t;
     }
-    
-	public String toString() {
-	    return (name + " [" + providerVolumeId + "]");
-	}
+
+    public String toString() {
+        return ( name + " [" + providerVolumeId + "]" );
+    }
 
     public String getProviderProductId() {
         return providerProductId;
     }
 
-    public void setProviderProductId(String providerProductId) {
+    public void setProviderProductId( String providerProductId ) {
         this.providerProductId = providerProductId;
     }
 
@@ -247,7 +249,7 @@ public class Volume implements Networkable, Taggable {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription( String description ) {
         this.description = description;
     }
 
@@ -255,7 +257,7 @@ public class Volume implements Networkable, Taggable {
         return rootVolume;
     }
 
-    public void setRootVolume(boolean rootVolume) {
+    public void setRootVolume( boolean rootVolume ) {
         this.rootVolume = rootVolume;
     }
 
@@ -263,7 +265,7 @@ public class Volume implements Networkable, Taggable {
         return mediaLink;
     }
 
-    public void setMediaLink(String mediaLink) {
+    public void setMediaLink( String mediaLink ) {
         this.mediaLink = mediaLink;
     }
 
@@ -271,7 +273,7 @@ public class Volume implements Networkable, Taggable {
         return guestOperatingSystem;
     }
 
-    public void setGuestOperatingSystem(Platform guestOperatingSystem) {
+    public void setGuestOperatingSystem( Platform guestOperatingSystem ) {
         this.guestOperatingSystem = guestOperatingSystem;
     }
 
@@ -279,19 +281,19 @@ public class Volume implements Networkable, Taggable {
         return iops;
     }
 
-    public void setIops(int iops) {
+    public void setIops( int iops ) {
         this.iops = iops;
     }
 
     public boolean isAttached() {
-        return (providerVirtualMachineId != null);
+        return ( providerVirtualMachineId != null );
     }
 
     public @Nonnull VolumeFormat getFormat() {
-        return (format == null ? VolumeFormat.BLOCK : format);
+        return ( format == null ? VolumeFormat.BLOCK : format );
     }
 
-    public void setFormat(@Nonnull VolumeFormat format) {
+    public void setFormat( @Nonnull VolumeFormat format ) {
         this.format = format;
     }
 
@@ -299,16 +301,16 @@ public class Volume implements Networkable, Taggable {
         return providerVlanId;
     }
 
-    public void setProviderVlanId(String providerVlanId) {
+    public void setProviderVlanId( String providerVlanId ) {
         this.providerVlanId = providerVlanId;
     }
 
-    public synchronized void setTags(Map<String,String> properties) {
+    public synchronized void setTags( Map<String, String> properties ) {
         getTags().clear();
         getTags().putAll(properties);
     }
 
-    public @Nullable String getTag(@Nonnull String key) {
+    public @Nullable String getTag( @Nonnull String key ) {
         return getTags().get(key);
     }
 
@@ -321,16 +323,16 @@ public class Volume implements Networkable, Taggable {
     }
 
     @Override
-    public void setTag(@Nonnull String key, @Nonnull String value) {
+    public void setTag( @Nonnull String key, @Nonnull String value ) {
         getTags().put(key, value);
     }
 
     public Boolean isDeleteOnVirtualMachineTermination() {
-      return deleteOnVirtualMachineTermination;
+        return deleteOnVirtualMachineTermination;
     }
 
     public void setDeleteOnVirtualMachineTermination( Boolean deleteOnVirtualMachineTermination ) {
-      this.deleteOnVirtualMachineTermination = deleteOnVirtualMachineTermination;
+        this.deleteOnVirtualMachineTermination = deleteOnVirtualMachineTermination;
     }
 
 }
