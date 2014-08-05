@@ -124,7 +124,7 @@ public abstract class CloudProvider {
     private CloudProvider computeCloudProvider;
     private ProviderContext context;
     private CloudProvider storageCloudProvider;
-
+    private boolean debug;
 
     private transient int holdCount = 0;
 
@@ -448,4 +448,20 @@ public abstract class CloudProvider {
             storageCloudProvider = null;
         }
     }
+
+    /**
+     * @see CloudProvider#setDebug(boolean)
+     */
+    public boolean isDebug() {
+        return debug;
+    }
+
+    /**
+     * Sets debug parameter to trigger debug functionality in particular providers.
+     * @param debug
+     */
+    public void setDebug( boolean debug ) {
+        this.debug = debug;
+    }
+
 }
