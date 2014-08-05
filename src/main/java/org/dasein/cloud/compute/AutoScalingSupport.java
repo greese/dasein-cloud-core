@@ -144,4 +144,23 @@ public interface AutoScalingSupport extends AccessControlledService {
      */
     public void removeTags(@Nonnull String[] providerScalingGroupIds, @Nonnull AutoScalingTag... tags) throws CloudException, InternalException;
 
+    /**
+     * Set notification configurations for scaling group.
+     *
+     * @param scalingGroupId the auto scaling group id
+     * @param topic the notification service topic
+     * @param notificationTypes types to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void setNotificationConfig(@Nonnull String scalingGroupId, @Nonnull String topic, @Nonnull String[] notificationTypes) throws CloudException, InternalException;
+
+    /**
+     * Get list of notification configs for multiple auto scaling groups.
+     *
+     * @param scalingGroupIds the auto scaling group ids
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public Collection<AutoScalingGroupNotificationConfig> listNotificationConfigs(final String[] scalingGroupIds) throws CloudException, InternalException;
 }
