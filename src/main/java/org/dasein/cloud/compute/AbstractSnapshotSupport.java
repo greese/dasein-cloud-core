@@ -281,4 +281,11 @@ public abstract class AbstractSnapshotSupport implements SnapshotSupport {
             updateTags(id, tags);
         }
     }
+
+    @Override
+    public void updateTags(@Nonnull String[] snapshotIds, boolean asynchronous, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for (String snapshotId : snapshotIds) {
+            updateTags(snapshotId, asynchronous, tags);
+        }
+    }
 }

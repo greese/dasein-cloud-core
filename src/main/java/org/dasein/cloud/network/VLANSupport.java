@@ -743,6 +743,28 @@ public interface VLANSupport extends AccessControlledService {
     public void updateSubnetTags(@Nonnull String[] subnetIds, @Nonnull Tag... tags) throws CloudException, InternalException;
 
     /**
+     * Updates meta-data for a subnet with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     * @param subnetId the subnet to update
+     * @param asynchronous the type of update, if true - will update asynchronously
+     * @param tags the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void updateSubnetTags(@Nonnull String subnetId, boolean asynchronous, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Updates meta-data for multiple subnets with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     * @param subnetIds the subnets to update
+     * @param asynchronous the type of update, if true - will update asynchronously
+     * @param tags  the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void updateSubnetTags(@Nonnull String[] subnetIds, boolean asynchronous, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
      * Updates meta-data for a routing table with the new values. It will not overwrite any value that currently
      * exists unless it appears in the tags you submit.
      * @param routingTableId the routing table to update
@@ -761,6 +783,28 @@ public interface VLANSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
     public abstract void updateRoutingTableTags(@Nonnull String[] routingTableIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Updates meta-data for a routing table with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     * @param routingTableId the routing table to update
+     * @param asynchronous the type of update, if true - will update asynchronously
+     * @param tags the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void updateRoutingTableTags(@Nonnull String routingTableId, boolean asynchronous, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Updates meta-data for multiple routing tables with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     * @param routingTableIds the routing tables to update
+     * @param asynchronous the type of update, if true - will update asynchronously
+     * @param tags the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void updateRoutingTableTags(@Nonnull String[] routingTableIds, boolean asynchronous, @Nonnull Tag... tags) throws CloudException, InternalException;
 
     /**
      * Updates meta-data for a VLAN with the new values. It will not overwrite any value that currently
@@ -801,5 +845,27 @@ public interface VLANSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
     public abstract void updateInternetGatewayTags(@Nonnull String[] internetGatewayIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Updates meta-data for an internet gateway with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     * @param internetGatewayId the internet gateway to update
+     * @param asynchronous the type of update, if true - will update asynchronously
+     * @param tags  the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void updateInternetGatewayTags(@Nonnull String internetGatewayId, boolean asynchronous, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Updates meta-data for multiple internet gateways with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     * @param internetGatewayIds the internet gateways to update
+     * @param asynchronous the type of update, if true - will update asynchronously
+     * @param tags  the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public abstract void updateInternetGatewayTags(@Nonnull String[] internetGatewayIds, boolean asynchronous, @Nonnull Tag... tags) throws CloudException, InternalException;
 
 }

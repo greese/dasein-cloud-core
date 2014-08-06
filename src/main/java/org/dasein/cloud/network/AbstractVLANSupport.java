@@ -521,6 +521,13 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     }
 
     @Override
+    public void updateSubnetTags(@Nonnull String[] subnetIds, boolean asynchronous, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for (String subnetId : subnetIds) {
+            updateSubnetTags(subnetId, asynchronous, tags);
+        }
+    }
+
+    @Override
     public void updateVLANTags(@Nonnull String vlanId, @Nonnull Tag... tags) throws CloudException, InternalException {
         // NO-OP
     }
@@ -533,9 +540,23 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     }
 
     @Override
+    public void updateInternetGatewayTags(@Nonnull String[] internetGatewayIds, boolean asynchronous, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for (String internetGatewayId:internetGatewayIds) {
+            updateInternetGatewayTags(internetGatewayId, asynchronous, tags);
+        }
+    }
+
+    @Override
     public void updateInternetGatewayTags(@Nonnull String[] internetGatewayIds, @Nonnull Tag... tags) throws CloudException, InternalException {
         for (String internetGatewayId : internetGatewayIds) {
             updateInternetGatewayTags(internetGatewayId, tags);
+        }
+    }
+
+    @Override
+    public void updateRoutingTableTags(@Nonnull String[] routingTableIds, boolean asynchronous, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for (String routingTableId : routingTableIds) {
+            updateRoutingTableTags(routingTableId, asynchronous, tags);
         }
     }
 
