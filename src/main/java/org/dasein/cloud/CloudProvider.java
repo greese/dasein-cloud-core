@@ -33,9 +33,7 @@ import org.dasein.util.CalendarWrapper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * <p>
@@ -62,6 +60,7 @@ import java.util.Properties;
  * @since 2010.08
  */
 public abstract class CloudProvider {
+
     @SuppressWarnings("UnusedDeclaration")
     static private @Nonnull String getLastItem(@Nonnull String name) {
         int idx = name.lastIndexOf('.');
@@ -124,7 +123,7 @@ public abstract class CloudProvider {
     private CloudProvider computeCloudProvider;
     private ProviderContext context;
     private CloudProvider storageCloudProvider;
-
+    private boolean debug;
 
     private transient int holdCount = 0;
 
@@ -448,4 +447,20 @@ public abstract class CloudProvider {
             storageCloudProvider = null;
         }
     }
+
+    /**
+     * @see CloudProvider#setDebug(boolean)
+     */
+    public boolean isDebug() {
+        return debug;
+    }
+
+    /**
+     * Sets debug parameter to trigger debug functionality in particular providers.
+     * @param debug
+     */
+    public void setDebug( boolean debug ) {
+        this.debug = debug;
+    }
+
 }

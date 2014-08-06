@@ -28,6 +28,7 @@ import org.dasein.cloud.Requirement;
 import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.Tag;
 import org.dasein.cloud.identity.ServiceAction;
+import org.dasein.cloud.util.TagUtils;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -199,13 +200,13 @@ public abstract class AbstractFirewallSupport implements FirewallSupport {
     @Override
     @Deprecated
     public @Nonnull Requirement identifyPrecedenceRequirement(boolean inVlan) throws InternalException, CloudException {
-        return Requirement.NONE;
+        return getCapabilities().identifyPrecedenceRequirement(inVlan);
     }
 
     @Override
     @Deprecated
     public boolean isZeroPrecedenceHighest() throws InternalException, CloudException {
-        return true;
+        return getCapabilities().isZeroPrecedenceHighest();
     }
 
     @Override
@@ -335,25 +336,25 @@ public abstract class AbstractFirewallSupport implements FirewallSupport {
     @Override
     @Deprecated
     public boolean supportsRules(@Nonnull Direction direction, @Nonnull Permission permission, boolean inVlan) throws CloudException, InternalException {
-        return (direction.equals(Direction.INGRESS) && permission.equals(Permission.ALLOW) && !inVlan);
+        return getCapabilities().supportsRules(direction, permission, inVlan);
     }
 
     @Override
     @Deprecated
     public boolean supportsFirewallCreation(boolean inVlan) throws CloudException, InternalException {
-        return !inVlan;
+        return getCapabilities().supportsFirewallCreation(inVlan);
     }
 
     @Override
     @Deprecated
     public boolean requiresRulesOnCreation() throws CloudException, InternalException{
-        return false;
+        return getCapabilities().requiresRulesOnCreation();
     }
 
     @Override
     @Deprecated
     public boolean supportsFirewallDeletion() throws CloudException, InternalException {
-        return true;
+        return getCapabilities().supportsFirewallDeletion();
     }
 
     @Override
@@ -373,4 +374,23 @@ public abstract class AbstractFirewallSupport implements FirewallSupport {
             updateTags(id, tags);
         }
     }
+
+    @Override
+    public void setTags(@Nonnull String firewallId, @Nonnull Tag... tags) throws CloudException, InternalException {
+        setTags( new String[]{firewallId}, tags);
+    }
+
+    @Override
+    public void setTags(@Nonnull String[] firewallIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for (String id : firewallIds) {
+            Collection<Tag> collectionForDelete = TagUtils.getTagsForDelete(getFirewall(id).getTags(), tags);
+
+            if (collectionForDelete != null) {
+                removeTags(id, collectionForDelete.toArray(new Tag[collectionForDelete.size()]));
+            }
+
+            updateTags(id, tags);
+        }
+    }
+
 }

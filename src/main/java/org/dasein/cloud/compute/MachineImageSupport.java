@@ -20,6 +20,7 @@
 package org.dasein.cloud.compute;
 
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
@@ -54,6 +55,7 @@ public interface MachineImageSupport extends AccessControlledService {
     static public final ServiceAction DOWNLOAD_IMAGE    = new ServiceAction("IMAGE:DOWNLOAD_IMAGE");
     static public final ServiceAction GET_IMAGE         = new ServiceAction("IMAGE:GET_IMAGE");
     static public final ServiceAction IMAGE_VM          = new ServiceAction("IMAGE:IMAGE_VM");
+    static public final ServiceAction COPY_IMAGE        = new ServiceAction("IMAGE:COPY_IMAGE");
     static public final ServiceAction LIST_IMAGE        = new ServiceAction("IMAGE:LIST_IMAGE");
     static public final ServiceAction MAKE_PUBLIC       = new ServiceAction("IMAGE:MAKE_PUBLIC");
     static public final ServiceAction REGISTER_IMAGE    = new ServiceAction("IMAGE:REGISTER_IMAGE");
@@ -132,6 +134,15 @@ public interface MachineImageSupport extends AccessControlledService {
      * @throws OperationNotSupportedException the cloud does not support custom image creation
      */
     public void captureImageAsync(@Nonnull ImageCreateOptions options, @Nonnull AsynchronousTask<MachineImage> taskTracker) throws CloudException, InternalException;
+
+    /**
+     * Copies a machine image from current region of the user to another region.
+     * @param options the options used to copy the machine image.
+     * @return ID of the new machine image created as a result of the copying.
+     * @throws CloudException an error occurred with the cloud provider
+     * @throws InternalException a local error occurred in the Dasein Cloud implementation
+     */
+    public @Nonnull String copyImage(@Nonnull ImageCopyOptions options) throws CloudException, InternalException;
 
     /**
      * Provides access to meta-data about virtual machine capabilities in the current region of this cloud.
@@ -567,6 +578,29 @@ public interface MachineImageSupport extends AccessControlledService {
     public void updateTags(@Nonnull String[] imageIds, @Nonnull Tag... tags) throws CloudException, InternalException;
 
     /**
+     * Updates meta-data for a image with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     *
+     * @param imageId the image to update
+     * @param asynchronous the type of update, if true - will update asynchronously
+     * @param tags    the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void updateTags(@Nonnull String imageId, boolean asynchronous, @Nonnull Tag ... tags) throws CloudException, InternalException;
+
+    /**
+     * Updates meta-data for multiple images with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     *
+     * @param imageIds the images to update
+     * @param asynchronous the type of update, if true - will update asynchronously
+     * @param tags     the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void updateTags(@Nonnull String[] imageIds, boolean asynchronous, @Nonnull Tag ... tags) throws CloudException, InternalException;
+    /**
      * Removes meta-data from an image. If tag values are set, their removal is dependent on underlying cloud
      * provider behavior. They may be removed only if the tag value matches or they may be removed regardless of the
      * value.
@@ -589,5 +623,27 @@ public interface MachineImageSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
     public void removeTags(@Nonnull String[] imageIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Set meta-data for an image. Remove any tags that were not provided by the incoming tags, and add or
+     * overwrite any new or pre-existing tags.
+     *
+     * @param imageId the image to update
+     * @param tags     the meta-data tags to remove
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void setTags(@Nonnull String imageId, @Nonnull Tag... tags)  throws CloudException, InternalException;
+
+    /**
+     * Set meta-data for multiple images. Remove any tags that were not provided by the incoming tags, and add or
+     * overwrite any new or pre-existing tags.
+     *
+     * @param imageIds the images to update
+     * @param tags     the meta-data tags to remove
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void setTags(@Nonnull String[] imageIds, @Nonnull Tag... tags)  throws CloudException, InternalException;
 
 }

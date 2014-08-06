@@ -24,6 +24,7 @@ import org.dasein.cloud.compute.ComputeServices;
 import org.dasein.cloud.compute.VirtualMachine;
 import org.dasein.cloud.compute.VirtualMachineSupport;
 import org.dasein.cloud.identity.ServiceAction;
+import org.dasein.cloud.util.TagUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -521,6 +522,13 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     }
 
     @Override
+    public void updateSubnetTags(@Nonnull String[] subnetIds, boolean asynchronous, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for (String subnetId : subnetIds) {
+            updateSubnetTags(subnetId, asynchronous, tags);
+        }
+    }
+
+    @Override
     public void updateVLANTags(@Nonnull String vlanId, @Nonnull Tag... tags) throws CloudException, InternalException {
         // NO-OP
     }
@@ -533,9 +541,23 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     }
 
     @Override
+    public void updateInternetGatewayTags(@Nonnull String[] internetGatewayIds, boolean asynchronous, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for (String internetGatewayId:internetGatewayIds) {
+            updateInternetGatewayTags(internetGatewayId, asynchronous, tags);
+        }
+    }
+
+    @Override
     public void updateInternetGatewayTags(@Nonnull String[] internetGatewayIds, @Nonnull Tag... tags) throws CloudException, InternalException {
         for (String internetGatewayId : internetGatewayIds) {
             updateInternetGatewayTags(internetGatewayId, tags);
+        }
+    }
+
+    @Override
+    public void updateRoutingTableTags(@Nonnull String[] routingTableIds, boolean asynchronous, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for (String routingTableId : routingTableIds) {
+            updateRoutingTableTags(routingTableId, asynchronous, tags);
         }
     }
 
@@ -559,4 +581,60 @@ public abstract class AbstractVLANSupport implements VLANSupport {
             removeInternetGatewayTags(internetGatewayId, tags);
         }
     }
+
+    @Override
+    public void setSubnetTags(@Nonnull String[] subnetIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for (String id : subnetIds) {
+
+            Collection<Tag> collectionForDelete = TagUtils.getTagsForDelete(getSubnet(id).getTags(), tags);
+
+            if (collectionForDelete != null) {
+                removeSubnetTags(id, collectionForDelete.toArray(new Tag[collectionForDelete.size()]));
+            }
+
+            updateSubnetTags(id, tags);
+        }
+    }
+
+    @Override
+    public void setRoutingTableTags(@Nonnull String[] routingTableIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for (String id : routingTableIds) {
+            Collection<Tag> collectionForDelete = TagUtils.getTagsForDelete( getRoutingTable(id).getTags(), tags);
+
+            if (collectionForDelete != null) {
+                removeRoutingTableTags(id, collectionForDelete.toArray(new Tag[collectionForDelete.size()]));
+            }
+
+            updateRoutingTableTags(id, tags);
+        }
+    }
+
+    @Override
+    public void setInternetGatewayTags(@Nonnull String[] internetGatewayIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for (String id : internetGatewayIds) {
+            Collection<Tag> collectionForDelete = TagUtils.getTagsForDelete(getInternetGatewayById(id).getTags(), tags);
+
+            if (collectionForDelete != null) {
+                removeInternetGatewayTags(id, collectionForDelete.toArray(new Tag[collectionForDelete.size()]));
+            }
+
+            updateInternetGatewayTags(id, tags);
+        }
+    }
+
+    @Override
+    public void setSubnetTags(@Nonnull String subnetId, @Nonnull Tag... tags) throws CloudException, InternalException {
+        setSubnetTags(new String[]{subnetId}, tags);
+    }
+
+    @Override
+    public void setRoutingTableTags(@Nonnull String routingTableId, @Nonnull Tag... tags) throws CloudException, InternalException {
+        setRoutingTableTags(new String[]{routingTableId}, tags);
+    }
+
+    @Override
+    public void setInternetGatewayTags(@Nonnull String internetGatewayId, @Nonnull Tag... tags) throws CloudException, InternalException {
+        setInternetGatewayTags(new String[]{internetGatewayId}, tags);
+    }
+
 }
