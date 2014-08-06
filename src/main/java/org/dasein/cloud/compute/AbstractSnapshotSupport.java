@@ -28,10 +28,12 @@ import org.dasein.cloud.Requirement;
 import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.Tag;
 import org.dasein.cloud.identity.ServiceAction;
+import org.dasein.cloud.util.TagUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 
 /**
@@ -288,4 +290,24 @@ public abstract class AbstractSnapshotSupport implements SnapshotSupport {
             updateTags(snapshotId, asynchronous, tags);
         }
     }
+
+    @Override
+    public void setTags(@Nonnull String snapshotId, @Nonnull Tag... tags) throws CloudException, InternalException {
+        setTags(new String[]{snapshotId}, tags);
+    }
+
+    @Override
+    public void setTags(@Nonnull String[] snapshotIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for (String id : snapshotIds) {
+
+            Collection<Tag> collectionForDelete = TagUtils.getTagsForDelete(getSnapshot(id).getTags(), tags);
+
+            if (collectionForDelete != null) {
+                removeTags(id, collectionForDelete.toArray(new Tag[collectionForDelete.size()]));
+            }
+
+            updateTags(id, tags);
+        }
+    }
+
 }
