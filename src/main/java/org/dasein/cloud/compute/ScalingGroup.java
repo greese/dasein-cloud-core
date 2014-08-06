@@ -20,9 +20,7 @@
 package org.dasein.cloud.compute;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class ScalingGroup implements Serializable {
     private static final long serialVersionUID = -5317003700769693511L;
@@ -49,10 +47,9 @@ public class ScalingGroup implements Serializable {
     private Collection<String[]>  suspendedProcesses;
     private String[]              terminationPolicies;
     private AutoScalingTag[]      tags;
-    // comma seperated list
-    private String                subnetIds;
+    // comma separated list
+    private String[]              subnets;
 
-    
     public ScalingGroup() { }
 
     public String getId() {
@@ -241,12 +238,23 @@ public class ScalingGroup implements Serializable {
       this.tags = tags;
     }
 
+    @Deprecated
     public String getSubnetIds() {
-      return subnetIds;
+        if(this.subnets == null || this.subnets.length == 0){
+            return new String();
+        }
+        StringBuilder sb = new StringBuilder();
+        for (String sn : this.subnets) {
+            sb.append(sn).append(",");
+        }
+        return sb.deleteCharAt(sb.length()-1).toString();
     }
 
-    public void setSubnetIds(String subnetIds) {
-      this.subnetIds = subnetIds;
-    }
-    
+    @Deprecated
+    public void setSubnetIds(String subnetIds) { this.subnets = (subnetIds == null) ? new String[0] : subnetIds.split("\\s*,\\s*"); }
+
+    public String[] getSubnets() { return (this.subnets == null) ? new String[0] : this.subnets; }
+
+    public void setSubnets(String[] subnets) {  this.subnets = subnets;  }
+
 }
