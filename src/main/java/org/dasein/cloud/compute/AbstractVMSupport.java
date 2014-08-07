@@ -171,7 +171,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
 
     @Override
     public @Nullable VirtualMachineProduct getProduct( @Nonnull String productId ) throws InternalException, CloudException {
-        for( Architecture architecture : Architecture.values() ) {
+        for( Architecture architecture : getCapabilities().listSupportedArchitectures() ) {
             for( VirtualMachineProduct prd : listProducts(architecture) ) {
                 if( productId.equals(prd.getProviderProductId()) ) {
                     return prd;
@@ -535,16 +535,57 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
-    public @Nonnull Iterable<VirtualMachineProduct> listProducts( @Nonnull Architecture architecture ) throws InternalException, CloudException {
+    final public Iterable<VirtualMachineProduct> listProducts( VirtualMachineProductFilterOptions options ) throws InternalException, CloudException {
+        List<VirtualMachineProduct> products = new ArrayList<VirtualMachineProduct>();
+        for( Architecture arch : getCapabilities().listSupportedArchitectures() ) {
+            mergeProductLists(products, this.listProducts(options, arch));
+        }
+        return products;
+    }
+
+    /**
+     * Merge product iterable into the list, using providerProductId as a unique key
+     * @param to
+     *          the target list
+     * @param from
+     *          the source iterable
+     */
+    private void mergeProductLists(List<VirtualMachineProduct> to, Iterable<VirtualMachineProduct> from) {
+        List<VirtualMachineProduct> copy = new ArrayList<VirtualMachineProduct>(to);
+        for( VirtualMachineProduct productFrom : from ) {
+            boolean found = false;
+            for( VirtualMachineProduct productTo : copy ) {
+                if( productTo.getProviderProductId().equalsIgnoreCase(productFrom.getProviderProductId()) ) {
+                    found = true;
+                    break;
+                }
+            }
+            if( !found ) {
+                to.add(productFrom);
+            }
+        }
+    }
+
+    @Override
+    final public @Nonnull Iterable<VirtualMachineProduct> listProducts( @Nonnull Architecture architecture ) throws InternalException, CloudException {
+        return this.listProducts(null, architecture);
+    }
+
+    @Override
+    public @Nonnull Iterable<VirtualMachineProduct> listProducts( @Nullable VirtualMachineProductFilterOptions options, @Nullable Architecture architecture ) throws InternalException, CloudException {
         APITrace.begin(getProvider(), "VM.listProducts");
         try {
-            Cache<VirtualMachineProduct> cache = Cache.getInstance(getProvider(), "products" + architecture.name(), VirtualMachineProduct.class, CacheLevel.REGION_ACCOUNT, new TimePeriod<Day>(1, TimePeriod.DAY));
+            String cacheName = "productsALL";
+            if( architecture != null ) {
+                cacheName = "products" + architecture.name();
+            }
+            Cache<VirtualMachineProduct> cache = Cache.getInstance(getProvider(), cacheName, VirtualMachineProduct.class, CacheLevel.REGION_ACCOUNT, new TimePeriod<Day>(1, TimePeriod.DAY));
             Iterable<VirtualMachineProduct> products = cache.get(getContext());
 
             if( products != null ) {
                 return products;
             }
-            ArrayList<VirtualMachineProduct> list = new ArrayList<VirtualMachineProduct>();
+            List<VirtualMachineProduct> list = new ArrayList<VirtualMachineProduct>();
 
             try {
                 String resource = getVMProductsResource();
@@ -603,7 +644,8 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
                     JSONObject product = plist.getJSONObject(i);
                     boolean supported = false;
 
-                    if( product.has("architectures") ) {
+                    // If architecture is specified, check if product matches
+                    if( architecture != null && product.has("architectures") ) {
                         JSONArray architectures = product.getJSONArray("architectures");
 
                         for( int j = 0; j < architectures.length(); j++ ) {
@@ -614,10 +656,15 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
                                 break;
                             }
                         }
+                        if( !supported ) {
+                            continue;
+                        }
                     }
-                    if( !supported ) {
-                        continue;
+                    else {
+                        // No architecture specified, flip the flag - all architectures allowed
+                        supported = true;
                     }
+
                     if( product.has("excludesRegions") ) {
                         JSONArray regions = product.getJSONArray("excludesRegions");
 
@@ -636,7 +683,16 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
                     VirtualMachineProduct prd = toProduct(product);
 
                     if( prd != null ) {
-                        list.add(prd);
+                        if( options != null) {
+                            // Filter supplied, add matches only.
+                            if( options.matches(prd) ) {
+                                list.add(prd);
+                            }
+                        }
+                        else {
+                            // No filter supplied, add all survived.
+                            list.add(prd);
+                        }
                     }
                 }
                 cache.put(getContext(), list);
@@ -649,16 +705,6 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
         } finally {
             APITrace.end();
         }
-    }
-
-    @Override
-    public Iterable<VirtualMachineProduct> listProducts(VirtualMachineProductFilterOptions options) throws InternalException, CloudException{
-        throw new OperationNotSupportedException("Product size filtering not implemented for " + getProvider().getCloudName());
-    }
-
-    @Override
-    public Iterable<VirtualMachineProduct> listProducts(VirtualMachineProductFilterOptions options, Architecture architecture) throws InternalException, CloudException{
-        throw new OperationNotSupportedException("Product size filtering not implemented for " + getProvider().getCloudName());
     }
 
     @Override
