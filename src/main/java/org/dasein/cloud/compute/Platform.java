@@ -74,6 +74,10 @@ public enum Platform {
      */
     SUSE,
     /**
+     * SmartOS
+     */
+    SMARTOS,
+    /**
      * No clue
      */
     UNKNOWN;
@@ -103,6 +107,9 @@ public enum Platform {
         }
         else if( name.contains("suse") || name.contains("sles")  ) {
             return SUSE;
+        }
+        else if(name.contains("smartos")){
+            return SMARTOS;
         }
         else if( name.contains("bsd") ) {
             if( name.contains("free") ) {

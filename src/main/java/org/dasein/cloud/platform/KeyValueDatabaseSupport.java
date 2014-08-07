@@ -45,11 +45,20 @@ public interface KeyValueDatabaseSupport extends AccessControlledService {
     public void addKeyValuePairs(String inDatabaseId, String itemId, KeyValuePair ... pairs) throws CloudException, InternalException;
     
     public String createDatabase(String name, String description) throws CloudException, InternalException;
+
+    /**
+     * Provides access to meta-data about KVDatabase capabilities in the current region of this cloud.
+     * @return a description of the features supported by this region of this cloud
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException    an error occurred within the cloud provider
+     */
+    public @Nonnull KeyValueDatabaseCapabilities getCapabilities() throws InternalException, CloudException;
     
     public Iterable<KeyValuePair> getKeyValuePairs(String inDatabaseId, String itemId, boolean consistentRead) throws CloudException, InternalException;
     
     public KeyValueDatabase getDatabase(String databaseId) throws CloudException, InternalException;
-    
+
+    @Deprecated
     public String getProviderTermForDatabase(Locale locale);
 
     public boolean isSubscribed() throws CloudException, InternalException;
@@ -60,7 +69,9 @@ public interface KeyValueDatabaseSupport extends AccessControlledService {
      * @return true if this region supports key/value databases
      * @throws CloudException an error occurred talking with the cloud provider
      * @throws InternalException an error occurred inside the implementation of Dasein Cloud
+     * @deprecated Use {@link KeyValueDatabaseCapabilities#isSupportsKeyValueDatabases()}
      */
+    @Deprecated
     public boolean isSupportsKeyValueDatabases() throws CloudException, InternalException;
     
     public Iterable<String> list() throws CloudException, InternalException;

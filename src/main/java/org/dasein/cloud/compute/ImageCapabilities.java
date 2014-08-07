@@ -19,12 +19,10 @@
 
 package org.dasein.cloud.compute;
 
-import org.dasein.cloud.Capabilities;
-import org.dasein.cloud.CloudException;
-import org.dasein.cloud.InternalException;
-import org.dasein.cloud.Requirement;
+import org.dasein.cloud.*;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Locale;
 
 /**
@@ -69,6 +67,12 @@ public interface ImageCapabilities extends Capabilities{
      * @return the term used by the provider to describe a custom image
      */
     public abstract @Nonnull String getProviderTermForCustomImage(@Nonnull Locale locale, @Nonnull ImageClass cls);
+
+    /**
+     * Returns the visible scope of the Image or null if not applicable for the specific cloud
+     * @return the Visible Scope of the Image
+     */
+    public @Nullable VisibleScope getImageVisibleScope();
 
     /**
      * Identifies if you can bundle a virtual machine to cloud storage from within the VM. If you must bundle local to the

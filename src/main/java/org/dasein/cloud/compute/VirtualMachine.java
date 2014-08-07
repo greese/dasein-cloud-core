@@ -38,64 +38,68 @@ import java.util.concurrent.Callable;
  * A virtual machine running within a cloud. This class contains the current state at the time
  * of any cloud API call for the target VM.
  * </p>
+ *
  * @author George Reese @ enstratius (http://www.enstratius.com)
- * @version 2012-07 Altered product -> productId to minimize chattiness of any polling using Dasein Cloud
- * @version 2013.02 added Networkable interface (issue #24)
  * @version 2013.04 added access to shell key IDs
  */
 public class VirtualMachine implements Networkable, Taggable {
-    private Architecture          architecture;
-    private boolean               clonable;
-    private long                  creationTimestamp;
-    private VmState               currentState;
-    private Map<String,String>    tags;
-    private String[]              labels;
-    private String                description;
-    private boolean               imagable;
-    private long                  lastBootTimestamp;
-    private long                  lastPauseTimestamp;
-    private String                name;
-    private boolean               pausable;    
-    private boolean               persistent;
-    private Platform              platform;
-    private String                privateDnsAddress;
-    private RawAddress[]          privateIpAddresses;
-    private String                productId;
-    private String                providerAssignedIpAddressId;
-    private String                providerDataCenterId;
-    private String                providerKernelImageId;
-    private String                providerMachineImageId;
-    private String                providerOwnerId;
-    private String                providerRamdiskImageId;
-    private String                providerRegionId;
-    private String[]              providerShellKeyIds;
-    private String                providerSubnetId;
-    private String                providerVirtualMachineId;
-    private String[]              providerNetworkInterfaceIds;
-    private String                providerVlanId;
-    private String                providerKeypairId;
-    private String[]              providerFirewallIds;
-    private String[]              providerVolumeIds;
-    private String                publicDnsAddress;
-    private RawAddress[]          publicIpAddresses;
-    private boolean               rebootable;
-    private String                rootPassword;
-    private String                rootUser;
-    private String                stateReasonMessage;
-    private long                  terminationTimestamp;
-    private Volume[]              volumes;
-    private boolean               ioOptimized;
-    private boolean               ipForwardingAllowed;
-    private String                providerRoleId;
-    private VmStatus              providerHostStatus;
-    private VmStatus              providerVmStatus;
-    private String                virtualMachineGroup;
-    private VisibleScope          visibleScope;
-	private String                userData;
+    private String                  affinityGroupId;
+    private Architecture            architecture;
+    private boolean                 clonable;
+    private long                    creationTimestamp;
+    private VmState                 currentState;
+    private Map<String, String>     tags;
+    private String[]                labels;
+    private String                  description;
+    private boolean                 imagable;
+    private long                    lastBootTimestamp;
+    private long                    lastPauseTimestamp;
+    private String                  name;
+    private boolean                 pausable;
+    private boolean                 persistent;
+    private Platform                platform;
+    private String                  privateDnsAddress;
+    private RawAddress[]            privateIpAddresses;
+    private String                  productId;
+    private String                  providerAssignedIpAddressId;
+    private String                  providerDataCenterId;
+    private String                  providerKernelImageId;
+    private String                  providerMachineImageId;
+    private String                  providerOwnerId;
+    private String                  providerRamdiskImageId;
+    private String                  providerRegionId;
+    private String[]                providerShellKeyIds;
+    private String                  providerSubnetId;
+    private String                  providerVirtualMachineId;
+    private String[]                providerNetworkInterfaceIds;
+    private String                  providerVlanId;
+    private String                  providerKeypairId;
+    private String[]                providerFirewallIds;
+    private String[]                providerVolumeIds;
+    private String                  publicDnsAddress;
+    private RawAddress[]            publicIpAddresses;
+    private boolean                 rebootable;
+    private String                  rootPassword;
+    private String                  rootUser;
+    private String                  stateReasonMessage;
+    private long                    terminationTimestamp;
+    private Volume[]                volumes;
+    private boolean                 ioOptimized;
+    private boolean                 ipForwardingAllowed;
+    private String                  providerRoleId;
+    private VmStatus                providerHostStatus;
+    private VmStatus                providerVmStatus;
+    private String                  virtualMachineGroup;
+    private VisibleScope            visibleScope;
+    private String                  userData;
+    private VirtualMachineLifecycle lifecycle;
+    private String                  spotRequestId; // TODO - add filtering by, add setter/getter
+    private String                  resourcePoolId;
 
-  public VirtualMachine() { }
-    
-    public boolean equals(Object ob) {
+    public VirtualMachine() {
+    }
+
+    public boolean equals( Object ob ) {
         if( ob == null ) {
             return false;
         }
@@ -105,36 +109,36 @@ public class VirtualMachine implements Networkable, Taggable {
         if( !getClass().getName().equals(ob.getClass().getName()) ) {
             return false;
         }
-        VirtualMachine other = (VirtualMachine)ob;
-        
+        VirtualMachine other = ( VirtualMachine ) ob;
+
         if( !getProviderRegionId().equals(other.getProviderRegionId()) ) {
             return false;
         }
         return getProviderVirtualMachineId().equals(other.getProviderVirtualMachineId());
     }
-    
-    public void addTag(Tag t) {
+
+    public void addTag( Tag t ) {
         addTag(t.getKey(), t.getValue());
     }
-    
-    public void addTag(String key, String value) {
+
+    public void addTag( String key, String value ) {
         getTags().put(key, value);
     }
-    
+
     private transient volatile Callable<String> passwordCallback = null;
-    
-    public void setPasswordCallback(Callable<String> callback) {
+
+    public void setPasswordCallback( Callable<String> callback ) {
         this.passwordCallback = callback;
     }
 
-    public void setRootPassword(String rootPassword) {
+    public void setRootPassword( String rootPassword ) {
         this.rootPassword = rootPassword;
     }
 
     public String getRootPassword() {
         String pw;
-        
-        synchronized( this ) {
+
+        synchronized ( this ) {
             pw = rootPassword;
         }
         if( pw != null ) {
@@ -146,31 +150,33 @@ public class VirtualMachine implements Networkable, Taggable {
         return pw;
     }
 
-    public String getRootPassword(long timeoutInMilliseconds) throws InterruptedException {
+    public String getRootPassword( long timeoutInMilliseconds ) throws InterruptedException {
         long timeout = System.currentTimeMillis() + timeoutInMilliseconds;
         String pw = getRootPassword();
         boolean hasCallback;
 
-        synchronized( this ) {
-            hasCallback = (passwordCallback != null);
+        synchronized ( this ) {
+            hasCallback = ( passwordCallback != null );
         }
         if( hasCallback ) {
             while( pw == null ) {
                 if( timeout <= System.currentTimeMillis() ) {
                     throw new InterruptedException("System timed out waiting for a password to become available.");
                 }
-                try { Thread.sleep(15000L); }
-                catch( InterruptedException ignore ) { }
+                try {
+                    Thread.sleep(15000L);
+                } catch( InterruptedException ignore ) {
+                }
                 pw = getRootPassword();
             }
         }
         return pw;
     }
-    
+
     public String fetchPassword() {
         String pw;
-        
-        synchronized( this ) {
+
+        synchronized ( this ) {
             pw = rootPassword;
         }
         if( pw != null ) {
@@ -182,13 +188,12 @@ public class VirtualMachine implements Networkable, Taggable {
         try {
             pw = passwordCallback.call();
             if( pw != null ) {
-                synchronized( this ) {
+                synchronized ( this ) {
                     rootPassword = pw;
                 }
             }
             return rootPassword;
-        }
-        catch( Exception e ) {
+        } catch( Exception e ) {
             return null;
         }
     }
@@ -197,11 +202,19 @@ public class VirtualMachine implements Networkable, Taggable {
         return name + " [" + providerVirtualMachineId + "]";
     }
 
+    public String getAffinityGroupId(){
+        return affinityGroupId;
+    }
+
+    public void setAffinityGroupId(String affinityGroupId){
+        this.affinityGroupId = affinityGroupId;
+    }
+
     public Architecture getArchitecture() {
         return architecture;
     }
 
-    public void setArchitecture(Architecture architecture) {
+    public void setArchitecture( Architecture architecture ) {
         this.architecture = architecture;
     }
 
@@ -209,7 +222,7 @@ public class VirtualMachine implements Networkable, Taggable {
         return clonable;
     }
 
-    public void setClonable(boolean clonable) {
+    public void setClonable( boolean clonable ) {
         this.clonable = clonable;
     }
 
@@ -217,7 +230,7 @@ public class VirtualMachine implements Networkable, Taggable {
         return creationTimestamp;
     }
 
-    public void setCreationTimestamp(long creationTimestamp) {
+    public void setCreationTimestamp( long creationTimestamp ) {
         this.creationTimestamp = creationTimestamp;
     }
 
@@ -225,7 +238,7 @@ public class VirtualMachine implements Networkable, Taggable {
         return currentState;
     }
 
-    public void setCurrentState(VmState currentState) {
+    public void setCurrentState( VmState currentState ) {
         this.currentState = currentState;
     }
 
@@ -233,7 +246,7 @@ public class VirtualMachine implements Networkable, Taggable {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription( String description ) {
         this.description = description;
     }
 
@@ -241,7 +254,7 @@ public class VirtualMachine implements Networkable, Taggable {
         return imagable;
     }
 
-    public void setImagable(boolean imagable) {
+    public void setImagable( boolean imagable ) {
         this.imagable = imagable;
     }
 
@@ -249,7 +262,7 @@ public class VirtualMachine implements Networkable, Taggable {
         return lastBootTimestamp;
     }
 
-    public void setLastBootTimestamp(long lastBootTimestamp) {
+    public void setLastBootTimestamp( long lastBootTimestamp ) {
         this.lastBootTimestamp = lastBootTimestamp;
     }
 
@@ -257,7 +270,7 @@ public class VirtualMachine implements Networkable, Taggable {
         return lastPauseTimestamp;
     }
 
-    public void setLastPauseTimestamp(long lastPauseTimestamp) {
+    public void setLastPauseTimestamp( long lastPauseTimestamp ) {
         this.lastPauseTimestamp = lastPauseTimestamp;
     }
 
@@ -265,7 +278,7 @@ public class VirtualMachine implements Networkable, Taggable {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName( String name ) {
         this.name = name;
     }
 
@@ -273,7 +286,7 @@ public class VirtualMachine implements Networkable, Taggable {
         return pausable;
     }
 
-    public void setPausable(boolean pausable) {
+    public void setPausable( boolean pausable ) {
         this.pausable = pausable;
     }
 
@@ -281,7 +294,7 @@ public class VirtualMachine implements Networkable, Taggable {
         return persistent;
     }
 
-    public void setPersistent(boolean persistent) {
+    public void setPersistent( boolean persistent ) {
         this.persistent = persistent;
     }
 
@@ -289,7 +302,7 @@ public class VirtualMachine implements Networkable, Taggable {
         return platform;
     }
 
-    public void setPlatform(Platform platform) {
+    public void setPlatform( Platform platform ) {
         this.platform = platform;
     }
 
@@ -297,12 +310,12 @@ public class VirtualMachine implements Networkable, Taggable {
         return privateDnsAddress;
     }
 
-    public void setPrivateDnsAddress(String privateDnsAddress) {
+    public void setPrivateDnsAddress( String privateDnsAddress ) {
         this.privateDnsAddress = privateDnsAddress;
     }
 
     public @Nonnull RawAddress[] getPrivateAddresses() {
-        return (privateIpAddresses == null ? new RawAddress[0] : privateIpAddresses);
+        return ( privateIpAddresses == null ? new RawAddress[0] : privateIpAddresses );
     }
 
     /**
@@ -323,7 +336,7 @@ public class VirtualMachine implements Networkable, Taggable {
         return addrs;
     }
 
-    public void setPrivateAddresses(@Nonnull RawAddress ... addresses) {
+    public void setPrivateAddresses( @Nonnull RawAddress... addresses ) {
         privateIpAddresses = addresses;
     }
 
@@ -331,10 +344,10 @@ public class VirtualMachine implements Networkable, Taggable {
      * @deprecated Use {@link #setPrivateAddresses(RawAddress...)}
      */
     @Deprecated
-    public void setPrivateIpAddresses(String[] privateIpAddresses) {
+    public void setPrivateIpAddresses( String[] privateIpAddresses ) {
         this.privateIpAddresses = new RawAddress[privateIpAddresses == null ? 0 : privateIpAddresses.length];
         if( privateIpAddresses != null ) {
-            for( int i=0; i<this.privateIpAddresses.length; i++ ) {
+            for( int i = 0; i < this.privateIpAddresses.length; i++ ) {
                 this.privateIpAddresses[i] = new RawAddress(privateIpAddresses[i]);
             }
         }
@@ -344,7 +357,7 @@ public class VirtualMachine implements Networkable, Taggable {
         return providerAssignedIpAddressId;
     }
 
-    public void setProviderAssignedIpAddressId(String providerAssignedIpAddressId) {
+    public void setProviderAssignedIpAddressId( String providerAssignedIpAddressId ) {
         this.providerAssignedIpAddressId = providerAssignedIpAddressId;
     }
 
@@ -352,7 +365,7 @@ public class VirtualMachine implements Networkable, Taggable {
         return providerDataCenterId;
     }
 
-    public void setProviderDataCenterId(String providerDataCenterId) {
+    public void setProviderDataCenterId( String providerDataCenterId ) {
         this.providerDataCenterId = providerDataCenterId;
     }
 
@@ -360,7 +373,7 @@ public class VirtualMachine implements Networkable, Taggable {
         return providerMachineImageId;
     }
 
-    public void setProviderMachineImageId(String providerMachineImageId) {
+    public void setProviderMachineImageId( String providerMachineImageId ) {
         this.providerMachineImageId = providerMachineImageId;
     }
 
@@ -368,7 +381,7 @@ public class VirtualMachine implements Networkable, Taggable {
         return providerOwnerId;
     }
 
-    public void setProviderOwnerId(String providerOwnerId) {
+    public void setProviderOwnerId( String providerOwnerId ) {
         this.providerOwnerId = providerOwnerId;
     }
 
@@ -376,7 +389,7 @@ public class VirtualMachine implements Networkable, Taggable {
         return providerRegionId;
     }
 
-    public void setProviderRegionId(String providerRegionId) {
+    public void setProviderRegionId( String providerRegionId ) {
         this.providerRegionId = providerRegionId;
     }
 
@@ -384,7 +397,7 @@ public class VirtualMachine implements Networkable, Taggable {
         return providerVirtualMachineId;
     }
 
-    public void setProviderVirtualMachineId(String providerVirtualMachineId) {
+    public void setProviderVirtualMachineId( String providerVirtualMachineId ) {
         this.providerVirtualMachineId = providerVirtualMachineId;
     }
 
@@ -392,12 +405,12 @@ public class VirtualMachine implements Networkable, Taggable {
         return publicDnsAddress;
     }
 
-    public void setPublicDnsAddress(String publicDnsAddress) {
+    public void setPublicDnsAddress( String publicDnsAddress ) {
         this.publicDnsAddress = publicDnsAddress;
     }
 
     public @Nonnull RawAddress[] getPublicAddresses() {
-        return (publicIpAddresses == null ? new RawAddress[0] : publicIpAddresses);
+        return ( publicIpAddresses == null ? new RawAddress[0] : publicIpAddresses );
     }
 
     /**
@@ -412,7 +425,7 @@ public class VirtualMachine implements Networkable, Taggable {
             String ip = resolve(publicDnsAddress);
 
             if( ip != null ) {
-                publicIpAddresses = new RawAddress[] { new RawAddress(ip) };
+                publicIpAddresses = new RawAddress[]{new RawAddress(ip)};
             }
             else {
                 return new String[0];
@@ -421,7 +434,7 @@ public class VirtualMachine implements Networkable, Taggable {
         String[] addrs = new String[publicIpAddresses.length];
 
         if( publicIpAddresses != null ) {
-            for( int i=0; i<addrs.length; i++ ) {
+            for( int i = 0; i < addrs.length; i++ ) {
                 addrs[i] = publicIpAddresses[i].getIpAddress();
             }
         }
@@ -431,24 +444,26 @@ public class VirtualMachine implements Networkable, Taggable {
     /**
      * Creates an informal association under a group name for the launched VM with other virtual machines in
      * the system. The underlying cloud may interpret this in any number of ways.
+     *
      * @return the virtual machine group association
      */
     public @Nullable String getVirtualMachineGroup() {
         return virtualMachineGroup;
     }
 
-    private String resolve(String dnsName) {
-        if (dnsName != null && dnsName.length() > 0) {
+    private String resolve( String dnsName ) {
+        if( dnsName != null && dnsName.length() > 0 ) {
             InetAddress[] addresses;
 
             try {
                 addresses = InetAddress.getAllByName(dnsName);
-            } catch (UnknownHostException e) {
+            } catch( UnknownHostException e ) {
                 addresses = null;
             }
-            if (addresses != null && addresses.length > 0) {
+            if( addresses != null && addresses.length > 0 ) {
                 dnsName = addresses[0].getHostAddress();
-            } else {
+            }
+            else {
                 dnsName = dnsName.split("\\.")[0];
                 dnsName = dnsName.replaceAll("-", "\\.");
                 dnsName = dnsName.substring(4);
@@ -457,7 +472,7 @@ public class VirtualMachine implements Networkable, Taggable {
         return dnsName;
     }
 
-    public void setPublicAddresses(@Nonnull RawAddress ... addresses) {
+    public void setPublicAddresses( @Nonnull RawAddress... addresses ) {
         publicIpAddresses = addresses;
     }
 
@@ -465,10 +480,10 @@ public class VirtualMachine implements Networkable, Taggable {
      * @deprecated Use {@link #setPublicAddresses(RawAddress...)}
      */
     @Deprecated
-    public void setPublicIpAddresses(String[] publicIpAddresses) {
+    public void setPublicIpAddresses( String[] publicIpAddresses ) {
         this.publicIpAddresses = new RawAddress[publicIpAddresses == null ? 0 : publicIpAddresses.length];
         if( publicIpAddresses != null ) {
-            for( int i=0; i<this.publicIpAddresses.length; i++ ) {
+            for( int i = 0; i < this.publicIpAddresses.length; i++ ) {
                 this.publicIpAddresses[i] = new RawAddress(publicIpAddresses[i]);
             }
         }
@@ -478,7 +493,7 @@ public class VirtualMachine implements Networkable, Taggable {
         return rebootable;
     }
 
-    public void setRebootable(boolean rebootable) {
+    public void setRebootable( boolean rebootable ) {
         this.rebootable = rebootable;
     }
 
@@ -486,7 +501,7 @@ public class VirtualMachine implements Networkable, Taggable {
         return rootUser;
     }
 
-    public void setRootUser(String rootUser) {
+    public void setRootUser( String rootUser ) {
         this.rootUser = rootUser;
     }
 
@@ -494,7 +509,7 @@ public class VirtualMachine implements Networkable, Taggable {
         return stateReasonMessage;
     }
 
-    public void setStateReasonMessage(String stateReasonMessage) {
+    public void setStateReasonMessage( String stateReasonMessage ) {
         this.stateReasonMessage = stateReasonMessage;
     }
 
@@ -502,7 +517,7 @@ public class VirtualMachine implements Networkable, Taggable {
         return terminationTimestamp;
     }
 
-    public void setTerminationTimestamp(long terminationTimestamp) {
+    public void setTerminationTimestamp( long terminationTimestamp ) {
         this.terminationTimestamp = terminationTimestamp;
     }
 
@@ -510,7 +525,7 @@ public class VirtualMachine implements Networkable, Taggable {
         return passwordCallback;
     }
 
-    public void setProductId(String productId) {
+    public void setProductId( String productId ) {
         this.productId = productId;
     }
 
@@ -518,38 +533,38 @@ public class VirtualMachine implements Networkable, Taggable {
         return productId;
     }
 
-    public void setLabels(String[] labels) {
+    public void setLabels( String[] labels ) {
         this.labels = labels;
     }
 
     public String[] getLabels() {
-        return (labels == null ? new String[0] : labels);
+        return ( labels == null ? new String[0] : labels );
     }
 
-    public Object getTag(String tag) {
+    public Object getTag( String tag ) {
         return getTags().get(tag);
     }
-    
-    public synchronized Map<String,String> getTags() {
+
+    public synchronized Map<String, String> getTags() {
         if( tags == null ) {
-            tags = new HashMap<String,String>();
+            tags = new HashMap<String, String>();
         }
         return tags;
     }
 
-    public void setTag(@Nonnull String key, @Nonnull String value) {
+    public void setTag( @Nonnull String key, @Nonnull String value ) {
         if( tags == null ) {
             tags = new HashMap<String, String>();
         }
         tags.put(key, value);
     }
 
-    public synchronized void setTags(Map<String,String> properties) {
+    public synchronized void setTags( Map<String, String> properties ) {
         getTags().clear();
         getTags().putAll(properties);
     }
 
-    public void setProviderSubnetId(String providerSubnetId) {
+    public void setProviderSubnetId( String providerSubnetId ) {
         this.providerSubnetId = providerSubnetId;
     }
 
@@ -557,7 +572,7 @@ public class VirtualMachine implements Networkable, Taggable {
         return providerSubnetId;
     }
 
-    public void setProviderVlanId(String providerVlanId) {
+    public void setProviderVlanId( String providerVlanId ) {
         this.providerVlanId = providerVlanId;
     }
 
@@ -566,34 +581,34 @@ public class VirtualMachine implements Networkable, Taggable {
     }
 
     public String getProviderKeypairId() {
-      return providerKeypairId;
+        return providerKeypairId;
     }
 
     public void setProviderKeypairId( String providerKeypairId ) {
-      this.providerKeypairId = providerKeypairId;
+        this.providerKeypairId = providerKeypairId;
     }
 
     public String[] getProviderFirewallIds() {
-      return (providerFirewallIds == null ? new String[0] : providerFirewallIds);
+        return ( providerFirewallIds == null ? new String[0] : providerFirewallIds );
     }
 
     public void setProviderFirewallIds( String[] providerFirewallIds ) {
-      this.providerFirewallIds = providerFirewallIds;
+        this.providerFirewallIds = providerFirewallIds;
     }
 
     public String[] getProviderNetworkInterfaceIds() {
-      return (providerNetworkInterfaceIds == null ? new String[0] : providerNetworkInterfaceIds);
+        return ( providerNetworkInterfaceIds == null ? new String[0] : providerNetworkInterfaceIds );
     }
 
     public void setProviderNetworkInterfaceIds( String[] providerNetworkInterfaceIds ) {
-      this.providerNetworkInterfaceIds = providerNetworkInterfaceIds;
+        this.providerNetworkInterfaceIds = providerNetworkInterfaceIds;
     }
 
     public @Nullable String getProviderKernelImageId() {
         return providerKernelImageId;
     }
 
-    public void setProviderKernelImageId(@Nullable String providerKernelImageId) {
+    public void setProviderKernelImageId( @Nullable String providerKernelImageId ) {
         this.providerKernelImageId = providerKernelImageId;
     }
 
@@ -601,19 +616,19 @@ public class VirtualMachine implements Networkable, Taggable {
         return providerRamdiskImageId;
     }
 
-    public void setProviderRamdiskImageId(@Nullable String providerRamdiskImageId) {
+    public void setProviderRamdiskImageId( @Nullable String providerRamdiskImageId ) {
         this.providerRamdiskImageId = providerRamdiskImageId;
     }
 
-    public void setProviderShellKeyIds(@Nonnull String ... keyIds) {
+    public void setProviderShellKeyIds( @Nonnull String... keyIds ) {
         this.providerShellKeyIds = keyIds;
     }
 
     public @Nonnull String[] getProviderShellKeyIds() {
-        return (providerShellKeyIds == null ? new String[0] : providerShellKeyIds);
+        return ( providerShellKeyIds == null ? new String[0] : providerShellKeyIds );
     }
 
-    public @Nonnull String[] getProviderVolumeIds(@Nonnull CloudProvider provider) throws CloudException, InternalException {
+    public @Nonnull String[] getProviderVolumeIds( @Nonnull CloudProvider provider ) throws CloudException, InternalException {
         if( providerVolumeIds == null ) {
             ComputeServices services = provider.getComputeServices();
 
@@ -637,71 +652,98 @@ public class VirtualMachine implements Networkable, Taggable {
         return providerVolumeIds;
     }
 
-    public void setProviderVolumeIds(@Nonnull String ... ids) {
+    public void setProviderVolumeIds( @Nonnull String... ids ) {
         providerVolumeIds = ids;
     }
 
     public @Nullable Volume[] getVolumes() {
-      return volumes;
+        return volumes;
     }
 
     public void setVolumes( @Nullable Volume[] volumes ) {
-      this.volumes = volumes;
+        this.volumes = volumes;
     }
 
     public boolean isIoOptimized() {
-      return ioOptimized;
+        return ioOptimized;
     }
 
-    public void setIoOptimized(boolean ioOptimized) {
-      this.ioOptimized = ioOptimized;
+    public void setIoOptimized( boolean ioOptimized ) {
+        this.ioOptimized = ioOptimized;
     }
 
     public boolean isIpForwardingAllowed() {
-      return ipForwardingAllowed;
+        return ipForwardingAllowed;
     }
 
     public void setIpForwardingAllowed( boolean ipForwardingAllowed ) {
-      this.ipForwardingAllowed = ipForwardingAllowed;
+        this.ipForwardingAllowed = ipForwardingAllowed;
     }
 
     public String getProviderRoleId() {
-      return providerRoleId;
+        return providerRoleId;
     }
 
-    public void setProviderRoleId(String roleId) {
-      this.providerRoleId = roleId;
+    public void setProviderRoleId( String roleId ) {
+        this.providerRoleId = roleId;
     }
 
     public VmStatus getProviderVmStatus() {
-      return providerVmStatus;
+        return providerVmStatus;
     }
 
-    public void setProviderVmStatus(VmStatus vmStatus) {
-      this.providerVmStatus = vmStatus;
+    public void setProviderVmStatus( VmStatus vmStatus ) {
+        this.providerVmStatus = vmStatus;
     }
 
     public VmStatus getProviderHostStatus() {
-      return providerHostStatus;
+        return providerHostStatus;
     }
 
-    public void setProviderHostStatus(VmStatus vmStatus) {
-      this.providerHostStatus = vmStatus;
+    public void setProviderHostStatus( VmStatus vmStatus ) {
+        this.providerHostStatus = vmStatus;
     }
 
-    public void setVisibleScope(VisibleScope visibleScope){
+    public void setVisibleScope( VisibleScope visibleScope ) {
         this.visibleScope = visibleScope;
     }
 
-    public VisibleScope getVisibleScope(){
+    public VisibleScope getVisibleScope() {
         return this.visibleScope;
     }
 
-	public String getUserData() {
-		return userData;
-	}
+    public String getUserData() {
+        return userData;
+    }
 
-	public void setUserData(String userData) {
-		this.userData = userData;
-	}
+    public void setUserData( String userData ) {
+        this.userData = userData;
+    }
+
+    public VirtualMachineLifecycle getLifecycle() {
+        if( lifecycle == null ) {
+            lifecycle = VirtualMachineLifecycle.NORMAL;
+        }
+        return lifecycle;
+    }
+
+    public void setLifecycle( VirtualMachineLifecycle lifecycle ) {
+        this.lifecycle = lifecycle;
+    }
+
+    public String getSpotRequestId() {
+        return spotRequestId;
+    }
+
+    public void setSpotRequestId( String spotRequestId ) {
+        this.spotRequestId = spotRequestId;
+    }
+
+    public String getResourcePoolId() {
+        return resourcePoolId;
+    }
+
+    public void setResourcePoolId(String resourcePoolId) {
+        this.resourcePoolId = resourcePoolId;
+    }
 }

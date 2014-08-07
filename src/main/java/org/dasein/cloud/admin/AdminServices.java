@@ -25,4 +25,12 @@ public interface AdminServices {
     public @Nullable PrepaymentSupport getPrepaymentSupport();
     
     public boolean hasPrepaymentSupport();
+    
+    public @Nullable AccountSupport getAccountSupport();
+    
+    public boolean hasAccountSupport();
+    
+    public @Nullable BillingSupport getBillingSupport();
+    
+    public boolean hasBillingSupport();
 }
