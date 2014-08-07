@@ -80,6 +80,7 @@ public class LoadBalancerCreateOptions {
     private ArrayList<LoadBalancerEndpoint> endpoints;
     private ArrayList<String>               providerDataCenterIds;
     private ArrayList<String>               providerSubnetIds;
+    private ArrayList<String>               firewallIds;
     private String                          providerIpAddressId;
     private String                          description;
     private ArrayList<LbListener>           listeners;
@@ -87,6 +88,10 @@ public class LoadBalancerCreateOptions {
     private String                          name;
     private LbType                          type;
     private HealthCheckOptions              healthCheckOptions;
+    private Boolean                         crossDataCenter;
+    private Boolean                         connectionDraining;
+    private Integer                         connectionDrainingTimeout;
+    private Integer                         idleConnectionTimeout;
 
     private LoadBalancerCreateOptions() { }
 
@@ -199,7 +204,17 @@ public class LoadBalancerCreateOptions {
       return providerSubnetIds.toArray(new String[providerSubnetIds.size()]);
     }
 
-    /**
+	/**
+	 * @return the security groups to which this load balancer will be added
+	 */
+    public String[] getFirewallIds() {
+      if( firewallIds == null ) {
+        return new String[0];
+      }
+      return firewallIds.toArray(new String[firewallIds.size()]);
+	}
+
+	/**
      * @return the IP address you are assigning to this load balancer if the address is required
      */
     public @Nullable String getProviderIpAddressId() {
@@ -215,6 +230,22 @@ public class LoadBalancerCreateOptions {
 
     public HealthCheckOptions getHealthCheckOptions(){
         return this.healthCheckOptions;
+    }
+
+    public Boolean getCrossDataCenter() {
+        return crossDataCenter;
+    }
+
+    public Boolean getConnectionDraining() {
+        return connectionDraining;
+    }
+
+    public Integer getConnectionDrainingTimeout() {
+        return connectionDrainingTimeout;
+    }
+
+    public Integer getIdleConnectionTimeout() {
+        return idleConnectionTimeout;
     }
 
     /**
@@ -253,6 +284,19 @@ public class LoadBalancerCreateOptions {
         this.providerSubnetIds = new ArrayList<String>();
       }
       Collections.addAll(this.providerSubnetIds, providerSubnetIds);
+      return this;
+    }
+
+    /**
+     * Adds the specified firewalls into this list of firewalls to which this load balancer rotation will be added.
+     * @param firewallIds the IDs of the firewalls to add the load balancer to
+     * @return this
+     */
+    public @Nonnull LoadBalancerCreateOptions withFirewalls(@Nonnull String ... firewallIds) {
+      if ( this.firewallIds == null ) {
+        this.firewallIds = new ArrayList<String>();
+      }
+      Collections.addAll(this.firewallIds, firewallIds);
       return this;
     }
 
@@ -328,4 +372,46 @@ public class LoadBalancerCreateOptions {
         return this;
     }
 
+    /**
+     * Adds the specified the maximum time (in seconds) to keep the existing connections open before
+     * deregistering the instances.
+     * @param connectionDrainingTimeout the timeout options
+     * @return this
+     */
+    public @Nonnull LoadBalancerCreateOptions withConnectionDrainingTimeout(Integer connectionDrainingTimeout) {
+        this.connectionDrainingTimeout = connectionDrainingTimeout;
+        return this;
+    }
+
+    /**
+     * Adds the specifies the time (in seconds) the connection is allowed to be idle
+     * before it is closed by the load balancer
+     * @param idleConnectionTimeout the timeout options
+     * @return this
+     */
+    public @Nonnull LoadBalancerCreateOptions withIdleConnectionTimeout(Integer idleConnectionTimeout) {
+        this.idleConnectionTimeout = idleConnectionTimeout;
+        return this;
+    }
+
+    /**
+     * Adds the specified whether connection draining is enabled for the load balancer.
+     * @param connectionDraining the connection draining options
+     * @return this
+     */
+    public @Nonnull LoadBalancerCreateOptions withConnectionDraining(Boolean connectionDraining) {
+        this.connectionDraining = connectionDraining;
+        return this;
+    }
+
+    /**
+     * Adds the specified cross data centers. If enabled, the load balancer routes the request traffic evenly
+     * across all back-end instances regardless of the data center.
+     * @param crossDataCenter then cross zone options
+     * @return
+     */
+    public @Nonnull LoadBalancerCreateOptions withCrossDataCenter(Boolean crossDataCenter) {
+        this.crossDataCenter = crossDataCenter;
+        return this;
+    }
 }

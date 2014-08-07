@@ -19,6 +19,7 @@
 
 package org.dasein.cloud.compute;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -230,6 +231,7 @@ public class MachineImage implements Taggable {
     private Map<String,String> tags;
     private MachineImageType   type;
     private VisibleScope       visibleScope;
+    private Collection<MachineImageVolume> volumes;
 
     /**
      * Constructs an empty machine image.
@@ -441,6 +443,14 @@ public class MachineImage implements Taggable {
         getTags().putAll(properties);
     }
 
+    public @Nullable Collection<MachineImageVolume> getVolumes() {
+        return volumes;
+    }
+
+    public void setVolumes(@Nullable Collection<MachineImageVolume> volumes) {
+        this.volumes = volumes;
+    }
+
     @Override
     public String toString() {
         return (name + " [" + providerMachineImageId + "]");
@@ -601,5 +611,4 @@ public class MachineImage implements Taggable {
     public void setType(@Nonnull MachineImageType type) {
         this.type = type;
     }
-
 }

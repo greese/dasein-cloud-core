@@ -20,41 +20,37 @@
 package org.dasein.cloud.compute;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class ScalingGroup implements Serializable {
     private static final long serialVersionUID = -5317003700769693511L;
-
-    private int                  defaultCooldown;
-    private long                 creationTimestamp;
-    private String               description;
-    private int                  maxServers;
-    private int                  minServers;
-    private String               name;
-    private String[]             providerDataCenterIds;
-    private String               providerLaunchConfigurationId;
-    private String               providerOwnerId;
-    private String               providerRegionId;
-    private String               providerScalingGroupId;
-    private String[]             providerServerIds;
-    private int                  targetCapacity;
-    private String               id;
-    private String[]             enabledMetrics;
-    private int                  healthCheckGracePeriod;
-    private String               healthCheckType;
-    private String[]             providerLoadBalancerNames;
-    private String               status;
-    private Collection<String[]> suspendedProcesses;
-    private String[]             terminationPolicies;
-    private AutoScalingTag[]     tags;
+    
+    private int                   defaultCooldown;
+    private long                  creationTimestamp;
+    private String                description;
+    private int                   maxServers;
+    private int                   minServers;
+    private String                name;
+    private String[]              providerDataCenterIds;
+    private String                providerLaunchConfigurationId;
+    private String                providerOwnerId;
+    private String                providerRegionId;
+    private String                providerScalingGroupId;
+    private String[]              providerServerIds;
+    private int                   targetCapacity;
+    private String                id;
+    private String[]              enabledMetrics;
+    private int                   healthCheckGracePeriod;
+    private String                healthCheckType;
+    private String[]              providerLoadBalancerNames;
+    private String                status;
+    private Collection<String[]>  suspendedProcesses;
+    private String[]              terminationPolicies;
+    private AutoScalingTag[]      tags;
     // comma separated list
-    private String               subnetIds;
+    private String[]              subnets;
 
-
-    public ScalingGroup() {
-    }
+    public ScalingGroup() { }
 
     public String getId() {
         return id;
@@ -242,12 +238,23 @@ public class ScalingGroup implements Serializable {
         this.tags = tags;
     }
 
+    @Deprecated
     public String getSubnetIds() {
-        return subnetIds;
+        if(this.subnets == null || this.subnets.length == 0){
+            return new String();
+        }
+        StringBuilder sb = new StringBuilder();
+        for (String sn : this.subnets) {
+            sb.append(sn).append(",");
+        }
+        return sb.deleteCharAt(sb.length()-1).toString();
     }
 
-    public void setSubnetIds( String subnetIds ) {
-        this.subnetIds = subnetIds;
-    }
+    @Deprecated
+    public void setSubnetIds(String subnetIds) { this.subnets = (subnetIds == null) ? new String[0] : subnetIds.split("\\s*,\\s*"); }
+
+    public String[] getSubnets() { return (this.subnets == null) ? new String[0] : this.subnets; }
+
+    public void setSubnets(String[] subnets) {  this.subnets = subnets;  }
 
 }

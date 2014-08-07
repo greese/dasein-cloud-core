@@ -136,6 +136,7 @@ public class LoadBalancer implements Networkable, Taggable {
     private Map<String,String>      tags;
     private String                  providerLBHealthCheckId;
     private String[]                providerFirewallIds;
+    private LoadBalancerHealthCheck healthCheck;
     private VisibleScope            visibleScope;
 
     /**
@@ -396,7 +397,6 @@ public class LoadBalancer implements Networkable, Taggable {
     /**
      * Sets the firewall ids.
      * @param providerFirewallIds the firewall ids
-     * @return this
      */
     public void setProviderFirewallIds(String[] providerFirewallIds) {
         this.providerFirewallIds = providerFirewallIds;
@@ -428,6 +428,14 @@ public class LoadBalancer implements Networkable, Taggable {
         }
         Collections.addAll(this.listeners, listeners);
         return this;
+    }
+
+    public LoadBalancerHealthCheck getHealthCheck() {
+        return healthCheck;
+    }
+
+    public void setHealthCheck(LoadBalancerHealthCheck healthCheck) {
+        this.healthCheck = healthCheck;
     }
 
     /******************************* DEPRECATED METHODS ***********************************/
