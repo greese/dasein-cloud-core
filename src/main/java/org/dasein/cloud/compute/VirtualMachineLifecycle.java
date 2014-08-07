@@ -5,8 +5,8 @@ package org.dasein.cloud.compute;
  * <p>Created by Stas Maksimov: 20/06/2014 22:56</p>
  *
  * @author Stas Maksimov
- * @version 2014.07 initial version
- * @since 2014.07
+ * @version 2014.08 initial version
+ * @since 2014.08
  */
 public enum VirtualMachineLifecycle {
 

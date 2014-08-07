@@ -29,8 +29,8 @@ import javax.annotation.Nonnull;
  * Affinity Group Support defines how affinity groups are managed by the underlying cloud.
  * Created by Drew Lyall: 11/07/14 11:44
  * @author Drew Lyall
- * @version 2014.07
- * @since 2014.07
+ * @version 2014.08
+ * @since 2014.08
  */
 public interface AffinityGroupSupport extends AccessControlledService{
     /**

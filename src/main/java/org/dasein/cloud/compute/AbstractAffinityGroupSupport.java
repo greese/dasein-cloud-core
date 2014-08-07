@@ -12,8 +12,8 @@ import javax.annotation.Nonnull;
  * Basic default implemetations of all AffinityGroupSupport methods
  * Created by Drew Lyall: 16/07/14 15:43
  * @author Drew Lyall
- * @version 2014.07
- * @since 2014.07
+ * @version 2014.08
+ * @since 2014.08
  */
 public class AbstractAffinityGroupSupport implements AffinityGroupSupport{
     private CloudProvider provider;

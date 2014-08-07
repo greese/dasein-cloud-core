@@ -26,8 +26,8 @@ package org.dasein.cloud.compute;
  * <p>Created by Stas Maksimov: 21/06/2014 18:37</p>
  *
  * @author Stas Maksimov
- * @version 2014.07 initial version
- * @since 2014.07
+ * @version 2014.08 initial version
+ * @since 2014.08
  */
 public class SpotVirtualMachineRequestFilterOptions {
     private boolean                       matchesAny;
