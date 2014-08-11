@@ -439,4 +439,14 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
     public void setFirewalls(@Nonnull String providerLoadBalancerId, @Nonnull String... firewallIds) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Setting firewalls have not been implemented for " + getProvider().getCloudName());
     }
+
+    @Override
+    public void modifyLoadBalancerAttributes(@Nonnull String id, @Nonnull LbAttributesOptions options) throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Modify attributes have not been implemented for " + getProvider().getCloudName());
+    }
+
+    @Override
+    public LbAttributesOptions getLoadBalancerAttributes(@Nonnull String id) throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Get attributes have not been implemented for " + getProvider().getCloudName());
+    }
 }

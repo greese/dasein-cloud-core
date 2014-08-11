@@ -29,10 +29,12 @@ import org.dasein.cloud.Requirement;
 import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.Tag;
 import org.dasein.cloud.identity.ServiceAction;
+import org.dasein.cloud.util.TagUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Locale;
 
@@ -591,6 +593,13 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
     }
 
     @Override
+    public void updateTags(@Nonnull String[] imageIds, boolean asynchronous, @Nonnull Tag ... tags) throws CloudException, InternalException {
+        for( String id : imageIds ) {
+            updateTags(id, asynchronous, tags);
+        }
+    }
+
+    @Override
     public void removeTags(@Nonnull String imageId, @Nonnull Tag ... tags) throws CloudException, InternalException {
         // NO-OP
     }
@@ -601,4 +610,24 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
             removeTags(id, tags);
         }
     }
+
+    @Override
+    public void setTags(@Nonnull String imageId, @Nonnull Tag... tags) throws CloudException, InternalException {
+        setTags(new String[]{imageId}, tags);
+    }
+
+    @Override
+    public void setTags(@Nonnull String[] imageIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for (String id : imageIds) {
+
+            Collection<Tag> collectionForDelete = TagUtils.getTagsForDelete(getImage(id).getTags(), tags);
+
+            if (collectionForDelete != null) {
+                removeTags(id, collectionForDelete.toArray(new Tag[collectionForDelete.size()]));
+            }
+
+            updateTags(id, tags);
+        }
+    }
+
 }
