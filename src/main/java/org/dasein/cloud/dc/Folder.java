@@ -1,5 +1,7 @@
 package org.dasein.cloud.dc;
 
+import java.util.List;
+
 /**
  * User: daniellemayne
  * Date: 18/08/2014
@@ -10,6 +12,7 @@ public class Folder {
     private String name;
     private FolderType type;
     private Folder parent;
+    private List<Folder> children;
 
     public String getId() {
         return id;
@@ -41,5 +44,13 @@ public class Folder {
 
     public void setParent(Folder parent) {
         this.parent = parent;
+    }
+
+    public List<Folder> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<Folder> children) {
+        this.children = children;
     }
 }
