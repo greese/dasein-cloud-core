@@ -41,4 +41,9 @@ public interface DataCenterCapabilities extends Capabilities {
      * Specifies whether the given cloud supports the concept of storage pools
      */
     public boolean supportsStoragePools();
+
+    /**
+     * Specifies whether the given cloud supports the concept of folders
+     */
+    public boolean supportsFolders();
 }

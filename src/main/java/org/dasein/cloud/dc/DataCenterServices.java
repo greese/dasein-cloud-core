@@ -141,4 +141,38 @@ public interface DataCenterServices {
      */
     @Nonnull
     public Collection<StoragePool> listStoragePools() throws InternalException, CloudException;
+
+    /**
+     * Provides access to the full storage pool information for the specified storage pool
+     *
+     * @param providerStoragePoolId the provider-specific identifier that the provider uses to identify the storage pool
+     * @return the Storage Pool object with the specified id
+     * @throws InternalException an error occurred locally in processing the request
+     * @throws CloudException    an error occurred within the cloud provider or the cloud provider did not approve of the request
+     */
+    @Nonnull
+    public StoragePool getStoragePool(String providerStoragePoolId) throws InternalException, CloudException;
+
+
+    /**
+     * Lists all vm folders
+     *
+     * @return all vm folders supported for this cloud in the context region
+     * @throws InternalException an error occurred locally in processing the request
+     * @throws CloudException    an error occurred within the cloud provider or the cloud provider did not approve of the request
+     */
+    @Nonnull
+    public Collection<Folder> listVMFolders() throws InternalException, CloudException;
+
+    /**
+     * Provides access to the full vm folder information for the specified vm folder
+     *
+     * @param providerVMFolderId the provider-specific identifier that the provider uses to identify the vm folder
+     * @return the vm folder object with the specified id
+     * @throws InternalException an error occurred locally in processing the request
+     * @throws CloudException    an error occurred within the cloud provider or the cloud provider did not approve of the request
+     */
+    @Nonnull
+    public Folder getVMFolder(String providerVMFolderId) throws InternalException, CloudException;
+
 }
