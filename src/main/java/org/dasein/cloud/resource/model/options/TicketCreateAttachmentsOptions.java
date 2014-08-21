@@ -9,15 +9,15 @@ import java.util.List;
  */
 public class TicketCreateAttachmentsOptions {
 
-    private String attachmentSetId;
+    private String ticketId;
     private List<TicketAttachmentData> attachments = new ArrayList<TicketAttachmentData>();
 
-    public String getAttachmentSetId() {
-        return attachmentSetId;
+    public String getTicketId() {
+        return ticketId;
     }
 
-    public void setAttachmentSetId(String attachmentSetId) {
-        this.attachmentSetId = attachmentSetId;
+    public void setTicketId(String ticketId) {
+        this.ticketId = ticketId;
     }
 
     public List<TicketAttachmentData> getAttachments() {
