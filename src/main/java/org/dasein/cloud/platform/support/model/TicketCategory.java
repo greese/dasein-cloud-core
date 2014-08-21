@@ -1,10 +1,10 @@
-package org.dasein.cloud.resource.model;
+package org.dasein.cloud.platform.support.model;
 
 /**
  * @author Eugene Yaroslavtsev
  * @since 18.08.2014
  */
-public class Category {
+public class TicketCategory {
 
     private String code;
     private String name;

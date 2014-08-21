@@ -1,11 +1,11 @@
-package org.dasein.cloud.resource;
+package org.dasein.cloud.platform.support;
 
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.OperationNotSupportedException;
-import org.dasein.cloud.resource.model.*;
-import org.dasein.cloud.resource.model.options.*;
+import org.dasein.cloud.platform.support.model.*;
+import org.dasein.cloud.platform.support.model.options.*;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
@@ -14,11 +14,11 @@ import java.util.Collection;
  * User: Eugene Yaroslavtsev
  * Date: 20.08.2014
  */
-public abstract class AbstractSupportService implements SupportService {
+public abstract class AbstractTicketService implements TicketService {
 
     private CloudProvider provider;
 
-    public AbstractSupportService(CloudProvider cloudProvider) {
+    public AbstractTicketService(CloudProvider cloudProvider) {
         this.provider = cloudProvider;
     }
 
@@ -43,22 +43,22 @@ public abstract class AbstractSupportService implements SupportService {
     }
 
     @Override
-    public ReplyWithCcEmails listReplies(@Nonnull TicketListRepliesOptions options) throws InternalException, CloudException {
+    public Collection<TicketReply> listReplies(@Nonnull TicketListRepliesOptions options) throws InternalException, CloudException {
         throw new OperationNotSupportedException(provider.getCloudName() +" support is not currently implemented for list replies");
     }
 
     @Override
-    public AttachmentData getAttachment(@Nonnull TicketGetAttachmetnOptions options) throws InternalException, CloudException {
+    public TicketAttachmentData getAttachment(@Nonnull TicketGetAttachmetnOptions options) throws InternalException, CloudException {
         throw new OperationNotSupportedException(provider.getCloudName() + " support is not currently implemented for get attachment");
     }
 
     @Override
-    public Collection<Attachment> listAttachments(@Nonnull TicketListAttachmentsOptions options) throws InternalException, CloudException {
+    public Collection<TicketAttachment> listAttachments(@Nonnull TicketListAttachmentsOptions options) throws InternalException, CloudException {
         throw new OperationNotSupportedException(provider.getCloudName() +" support is not currently implemented for list attachments");
     }
 
     @Override
-    public Collection<Service> listServices(@Nonnull TicketListServicesOptions options) throws InternalException, CloudException {
+    public Collection<org.dasein.cloud.platform.support.model.TicketService> listServices(@Nonnull TicketListServicesOptions options) throws InternalException, CloudException {
         throw new OperationNotSupportedException(provider.getCloudName() +" support is not currently implemented for list services");
     }
 

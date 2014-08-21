@@ -1,10 +1,10 @@
-package org.dasein.cloud.resource.model;
+package org.dasein.cloud.platform.support.model;
 
 /**
  * @author Eugene Yaroslavtsev
  * @since 14.08.2014
  */
-public class Attachment {
+public class TicketAttachment {
 
     private String attachmentId;
     private String fileName;

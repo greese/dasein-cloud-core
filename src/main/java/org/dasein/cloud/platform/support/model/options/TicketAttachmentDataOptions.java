@@ -1,10 +1,10 @@
-package org.dasein.cloud.resource.model.options;
+package org.dasein.cloud.platform.support.model.options;
 
 /**
  * @author Eugene Yaroslavtsev
  * @since 19.08.2014
  */
-public class TicketAttachmentData {
+public class TicketAttachmentDataOptions {
 
     private String data;
     private String fileName;

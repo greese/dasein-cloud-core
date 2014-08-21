@@ -1,5 +1,5 @@
 
-package org.dasein.cloud.resource.model;
+package org.dasein.cloud.platform.support.model;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ public class Ticket {
     private List<String> ccEmailAddresses;
     private String displayId;
     private String language;
-    private List<Reply> recentReplies;
+    private List<TicketReply> recentReplies;
     private String serviceCode;
     private String severityCode;
     private String status;
@@ -67,11 +67,11 @@ public class Ticket {
         this.language = language;
     }
 
-    public List<Reply> getRecentReplies() {
+    public List<TicketReply> getRecentReplies() {
         return recentReplies;
     }
 
-    public void setRecentReplies(List<Reply> recentReplies) {
+    public void setRecentReplies(List<TicketReply> recentReplies) {
         this.recentReplies = recentReplies;
     }
 

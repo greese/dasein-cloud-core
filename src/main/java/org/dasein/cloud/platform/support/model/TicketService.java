@@ -1,4 +1,4 @@
-package org.dasein.cloud.resource.model;
+package org.dasein.cloud.platform.support.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,17 +7,17 @@ import java.util.List;
  * @author Eugene Yaroslavtsev
  * @since 18.08.2014
  */
-public class Service {
+public class TicketService {
 
-    private List<Category> categories = new ArrayList<Category>();
+    private List<TicketCategory> categories = new ArrayList<TicketCategory>();
     private String code;
     private String name;
 
-    public List<Category> getCategories() {
+    public List<TicketCategory> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<Category> categories) {
+    public void setCategories(List<TicketCategory> categories) {
         this.categories = categories;
     }
 

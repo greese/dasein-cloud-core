@@ -1,22 +1,22 @@
 
-package org.dasein.cloud.resource.model;
+package org.dasein.cloud.platform.support.model;
 
 import java.util.List;
 
-public class Reply {
+public class TicketReply {
 
-    private List<Attachment> attachmentSet;
+    private List<TicketAttachment> ticketAttachmentSet;
     private String body;
     private String ticketId;
     private String submittedBy;
     private String timeCreated;
 
-    public List<Attachment> getAttachmentSet() {
-        return attachmentSet;
+    public List<TicketAttachment> getTicketAttachmentSet() {
+        return ticketAttachmentSet;
     }
 
-    public void setAttachmentSet(List<Attachment> attachmentSet) {
-        this.attachmentSet = attachmentSet;
+    public void setTicketAttachmentSet(List<TicketAttachment> ticketAttachmentSet) {
+        this.ticketAttachmentSet = ticketAttachmentSet;
     }
 
     public String getBody() {

@@ -1,4 +1,4 @@
-package org.dasein.cloud.resource.model.options;
+package org.dasein.cloud.platform.support.model.options;
 
 import java.util.ArrayList;
 import java.util.List;

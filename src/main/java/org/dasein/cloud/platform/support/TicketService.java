@@ -1,9 +1,9 @@
-package org.dasein.cloud.resource;
+package org.dasein.cloud.platform.support;
 
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
-import org.dasein.cloud.resource.model.*;
-import org.dasein.cloud.resource.model.options.*;
+import org.dasein.cloud.platform.support.model.*;
+import org.dasein.cloud.platform.support.model.options.*;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
@@ -12,7 +12,7 @@ import java.util.Collection;
  * User: Eugene Yaroslavtsev
  * Date: 20.08.2014
  */
-public interface SupportService {
+public interface TicketService {
 
     /**
      * Gets the list of tickets having the specified options
@@ -57,11 +57,11 @@ public interface SupportService {
      * Gets the list of replies in tickets having the specified options
      *
      * @param options the specified options
-     * @return the replies with cc emails
+     * @return the replies
      * @throws InternalException
      * @throws CloudException
      */
-    public ReplyWithCcEmails listReplies(@Nonnull TicketListRepliesOptions options) throws InternalException, CloudException;
+    public Collection<TicketReply> listReplies(@Nonnull TicketListRepliesOptions options) throws InternalException, CloudException;
 
     /**
      * Gets the attachment having the specified options
@@ -71,7 +71,7 @@ public interface SupportService {
      * @throws InternalException
      * @throws CloudException
      */
-    public AttachmentData getAttachment(@Nonnull TicketGetAttachmetnOptions options) throws InternalException, CloudException;
+    public TicketAttachmentData getAttachment(@Nonnull TicketGetAttachmetnOptions options) throws InternalException, CloudException;
 
     /**
      * Gets the list of attachments having the specified options
@@ -81,7 +81,7 @@ public interface SupportService {
      * @throws InternalException
      * @throws CloudException
      */
-    public Collection<Attachment> listAttachments(@Nonnull TicketListAttachmentsOptions options) throws InternalException, CloudException;
+    public Collection<TicketAttachment> listAttachments(@Nonnull TicketListAttachmentsOptions options) throws InternalException, CloudException;
 
     /**
      * Gets list of services having the specified options
@@ -91,7 +91,7 @@ public interface SupportService {
      * @throws InternalException
      * @throws CloudException
      */
-    public Collection<Service> listServices(@Nonnull TicketListServicesOptions options) throws InternalException, CloudException;
+    public Collection<org.dasein.cloud.platform.support.model.TicketService> listServices(@Nonnull TicketListServicesOptions options) throws InternalException, CloudException;
 
     /**
      * Creates the reply having the specified options

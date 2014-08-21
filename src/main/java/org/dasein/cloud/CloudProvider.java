@@ -26,7 +26,6 @@ import org.dasein.cloud.dc.DataCenterServices;
 import org.dasein.cloud.identity.IdentityServices;
 import org.dasein.cloud.network.NetworkServices;
 import org.dasein.cloud.platform.PlatformServices;
-import org.dasein.cloud.resource.ResourceServices;
 import org.dasein.cloud.storage.StorageServices;
 import org.dasein.cloud.util.NamingConstraints;
 import org.dasein.cloud.util.ResourceNamespace;
@@ -34,7 +33,9 @@ import org.dasein.util.CalendarWrapper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * <p>
@@ -309,8 +310,6 @@ public abstract class CloudProvider {
     public abstract @Nullable NetworkServices getNetworkServices();
 
     public abstract @Nullable PlatformServices getPlatformServices();
-
-    public abstract @Nullable ResourceServices getResourceServices();
 
     /**
      * @return the name of this cloud provider

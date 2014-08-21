@@ -1,10 +1,10 @@
-package org.dasein.cloud.resource.model;
+package org.dasein.cloud.platform.support.model;
 
 /**
  * User: Eugene Yaroslavtsev
  * Date: 20.08.2014
  */
-public class AttachmentData {
+public class TicketAttachmentData {
 
     private String data;
     private String fileName;

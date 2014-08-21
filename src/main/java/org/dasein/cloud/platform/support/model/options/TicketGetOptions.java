@@ -1,12 +1,12 @@
-package org.dasein.cloud.resource.model.options;
+package org.dasein.cloud.platform.support.model.options;
 
 /**
- * @author Eugene Yaroslavtsev
- * @since 15.08.2014
+ * User: Eugene Yaroslavtsev
+ * Date: 21.08.2014
  */
-public class TicketCloseOptions {
+public class TicketGetOptions {
 
-    private String ticketId;
+    String ticketId;
 
     public String getTicketId() {
         return ticketId;
@@ -15,5 +15,4 @@ public class TicketCloseOptions {
     public void setTicketId(String ticketId) {
         this.ticketId = ticketId;
     }
-
 }
