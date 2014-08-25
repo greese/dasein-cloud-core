@@ -107,6 +107,7 @@ public class VMLaunchOptions {
     private String             virtualMachineGroup;
     private String             resourcePoolId;
     private String             storagePoolId;
+    private String             vmFolderId;
     // NOTE: SEE NOTE AT TOP OF ATTRIBUTE LIST WHEN ADDING/REMOVING/CHANGING AN ATTRIBUTE
 
     private VMLaunchOptions() { }
@@ -237,6 +238,7 @@ public class VMLaunchOptions {
         }
         options.affinityGroupId = affinityGroupId;
         options.storagePoolId = storagePoolId;
+        options.vmFolderId = vmFolderId;
         return options;
     }
 
@@ -437,6 +439,13 @@ public class VMLaunchOptions {
      */
     public @Nonnull VolumeAttachment[] getVolumes() {
         return (volumes == null ? new VolumeAttachment[0] : volumes);
+    }
+
+    /**
+     * @return the vmFolder that this machine should be launched into
+     */
+    public @Nullable String getVmFolderId() {
+        return vmFolderId;
     }
 
     /**
@@ -815,6 +824,16 @@ public class VMLaunchOptions {
      */
     public @Nonnull VMLaunchOptions withUserData(@Nonnull String userData) {
         this.userData = userData;
+        return this;
+    }
+
+    /**
+     * Identifies the vm folder that the machine should be launched into
+     * @param vmFolderId the vm folder the machine should be launched into
+     * @return this
+     */
+    public @Nonnull VMLaunchOptions withVMFolderId(@Nonnull String vmFolderId) {
+        this.vmFolderId = vmFolderId;
         return this;
     }
 

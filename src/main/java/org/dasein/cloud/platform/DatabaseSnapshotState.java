@@ -20,5 +20,5 @@
 package org.dasein.cloud.platform;
 
 public enum DatabaseSnapshotState {
-    CREATING, AVAILABLE, DELETING, DELETED;
+    CREATING, AVAILABLE, DELETING, DELETED, SKIPPED, ERROR;
 }

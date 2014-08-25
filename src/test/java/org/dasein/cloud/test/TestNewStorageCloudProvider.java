@@ -112,6 +112,24 @@ public class TestNewStorageCloudProvider extends AbstractCloud {
             public Collection<StoragePool> listStoragePools() throws InternalException, CloudException{
                 return Collections.emptyList();
             }
+
+            @Nonnull
+            @Override
+            public StoragePool getStoragePool(String providerStoragePoolId) throws InternalException, CloudException {
+                return null;
+            }
+
+            @Nonnull
+            @Override
+            public Collection<Folder> listVMFolders() throws InternalException, CloudException {
+                return Collections.emptyList();
+            }
+
+            @Nonnull
+            @Override
+            public Folder getVMFolder(String providerVMFolderId) throws InternalException, CloudException {
+                return null;
+            }
         };
     }
 
