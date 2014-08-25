@@ -6,14 +6,14 @@ package org.dasein.cloud.platform.support.model.options;
  */
 public class TicketAttachmentDataOptions {
 
-    private String data;
+    private byte[] data;
     private String fileName;
 
-    public String getData() {
+    public byte[] getData() {
         return data;
     }
 
-    public void setData(String data) {
+    public void setData(byte[] data) {
         this.data = data;
     }
 
