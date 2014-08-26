@@ -1,6 +1,7 @@
 
 package org.dasein.cloud.platform.support.model;
 
+import org.dasein.cloud.platform.support.TicketSeverity;
 import org.dasein.cloud.platform.support.TicketStatus;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public class Ticket {
     private String language;
     private List<TicketReply> recentReplies;
     private String serviceCode;
-    private String severityCode;
+    private TicketSeverity severityCode;
     private TicketStatus status;
     private String subject;
     private String submittedBy;
@@ -85,11 +86,11 @@ public class Ticket {
         this.serviceCode = serviceCode;
     }
 
-    public String getSeverityCode() {
+    public TicketSeverity getSeverityCode() {
         return severityCode;
     }
 
-    public void setSeverityCode(String severityCode) {
+    public void setSeverityCode(TicketSeverity severityCode) {
         this.severityCode = severityCode;
     }
 

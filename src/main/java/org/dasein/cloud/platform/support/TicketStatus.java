@@ -9,5 +9,4 @@ public enum TicketStatus {
     ASSIGNED_TO_CUSTOMER,
     ASSIGNED_TO_PROVIDER,
     CLOSED
-
 }
