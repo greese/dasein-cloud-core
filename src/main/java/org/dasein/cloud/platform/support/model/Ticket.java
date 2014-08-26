@@ -1,6 +1,8 @@
 
 package org.dasein.cloud.platform.support.model;
 
+import org.dasein.cloud.platform.support.TicketStatus;
+
 import java.util.List;
 
 public class Ticket {
@@ -14,7 +16,7 @@ public class Ticket {
     private List<TicketReply> recentReplies;
     private String serviceCode;
     private String severityCode;
-    private String status;
+    private TicketStatus status;
     private String subject;
     private String submittedBy;
     private String timeCreated;
@@ -91,11 +93,11 @@ public class Ticket {
         this.severityCode = severityCode;
     }
 
-    public String getStatus() {
+    public TicketStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(TicketStatus status) {
         this.status = status;
     }
 
