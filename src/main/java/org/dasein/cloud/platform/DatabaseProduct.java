@@ -23,23 +23,24 @@ import java.io.Serializable;
 
 public class DatabaseProduct implements Serializable {
     private static final long serialVersionUID = -5535140342676937943L;
-    
-    private String         currency;
-    private DatabaseEngine engine;
-    private boolean        highAvailability;
-    private String         name;
-    private String         productSize;
-    private String         providerDataCenterId;
-    private float          standardHourlyRate;
-    private float          standardIoRate;
-    private float          standardStorageRate;
-    private int            storageInGigabytes;
-    
-    public DatabaseProduct(String databaseSizeId) {
+
+    private String               currency;
+    private DatabaseEngine       engine;
+    private DatabaseLicenseModel licenseModel;
+    private boolean              highAvailability;
+    private String               name;
+    private String               productSize;
+    private String               providerDataCenterId;
+    private float                standardHourlyRate;
+    private float                standardIoRate;
+    private float                standardStorageRate;
+    private int                  storageInGigabytes;
+
+    public DatabaseProduct( String databaseSizeId ) {
         this(databaseSizeId, databaseSizeId);
     }
-    
-    public DatabaseProduct(String databaseSizeId, String databaseSizeName) {
+
+    public DatabaseProduct( String databaseSizeId, String databaseSizeName ) {
         this.productSize = databaseSizeId;
         this.name = databaseSizeName;
     }
@@ -48,7 +49,7 @@ public class DatabaseProduct implements Serializable {
         return productSize;
     }
 
-    public void setProductSize(String databaseSizeId) {
+    public void setProductSize( String databaseSizeId ) {
         this.productSize = databaseSizeId;
     }
 
@@ -56,19 +57,27 @@ public class DatabaseProduct implements Serializable {
         return name;
     }
 
-    public void setName(String databaseSizeName) {
+    public void setName( String databaseSizeName ) {
         this.name = databaseSizeName;
     }
 
-    public void setEngine(DatabaseEngine engine) {
+    public void setEngine( DatabaseEngine engine ) {
         this.engine = engine;
     }
 
     public DatabaseEngine getEngine() {
         return engine;
     }
-    
-    public void setProviderDataCenterId(String providerDataCenterId) {
+
+    public DatabaseLicenseModel getLicenseModel() {
+        return licenseModel;
+    }
+
+    public void setLicenseModel( DatabaseLicenseModel licenseModel ) {
+        this.licenseModel = licenseModel;
+    }
+
+    public void setProviderDataCenterId( String providerDataCenterId ) {
         this.providerDataCenterId = providerDataCenterId;
     }
 
@@ -76,7 +85,7 @@ public class DatabaseProduct implements Serializable {
         return providerDataCenterId;
     }
 
-    public void setStorageInGigabytes(int storageInGigabytes) {
+    public void setStorageInGigabytes( int storageInGigabytes ) {
         this.storageInGigabytes = storageInGigabytes;
     }
 
@@ -89,7 +98,7 @@ public class DatabaseProduct implements Serializable {
         return standardHourlyRate;
     }
 
-    public void setStandardHourlyRate(float standardHourlyRate) {
+    public void setStandardHourlyRate( float standardHourlyRate ) {
         this.standardHourlyRate = standardHourlyRate;
     }
 
@@ -97,11 +106,11 @@ public class DatabaseProduct implements Serializable {
         return standardStorageRate;
     }
 
-    public void setStandardStorageRate(float standardStorageRate) {
+    public void setStandardStorageRate( float standardStorageRate ) {
         this.standardStorageRate = standardStorageRate;
     }
 
-    public void setStandardIoRate(float standardIoRate) {
+    public void setStandardIoRate( float standardIoRate ) {
         this.standardIoRate = standardIoRate;
     }
 
@@ -109,19 +118,19 @@ public class DatabaseProduct implements Serializable {
         return standardIoRate;
     }
 
-    public void setCurrency(String currency) {
+    public void setCurrency( String currency ) {
         this.currency = currency;
     }
 
     public String getCurrency() {
         return currency;
     }
-    
+
     public String toString() {
         return productSize;
     }
 
-    public void setHighAvailability(boolean highAvailability) {
+    public void setHighAvailability( boolean highAvailability ) {
         this.highAvailability = highAvailability;
     }
 

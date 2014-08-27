@@ -27,7 +27,6 @@ import org.dasein.cloud.ProviderContext;
 import org.dasein.cloud.Requirement;
 import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.Tag;
-import org.dasein.cloud.identity.IdentityServices;
 import org.dasein.cloud.identity.ServiceAction;
 import org.dasein.cloud.util.*;
 import org.dasein.util.CalendarWrapper;
@@ -39,7 +38,6 @@ import org.dasein.util.uom.storage.Megabyte;
 import org.dasein.util.uom.storage.Storage;
 import org.dasein.util.uom.time.Day;
 import org.dasein.util.uom.time.TimePeriod;
-import org.dasein.util.uom.time.Week;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -60,6 +58,7 @@ import java.util.concurrent.Future;
 /**
  * Default implementation of virtual machine support for clouds with very little support.
  * <p>Created by George Reese: 1/29/13 6:11 PM</p>
+ *
  * @author George Reese
  * @version 2013.04
  * @since 2013.04
@@ -67,36 +66,40 @@ import java.util.concurrent.Future;
 public abstract class AbstractVMSupport<T extends CloudProvider> implements VirtualMachineSupport {
     private T provider;
 
-    public AbstractVMSupport(T provider) {
+    public AbstractVMSupport( T provider ) {
         this.provider = provider;
     }
 
     @Override
-    public VirtualMachine alterVirtualMachine(@Nonnull String vmId, @Nonnull VMScalingOptions options) throws InternalException, CloudException {
+    public VirtualMachine alterVirtualMachine( @Nonnull String vmId, @Nonnull VMScalingOptions options ) throws InternalException, CloudException {
         throw new OperationNotSupportedException("VM alternations are not currently supported for " + getProvider().getCloudName());
     }
 
     @Override
-    public VirtualMachine modifyInstance(@Nonnull String vmId, @Nonnull String[] firewalls) throws InternalException, CloudException {
+    public VirtualMachine modifyInstance( @Nonnull String vmId, @Nonnull String[] firewalls ) throws InternalException, CloudException {
         throw new OperationNotSupportedException("Instance firewall modifications are not currently supported for " + getProvider().getCloudName());
     }
 
-    public void cancelSpotDataFeedSubscription() throws CloudException, InternalException{
+    public void cancelSpotDataFeedSubscription() throws CloudException, InternalException {
         throw new OperationNotSupportedException("Spot Instances are not supported for " + getProvider().getCloudName());
     }
 
     @Override
-    public void cancelSpotInstanceRequest(String providerSpotInstanceRequestID) throws CloudException, InternalException{
+    public void cancelSpotVirtualMachineRequest( String providerSpotVirtualMachineRequestID ) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Spot Instances are not supported for " + getProvider().getCloudName());
     }
 
     @Override
-    public @Nonnull VirtualMachine clone(@Nonnull String vmId, @Nonnull String intoDcId, @Nonnull String name, @Nonnull String description, boolean powerOn, @Nullable String... firewallIds) throws InternalException, CloudException {
+    public @Nonnull VirtualMachine clone( @Nonnull String vmId, @Nonnull String intoDcId, @Nonnull String name, @Nonnull String description, boolean powerOn, @Nullable String... firewallIds ) throws InternalException, CloudException {
         throw new OperationNotSupportedException("VM cloning is not currently supported for " + getProvider().getCloudName());
     }
 
     @Override
-    public @Nonnull SpotInstanceRequest createSpotInstanceRequest(SIRequestCreateOptions options) throws CloudException, InternalException{
+    public @Nonnull SpotVirtualMachineRequest createSpotVirtualMachineRequest( SpotVirtualMachineRequestCreateOptions options ) throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Spot Instances are not supported for " + getProvider().getCloudName());
+    }
+
+    public @Nonnull Iterable<SpotVirtualMachineRequest> listSpotVirtualMachineRequests( SpotVirtualMachineRequestFilterOptions options ) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Spot Instances are not supported for " + getProvider().getCloudName());
     }
 
@@ -107,22 +110,23 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
-    public void disableAnalytics(@Nonnull String vmId) throws InternalException, CloudException {
+    public void disableAnalytics( @Nonnull String vmId ) throws InternalException, CloudException {
         // NO-OP
     }
 
     @Override
-    public void enableAnalytics(@Nonnull String vmId) throws InternalException, CloudException {
+    public void enableAnalytics( @Nonnull String vmId ) throws InternalException, CloudException {
         // NO-OP
     }
 
     @Override
-    public void enableSpotDataFeedSubscription(String s3BucketName) throws CloudException, InternalException{
+    public void enableSpotDataFeedSubscription( String bucketName ) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Spot Instances are not supported for " + getProvider().getCloudName());
     }
 
     /**
      * Provides the current provider context for the request in progress.
+     *
      * @return the current provider context
      * @throws CloudException no context was defined before making this call
      */
@@ -137,17 +141,17 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
 
     @Override
     @Deprecated
-    public @Nonnegative int getCostFactor(@Nonnull VmState state) throws CloudException, InternalException {
+    public @Nonnegative int getCostFactor( @Nonnull VmState state ) throws CloudException, InternalException {
         return getCapabilities().getCostFactor(state);
     }
 
     @Override
-    public @Nullable String getPassword(@Nonnull String vmId) throws InternalException, CloudException {
+    public @Nullable String getPassword( @Nonnull String vmId ) throws InternalException, CloudException {
         return null;
     }
 
     @Override
-    public @Nullable String getUserData(@Nonnull String vmId) throws InternalException, CloudException {
+    public @Nullable String getUserData( @Nonnull String vmId ) throws InternalException, CloudException {
         return null;
     }
 
@@ -163,8 +167,8 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
-    public @Nullable VirtualMachineProduct getProduct(@Nonnull String productId) throws InternalException, CloudException {
-        for( Architecture architecture : Architecture.values() ) {
+    public @Nullable VirtualMachineProduct getProduct( @Nonnull String productId ) throws InternalException, CloudException {
+        for( Architecture architecture : getCapabilities().listSupportedArchitectures() ) {
             for( VirtualMachineProduct prd : listProducts(architecture) ) {
                 if( productId.equals(prd.getProviderProductId()) ) {
                     return prd;
@@ -183,17 +187,16 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
 
     @Override
     @Deprecated
-    public @Nonnull String getProviderTermForServer(@Nonnull Locale locale) {
+    public @Nonnull String getProviderTermForServer( @Nonnull Locale locale ) {
         try {
             return getCapabilities().getProviderTermForVirtualMachine(locale);
-        }
-        catch( Exception ignore ) {
+        } catch( Exception ignore ) {
             return "virtual machine";
         }
     }
 
     @Override
-    public @Nullable VirtualMachine getVirtualMachine(@Nonnull String vmId) throws InternalException, CloudException {
+    public @Nullable VirtualMachine getVirtualMachine( @Nonnull String vmId ) throws InternalException, CloudException {
         for( VirtualMachine vm : listVirtualMachines(null) ) {
             if( vm.getProviderVirtualMachineId().equals(vmId) ) {
                 return vm;
@@ -203,18 +206,18 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
-    public @Nonnull VmStatistics getVMStatistics(@Nonnull String vmId, @Nonnegative long from, @Nonnegative long to) throws InternalException, CloudException {
+    public @Nonnull VmStatistics getVMStatistics( @Nonnull String vmId, @Nonnegative long from, @Nonnegative long to ) throws InternalException, CloudException {
         return new VmStatistics();
     }
 
     @Override
-    public @Nonnull Iterable<VmStatistics> getVMStatisticsForPeriod(@Nonnull String vmId, @Nonnegative long from, @Nonnegative long to) throws InternalException, CloudException {
+    public @Nonnull Iterable<VmStatistics> getVMStatisticsForPeriod( @Nonnull String vmId, @Nonnegative long from, @Nonnegative long to ) throws InternalException, CloudException {
         return Collections.emptyList();
     }
 
     @Override
     @Deprecated
-    public @Nonnull Requirement identifyImageRequirement(@Nonnull ImageClass cls) throws CloudException, InternalException {
+    public @Nonnull Requirement identifyImageRequirement( @Nonnull ImageClass cls ) throws CloudException, InternalException {
         return getCapabilities().identifyImageRequirement(cls);
     }
 
@@ -226,7 +229,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
 
     @Override
     @Deprecated
-    public @Nonnull Requirement identifyPasswordRequirement(Platform platform) throws CloudException, InternalException {
+    public @Nonnull Requirement identifyPasswordRequirement( Platform platform ) throws CloudException, InternalException {
         return getCapabilities().identifyPasswordRequirement(platform);
     }
 
@@ -244,7 +247,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
 
     @Override
     @Deprecated
-    public @Nonnull Requirement identifyShellKeyRequirement(Platform platform) throws CloudException, InternalException {
+    public @Nonnull Requirement identifyShellKeyRequirement( Platform platform ) throws CloudException, InternalException {
         return getCapabilities().identifyShellKeyRequirement(platform);
     }
 
@@ -289,10 +292,11 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     /**
      * Launches a virtual machine asynchronously from a cached thread pool. All errors are pulled out from the
      * the {@link java.util.concurrent.Future} result.
+     *
      * @param withLaunchOptions the launch options to use in launching the virtual machine
      * @return the unique ID of the launched virtual machine
      */
-    protected Future<String> launchAsync(final @Nonnull VMLaunchOptions withLaunchOptions) {
+    protected Future<String> launchAsync( final @Nonnull VMLaunchOptions withLaunchOptions ) {
         return launchPool.submit(new Callable<String>() {
             @Override
             public String call() throws Exception {
@@ -303,7 +307,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
 
     // the default implementation does parallel launches and throws an exception only if it is unable to launch any virtual machines
     @Override
-    public @Nonnull Iterable<String> launchMany(final @Nonnull VMLaunchOptions withLaunchOptions, final @Nonnegative int count) throws CloudException, InternalException {
+    public @Nonnull Iterable<String> launchMany( final @Nonnull VMLaunchOptions withLaunchOptions, final @Nonnegative int count ) throws CloudException, InternalException {
         if( count < 1 ) {
             throw new InternalException("Invalid attempt to launch less than 1 virtual machine (requested " + count + ").");
         }
@@ -328,7 +332,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
         if( baseHost == null ) {
             baseHost = withLaunchOptions.getHostName();
         }
-        for( int i=1; i<=count; i++ ) {
+        for( int i = 1; i <= count; i++ ) {
             String hostName = c.incrementName(baseHost, i);
             String friendlyName = withLaunchOptions.getFriendlyName() + "-" + i;
             VMLaunchOptions options = withLaunchOptions.copy(hostName == null ? withLaunchOptions.getHostName() + "-" + i : hostName, friendlyName);
@@ -338,7 +342,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
 
         PopulatorThread<String> populator = new PopulatorThread<String>(new JiteratorPopulator<String>() {
             @Override
-            public void populate(@Nonnull Jiterator<String> iterator) throws Exception {
+            public void populate( @Nonnull Jiterator<String> iterator ) throws Exception {
                 ArrayList<Future<String>> original = results;
                 ArrayList<Future<String>> copy = new ArrayList<Future<String>>();
                 Exception exception = null;
@@ -350,8 +354,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
                             try {
                                 iterator.push(result.get());
                                 loaded = true;
-                            }
-                            catch( Exception e ) {
+                            } catch( Exception e ) {
                                 exception = e;
                             }
                         }
@@ -375,7 +378,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
 
     @Override
     @Deprecated
-    public @Nonnull VirtualMachine launch(@Nonnull String fromMachineImageId, @Nonnull VirtualMachineProduct product, @Nonnull String dataCenterId, @Nonnull String name, @Nonnull String description, @Nullable String withKeypairId, @Nullable String inVlanId, boolean withAnalytics, boolean asSandbox, @Nullable String... firewallIds) throws InternalException, CloudException {
+    public @Nonnull VirtualMachine launch( @Nonnull String fromMachineImageId, @Nonnull VirtualMachineProduct product, @Nonnull String dataCenterId, @Nonnull String name, @Nonnull String description, @Nullable String withKeypairId, @Nullable String inVlanId, boolean withAnalytics, boolean asSandbox, @Nullable String... firewallIds ) throws InternalException, CloudException {
         VMLaunchOptions options = VMLaunchOptions.getInstance(product.getProviderProductId(), fromMachineImageId, name, name, description);
 
         options.inDataCenter(dataCenterId);
@@ -396,7 +399,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
 
     @Override
     @Deprecated
-    public @Nonnull VirtualMachine launch(@Nonnull String fromMachineImageId, @Nonnull VirtualMachineProduct product, @Nonnull String dataCenterId, @Nonnull String name, @Nonnull String description, @Nullable String withKeypairId, @Nullable String inVlanId, boolean withAnalytics, boolean asSandbox, @Nullable String[] firewallIds, @Nullable Tag... tags) throws InternalException, CloudException {
+    public @Nonnull VirtualMachine launch( @Nonnull String fromMachineImageId, @Nonnull VirtualMachineProduct product, @Nonnull String dataCenterId, @Nonnull String name, @Nonnull String description, @Nullable String withKeypairId, @Nullable String inVlanId, boolean withAnalytics, boolean asSandbox, @Nullable String[] firewallIds, @Nullable Tag... tags ) throws InternalException, CloudException {
         VMLaunchOptions options = VMLaunchOptions.getInstance(product.getProviderProductId(), fromMachineImageId, name, name, description);
 
         options.inDataCenter(dataCenterId);
@@ -413,7 +416,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
             options.behindFirewalls(firewallIds);
         }
         if( tags != null ) {
-            HashMap<String,Object> metaData = new HashMap<String, Object>();
+            HashMap<String, Object> metaData = new HashMap<String, Object>();
 
             for( Tag tag : tags ) {
                 metaData.put(tag.getKey(), tag.getValue());
@@ -424,27 +427,27 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
-    public @Nonnull Iterable<String> listFirewalls(@Nonnull String vmId) throws InternalException, CloudException {
+    public @Nonnull Iterable<String> listFirewalls( @Nonnull String vmId ) throws InternalException, CloudException {
         return Collections.emptyList();
     }
 
     /**
      * <p>
-     *     Identifies a resource file that potentially contains VM product definitions for one or more clouds and/or
-     *     a default set of products. This helps this abstract base class implement some default configuration file
-     *     based behaviors for clouds that do not provide mechanisms for looking up VM products such as AWS or clouds
-     *     that don't have a concept of products like vCloud. If your cloud provides product lookups (like OpenStack),
-     *     then you can happily ignore this method and override {@link #listProducts(Architecture)} to do the proper
-     *     lookup.
+     * Identifies a resource file that potentially contains VM product definitions for one or more clouds and/or
+     * a default set of products. This helps this abstract base class implement some default configuration file
+     * based behaviors for clouds that do not provide mechanisms for looking up VM products such as AWS or clouds
+     * that don't have a concept of products like vCloud. If your cloud provides product lookups (like OpenStack),
+     * then you can happily ignore this method and override {@link #listProducts(Architecture)} to do the proper
+     * lookup.
      * </p>
      * <p>
-     *     The best way to take advantage of this feature is simply to create a resource file, place it in the application
-     *     CLASSPATH, and then set the {@link ProviderContext#getCustomProperties()} so it has a &quot;vmproducts&quot;
-     *     property that points to the resource file to use for that specific cloud connection.
+     * The best way to take advantage of this feature is simply to create a resource file, place it in the application
+     * CLASSPATH, and then set the {@link ProviderContext#getCustomProperties()} so it has a &quot;vmproducts&quot;
+     * property that points to the resource file to use for that specific cloud connection.
      * </p>
      * <p>
-     *     The format of the resource file is as follows:
-     *
+     * The format of the resource file is as follows:
+     * <p/>
      * </p>
      * <pre>
      * [
@@ -465,40 +468,41 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
      * ]
      * </pre>
      * <p>
-     *     The core element is a list of cloud/product definitions. Each cloud has a &quot;provider&quot;, &quot;cloud&quot;,
-     *     and &quot;products&quot; attribute. The provider is either &quot;default&quot; or a match to the value for
-     *     {@link ProviderContext#getProviderName()}. The cloud is similarly either &quot;default&quot; or a match to the
-     *     value for {@link ProviderContext#getCloudName()}. The implementation of {@link #listProducts(Architecture)}
-     *     in this base class will attempt to match the cloud name and provider name or look for a default.
+     * The core element is a list of cloud/product definitions. Each cloud has a &quot;provider&quot;, &quot;cloud&quot;,
+     * and &quot;products&quot; attribute. The provider is either &quot;default&quot; or a match to the value for
+     * {@link ProviderContext#getProviderName()}. The cloud is similarly either &quot;default&quot; or a match to the
+     * value for {@link ProviderContext#getCloudName()}. The implementation of {@link #listProducts(Architecture)}
+     * in this base class will attempt to match the cloud name and provider name or look for a default.
      * </p>
      * <p>
-     *     Here's what happens in practice:
+     * Here's what happens in practice:
      * </p>
      * <p>
-     *     If your implementation has over-ridden {@link #listProducts(Architecture)}, then that logic prevails and
-     *     all of this is ignored (for that cloud implementation).
+     * If your implementation has over-ridden {@link #listProducts(Architecture)}, then that logic prevails and
+     * all of this is ignored (for that cloud implementation).
      * </p>
      * <p>
-     *     If your implementation is under the package something.whatever.<b>cloudname</b> (the important part is the last part
-     *     of the package name) and you have not specified ANY kind of properties, the default {@link #listProducts(Architecture)}
-     *     will look for a vmproducts.json file as the resource org.dasein.cloud.<b>cloudname</b>.vmproducts.json. If it exists,
-     *     it will be used.
+     * If your implementation is under the package something.whatever.<b>cloudname</b> (the important part is the last part
+     * of the package name) and you have not specified ANY kind of properties, the default {@link #listProducts(Architecture)}
+     * will look for a vmproducts.json file as the resource org.dasein.cloud.<b>cloudname</b>.vmproducts.json. If it exists,
+     * it will be used.
      * </p>
      * <p>
-     *     If you specify a custom property with your connection called &quot;vmproducts&quot;, then the
-     *     default {@link #listProducts(Architecture)} method will look for a resource matching the value specified
-     *     in that property.
+     * If you specify a custom property with your connection called &quot;vmproducts&quot;, then the
+     * default {@link #listProducts(Architecture)} method will look for a resource matching the value specified
+     * in that property.
      * </p>
      * <p>
-     *     If no custom property is set, but there is a system property (@{@link System#getProperties()}) called
-     *     &quot;dasein.vmproducts.<b>cloudname</b>&quot; and look for a resource matching the value specified in that
-     *     property.
+     * If no custom property is set, but there is a system property (@{@link System#getProperties()}) called
+     * &quot;dasein.vmproducts.<b>cloudname</b>&quot; and look for a resource matching the value specified in that
+     * property.
      * </p>
      * <p>
-     *     If you do absolutely nothing (or if the property file specified above doesn't actually exist),
-     *     Dasein Cloud will load the default vmproducts.json packages with dasein-cloud-core under
-     *     the resource org.dasein.cloud.std.vmproducts.json.
+     * If you do absolutely nothing (or if the property file specified above doesn't actually exist),
+     * Dasein Cloud will load the default vmproducts.json packages with dasein-cloud-core under
+     * the resource org.dasein.cloud.std.vmproducts.json.
      * </p>
+     *
      * @return a resource file location with a vmproducts JSON definition
      * @throws CloudException no context has been set for loading the products
      */
@@ -517,7 +521,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
                 impl = getProvider().getClass().getPackage().getName();
             }
             else {
-                impl = parts[parts.length-1];
+                impl = parts[parts.length - 1];
             }
             value = System.getProperty("dasein.vmproducts." + impl);
             if( value == null ) {
@@ -528,21 +532,57 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
-    public @Nonnull Iterable<VirtualMachineProduct> listProducts(@Nonnull Architecture architecture) throws InternalException, CloudException {
-        return listProducts(architecture, null);
+    final public Iterable<VirtualMachineProduct> listProducts( VirtualMachineProductFilterOptions options ) throws InternalException, CloudException {
+        List<VirtualMachineProduct> products = new ArrayList<VirtualMachineProduct>();
+        for( Architecture arch : getCapabilities().listSupportedArchitectures() ) {
+            mergeProductLists(products, this.listProducts(options, arch));
+        }
+        return products;
+    }
+
+    /**
+     * Merge product iterable into the list, using providerProductId as a unique key
+     * @param to
+     *          the target list
+     * @param from
+     *          the source iterable
+     */
+    private void mergeProductLists(List<VirtualMachineProduct> to, Iterable<VirtualMachineProduct> from) {
+        List<VirtualMachineProduct> copy = new ArrayList<VirtualMachineProduct>(to);
+        for( VirtualMachineProduct productFrom : from ) {
+            boolean found = false;
+            for( VirtualMachineProduct productTo : copy ) {
+                if( productTo.getProviderProductId().equalsIgnoreCase(productFrom.getProviderProductId()) ) {
+                    found = true;
+                    break;
+                }
+            }
+            if( !found ) {
+                to.add(productFrom);
+            }
+        }
     }
 
     @Override
-    public @Nonnull Iterable<VirtualMachineProduct> listProducts(@Nonnull Architecture architecture, String preferedDataCenterId) throws InternalException, CloudException {
+    final public @Nonnull Iterable<VirtualMachineProduct> listProducts( @Nonnull Architecture architecture ) throws InternalException, CloudException {
+        return this.listProducts(null, architecture);
+    }
+
+    @Override
+    public @Nonnull Iterable<VirtualMachineProduct> listProducts( @Nullable VirtualMachineProductFilterOptions options, @Nullable Architecture architecture ) throws InternalException, CloudException {
         APITrace.begin(getProvider(), "VM.listProducts");
         try {
-            Cache<VirtualMachineProduct> cache = Cache.getInstance(getProvider(), "products" + architecture.name(), VirtualMachineProduct.class, CacheLevel.REGION_ACCOUNT, new TimePeriod<Day>(1, TimePeriod.DAY));
+            String cacheName = "productsALL";
+            if( architecture != null ) {
+                cacheName = "products" + architecture.name();
+            }
+            Cache<VirtualMachineProduct> cache = Cache.getInstance(getProvider(), cacheName, VirtualMachineProduct.class, CacheLevel.REGION_ACCOUNT, new TimePeriod<Day>(1, TimePeriod.DAY));
             Iterable<VirtualMachineProduct> products = cache.get(getContext());
 
             if( products != null ) {
                 return products;
             }
-            ArrayList<VirtualMachineProduct> list = new ArrayList<VirtualMachineProduct>();
+            List<VirtualMachineProduct> list = new ArrayList<VirtualMachineProduct>();
 
             try {
                 String resource = getVMProductsResource();
@@ -558,14 +598,14 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
                 StringBuilder json = new StringBuilder();
                 String line;
 
-                while( (line = reader.readLine()) != null ) {
+                while( ( line = reader.readLine() ) != null ) {
                     json.append(line);
                     json.append("\n");
                 }
                 JSONArray arr = new JSONArray(json.toString());
                 JSONObject toCache = null;
 
-                for( int i=0; i<arr.length(); i++ ) {
+                for( int i = 0; i < arr.length(); i++ ) {
                     JSONObject productSet = arr.getJSONObject(i);
                     String cloud, provider;
 
@@ -584,7 +624,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
                     if( !productSet.has("products") ) {
                         continue;
                     }
-                    if( toCache == null || (provider.equals("default") && cloud.equals("default")) ) {
+                    if( toCache == null || ( provider.equals("default") && cloud.equals("default") ) ) {
                         toCache = productSet;
                     }
                     if( provider.equalsIgnoreCase(getProvider().getProviderName()) && cloud.equalsIgnoreCase(getProvider().getCloudName()) ) {
@@ -597,14 +637,15 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
                 }
                 JSONArray plist = toCache.getJSONArray("products");
 
-                for( int i=0; i<plist.length(); i++ ) {
+                for( int i = 0; i < plist.length(); i++ ) {
                     JSONObject product = plist.getJSONObject(i);
                     boolean supported = false;
 
-                    if( product.has("architectures") ) {
+                    // If architecture is specified, check if product matches
+                    if( architecture != null && product.has("architectures") ) {
                         JSONArray architectures = product.getJSONArray("architectures");
 
-                        for( int j=0; j<architectures.length(); j++ ) {
+                        for( int j = 0; j < architectures.length(); j++ ) {
                             String a = architectures.getString(j);
 
                             if( architecture.name().equals(a) ) {
@@ -612,14 +653,19 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
                                 break;
                             }
                         }
+                        if( !supported ) {
+                            continue;
+                        }
                     }
-                    if( !supported ) {
-                        continue;
+                    else {
+                        // No architecture specified, flip the flag - all architectures allowed
+                        supported = true;
                     }
+
                     if( product.has("excludesRegions") ) {
                         JSONArray regions = product.getJSONArray("excludesRegions");
 
-                        for( int j=0; j<regions.length(); j++ ) {
+                        for( int j = 0; j < regions.length(); j++ ) {
                             String r = regions.getString(j);
 
                             if( r.equals(getContext().getRegionId()) ) {
@@ -634,26 +680,32 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
                     VirtualMachineProduct prd = toProduct(product);
 
                     if( prd != null ) {
-                        list.add(prd);
+                        if( options != null) {
+                            // Filter supplied, add matches only.
+                            if( options.matches(prd) ) {
+                                list.add(prd);
+                            }
+                        }
+                        else {
+                            // No filter supplied, add all survived.
+                            list.add(prd);
+                        }
                     }
                 }
                 cache.put(getContext(), list);
-            }
-            catch( IOException e ) {
+            } catch( IOException e ) {
                 throw new InternalException(e);
-            }
-            catch( JSONException e ) {
+            } catch( JSONException e ) {
                 throw new InternalException(e);
             }
             return list;
-        }
-        finally {
+        } finally {
             APITrace.end();
         }
     }
 
     @Override
-    public Iterable<SpotPriceHistory> listSpotPriceHistories(SPHistoryFilterOptions options) throws CloudException, InternalException{
+    public Iterable<SpotPriceHistory> listSpotPriceHistories( SpotPriceHistoryFilterOptions options ) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Spot Instances are not supported for " + getProvider().getCloudName());
     }
 
@@ -692,7 +744,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
-    public @Nonnull Iterable<VirtualMachine> listVirtualMachines(@Nullable VMFilterOptions options) throws InternalException, CloudException {
+    public @Nonnull Iterable<VirtualMachine> listVirtualMachines( @Nullable VMFilterOptions options ) throws InternalException, CloudException {
         if( options == null ) {
             return listVirtualMachines();
         }
@@ -707,23 +759,25 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
-    public void pause(@Nonnull String vmId) throws InternalException, CloudException {
+    public void pause( @Nonnull String vmId ) throws InternalException, CloudException {
         throw new OperationNotSupportedException("Pause/unpause is not currently implemented for " + getProvider().getCloudName());
     }
 
     @Override
-    public void reboot(@Nonnull String vmId) throws CloudException, InternalException {
+    public void reboot( @Nonnull String vmId ) throws CloudException, InternalException {
         VirtualMachine vm = getVirtualMachine(vmId);
 
         if( vm == null ) {
             throw new CloudException("No such virtual machine: " + vmId);
         }
         stop(vmId);
-        long timeout = System.currentTimeMillis() + (CalendarWrapper.MINUTE * 5L);
+        long timeout = System.currentTimeMillis() + ( CalendarWrapper.MINUTE * 5L );
 
         while( timeout > System.currentTimeMillis() ) {
-            try { vm = getVirtualMachine(vmId); }
-            catch( Throwable ignore ) { }
+            try {
+                vm = getVirtualMachine(vmId);
+            } catch( Throwable ignore ) {
+            }
             if( vm == null ) {
                 return;
             }
@@ -735,32 +789,33 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
-    public void resume(@Nonnull String vmId) throws CloudException, InternalException {
+    public void resume( @Nonnull String vmId ) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Resume/suspend is not currently implemented for " + getProvider().getCloudName());
     }
 
     @Override
-    public void start(@Nonnull String vmId) throws InternalException, CloudException {
+    public void start( @Nonnull String vmId ) throws InternalException, CloudException {
         throw new OperationNotSupportedException("Start/stop is not currently implemented for " + getProvider().getCloudName());
     }
 
     @Override
-    public final void stop(@Nonnull String vmId) throws InternalException, CloudException {
+    public final void stop( @Nonnull String vmId ) throws InternalException, CloudException {
         stop(vmId, false);
 
-        long timeout = System.currentTimeMillis() + (CalendarWrapper.MINUTE * 5L);
+        long timeout = System.currentTimeMillis() + ( CalendarWrapper.MINUTE * 5L );
 
         while( timeout > System.currentTimeMillis() ) {
-            try { Thread.sleep(10000L); }
-            catch( InterruptedException ignore ) { }
+            try {
+                Thread.sleep(10000L);
+            } catch( InterruptedException ignore ) {
+            }
             try {
                 VirtualMachine vm = getVirtualMachine(vmId);
 
                 if( vm == null || VmState.TERMINATED.equals(vm.getCurrentState()) || VmState.STOPPED.equals(vm.getCurrentState()) ) {
                     return;
                 }
-            }
-            catch( Throwable ignore ) {
+            } catch( Throwable ignore ) {
                 // ignore
             }
         }
@@ -769,76 +824,73 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
-    public void stop(@Nonnull String vmId, boolean force) throws InternalException, CloudException {
+    public void stop( @Nonnull String vmId, boolean force ) throws InternalException, CloudException {
         throw new OperationNotSupportedException("Start/stop is not currently implemented for " + getProvider().getCloudName());
     }
 
     @Override
     @Deprecated
     public final boolean supportsAnalytics() throws CloudException, InternalException {
-        return (getCapabilities().isBasicAnalyticsSupported() || getCapabilities().isExtendedAnalyticsSupported());
+        return ( getCapabilities().isBasicAnalyticsSupported() || getCapabilities().isExtendedAnalyticsSupported() );
     }
 
     @Override
     @Deprecated
-    public boolean supportsPauseUnpause(@Nonnull VirtualMachine vm) {
+    public boolean supportsPauseUnpause( @Nonnull VirtualMachine vm ) {
         try {
             VirtualMachineCapabilities c = getCapabilities();
             VmState s = vm.getCurrentState();
 
-            return (c.canPause(s) || c.canUnpause(s));
-        }
-        catch( Exception ignore ) {
+            return ( c.canPause(s) || c.canUnpause(s) );
+        } catch( Exception ignore ) {
             return false;
         }
     }
 
     @Override
     @Deprecated
-    public boolean supportsStartStop(@Nonnull VirtualMachine vm) {
+    public boolean supportsStartStop( @Nonnull VirtualMachine vm ) {
         try {
             VirtualMachineCapabilities c = getCapabilities();
             VmState s = vm.getCurrentState();
 
-            return (c.canStart(s) || c.canStop(s));
-        }
-        catch( Exception ignore ) {
+            return ( c.canStart(s) || c.canStop(s) );
+        } catch( Exception ignore ) {
             return false;
         }
     }
 
     @Override
     @Deprecated
-    public boolean supportsSuspendResume(@Nonnull VirtualMachine vm) {
+    public boolean supportsSuspendResume( @Nonnull VirtualMachine vm ) {
         try {
             VirtualMachineCapabilities c = getCapabilities();
             VmState s = vm.getCurrentState();
 
-            return (c.canSuspend(s) || c.canResume(s));
-        }
-        catch( Exception ignore ) {
+            return ( c.canSuspend(s) || c.canResume(s) );
+        } catch( Exception ignore ) {
             return false;
         }
     }
 
     @Override
-    public void suspend(@Nonnull String vmId) throws CloudException, InternalException {
+    public void suspend( @Nonnull String vmId ) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Resume/suspend is not currently implemented for " + getProvider().getCloudName());
 
     }
 
     @Override
-    public void terminate(@Nonnull String vmId) throws CloudException, InternalException {
+    public void terminate( @Nonnull String vmId ) throws CloudException, InternalException {
         terminate(vmId, null);
     }
 
     @Override
-    public void unpause(@Nonnull String vmId) throws CloudException, InternalException {
+    public void unpause( @Nonnull String vmId ) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Pause/unpause is not currently implemented for " + getProvider().getCloudName());
     }
 
     @Override
-    public void updateTags(@Nonnull String vmId, @Nonnull Tag... tags) throws CloudException, InternalException {
+    public void updateTags( @Nonnull String vmId, @Nonnull Tag... tags ) throws CloudException, InternalException {
         // NO-OP
     }
 
@@ -867,7 +919,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
-    public void removeTags(@Nonnull String[] vmIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+    public void removeTags( @Nonnull String[] vmIds, @Nonnull Tag... tags ) throws CloudException, InternalException {
         for( String id : vmIds ) {
             removeTags(id, tags);
         }
@@ -896,7 +948,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
         return new String[0];
     }
 
-    private @Nullable VirtualMachineProduct toProduct(@Nonnull JSONObject json) throws InternalException {
+    private @Nullable VirtualMachineProduct toProduct( @Nonnull JSONObject json ) throws InternalException {
         VirtualMachineProduct prd = new VirtualMachineProduct();
 
         try {
@@ -939,16 +991,15 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
             if( json.has("standardHourlyRates") ) {
                 JSONArray rates = json.getJSONArray("standardHourlyRates");
 
-                for( int i=0; i<rates.length(); i++ ) {
+                for( int i = 0; i < rates.length(); i++ ) {
                     JSONObject rate = rates.getJSONObject(i);
 
                     if( rate.has("rate") ) {
-                        prd.setStandardHourlyRate((float)rate.getDouble("rate"));
+                        prd.setStandardHourlyRate(( float ) rate.getDouble("rate"));
                     }
                 }
             }
-        }
-        catch( JSONException e ) {
+        } catch( JSONException e ) {
             throw new InternalException(e);
         }
         return prd;
@@ -960,7 +1011,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
-    public @Nullable Iterable<VirtualMachineStatus> getVMStatus(@Nullable VmStatusFilterOptions filterOptions) throws InternalException, CloudException {
+    public @Nullable Iterable<VirtualMachineStatus> getVMStatus( @Nullable VmStatusFilterOptions filterOptions ) throws InternalException, CloudException {
         throw new OperationNotSupportedException("Virtual Machine Status is not currently implemented for " + getProvider().getCloudName());
     }
 

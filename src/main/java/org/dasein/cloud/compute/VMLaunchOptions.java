@@ -103,8 +103,11 @@ public class VMLaunchOptions {
     private boolean            ipForwardingAllowed;
     private String             roleId;
     private boolean            associatePublicIpAddress;
-    private String             placementGroupId;
+    private String             affinityGroupId;
     private String             virtualMachineGroup;
+    private String             resourcePoolId;
+    private String             storagePoolId;
+    private String             vmFolderId;
     // NOTE: SEE NOTE AT TOP OF ATTRIBUTE LIST WHEN ADDING/REMOVING/CHANGING AN ATTRIBUTE
 
     private VMLaunchOptions() { }
@@ -185,6 +188,7 @@ public class VMLaunchOptions {
         options.ipForwardingAllowed = ipForwardingAllowed;
         options.kernelId = kernelId;
         options.virtualMachineGroup = virtualMachineGroup;
+        options.resourcePoolId = resourcePoolId;
         if( metaData != null ) {
             options.metaData = new HashMap<String, Object>();
             options.metaData.putAll(metaData);
@@ -232,7 +236,9 @@ public class VMLaunchOptions {
             }
             options.volumes = copy.toArray(new VolumeAttachment[copy.size()]);
         }
-        options.placementGroupId = placementGroupId;
+        options.affinityGroupId = affinityGroupId;
+        options.storagePoolId = storagePoolId;
+        options.vmFolderId = vmFolderId;
         return options;
     }
 
@@ -361,6 +367,13 @@ public class VMLaunchOptions {
     }
 
     /**
+     * @return the resource pool id to use in launching the vm
+     */
+    public String getResourcePoolId() {
+        return resourcePoolId;
+    }
+
+    /**
      * Some clouds have quality of service offerings in the form of volume products that allow you to pick
      * different levels of service for a given root volume. The product may also impact disk size.
      * @return the produce ID for the root volume to which the virtual machine will be attached
@@ -426,6 +439,13 @@ public class VMLaunchOptions {
      */
     public @Nonnull VolumeAttachment[] getVolumes() {
         return (volumes == null ? new VolumeAttachment[0] : volumes);
+    }
+
+    /**
+     * @return the vmFolder that this machine should be launched into
+     */
+    public @Nullable String getVmFolderId() {
+        return vmFolderId;
     }
 
     /**
@@ -621,11 +641,23 @@ public class VMLaunchOptions {
      * Identifies the SSH key to use in bootstrapping the virtual machine.
      * @param key the SSH key to be used in bootstrapping the VM
      * @return this
+     * @deprecated since 2014.08
+     *
      */
     public @Nonnull VMLaunchOptions withBoostrapKey(@Nonnull String key) {
+        return withBootstrapKey(key);
+    }
+
+    /**
+     * Identifies the SSH key to use in bootstrapping the virtual machine.
+     * @param key the SSH key to be used in bootstrapping the VM
+     * @return this
+     */
+    public @Nonnull VMLaunchOptions withBootstrapKey(@Nonnull String key) {
         this.bootstrapKey = key;
         return this;
     }
+
 
     /**
      * Identifies the user and password to use in bootstrapping this virtual machine.
@@ -765,6 +797,16 @@ public class VMLaunchOptions {
     }
 
     /**
+     * Indicates that the virtual machine is to be launched with the specified resource pool.
+     * @param resourcePoolId the resource pool ID
+     * @return this
+     */
+    public @Nonnull VMLaunchOptions withResourcePoolId(@Nonnull String resourcePoolId) {
+        this.resourcePoolId = resourcePoolId;
+        return this;
+    }
+
+    /**
      * Indicates that the virtual machine is to be launched with the specified root volume product.
      * @param volumeProductId the product ID of the root volume
      * @return this
@@ -782,6 +824,16 @@ public class VMLaunchOptions {
      */
     public @Nonnull VMLaunchOptions withUserData(@Nonnull String userData) {
         this.userData = userData;
+        return this;
+    }
+
+    /**
+     * Identifies the vm folder that the machine should be launched into
+     * @param vmFolderId the vm folder the machine should be launched into
+     * @return this
+     */
+    public @Nonnull VMLaunchOptions withVMFolderId(@Nonnull String vmFolderId) {
+        this.vmFolderId = vmFolderId;
         return this;
     }
 
@@ -877,21 +929,38 @@ public class VMLaunchOptions {
     }
 
     /**
-     * @see #withPlacementGroupId(String)
+     * @see #withAffinityGroupId(String)
      */
-    public String getPlacementGroupId() {
-        return placementGroupId;
+    public String getAffinityGroupId() {
+        return affinityGroupId;
     }
 
     /**
-     * Specifies the placement group to launch the instance within. Placement groups are a logical grouping of instances
-     * meant for low-latency clusters. Placement groups are not supported by all providers.
-     * @param placementGroupId the placement group id
+     * Specifies the affinity group to launch the instance within. Affinity groups are a logical grouping of instances
+     * meant for low-latency clusters. Affinity groups are not supported by all providers.
+     * @param affinityGroupId the affinity group id
      * @return this
      */
-    public VMLaunchOptions withPlacementGroupId( @Nonnull String placementGroupId ) {
-        this.placementGroupId = placementGroupId;
+    public VMLaunchOptions withAffinityGroupId( @Nonnull String affinityGroupId ) {
+        this.affinityGroupId = affinityGroupId;
         return this;
     }
 
+    /**
+     * @see #withStoragePoolId(String)
+     */
+    public @Nullable String getStoragePoolId() {
+        return storagePoolId;
+    }
+
+    /**
+     * Specifies the stroage pool to launch the instance within. Storage pools are the physical location
+     * of the vm disk files. Storage pools are not supported by all providers.
+     * @param storagePoolId the storage pool id
+     * @return this
+     */
+    public VMLaunchOptions withStoragePoolId( @Nonnull String storagePoolId ) {
+        this.storagePoolId = storagePoolId;
+        return this;
+    }
 }

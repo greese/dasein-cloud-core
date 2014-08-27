@@ -27,7 +27,7 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 
 public interface AutoScalingSupport extends AccessControlledService {
-    static public final ServiceAction ANY                         = new ServiceAction("SCALING:ANY");
+    static public final ServiceAction ANY = new ServiceAction("SCALING:ANY");
 
     static public final ServiceAction CREATE_LAUNCH_CONFIGURATION = new ServiceAction("SCALING:CREATE_LAUNCH_CONFIGURATION");
     static public final ServiceAction CREATE_SCALING_GROUP        = new ServiceAction("SCALING:CREATE_SCALING_GROUP");
@@ -48,75 +48,77 @@ public interface AutoScalingSupport extends AccessControlledService {
 
     /**
      * Creates an auto scaling group with the provided options.
+     *
      * @param options the auto scaling group options
      * @return the provider's auto scaling group id
      * @throws InternalException
      * @throws CloudException
      */
-    public String createAutoScalingGroup(@Nonnull AutoScalingGroupOptions options) throws InternalException, CloudException;
+    public String createAutoScalingGroup( @Nonnull AutoScalingGroupOptions options ) throws InternalException, CloudException;
 
     /**
      * @deprecated use {@link #createAutoScalingGroup(AutoScalingGroupOptions)}
      */
-    public String createAutoScalingGroup(@Nonnull String name, @Nonnull String launchConfigurationId, @Nonnull Integer minServers, @Nonnull Integer maxServers, @Nullable Integer cooldown, @Nullable String[] loadBalancerIds, @Nullable Integer desiredCapacity, @Nullable Integer healthCheckGracePeriod, @Nullable String healthCheckType, @Nullable String vpcZones, @Nullable String ... dataCenterIds) throws InternalException, CloudException;
+    @Deprecated
+    public String createAutoScalingGroup( @Nonnull String name, @Nonnull String launchConfigurationId, @Nonnull Integer minServers, @Nonnull Integer maxServers, @Nullable Integer cooldown, @Nullable String[] loadBalancerIds, @Nullable Integer desiredCapacity, @Nullable Integer healthCheckGracePeriod, @Nullable String healthCheckType, @Nullable String vpcZones, @Nullable String... dataCenterIds ) throws InternalException, CloudException;
 
-    public void updateAutoScalingGroup(String scalingGroupId, @Nullable String launchConfigurationId, @Nullable Integer minServers, @Nullable Integer maxServers, @Nullable Integer cooldown, @Nullable Integer desiredCapacity, @Nullable Integer healthCheckGracePeriod, @Nullable String healthCheckType, @Nullable String vpcZones, @Nullable String ... zoneIds) throws InternalException, CloudException;
-        
-    public String createLaunchConfiguration(String name, String imageId, VirtualMachineProduct size, String keyPairName, String userData, String providerRoleId, Boolean detailedMonitoring, String ... firewalls) throws InternalException, CloudException;
+    public void updateAutoScalingGroup( String scalingGroupId, @Nullable String launchConfigurationId, @Nullable Integer minServers, @Nullable Integer maxServers, @Nullable Integer cooldown, @Nullable Integer desiredCapacity, @Nullable Integer healthCheckGracePeriod, @Nullable String healthCheckType, @Nullable String vpcZones, @Nullable String... zoneIds ) throws InternalException, CloudException;
+
+    public String createLaunchConfiguration( String name, String imageId, VirtualMachineProduct size, String keyPairName, String userData, String providerRoleId, Boolean detailedMonitoring, String... firewalls ) throws InternalException, CloudException;
 
     /**
      * Created an Auto Scaling Launch Configuration based on passed options
      *
      * @param options the auto scaling launch configuration options
-     * @throws CloudException an error occurred within the cloud provider
+     * @throws CloudException    an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public String createLaunchConfiguration(@Nonnull LaunchConfigurationCreateOptions options) throws InternalException, CloudException;
-        
-    public void deleteAutoScalingGroup(String providerAutoScalingGroupId) throws CloudException, InternalException;
+    public String createLaunchConfiguration( @Nonnull LaunchConfigurationCreateOptions options ) throws InternalException, CloudException;
+
+    public void deleteAutoScalingGroup( String providerAutoScalingGroupId ) throws CloudException, InternalException;
 
     /**
      * Deletes an Auto Scaling group based on passed options
      *
      * @param options the auto scaling group delete options
-     * @throws CloudException an error occurred within the cloud provider
+     * @throws CloudException    an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public void deleteAutoScalingGroup(@Nonnull AutoScalingGroupDeleteOptions options) throws CloudException, InternalException;
-    
-    public void deleteLaunchConfiguration(String providerLaunchConfigurationId) throws CloudException, InternalException;
-    
-    public LaunchConfiguration getLaunchConfiguration(String providerLaunchConfigurationId) throws CloudException, InternalException;
+    public void deleteAutoScalingGroup( @Nonnull AutoScalingGroupDeleteOptions options ) throws CloudException, InternalException;
 
-    public ScalingGroup getScalingGroup(String providerScalingGroupId) throws CloudException, InternalException;
+    public void deleteLaunchConfiguration( String providerLaunchConfigurationId ) throws CloudException, InternalException;
+
+    public LaunchConfiguration getLaunchConfiguration( String providerLaunchConfigurationId ) throws CloudException, InternalException;
+
+    public ScalingGroup getScalingGroup( String providerScalingGroupId ) throws CloudException, InternalException;
 
     public boolean isSubscribed() throws CloudException, InternalException;
 
-    public void suspendAutoScaling(String providerScalingGroupId, String[] processesToSuspend) throws CloudException, InternalException;
+    public void suspendAutoScaling( String providerScalingGroupId, String[] processesToSuspend ) throws CloudException, InternalException;
 
-    public void resumeAutoScaling(String providerScalingGroupId, String[] processesToResume) throws CloudException, InternalException;
+    public void resumeAutoScaling( String providerScalingGroupId, String[] processesToResume ) throws CloudException, InternalException;
 
-    public String updateScalingPolicy(String policyName, String adjustmentType, String autoScalingGroupName, Integer cooldown, Integer minAdjustmentStep, Integer scalingAdjustment) throws CloudException, InternalException;
+    public String updateScalingPolicy( String policyName, String adjustmentType, String autoScalingGroupName, Integer cooldown, Integer minAdjustmentStep, Integer scalingAdjustment ) throws CloudException, InternalException;
 
-    public void deleteScalingPolicy(String policyName, String autoScalingGroupName) throws CloudException, InternalException;
+    public void deleteScalingPolicy( String policyName, String autoScalingGroupName ) throws CloudException, InternalException;
 
-    public Collection<ScalingPolicy> listScalingPolicies(@Nullable String autoScalingGroupName) throws CloudException, InternalException;
+    public Collection<ScalingPolicy> listScalingPolicies( @Nullable String autoScalingGroupName ) throws CloudException, InternalException;
 
-    public ScalingPolicy getScalingPolicy(@Nonnull String policyName) throws CloudException, InternalException;
+    public ScalingPolicy getScalingPolicy( @Nonnull String policyName ) throws CloudException, InternalException;
 
     public Iterable<ResourceStatus> listScalingGroupStatus() throws CloudException, InternalException;
 
-    public Collection<ScalingGroup> listScalingGroups(AutoScalingGroupFilterOptions options) throws CloudException, InternalException;
+    public Collection<ScalingGroup> listScalingGroups( AutoScalingGroupFilterOptions options ) throws CloudException, InternalException;
 
-	public Collection<ScalingGroup> listScalingGroups() throws CloudException, InternalException;
+    public Collection<ScalingGroup> listScalingGroups() throws CloudException, InternalException;
 
     public Iterable<ResourceStatus> listLaunchConfigurationStatus() throws CloudException, InternalException;
 
     public Collection<LaunchConfiguration> listLaunchConfigurations() throws CloudException, InternalException;
 
-    public void setDesiredCapacity(String scalingGroupId, int capacity) throws CloudException, InternalException;
-        
-    public String setTrigger(String name, String scalingGroupId, String statistic, String unitOfMeasure, String metric, int periodInSeconds, double lowerThreshold, double upperThreshold, int lowerIncrement, boolean lowerIncrementAbsolute, int upperIncrement, boolean upperIncrementAbsolute, int breachDuration) throws InternalException, CloudException;
+    public void setDesiredCapacity( String scalingGroupId, int capacity ) throws CloudException, InternalException;
+
+    public String setTrigger( String name, String scalingGroupId, String statistic, String unitOfMeasure, String metric, int periodInSeconds, double lowerThreshold, double upperThreshold, int lowerIncrement, boolean lowerIncrementAbsolute, int upperIncrement, boolean upperIncrementAbsolute, int breachDuration ) throws InternalException, CloudException;
 
     /**
      * Set notification configurations for scaling group.
@@ -143,11 +145,11 @@ public interface AutoScalingSupport extends AccessControlledService {
      * exists unless it appears in the tags you submit.
      *
      * @param providerScalingGroupIds the auto scaling groups to update
-     * @param tags  the meta-data tags to set
+     * @param tags                    the meta-data tags to set
      * @throws CloudException    an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public void updateTags(@Nonnull String[] providerScalingGroupIds, @Nonnull AutoScalingTag... tags) throws CloudException, InternalException;
+    public void updateTags( @Nonnull String[] providerScalingGroupIds, @Nonnull AutoScalingTag... tags ) throws CloudException, InternalException;
 
     /**
      * Removes meta-data from multiple auto scaling groups. If tag values are set, their removal is dependent on underlying cloud
@@ -155,11 +157,11 @@ public interface AutoScalingSupport extends AccessControlledService {
      * value.
      *
      * @param providerScalingGroupIds the auto scaling groups to update
-     * @param tags  the meta-data tags to remove
+     * @param tags                    the meta-data tags to remove
      * @throws CloudException    an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public void removeTags(@Nonnull String[] providerScalingGroupIds, @Nonnull AutoScalingTag... tags) throws CloudException, InternalException;
+    public void removeTags( @Nonnull String[] providerScalingGroupIds, @Nonnull AutoScalingTag... tags ) throws CloudException, InternalException;
 
     /**
      * Set meta-data for auto scaling group. Remove any tags that were not provided by the incoming tags, and add or

@@ -24,6 +24,7 @@ import org.dasein.cloud.Capabilities;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.Requirement;
+import org.dasein.cloud.util.NamingConstraints;
 import org.dasein.util.uom.storage.Gigabyte;
 import org.dasein.util.uom.storage.Storage;
 
@@ -66,6 +67,38 @@ public interface VolumeCapabilities extends Capabilities{
     public int getMaximumVolumeCount() throws InternalException, CloudException;
 
     /**
+     * Indicates the maximum IOPS value allowed in the Volume products for the provider.
+     * @return the maximum IOPS value
+     * @throws org.dasein.cloud.InternalException an error occurred within the Dasein Cloud implementation determining the limit
+     * @throws org.dasein.cloud.CloudException an error occurred retrieving the limit from the cloud
+     */
+    public int getMaximumVolumeProductIOPS() throws InternalException, CloudException;
+
+    /**
+     * Indicates the minimum IOPS value allowed in the Volume products for the provider.
+     * @return the minimum IOPS value
+     * @throws org.dasein.cloud.InternalException an error occurred within the Dasein Cloud implementation determining the limit
+     * @throws org.dasein.cloud.CloudException an error occurred retrieving the limit from the cloud
+     */
+    public int getMinimumVolumeProductIOPS() throws InternalException, CloudException;
+
+    /**
+     * Indicates the maximum volume size for IOPS Volumes.
+     * @return the maximum size of an IOPS volume
+     * @throws org.dasein.cloud.InternalException an error occurred within the Dasein Cloud implementation determining the limit
+     * @throws org.dasein.cloud.CloudException an error occurred retrieving the limit from the cloud
+     */
+    public int getMaximumVolumeSizeIOPS() throws InternalException, CloudException;
+
+    /**
+     * Indicates the minimum volume size for IOPS Volumes.
+     * @return the minimum size of an IOPS volume
+     * @throws org.dasein.cloud.InternalException an error occurred within the Dasein Cloud implementation determining the limit
+     * @throws org.dasein.cloud.CloudException an error occurred retrieving the limit from the cloud
+     */
+    public int getMinimumVolumeSizeIOPS() throws InternalException, CloudException;
+
+    /**
      * Indicates the largest provisionable volume.
      * @return the largest provisionable volume or null if a limit is not known
      * @throws InternalException an error occurred within the Dasein Cloud implementation determining the limit
@@ -80,6 +113,14 @@ public interface VolumeCapabilities extends Capabilities{
      * @throws CloudException an error occurred retrieving the limit from the cloud
      */
     public @Nonnull Storage<Gigabyte> getMinimumVolumeSize() throws InternalException, CloudException;
+
+    /**
+     * Identifies the naming conventions that constrain how volumes may be named (friendly name) in this cloud.
+     * @return naming conventions that constrain volume naming
+     * @throws CloudException an error occurred querying the cloud for naming constraints
+     * @throws InternalException an error occurred assembling the naming constraints object
+     */
+    public @Nonnull NamingConstraints getVolumeNamingConstraints() throws CloudException, InternalException;
 
     /**
      * Specifies the provider term for a volume.

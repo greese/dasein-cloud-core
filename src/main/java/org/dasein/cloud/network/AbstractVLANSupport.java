@@ -39,10 +39,10 @@ import java.util.Collections;
  * @version 2013.04
  * @since 2013.04
  */
-public abstract class AbstractVLANSupport implements VLANSupport {
-    private CloudProvider provider;
+public abstract class AbstractVLANSupport<T extends CloudProvider> implements VLANSupport {
+    private T provider;
 
-    public AbstractVLANSupport(@Nonnull CloudProvider provider) {
+    public AbstractVLANSupport(@Nonnull T provider) {
         this.provider = provider;
     }
 
@@ -510,6 +510,11 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     }
 
     @Override
+    public void updateRoutingTableTags(@Nonnull String routingTableId, @Nonnull Tag... tags) throws CloudException, InternalException{
+        throw new OperationNotSupportedException("Routing table tags are not supported in " + provider.getCloudName());
+    }
+
+    @Override
     public void updateSubnetTags(@Nonnull String subnetId, @Nonnull Tag... tags) throws CloudException, InternalException {
         // NO-OP
     }
@@ -576,6 +581,11 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     }
 
     @Override
+    public void removeInternetGatewayTags(@Nonnull String internetGatewayId, @Nonnull Tag... tags) throws CloudException, InternalException{
+        throw new OperationNotSupportedException("Internet Gateway tags are not supported in " + provider.getCloudName());
+    }
+
+    @Override
     public void removeInternetGatewayTags(@Nonnull String[] internetGatewayIds, @Nonnull Tag... tags) throws CloudException, InternalException {
         for (String internetGatewayId : internetGatewayIds) {
             removeInternetGatewayTags(internetGatewayId, tags);
@@ -637,4 +647,27 @@ public abstract class AbstractVLANSupport implements VLANSupport {
         setInternetGatewayTags(new String[]{internetGatewayId}, tags);
     }
 
+    public void removeRoutingTableTags(@Nonnull String routingTableId, @Nonnull Tag... tags) throws CloudException, InternalException{
+        throw new OperationNotSupportedException("Routing table tags are not supported in " + provider.getCloudName());
+    }
+
+    @Override
+    public void removeInternetGatewayById( @Nonnull String id ) throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Internet gateways are not currently implemented for " + getProvider().getCloudName());
+    }
+
+    @Override
+    public @Nonnull Collection<InternetGateway> listInternetGateways( @Nullable String vlanId ) throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Internet gateways are not currently implemented for " + getProvider().getCloudName());
+    }
+
+    @Override
+    public @Nullable InternetGateway getInternetGatewayById( @Nonnull String gatewayId ) throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Internet gateways are not currently implemented for " + getProvider().getCloudName());
+    }
+
+    @Override
+    public @Nullable String getAttachedInternetGatewayId( @Nonnull String vlanId ) throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Internet gateways are not currently implemented for " + getProvider().getCloudName());
+    }
 }

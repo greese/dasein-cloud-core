@@ -204,17 +204,17 @@ public class LoadBalancerCreateOptions {
       return providerSubnetIds.toArray(new String[providerSubnetIds.size()]);
     }
 
-	/**
-	 * @return the security groups to which this load balancer will be added
-	 */
+  /**
+   * @return the security groups to which this load balancer will be added
+   */
     public String[] getFirewallIds() {
       if( firewallIds == null ) {
         return new String[0];
       }
       return firewallIds.toArray(new String[firewallIds.size()]);
-	}
+    }
 
-	/**
+    /**
      * @return the IP address you are assigning to this load balancer if the address is required
      */
     public @Nullable String getProviderIpAddressId() {
