@@ -4,7 +4,7 @@ package org.dasein.cloud.platform.support.model.options;
  * User: Eugene Yaroslavtsev
  * Date: 21.08.2014
  */
-public class TicketGetAttachmetnOptions {
+public class TicketGetAttachmentOptions {
 
     String attachmentId;
 

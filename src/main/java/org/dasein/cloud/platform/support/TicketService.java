@@ -71,7 +71,7 @@ public interface TicketService {
      * @throws InternalException
      * @throws CloudException
      */
-    public TicketAttachmentData getAttachment(@Nonnull TicketGetAttachmetnOptions options) throws InternalException, CloudException;
+    public TicketAttachmentData getAttachment(@Nonnull TicketGetAttachmentOptions options) throws InternalException, CloudException;
 
     /**
      * Gets the list of attachments having the specified options

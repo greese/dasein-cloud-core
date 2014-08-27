@@ -48,7 +48,7 @@ public abstract class AbstractTicketService implements TicketService {
     }
 
     @Override
-    public TicketAttachmentData getAttachment(@Nonnull TicketGetAttachmetnOptions options) throws InternalException, CloudException {
+    public TicketAttachmentData getAttachment(@Nonnull TicketGetAttachmentOptions options) throws InternalException, CloudException {
         throw new OperationNotSupportedException(provider.getCloudName() + " support is not currently implemented for get attachment");
     }
 
