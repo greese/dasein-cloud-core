@@ -224,7 +224,7 @@ public interface LoadBalancerSupport extends AccessControlledService {
 
     /**
      * Creates a standalone LoadBalancerHealthCheck that can be attached to a LoadBalancer either at a later time
-     * or on create of the LB.
+     * or on creation of the LB.
      * @param name the name of the Health Check if required
      * @param description a friendly name for the Health Check
      * @param host an optional hostname that can be set as the target for the health check monitoring
@@ -242,8 +242,9 @@ public interface LoadBalancerSupport extends AccessControlledService {
     public LoadBalancerHealthCheck createLoadBalancerHealthCheck(@Nullable String name, @Nullable String description, @Nullable String host, @Nullable LoadBalancerHealthCheck.HCProtocol protocol, int port, @Nullable String path, int interval, int timeout, int healthyCount, int unhealthyCount) throws CloudException, InternalException;
 
     /**
-     * Creates a standalone LoadBalancerHealthCheck that can be attached to a LoadBalancer either at a later time
-     * or on create of the LB.
+     * Creates a LoadBalancerHealthCheck object. For some clouds the Health Checks can exist as standalone objects but for others
+     * (indicated by LoadBalancerCapabilities.healthCheckRequiresLoadBalancer()) they must only exist connected to a Load Balancer.
+     * In those cases the HealthCheckOptions dialog must have a valid providerLoadBalancerId
      * @param options the options for creating the health check
      * @return the unique ID of the health check
      */
@@ -386,6 +387,13 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @throws InternalException
      */
     public LbAttributesOptions getLoadBalancerAttributes(@Nonnull String id) throws CloudException, InternalException;
+
+    /**
+     * Detach named healthCheck from named loadBalancer without deleting either.
+     * @throws CloudException an error occurred with the cloud provider while performing this action
+     * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
+     */
+    public void detatchHealthCheck(String loadBalancerId, String heathcheckId) throws CloudException, InternalException;
 
     /********************************** DEPRECATED METHODS *************************************/
 
@@ -573,7 +581,7 @@ public interface LoadBalancerSupport extends AccessControlledService {
     @Deprecated
     public HashMap<String, String> getInstanceHealth(@Nonnull String providerLoadBalancerId, @Nullable String providerVirtualMachineId) throws CloudException, InternalException;
 
-     /*
+    /**
      * Indicates whether a health check can be created independently of a load balancer
      * @return false if a health check can exist without having been assigned to a load balancer
      * @throws CloudException

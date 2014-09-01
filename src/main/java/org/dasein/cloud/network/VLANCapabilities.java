@@ -19,12 +19,10 @@
 
 package org.dasein.cloud.network;
 
-import org.dasein.cloud.Capabilities;
-import org.dasein.cloud.CloudException;
-import org.dasein.cloud.InternalException;
-import org.dasein.cloud.Requirement;
+import org.dasein.cloud.*;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Locale;
 
 /**
@@ -136,6 +134,12 @@ public interface VLANCapabilities extends Capabilities{
      * @throws InternalException a local error occurred determining subnet support level
      */
     public @Nonnull Requirement getSubnetSupport() throws CloudException, InternalException;
+
+    /**
+     * Returns the visible scope of the VLAN or null if not applicable for the specific cloud
+     * @return the Visible Scope of the VLAN
+     */
+    public @Nullable VisibleScope getVLANVisibleScope();
 
     /**
      * Indicates whether or not you must specify a data center when provisioning your subnet. If {@link

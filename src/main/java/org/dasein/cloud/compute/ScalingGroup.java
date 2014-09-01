@@ -53,74 +53,74 @@ public class ScalingGroup implements Serializable {
     public ScalingGroup() { }
 
     public String getId() {
-      return id;
+        return id;
     }
 
-    public void setId(String id) {
-      this.id = id;
+    public void setId( String id ) {
+        this.id = id;
     }
 
     public String[] getEnabledMetrics() {
-      return enabledMetrics;
+        return enabledMetrics;
     }
 
-    public void setEnabledMetrics(String[] metrics) {
-      this.enabledMetrics = metrics;
+    public void setEnabledMetrics( String[] metrics ) {
+        this.enabledMetrics = metrics;
     }
 
     public int getHealthCheckGracePeriod() {
-      return healthCheckGracePeriod;
+        return healthCheckGracePeriod;
     }
 
-    public void setHealthCheckGracePeriod(int healthCheckGracePeriod) {
-      this.healthCheckGracePeriod = healthCheckGracePeriod;
+    public void setHealthCheckGracePeriod( int healthCheckGracePeriod ) {
+        this.healthCheckGracePeriod = healthCheckGracePeriod;
     }
 
     public String getHealthCheckType() {
-      return healthCheckType;
+        return healthCheckType;
     }
 
-    public void setHealthCheckType(String healthCheckType) {
-      this.healthCheckType = healthCheckType;
+    public void setHealthCheckType( String healthCheckType ) {
+        this.healthCheckType = healthCheckType;
     }
 
     public String[] getProviderLoadBalancerNames() {
-      return providerLoadBalancerNames;
+        return providerLoadBalancerNames;
     }
 
-    public void setProviderLoadBalancerNames(String[] providerLoadBalancerNames) {
-      this.providerLoadBalancerNames = providerLoadBalancerNames;
+    public void setProviderLoadBalancerNames( String[] providerLoadBalancerNames ) {
+        this.providerLoadBalancerNames = providerLoadBalancerNames;
     }
 
     public String getStatus() {
-      return status;
+        return status;
     }
 
-    public void setStatus(String status) {
-      this.status = status;
+    public void setStatus( String status ) {
+        this.status = status;
     }
 
     public Collection<String[]> getSuspendedProcesses() {
-      return suspendedProcesses;
+        return suspendedProcesses;
     }
 
-    public void setSuspendedProcesses(Collection<String[]> suspendedProcesses) {
-      this.suspendedProcesses = suspendedProcesses;
+    public void setSuspendedProcesses( Collection<String[]> suspendedProcesses ) {
+        this.suspendedProcesses = suspendedProcesses;
     }
 
     public String[] getTerminationPolicies() {
-      return terminationPolicies;
+        return terminationPolicies;
     }
 
-    public void setTerminationPolicies(String[] terminationPolicies) {
-      this.terminationPolicies = terminationPolicies;
+    public void setTerminationPolicies( String[] terminationPolicies ) {
+        this.terminationPolicies = terminationPolicies;
     }
 
     public int getDefaultCooldown() {
         return defaultCooldown;
     }
 
-    public void setDefaultCooldown(int cooldown) {
+    public void setDefaultCooldown( int cooldown ) {
         this.defaultCooldown = cooldown;
     }
 
@@ -128,7 +128,7 @@ public class ScalingGroup implements Serializable {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription( String description ) {
         this.description = description;
     }
 
@@ -136,7 +136,7 @@ public class ScalingGroup implements Serializable {
         return maxServers;
     }
 
-    public void setMaxServers(int maxServers) {
+    public void setMaxServers( int maxServers ) {
         this.maxServers = maxServers;
     }
 
@@ -144,7 +144,7 @@ public class ScalingGroup implements Serializable {
         return minServers;
     }
 
-    public void setMinServers(int minServers) {
+    public void setMinServers( int minServers ) {
         this.minServers = minServers;
     }
 
@@ -152,7 +152,7 @@ public class ScalingGroup implements Serializable {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName( String name ) {
         this.name = name;
     }
 
@@ -160,7 +160,7 @@ public class ScalingGroup implements Serializable {
         return providerDataCenterIds;
     }
 
-    public void setProviderDataCenterIds(String[] providerDataCenterIds) {
+    public void setProviderDataCenterIds( String[] providerDataCenterIds ) {
         this.providerDataCenterIds = providerDataCenterIds;
     }
 
@@ -168,7 +168,7 @@ public class ScalingGroup implements Serializable {
         return providerLaunchConfigurationId;
     }
 
-    public void setProviderLaunchConfigurationId(String providerLaunchConfigurationId) {
+    public void setProviderLaunchConfigurationId( String providerLaunchConfigurationId ) {
         this.providerLaunchConfigurationId = providerLaunchConfigurationId;
     }
 
@@ -176,7 +176,7 @@ public class ScalingGroup implements Serializable {
         return providerOwnerId;
     }
 
-    public void setProviderOwnerId(String providerOwnerId) {
+    public void setProviderOwnerId( String providerOwnerId ) {
         this.providerOwnerId = providerOwnerId;
     }
 
@@ -184,7 +184,7 @@ public class ScalingGroup implements Serializable {
         return providerRegionId;
     }
 
-    public void setProviderRegionId(String providerRegionId) {
+    public void setProviderRegionId( String providerRegionId ) {
         this.providerRegionId = providerRegionId;
     }
 
@@ -192,11 +192,11 @@ public class ScalingGroup implements Serializable {
         return providerScalingGroupId;
     }
 
-    public void setProviderScalingGroupId(String providerScalingGroupId) {
+    public void setProviderScalingGroupId( String providerScalingGroupId ) {
         this.providerScalingGroupId = providerScalingGroupId;
     }
 
-    public void setProviderServerIds(String[] providerServerIds) {
+    public void setProviderServerIds( String[] providerServerIds ) {
         this.providerServerIds = providerServerIds;
     }
 
@@ -204,7 +204,7 @@ public class ScalingGroup implements Serializable {
         return providerServerIds;
     }
 
-    public void setCreationTimestamp(long creationTimestamp) {
+    public void setCreationTimestamp( long creationTimestamp ) {
         this.creationTimestamp = creationTimestamp;
     }
 
@@ -212,7 +212,7 @@ public class ScalingGroup implements Serializable {
         return creationTimestamp;
     }
 
-    public void setTargetCapacity(int targetCapacity) {
+    public void setTargetCapacity( int targetCapacity ) {
         this.targetCapacity = targetCapacity;
     }
 
@@ -221,21 +221,21 @@ public class ScalingGroup implements Serializable {
     }
 
     public AutoScalingTag[] getTags() {
-      return tags;
+        return tags;
     }
 
-	public Map<String, String> getTagsAsMap() {
-		Map<String, String> tagsAsMap = new HashMap<String, String>();
-		if (tags != null) {
-			for (AutoScalingTag tag : tags) {
-				tagsAsMap.put(tag.getKey(), tag.getValue());
-			}
-		}
-		return tagsAsMap;
-	}
+    public Map<String, String> getTagsAsMap() {
+        Map<String, String> tagsAsMap = new HashMap<String, String>();
+        if( tags != null ) {
+            for( AutoScalingTag tag : tags ) {
+                tagsAsMap.put(tag.getKey(), tag.getValue());
+            }
+        }
+        return tagsAsMap;
+    }
 
-    public void setTags(AutoScalingTag[] tags) {
-      this.tags = tags;
+    public void setTags( AutoScalingTag[] tags ) {
+        this.tags = tags;
     }
 
     @Deprecated

@@ -31,4 +31,24 @@ public abstract class AbstractAdminServices implements AdminServices {
     public boolean hasPrepaymentSupport() {
         return (getPrepaymentSupport() != null);
     }
+    
+    @Override
+    public AccountSupport getAccountSupport() {
+        return null;
+    }
+    
+    @Override
+    public boolean hasAccountSupport() {
+        return (getAccountSupport() != null);
+    }
+    
+    @Override
+    public BillingSupport getBillingSupport() {
+        return null;
+    }
+    
+    @Override
+    public boolean hasBillingSupport() {
+        return (getBillingSupport() != null);
+    }
 }
