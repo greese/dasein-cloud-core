@@ -8,7 +8,6 @@ import org.dasein.cloud.platform.support.model.*;
 import org.dasein.cloud.platform.support.model.options.*;
 
 import javax.annotation.Nonnull;
-import java.util.Collection;
 
 /**
  * User: Eugene Yaroslavtsev
@@ -23,7 +22,7 @@ public abstract class AbstractTicketService implements TicketService {
     }
 
     @Override
-    public Collection<Ticket> listTickets(@Nonnull TicketListOptions options) throws InternalException, CloudException {
+    public Iterable<Ticket> listTickets(@Nonnull TicketListOptions options) throws InternalException, CloudException {
         throw new OperationNotSupportedException(provider.getCloudName() +" support is not currently implemented for list tickets");
     }
 
@@ -43,7 +42,7 @@ public abstract class AbstractTicketService implements TicketService {
     }
 
     @Override
-    public Collection<TicketReply> listReplies(@Nonnull TicketListRepliesOptions options) throws InternalException, CloudException {
+    public Iterable<TicketReply> listReplies(@Nonnull TicketListRepliesOptions options) throws InternalException, CloudException {
         throw new OperationNotSupportedException(provider.getCloudName() +" support is not currently implemented for list replies");
     }
 
@@ -53,12 +52,12 @@ public abstract class AbstractTicketService implements TicketService {
     }
 
     @Override
-    public Collection<TicketAttachment> listAttachments(@Nonnull TicketListAttachmentsOptions options) throws InternalException, CloudException {
+    public Iterable<TicketAttachment> listAttachments(@Nonnull TicketListAttachmentsOptions options) throws InternalException, CloudException {
         throw new OperationNotSupportedException(provider.getCloudName() +" support is not currently implemented for list attachments");
     }
 
     @Override
-    public Collection<org.dasein.cloud.platform.support.model.TicketService> listServices(@Nonnull TicketListServicesOptions options) throws InternalException, CloudException {
+    public Iterable<org.dasein.cloud.platform.support.model.TicketService> listServices(@Nonnull TicketListServicesOptions options) throws InternalException, CloudException {
         throw new OperationNotSupportedException(provider.getCloudName() +" support is not currently implemented for list services");
     }
 

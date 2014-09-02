@@ -2,11 +2,13 @@ package org.dasein.cloud.platform.support;
 
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
-import org.dasein.cloud.platform.support.model.*;
+import org.dasein.cloud.platform.support.model.Ticket;
+import org.dasein.cloud.platform.support.model.TicketAttachment;
+import org.dasein.cloud.platform.support.model.TicketAttachmentData;
+import org.dasein.cloud.platform.support.model.TicketReply;
 import org.dasein.cloud.platform.support.model.options.*;
 
 import javax.annotation.Nonnull;
-import java.util.Collection;
 
 /**
  * User: Eugene Yaroslavtsev
@@ -22,7 +24,7 @@ public interface TicketService {
      * @throws InternalException
      * @throws CloudException
      */
-    public Collection<Ticket> listTickets(@Nonnull TicketListOptions options) throws InternalException, CloudException;
+    public Iterable<Ticket> listTickets(@Nonnull TicketListOptions options) throws InternalException, CloudException;
 
     /**
      * Closes the ticket having the specified options
@@ -61,7 +63,7 @@ public interface TicketService {
      * @throws InternalException
      * @throws CloudException
      */
-    public Collection<TicketReply> listReplies(@Nonnull TicketListRepliesOptions options) throws InternalException, CloudException;
+    public Iterable<TicketReply> listReplies(@Nonnull TicketListRepliesOptions options) throws InternalException, CloudException;
 
     /**
      * Gets the attachment having the specified options
@@ -81,7 +83,7 @@ public interface TicketService {
      * @throws InternalException
      * @throws CloudException
      */
-    public Collection<TicketAttachment> listAttachments(@Nonnull TicketListAttachmentsOptions options) throws InternalException, CloudException;
+    public Iterable<TicketAttachment> listAttachments(@Nonnull TicketListAttachmentsOptions options) throws InternalException, CloudException;
 
     /**
      * Gets list of services having the specified options
@@ -91,7 +93,7 @@ public interface TicketService {
      * @throws InternalException
      * @throws CloudException
      */
-    public Collection<org.dasein.cloud.platform.support.model.TicketService> listServices(@Nonnull TicketListServicesOptions options) throws InternalException, CloudException;
+    public Iterable<org.dasein.cloud.platform.support.model.TicketService> listServices(@Nonnull TicketListServicesOptions options) throws InternalException, CloudException;
 
     /**
      * Creates the reply having the specified options
