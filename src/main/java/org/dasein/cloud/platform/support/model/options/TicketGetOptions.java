@@ -8,11 +8,21 @@ public class TicketGetOptions {
 
     String ticketId;
 
+    Boolean includeCommunications = true;
+
     public String getTicketId() {
         return ticketId;
     }
 
     public void setTicketId(String ticketId) {
         this.ticketId = ticketId;
+    }
+
+    public Boolean getIncludeCommunications() {
+        return includeCommunications;
+    }
+
+    public void setIncludeCommunications(Boolean includeCommunications) {
+        this.includeCommunications = includeCommunications;
     }
 }

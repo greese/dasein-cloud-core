@@ -4,23 +4,22 @@ package org.dasein.cloud.platform.support.model;
 import org.dasein.cloud.platform.support.TicketSeverity;
 import org.dasein.cloud.platform.support.TicketStatus;
 
-import java.util.List;
-
 public class Ticket {
 
     private String type;
     private String ticketId;
     private String categoryCode;
-    private List<String> ccEmailAddresses;
+    private Iterable<String> ccEmailAddresses;
     private String displayId;
     private String language;
-    private List<TicketReply> recentReplies;
+    private Iterable<TicketReply> recentReplies;
     private String serviceCode;
     private TicketSeverity severityCode;
     private TicketStatus status;
     private String subject;
     private String submittedBy;
     private String timeCreated;
+    private boolean hasReplies = true;
 
     public String getType() {
         return type;
@@ -46,11 +45,11 @@ public class Ticket {
         this.categoryCode = categoryCode;
     }
 
-    public List<String> getCcEmailAddresses() {
+    public Iterable<String> getCcEmailAddresses() {
         return ccEmailAddresses;
     }
 
-    public void setCcEmailAddresses(List<String> ccEmailAddresses) {
+    public void setCcEmailAddresses(Iterable<String> ccEmailAddresses) {
         this.ccEmailAddresses = ccEmailAddresses;
     }
 
@@ -70,11 +69,11 @@ public class Ticket {
         this.language = language;
     }
 
-    public List<TicketReply> getRecentReplies() {
+    public Iterable<TicketReply> getRecentReplies() {
         return recentReplies;
     }
 
-    public void setRecentReplies(List<TicketReply> recentReplies) {
+    public void setRecentReplies(Iterable<TicketReply> recentReplies) {
         this.recentReplies = recentReplies;
     }
 
@@ -126,4 +125,11 @@ public class Ticket {
         this.timeCreated = timeCreated;
     }
 
+    public boolean isHasReplies() {
+        return hasReplies;
+    }
+
+    public void setHasReplies(boolean hasReplies) {
+        this.hasReplies = hasReplies;
+    }
 }
