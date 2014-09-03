@@ -9,7 +9,7 @@ public class TicketListRepliesOptions {
     private String afterTime;
     private String beforeTime;
     private String ticketId;
-    private String maxResults;
+    private Integer maxResults;
     private String nextToken;
 
     public String getAfterTime() {
@@ -36,11 +36,11 @@ public class TicketListRepliesOptions {
         this.ticketId = ticketId;
     }
 
-    public String getMaxResults() {
+    public Integer getMaxResults() {
         return maxResults;
     }
 
-    public void setMaxResults( String maxResults ) {
+    public void setMaxResults( Integer maxResults ) {
         this.maxResults = maxResults;
     }
 
