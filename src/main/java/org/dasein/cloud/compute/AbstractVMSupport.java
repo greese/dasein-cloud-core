@@ -919,19 +919,18 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
-    public void removeTagsWithVerification(@Nonnull String[] vmIds, @Nonnull Tag... tags) throws CloudException, InternalException {
-        for (String vmId : vmIds) {
+    public void removeTagsWithVerification( @Nonnull String[] vmIds, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        for( String vmId : vmIds ) {
             removeTagsWithVerification(vmId, tags);
         }
     }
 
     @Override
-    public void removeTagsWithVerification(@Nonnull String vmId, @Nonnull Tag... tags) throws CloudException, InternalException {
-        //response with 204 status we get every request with any valid instance id (if instance not exist)
-        //because need verify the virtual machine exists
-        if (checkExistingVirtualMachine(vmId)) {
+    public void removeTagsWithVerification( @Nonnull String vmId, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        if( checkExistingVirtualMachine(vmId) ) {
             removeTags(vmId, tags);
-        } else {
+        }
+        else {
             throw new CloudException(CloudErrorType.GENERAL, 404, null, String.format("No such virtual machine [%s] in region [%s]", vmId, getContext().getRegionId()));
         }
     }
