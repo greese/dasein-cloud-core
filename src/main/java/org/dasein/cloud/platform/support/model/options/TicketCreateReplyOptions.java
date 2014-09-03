@@ -18,7 +18,7 @@ public class TicketCreateReplyOptions {
         return attachmentSetId;
     }
 
-    public void setAttachmentSetId(String attachmentSetId) {
+    public void setAttachmentSetId( String attachmentSetId ) {
         this.attachmentSetId = attachmentSetId;
     }
 
@@ -26,7 +26,7 @@ public class TicketCreateReplyOptions {
         return caseId;
     }
 
-    public void setCaseId(String caseId) {
+    public void setCaseId( String caseId ) {
         this.caseId = caseId;
     }
 
@@ -34,7 +34,7 @@ public class TicketCreateReplyOptions {
         return ccEmailAddresses;
     }
 
-    public void setCcEmailAddresses(List<String> ccEmailAddresses) {
+    public void setCcEmailAddresses( List<String> ccEmailAddresses ) {
         this.ccEmailAddresses = ccEmailAddresses;
     }
 
@@ -42,7 +42,7 @@ public class TicketCreateReplyOptions {
         return communicationBody;
     }
 
-    public void setCommunicationBody(String communicationBody) {
+    public void setCommunicationBody( String communicationBody ) {
         this.communicationBody = communicationBody;
     }
 

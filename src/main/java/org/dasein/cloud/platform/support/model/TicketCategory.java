@@ -13,7 +13,7 @@ public class TicketCategory {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode( String code ) {
         this.code = code;
     }
 
@@ -21,7 +21,7 @@ public class TicketCategory {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName( String name ) {
         this.name = name;
     }
 

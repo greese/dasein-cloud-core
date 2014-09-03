@@ -14,7 +14,7 @@ public class TicketGetOptions {
         return ticketId;
     }
 
-    public void setTicketId(String ticketId) {
+    public void setTicketId( String ticketId ) {
         this.ticketId = ticketId;
     }
 
@@ -22,7 +22,7 @@ public class TicketGetOptions {
         return includeCommunications;
     }
 
-    public void setIncludeCommunications(Boolean includeCommunications) {
+    public void setIncludeCommunications( Boolean includeCommunications ) {
         this.includeCommunications = includeCommunications;
     }
 }

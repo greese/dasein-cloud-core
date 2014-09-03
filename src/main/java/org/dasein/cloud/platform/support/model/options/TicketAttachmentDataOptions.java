@@ -13,7 +13,7 @@ public class TicketAttachmentDataOptions {
         return data;
     }
 
-    public void setData(byte[] data) {
+    public void setData( byte[] data ) {
         this.data = data;
     }
 
@@ -21,7 +21,7 @@ public class TicketAttachmentDataOptions {
         return fileName;
     }
 
-    public void setFileName(String fileName) {
+    public void setFileName( String fileName ) {
         this.fileName = fileName;
     }
 

@@ -16,7 +16,7 @@ public class TicketListRepliesOptions {
         return afterTime;
     }
 
-    public void setAfterTime(String afterTime) {
+    public void setAfterTime( String afterTime ) {
         this.afterTime = afterTime;
     }
 
@@ -24,7 +24,7 @@ public class TicketListRepliesOptions {
         return beforeTime;
     }
 
-    public void setBeforeTime(String beforeTime) {
+    public void setBeforeTime( String beforeTime ) {
         this.beforeTime = beforeTime;
     }
 
@@ -32,7 +32,7 @@ public class TicketListRepliesOptions {
         return ticketId;
     }
 
-    public void setTicketId(String ticketId) {
+    public void setTicketId( String ticketId ) {
         this.ticketId = ticketId;
     }
 
@@ -40,7 +40,7 @@ public class TicketListRepliesOptions {
         return maxResults;
     }
 
-    public void setMaxResults(String maxResults) {
+    public void setMaxResults( String maxResults ) {
         this.maxResults = maxResults;
     }
 
@@ -48,7 +48,7 @@ public class TicketListRepliesOptions {
         return nextToken;
     }
 
-    public void setNextToken(String nextToken) {
+    public void setNextToken( String nextToken ) {
         this.nextToken = nextToken;
     }
 }

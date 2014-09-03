@@ -22,7 +22,7 @@ public class TicketListOptions {
         return afterTime;
     }
 
-    public void setAfterTime(String afterTime) {
+    public void setAfterTime( String afterTime ) {
         this.afterTime = afterTime;
     }
 
@@ -30,7 +30,7 @@ public class TicketListOptions {
         return beforeTime;
     }
 
-    public void setBeforeTime(String beforeTime) {
+    public void setBeforeTime( String beforeTime ) {
         this.beforeTime = beforeTime;
     }
 
@@ -38,7 +38,7 @@ public class TicketListOptions {
         return caseIdList;
     }
 
-    public void setCaseIdList(List<String> caseIdList) {
+    public void setCaseIdList( List<String> caseIdList ) {
         this.caseIdList = caseIdList;
     }
 
@@ -46,7 +46,7 @@ public class TicketListOptions {
         return displayId;
     }
 
-    public void setDisplayId(String displayId) {
+    public void setDisplayId( String displayId ) {
         this.displayId = displayId;
     }
 
@@ -54,7 +54,7 @@ public class TicketListOptions {
         return includeCommunications;
     }
 
-    public void setIncludeCommunications(Boolean includeCommunications) {
+    public void setIncludeCommunications( Boolean includeCommunications ) {
         this.includeCommunications = includeCommunications;
     }
 
@@ -62,7 +62,7 @@ public class TicketListOptions {
         return includeResolvedCases;
     }
 
-    public void setIncludeResolvedCases(Boolean includeResolvedCases) {
+    public void setIncludeResolvedCases( Boolean includeResolvedCases ) {
         this.includeResolvedCases = includeResolvedCases;
     }
 
@@ -70,7 +70,7 @@ public class TicketListOptions {
         return language;
     }
 
-    public void setLanguage(String language) {
+    public void setLanguage( String language ) {
         this.language = language;
     }
 
@@ -78,7 +78,7 @@ public class TicketListOptions {
         return maxResults;
     }
 
-    public void setMaxResults(Integer maxResults) {
+    public void setMaxResults( Integer maxResults ) {
         this.maxResults = maxResults;
     }
 
@@ -86,7 +86,7 @@ public class TicketListOptions {
         return nextToken;
     }
 
-    public void setNextToken(String nextToken) {
+    public void setNextToken( String nextToken ) {
         this.nextToken = nextToken;
     }
 

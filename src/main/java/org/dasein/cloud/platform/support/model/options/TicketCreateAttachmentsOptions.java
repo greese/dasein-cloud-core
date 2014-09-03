@@ -16,7 +16,7 @@ public class TicketCreateAttachmentsOptions {
         return ticketId;
     }
 
-    public void setTicketId(String ticketId) {
+    public void setTicketId( String ticketId ) {
         this.ticketId = ticketId;
     }
 
@@ -24,7 +24,7 @@ public class TicketCreateAttachmentsOptions {
         return attachments;
     }
 
-    public void setAttachments(List<TicketAttachmentDataOptions> attachments) {
+    public void setAttachments( List<TicketAttachmentDataOptions> attachments ) {
         this.attachments = attachments;
     }
 

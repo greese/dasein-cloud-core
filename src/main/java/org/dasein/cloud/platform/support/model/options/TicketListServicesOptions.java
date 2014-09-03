@@ -15,7 +15,7 @@ public class TicketListServicesOptions {
         return language;
     }
 
-    public void setLanguage(String language) {
+    public void setLanguage( String language ) {
         this.language = language;
     }
 
@@ -23,7 +23,7 @@ public class TicketListServicesOptions {
         return serviceCodeList;
     }
 
-    public void setServiceCodeList(Collection<String> serviceCodeList) {
+    public void setServiceCodeList( Collection<String> serviceCodeList ) {
         this.serviceCodeList = serviceCodeList;
     }
 

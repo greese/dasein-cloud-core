@@ -1,4 +1,3 @@
-
 package org.dasein.cloud.platform.support.model;
 
 import org.dasein.cloud.platform.support.TicketSeverity;
@@ -25,7 +24,7 @@ public class Ticket {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType( String type ) {
         this.type = type;
     }
 
@@ -33,7 +32,7 @@ public class Ticket {
         return ticketId;
     }
 
-    public void setTicketId(String ticketId) {
+    public void setTicketId( String ticketId ) {
         this.ticketId = ticketId;
     }
 
@@ -41,7 +40,7 @@ public class Ticket {
         return categoryCode;
     }
 
-    public void setCategoryCode(String categoryCode) {
+    public void setCategoryCode( String categoryCode ) {
         this.categoryCode = categoryCode;
     }
 
@@ -49,7 +48,7 @@ public class Ticket {
         return ccEmailAddresses;
     }
 
-    public void setCcEmailAddresses(Iterable<String> ccEmailAddresses) {
+    public void setCcEmailAddresses( Iterable<String> ccEmailAddresses ) {
         this.ccEmailAddresses = ccEmailAddresses;
     }
 
@@ -57,7 +56,7 @@ public class Ticket {
         return displayId;
     }
 
-    public void setDisplayId(String displayId) {
+    public void setDisplayId( String displayId ) {
         this.displayId = displayId;
     }
 
@@ -65,7 +64,7 @@ public class Ticket {
         return language;
     }
 
-    public void setLanguage(String language) {
+    public void setLanguage( String language ) {
         this.language = language;
     }
 
@@ -73,7 +72,7 @@ public class Ticket {
         return recentReplies;
     }
 
-    public void setRecentReplies(Iterable<TicketReply> recentReplies) {
+    public void setRecentReplies( Iterable<TicketReply> recentReplies ) {
         this.recentReplies = recentReplies;
     }
 
@@ -81,7 +80,7 @@ public class Ticket {
         return serviceCode;
     }
 
-    public void setServiceCode(String serviceCode) {
+    public void setServiceCode( String serviceCode ) {
         this.serviceCode = serviceCode;
     }
 
@@ -89,7 +88,7 @@ public class Ticket {
         return severityCode;
     }
 
-    public void setSeverityCode(TicketSeverity severityCode) {
+    public void setSeverityCode( TicketSeverity severityCode ) {
         this.severityCode = severityCode;
     }
 
@@ -97,7 +96,7 @@ public class Ticket {
         return status;
     }
 
-    public void setStatus(TicketStatus status) {
+    public void setStatus( TicketStatus status ) {
         this.status = status;
     }
 
@@ -105,7 +104,7 @@ public class Ticket {
         return subject;
     }
 
-    public void setSubject(String subject) {
+    public void setSubject( String subject ) {
         this.subject = subject;
     }
 
@@ -113,7 +112,7 @@ public class Ticket {
         return submittedBy;
     }
 
-    public void setSubmittedBy(String submittedBy) {
+    public void setSubmittedBy( String submittedBy ) {
         this.submittedBy = submittedBy;
     }
 
@@ -121,7 +120,7 @@ public class Ticket {
         return timeCreated;
     }
 
-    public void setTimeCreated(String timeCreated) {
+    public void setTimeCreated( String timeCreated ) {
         this.timeCreated = timeCreated;
     }
 
@@ -129,7 +128,7 @@ public class Ticket {
         return hasReplies;
     }
 
-    public void setHasReplies(boolean hasReplies) {
+    public void setHasReplies( boolean hasReplies ) {
         this.hasReplies = hasReplies;
     }
 }

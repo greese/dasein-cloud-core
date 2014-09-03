@@ -17,57 +17,57 @@ public abstract class AbstractTicketService implements TicketService {
 
     private CloudProvider provider;
 
-    public AbstractTicketService(CloudProvider cloudProvider) {
+    public AbstractTicketService( CloudProvider cloudProvider ) {
         this.provider = cloudProvider;
     }
 
     @Override
-    public Iterable<Ticket> listTickets(@Nonnull TicketListOptions options) throws InternalException, CloudException {
-        throw new OperationNotSupportedException(provider.getCloudName() +" support is not currently implemented for list tickets");
+    public Iterable<Ticket> listTickets( @Nonnull TicketListOptions options ) throws InternalException, CloudException {
+        throw new OperationNotSupportedException(provider.getCloudName() + " support is not currently implemented for list tickets");
     }
 
     @Override
-    public void closeTicket(@Nonnull TicketCloseOptions options) throws InternalException, CloudException {
-        throw new OperationNotSupportedException(provider.getCloudName() +" support is not currently implemented for close ticket");
+    public void closeTicket( @Nonnull TicketCloseOptions options ) throws InternalException, CloudException {
+        throw new OperationNotSupportedException(provider.getCloudName() + " support is not currently implemented for close ticket");
     }
 
     @Override
-    public String createTicket(@Nonnull TicketCreateOptions options) throws InternalException, CloudException {
+    public String createTicket( @Nonnull TicketCreateOptions options ) throws InternalException, CloudException {
         throw new OperationNotSupportedException(provider.getCloudName() + " support is not currently implemented for create ticket");
     }
 
     @Override
-    public Ticket getTicket(@Nonnull TicketGetOptions options) throws InternalException, CloudException {
-        throw new OperationNotSupportedException(provider.getCloudName() +" support is not currently implemented for get ticket");
+    public Ticket getTicket( @Nonnull TicketGetOptions options ) throws InternalException, CloudException {
+        throw new OperationNotSupportedException(provider.getCloudName() + " support is not currently implemented for get ticket");
     }
 
     @Override
-    public Iterable<TicketReply> listReplies(@Nonnull TicketListRepliesOptions options) throws InternalException, CloudException {
-        throw new OperationNotSupportedException(provider.getCloudName() +" support is not currently implemented for list replies");
+    public Iterable<TicketReply> listReplies( @Nonnull TicketListRepliesOptions options ) throws InternalException, CloudException {
+        throw new OperationNotSupportedException(provider.getCloudName() + " support is not currently implemented for list replies");
     }
 
     @Override
-    public TicketAttachmentData getAttachment(@Nonnull TicketGetAttachmentOptions options) throws InternalException, CloudException {
+    public TicketAttachmentData getAttachment( @Nonnull TicketGetAttachmentOptions options ) throws InternalException, CloudException {
         throw new OperationNotSupportedException(provider.getCloudName() + " support is not currently implemented for get attachment");
     }
 
     @Override
-    public Iterable<TicketAttachment> listAttachments(@Nonnull TicketListAttachmentsOptions options) throws InternalException, CloudException {
-        throw new OperationNotSupportedException(provider.getCloudName() +" support is not currently implemented for list attachments");
+    public Iterable<TicketAttachment> listAttachments( @Nonnull TicketListAttachmentsOptions options ) throws InternalException, CloudException {
+        throw new OperationNotSupportedException(provider.getCloudName() + " support is not currently implemented for list attachments");
     }
 
     @Override
-    public Iterable<org.dasein.cloud.platform.support.model.TicketService> listServices(@Nonnull TicketListServicesOptions options) throws InternalException, CloudException {
-        throw new OperationNotSupportedException(provider.getCloudName() +" support is not currently implemented for list services");
+    public Iterable<org.dasein.cloud.platform.support.model.TicketService> listServices( @Nonnull TicketListServicesOptions options ) throws InternalException, CloudException {
+        throw new OperationNotSupportedException(provider.getCloudName() + " support is not currently implemented for list services");
     }
 
     @Override
-    public void createReply(@Nonnull TicketCreateReplyOptions options) throws InternalException, CloudException {
-        throw new OperationNotSupportedException(provider.getCloudName() +" support is not currently implemented for create reply");
+    public void createReply( @Nonnull TicketCreateReplyOptions options ) throws InternalException, CloudException {
+        throw new OperationNotSupportedException(provider.getCloudName() + " support is not currently implemented for create reply");
     }
 
     @Override
-    public String createAttachments(@Nonnull TicketCreateAttachmentsOptions options) throws InternalException, CloudException {
+    public String createAttachments( @Nonnull TicketCreateAttachmentsOptions options ) throws InternalException, CloudException {
         throw new OperationNotSupportedException(provider.getCloudName() + " support is not currently implemented for create attachments");
     }
 

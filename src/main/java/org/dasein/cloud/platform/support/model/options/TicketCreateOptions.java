@@ -22,7 +22,7 @@ public class TicketCreateOptions {
         return attachmentSetId;
     }
 
-    public void setAttachmentSetId(String attachmentSetId) {
+    public void setAttachmentSetId( String attachmentSetId ) {
         this.attachmentSetId = attachmentSetId;
     }
 
@@ -30,7 +30,7 @@ public class TicketCreateOptions {
         return categoryCode;
     }
 
-    public void setCategoryCode(String categoryCode) {
+    public void setCategoryCode( String categoryCode ) {
         this.categoryCode = categoryCode;
     }
 
@@ -38,7 +38,7 @@ public class TicketCreateOptions {
         return ccEmailAddresses;
     }
 
-    public void setCcEmailAddresses(Collection<String> ccEmailAddresses) {
+    public void setCcEmailAddresses( Collection<String> ccEmailAddresses ) {
         this.ccEmailAddresses = ccEmailAddresses;
     }
 
@@ -46,7 +46,7 @@ public class TicketCreateOptions {
         return communicationBody;
     }
 
-    public void setCommunicationBody(String communicationBody) {
+    public void setCommunicationBody( String communicationBody ) {
         this.communicationBody = communicationBody;
     }
 
@@ -54,7 +54,7 @@ public class TicketCreateOptions {
         return issueType;
     }
 
-    public void setIssueType(String issueType) {
+    public void setIssueType( String issueType ) {
         this.issueType = issueType;
     }
 
@@ -62,7 +62,7 @@ public class TicketCreateOptions {
         return language;
     }
 
-    public void setLanguage(String language) {
+    public void setLanguage( String language ) {
         this.language = language;
     }
 
@@ -70,7 +70,7 @@ public class TicketCreateOptions {
         return serviceCode;
     }
 
-    public void setServiceCode(String serviceCode) {
+    public void setServiceCode( String serviceCode ) {
         this.serviceCode = serviceCode;
     }
 
@@ -78,7 +78,7 @@ public class TicketCreateOptions {
         return severityCode;
     }
 
-    public void setSeverityCode(String severityCode) {
+    public void setSeverityCode( String severityCode ) {
         this.severityCode = severityCode;
     }
 
@@ -86,7 +86,7 @@ public class TicketCreateOptions {
         return subject;
     }
 
-    public void setSubject(String subject) {
+    public void setSubject( String subject ) {
         this.subject = subject;
     }
 

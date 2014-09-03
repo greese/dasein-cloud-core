@@ -1,4 +1,3 @@
-
 package org.dasein.cloud.platform.support.model;
 
 import java.util.List;
@@ -15,7 +14,7 @@ public class TicketReply {
         return ticketAttachmentSet;
     }
 
-    public void setTicketAttachmentSet(List<TicketAttachment> ticketAttachmentSet) {
+    public void setTicketAttachmentSet( List<TicketAttachment> ticketAttachmentSet ) {
         this.ticketAttachmentSet = ticketAttachmentSet;
     }
 
@@ -23,7 +22,7 @@ public class TicketReply {
         return body;
     }
 
-    public void setBody(String body) {
+    public void setBody( String body ) {
         this.body = body;
     }
 
@@ -31,7 +30,7 @@ public class TicketReply {
         return ticketId;
     }
 
-    public void setTicketId(String ticketId) {
+    public void setTicketId( String ticketId ) {
         this.ticketId = ticketId;
     }
 
@@ -39,7 +38,7 @@ public class TicketReply {
         return submittedBy;
     }
 
-    public void setSubmittedBy(String submittedBy) {
+    public void setSubmittedBy( String submittedBy ) {
         this.submittedBy = submittedBy;
     }
 
@@ -47,7 +46,7 @@ public class TicketReply {
         return timeCreated;
     }
 
-    public void setTimeCreated(String timeCreated) {
+    public void setTimeCreated( String timeCreated ) {
         this.timeCreated = timeCreated;
     }
 

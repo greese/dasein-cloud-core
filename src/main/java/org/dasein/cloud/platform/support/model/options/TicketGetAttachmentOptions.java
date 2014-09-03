@@ -12,7 +12,7 @@ public class TicketGetAttachmentOptions {
         return attachmentId;
     }
 
-    public void setAttachmentId(String attachmentId) {
+    public void setAttachmentId( String attachmentId ) {
         this.attachmentId = attachmentId;
     }
 }

@@ -24,7 +24,7 @@ public interface TicketService {
      * @throws InternalException
      * @throws CloudException
      */
-    public Iterable<Ticket> listTickets(@Nonnull TicketListOptions options) throws InternalException, CloudException;
+    public Iterable<Ticket> listTickets( @Nonnull TicketListOptions options ) throws InternalException, CloudException;
 
     /**
      * Closes the ticket having the specified options
@@ -33,7 +33,7 @@ public interface TicketService {
      * @throws InternalException
      * @throws CloudException
      */
-    public void closeTicket(@Nonnull TicketCloseOptions options) throws InternalException, CloudException;
+    public void closeTicket( @Nonnull TicketCloseOptions options ) throws InternalException, CloudException;
 
     /**
      * Creates the ticket with parameters specified in options
@@ -43,7 +43,7 @@ public interface TicketService {
      * @throws InternalException
      * @throws CloudException
      */
-    public String createTicket(@Nonnull TicketCreateOptions options) throws InternalException, CloudException;
+    public String createTicket( @Nonnull TicketCreateOptions options ) throws InternalException, CloudException;
 
     /**
      * Gets the single ticket having the specified options
@@ -53,7 +53,7 @@ public interface TicketService {
      * @throws InternalException
      * @throws CloudException
      */
-    public Ticket getTicket(@Nonnull TicketGetOptions options) throws InternalException, CloudException;
+    public Ticket getTicket( @Nonnull TicketGetOptions options ) throws InternalException, CloudException;
 
     /**
      * Gets the list of replies in tickets having the specified options
@@ -63,7 +63,7 @@ public interface TicketService {
      * @throws InternalException
      * @throws CloudException
      */
-    public Iterable<TicketReply> listReplies(@Nonnull TicketListRepliesOptions options) throws InternalException, CloudException;
+    public Iterable<TicketReply> listReplies( @Nonnull TicketListRepliesOptions options ) throws InternalException, CloudException;
 
     /**
      * Gets the attachment having the specified options
@@ -73,7 +73,7 @@ public interface TicketService {
      * @throws InternalException
      * @throws CloudException
      */
-    public TicketAttachmentData getAttachment(@Nonnull TicketGetAttachmentOptions options) throws InternalException, CloudException;
+    public TicketAttachmentData getAttachment( @Nonnull TicketGetAttachmentOptions options ) throws InternalException, CloudException;
 
     /**
      * Gets the list of attachments having the specified options
@@ -83,7 +83,7 @@ public interface TicketService {
      * @throws InternalException
      * @throws CloudException
      */
-    public Iterable<TicketAttachment> listAttachments(@Nonnull TicketListAttachmentsOptions options) throws InternalException, CloudException;
+    public Iterable<TicketAttachment> listAttachments( @Nonnull TicketListAttachmentsOptions options ) throws InternalException, CloudException;
 
     /**
      * Gets list of services having the specified options
@@ -93,7 +93,7 @@ public interface TicketService {
      * @throws InternalException
      * @throws CloudException
      */
-    public Iterable<org.dasein.cloud.platform.support.model.TicketService> listServices(@Nonnull TicketListServicesOptions options) throws InternalException, CloudException;
+    public Iterable<org.dasein.cloud.platform.support.model.TicketService> listServices( @Nonnull TicketListServicesOptions options ) throws InternalException, CloudException;
 
     /**
      * Creates the reply having the specified options
@@ -102,7 +102,7 @@ public interface TicketService {
      * @throws InternalException
      * @throws CloudException
      */
-    public void createReply(@Nonnull TicketCreateReplyOptions options) throws InternalException, CloudException;
+    public void createReply( @Nonnull TicketCreateReplyOptions options ) throws InternalException, CloudException;
 
     /**
      * Creates the attachment having the specified options
@@ -112,6 +112,6 @@ public interface TicketService {
      * @throws InternalException
      * @throws CloudException
      */
-    public String createAttachments(@Nonnull TicketCreateAttachmentsOptions options) throws InternalException, CloudException;
+    public String createAttachments( @Nonnull TicketCreateAttachmentsOptions options ) throws InternalException, CloudException;
 
 }

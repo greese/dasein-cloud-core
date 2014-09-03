@@ -13,7 +13,7 @@ public class TicketAttachment {
         return attachmentId;
     }
 
-    public void setAttachmentId(String attachmentId) {
+    public void setAttachmentId( String attachmentId ) {
         this.attachmentId = attachmentId;
     }
 
@@ -21,7 +21,7 @@ public class TicketAttachment {
         return fileName;
     }
 
-    public void setFileName(String fileName) {
+    public void setFileName( String fileName ) {
         this.fileName = fileName;
     }
 

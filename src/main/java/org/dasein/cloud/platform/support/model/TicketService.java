@@ -17,7 +17,7 @@ public class TicketService {
         return categories;
     }
 
-    public void setCategories(List<TicketCategory> categories) {
+    public void setCategories( List<TicketCategory> categories ) {
         this.categories = categories;
     }
 
@@ -25,7 +25,7 @@ public class TicketService {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode( String code ) {
         this.code = code;
     }
 
@@ -33,7 +33,7 @@ public class TicketService {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName( String name ) {
         this.name = name;
     }
 
