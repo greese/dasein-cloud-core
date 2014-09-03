@@ -19,14 +19,7 @@
 
 package org.dasein.cloud.compute;
 
-import org.dasein.cloud.CloudException;
-import org.dasein.cloud.CloudProvider;
-import org.dasein.cloud.InternalException;
-import org.dasein.cloud.OperationNotSupportedException;
-import org.dasein.cloud.ProviderContext;
-import org.dasein.cloud.Requirement;
-import org.dasein.cloud.ResourceStatus;
-import org.dasein.cloud.Tag;
+import org.dasein.cloud.*;
 import org.dasein.cloud.identity.ServiceAction;
 import org.dasein.cloud.util.*;
 import org.dasein.util.CalendarWrapper;
@@ -926,6 +919,24 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
+    public void removeTagsWithVerification(@Nonnull String[] vmIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for (String vmId : vmIds) {
+            removeTagsWithVerification(vmId, tags);
+        }
+    }
+
+    @Override
+    public void removeTagsWithVerification(@Nonnull String vmId, @Nonnull Tag... tags) throws CloudException, InternalException {
+        //response with 204 status we get every request with any valid instance id (if instance not exist)
+        //because need verify the virtual machine exists
+        if (checkExistingVirtualMachine(vmId)) {
+            removeTags(vmId, tags);
+        } else {
+            throw new CloudException(CloudErrorType.GENERAL, 404, null, String.format("No such virtual machine [%s] in region [%s]", vmId, getContext().getRegionId()));
+        }
+    }
+
+    @Override
     public void setTags(@Nonnull String vmId, @Nonnull Tag... tags) throws CloudException, InternalException {
         setTags(new String[]{vmId}, tags);
     }
@@ -1013,6 +1024,14 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     @Override
     public @Nullable Iterable<VirtualMachineStatus> getVMStatus( @Nullable VmStatusFilterOptions filterOptions ) throws InternalException, CloudException {
         throw new OperationNotSupportedException("Virtual Machine Status is not currently implemented for " + getProvider().getCloudName());
+    }
+
+    private boolean checkExistingVirtualMachine(@Nonnull String wmId) throws CloudException, InternalException {
+        try {
+            return getVirtualMachine(wmId) != null;
+        } catch (Exception ex) {
+            return false;
+        }
     }
 
 }
