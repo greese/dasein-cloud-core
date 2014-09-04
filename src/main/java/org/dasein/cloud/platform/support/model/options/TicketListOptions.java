@@ -1,7 +1,5 @@
 package org.dasein.cloud.platform.support.model.options;
 
-import java.util.List;
-
 /**
  * @author Eugene Yaroslavtsev
  * @since 14.08.2014
@@ -10,7 +8,7 @@ public class TicketListOptions {
 
     String afterTime;
     String beforeTime;
-    List<String> caseIdList;
+    String[] caseIdList;
     String displayId;
     Boolean includeCommunications;
     Boolean includeResolvedCases;
@@ -32,11 +30,11 @@ public class TicketListOptions {
         this.beforeTime = beforeTime;
     }
 
-    public List<String> getCaseIdList() {
+    public String[] getCaseIdList() {
         return caseIdList;
     }
 
-    public void setCaseIdList( List<String> caseIdList ) {
+    public void setCaseIdList( String[] caseIdList ) {
         this.caseIdList = caseIdList;
     }
 

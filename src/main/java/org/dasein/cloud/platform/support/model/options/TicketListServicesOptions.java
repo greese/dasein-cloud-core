@@ -1,7 +1,5 @@
 package org.dasein.cloud.platform.support.model.options;
 
-import java.util.Collection;
-
 /**
  * @author Eugene Yaroslavtsev
  * @since 18.08.2014
@@ -9,7 +7,7 @@ import java.util.Collection;
 public class TicketListServicesOptions {
 
     String language;
-    Collection<String> serviceCodeList;
+    String[] serviceCodeList;
 
     public String getLanguage() {
         return language;
@@ -19,11 +17,11 @@ public class TicketListServicesOptions {
         this.language = language;
     }
 
-    public Collection<String> getServiceCodeList() {
+    public String[] getServiceCodeList() {
         return serviceCodeList;
     }
 
-    public void setServiceCodeList( Collection<String> serviceCodeList ) {
+    public void setServiceCodeList( String[] serviceCodeList ) {
         this.serviceCodeList = serviceCodeList;
     }
 

@@ -1,8 +1,5 @@
 package org.dasein.cloud.platform.support.model.options;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author Eugene Yaroslavtsev
  * @since 19.08.2014
@@ -10,7 +7,7 @@ import java.util.List;
 public class TicketCreateAttachmentsOptions {
 
     private String ticketId;
-    private List<TicketAttachmentDataOptions> attachments = new ArrayList<TicketAttachmentDataOptions>();
+    private TicketAttachmentDataOptions[] attachments;
 
     public String getTicketId() {
         return ticketId;
@@ -20,11 +17,11 @@ public class TicketCreateAttachmentsOptions {
         this.ticketId = ticketId;
     }
 
-    public List<TicketAttachmentDataOptions> getAttachments() {
+    public TicketAttachmentDataOptions[] getAttachments() {
         return attachments;
     }
 
-    public void setAttachments( List<TicketAttachmentDataOptions> attachments ) {
+    public void setAttachments( TicketAttachmentDataOptions[] attachments ) {
         this.attachments = attachments;
     }
 

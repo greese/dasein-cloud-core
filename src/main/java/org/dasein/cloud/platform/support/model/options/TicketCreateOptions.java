@@ -1,7 +1,5 @@
 package org.dasein.cloud.platform.support.model.options;
 
-import java.util.Collection;
-
 /**
  * @author Eugene Yaroslavtsev
  * @since 15.08.2014
@@ -10,7 +8,7 @@ public class TicketCreateOptions {
 
     String attachmentSetId;
     String categoryCode;
-    Collection<String> ccEmailAddresses;
+    String[] ccEmailAddresses;
     String communicationBody;
     String issueType;
     String language;
@@ -34,11 +32,11 @@ public class TicketCreateOptions {
         this.categoryCode = categoryCode;
     }
 
-    public Collection<String> getCcEmailAddresses() {
+    public String[] getCcEmailAddresses() {
         return ccEmailAddresses;
     }
 
-    public void setCcEmailAddresses( Collection<String> ccEmailAddresses ) {
+    public void setCcEmailAddresses( String[] ccEmailAddresses ) {
         this.ccEmailAddresses = ccEmailAddresses;
     }
 

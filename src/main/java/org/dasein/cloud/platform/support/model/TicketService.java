@@ -1,23 +1,20 @@
 package org.dasein.cloud.platform.support.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author Eugene Yaroslavtsev
  * @since 18.08.2014
  */
 public class TicketService {
 
-    private List<TicketCategory> categories = new ArrayList<TicketCategory>();
+    private TicketCategory[] categories;
     private String code;
     private String name;
 
-    public List<TicketCategory> getCategories() {
+    public TicketCategory[] getCategories() {
         return categories;
     }
 
-    public void setCategories( List<TicketCategory> categories ) {
+    public void setCategories( TicketCategory[] categories ) {
         this.categories = categories;
     }
 
