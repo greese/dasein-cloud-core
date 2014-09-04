@@ -9,8 +9,6 @@ public class TicketListRepliesOptions {
     private String afterTime;
     private String beforeTime;
     private String ticketId;
-    private Integer maxResults;
-    private String nextToken;
 
     public String getAfterTime() {
         return afterTime;
@@ -36,19 +34,4 @@ public class TicketListRepliesOptions {
         this.ticketId = ticketId;
     }
 
-    public Integer getMaxResults() {
-        return maxResults;
-    }
-
-    public void setMaxResults( Integer maxResults ) {
-        this.maxResults = maxResults;
-    }
-
-    public String getNextToken() {
-        return nextToken;
-    }
-
-    public void setNextToken( String nextToken ) {
-        this.nextToken = nextToken;
-    }
 }

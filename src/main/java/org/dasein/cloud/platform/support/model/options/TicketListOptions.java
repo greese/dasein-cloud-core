@@ -15,8 +15,6 @@ public class TicketListOptions {
     Boolean includeCommunications;
     Boolean includeResolvedCases;
     String language;
-    Integer maxResults;
-    String nextToken;
 
     public String getAfterTime() {
         return afterTime;
@@ -72,22 +70,6 @@ public class TicketListOptions {
 
     public void setLanguage( String language ) {
         this.language = language;
-    }
-
-    public Integer getMaxResults() {
-        return maxResults;
-    }
-
-    public void setMaxResults( Integer maxResults ) {
-        this.maxResults = maxResults;
-    }
-
-    public String getNextToken() {
-        return nextToken;
-    }
-
-    public void setNextToken( String nextToken ) {
-        this.nextToken = nextToken;
     }
 
 }
