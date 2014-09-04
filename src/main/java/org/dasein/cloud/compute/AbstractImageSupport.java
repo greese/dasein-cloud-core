@@ -147,7 +147,7 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
     }
 
     @Override
-    public @Nonnull String copyImage(@Nonnull ImageCopyOptions options) throws CloudException, InternalException {
+    public @Nonnull String copyImage( @Nonnull ImageCopyOptions options ) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Image copying is not currently implemented");
     }
 
@@ -593,7 +593,7 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
     }
 
     @Override
-    public void updateTags(@Nonnull String[] imageIds, boolean asynchronous, @Nonnull Tag ... tags) throws CloudException, InternalException {
+    public void updateTags( @Nonnull String[] imageIds, boolean asynchronous, @Nonnull Tag... tags ) throws CloudException, InternalException {
         for( String id : imageIds ) {
             updateTags(id, asynchronous, tags);
         }
@@ -612,17 +612,17 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
     }
 
     @Override
-    public void setTags(@Nonnull String imageId, @Nonnull Tag... tags) throws CloudException, InternalException {
+    public void setTags( @Nonnull String imageId, @Nonnull Tag... tags ) throws CloudException, InternalException {
         setTags(new String[]{imageId}, tags);
     }
 
     @Override
-    public void setTags(@Nonnull String[] imageIds, @Nonnull Tag... tags) throws CloudException, InternalException {
-        for (String id : imageIds) {
+    public void setTags( @Nonnull String[] imageIds, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        for( String id : imageIds ) {
 
             Collection<Tag> collectionForDelete = TagUtils.getTagsForDelete(getImage(id).getTags(), tags);
 
-            if (collectionForDelete != null) {
+            if( collectionForDelete != null ) {
                 removeTags(id, collectionForDelete.toArray(new Tag[collectionForDelete.size()]));
             }
 

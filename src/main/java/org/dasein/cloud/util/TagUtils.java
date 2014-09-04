@@ -12,12 +12,12 @@ import java.util.Map;
  */
 public class TagUtils {
 
-    static public Collection<Tag> getTagsForDelete(Map<String, String> all, Tag[] tags) {
+    static public Collection<Tag> getTagsForDelete( Map<String, String> all, Tag[] tags ) {
         Collection<Tag> result = null;
-        if (all != null) {
+        if( all != null ) {
             result = new ArrayList<Tag>();
-            for (Map.Entry<String, String> entry : all.entrySet()) {
-                if (!isKeyInTags(entry.getKey(), tags)) {
+            for( Map.Entry<String, String> entry : all.entrySet() ) {
+                if( !isKeyInTags(entry.getKey(), tags) ) {
                     result.add(new Tag(entry.getKey(), entry.getValue()));
                 }
             }
@@ -25,9 +25,9 @@ public class TagUtils {
         return result;
     }
 
-    static public boolean isKeyInTags(String key, Tag[] tags) {
-        for (Tag tag : tags) {
-            if (tag.getKey().equals(key)) {
+    static public boolean isKeyInTags( String key, Tag[] tags ) {
+        for( Tag tag : tags ) {
+            if( tag.getKey().equals(key) ) {
                 return true;
             }
         }

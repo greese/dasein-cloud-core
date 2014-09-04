@@ -18,7 +18,7 @@ public class AutoScalingGroupNotificationConfig implements Serializable {
         return autoScalingGroupName;
     }
 
-    public void setAutoScalingGroupName(String autoScalingGroupName) {
+    public void setAutoScalingGroupName( String autoScalingGroupName ) {
         this.autoScalingGroupName = autoScalingGroupName;
     }
 
@@ -26,7 +26,7 @@ public class AutoScalingGroupNotificationConfig implements Serializable {
         return notificationType;
     }
 
-    public void setNotificationType(String notificationType) {
+    public void setNotificationType( String notificationType ) {
         this.notificationType = notificationType;
     }
 
@@ -34,7 +34,7 @@ public class AutoScalingGroupNotificationConfig implements Serializable {
         return topic;
     }
 
-    public void setTopic(String topic) {
+    public void setTopic( String topic ) {
         this.topic = topic;
     }
 }

@@ -434,7 +434,7 @@ public class LoadBalancer implements Networkable, Taggable {
         return healthCheck;
     }
 
-    public void setHealthCheck(LoadBalancerHealthCheck healthCheck) {
+    public void setHealthCheck( LoadBalancerHealthCheck healthCheck ) {
         this.healthCheck = healthCheck;
     }
 

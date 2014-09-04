@@ -135,7 +135,7 @@ public class RoutingTable implements Networkable, Taggable {
         return main;
     }
 
-    public void setMain(boolean main) {
+    public void setMain( boolean main ) {
         this.main = main;
     }
 

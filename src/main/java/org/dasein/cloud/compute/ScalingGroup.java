@@ -24,7 +24,7 @@ import java.util.*;
 
 public class ScalingGroup implements Serializable {
     private static final long serialVersionUID = -5317003700769693511L;
-    
+
     private int                   defaultCooldown;
     private long                  creationTimestamp;
     private String                description;
@@ -240,21 +240,27 @@ public class ScalingGroup implements Serializable {
 
     @Deprecated
     public String getSubnetIds() {
-        if(this.subnets == null || this.subnets.length == 0){
+        if( this.subnets == null || this.subnets.length == 0 ) {
             return new String();
         }
         StringBuilder sb = new StringBuilder();
-        for (String sn : this.subnets) {
+        for( String sn : this.subnets ) {
             sb.append(sn).append(",");
         }
-        return sb.deleteCharAt(sb.length()-1).toString();
+        return sb.deleteCharAt(sb.length() - 1).toString();
     }
 
     @Deprecated
-    public void setSubnetIds(String subnetIds) { this.subnets = (subnetIds == null) ? new String[0] : subnetIds.split("\\s*,\\s*"); }
+    public void setSubnetIds( String subnetIds ) {
+        this.subnets = ( subnetIds == null ) ? new String[0] : subnetIds.split("\\s*,\\s*");
+    }
 
-    public String[] getSubnets() { return (this.subnets == null) ? new String[0] : this.subnets; }
+    public String[] getSubnets() {
+        return ( this.subnets == null ) ? new String[0] : this.subnets;
+    }
 
-    public void setSubnets(String[] subnets) {  this.subnets = subnets;  }
+    public void setSubnets( String[] subnets ) {
+        this.subnets = subnets;
+    }
 
 }

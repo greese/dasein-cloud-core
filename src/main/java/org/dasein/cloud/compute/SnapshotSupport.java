@@ -356,45 +356,47 @@ public interface SnapshotSupport extends AccessControlledService {
     /**
      * Updates meta-data for a snapshot with the new values. It will not overwrite any value that currently
      * exists unless it appears in the tags you submit.
-     * @param snapshotId the snapshot to update
+     *
+     * @param snapshotId   the snapshot to update
      * @param asynchronous the type of update, if true - will update asynchronously
-     * @param tags the meta-data tags to set
+     * @param tags         the meta-data tags to set
      * @throws CloudException    an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public void updateTags(@Nonnull String snapshotId, boolean asynchronous, @Nonnull Tag... tags) throws CloudException, InternalException;
+    public void updateTags( @Nonnull String snapshotId, boolean asynchronous, @Nonnull Tag... tags ) throws CloudException, InternalException;
 
     /**
      * Updates meta-data for multiple snapshots with the new values. It will not overwrite any value that currently
      * exists unless it appears in the tags you submit.
-     * @param snapshotIds the snapshots to update
+     *
+     * @param snapshotIds  the snapshots to update
      * @param asynchronous the type of update, if true - will update asynchronously
-     * @param tags  the meta-data tags to set
+     * @param tags         the meta-data tags to set
      * @throws CloudException    an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public void updateTags(@Nonnull String[] snapshotIds, boolean asynchronous, @Nonnull Tag... tags) throws CloudException, InternalException;
+    public void updateTags( @Nonnull String[] snapshotIds, boolean asynchronous, @Nonnull Tag... tags ) throws CloudException, InternalException;
 
     /**
      * Set meta-data for a snapshot. Remove any tags that were not provided by the incoming tags, and add or
      * overwrite any new or pre-existing tags.
      *
      * @param snapshotId the snapshot to set
-     * @param tags  the meta-data tags to set
+     * @param tags       the meta-data tags to set
      * @throws CloudException    an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public void setTags(@Nonnull String snapshotId, @Nonnull Tag... tags) throws CloudException, InternalException;
+    public void setTags( @Nonnull String snapshotId, @Nonnull Tag... tags ) throws CloudException, InternalException;
 
     /**
      * Set meta-data for multiple snapshots. Remove any tags that were not provided by the incoming tags, and add or
      * overwrite any new or pre-existing tags.
      *
      * @param snapshotIds the snapshots to set
-     * @param tags  the meta-data tags to set
+     * @param tags        the meta-data tags to set
      * @throws CloudException    an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public void setTags(@Nonnull String[] snapshotIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+    public void setTags( @Nonnull String[] snapshotIds, @Nonnull Tag... tags ) throws CloudException, InternalException;
 
 }

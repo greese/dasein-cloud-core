@@ -141,8 +141,9 @@ public interface ImageCapabilities extends Capabilities{
 
     /**
      * Indicates whether copying of an image to another region is supported by this cloud.
+     *
      * @return true if you can copy images in this cloud to other regions
-     * @throws CloudException an error occurred with the cloud provider when checking this capability
+     * @throws CloudException    an error occurred with the cloud provider when checking this capability
      * @throws InternalException an error occurred within the Dasein cloud implementation while check this capability
      */
     public abstract boolean supportsImageCopy() throws CloudException, InternalException;

@@ -447,7 +447,7 @@ public class MachineImage implements Taggable {
         return volumes;
     }
 
-    public void setVolumes(@Nullable Collection<MachineImageVolume> volumes) {
+    public void setVolumes( @Nullable Collection<MachineImageVolume> volumes ) {
         this.volumes = volumes;
     }
 

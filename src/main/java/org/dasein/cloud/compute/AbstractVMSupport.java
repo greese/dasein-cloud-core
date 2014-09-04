@@ -156,7 +156,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
-    public @Nonnull String getConsoleOutput(@Nonnull String vmId) throws InternalException, CloudException {
+    public @Nonnull String getConsoleOutput( @Nonnull String vmId ) throws InternalException, CloudException {
         return "";
     }
 
@@ -895,26 +895,26 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
-    public void updateTags(@Nonnull String[] vmIds, @Nonnull Tag... tags) throws CloudException, InternalException {
-        for (String id : vmIds) {
+    public void updateTags( @Nonnull String[] vmIds, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        for( String id : vmIds ) {
             updateTags(id, tags);
         }
     }
 
     @Override
-    public void updateTags(@Nonnull String vmId, boolean asynchronous, @Nonnull Tag... tags) throws CloudException, InternalException {
+    public void updateTags( @Nonnull String vmId, boolean asynchronous, @Nonnull Tag... tags ) throws CloudException, InternalException {
         // NO-OP
     }
 
     @Override
-    public void updateTags(@Nonnull String[] vmIds, boolean asynchronous, @Nonnull Tag... tags) throws CloudException, InternalException {
+    public void updateTags( @Nonnull String[] vmIds, boolean asynchronous, @Nonnull Tag... tags ) throws CloudException, InternalException {
         for( String id : vmIds ) {
             updateTags(id, asynchronous, tags);
         }
     }
 
     @Override
-    public void removeTags(@Nonnull String vmId, @Nonnull Tag... tags) throws CloudException, InternalException {
+    public void removeTags( @Nonnull String vmId, @Nonnull Tag... tags ) throws CloudException, InternalException {
         // NO-OP
     }
 

@@ -13,8 +13,7 @@ public class LbAttributesOptions {
     Integer connectionDrainingTimeout;
     Integer idleConnectionTimeout;
 
-    public static LbAttributesOptions getInstance(Boolean crossDataCenter, Boolean connectionDraining, @Nullable Integer connectionDrainingTimeout,
-                                                @Nullable Integer idleConnectionTimeout) {
+    public static LbAttributesOptions getInstance( Boolean crossDataCenter, Boolean connectionDraining, @Nullable Integer connectionDrainingTimeout, @Nullable Integer idleConnectionTimeout ) {
         LbAttributesOptions options = new LbAttributesOptions();
         options.crossDataCenter = crossDataCenter;
         options.connectionDraining = connectionDraining;
@@ -35,7 +34,7 @@ public class LbAttributesOptions {
         return connectionDraining;
     }
 
-    public void setConnectionDraining(Boolean connectionDraining) {
+    public void setConnectionDraining( Boolean connectionDraining ) {
         this.connectionDraining = connectionDraining;
     }
 
@@ -43,7 +42,7 @@ public class LbAttributesOptions {
         return connectionDrainingTimeout;
     }
 
-    public void setConnectionDrainingTimeout(Integer connectionDrainingTimeout) {
+    public void setConnectionDrainingTimeout( Integer connectionDrainingTimeout ) {
         this.connectionDrainingTimeout = connectionDrainingTimeout;
     }
 
@@ -51,7 +50,7 @@ public class LbAttributesOptions {
         return idleConnectionTimeout;
     }
 
-    public void setIdleConnectionTimeout(Integer idleConnectionTimeout) {
+    public void setIdleConnectionTimeout( Integer idleConnectionTimeout ) {
         this.idleConnectionTimeout = idleConnectionTimeout;
     }
 }

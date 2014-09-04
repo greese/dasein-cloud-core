@@ -9,10 +9,8 @@ import javax.annotation.Nullable;
  */
 public class MachineImageVolume {
 
-    static public
-    @Nonnull
-    MachineImageVolume getMachineImageVolumeInstance(@Nonnull String deviceName, @Nonnull String snapshotId, @Nonnull Integer volumeSize, @Nonnull String volumeType, @Nullable Integer iops) {
-        @SuppressWarnings("deprecation") MachineImageVolume machineImageVolume = new MachineImageVolume();
+    static public @Nonnull MachineImageVolume getMachineImageVolumeInstance( @Nonnull String deviceName, @Nonnull String snapshotId, @Nonnull Integer volumeSize, @Nonnull String volumeType, @Nullable Integer iops ) {
+        @SuppressWarnings( "deprecation" ) MachineImageVolume machineImageVolume = new MachineImageVolume();
 
         machineImageVolume.deviceName = deviceName;
         machineImageVolume.iops = iops;
@@ -23,7 +21,8 @@ public class MachineImageVolume {
         return machineImageVolume;
     }
 
-    public MachineImageVolume() {}
+    public MachineImageVolume() {
+    }
 
     private String deviceName;
     private String snapshotId;
@@ -35,7 +34,7 @@ public class MachineImageVolume {
         return deviceName;
     }
 
-    public void setDeviceName(String deviceName) {
+    public void setDeviceName( String deviceName ) {
         this.deviceName = deviceName;
     }
 
@@ -43,7 +42,7 @@ public class MachineImageVolume {
         return snapshotId;
     }
 
-    public void setSnapshotId(String snapshotId) {
+    public void setSnapshotId( String snapshotId ) {
         this.snapshotId = snapshotId;
     }
 
@@ -51,7 +50,7 @@ public class MachineImageVolume {
         return volumeSize;
     }
 
-    public void setVolumeSize(Integer volumeSize) {
+    public void setVolumeSize( Integer volumeSize ) {
         this.volumeSize = volumeSize;
     }
 
@@ -59,7 +58,7 @@ public class MachineImageVolume {
         return volumeType;
     }
 
-    public void setVolumeType(String volumeType) {
+    public void setVolumeType( String volumeType ) {
         this.volumeType = volumeType;
     }
 
@@ -67,7 +66,7 @@ public class MachineImageVolume {
         return iops;
     }
 
-    public void setIops(Integer iops) {
+    public void setIops( Integer iops ) {
         this.iops = iops;
     }
 }

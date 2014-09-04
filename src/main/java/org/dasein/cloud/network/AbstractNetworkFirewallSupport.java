@@ -228,12 +228,12 @@ public abstract class AbstractNetworkFirewallSupport implements NetworkFirewallS
     }
 
     @Override
-    public void setTags(@Nonnull String[] firewallIds, @Nonnull Tag... tags) throws CloudException, InternalException {
-        for (String id : firewallIds) {
+    public void setTags( @Nonnull String[] firewallIds, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        for( String id : firewallIds ) {
 
             Collection<Tag> collectionForDelete = TagUtils.getTagsForDelete(getFirewall(id).getTags(), tags);
 
-            if (collectionForDelete != null) {
+            if( collectionForDelete != null ) {
                 removeTags(id, collectionForDelete.toArray(new Tag[collectionForDelete.size()]));
             }
 
@@ -242,7 +242,7 @@ public abstract class AbstractNetworkFirewallSupport implements NetworkFirewallS
     }
 
     @Override
-    public void setTags(@Nonnull String firewallId, @Nonnull Tag... tags) throws CloudException, InternalException {
+    public void setTags( @Nonnull String firewallId, @Nonnull Tag... tags ) throws CloudException, InternalException {
         setTags(new String[]{firewallId}, tags);
     }
 

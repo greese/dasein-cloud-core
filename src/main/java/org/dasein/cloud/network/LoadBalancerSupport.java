@@ -65,23 +65,25 @@ public interface LoadBalancerSupport extends AccessControlledService {
 
     /**
      * Adds one or more new listeners to your load balancer.
+     *
      * @param toLoadBalancerId the load balancer to which data centers are being added
-     * @param listeners the listeners to be established on create
-     * @throws CloudException an error occurred with the cloud provider while performing this action
-     * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
+     * @param listeners        the listeners to be established on create
+     * @throws CloudException                 an error occurred with the cloud provider while performing this action
+     * @throws InternalException              an error occurred within the Dasein Cloud implementation while performing this action
      * @throws OperationNotSupportedException this load balancer is not data-center aware
      */
-    public void addListeners(@Nonnull String toLoadBalancerId, @Nullable LbListener[] listeners) throws CloudException, InternalException;
+    public void addListeners( @Nonnull String toLoadBalancerId, @Nullable LbListener[] listeners ) throws CloudException, InternalException;
 
     /**
      * Removes one or more new listeners from load balancer.
+     *
      * @param toLoadBalancerId the load balancer to which data centers are being added
-     * @param listeners the listeners to be deleted
-     * @throws CloudException an error occurred with the cloud provider while performing this action
-     * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
+     * @param listeners        the listeners to be deleted
+     * @throws CloudException                 an error occurred with the cloud provider while performing this action
+     * @throws InternalException              an error occurred within the Dasein Cloud implementation while performing this action
      * @throws OperationNotSupportedException this load balancer is not data-center aware
      */
-    public void removeListeners(@Nonnull String toLoadBalancerId, @Nullable LbListener[] listeners) throws CloudException, InternalException;
+    public void removeListeners( @Nonnull String toLoadBalancerId, @Nullable LbListener[] listeners ) throws CloudException, InternalException;
 
     /**
      * Adds one or more data centers to the list of data centers associated with the specified load balancer. This method
@@ -372,21 +374,23 @@ public interface LoadBalancerSupport extends AccessControlledService {
 
     /**
      * Modifies the attributes of a specified load balancer
-     * @param id firewall id
+     *
+     * @param id      firewall id
      * @param options attributes options
      * @throws CloudException
      * @throws InternalException
      */
-    public void modifyLoadBalancerAttributes(@Nonnull String id, @Nonnull LbAttributesOptions options) throws CloudException, InternalException;
+    public void modifyLoadBalancerAttributes( @Nonnull String id, @Nonnull LbAttributesOptions options ) throws CloudException, InternalException;
 
 
     /**
      * Get load balancer attributes
+     *
      * @param id - load balancer id
      * @throws CloudException
      * @throws InternalException
      */
-    public LbAttributesOptions getLoadBalancerAttributes(@Nonnull String id) throws CloudException, InternalException;
+    public LbAttributesOptions getLoadBalancerAttributes( @Nonnull String id ) throws CloudException, InternalException;
 
     /**
      * Detach named healthCheck from named loadBalancer without deleting either.
