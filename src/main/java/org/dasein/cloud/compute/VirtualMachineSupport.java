@@ -642,6 +642,30 @@ public interface VirtualMachineSupport extends AccessControlledService {
     public void removeTags( @Nonnull String[] vmIds, @Nonnull Tag... tags ) throws CloudException, InternalException;
 
 
+    /**
+     * Removes meta-data from a virtual machine with verification existing virtual machine. If tag values are set, their removal is dependent on underlying cloud
+     * provider behavior. They may be removed only if the tag value matches or they may be removed regardless of the
+     * value.
+     *
+     * @param vmId the virtual machine to update
+     * @param tags the meta-data tags to remove
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void removeTagsWithVerification( @Nonnull String vmId, @Nonnull Tag... tags ) throws CloudException, InternalException;
+
+    /**
+     * Removes meta-data from multiple virtual machines with verification existing virtual machine. If tag values are set, their removal is dependent on underlying cloud
+     * provider behavior. They may be removed only if the tag value matches or they may be removed regardless of the
+     * value.
+     *
+     * @param vmIds the virtual machine to update
+     * @param tags  the meta-data tags to remove
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void removeTagsWithVerification( @Nonnull String[] vmIds, @Nonnull Tag... tags ) throws CloudException, InternalException;
+
     /**************************** DEPRECATED METHODS ************************************/
 
     /**
