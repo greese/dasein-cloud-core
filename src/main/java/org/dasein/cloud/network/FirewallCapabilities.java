@@ -107,6 +107,15 @@ public interface FirewallCapabilities extends Capabilities{
     public @Nonnull Iterable<Permission> listSupportedPermissions(boolean inVlan) throws InternalException, CloudException;
 
     /**
+     * Lists the protocols that any firewall rules are allowed to use.
+     * @param inVlan whether or not you are testing capabilities for VLAN firewalls
+     * @return a list of supported protocols
+     * @throws InternalException an error occurred locally independent of any events in the cloud
+     * @throws CloudException    an error occurred with the cloud provider while performing the operation
+     */
+    public @Nonnull Iterable<Protocol> listSupportedProtocols(boolean inVlan) throws InternalException, CloudException;
+
+    /**
      * Describes what kinds of source endpoints may be named. A cloud must support at least one, but may support more
      * than one.
      * @param inVlan whether or not you are testing capabilities for VLAN firewalls

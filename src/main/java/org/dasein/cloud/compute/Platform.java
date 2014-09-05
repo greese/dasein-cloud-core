@@ -96,7 +96,7 @@ public enum Platform {
         else if( name.contains("fedora") ) {
             return FEDORA_CORE;
         }
-        else if( name.contains("windows") ) {
+        else if( name.contains("windows") || name.contains("win") ) {
             return WINDOWS;
         }
         else if( name.contains("red hat") || name.contains("redhat") || name.contains("red-hat") || name.contains("rhel") ) {
