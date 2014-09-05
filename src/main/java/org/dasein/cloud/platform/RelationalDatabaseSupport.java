@@ -161,4 +161,15 @@ public interface RelationalDatabaseSupport extends AccessControlledService {
     public void updateConfiguration(String providerConfigurationId, ConfigurationParameter ... parameters) throws CloudException, InternalException;
     
     public DatabaseSnapshot snapshot(String providerDatabaseId, String name) throws CloudException, InternalException;
+    
+    //
+    // New Backup section
+    //
+    public DatabaseBackup getBackup(String providerDbBackupId) throws CloudException, InternalException;
+    
+    public Iterable<DatabaseBackup> listBackups(String forOptionalProviderDatabaseId) throws CloudException, InternalException;
+    
+    public String createFromBackup(String dataSourceName, String providerDatabaseId, String providerDbBackupId, String productSize, String providerDataCenterId, int hostPort) throws CloudException, InternalException;
+   
+    public boolean removeBackup(String providerBackupId) throws CloudException, InternalException;
 }

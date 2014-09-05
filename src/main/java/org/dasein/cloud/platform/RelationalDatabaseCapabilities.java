@@ -65,4 +65,25 @@ public interface RelationalDatabaseCapabilities extends Capabilities{
      * @return true if snapshots are supported
      */
     public boolean isSupportsSnapshots() throws CloudException, InternalException;
+
+    /**
+     * The term the provider uses to describe the DB Backup.
+     * @param locale the language in which the term should be presented
+     * @return the provider term for DB Snapshot
+     */
+    public String getProviderTermForBackup( Locale locale );
+
+    /** 
+     * Indicates whether the cloud provides support for RDS backups
+     * @return boolean
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public boolean isSuppotsDatabaseBackups() throws CloudException, InternalException;
+
+    public boolean isSuppotsScheduledDatabaseBackups() throws CloudException, InternalException;
+
+    public boolean isSuppotsDemandBackups() throws CloudException, InternalException;
+
+    public boolean isSupportsRestoreBackup() throws CloudException, InternalException;
 }
