@@ -300,10 +300,10 @@ public abstract class AbstractSnapshotSupport implements SnapshotSupport {
     public void setTags( @Nonnull String[] snapshotIds, @Nonnull Tag... tags ) throws CloudException, InternalException {
         for( String id : snapshotIds ) {
 
-            Collection<Tag> collectionForDelete = TagUtils.getTagsForDelete(getSnapshot(id).getTags(), tags);
+            Tag[] collectionForDelete = TagUtils.getTagsForDelete(getSnapshot(id).getTags(), tags);
 
-            if( collectionForDelete != null ) {
-                removeTags(id, collectionForDelete.toArray(new Tag[collectionForDelete.size()]));
+            if( collectionForDelete.length != 0 ) {
+                removeTags(id, collectionForDelete);
             }
 
             updateTags(id, tags);

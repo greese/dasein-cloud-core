@@ -596,10 +596,10 @@ public abstract class AbstractVLANSupport<T extends CloudProvider> implements VL
     public void setSubnetTags( @Nonnull String[] subnetIds, @Nonnull Tag... tags ) throws CloudException, InternalException {
         for( String id : subnetIds ) {
 
-            Collection<Tag> collectionForDelete = TagUtils.getTagsForDelete(getSubnet(id).getTags(), tags);
+            Tag[] collectionForDelete = TagUtils.getTagsForDelete(getSubnet(id).getTags(), tags);
 
-            if( collectionForDelete != null ) {
-                removeSubnetTags(id, collectionForDelete.toArray(new Tag[collectionForDelete.size()]));
+            if( collectionForDelete.length != 0 ) {
+                removeSubnetTags(id, collectionForDelete);
             }
 
             updateSubnetTags(id, tags);
@@ -609,10 +609,10 @@ public abstract class AbstractVLANSupport<T extends CloudProvider> implements VL
     @Override
     public void setRoutingTableTags( @Nonnull String[] routingTableIds, @Nonnull Tag... tags ) throws CloudException, InternalException {
         for( String id : routingTableIds ) {
-            Collection<Tag> collectionForDelete = TagUtils.getTagsForDelete(getRoutingTable(id).getTags(), tags);
+            Tag[] collectionForDelete = TagUtils.getTagsForDelete(getRoutingTable(id).getTags(), tags);
 
-            if( collectionForDelete != null ) {
-                removeRoutingTableTags(id, collectionForDelete.toArray(new Tag[collectionForDelete.size()]));
+            if( collectionForDelete.length != 0 ) {
+                removeRoutingTableTags(id, collectionForDelete);
             }
 
             updateRoutingTableTags(id, tags);
@@ -622,10 +622,10 @@ public abstract class AbstractVLANSupport<T extends CloudProvider> implements VL
     @Override
     public void setInternetGatewayTags( @Nonnull String[] internetGatewayIds, @Nonnull Tag... tags ) throws CloudException, InternalException {
         for( String id : internetGatewayIds ) {
-            Collection<Tag> collectionForDelete = TagUtils.getTagsForDelete(getInternetGatewayById(id).getTags(), tags);
+            Tag[] collectionForDelete = TagUtils.getTagsForDelete(getInternetGatewayById(id).getTags(), tags);
 
-            if( collectionForDelete != null ) {
-                removeInternetGatewayTags(id, collectionForDelete.toArray(new Tag[collectionForDelete.size()]));
+            if( collectionForDelete.length != 0 ) {
+                removeInternetGatewayTags(id, collectionForDelete);
             }
 
             updateInternetGatewayTags(id, tags);

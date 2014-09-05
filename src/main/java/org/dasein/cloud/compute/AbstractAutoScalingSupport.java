@@ -31,27 +31,26 @@ public abstract class AbstractAutoScalingSupport implements AutoScalingSupport {
     public void setTags( @Nonnull String[] providerScalingGroupIds, @Nonnull AutoScalingTag... tags ) throws CloudException, InternalException {
         for( String id : providerScalingGroupIds ) {
 
-            Collection<AutoScalingTag> collectionForDelete = getTagsForDelete(getScalingGroup(id).getTags(), tags);
+            AutoScalingTag[] collectionForDelete = getTagsForDelete(getScalingGroup(id).getTags(), tags);
 
-            if( collectionForDelete != null ) {
-                removeTags(new String[]{id}, collectionForDelete.toArray(new AutoScalingTag[collectionForDelete.size()]));
+            if( collectionForDelete.length != 0 ) {
+                removeTags(new String[]{id}, collectionForDelete);
             }
 
             updateTags(new String[]{id}, tags);
         }
     }
 
-    static public Collection<AutoScalingTag> getTagsForDelete( AutoScalingTag[] all, Tag[] tags ) {
-        Collection<AutoScalingTag> result = null;
+    static public AutoScalingTag[] getTagsForDelete( AutoScalingTag[] all, Tag[] tags ) {
+        Collection<AutoScalingTag> result = new ArrayList<AutoScalingTag>();
         if( all != null ) {
-            result = new ArrayList<AutoScalingTag>();
             for( AutoScalingTag tag : all ) {
                 if( !TagUtils.isKeyInTags(tag.getKey(), tags) ) {
                     result.add(tag);
                 }
             }
         }
-        return result;
+        return result.toArray(new AutoScalingTag[result.size()]);
     }
 
 }

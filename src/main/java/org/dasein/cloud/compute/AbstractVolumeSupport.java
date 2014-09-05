@@ -288,10 +288,10 @@ public abstract class AbstractVolumeSupport implements VolumeSupport {
     public void setTags( @Nonnull String[] volumeIds, @Nonnull Tag... tags ) throws CloudException, InternalException {
         for( String id : volumeIds ) {
 
-            Collection<Tag> collectionForDelete = TagUtils.getTagsForDelete(getVolume(id).getTags(), tags);
+            Tag[] collectionForDelete = TagUtils.getTagsForDelete(getVolume(id).getTags(), tags);
 
-            if( collectionForDelete != null ) {
-                removeTags(id, collectionForDelete.toArray(new Tag[collectionForDelete.size()]));
+            if( collectionForDelete.length != 0 ) {
+                removeTags(id, collectionForDelete);
             }
 
             updateTags(id, tags);

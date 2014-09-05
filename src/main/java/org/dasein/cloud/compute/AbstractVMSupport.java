@@ -933,10 +933,10 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     @Override
     public void setTags(@Nonnull String[] vmIds, @Nonnull Tag... tags) throws CloudException, InternalException {
         for (String id : vmIds) {
-            Collection<Tag> collectionForDelete = TagUtils.getTagsForDelete(getVirtualMachine(id).getTags(), tags);
+            Tag[] collectionForDelete = TagUtils.getTagsForDelete(getVirtualMachine(id).getTags(), tags);
 
-            if (collectionForDelete != null) {
-                removeTags(id, collectionForDelete.toArray(new Tag[collectionForDelete.size()]));
+            if (collectionForDelete.length != 0 ) {
+                removeTags(id, collectionForDelete);
             }
 
             updateTags(id, tags);

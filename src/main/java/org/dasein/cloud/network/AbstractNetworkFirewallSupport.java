@@ -231,10 +231,10 @@ public abstract class AbstractNetworkFirewallSupport implements NetworkFirewallS
     public void setTags( @Nonnull String[] firewallIds, @Nonnull Tag... tags ) throws CloudException, InternalException {
         for( String id : firewallIds ) {
 
-            Collection<Tag> collectionForDelete = TagUtils.getTagsForDelete(getFirewall(id).getTags(), tags);
+            Tag[] collectionForDelete = TagUtils.getTagsForDelete(getFirewall(id).getTags(), tags);
 
-            if( collectionForDelete != null ) {
-                removeTags(id, collectionForDelete.toArray(new Tag[collectionForDelete.size()]));
+            if( collectionForDelete.length != 0 ) {
+                removeTags(id, collectionForDelete);
             }
 
             updateTags(id, tags);

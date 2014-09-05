@@ -2,6 +2,7 @@ package org.dasein.cloud.util;
 
 import org.dasein.cloud.Tag;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
@@ -12,17 +13,16 @@ import java.util.Map;
  */
 public class TagUtils {
 
-    static public Collection<Tag> getTagsForDelete( Map<String, String> all, Tag[] tags ) {
-        Collection<Tag> result = null;
+    static public @Nonnull Tag[] getTagsForDelete( Map<String, String> all, Tag[] tags ) {
+        Collection<Tag> result = new ArrayList<Tag>();
         if( all != null ) {
-            result = new ArrayList<Tag>();
             for( Map.Entry<String, String> entry : all.entrySet() ) {
                 if( !isKeyInTags(entry.getKey(), tags) ) {
                     result.add(new Tag(entry.getKey(), entry.getValue()));
                 }
             }
         }
-        return result;
+        return result.toArray(new Tag[result.size()]);
     }
 
     static public boolean isKeyInTags( String key, Tag[] tags ) {

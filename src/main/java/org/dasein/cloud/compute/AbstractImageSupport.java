@@ -620,10 +620,10 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
     public void setTags( @Nonnull String[] imageIds, @Nonnull Tag... tags ) throws CloudException, InternalException {
         for( String id : imageIds ) {
 
-            Collection<Tag> collectionForDelete = TagUtils.getTagsForDelete(getImage(id).getTags(), tags);
+            Tag[] collectionForDelete = TagUtils.getTagsForDelete(getImage(id).getTags(), tags);
 
-            if( collectionForDelete != null ) {
-                removeTags(id, collectionForDelete.toArray(new Tag[collectionForDelete.size()]));
+            if( collectionForDelete.length != 0 ) {
+                removeTags(id, collectionForDelete);
             }
 
             updateTags(id, tags);
