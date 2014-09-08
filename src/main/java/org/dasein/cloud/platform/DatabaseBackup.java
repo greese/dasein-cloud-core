@@ -32,9 +32,9 @@ public class DatabaseBackup implements Serializable {
     private String                providerSnapshotId;
     private long                  snapshotTimestamp;
     private int                   storageInGigabytes;
-    
+
     public DatabaseBackup() { }
-    
+
     public boolean equals(Object ob) {
         if( ob == null ) {
             return false;
@@ -46,7 +46,7 @@ public class DatabaseBackup implements Serializable {
             return false;
         }
         DatabaseSnapshot other = (DatabaseSnapshot)ob;
-        
+
         if( !getProviderOwnerId().equals(other.getProviderOwnerId()) ) {
             return false;
         }
@@ -55,46 +55,59 @@ public class DatabaseBackup implements Serializable {
         }
         return getProviderSnapshotId().equals(other.getProviderSnapshotId());
     }
-    
+
     public String getAdminUser() {
         return adminUser;
     }
+
     public void setAdminUser(String adminUser) {
         this.adminUser = adminUser;
     }
+
     public DatabaseSnapshotState getCurrentState() {
         return currentState;
     }
+
     public void setCurrentState(DatabaseSnapshotState currentState) {
         this.currentState = currentState;
     }
+
     public String getProviderDatabaseId() {
         return providerDatabaseId;
     }
+
     public void setProviderDatabaseId(String providerDatabaseId) {
         this.providerDatabaseId = providerDatabaseId;
     }
+
     public String getProviderRegionId() {
         return providerRegionId;
     }
+
     public void setProviderRegionId(String providerRegionId) {
         this.providerRegionId = providerRegionId;
     }
+
     public String getProviderSnapshotId() {
         return providerSnapshotId;
     }
+
     public void setProviderSnapshotId(String providerSnapshotId) {
         this.providerSnapshotId = providerSnapshotId;
     }
+
     public long getSnapshotTimestamp() {
         return snapshotTimestamp;
     }
+
     public void setSnapshotTimestamp(long snapshotTimestamp) {
         this.snapshotTimestamp = snapshotTimestamp;
     }
+
     public int getStorageInGigabytes() {
         return storageInGigabytes;
     }
+
     public void setStorageInGigabytes(int storageInGigabytes) {
         this.storageInGigabytes = storageInGigabytes;
     }
@@ -106,7 +119,7 @@ public class DatabaseBackup implements Serializable {
     public String getProviderOwnerId() {
         return providerOwnerId;
     }
-    
+
     public String toString() {
         return getProviderSnapshotId();
     }
