@@ -138,7 +138,7 @@ public interface AutoScalingSupport extends AccessControlledService {
      * @throws CloudException    an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
-    public Collection<AutoScalingGroupNotificationConfig> listNotificationConfigs( final String[] scalingGroupIds ) throws CloudException, InternalException;
+    public Iterable<AutoScalingGroupNotificationConfig> listNotificationConfigs( final String[] scalingGroupIds ) throws CloudException, InternalException;
 
     /**
      * Updates meta-data for multiple auto scaling groups with the new values. It will not overwrite any value that currently

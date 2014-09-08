@@ -26,31 +26,16 @@ public class LbAttributesOptions {
         return crossDataCenter;
     }
 
-    public void setCrossDataCenter( Boolean crossDataCenter ) {
-        this.crossDataCenter = crossDataCenter;
-    }
-
     public Boolean getConnectionDraining() {
         return connectionDraining;
-    }
-
-    public void setConnectionDraining( Boolean connectionDraining ) {
-        this.connectionDraining = connectionDraining;
     }
 
     public Integer getConnectionDrainingTimeout() {
         return connectionDrainingTimeout;
     }
 
-    public void setConnectionDrainingTimeout( Integer connectionDrainingTimeout ) {
-        this.connectionDrainingTimeout = connectionDrainingTimeout;
-    }
-
     public Integer getIdleConnectionTimeout() {
         return idleConnectionTimeout;
     }
 
-    public void setIdleConnectionTimeout( Integer idleConnectionTimeout ) {
-        this.idleConnectionTimeout = idleConnectionTimeout;
-    }
 }
