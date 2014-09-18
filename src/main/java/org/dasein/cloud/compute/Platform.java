@@ -66,6 +66,10 @@ public enum Platform {
      */
     CENT_OS,
     /**
+     * CoreOS
+     */
+    COREOS,
+    /**
      * Generic Windows
      */
     WINDOWS,
@@ -89,6 +93,9 @@ public enum Platform {
         name = name.toLowerCase();
         if( name.contains("centos") ) {
             return CENT_OS;
+        }
+        else if( name.contains("coreos") ) {
+            return COREOS;
         }
         else if( name.contains("ubuntu") ) {
             return UBUNTU;
@@ -190,6 +197,7 @@ public enum Platform {
         case FREE_BSD: return "FreeBSD";
         case OPEN_BSD: return "OpenBSD";
         case CENT_OS: return "CentOS";
+        case COREOS: return "CoreOS";
         case WINDOWS: return "Windows";
         }
         return "Unknown";
