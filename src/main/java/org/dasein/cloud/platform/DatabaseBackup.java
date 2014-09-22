@@ -22,19 +22,19 @@ package org.dasein.cloud.platform;
 import java.io.Serializable;
 
 public class DatabaseBackup implements Serializable {
-    private static final long serialVersionUID = 3816734659784392296L;
+    private static final long serialVersionUID = 3816734659784392296L;  //TODO what does this need to be changed to?
     
     private String                adminUser;
-    private DatabaseSnapshotState currentState; 
+    private DatabaseBackupState   currentState; 
     private String                providerDatabaseId;
     private String                providerOwnerId;
     private String                providerRegionId;
-    private String                providerSnapshotId;
-    private long                  snapshotTimestamp;
+    private String                providerBackupId;
+    private long                  backupTimestamp;
     private int                   storageInGigabytes;
-    
+
     public DatabaseBackup() { }
-    
+
     public boolean equals(Object ob) {
         if( ob == null ) {
             return false;
@@ -45,56 +45,69 @@ public class DatabaseBackup implements Serializable {
         if( !getClass().getName().equals(ob.getClass().getName()) ) {
             return false;
         }
-        DatabaseSnapshot other = (DatabaseSnapshot)ob;
-        
+        DatabaseBackup other = (DatabaseBackup)ob;
+
         if( !getProviderOwnerId().equals(other.getProviderOwnerId()) ) {
             return false;
         }
         if( !getProviderRegionId().equals(other.getProviderRegionId()) ) {
             return false;
         }
-        return getProviderSnapshotId().equals(other.getProviderSnapshotId());
+        return getProviderBackupId().equals(other.getProviderBackupId());
     }
-    
+
     public String getAdminUser() {
         return adminUser;
     }
+
     public void setAdminUser(String adminUser) {
         this.adminUser = adminUser;
     }
-    public DatabaseSnapshotState getCurrentState() {
+
+    public DatabaseBackupState getCurrentState() {
         return currentState;
     }
-    public void setCurrentState(DatabaseSnapshotState currentState) {
+
+    public void setCurrentState(DatabaseBackupState currentState) {
         this.currentState = currentState;
     }
+
     public String getProviderDatabaseId() {
         return providerDatabaseId;
     }
+
     public void setProviderDatabaseId(String providerDatabaseId) {
         this.providerDatabaseId = providerDatabaseId;
     }
+
     public String getProviderRegionId() {
         return providerRegionId;
     }
+
     public void setProviderRegionId(String providerRegionId) {
         this.providerRegionId = providerRegionId;
     }
-    public String getProviderSnapshotId() {
-        return providerSnapshotId;
+
+    public String getProviderBackupId() {
+        return providerBackupId;
     }
-    public void setProviderSnapshotId(String providerSnapshotId) {
-        this.providerSnapshotId = providerSnapshotId;
+
+    public void setProviderBackupId(String providerSnapshotId) {
+        this.providerBackupId = providerSnapshotId;
     }
-    public long getSnapshotTimestamp() {
-        return snapshotTimestamp;
+
+    public long getBackupTimestamp() {
+        return backupTimestamp;
     }
-    public void setSnapshotTimestamp(long snapshotTimestamp) {
-        this.snapshotTimestamp = snapshotTimestamp;
+
+    public void setBackupTimestamp(long backupTimestamp) {
+        this.backupTimestamp = backupTimestamp;
     }
+
     public int getStorageInGigabytes() {
         return storageInGigabytes;
     }
+
     public void setStorageInGigabytes(int storageInGigabytes) {
         this.storageInGigabytes = storageInGigabytes;
     }
@@ -106,8 +119,9 @@ public class DatabaseBackup implements Serializable {
     public String getProviderOwnerId() {
         return providerOwnerId;
     }
-    
+
     public String toString() {
-        return getProviderSnapshotId();
+        return getProviderBackupId();
     }
+
 }
