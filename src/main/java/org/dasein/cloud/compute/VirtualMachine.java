@@ -72,6 +72,7 @@ public class VirtualMachine implements Networkable, Taggable {
     private String                  providerSubnetId;
     private String                  providerVirtualMachineId;
     private String[]                providerNetworkInterfaceIds;
+    private ProviderNetworkInterface[] providerNetworkInterfaces;
     private String                  providerVlanId;
     private String                  providerKeypairId;
     private String[]                providerFirewallIds;
@@ -602,6 +603,14 @@ public class VirtualMachine implements Networkable, Taggable {
 
     public void setProviderNetworkInterfaceIds( String[] providerNetworkInterfaceIds ) {
         this.providerNetworkInterfaceIds = providerNetworkInterfaceIds;
+    }
+
+    public ProviderNetworkInterface[] getProviderNetworkInterfaces() {
+        return providerNetworkInterfaces;
+    }
+
+    public void setProviderNetworkInterfaces( ProviderNetworkInterface[] providerNetworkInterfaces ) {
+        this.providerNetworkInterfaces = providerNetworkInterfaces;
     }
 
     public @Nullable String getProviderKernelImageId() {
