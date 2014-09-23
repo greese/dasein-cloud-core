@@ -8,7 +8,7 @@ import org.dasein.cloud.network.RawAddress;
  */
 public class AssociationIpAddress {
     private RawAddress privateIpAddress;
-    private RawAddress publicIp;
+    private RawAddress publicIpAddress;
     private boolean primary;
 
     public AssociationIpAddress() {
@@ -22,12 +22,12 @@ public class AssociationIpAddress {
         this.privateIpAddress = privateIpAddress;
     }
 
-    public RawAddress getPublicIp() {
-        return publicIp;
+    public RawAddress getPublicIpAddress() {
+        return publicIpAddress;
     }
 
-    public void setPublicIp( RawAddress publicIp ) {
-        this.publicIp = publicIp;
+    public void setPublicIpAddress( RawAddress publicIpAddress ) {
+        this.publicIpAddress = publicIpAddress;
     }
 
     public boolean isPrimary() {
