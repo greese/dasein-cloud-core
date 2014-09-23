@@ -20,6 +20,7 @@
 package org.dasein.cloud.platform;
 
 import org.dasein.cloud.platform.bigdata.DataWarehouseSupport;
+import org.dasein.cloud.platform.support.TicketService;
 
 import javax.annotation.Nullable;
 
@@ -45,6 +46,8 @@ public interface PlatformServices {
     public @Nullable RelationalDatabaseSupport getRelationalDatabaseSupport();
 
     public @Nullable MonitoringSupport getMonitoringSupport();
+
+    public @Nullable TicketService getSupportService();
     
     public boolean hasCDNSupport();
 
@@ -61,6 +64,8 @@ public interface PlatformServices {
     
     public boolean hasRelationalDatabaseSupport();
 
-   public boolean hasMonitoringSupport();
+    public boolean hasMonitoringSupport();
+
+    public boolean hasSupportService();
 
 }

@@ -19,16 +19,15 @@
 
 package org.dasein.cloud;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import org.dasein.cloud.admin.AdminServices;
 import org.dasein.cloud.ci.CIServices;
 import org.dasein.cloud.compute.ComputeServices;
-import org.dasein.cloud.dc.DataCenterServices;
 import org.dasein.cloud.identity.IdentityServices;
 import org.dasein.cloud.network.NetworkServices;
 import org.dasein.cloud.platform.PlatformServices;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Simple base implementation of a cloud provider bootstrap object that defaults all services to <code>null</code>.
@@ -75,18 +74,19 @@ public abstract class AbstractCloud extends CloudProvider {
         
         return (compute == null ? null : compute.getIdentityServices());
     }
-    
+
     @Override
     public @Nullable NetworkServices getNetworkServices() {
         CloudProvider compute = getComputeCloud();
-        
+
         return (compute == null ? null : compute.getNetworkServices());
     }
-    
+
     @Override
     public @Nullable PlatformServices getPlatformServices() {
         CloudProvider compute = getComputeCloud();
-        
-        return (compute == null ? null : compute.getPlatformServices());
+
+        return ( compute == null ? null : compute.getPlatformServices() );
     }
+
 }
