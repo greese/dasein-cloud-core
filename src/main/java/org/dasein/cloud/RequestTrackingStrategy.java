@@ -20,6 +20,7 @@
 package org.dasein.cloud;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Created by Drew Lyall: 12/09/2014 16:51
@@ -34,6 +35,7 @@ public class RequestTrackingStrategy{
     }
 
     private String  requestID;
+    private String  headerName;
     private boolean sendAsHeader;
     private boolean inAPITrace;
 
@@ -53,12 +55,17 @@ public class RequestTrackingStrategy{
         return this.sendAsHeader;
     }
 
+    public @Nullable String getHeaderName(){
+        return this.headerName;
+    }
+
     public boolean getInAPITrace(){
         return this.inAPITrace;
     }
 
-    public @Nonnull RequestTrackingStrategy sendAsHeader(boolean sendAsHeader){
+    public @Nonnull RequestTrackingStrategy sendAsHeader(boolean sendAsHeader, @Nonnull String headerName){
         this.sendAsHeader = sendAsHeader;
+        this.headerName = headerName;
         return this;
     }
 
