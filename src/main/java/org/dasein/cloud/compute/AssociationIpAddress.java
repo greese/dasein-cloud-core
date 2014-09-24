@@ -9,6 +9,7 @@ import org.dasein.cloud.network.RawAddress;
 public class AssociationIpAddress {
     private RawAddress privateIpAddress;
     private RawAddress publicIpAddress;
+    private String publicDnsName;
     private boolean primary;
 
     public AssociationIpAddress() {
@@ -28,6 +29,14 @@ public class AssociationIpAddress {
 
     public void setPublicIpAddress( RawAddress publicIpAddress ) {
         this.publicIpAddress = publicIpAddress;
+    }
+
+    public String getPublicDnsName() {
+        return publicDnsName;
+    }
+
+    public void setPublicDnsName( String publicDnsName ) {
+        this.publicDnsName = publicDnsName;
     }
 
     public boolean isPrimary() {
