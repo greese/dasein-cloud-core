@@ -28,27 +28,27 @@ import javax.annotation.Nullable;
  * @since 2014.08 - Fork
  * @version 2014.08 - Fork
  */
-public class RequestTrackingStrategy{
+public class RequestTrackingStrategy {
 
-    public static @Nonnull RequestTrackingStrategy getInstance(@Nonnull String requestID){
-        return new RequestTrackingStrategy(requestID);
+    public static @Nonnull RequestTrackingStrategy getInstance(@Nonnull String requestId){
+        return new RequestTrackingStrategy(requestId);
     }
 
-    private String  requestID;
+    private String  requestId;
     private String  headerName;
     private boolean sendAsHeader;
     private boolean inAPITrace;
 
     private RequestTrackingStrategy(){}
 
-    private RequestTrackingStrategy(@Nonnull String requestID){
-        this.requestID = requestID;
+    private RequestTrackingStrategy(@Nonnull String requestId){
+        this.requestId = requestId;
         this.sendAsHeader = false;
         this.inAPITrace = false;
     }
 
-    public @Nonnull String getRequestID(){
-        return this.requestID;
+    public @Nonnull String getRequestId(){
+        return this.requestId;
     }
 
     public boolean getSendAsHeader(){
