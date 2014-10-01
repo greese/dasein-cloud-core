@@ -92,7 +92,7 @@ public class  APITrace {
                 RequestTrackingStrategy strategy = ctx.getRequestTrackingStrategy();
                 String requestTracking = "";
                 if(strategy != null && strategy.getInAPITrace()){
-                    requestTracking = strategy.getRequestID() + DELIMITER;
+                    requestTracking = strategy.getRequestId() + DELIMITER;
                 }
 
                 operationName = provider.getProviderName().replaceAll(DELIMITER_REGEX, "_") + DELIMITER + provider.getCloudName().replaceAll(DELIMITER_REGEX, "_") + DELIMITER + accountNumber.replaceAll(DELIMITER_REGEX, "_") + DELIMITER + requestTracking + operationName;
