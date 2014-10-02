@@ -86,4 +86,6 @@ public interface RelationalDatabaseCapabilities extends Capabilities{
     public boolean isSuppotsDemandBackups() throws CloudException, InternalException;
 
     public boolean isSupportsRestoreBackup() throws CloudException, InternalException;
+
+    public boolean isSupportsDeleteBackup() throws CloudException, InternalException;
 }
