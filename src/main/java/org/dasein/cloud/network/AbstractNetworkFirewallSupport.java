@@ -233,7 +233,7 @@ public abstract class AbstractNetworkFirewallSupport implements NetworkFirewallS
 
             Collection<Tag> collectionForDelete = TagUtils.getTagsForDelete(getFirewall(id).getTags(), tags);
 
-            if (collectionForDelete != null) {
+            if( collectionForDelete != null && collectionForDelete.size() != 0 ) {
                 removeTags(id, collectionForDelete.toArray(new Tag[collectionForDelete.size()]));
             }
 

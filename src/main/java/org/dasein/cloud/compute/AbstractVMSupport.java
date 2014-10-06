@@ -945,7 +945,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
         for (String id : vmIds) {
             Collection<Tag> collectionForDelete = TagUtils.getTagsForDelete(getVirtualMachine(id).getTags(), tags);
 
-            if (collectionForDelete != null) {
+            if (collectionForDelete != null && collectionForDelete.size() != 0) {
                 removeTags(id, collectionForDelete.toArray(new Tag[collectionForDelete.size()]));
             }
 
