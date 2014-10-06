@@ -622,7 +622,7 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
 
             Collection<Tag> collectionForDelete = TagUtils.getTagsForDelete(getImage(id).getTags(), tags);
 
-            if (collectionForDelete != null) {
+            if (collectionForDelete != null && collectionForDelete.size() != 0) {
                 removeTags(id, collectionForDelete.toArray(new Tag[collectionForDelete.size()]));
             }
 
