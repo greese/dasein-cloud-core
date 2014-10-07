@@ -35,45 +35,49 @@ import java.util.Collections;
  * @author Cameron Stokes (http://github.com/clstokes)
  * @since 2013-02-18
  */
-public abstract class AbstractMonitoringSupport implements MonitoringSupport {
+public abstract class AbstractMonitoringSupport<T extends CloudProvider> implements MonitoringSupport {
 
-  private CloudProvider provider;
+    private T provider;
 
-  public AbstractMonitoringSupport( @Nonnull CloudProvider provider ) {
-    this.provider = provider;
-  }
+    public AbstractMonitoringSupport( @Nonnull T provider ) {
+        this.provider = provider;
+    }
 
-  @Override
-  public @Nonnull Collection<Metric> listMetrics( MetricFilterOptions options ) throws InternalException, CloudException {
-    return Collections.emptyList();
-  }
+    public final @Nonnull T getProvider() {
+        return provider;
+    }
 
-  @Override
-  public @Nonnull Collection<Alarm> listAlarms( AlarmFilterOptions options ) throws InternalException, CloudException {
-    return Collections.emptyList();
-  }
+    @Override
+    public @Nonnull Collection<Metric> listMetrics( MetricFilterOptions options ) throws InternalException, CloudException {
+        return Collections.emptyList();
+    }
 
-  @Override public void updateAlarm( @Nonnull AlarmUpdateOptions options ) throws InternalException, CloudException {
-    throw new OperationNotSupportedException( "Creating alarms is not currently implemented" );
-  }
+    @Override
+    public @Nonnull Collection<Alarm> listAlarms( AlarmFilterOptions options ) throws InternalException, CloudException {
+        return Collections.emptyList();
+    }
 
-  @Override public void removeAlarms( @Nonnull String[] alarmNames ) throws InternalException, CloudException {
-    throw new OperationNotSupportedException( "Removing alarms is not currently implemented" );
-  }
+    @Override public void updateAlarm( @Nonnull AlarmUpdateOptions options ) throws InternalException, CloudException {
+        throw new OperationNotSupportedException("Creating alarms is not currently implemented");
+    }
 
-  @Override
-  public void enableAlarmActions( @Nonnull String[] alarmNames ) throws InternalException, CloudException {
-    throw new OperationNotSupportedException( "Enabling alarm actions is not currently implemented" );
-  }
+    @Override public void removeAlarms( @Nonnull String[] alarmNames ) throws InternalException, CloudException {
+        throw new OperationNotSupportedException("Removing alarms is not currently implemented");
+    }
 
-  @Override
-  public void disableAlarmActions( @Nonnull String[] alarmNames ) throws InternalException, CloudException {
-    throw new OperationNotSupportedException( "Disabling alarm actions is not currently implemented" );
-  }
+    @Override
+    public void enableAlarmActions( @Nonnull String[] alarmNames ) throws InternalException, CloudException {
+        throw new OperationNotSupportedException("Enabling alarm actions is not currently implemented");
+    }
 
-  @Override
-  public @Nonnull String[] mapServiceAction( @Nonnull ServiceAction action ) {
-    return new String[0];
-  }
+    @Override
+    public void disableAlarmActions( @Nonnull String[] alarmNames ) throws InternalException, CloudException {
+        throw new OperationNotSupportedException("Disabling alarm actions is not currently implemented");
+    }
+
+    @Override
+    public @Nonnull String[] mapServiceAction( @Nonnull ServiceAction action ) {
+        return new String[0];
+    }
 
 }

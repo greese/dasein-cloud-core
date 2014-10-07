@@ -15,10 +15,14 @@ import javax.annotation.Nonnull;
  * @version 2014.08
  * @since 2014.08
  */
-public class AbstractAffinityGroupSupport implements AffinityGroupSupport{
-    private CloudProvider provider;
+public class AbstractAffinityGroupSupport<T extends CloudProvider> implements AffinityGroupSupport{
+    private T provider;
 
-    public AbstractAffinityGroupSupport(@Nonnull CloudProvider provider) {
+    protected final @Nonnull T getProvider() {
+        return provider;
+    }
+
+    public AbstractAffinityGroupSupport(@Nonnull T provider) {
         this.provider = provider;
     }
 
