@@ -71,7 +71,7 @@ public interface RelationalDatabaseCapabilities extends Capabilities{
      * @param locale the language in which the term should be presented
      * @return the provider term for DB Snapshot
      */
-    public String getProviderTermForBackup( Locale locale );
+    public @Nonnull String getProviderTermForBackup( Locale locale );
 
     /** 
      * Indicates whether the cloud provides support for RDS backups
@@ -79,11 +79,11 @@ public interface RelationalDatabaseCapabilities extends Capabilities{
      * @throws CloudException
      * @throws InternalException
      */
-    public boolean isSuppotsDatabaseBackups() throws CloudException, InternalException;
+    public boolean isSupportsDatabaseBackups() throws CloudException, InternalException;
 
-    public boolean isSuppotsScheduledDatabaseBackups() throws CloudException, InternalException;
+    public boolean isSupportsScheduledDatabaseBackups() throws CloudException, InternalException;
 
-    public boolean isSuppotsDemandBackups() throws CloudException, InternalException;
+    public boolean isSupportsDemandBackups() throws CloudException, InternalException;
 
     public boolean isSupportsRestoreBackup() throws CloudException, InternalException;
 
