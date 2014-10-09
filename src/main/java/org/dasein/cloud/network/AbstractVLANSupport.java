@@ -250,7 +250,7 @@ public abstract class AbstractVLANSupport<T extends CloudProvider> implements VL
     /**
      * @return the provider object governing this support object
      */
-    protected final @Nonnull CloudProvider getProvider() {
+    protected final @Nonnull T getProvider() {
         return provider;
     }
 

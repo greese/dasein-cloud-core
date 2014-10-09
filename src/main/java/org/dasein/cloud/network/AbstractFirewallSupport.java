@@ -47,10 +47,10 @@ import java.util.Map;
  * @version 2014.03 added support for authorizing with rule create options
  */
 @SuppressWarnings("UnusedDeclaration")
-public abstract class AbstractFirewallSupport implements FirewallSupport {
-    private CloudProvider provider;
+public abstract class AbstractFirewallSupport<T extends CloudProvider> implements FirewallSupport {
+    private T provider;
 
-    public AbstractFirewallSupport(@Nonnull CloudProvider provider) {
+    public AbstractFirewallSupport(@Nonnull T provider) {
         this.provider = provider;
     }
 
@@ -169,7 +169,7 @@ public abstract class AbstractFirewallSupport implements FirewallSupport {
     }
 
     @Override
-    public @Nullable  Firewall getFirewall(@Nonnull String firewallId) throws InternalException, CloudException {
+    public @Nullable Firewall getFirewall(@Nonnull String firewallId) throws InternalException, CloudException {
         for( Firewall fw : list() ) {
             if( firewallId.equals(fw.getProviderFirewallId()) ) {
                 return fw;
@@ -187,7 +187,7 @@ public abstract class AbstractFirewallSupport implements FirewallSupport {
     /**
      * @return the provider object associated with any calls through this support object
      */
-    protected final @Nonnull CloudProvider getProvider() {
+    protected final @Nonnull T getProvider() {
         return provider;
     }
 
