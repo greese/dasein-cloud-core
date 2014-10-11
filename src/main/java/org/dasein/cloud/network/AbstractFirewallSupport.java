@@ -181,7 +181,7 @@ public abstract class AbstractFirewallSupport<T extends CloudProvider> implement
     @Override
     @Deprecated
     public @Nonnull FirewallConstraints getFirewallConstraintsForCloud() throws InternalException, CloudException {
-        return FirewallConstraints.getInstance();
+        return getCapabilities().getFirewallConstraintsForCloud();
     }
 
     /**
@@ -217,6 +217,28 @@ public abstract class AbstractFirewallSupport<T extends CloudProvider> implement
             status.add(new ResourceStatus(fw.getProviderFirewallId(), true));
         }
         return status;
+    }
+
+    @Deprecated
+    public @Nonnull Iterable<RuleTargetType> listSupportedDestinationTypes(boolean inVlan) throws InternalException, CloudException {
+        return getCapabilities().listSupportedDestinationTypes(inVlan);
+    }
+
+    @Deprecated
+    public @Nonnull Iterable<Direction> listSupportedDirections(boolean inVlan) throws InternalException, CloudException {
+        return getCapabilities().listSupportedDirections(inVlan);
+    }
+
+    @Override
+    @Deprecated
+    public @Nonnull Iterable<Permission> listSupportedPermissions(boolean inVlan) throws InternalException, CloudException {
+        return getCapabilities().listSupportedPermissions(inVlan);
+    }
+
+    @Override
+    @Deprecated
+    public @Nonnull Iterable<RuleTargetType> listSupportedSourceTypes(boolean inVlan) throws InternalException, CloudException {
+        return getCapabilities().listSupportedSourceTypes(inVlan);
     }
 
     @Override
