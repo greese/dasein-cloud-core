@@ -33,8 +33,8 @@ import java.util.Locale;
  * <p>Created by stas: 11/10/2014 19:00</p>
  *
  * @author Stas Maksimov
- * @version 2014.08 initial version
- * @since 2014.08
+ * @version 2015.01 initial version
+ * @since 2015.01
  */
 public abstract class AbstractDataCenterServices<T extends CloudProvider> implements DataCenterServices {
     private T provider;

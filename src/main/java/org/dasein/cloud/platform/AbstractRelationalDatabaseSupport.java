@@ -29,8 +29,8 @@ import java.util.Locale;
  * <p>Created by stas: 11/10/2014 21:39</p>
  *
  * @author Stas Maksimov
- * @version 2014.08 initial version
- * @since 2014.08
+ * @version 2015.01 initial version
+ * @since 2015.01
  */
 public abstract class AbstractRelationalDatabaseSupport<T extends CloudProvider> implements RelationalDatabaseSupport {
     private T provider;
