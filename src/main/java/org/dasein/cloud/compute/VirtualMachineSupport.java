@@ -54,6 +54,16 @@ public interface VirtualMachineSupport extends AccessControlledService {
     static public final ServiceAction VIEW_CONSOLE     = new ServiceAction("VM:VIEW_CONSOLE");
 
     /**
+     * Allows the adjustment of a variety of options associated with the Virtual Machine. Few clouds will support all possible
+     * options. Therefore a client should check with the cloud's [VMScalingCapabilities] to see what can be scaled.
+     * @param vmId the Virtual Machine being modified
+     * @param options the options specifying the various changes
+     * @throws InternalException an internal error occurred processing the request
+     * @throws CloudException    an error occurred in the cloud processing the request
+     */
+    public void alterVirtualMachine(@Nonnull String vmId, @Nonnull AlterVirtualMachineOptions options) throws InternalException, CloudException;
+
+    /**
      * Scales a virtual machine in accordance with the specified scaling options. Few clouds will support all possible
      * options. Therefore a client should check with the cloud's [VMScalingCapabilities] to see what can be scaled.
      * To support the widest variety of clouds, a client should be prepared for the fact that the returned virtual
