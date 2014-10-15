@@ -253,7 +253,6 @@ public abstract class AbstractRelationalDatabaseSupport<T extends CloudProvider>
     //
 
     /*
-     * Author: Roger Unwin
      * Obtain a valid DatabaseBackup object for the given database instance where the backup was taken prior to the given time.
      *
      * Throws CloudException on failure
@@ -261,8 +260,8 @@ public abstract class AbstractRelationalDatabaseSupport<T extends CloudProvider>
     public DatabaseBackup getUsableBackup(String providerDbId, String beforeTimestamp) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Snapshot functionality is not currently implemented in "+getProvider().getCloudName());
     }
+
     /*
-     * Author: Roger Unwin
      * Obtain a list of DatabaseBackup objects for a given database, or for all databases if null.
      * 
      * Throws CloudException on failure
@@ -272,7 +271,6 @@ public abstract class AbstractRelationalDatabaseSupport<T extends CloudProvider>
     }
 
     /*
-     * Author: Roger Unwin
      * Create a new database from the passed in backup object
      * 
      * Throws CloudException on failure
@@ -282,7 +280,6 @@ public abstract class AbstractRelationalDatabaseSupport<T extends CloudProvider>
     }
 
     /*
-     * Author: Roger Unwin
      * Remove specified database backup
      * 
      * Throws CloudException on failure
@@ -292,7 +289,6 @@ public abstract class AbstractRelationalDatabaseSupport<T extends CloudProvider>
     }
 
     /*
-     * Author: Roger Unwin
      * Restore the passed in DatabaseBackup to its current database instance.
      * 
      * Throws CloudException on failure

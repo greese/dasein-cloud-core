@@ -167,7 +167,6 @@ public interface RelationalDatabaseSupport extends AccessControlledService {
     //
 
     /*
-     * Author: Roger Unwin
      * Obtain a valid DatabaseBackup object for the given database instance where the backup was taken prior to the given time.
      *
      * Throws CloudException on failure
@@ -175,7 +174,6 @@ public interface RelationalDatabaseSupport extends AccessControlledService {
     public DatabaseBackup getUsableBackup(String providerDbId, String beforeTimestamp) throws CloudException, InternalException;
 
     /*
-     * Author: Roger Unwin
      * Obtain a list of DatabaseBackup objects for a given database, or for all databases if null.
      * 
      * Throws CloudException on failure
@@ -183,7 +181,6 @@ public interface RelationalDatabaseSupport extends AccessControlledService {
     public Iterable<DatabaseBackup> listBackups(String forOptionalProviderDatabaseId) throws CloudException, InternalException;
 
     /*
-     * Author: Roger Unwin
      * Create a new database from the passed in backup object
      * 
      * Throws CloudException on failure
@@ -191,7 +188,6 @@ public interface RelationalDatabaseSupport extends AccessControlledService {
     public void createFromBackup(DatabaseBackup backup, String databaseCloneToName) throws CloudException, InternalException;
 
     /*
-     * Author: Roger Unwin
      * Remove specified database backup
      * 
      * Throws CloudException on failure
@@ -199,7 +195,6 @@ public interface RelationalDatabaseSupport extends AccessControlledService {
     public void removeBackup(DatabaseBackup backup) throws CloudException, InternalException;
 
     /*
-     * Author: Roger Unwin
      * Restore the passed in DatabaseBackup to its current database instance.
      * 
      * Throws CloudException on failure
