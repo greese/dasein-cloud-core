@@ -248,23 +248,53 @@ public abstract class AbstractRelationalDatabaseSupport<T extends CloudProvider>
         throw new OperationNotSupportedException("Snapshot functionality is not currently implemented in "+getProvider().getCloudName());
     }
 
-    @Override
-    public DatabaseBackup getBackup( String providerDbBackupId ) throws CloudException, InternalException {
-        throw new OperationNotSupportedException("Backup retrieval is not currently implemented in "+getProvider().getCloudName());
+    //
+    // New Backup section
+    //
+
+    /*
+     * Obtain a valid DatabaseBackup object for the given database instance where the backup was taken prior to the given time.
+     *
+     * Throws CloudException on failure
+     */
+    public DatabaseBackup getUsableBackup(String providerDbId, String beforeTimestamp) throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Snapshot functionality is not currently implemented in "+getProvider().getCloudName());
     }
 
-    @Override
-    public Iterable<DatabaseBackup> listBackups( String forOptionalProviderDatabaseId ) throws CloudException, InternalException {
-        throw new OperationNotSupportedException("Backups retrieval is not currently implemented in "+getProvider().getCloudName());
+    /*
+     * Obtain a list of DatabaseBackup objects for a given database, or for all databases if null.
+     * 
+     * Throws CloudException on failure
+     */
+    public Iterable<DatabaseBackup> listBackups(String forOptionalProviderDatabaseId) throws CloudException, InternalException{
+        throw new OperationNotSupportedException("Snapshot functionality is not currently implemented in "+getProvider().getCloudName());
     }
 
-    @Override
-    public String createFromBackup( String dataSourceName, String providerDatabaseId, String providerDbBackupId, String productSize, String providerDataCenterId, int hostPort ) throws CloudException, InternalException {
-        throw new OperationNotSupportedException("Creation of databases from backup copies is not currently implemented in "+getProvider().getCloudName());
+    /*
+     * Create a new database from the passed in backup object
+     * 
+     * Throws CloudException on failure
+     */
+    public void createFromBackup(DatabaseBackup backup, String databaseCloneToName) throws CloudException, InternalException{
+        throw new OperationNotSupportedException("Snapshot functionality is not currently implemented in "+getProvider().getCloudName());
     }
 
-    @Override
-    public boolean removeBackup( String providerBackupId ) throws CloudException, InternalException {
-        throw new OperationNotSupportedException("Backup removal is not currently implemented in "+getProvider().getCloudName());
+    /*
+     * Remove specified database backup
+     * 
+     * Throws CloudException on failure
+     */
+    public void removeBackup(DatabaseBackup backup) throws CloudException, InternalException{
+        throw new OperationNotSupportedException("Snapshot functionality is not currently implemented in "+getProvider().getCloudName());
     }
+
+    /*
+     * Restore the passed in DatabaseBackup to its current database instance.
+     * 
+     * Throws CloudException on failure
+     */
+    public void restoreBackup(DatabaseBackup backup) throws CloudException, InternalException{
+        throw new OperationNotSupportedException("Snapshot functionality is not currently implemented in "+getProvider().getCloudName());
+    }
+
 }
