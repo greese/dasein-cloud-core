@@ -159,7 +159,4 @@ public class DatabaseBackup implements Serializable {
     public void setBackupConfiguration(String backupConfiguration) {
         this.backupConfiguration = backupConfiguration;
     }
-
-
-
 }
