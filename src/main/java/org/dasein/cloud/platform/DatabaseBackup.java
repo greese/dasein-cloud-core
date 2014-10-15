@@ -23,15 +23,20 @@ import java.io.Serializable;
 
 public class DatabaseBackup implements Serializable {
     private static final long serialVersionUID = 3816734659784392296L;  //TODO what does this need to be changed to?
-    
+
     private String                adminUser;
     private DatabaseBackupState   currentState; 
     private String                providerDatabaseId;
     private String                providerOwnerId;
     private String                providerRegionId;
     private String                providerBackupId;
-    private long                  backupTimestamp;
     private int                   storageInGigabytes;
+
+    private String backupConfiguration = null;
+    private String dueTime = null;
+    private String enqueuedTime = null;
+    private String startTime = null;
+    private String endTime = null;
 
     public DatabaseBackup() { }
 
@@ -96,14 +101,6 @@ public class DatabaseBackup implements Serializable {
         this.providerBackupId = providerSnapshotId;
     }
 
-    public long getBackupTimestamp() {
-        return backupTimestamp;
-    }
-
-    public void setBackupTimestamp(long backupTimestamp) {
-        this.backupTimestamp = backupTimestamp;
-    }
-
     public int getStorageInGigabytes() {
         return storageInGigabytes;
     }
@@ -124,4 +121,42 @@ public class DatabaseBackup implements Serializable {
         return getProviderBackupId();
     }
 
+    public void setDueTime(String dueTime) {
+        this.dueTime = dueTime;
+    }
+    public String getDueTime() {
+        return dueTime;
+    }
+
+    public void setEnqueuedTime(String enqueuedTime) {
+        this.enqueuedTime = enqueuedTime;
+    }
+
+    public String getEnqueuedTime() {
+        return enqueuedTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public String getBackupConfiguration() {
+        return backupConfiguration;
+    }
+
+    public void setBackupConfiguration(String backupConfiguration) {
+        this.backupConfiguration = backupConfiguration;
+    }
 }

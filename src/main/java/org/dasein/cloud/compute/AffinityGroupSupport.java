@@ -32,7 +32,7 @@ import javax.annotation.Nonnull;
  * @version 2014.08
  * @since 2014.08
  */
-public interface AffinityGroupSupport extends AccessControlledService{
+public interface AffinityGroupSupport extends AccessControlledService {
     /**
      * Creates an affinity group in the cloud
      * @param options the options used when creating the affinity group

@@ -22,6 +22,7 @@ package org.dasein.cloud.util;
 import org.apache.log4j.Logger;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.ProviderContext;
+import org.dasein.cloud.RequestTrackingStrategy;
 import org.json.JSONObject;
 
 import javax.annotation.Nonnull;
@@ -88,8 +89,13 @@ public class  APITrace {
             try {
                 ProviderContext ctx = provider.getContext();
                 String accountNumber = getAccountNumber( ctx );
+                RequestTrackingStrategy strategy = ctx.getRequestTrackingStrategy();
+                String requestTracking = "";
+                if(strategy != null && strategy.getInAPITrace()){
+                    requestTracking = strategy.getRequestId() + DELIMITER;
+                }
 
-                operationName = provider.getProviderName().replaceAll(DELIMITER_REGEX, "_") + DELIMITER + provider.getCloudName().replaceAll(DELIMITER_REGEX, "_") + DELIMITER + accountNumber.replaceAll(DELIMITER_REGEX, "_") + DELIMITER + operationName;
+                operationName = provider.getProviderName().replaceAll(DELIMITER_REGEX, "_") + DELIMITER + provider.getCloudName().replaceAll(DELIMITER_REGEX, "_") + DELIMITER + accountNumber.replaceAll(DELIMITER_REGEX, "_") + DELIMITER + requestTracking + operationName;
                 long thread = Thread.currentThread().getId();
                 CloudOperation operation = new CloudOperation(operationName);
                 CloudOperation current = operations.get(thread);
@@ -626,7 +632,7 @@ public class  APITrace {
         }
     }
 
-  static public String getAccountNumber(@Nullable ProviderContext ctx) {
-    return ((ctx == null || ctx.getAccountNumber() == null) ? "---" : ctx.getAccountNumber());
-  }
+    static public String getAccountNumber(@Nullable ProviderContext ctx) {
+      return ((ctx == null || ctx.getAccountNumber() == null) ? "---" : ctx.getAccountNumber());
+    }
 }
