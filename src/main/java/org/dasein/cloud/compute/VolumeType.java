@@ -27,5 +27,5 @@ package org.dasein.cloud.compute;
  * @version 2012-07 initial version
  */
 public enum VolumeType {
-    SSD, HDD
+    SSD, HDD, EPHEMERAL
 }
