@@ -573,30 +573,6 @@ public interface VirtualMachineSupport extends AccessControlledService {
     public void updateTags( @Nonnull String[] vmIds, @Nonnull Tag... tags ) throws CloudException, InternalException;
 
     /**
-     * Updates meta-data for a virtual machine with the new values. It will not overwrite any value that currently
-     * exists unless it appears in the tags you submit.
-     *
-     * @param vmId         the virtual machine to update
-     * @param asynchronous the type of update, if true - will add asynchronously
-     * @param tags         the meta-data tags to set
-     * @throws CloudException    an error occurred within the cloud provider
-     * @throws InternalException an error occurred within the Dasein Cloud API implementation
-     */
-    public void updateTags( @Nonnull String vmId, boolean asynchronous, @Nonnull Tag... tags ) throws CloudException, InternalException;
-
-    /**
-     * Updates meta-data for multiple virtual machines with the new values. It will not overwrite any value that currently
-     * exists unless it appears in the tags you submit.
-     *
-     * @param vmIds        the virtual machines to update
-     * @param asynchronous the type of update, if true - will add asynchronously
-     * @param tags         the meta-data tags to set
-     * @throws CloudException    an error occurred within the cloud provider
-     * @throws InternalException an error occurred within the Dasein Cloud API implementation
-     */
-    public void updateTags( @Nonnull String[] vmIds, boolean asynchronous, @Nonnull Tag... tags ) throws CloudException, InternalException;
-
-    /**
      * Set meta-data for a virtual machine. Remove any tags that were not provided by the incoming tags, and add or
      * overwrite any new or pre-existing tags.
      *
