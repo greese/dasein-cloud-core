@@ -1,316 +1,328 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-<!--
-    Copyright (C) 2009-2014 Dell, Inc.(http://www.enstratius.com)
+    <!--
+        Copyright (C) 2009-2014 Dell, Inc.(http://www.enstratius.com)
 
-    ====================================================================
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
+        ====================================================================
+        Licensed under the Apache License, Version 2.0 (the "License");
+        you may not use this file except in compliance with the License.
+        You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-    ====================================================================
--->
+        Unless required by applicable law or agreed to in writing, software
+        distributed under the License is distributed on an "AS IS" BASIS,
+        WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        See the License for the specific language governing permissions and
+        limitations under the License.
+        ====================================================================
+    -->
 
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.dasein</groupId>
-  <artifactId>dasein-cloud-core</artifactId>
-  <version>2015.01.1-SNAPSHOT</version>
-  <packaging>jar</packaging>
+    <groupId>org.dasein</groupId>
+    <artifactId>dasein-cloud-core</artifactId>
+    <version>2015.01.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
 
-  <name>dasein-cloud-core</name>
-  <description>
-    The dasein-cloud-core artifact contains the core classes and interfaces that support any Dasein Cloud
-    implementation for any cloud provider. Client applications talk only to these packages that hide
-    the specifics contained in implementations.
-  </description>
+    <name>dasein-cloud-core</name>
+    <description>
+        The dasein-cloud-core artifact contains the core classes and interfaces that support any Dasein Cloud
+        implementation for any cloud provider. Client applications talk only to these packages that hide
+        the specifics contained in implementations.
+    </description>
 
-  <inceptionYear>2009</inceptionYear>
+    <inceptionYear>2009</inceptionYear>
 
-  <url>http://github.com/greese/dasein-cloud-core</url>
-
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
-
-  <licenses>
-  	<license>
-  		<name>Apache License 2.0</name>
-  		<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
-  	</license>
-  </licenses>
-
-  <organization>
-  	<name>Dell, Inc.</name>
-  	<url>http://software.dell.com</url>
-  </organization>
-
-  <scm>
-    <connection>scm:git:git://github.com/greese/dasein-cloud-core.git</connection>
-    <developerConnection>scm:git:git@github.com:greese/dasein-cloud-core.git</developerConnection>
     <url>http://github.com/greese/dasein-cloud-core</url>
-  </scm>
 
-  <parent>
-    <groupId>org.sonatype.oss</groupId>
-    <artifactId>oss-parent</artifactId>
-    <version>5</version>
-  </parent>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <licenses>
+        <license>
+            <name>Apache License 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+        </license>
+    </licenses>
+
+    <organization>
+        <name>Dell, Inc.</name>
+        <url>http://software.dell.com</url>
+    </organization>
+
+    <scm>
+        <connection>scm:git:git://github.com/greese/dasein-cloud-core.git</connection>
+        <developerConnection>scm:git:git@github.com:greese/dasein-cloud-core.git</developerConnection>
+        <url>http://github.com/greese/dasein-cloud-core</url>
+    </scm>
+
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>5</version>
+    </parent>
 
 
-  <dependencies>
-    <dependency>
-      <groupId>org.dasein</groupId>
-      <artifactId>dasein-util</artifactId>
-      <version>2013.02</version>
-      <scope>compile</scope>
-      <optional>false</optional>
-    </dependency>
-    <dependency>
-      <groupId>commons-codec</groupId>
-      <artifactId>commons-codec</artifactId>
-      <version>1.6</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpclient</artifactId>
-      <version>4.2.1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.bouncycastle</groupId>
-      <artifactId>bcprov-jdk16</artifactId>
-      <version>1.46</version>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.9</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <version>1.2.17</version>
-      <scope>compile</scope>
-      <optional>false</optional>
-    </dependency>
-    <dependency>
-      <groupId>com.google.code.findbugs</groupId>
-      <artifactId>jsr305</artifactId>
-      <version>2.0.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.json</groupId>
-      <artifactId>json</artifactId>
-      <version>20090211</version>
-      <scope>compile</scope>
-    </dependency>
-  </dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>org.dasein</groupId>
+            <artifactId>dasein-util</artifactId>
+            <version>2013.02</version>
+            <scope>compile</scope>
+            <optional>false</optional>
+        </dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.3.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk16</artifactId>
+            <version>1.46</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.9</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+            <scope>compile</scope>
+            <optional>false</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20090211</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.4.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.4.3</version>
+        </dependency>
+    </dependencies>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.0.2</version>
-        <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.7</version>
-        <executions>
-          <execution>
-            <id>javadoc</id>
-            <phase>package</phase>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <encoding>utf-8</encoding>
-          <quiet>true</quiet>
-          <links>
-            <link>http://docs.oracle.com/javaee/6/api/</link>
-            <link>http://www.dasein.org/api/dasein-utils/</link>
-          </links>
-          <stylesheetfile>dasein-javadoc.css</stylesheetfile>
-          <footer />
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>com.mycila.maven-license-plugin</groupId>
-        <artifactId>maven-license-plugin</artifactId>
-        <version>1.8.0</version>
-        <configuration>
-          <strictCheck>true</strictCheck>
-          <encoding>utf-8</encoding>
-          <aggregate>true</aggregate>
-          <header>${basedir}/src/main/etc/header.txt</header>
-          <failIfMissing>true</failIfMissing>
-          <excludes>
-            <exclude>thirdparty/**</exclude>
-            <exclude>**/src/**/resources/**</exclude>
-            <exclude>**/LICENSE-APACHE.txt</exclude>
-          </excludes>
-          <properties>
-            <year>2009-2014</year>
-            <copyrightHolder>Dell, Inc.</copyrightHolder>
-          </properties>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-source-plugin</artifactId>
-        <version>2.1.2</version>
-        <executions>
-          <execution>
-            <id>source</id>
-            <phase>package</phase>
-            <goals>
-              <goal>jar-no-fork</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-release-plugin</artifactId>
-        <version>2.1</version>
-      </plugin>
-      <plugin>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>copy-dependencies</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/lib</outputDirectory>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-idea-plugin</artifactId>
-        <version>2.2</version>
-        <configuration>
-          <downloadSources>true</downloadSources>
-          <downloadJavadocs>true</downloadJavadocs>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-eclipse-plugin</artifactId>
-        <version>2.9</version>
-        <configuration>
-          <downloadSources>true</downloadSources>
-          <downloadJavadocs>true</downloadJavadocs>
-        </configuration>
-      </plugin>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-checkstyle-plugin</artifactId>
-            <version>2.12.1</version>
-            <executions>
-                <execution>
-                    <id>verify-style</id>
-                    <phase>process-classes</phase>
-                    <goals>
-                        <goal>check</goal>
-                    </goals>
-                </execution>
-            </executions>
-            <configuration>
-                <logViolationsToConsole>true</logViolationsToConsole>
-                <checkstyleRules>
-                    <module name="Checker">
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.0.2</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.7</version>
+                <executions>
+                    <execution>
+                        <id>javadoc</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <encoding>utf-8</encoding>
+                    <quiet>true</quiet>
+                    <links>
+                        <link>http://docs.oracle.com/javaee/6/api/</link>
+                        <link>http://www.dasein.org/api/dasein-utils/</link>
+                    </links>
+                    <stylesheetfile>dasein-javadoc.css</stylesheetfile>
+                    <footer/>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.mycila.maven-license-plugin</groupId>
+                <artifactId>maven-license-plugin</artifactId>
+                <version>1.8.0</version>
+                <configuration>
+                    <strictCheck>true</strictCheck>
+                    <encoding>utf-8</encoding>
+                    <aggregate>true</aggregate>
+                    <header>${basedir}/src/main/etc/header.txt</header>
+                    <failIfMissing>true</failIfMissing>
+                    <excludes>
+                        <exclude>thirdparty/**</exclude>
+                        <exclude>**/src/**/resources/**</exclude>
+                        <exclude>**/LICENSE-APACHE.txt</exclude>
+                    </excludes>
+                    <properties>
+                        <year>2009-2014</year>
+                        <copyrightHolder>Dell, Inc.</copyrightHolder>
+                    </properties>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.1.2</version>
+                <executions>
+                    <execution>
+                        <id>source</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.1</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-idea-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <downloadSources>true</downloadSources>
+                    <downloadJavadocs>true</downloadJavadocs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-eclipse-plugin</artifactId>
+                <version>2.9</version>
+                <configuration>
+                    <downloadSources>true</downloadSources>
+                    <downloadJavadocs>true</downloadJavadocs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>2.12.1</version>
+                <executions>
+                    <execution>
+                        <id>verify-style</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <logViolationsToConsole>true</logViolationsToConsole>
+                    <checkstyleRules>
+                        <module name="Checker">
 
-                        <!-- Checks for Size Violations.                    -->
-                        <!-- See http://checkstyle.sf.net/config_sizes.html -->
-                        <module name="FileLength">
-                            <property name="max" value="3500" />
-                            <property name="fileExtensions" value="java" />
-                        </module>
+                            <module name="FileLength">
+                                <property name="max" value="3500"/>
+                                <property name="fileExtensions" value="java"/>
+                            </module>
 
-                        <!-- Checks for whitespace                               -->
-                        <!-- See http://checkstyle.sf.net/config_whitespace.html -->
-                        <module name="FileTabCharacter" />
+                            <module name="FileTabCharacter"/>
 
-                        <module name="TreeWalker">
-                            <module name="StaticVariableName" />
-                            <module name="TypeName">
-                                <property name="format" value="^_?[A-Z][a-zA-Z0-9]*$" />
+                            <module name="TreeWalker">
+                                <module name="StaticVariableName"/>
+                                <module name="TypeName">
+                                    <property name="format" value="^_?[A-Z][a-zA-Z0-9]*$"/>
+                                </module>
                             </module>
                         </module>
-                    </module>
-                </checkstyleRules>
-            </configuration>
-        </plugin>
-    </plugins>
-  </build>
+                    </checkstyleRules>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
-  <distributionManagement>
-    <repository>
-      <id>sonatype-nexus-staging</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-      <uniqueVersion>false</uniqueVersion>
-    </repository>
-    <snapshotRepository>
-      <id>sonatype-nexus-snapshots</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </snapshotRepository>
-  </distributionManagement>
+    <distributionManagement>
+        <repository>
+            <id>sonatype-nexus-staging</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+            <uniqueVersion>false</uniqueVersion>
+        </repository>
+        <snapshotRepository>
+            <id>sonatype-nexus-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 
-  <developers>
-    <developer>
-      <name>George Reese</name>
-      <id>georgereese</id>
-      <email>george_reese -at- dell -dot- com</email>
-      <organization>Dell</organization>
-      <roles>
-        <role>Java Developer</role>
-        <role>PMC</role>
-      </roles>
-      <url>http://software.dell.com</url>
-      <timezone>-6</timezone>
-    </developer>
-    <developer>
-      <name>Morgan Catlin</name>
-      <id>sylistron</id>
-      <email>morgan.catlin -at- valtira -dot- com</email>
-      <organization>enstratius</organization>
-      <roles>
-        <role>Java Developer</role>
-      </roles>
-      <url>http://www.valtira.com</url>
-      <timezone>-6</timezone>
-    </developer>
-    <developer>
-      <name>Adrian Cole</name>
-      <id>ferncam1</id>
-      <email>adrian -at- jclouds -dot- org</email>
-      <organization>jclouds</organization>
-      <roles>
-        <role>Java Developer</role>
-        <role>PMC</role>
-      </roles>
-      <url>http://www.jclouds.org</url>
-      <timezone>-8</timezone>
-    </developer>
-  </developers>
-  
+    <developers>
+        <developer>
+            <name>George Reese</name>
+            <id>georgereese</id>
+            <email>george_reese -at- dell -dot- com</email>
+            <organization>Dell</organization>
+            <roles>
+                <role>Java Developer</role>
+                <role>PMC</role>
+            </roles>
+            <url>http://software.dell.com</url>
+            <timezone>-6</timezone>
+        </developer>
+        <developer>
+            <name>Morgan Catlin</name>
+            <id>sylistron</id>
+            <email>morgan.catlin -at- valtira -dot- com</email>
+            <organization>enstratius</organization>
+            <roles>
+                <role>Java Developer</role>
+            </roles>
+            <url>http://www.valtira.com</url>
+            <timezone>-6</timezone>
+        </developer>
+        <developer>
+            <name>Adrian Cole</name>
+            <id>ferncam1</id>
+            <email>adrian -at- jclouds -dot- org</email>
+            <organization>jclouds</organization>
+            <roles>
+                <role>Java Developer</role>
+                <role>PMC</role>
+            </roles>
+            <url>http://www.jclouds.org</url>
+            <timezone>-8</timezone>
+        </developer>
+    </developers>
+
 </project>

@@ -168,14 +168,20 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
 
     @Override
     public @Nullable VirtualMachineProduct getProduct( @Nonnull String productId ) throws InternalException, CloudException {
-        for( Architecture architecture : getCapabilities().listSupportedArchitectures() ) {
-            for( VirtualMachineProduct prd : listProducts(architecture) ) {
-                if( productId.equals(prd.getProviderProductId()) ) {
-                    return prd;
+        APITrace.begin(getProvider(), "VM.getProduct");
+        try {
+            for( Architecture architecture : getCapabilities().listSupportedArchitectures() ) {
+                for( VirtualMachineProduct prd : listProducts(architecture) ) {
+                    if( productId.equals(prd.getProviderProductId()) ) {
+                        return prd;
+                    }
                 }
             }
+            return null;
         }
-        return null;
+        finally {
+            APITrace.end();
+        }
     }
 
     /**
@@ -314,7 +320,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
         if( count == 1 ) {
             return Collections.singleton(launch(withLaunchOptions).getProviderVirtualMachineId());
         }
-        final ArrayList<Future<String>> results = new ArrayList<Future<String>>();
+        final List<Future<String>> results = new ArrayList<Future<String>>();
         MachineImage image = null;
 
         ComputeServices services = getProvider().getComputeServices();
@@ -343,8 +349,8 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
         PopulatorThread<String> populator = new PopulatorThread<String>(new JiteratorPopulator<String>() {
             @Override
             public void populate( @Nonnull Jiterator<String> iterator ) throws Exception {
-                ArrayList<Future<String>> original = results;
-                ArrayList<Future<String>> copy = new ArrayList<Future<String>>();
+                List<Future<String>> original = results;
+                List<Future<String>> copy = new ArrayList<Future<String>>();
                 Exception exception = null;
                 boolean loaded = false;
 
@@ -383,7 +389,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
 
         options.inDataCenter(dataCenterId);
         if( withKeypairId != null ) {
-            options.withBoostrapKey(withKeypairId);
+            options.withBootstrapKey(withKeypairId);
         }
         if( inVlanId != null ) {
             options.inVlan(null, dataCenterId, inVlanId);
@@ -404,7 +410,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
 
         options.inDataCenter(dataCenterId);
         if( withKeypairId != null ) {
-            options.withBoostrapKey(withKeypairId);
+            options.withBootstrapKey(withKeypairId);
         }
         if( inVlanId != null ) {
             options.inVlan(null, dataCenterId, inVlanId);
@@ -416,7 +422,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
             options.behindFirewalls(firewallIds);
         }
         if( tags != null ) {
-            HashMap<String, Object> metaData = new HashMap<String, Object>();
+            Map<String, Object> metaData = new HashMap<String, Object>();
 
             for( Tag tag : tags ) {
                 metaData.put(tag.getKey(), tag.getValue());
@@ -730,7 +736,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
 
     @Override
     public @Nonnull Iterable<ResourceStatus> listVirtualMachineStatus() throws InternalException, CloudException {
-        ArrayList<ResourceStatus> status = new ArrayList<ResourceStatus>();
+        List<ResourceStatus> status = new ArrayList<ResourceStatus>();
 
         for( VirtualMachine vm : listVirtualMachines() ) {
             status.add(new ResourceStatus(vm.getProviderVirtualMachineId(), vm.getCurrentState()));
@@ -740,7 +746,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
 
     @Override
     public @Nonnull Iterable<VirtualMachine> listVirtualMachines() throws InternalException, CloudException {
-        return Collections.emptyList();
+        return Collections.<VirtualMachine>emptyList();
     }
 
     @Override
@@ -748,7 +754,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
         if( options == null ) {
             return listVirtualMachines();
         }
-        ArrayList<VirtualMachine> vms = new ArrayList<VirtualMachine>();
+        List<VirtualMachine> vms = new ArrayList<VirtualMachine>();
 
         for( VirtualMachine vm : listVirtualMachines() ) {
             if( options.matches(vm) ) {

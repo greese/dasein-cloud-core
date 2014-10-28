@@ -45,10 +45,10 @@ import java.util.*;
  * @version 2013.04
  * @since 2013.04
  */
-public abstract class AbstractVolumeSupport implements VolumeSupport {
-    private CloudProvider provider;
+public abstract class AbstractVolumeSupport<T extends CloudProvider> implements VolumeSupport {
+    private T provider;
 
-    public AbstractVolumeSupport(@Nonnull CloudProvider provider) {
+    public AbstractVolumeSupport(@Nonnull T provider) {
         this.provider = provider;
     }
 
@@ -186,7 +186,7 @@ public abstract class AbstractVolumeSupport implements VolumeSupport {
     /**
      * @return the cloud provider under which this support instance is operating
      */
-    protected final @Nonnull CloudProvider getProvider() {
+    protected final @Nonnull T getProvider() {
         return provider;
     }
 

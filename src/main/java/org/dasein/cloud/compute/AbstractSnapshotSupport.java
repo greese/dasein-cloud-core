@@ -43,10 +43,10 @@ import java.util.Collections;
  * @since 2013.04
  * @version 2013.04
  */
-public abstract class AbstractSnapshotSupport implements SnapshotSupport {
-    private CloudProvider provider;
+public abstract class AbstractSnapshotSupport<T extends CloudProvider> implements SnapshotSupport {
+    private T provider;
 
-    public AbstractSnapshotSupport(@Nonnull CloudProvider provider) {
+    public AbstractSnapshotSupport(@Nonnull T provider) {
         this.provider = provider;
     }
 
@@ -87,7 +87,7 @@ public abstract class AbstractSnapshotSupport implements SnapshotSupport {
     /**
      * @return the provider object associated with any calls through this support object
      */
-    protected @Nonnull CloudProvider getProvider() {
+    protected final @Nonnull T getProvider() {
         return provider;
     }
 

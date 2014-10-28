@@ -180,11 +180,12 @@ public class ProviderContext extends ProviderContextCompat implements Serializab
         return random;
     }
 
-    private String             accountNumber;
-    private Cloud              cloud;
-    private Map<String,Object> configurationValues;
-    private String             effectiveAccountNumber;
-    private String             regionId; 
+    private String                  accountNumber;
+    private Cloud                   cloud;
+    private Map<String,Object>      configurationValues;
+    private String                  effectiveAccountNumber;
+    private String                  regionId;
+    private RequestTrackingStrategy strategy;
     /**
      * Constructs a provider context from the provided values
      * @param cloud the cloud configuration object to build against
@@ -362,6 +363,24 @@ public class ProviderContext extends ProviderContextCompat implements Serializab
      */
     public @Nullable String getRegionId() {
         return regionId;
+    }
+
+    /**
+     * Sets a strategy for tracking client requests to Dasein. Management of the request ID occurs outside of Dasein so that
+     * the client can determine the scope of exactly what it is tracking.
+     * @param strategy an object that describes the way in which the ID should be used (sent as a header, logged to file etc).
+     * @return the ProviderContext with the tracking strategy set
+     */
+    public @Nonnull ProviderContext withRequestTracking(@Nonnull RequestTrackingStrategy strategy){
+        this.strategy = strategy;
+        return this;
+    }
+
+    /**
+     * @return the strategy object currently being used for tracking requests
+     */
+    public @Nullable RequestTrackingStrategy getRequestTrackingStrategy(){
+        return this.strategy;
     }
 
     /******************************** DEPRECATED METHODS ********************************/

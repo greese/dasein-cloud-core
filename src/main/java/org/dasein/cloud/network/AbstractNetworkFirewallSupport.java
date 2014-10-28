@@ -43,10 +43,10 @@ import java.util.*;
  * @version 2013.04 (issue greese/dasein-cloud-aws/#8)
  * @version 2014.03 (issue #99)
  */
-public abstract class AbstractNetworkFirewallSupport implements NetworkFirewallSupport {
-    private CloudProvider provider;
+public abstract class AbstractNetworkFirewallSupport<T extends CloudProvider> implements NetworkFirewallSupport {
+    private T provider;
 
-    public AbstractNetworkFirewallSupport(@Nonnull CloudProvider provider)  {
+    public AbstractNetworkFirewallSupport(@Nonnull T provider)  {
         this.provider = provider;
     }
 
@@ -128,7 +128,7 @@ public abstract class AbstractNetworkFirewallSupport implements NetworkFirewallS
         return FirewallConstraints.getInstance();
     }
 
-    protected @Nonnull CloudProvider getProvider() {
+    protected final @Nonnull T getProvider() {
         return provider;
     }
 

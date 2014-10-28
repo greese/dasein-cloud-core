@@ -27,11 +27,7 @@ import org.dasein.cloud.Requirement;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Options for provisioning a load balancer in the cloud. Different clouds have very different requirements on
@@ -68,7 +64,7 @@ public class LoadBalancerCreateOptions {
      * @param atIpAddressId the unique ID of the static IP address to use in creating the load balancer
      * @return a set of creation options for building a load balancer
      */
-    static public LoadBalancerCreateOptions getInstance(@Nonnull String name, @Nonnull String description, @Nonnull String atIpAddressId) {
+    static public LoadBalancerCreateOptions getInstance(@Nonnull String name, @Nonnull String description, @Nullable String atIpAddressId) {
         LoadBalancerCreateOptions options = new LoadBalancerCreateOptions();
 
         options.name = name;
@@ -104,7 +100,7 @@ public class LoadBalancerCreateOptions {
      * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
      * @throws OperationNotSupportedException this cloud does not support load balancer creation
      */
-    public @Nonnull String build(@Nonnull CloudProvider provider) throws CloudException, InternalException {
+    public @Nonnull String build( @Nonnull CloudProvider provider ) throws CloudException, InternalException {
         NetworkServices services = provider.getNetworkServices();
 
         if( services == null ) {
@@ -115,13 +111,13 @@ public class LoadBalancerCreateOptions {
         if( support == null ) {
             throw new OperationNotSupportedException("Load balancers are not supported in " + provider.getCloudName());
         }
-        if( support.getCapabilities().identifyListenersOnCreateRequirement().equals(Requirement.REQUIRED) && (listeners == null || listeners.isEmpty()) ) {
+        if( support.getCapabilities().identifyListenersOnCreateRequirement().equals(Requirement.REQUIRED) && ( listeners == null || listeners.isEmpty() ) ) {
             throw new CloudException("You must specify at least one listener when creating a load balancer in " + provider.getCloudName());
         }
-        if( support.getCapabilities().identifyEndpointsOnCreateRequirement().equals(Requirement.REQUIRED) && (endpoints == null || endpoints.isEmpty()) ) {
+        if( support.getCapabilities().identifyEndpointsOnCreateRequirement().equals(Requirement.REQUIRED) && ( endpoints == null || endpoints.isEmpty() ) ) {
             throw new CloudException("You must specify at least one endpoint when creating a load balancer in " + provider.getCloudName());
         }
-        if( support.getCapabilities().isDataCenterLimited() && (providerDataCenterIds == null || providerDataCenterIds.isEmpty()) ) {
+        if( support.getCapabilities().isDataCenterLimited() && ( providerDataCenterIds == null || providerDataCenterIds.isEmpty() ) ) {
             throw new CloudException("You must specify at least one data center when creating a load balancer in " + provider.getCloudName());
         }
         if( !support.getCapabilities().isAddressAssignedByProvider() && providerIpAddressId == null ) {
@@ -159,7 +155,7 @@ public class LoadBalancerCreateOptions {
     /**
      * @return the endpoints that should be established as part of the create operation
      */
-    public LoadBalancerEndpoint[] getEndpoints() {
+    public @Nonnull LoadBalancerEndpoint[] getEndpoints() {
         return (endpoints == null ? new LoadBalancerEndpoint[0] : endpoints.toArray(new LoadBalancerEndpoint[endpoints.size()]));
     }
 
@@ -224,11 +220,11 @@ public class LoadBalancerCreateOptions {
     /**
      * @return the load balancer type
      */
-    public LbType getType() {
+    public @Nullable LbType getType() {
       return type;
     }
 
-    public HealthCheckOptions getHealthCheckOptions(){
+    public @Nullable HealthCheckOptions getHealthCheckOptions(){
         return this.healthCheckOptions;
     }
 
@@ -357,7 +353,7 @@ public class LoadBalancerCreateOptions {
      * @param type the load balancer type
      * @return this
      */
-    public LoadBalancerCreateOptions asType( LbType type ) {
+    public @Nonnull LoadBalancerCreateOptions asType( @Nullable LbType type ) {
       this.type = type;
       return this;
     }
@@ -368,7 +364,7 @@ public class LoadBalancerCreateOptions {
      * @param options the Health Check Options
      * @return this
      */
-    public @Nonnull LoadBalancerCreateOptions withHealthCheckOptions(HealthCheckOptions options){
+    public @Nonnull LoadBalancerCreateOptions withHealthCheckOptions(@Nullable HealthCheckOptions options){
         this.healthCheckOptions = options;
         return this;
     }
