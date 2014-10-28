@@ -46,6 +46,10 @@ public class ContextRequirements {
          */
         PASSWORD,
         /**
+         * A secret token, as may be required alternatively to a key-pair, e.g. in OAuth authenticating accounts
+         */
+        TOKEN,
+        /**
          * A combo text + password value with the first value being a public-like key thing or user name and the second value being a secret key or password
          */
         KEYPAIR,
@@ -63,7 +67,7 @@ public class ContextRequirements {
      * A pairing of field name and its type
      */
     static public class Field {
-        static public final String ACCESS_KEYS = "accessKeys";
+        static public final String ACCESS_KEYS = "accessKeys"; // legacy compatibility field name
         static public final String X509        = "x509";
 
         public String    compatName;
@@ -121,7 +125,7 @@ public class ContextRequirements {
         }
     }
 
-    private ArrayList<Field> configurableValues = new ArrayList<Field>();
+    private List<Field> configurableValues = new ArrayList<Field>();
 
     /**
      * Constructs a set of context requirements from the ordered fields provided. Order is useful in
@@ -134,7 +138,7 @@ public class ContextRequirements {
 
     /**
      * Identifies the field that matches the old accessPublic and accessPrivate fields. Because the new
-     * mechanism treats them as one value, this returns a single field that matches both. If compatability has
+     * mechanism treats them as one value, this returns a single field that matches both. If compatibility has
      * not been defined, the first {@link FieldType#KEYPAIR} field is considered a match.
      * @return the field that matches the old style keypair of accessPublic and accessPrivate
      */
@@ -196,9 +200,6 @@ public class ContextRequirements {
      * @return an ordered list of configurable fields
      */
     public @Nonnull List<Field> getConfigurableValues() {
-        ArrayList<Field> tmp = new ArrayList<Field>();
-
-        tmp.addAll(configurableValues);
-        return tmp;
+        return Collections.unmodifiableList(configurableValues);
     }
 }

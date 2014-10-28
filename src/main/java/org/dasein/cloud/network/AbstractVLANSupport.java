@@ -31,6 +31,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Provides baseline support for functionality that is common among implementations, in particular for deprecated methods.
@@ -250,7 +251,7 @@ public abstract class AbstractVLANSupport<T extends CloudProvider> implements VL
     /**
      * @return the provider object governing this support object
      */
-    protected final @Nonnull CloudProvider getProvider() {
+    protected final @Nonnull T getProvider() {
         return provider;
     }
 
@@ -295,7 +296,7 @@ public abstract class AbstractVLANSupport<T extends CloudProvider> implements VL
 
     @Override
     public @Nonnull Iterable<ResourceStatus> listNetworkInterfaceStatus() throws CloudException, InternalException {
-        ArrayList<ResourceStatus> status = new ArrayList<ResourceStatus>();
+        List<ResourceStatus> status = new ArrayList<ResourceStatus>();
 
         for( NetworkInterface nic : listNetworkInterfaces() ) {
             status.add(new ResourceStatus(nic.getProviderNetworkInterfaceId(), nic.getCurrentState()));
@@ -310,7 +311,7 @@ public abstract class AbstractVLANSupport<T extends CloudProvider> implements VL
 
     @Override
     public @Nonnull Iterable<NetworkInterface> listNetworkInterfacesForVM(@Nonnull String forVmId) throws CloudException, InternalException {
-        ArrayList<NetworkInterface> nics = new ArrayList<NetworkInterface>();
+        List<NetworkInterface> nics = new ArrayList<NetworkInterface>();
 
         for( NetworkInterface nic : listNetworkInterfaces() ) {
             if( forVmId.equals(nic.getProviderVirtualMachineId()) ) {
@@ -322,7 +323,7 @@ public abstract class AbstractVLANSupport<T extends CloudProvider> implements VL
 
     @Override
     public @Nonnull Iterable<NetworkInterface> listNetworkInterfacesInSubnet(@Nonnull String subnetId) throws CloudException, InternalException {
-        ArrayList<NetworkInterface> nics = new ArrayList<NetworkInterface>();
+        List<NetworkInterface> nics = new ArrayList<NetworkInterface>();
 
         for( NetworkInterface nic : listNetworkInterfaces() ) {
             if( subnetId.equals(nic.getProviderSubnetId()) ) {
@@ -334,7 +335,7 @@ public abstract class AbstractVLANSupport<T extends CloudProvider> implements VL
 
     @Override
     public @Nonnull Iterable<NetworkInterface> listNetworkInterfacesInVLAN(@Nonnull String vlanId) throws CloudException, InternalException {
-        ArrayList<NetworkInterface> nics = new ArrayList<NetworkInterface>();
+        List<NetworkInterface> nics = new ArrayList<NetworkInterface>();
 
         for( NetworkInterface nic : listNetworkInterfaces() ) {
             if( vlanId.equals(nic.getProviderVlanId()) ) {
@@ -346,7 +347,7 @@ public abstract class AbstractVLANSupport<T extends CloudProvider> implements VL
 
     @Override
     public @Nonnull Iterable<Networkable> listResources(@Nonnull String inVlanId) throws CloudException, InternalException {
-        ArrayList<Networkable> resources = new ArrayList<Networkable>();
+        List<Networkable> resources = new ArrayList<Networkable>();
         NetworkServices network = provider.getNetworkServices();
 
         if( network != null ) {
@@ -372,7 +373,7 @@ public abstract class AbstractVLANSupport<T extends CloudProvider> implements VL
 
                 }
             }
-            for( RoutingTable table : listRoutingTables(inVlanId) ) {
+            for( RoutingTable table : listRoutingTablesForVlan(inVlanId) ) {
                 resources.add(table);
             }
             ComputeServices compute = provider.getComputeServices();
@@ -403,8 +404,9 @@ public abstract class AbstractVLANSupport<T extends CloudProvider> implements VL
     }
 
     @Override
+    @Deprecated
     public @Nonnull Iterable<RoutingTable> listRoutingTables(@Nonnull String vlanId) throws CloudException, InternalException {
-        return Collections.emptyList();
+        return listRoutingTablesForVlan(vlanId);
     }
 
     @Override
@@ -425,8 +427,7 @@ public abstract class AbstractVLANSupport<T extends CloudProvider> implements VL
 
     @Override
     public @Nonnull Iterable<ResourceStatus> listVlanStatus() throws CloudException, InternalException {
-        ArrayList<ResourceStatus> status = new ArrayList<ResourceStatus>();
-
+        List<ResourceStatus> status = new ArrayList<ResourceStatus>();
         for( VLAN vlan : listVlans() ) {
             status.add(new ResourceStatus(vlan.getProviderVlanId(), vlan.getCurrentState()));
         }

@@ -30,6 +30,7 @@ import java.util.concurrent.Callable;
 
 import org.apache.commons.codec.binary.Base64;
 import org.dasein.cloud.CloudException;
+import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
 import org.dasein.util.Retry;
 import org.dasein.util.uom.storage.*;
@@ -37,7 +38,17 @@ import org.dasein.util.uom.storage.*;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public abstract class AbstractBlobStoreSupport implements BlobStoreSupport {
+public abstract class AbstractBlobStoreSupport<T extends CloudProvider> implements BlobStoreSupport {
+    private T provider;
+
+    public AbstractBlobStoreSupport(T provider) {
+        this.provider = provider;
+    }
+
+    protected final @Nonnull T getProvider() {
+        return provider;
+    }
+
     private byte[] computeMD5Hash(InputStream is) throws NoSuchAlgorithmException, IOException {
         BufferedInputStream bis = new BufferedInputStream(is);
         
