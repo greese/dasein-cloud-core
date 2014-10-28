@@ -46,8 +46,6 @@ public class VMScalingCapabilities {
     private Requirement alterVmForVolumeChange;
     private boolean     createsNewVirtualMachine;
     private boolean     supportsProductChanges;
-    private boolean     supportsCPURAMChanges = false;
-    private boolean     supportsFirewallChanges = false;
 
     private VMScalingCapabilities() { }
 
@@ -82,43 +80,9 @@ public class VMScalingCapabilities {
     }
 
     /**
-     * @return true if you can scale up/down product - should not return true for CPU/RAM changes, only distinct products
+     * @return true if you can scale up/down product
      */
     public boolean isSupportsProductChanges() {
         return supportsProductChanges;
-    }
-
-    /**
-     * @return true if you can scale CPU/RAM sizes specifically (as opposed to distinct named product changes)
-     */
-    public boolean isSupportsCPURAMChanges(){
-        return supportsCPURAMChanges;
-    }
-
-    /**
-     * @return true if firewalls associated with the VM can be modified
-     */
-    public boolean isSupportsFirewallChanges(){
-        return supportsFirewallChanges;
-    }
-
-    /**
-     * Specifies whether the cloud allows changes to CPU/RAM sizes
-     * @param supportsCPURAMChanges true if changes are allowed
-     * @return this
-     */
-    public @Nonnull VMScalingCapabilities withSupportsCPURAMChanges(boolean supportsCPURAMChanges){
-        this.supportsCPURAMChanges = supportsCPURAMChanges;
-        return this;
-    }
-
-    /**
-     * Specified whether the cloud allows changes to the firewalls currently associated witht the VM
-     * @param supportsFirewallChanges true if changes are allowed
-     * @return this
-     */
-    public @Nonnull VMScalingCapabilities withSupportsFirewallChanges(boolean supportsFirewallChanges){
-        this.supportsFirewallChanges = supportsFirewallChanges;
-        return this;
     }
 }

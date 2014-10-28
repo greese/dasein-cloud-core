@@ -74,11 +74,6 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
-    public void alterVirtualMachine(@Nonnull String vmId, @Nonnull AlterVirtualMachineOptions options) throws InternalException, CloudException{
-        throw new OperationNotSupportedException("VM alternations are not currently supported for " + getProvider().getCloudName());
-    }
-
-    @Override
     public VirtualMachine alterVirtualMachine( @Nonnull String vmId, @Nonnull VMScalingOptions options ) throws InternalException, CloudException {
         throw new OperationNotSupportedException("VM alternations are not currently supported for " + getProvider().getCloudName());
     }
