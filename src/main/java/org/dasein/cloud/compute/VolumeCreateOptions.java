@@ -158,6 +158,7 @@ public class VolumeCreateOptions {
 
     // NOTE: ADDING/REMOVING/CHANGING AN ATTRIBUTE? MAKE SURE YOU REFLECT THE CHANGE IN THE copy() METHOD
     private String             dataCenterId;
+    private String             providerVirtualMachineId;
     private String             description;
     private String             deviceId;
     private VolumeFormat       format;
@@ -173,6 +174,10 @@ public class VolumeCreateOptions {
 
     public void setDataCenterId(String dataCenterId) {
       this.dataCenterId = dataCenterId;
+    }
+
+    public void setProviderVirtualMachineId(String providerVirtualMachineId){
+        this.providerVirtualMachineId = providerVirtualMachineId;
     }
 
     public void setDescription(String description) {
@@ -262,6 +267,7 @@ public class VolumeCreateOptions {
         VolumeCreateOptions options = new VolumeCreateOptions(volumeProductId, snapshotId, volumeSize, withName, description, iops);
 
         options.dataCenterId = dataCenterId;
+        options.providerVirtualMachineId = providerVirtualMachineId;
         options.deviceId = deviceId;
         options.format = format;
         options.virtualMachineId = virtualMachineId;
@@ -278,6 +284,13 @@ public class VolumeCreateOptions {
      */
     public @Nullable String getDataCenterId() {
         return dataCenterId;
+    }
+
+    /**
+     * @return the Virtual Machine instance on which the new volume will be attached at provision time
+     */
+    public @Nullable String getProviderVirtualMachineId(){
+        return providerVirtualMachineId;
     }
 
     /**
@@ -411,6 +424,11 @@ public class VolumeCreateOptions {
             this.metaData = new HashMap<String, Object>();
         }
         this.metaData.putAll(metaData);
+        return this;
+    }
+
+    public @Nonnull VolumeCreateOptions withVirtualMachineId(@Nonnull String providerVirtualMachineId){
+        this.providerVirtualMachineId = providerVirtualMachineId;
         return this;
     }
 }
