@@ -46,6 +46,7 @@ public class VMScalingCapabilities {
     private Requirement alterVmForVolumeChange;
     private boolean     createsNewVirtualMachine;
     private boolean     supportsProductChanges;
+    private boolean     supportsProductSizeChanges;
 
     private VMScalingCapabilities() { }
 
@@ -80,9 +81,23 @@ public class VMScalingCapabilities {
     }
 
     /**
+     * This indicates the scalability of distinct, named products.
      * @return true if you can scale up/down product
      */
     public boolean isSupportsProductChanges() {
         return supportsProductChanges;
+    }
+
+    /**
+     * This indicates the scalability of non-distinct, non-named product sizes
+     * @return true if you can scale the product size up/down
+     */
+    public boolean isSupportsProductSizeChanges(){
+        return supportsProductSizeChanges;
+    }
+
+    public @Nonnull VMScalingCapabilities withSupportsProductSizeScaling(boolean supportsProductSizeChanges){
+        this.supportsProductSizeChanges = supportsProductSizeChanges;
+        return this;
     }
 }
