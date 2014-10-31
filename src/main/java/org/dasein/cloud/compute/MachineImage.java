@@ -230,6 +230,7 @@ public class MachineImage implements Taggable {
     private Map<String,String> tags;
     private MachineImageType   type;
     private VisibleScope       visibleScope;
+    private boolean            sharedWithPublic;
 
     /**
      * Constructs an empty machine image.
@@ -414,12 +415,20 @@ public class MachineImage implements Taggable {
         return type;
     }
 
-    public void setVisibleScope(VisibleScope visibleScope){
-        this.visibleScope = visibleScope;
+    /**
+     * @return visible scope of the image
+     */
+    public @Nullable VisibleScope getVisibleScope(){
+        return this.visibleScope;
     }
 
-    public VisibleScope getVisibleScope(){
-        return this.visibleScope;
+    /**
+     * Sets visible scope of the image
+     * @return image instance with visible scope modified
+     */
+    public @Nonnull MachineImage withVisibleScope(@Nullable VisibleScope visibleScope) {
+        this.visibleScope = visibleScope;
+        return this;
     }
 
     @Override
@@ -454,6 +463,23 @@ public class MachineImage implements Taggable {
     public @Nonnull MachineImage withSoftware(@Nonnull String software) {
         this.software = software;
         return this;
+    }
+
+    /**
+     * Marks image as available to public
+     * @return this
+     */
+    public MachineImage sharedWithPublic() {
+        this.sharedWithPublic = true;
+        return this;
+    }
+
+    /**
+     * Indicates whether the image is available to public
+     * @return true if available to public
+     */
+    public boolean isPublic() {
+        return this.sharedWithPublic;
     }
 
     /********************************** DEPRECATED METHODS *******************************************/
@@ -517,6 +543,7 @@ public class MachineImage implements Taggable {
      * Sets the image class for this image.
      * @param imageClass the image class of the image
      * @deprecated Use the static factory methods
+     * @see MachineImage#getImageInstance(String, String, String, ImageClass, MachineImageState, String, String, Architecture, Platform, MachineImageFormat)
      */
     public void setImageClass(@Nonnull ImageClass imageClass) {
         this.imageClass = imageClass;
@@ -525,6 +552,8 @@ public class MachineImage implements Taggable {
     /**
      * Sets the kernel image associated with this machine image.
      * @param kernelImageId the kernel image associated with this image
+     * @deprecated Use the static factory methods
+     * @see MachineImage#associatedWith(String)
      */
     public void setKernelImageId(@Nonnull String kernelImageId) {
         this.kernelImageId = kernelImageId;
@@ -601,5 +630,16 @@ public class MachineImage implements Taggable {
     public void setType(@Nonnull MachineImageType type) {
         this.type = type;
     }
+
+    /**
+     * Sets visible scope of image
+     * @param visibleScope
+     * @deprecated Use the static factory methods
+     * @see MachineImage#withVisibleScope()
+     */
+    public void setVisibleScope(VisibleScope visibleScope){
+        this.visibleScope = visibleScope;
+    }
+
 
 }
