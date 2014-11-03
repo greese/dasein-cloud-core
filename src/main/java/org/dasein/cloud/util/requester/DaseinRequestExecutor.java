@@ -12,8 +12,8 @@ import org.dasein.cloud.util.requester.fluent.Requester;
 
 import java.util.Properties;
 
-/**
- * Created by Vlad_Munthiu on 10/17/2014.
+ /**
+ * @author Vlad Munthiu
  */
 
 public class DaseinRequestExecutor<T> implements Requester<T> {
