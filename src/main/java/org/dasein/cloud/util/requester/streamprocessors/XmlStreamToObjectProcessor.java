@@ -9,8 +9,8 @@ import javax.xml.bind.Unmarshaller;
 import java.io.InputStream;
 import java.io.StringWriter;
 
-/**
- * Created by Vlad_Munthiu on 10/17/2014.
+ /**
+ * @author Vlad Munthiu
  */
 public class XmlStreamToObjectProcessor<T> implements StreamProcessor<T> {
     public @Nullable T read(InputStream inputStream, Class<T> classType){

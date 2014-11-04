@@ -5,8 +5,8 @@ import org.dasein.cloud.util.requester.DaseinRequestExecutor;
 import org.dasein.cloud.util.requester.DriverToCoreMapper;
 import org.w3c.dom.Document;
 
-/**
- * Created by Vlad_Munthiu on 10/20/2014.
+ /**
+ * @author Vlad Munthiu
  */
 public interface CompositeRequester extends Requester<String> {
     <T> Requester<T> withXmlProcessor(Class<T> classType);

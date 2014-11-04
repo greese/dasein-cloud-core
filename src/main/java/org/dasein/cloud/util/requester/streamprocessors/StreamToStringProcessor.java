@@ -6,8 +6,8 @@ import org.dasein.cloud.util.requester.streamprocessors.StreamProcessor;
 import javax.annotation.Nullable;
 import java.io.*;
 
-/**
- * Created by Vlad_Munthiu on 10/20/2014.
+ /**
+ * @author Vlad Munthiu
  */
 public class StreamToStringProcessor implements StreamProcessor<String> {
     @Nullable

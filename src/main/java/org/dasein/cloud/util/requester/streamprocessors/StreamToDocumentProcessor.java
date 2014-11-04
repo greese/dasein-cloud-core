@@ -15,8 +15,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 
-/**
- * Created by Vlad_Munthiu on 10/20/2014.
+ /**
+ * @author Vlad Munthiu
  */
 public class StreamToDocumentProcessor implements StreamProcessor<Document> {
     @Nullable

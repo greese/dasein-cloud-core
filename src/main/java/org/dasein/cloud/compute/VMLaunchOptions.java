@@ -108,6 +108,14 @@ public class VMLaunchOptions {
     private String             resourcePoolId;
     private String             storagePoolId;
     private String             vmFolderId;
+    private String             dnsDomain;
+    private String[]           dnsServerList;
+    private String[]           dnsSuffixList;
+    private String[]           gatewayList;
+    private String             winWorkgroupName;
+    private String             winOwnerName;
+    private String             winOrgName;
+    private String             winProductSerialNum;
     // NOTE: SEE NOTE AT TOP OF ATTRIBUTE LIST WHEN ADDING/REMOVING/CHANGING AN ATTRIBUTE
 
     private VMLaunchOptions() { }
@@ -239,6 +247,14 @@ public class VMLaunchOptions {
         options.affinityGroupId = affinityGroupId;
         options.storagePoolId = storagePoolId;
         options.vmFolderId = vmFolderId;
+        options.dnsDomain = dnsDomain;
+        options.dnsServerList = (dnsServerList == null ? new String[0] : Arrays.copyOf(options.dnsServerList, options.dnsServerList.length));
+        options.dnsSuffixList = (dnsSuffixList == null ? new String[0] : Arrays.copyOf(options.dnsSuffixList, options.dnsSuffixList.length));
+        options.gatewayList = (gatewayList == null ? new String[0] : Arrays.copyOf(options.gatewayList, options.gatewayList.length));;
+        options.winWorkgroupName = winWorkgroupName;
+        options.winOwnerName = winOwnerName;
+        options.winOrgName = winOrgName;
+        options.winProductSerialNum = winProductSerialNum;
         return options;
     }
 
@@ -961,6 +977,150 @@ public class VMLaunchOptions {
      */
     public VMLaunchOptions withStoragePoolId( @Nonnull String storagePoolId ) {
         this.storagePoolId = storagePoolId;
+        return this;
+    }
+
+    /** The following attributes are used when manually specifying a private ip address
+
+    /**
+     * @return the dns servers, for a virtual network adapter with a static IP address to launch the virtual machine under
+     */
+    public @Nonnull String[] getDnsServerList() {
+        return (dnsServerList == null ? new String[0] : dnsServerList);
+    }
+
+    /**
+     * Specifies the dns servers to be used in the virtual machine at launch time
+     * @param dnsServers one or more dns servers to be used for the  new VM
+     * @return this
+     */
+    public @Nonnull VMLaunchOptions withDnsServerList(String... dnsServers) {
+        if (dnsServers != null) {
+            this.dnsServerList = Arrays.copyOf(dnsServers, dnsServers.length);
+        }
+        return this;
+    }
+
+    /**
+     * @return the name resolution suffixes for a virtual network adapter to launch the virtual machine under
+     */
+    public @Nonnull String[] getDnsSuffixList() {
+        return (dnsSuffixList == null ? new String[0] : dnsSuffixList);
+    }
+
+    /**
+     * Specifies the dns suffixes to be used for the virtual machine at launch time
+     * @param dnsSuffix one or more dns suffixes to be used for the new VM
+     * @return this
+     */
+    public @Nonnull VMLaunchOptions withDnsSuffixList(String... dnsSuffix) {
+        if (dnsSuffix != null) {
+            this.dnsSuffixList = Arrays.copyOf(dnsSuffix, dnsSuffix.length);
+        }
+        return this;
+    }
+
+    /**
+     * @return a list of gateways, in order of preference
+     */
+    public @Nonnull String[] getGatewayList() {
+        return (gatewayList == null ? new String[0] : gatewayList);
+    }
+
+    /**
+     * Specifies the gateways to be used for the virtual machine at launch time
+     * @param gateway one or more gateways to be used for the new VM
+     * @return this
+     */
+    public @Nonnull VMLaunchOptions withGatewayList(String... gateway) {
+        if (gateway != null) {
+            this.gatewayList = Arrays.copyOf(gateway, gateway.length);
+        }
+        return this;
+    }
+
+    /**
+     * @return a DNS domain suffix of this virtual machine
+     */
+    public @Nullable String getDnsDomain() {
+        return dnsDomain;
+    }
+
+    /**
+     * Indicates the dnsDomain into which the VM should be launched.
+     * @param dnsDomain the dns domain into which the VM should be launched
+     * @return this
+     */
+    public @Nonnull VMLaunchOptions withDnsDomain(@Nonnull String dnsDomain) {
+        this.dnsDomain = dnsDomain;
+        return this;
+    }
+
+    /**
+     * @return the owner of this virtual machine (Windows only)
+     */
+    public @Nullable String getWinOwnerName() {
+        return winOwnerName;
+    }
+
+    /**
+     * Indicates the windows owner of the VM to be launched.
+     * @param winOwnerName the windows owner of the VM to be launched
+     * @return this
+     */
+    public @Nonnull VMLaunchOptions withWinOwnerName(@Nonnull String winOwnerName) {
+        this.winOwnerName = winOwnerName;
+        return this;
+    }
+
+    /**
+     * @return the organisation name of this virtual machine (Windows only)
+     */
+    public @Nullable String getWinOrgName() {
+        return winOrgName;
+    }
+
+    /**
+     * Indicates the windows organisation name of the VM to be launched.
+     * @param winOrgName the windows organisation name of the VM to be launched
+     * @return this
+     */
+    public @Nonnull VMLaunchOptions withWinOrgName(@Nonnull String winOrgName) {
+        this.winOrgName = winOrgName;
+        return this;
+    }
+
+    /**
+     * @return the windows workgroup name of this virtual machine
+     */
+    public @Nullable String getWinWorkgroupName() {
+        return winWorkgroupName;
+    }
+
+    /**
+     * Indicates the windows workgroup into which the VM should be launched.
+     * @param winWorkgroupName the windows workgroup into which the VM should be launched
+     * @return this
+     */
+    public @Nonnull VMLaunchOptions withWinWorkgroupName(@Nonnull String winWorkgroupName) {
+        this.winWorkgroupName = winWorkgroupName;
+        return this;
+    }
+
+    /**
+     * @return the windows serial number of this virtual machine
+     */
+    public @Nullable String getWinProductSerialNum() {
+        return winProductSerialNum;
+    }
+
+    /**
+     * Indicates the windows serial number of the VM to be launched.
+     * @param winProductSerialNum the windows serial number of the VM to be launched
+     * @return this
+     */
+    public @Nonnull VMLaunchOptions withWinProductSerialNum(@Nonnull String winProductSerialNum) {
+        this.winProductSerialNum = winProductSerialNum;
         return this;
     }
 }

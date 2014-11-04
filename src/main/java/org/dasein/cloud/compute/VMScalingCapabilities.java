@@ -32,6 +32,7 @@ import javax.annotation.Nonnull;
  * @since 2013.01
  */
 public class VMScalingCapabilities {
+    @Deprecated
     static public VMScalingCapabilities getInstance(boolean newVm, boolean product, @Nonnull Requirement alterVmForNewVolume, @Nonnull Requirement alterVmForVolumeChange) {
         VMScalingCapabilities capabilities = new VMScalingCapabilities();
 
@@ -42,10 +43,20 @@ public class VMScalingCapabilities {
         return capabilities;
     }
 
-    private Requirement alterVmForNewVolume;
-    private Requirement alterVmForVolumeChange;
+    static public VMScalingCapabilities getInstance(boolean newVm, boolean productChange, boolean productSizeChange) {
+        VMScalingCapabilities capabilities = new VMScalingCapabilities();
+
+        capabilities.createsNewVirtualMachine = newVm;
+        capabilities.supportsProductChanges = productChange;
+        capabilities.supportsProductSizeChanges = productSizeChange;
+        return capabilities;
+    }
+
+    @Deprecated private Requirement alterVmForNewVolume;
+    @Deprecated private Requirement alterVmForVolumeChange;
     private boolean     createsNewVirtualMachine;
     private boolean     supportsProductChanges;
+    private boolean     supportsProductSizeChanges;
 
     private VMScalingCapabilities() { }
 
@@ -56,6 +67,7 @@ public class VMScalingCapabilities {
      * {@link VirtualMachineSupport#alterVirtualMachine(String, VMScalingOptions)}.
      * @return the requirement for handling new volumes as an alter VM operation
      */
+    @Deprecated
     public @Nonnull Requirement getAlterVmForNewVolume() {
         return alterVmForNewVolume;
     }
@@ -66,6 +78,7 @@ public class VMScalingCapabilities {
      * than {@link VirtualMachineSupport#alterVirtualMachine(String, VMScalingOptions)}.
      * @return the requirement for handling volume resizing as an alter VM operation
      */
+    @Deprecated
     public @Nonnull Requirement getAlterVmForVolumeChange() {
         return alterVmForVolumeChange;
     }
@@ -80,9 +93,23 @@ public class VMScalingCapabilities {
     }
 
     /**
+     * This indicates the scalability of distinct, named products.
      * @return true if you can scale up/down product
      */
     public boolean isSupportsProductChanges() {
         return supportsProductChanges;
+    }
+
+    /**
+     * This indicates the scalability of non-distinct, non-named product sizes
+     * @return true if you can scale the product size up/down
+     */
+    public boolean isSupportsProductSizeChanges(){
+        return supportsProductSizeChanges;
+    }
+
+    public @Nonnull VMScalingCapabilities withSupportsProductSizeScaling(boolean supportsProductSizeChanges){
+        this.supportsProductSizeChanges = supportsProductSizeChanges;
+        return this;
     }
 }

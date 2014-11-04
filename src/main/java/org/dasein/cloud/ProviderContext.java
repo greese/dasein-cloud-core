@@ -120,6 +120,7 @@ public class ProviderContext extends ProviderContextCompat implements Serializab
                     bytes[1] = fromStrings[1].getBytes("utf-8");
                     return new Value<byte[][]>(field.name, bytes);
                 case TEXT:
+                case TOKEN:
                     return new Value<String>(field.name, fromStrings[0]);
                 case INTEGER:
                     return new Value<Integer>(field.name, Integer.parseInt(fromStrings[0]));

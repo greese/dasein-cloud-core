@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-/**
- * Created by Vlad_Munthiu on 10/21/2014.
+ /**
+ * @author Vlad Munthiu
  */
 public class DaseinObjectToXmlEntity<T> extends DaseinEntity<T> {
     public DaseinObjectToXmlEntity(T daseinObject){
