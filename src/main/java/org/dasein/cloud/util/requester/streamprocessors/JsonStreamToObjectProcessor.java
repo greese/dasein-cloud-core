@@ -8,8 +8,8 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- * Created by Vlad_Munthiu on 10/17/2014.
+ /**
+ * @author Vlad Munthiu
  */
 public class JsonStreamToObjectProcessor<T> implements StreamProcessor<T> {
     public @Nullable T read(InputStream inputStream, Class<T> classType){

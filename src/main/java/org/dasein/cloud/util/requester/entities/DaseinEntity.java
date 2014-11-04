@@ -9,8 +9,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-/**
- * Created by Vlad_Munthiu on 10/21/2014.
+ /**
+ * @author Vlad Munthiu
  */
 public abstract class DaseinEntity<T> extends AbstractHttpEntity implements Cloneable {
     protected final byte[] content;
