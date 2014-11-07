@@ -73,13 +73,13 @@ public class LoadBalancerCreateOptions {
         return options;
     }
 
-    private ArrayList<LoadBalancerEndpoint> endpoints;
-    private ArrayList<String>               providerDataCenterIds;
-    private ArrayList<String>               providerSubnetIds;
-    private ArrayList<String>               firewallIds;
+    private List<LoadBalancerEndpoint>      endpoints;
+    private List<String>                    providerDataCenterIds;
+    private List<String>                    providerSubnetIds;
+    private List<String>                    firewallIds;
     private String                          providerIpAddressId;
     private String                          description;
-    private ArrayList<LbListener>           listeners;
+    private List<LbListener>                listeners;
     private Map<String,Object>              metaData;
     private String                          name;
     private LbType                          type;
