@@ -13,7 +13,7 @@ public class LbAttributesOptions {
     Integer connectionDrainingTimeout;
     Integer idleConnectionTimeout;
 
-    public static LbAttributesOptions getInstance( Boolean crossDataCenter, Boolean connectionDraining, @Nullable Integer connectionDrainingTimeout, @Nullable Integer idleConnectionTimeout ) {
+    public static LbAttributesOptions getInstance( @Nullable Boolean crossDataCenter, @Nullable Boolean connectionDraining, @Nullable Integer connectionDrainingTimeout, @Nullable Integer idleConnectionTimeout ) {
         LbAttributesOptions options = new LbAttributesOptions();
         options.crossDataCenter = crossDataCenter;
         options.connectionDraining = connectionDraining;

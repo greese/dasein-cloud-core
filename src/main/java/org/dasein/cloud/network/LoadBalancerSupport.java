@@ -382,7 +382,6 @@ public interface LoadBalancerSupport extends AccessControlledService {
      */
     public void modifyLoadBalancerAttributes( @Nonnull String id, @Nonnull LbAttributesOptions options ) throws CloudException, InternalException;
 
-
     /**
      * Get load balancer attributes
      *
