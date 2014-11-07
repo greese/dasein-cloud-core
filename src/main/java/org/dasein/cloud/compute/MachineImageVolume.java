@@ -9,6 +9,15 @@ import javax.annotation.Nullable;
  */
 public class MachineImageVolume {
 
+    /**
+     * Provides minimum viable machine image.
+     * @param deviceName the name of the machine image
+     * @param snapshotId the ID of the snapshot
+     * @param volumeSize the size of the volume
+     * @param volumeType the type of the volume
+     * @param iops the minimum guaranteed iops or 0 if no guarantees are sought
+     * @return the machine image volume
+     */
     static public @Nonnull MachineImageVolume getInstance( @Nonnull String deviceName, @Nonnull String snapshotId, @Nonnull Integer volumeSize, @Nonnull String volumeType, @Nullable Integer iops ) {
         @SuppressWarnings( "deprecation" ) MachineImageVolume machineImageVolume = new MachineImageVolume();
 
