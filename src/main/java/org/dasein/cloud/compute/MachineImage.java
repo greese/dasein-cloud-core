@@ -452,11 +452,11 @@ public class MachineImage implements Taggable {
         getTags().putAll(properties);
     }
 
-    public @Nonnull Iterable<MachineImageVolume> getVolumes() {
+    public @Nullable Iterable<MachineImageVolume> getVolumes() {
         return volumes;
     }
 
-    public void setVolumes( @Nonnull Iterable<MachineImageVolume> volumes ) {
+    public void setVolumes( @Nullable Iterable<MachineImageVolume> volumes ) {
         this.volumes = volumes;
     }
 
