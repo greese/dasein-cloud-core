@@ -25,7 +25,7 @@ import org.dasein.cloud.TimeWindow;
 
 public class Database implements Serializable {
     private static final long serialVersionUID = 2965680337224730031L;
-    
+
     private String          adminUser;
     private int             allocatedStorageInGb;
     private String          configuration;
@@ -36,6 +36,7 @@ public class Database implements Serializable {
     private int             hostPort;
     private String          hostName;
     private TimeWindow      maintenanceWindow;
+    private TimeWindow      backupWindow;
     private String          name;
     private String          productSize;
     private String          providerDataCenterId;
@@ -59,7 +60,7 @@ public class Database implements Serializable {
             return false;
         }
         Database other = (Database)ob;
-        
+
         if( !getProviderOwnerId().equals(other.getProviderOwnerId()) ) {
             return false;
         }
@@ -68,7 +69,7 @@ public class Database implements Serializable {
         }
         return getProviderDatabaseId().equals(other.getProviderDatabaseId());
     }
-    
+
     public String getAdminUser() {
         return adminUser;
     }
@@ -211,6 +212,14 @@ public class Database implements Serializable {
 
     public void setSnapshotWindow(TimeWindow snapshotWindow) {
         this.snapshotWindow = snapshotWindow;
+    }
+
+    public TimeWindow getBackupWindow() {
+        return backupWindow;
+    }
+
+    public void setBackupWindow(TimeWindow backupWindow) {
+        this.backupWindow = backupWindow;
     }
     
     public String toString() {
