@@ -1,19 +1,17 @@
 package org.dasein.cloud.network;
 
-import javax.annotation.Nullable;
-
 /**
  * User: mgulimonov
  * Date: 20.06.2014
  */
 public class LbAttributesOptions {
 
-    Boolean crossDataCenter;
-    Boolean connectionDraining;
-    Integer connectionDrainingTimeout;
-    Integer idleConnectionTimeout;
+    boolean crossDataCenter;
+    boolean connectionDraining;
+    int connectionDrainingTimeout;
+    int idleConnectionTimeout;
 
-    public static LbAttributesOptions getInstance( @Nullable Boolean crossDataCenter, @Nullable Boolean connectionDraining, @Nullable Integer connectionDrainingTimeout, @Nullable Integer idleConnectionTimeout ) {
+    public static LbAttributesOptions getInstance( boolean crossDataCenter, boolean connectionDraining, int connectionDrainingTimeout, int idleConnectionTimeout ) {
         LbAttributesOptions options = new LbAttributesOptions();
         options.crossDataCenter = crossDataCenter;
         options.connectionDraining = connectionDraining;
@@ -22,20 +20,19 @@ public class LbAttributesOptions {
         return options;
     }
 
-    public Boolean getCrossDataCenter() {
+    public boolean isCrossDataCenter() {
         return crossDataCenter;
     }
 
-    public Boolean getConnectionDraining() {
+    public boolean isConnectionDraining() {
         return connectionDraining;
     }
 
-    public Integer getConnectionDrainingTimeout() {
+    public int getConnectionDrainingTimeout() {
         return connectionDrainingTimeout;
     }
 
-    public Integer getIdleConnectionTimeout() {
+    public int getIdleConnectionTimeout() {
         return idleConnectionTimeout;
     }
-
 }
