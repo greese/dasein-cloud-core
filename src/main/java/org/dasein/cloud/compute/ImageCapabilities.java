@@ -156,6 +156,14 @@ public interface ImageCapabilities extends Capabilities{
     public abstract boolean supportsImageSharingWithPublic() throws CloudException, InternalException;
 
     /**
+     * Indicates whether the driver will return a list of machine images across every cloud region in a single call.
+     * @return true if you can list images for every region
+     * @throws CloudException an error occurred with the cloud provider when checking this capability
+     * @throws InternalException an error occurred within the Dasein cloud implementation while check this capability
+     */
+    public boolean supportsListingAllRegions() throws CloudException, InternalException;
+
+    /**
      * Indicates whether a library of public images of the specified class should be expected. If true,
      * {@link MachineImageSupport#listImages(ImageClass)} should provide a non-empty list of that type.
      * @param cls the image class of the images being checked
