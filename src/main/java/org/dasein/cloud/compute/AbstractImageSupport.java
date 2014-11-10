@@ -273,6 +273,11 @@ public abstract class AbstractImageSupport<T extends CloudProvider> implements M
     }
 
     @Override
+    public @Nonnull Iterable<MachineImage> listImagesAllRegions(@Nullable ImageFilterOptions options) throws CloudException, InternalException{
+        throw new OperationNotSupportedException("Listing images for all regions is not supported.");
+    }
+
+    @Override
     @Deprecated
     public @Nonnull Iterable<MachineImageFormat> listSupportedFormats() throws CloudException, InternalException {
         return getCapabilities().listSupportedFormats();
