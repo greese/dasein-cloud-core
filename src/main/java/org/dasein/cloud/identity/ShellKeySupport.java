@@ -79,7 +79,9 @@ public interface ShellKeySupport extends AccessControlledService {
      * @return the requirement state of importing key pairs
      * @throws CloudException an error occurred with the cloud provider in determining support
      * @throws InternalException a local error occurred while determining support
+     * @deprecated use {@link ShellKeyCapabilities#getKeyImportSupport()}
      */
+    @Deprecated
     public Requirement getKeyImportSupport() throws CloudException, InternalException;
     
     /**
@@ -96,7 +98,9 @@ public interface ShellKeySupport extends AccessControlledService {
      * Provides the provider term for an SSH keypair.
      * @param locale the locale into which the term should be translated
      * @return the provider term for the SSH keypair, ideally translated for the specified locale
+     * @deprecated use {@link ShellKeyCapabilities#getProviderTermForKeypair(java.util.Locale)}
      */
+    @Deprecated
     public @Nonnull String getProviderTermForKeypair(@Nonnull Locale locale);
 
     /**
