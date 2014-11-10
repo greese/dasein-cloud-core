@@ -8,8 +8,8 @@ import org.dasein.cloud.util.requester.streamprocessors.StreamProcessor;
 
 import java.io.IOException;
 
-/**
- * Created by Vlad_Munthiu on 10/20/2014.
+ /**
+ * @author Vlad Munthiu
  */
 public class DaseinResponseHandler<T> implements ResponseHandler<T> {
 
