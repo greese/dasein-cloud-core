@@ -48,7 +48,7 @@ public class ScalingGroup implements Serializable {
     private String[]              terminationPolicies;
     private AutoScalingTag[]      tags;
     // comma separated list
-    private String[]              subnets;
+    private String[]              providerSubnetIds;
 
     public ScalingGroup() { }
 
@@ -240,11 +240,11 @@ public class ScalingGroup implements Serializable {
 
     @Deprecated
     public String getSubnetIds() {
-        if( this.subnets == null || this.subnets.length == 0 ) {
+        if( this.providerSubnetIds == null || this.providerSubnetIds.length == 0 ) {
             return new String();
         }
         StringBuilder sb = new StringBuilder();
-        for( String sn : this.subnets ) {
+        for( String sn : this.providerSubnetIds ) {
             sb.append(sn).append(",");
         }
         return sb.deleteCharAt(sb.length() - 1).toString();
@@ -252,15 +252,15 @@ public class ScalingGroup implements Serializable {
 
     @Deprecated
     public void setSubnetIds( String subnetIds ) {
-        this.subnets = ( subnetIds == null ) ? new String[0] : subnetIds.split("\\s*,\\s*");
+        this.providerSubnetIds = ( subnetIds == null ) ? new String[0] : subnetIds.split("\\s*,\\s*");
     }
 
-    public String[] getSubnets() {
-        return ( this.subnets == null ) ? new String[0] : this.subnets;
+    public String[] getProviderSubnetIds() {
+        return ( this.providerSubnetIds == null ) ? new String[0] : this.providerSubnetIds;
     }
 
-    public void setSubnets( String[] subnets ) {
-        this.subnets = subnets;
+    public void setProviderSubnetIds( String[] providerSubnetIds ) {
+        this.providerSubnetIds = providerSubnetIds;
     }
 
 }

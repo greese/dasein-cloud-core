@@ -449,19 +449,13 @@ public abstract class CloudProvider {
     }
 
     /**
-     * @see CloudProvider#setDebug(boolean)
+     * DEBUG_AWS should be specified as system properties, otherwise return false
+     *
+     * @return DEBUG_AWS properties value, or false if not specified
      */
     public boolean isDebug() {
-        return debug;
-    }
-
-    /**
-     * Sets debug parameter to trigger debug functionality in particular providers.
-     *
-     * @param debug
-     */
-    public void setDebug( boolean debug ) {
-        this.debug = debug;
+        Properties properties = System.getProperties();
+        return Boolean.valueOf(properties.getProperty("DEBUG_AWS", "false"));
     }
 
 }
