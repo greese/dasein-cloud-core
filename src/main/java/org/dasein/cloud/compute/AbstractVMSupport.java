@@ -28,10 +28,7 @@ import org.dasein.cloud.Requirement;
 import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.Tag;
 import org.dasein.cloud.identity.ServiceAction;
-import org.dasein.cloud.util.APITrace;
-import org.dasein.cloud.util.Cache;
-import org.dasein.cloud.util.CacheLevel;
-import org.dasein.cloud.util.NamingConstraints;
+import org.dasein.cloud.util.*;
 import org.dasein.util.CalendarWrapper;
 import org.dasein.util.Jiterator;
 import org.dasein.util.JiteratorPopulator;
@@ -941,7 +938,25 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
-    public @Nonnull String[] mapServiceAction( @Nonnull ServiceAction action ) {
+    public void setTags(@Nonnull String vmId, @Nonnull Tag... tags) throws CloudException, InternalException {
+        setTags(new String[]{vmId}, tags);
+    }
+
+    @Override
+    public void setTags(@Nonnull String[] vmIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for (String id : vmIds) {
+            Tag[] collectionForDelete = TagUtils.getTagsForDelete(getVirtualMachine(id).getTags(), tags);
+
+            if (collectionForDelete.length != 0 ) {
+                removeTags(id, collectionForDelete);
+            }
+
+            updateTags(id, tags);
+        }
+    }
+
+    @Override
+    public @Nonnull String[] mapServiceAction(@Nonnull ServiceAction action) {
         return new String[0];
     }
 

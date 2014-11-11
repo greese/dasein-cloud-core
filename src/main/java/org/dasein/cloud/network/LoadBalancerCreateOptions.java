@@ -73,19 +73,20 @@ public class LoadBalancerCreateOptions {
         return options;
     }
 
-    private List<LoadBalancerEndpoint> endpoints;
-    private List<String>          providerDataCenterIds;
-    private List<String>          providerSubnetIds;
-    private String                     providerIpAddressId;
-    private String                     description;
-    private List<LbListener>      listeners;
-    private Map<String, Object>        metaData;
-    private String                     name;
-    private LbType                     type;
-    private HealthCheckOptions         healthCheckOptions;
+    private List<LoadBalancerEndpoint>      endpoints;
+    private List<String>                    providerDataCenterIds;
+    private List<String>                    providerSubnetIds;
+    private List<String>                    firewallIds;
+    private String                          providerIpAddressId;
+    private String                          description;
+    private List<LbListener>                listeners;
+    private Map<String,Object>              metaData;
+    private String                          name;
+    private LbType                          type;
+    private HealthCheckOptions              healthCheckOptions;
+    private LbAttributesOptions             lbAttributesOptions;
 
-    private LoadBalancerCreateOptions() {
-    }
+    private LoadBalancerCreateOptions() { }
 
     /**
      * Builds a load balancer in the cloud using the options specified in this object. It will examine provider meta-data
@@ -197,6 +198,16 @@ public class LoadBalancerCreateOptions {
     }
 
     /**
+     * @return the security groups to which this load balancer will be added
+     */
+    public String[] getFirewallIds() {
+        if( firewallIds == null ) {
+            return new String[0];
+        }
+        return firewallIds.toArray(new String[firewallIds.size()]);
+    }
+
+    /**
      * @return the IP address you are assigning to this load balancer if the address is required
      */
     public @Nullable String getProviderIpAddressId() {
@@ -212,6 +223,13 @@ public class LoadBalancerCreateOptions {
 
     public @Nullable HealthCheckOptions getHealthCheckOptions(){
         return this.healthCheckOptions;
+    }
+
+    /**
+     * @return the load balancer attributes
+     */
+    public @Nullable LbAttributesOptions getLbAttributesOptions() {
+        return lbAttributesOptions;
     }
 
     /**
@@ -251,6 +269,20 @@ public class LoadBalancerCreateOptions {
       }
       Collections.addAll(this.providerSubnetIds, providerSubnetIds);
       return this;
+    }
+
+    /**
+     * Adds the specified firewalls into this list of firewalls to which this load balancer rotation will be added.
+     *
+     * @param firewallIds the IDs of the firewalls to add the load balancer to
+     * @return this
+     */
+    public @Nonnull LoadBalancerCreateOptions withFirewalls( @Nonnull String... firewallIds ) {
+        if( this.firewallIds == null ) {
+            this.firewallIds = new ArrayList<String>();
+        }
+        Collections.addAll(this.firewallIds, firewallIds);
+        return this;
     }
 
     @Override
@@ -322,6 +354,16 @@ public class LoadBalancerCreateOptions {
      */
     public @Nonnull LoadBalancerCreateOptions withHealthCheckOptions(@Nullable HealthCheckOptions options){
         this.healthCheckOptions = options;
+        return this;
+    }
+
+    /**
+     * Adds the specified health check options to be associated with the load balancer on creation.
+     * @param lbAttributesOptions the attributes
+     * @return this
+     */
+    public @Nonnull LoadBalancerCreateOptions withLbAttributeOptions(@Nullable LbAttributesOptions lbAttributesOptions ) {
+        this.lbAttributesOptions = lbAttributesOptions;
         return this;
     }
 

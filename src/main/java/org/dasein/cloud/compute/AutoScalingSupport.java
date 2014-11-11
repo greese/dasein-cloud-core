@@ -19,10 +19,7 @@
 
 package org.dasein.cloud.compute;
 
-import org.dasein.cloud.AccessControlledService;
-import org.dasein.cloud.CloudException;
-import org.dasein.cloud.InternalException;
-import org.dasein.cloud.ResourceStatus;
+import org.dasein.cloud.*;
 import org.dasein.cloud.identity.ServiceAction;
 
 import javax.annotation.Nonnull;
@@ -124,6 +121,26 @@ public interface AutoScalingSupport extends AccessControlledService {
     public String setTrigger( String name, String scalingGroupId, String statistic, String unitOfMeasure, String metric, int periodInSeconds, double lowerThreshold, double upperThreshold, int lowerIncrement, boolean lowerIncrementAbsolute, int upperIncrement, boolean upperIncrementAbsolute, int breachDuration ) throws InternalException, CloudException;
 
     /**
+     * Set notification configurations for scaling group.
+     *
+     * @param scalingGroupId    the auto scaling group id
+     * @param topic             the notification service topic
+     * @param notificationTypes types to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void setNotificationConfig( @Nonnull String scalingGroupId, @Nonnull String topic, @Nonnull String[] notificationTypes ) throws CloudException, InternalException;
+
+    /**
+     * Get list of notification configs for multiple auto scaling groups.
+     *
+     * @param scalingGroupIds the auto scaling group ids
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public Iterable<AutoScalingGroupNotificationConfig> listNotificationConfigs( final String[] scalingGroupIds ) throws CloudException, InternalException;
+
+    /**
      * Updates meta-data for multiple auto scaling groups with the new values. It will not overwrite any value that currently
      * exists unless it appears in the tags you submit.
      *
@@ -145,5 +162,27 @@ public interface AutoScalingSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
     public void removeTags( @Nonnull String[] providerScalingGroupIds, @Nonnull AutoScalingTag... tags ) throws CloudException, InternalException;
+
+    /**
+     * Set meta-data for auto scaling group. Remove any tags that were not provided by the incoming tags, and add or
+     * overwrite any new or pre-existing tags.
+     *
+     * @param providerScalingGroupId the auto scaling group to set
+     * @param tags                   the meta-data tags to set
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public void setTags( @Nonnull String providerScalingGroupId, @Nonnull AutoScalingTag... tags ) throws CloudException, InternalException;
+
+    /**
+     * Set meta-data for multiple auto scaling groups. Remove any tags that were not provided by the incoming tags, and add or
+     * overwrite any new or pre-existing tags.
+     *
+     * @param providerScalingGroupIds the auto scaling groups to set
+     * @param tags                    the meta-data tags to set
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public void setTags( @Nonnull String[] providerScalingGroupIds, @Nonnull AutoScalingTag... tags ) throws CloudException, InternalException;
 
 }

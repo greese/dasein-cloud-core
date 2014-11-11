@@ -25,6 +25,7 @@ import org.dasein.cloud.identity.ServiceAction;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.Locale;
 
 /**
@@ -608,6 +609,28 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
     public void updateTags( @Nonnull String[] vmIds, @Nonnull Tag... tags ) throws CloudException, InternalException;
+
+    /**
+     * Set meta-data for a virtual machine. Remove any tags that were not provided by the incoming tags, and add or
+     * overwrite any new or pre-existing tags.
+     *
+     * @param vmId the virtual machine to set
+     * @param tags the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void setTags( @Nonnull String vmId, @Nonnull Tag... tags ) throws CloudException, InternalException;
+
+    /**
+     * Set meta-data for multiple virtual machines. Remove any tags that were not provided by the incoming tags, and add or
+     * overwrite any new or pre-existing tags.
+     *
+     * @param vmIds the virtual machines to set
+     * @param tags  the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void setTags( @Nonnull String[] vmIds, @Nonnull Tag... tags ) throws CloudException, InternalException;
 
     /**
      * Removes meta-data from a virtual machine. If tag values are set, their removal is dependent on underlying cloud

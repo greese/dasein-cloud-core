@@ -396,7 +396,6 @@ public class LoadBalancer implements Networkable, Taggable {
     /**
      * Sets the firewall ids.
      * @param providerFirewallIds the firewall ids
-     * @return this
      */
     public void setProviderFirewallIds(String[] providerFirewallIds) {
         this.providerFirewallIds = providerFirewallIds;

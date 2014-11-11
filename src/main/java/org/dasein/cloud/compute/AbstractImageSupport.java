@@ -29,11 +29,12 @@ import org.dasein.cloud.Requirement;
 import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.Tag;
 import org.dasein.cloud.identity.ServiceAction;
+import org.dasein.cloud.util.TagUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Locale;
 
@@ -143,6 +144,11 @@ public abstract class AbstractImageSupport<T extends CloudProvider> implements M
             throw new CloudException("No context has been set for this request");
         }
         return ctx;
+    }
+
+    @Override
+    public @Nonnull String copyImage( @Nonnull ImageCopyOptions options ) throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Image copying is not currently implemented");
     }
 
     @Override
@@ -597,4 +603,24 @@ public abstract class AbstractImageSupport<T extends CloudProvider> implements M
             removeTags(id, tags);
         }
     }
+
+    @Override
+    public void setTags( @Nonnull String imageId, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        setTags(new String[]{imageId}, tags);
+    }
+
+    @Override
+    public void setTags( @Nonnull String[] imageIds, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        for( String id : imageIds ) {
+
+            Tag[] collectionForDelete = TagUtils.getTagsForDelete(getImage(id).getTags(), tags);
+
+            if( collectionForDelete.length != 0 ) {
+                removeTags(id, collectionForDelete);
+            }
+
+            updateTags(id, tags);
+        }
+    }
+
 }

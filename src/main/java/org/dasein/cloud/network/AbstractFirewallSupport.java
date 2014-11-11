@@ -28,6 +28,7 @@ import org.dasein.cloud.Requirement;
 import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.Tag;
 import org.dasein.cloud.identity.ServiceAction;
+import org.dasein.cloud.util.TagUtils;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -395,4 +396,23 @@ public abstract class AbstractFirewallSupport<T extends CloudProvider> implement
             updateTags(id, tags);
         }
     }
+
+    @Override
+    public void setTags( @Nonnull String firewallId, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        setTags(new String[]{firewallId}, tags);
+    }
+
+    @Override
+    public void setTags( @Nonnull String[] firewallIds, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        for( String id : firewallIds ) {
+            Tag[] collectionForDelete = TagUtils.getTagsForDelete(getFirewall(id).getTags(), tags);
+
+            if( collectionForDelete.length != 0) {
+                removeTags(id, collectionForDelete);
+            }
+
+            updateTags(id, tags);
+        }
+    }
+
 }

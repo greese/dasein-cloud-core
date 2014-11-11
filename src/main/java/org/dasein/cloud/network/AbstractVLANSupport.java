@@ -24,6 +24,7 @@ import org.dasein.cloud.compute.ComputeServices;
 import org.dasein.cloud.compute.VirtualMachine;
 import org.dasein.cloud.compute.VirtualMachineSupport;
 import org.dasein.cloud.identity.ServiceAction;
+import org.dasein.cloud.util.TagUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -539,11 +540,6 @@ public abstract class AbstractVLANSupport<T extends CloudProvider> implements VL
     }
 
     @Override
-    public void updateInternetGatewayTags(@Nonnull String internetGatewayId, @Nonnull Tag... tags) throws CloudException, InternalException{
-        throw new OperationNotSupportedException("Internet Gateway tags are not supported in " + provider.getCloudName());
-    }
-
-    @Override
     public void updateInternetGatewayTags(@Nonnull String[] internetGatewayIds, @Nonnull Tag... tags) throws CloudException, InternalException {
         for (String internetGatewayId : internetGatewayIds) {
             updateInternetGatewayTags(internetGatewayId, tags);
@@ -577,6 +573,60 @@ public abstract class AbstractVLANSupport<T extends CloudProvider> implements VL
     }
 
     @Override
+    public void setSubnetTags( @Nonnull String[] subnetIds, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        for( String id : subnetIds ) {
+
+            Tag[] collectionForDelete = TagUtils.getTagsForDelete(getSubnet(id).getTags(), tags);
+
+            if( collectionForDelete.length != 0 ) {
+                removeSubnetTags(id, collectionForDelete);
+            }
+
+            updateSubnetTags(id, tags);
+        }
+    }
+
+    @Override
+    public void setRoutingTableTags( @Nonnull String[] routingTableIds, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        for( String id : routingTableIds ) {
+            Tag[] collectionForDelete = TagUtils.getTagsForDelete(getRoutingTable(id).getTags(), tags);
+
+            if( collectionForDelete.length != 0 ) {
+                removeRoutingTableTags(id, collectionForDelete);
+            }
+
+            updateRoutingTableTags(id, tags);
+        }
+    }
+
+    @Override
+    public void setInternetGatewayTags( @Nonnull String[] internetGatewayIds, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        for( String id : internetGatewayIds ) {
+            Tag[] collectionForDelete = TagUtils.getTagsForDelete(getInternetGatewayById(id).getTags(), tags);
+
+            if( collectionForDelete.length != 0 ) {
+                removeInternetGatewayTags(id, collectionForDelete);
+            }
+
+            updateInternetGatewayTags(id, tags);
+        }
+    }
+
+    @Override
+    public void setSubnetTags( @Nonnull String subnetId, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        setSubnetTags(new String[]{subnetId}, tags);
+    }
+
+    @Override
+    public void setRoutingTableTags( @Nonnull String routingTableId, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        setRoutingTableTags(new String[]{routingTableId}, tags);
+    }
+
+    @Override
+    public void setInternetGatewayTags( @Nonnull String internetGatewayId, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        setInternetGatewayTags(new String[]{internetGatewayId}, tags);
+    }
+
     public void removeRoutingTableTags(@Nonnull String routingTableId, @Nonnull Tag... tags) throws CloudException, InternalException{
         throw new OperationNotSupportedException("Routing table tags are not supported in " + provider.getCloudName());
     }
