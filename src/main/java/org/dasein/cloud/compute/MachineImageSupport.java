@@ -286,20 +286,6 @@ public interface MachineImageSupport extends AccessControlledService {
     public @Nonnull Iterable<MachineImage> listImages(@Nonnull ImageClass cls, @Nonnull String ownedBy) throws CloudException, InternalException;
 
     /**
-     * Lists all images in a specific library based on the given filter options. With no filter options specified, this
-     * generally includes all images belonging to the current account as well any explicitly shared with me. In clouds without a public
-     * library, it's all images I can see. The filtering functionality may be wholly or partially delegated to the cloud
-     * provider for efficiency.
-     * In this case the method expects to return all images across every region. Some clouds do not provide filtering or spearate calls
-     * for each region so to aid performance this method should be used
-     * @param options filter options
-     * @return the list of images in my image library of the specified image class
-     * @throws CloudException an error occurred with the cloud provider
-     * @throws InternalException a local error occurred in the Dasein Cloud implementation
-     */
-    public @Nonnull Iterable<MachineImage> listImagesAllRegions(@Nullable ImageFilterOptions options) throws CloudException, InternalException;
-
-    /**
      * Lists all machine image formats for any uploading/registering of machine images that might be supported.
      * If uploading/registering is not supported, this method will return any empty set.
      * @return the list of supported formats you can upload to the cloud
