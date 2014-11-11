@@ -118,6 +118,7 @@ public class ImageFilterOptions {
     private Platform           platform;
     private String             regex;
     private Map<String,String> tags;
+    private boolean            withAllRegions = false;
 
     private ImageFilterOptions(@Nullable ImageClass cls, boolean matchesAny) {
         imageClass = cls;
@@ -194,6 +195,11 @@ public class ImageFilterOptions {
     public @Nullable Map<String, String> getTags() {
         return tags;
     }
+
+    /**
+     * @return whether the query is to ignore the context region and return for all regions.
+     */
+    public boolean getWithAllRegions(){ return withAllRegions; }
 
     /**
      * Indicates whether there are any criteria associated with these options.
@@ -341,6 +347,11 @@ public class ImageFilterOptions {
      */
     public @Nonnull ImageFilterOptions withAccountNumber(@Nonnull String accountNumber) {
         this.accountNumber = accountNumber;
+        return this;
+    }
+
+    public @Nonnull ImageFilterOptions withAllRegions(boolean isAllRegions){
+        this.withAllRegions = isAllRegions;
         return this;
     }
 
