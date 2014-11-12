@@ -152,7 +152,6 @@ public class LoadBalancer implements Networkable, Taggable {
         this.currentState = state;
         this.name = name;
         this.description = description;
-        this.type = type;
         this.address = address;
         this.addressType = addressType;
         this.publicPorts = publicPorts;
@@ -167,7 +166,6 @@ public class LoadBalancer implements Networkable, Taggable {
         this.currentState = state;
         this.name = name;
         this.description = description;
-        this.type = type;
         this.address = address;
         this.addressType = addressType;
         this.publicPorts = publicPorts;
@@ -306,7 +304,7 @@ public class LoadBalancer implements Networkable, Taggable {
     }
 
     /**
-     * @return the ID of a Health Check is one is attached. Othwise null.
+     * @return the ID of a Health Check if one is attached.
      */
     public @Nullable String getProviderLBHealthCheckId(){
         return providerLBHealthCheckId;
@@ -314,6 +312,13 @@ public class LoadBalancer implements Networkable, Taggable {
 
     public @Nullable VisibleScope getVisibleScope(){
         return visibleScope;
+    }
+
+    /**
+     * @return the VLAN ID this load balancer was created for.
+     */
+    public @Nullable String getProviderVlanId() {
+        return providerVlanId;
     }
 
     @Override
