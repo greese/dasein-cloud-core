@@ -82,6 +82,7 @@ public class LoadBalancerCreateOptions {
     private List<LbListener>                listeners;
     private Map<String,Object>              metaData;
     private String                          name;
+    private String                          providerVlanId;
     private LbType                          type;
     private HealthCheckOptions              healthCheckOptions;
     private LbAttributesOptions             lbAttributesOptions;
@@ -116,6 +117,9 @@ public class LoadBalancerCreateOptions {
         }
         if( support.getCapabilities().isDataCenterLimited() && ( providerDataCenterIds == null || providerDataCenterIds.isEmpty() ) ) {
             throw new CloudException("You must specify at least one data center when creating a load balancer in " + provider.getCloudName());
+        }
+        if( support.getCapabilities().identifyVlanOnCreateRequirement().equals(Requirement.REQUIRED) && providerVlanId == null){
+            throw new CloudException("You must specify the vlan into which the load balancer will be created in " + provider.getCloudName());
         }
         if( !support.getCapabilities().isAddressAssignedByProvider() && providerIpAddressId == null ) {
             // attempt to find an address
@@ -176,6 +180,8 @@ public class LoadBalancerCreateOptions {
     public @Nonnull String getName() {
         return name;
     }
+
+    public @Nullable String getProviderVlanId() {return providerVlanId;}
 
     /**
      * @return the data centers to which this load balancer will be limited
@@ -303,6 +309,16 @@ public class LoadBalancerCreateOptions {
         for( String ipAddress : ipAddresses ) {
             endpoints.add(LoadBalancerEndpoint.getInstance(LbEndpointType.IP, ipAddress, LbEndpointState.ACTIVE));
         }
+        return this;
+    }
+
+    /**
+     * Specifies a vlanId into which the load balancer should be created if required by the cloud
+     * @param providerVlanId the Id of the vlan into which the load balancer will be created
+     * @return this
+     */
+    public @Nonnull LoadBalancerCreateOptions withVlanId(@Nonnull String providerVlanId){
+        this.providerVlanId = providerVlanId;
         return this;
     }
 

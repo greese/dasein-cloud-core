@@ -96,6 +96,14 @@ public interface LoadBalancerCapabilities extends Capabilities{
     public @Nonnull Requirement identifyListenersOnCreateRequirement() throws CloudException, InternalException;
 
     /**
+     * Indicates whether a load balancer requires a vlan to be specified when it is created.
+     * @return the degree to which a vlan should or must be part of the creation process
+     * @throws CloudException an error occurred while communicating with the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     */
+    public @Nonnull Requirement identifyVlanOnCreateRequirement() throws CloudException, InternalException;
+
+    /**
      * @return whether or not you are expected to provide an address as part of the create process or one gets assigned
      *         by the provider
      * @throws CloudException    an error occurred while communicating with the cloud provider
