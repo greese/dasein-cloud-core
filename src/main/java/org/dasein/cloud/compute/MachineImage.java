@@ -140,6 +140,28 @@ public class MachineImage implements Taggable {
         return this;
     }
 
+    /**
+     * Indicates the machine image type. If not set, the value will default to MachineImageType.VOLUME.
+     * @param type
+     * @return this
+     */
+    public @Nonnull MachineImage withType(@Nonnull MachineImageType type) {
+        this.type = type;
+        return this;
+    }
+
+    /**
+     * Indicates what image format in case when type of this image is set MachineImageType.STORAGE.
+     * This field should generally be ignored for other image types.
+     * @see org.dasein.cloud.compute.MachineImageType
+     * @param format
+     * @return this
+     */
+    public @Nonnull MachineImage withStorageFormat(@Nullable MachineImageFormat format) {
+        this.storageFormat = format;
+        return this;
+    }
+
     @Override
     public boolean equals(Object ob) {
         if( ob == null ) {
