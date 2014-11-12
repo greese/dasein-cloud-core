@@ -123,20 +123,21 @@ public class LoadBalancer implements Networkable, Taggable {
     private LoadBalancerState       currentState;
     private String                  description;
     private LbType                  type;
-    private ArrayList<LbListener>   listeners;
+    private List<LbListener>        listeners;
     private String                  name;
     private String[]                providerDataCenterIds;
     private String                  providerLoadBalancerId;
     private String                  providerOwnerId;
     private String                  providerRegionId;
     private String[]                providerServerIds;
-    private ArrayList<String>       providerSubnetIds;
+    private List<String>            providerSubnetIds;
     private int[]                   publicPorts;
     private IPVersion[]             supportedTraffic;
     private Map<String,String>      tags;
     private String                  providerLBHealthCheckId;
     private String[]                providerFirewallIds;
     private VisibleScope            visibleScope;
+    private String                  providerVlanId;
 
     /**
      * Constructs a load balancer object with no data.
@@ -335,7 +336,7 @@ public class LoadBalancer implements Networkable, Taggable {
     /**
      * @return the provider subnet ids
      */
-    public ArrayList<String> getProviderSubnetIds() {
+    public Iterable<String> getProviderSubnetIds() {
       return providerSubnetIds;
     }
 
@@ -426,6 +427,16 @@ public class LoadBalancer implements Networkable, Taggable {
             this.listeners = new ArrayList<LbListener>();
         }
         Collections.addAll(this.listeners, listeners);
+        return this;
+    }
+
+    /**
+     * Indicates the VLAN this load balancer should be created for.
+     * @param providerVlanId the VLAN id
+     * @return this
+     */
+    public @Nonnull LoadBalancer forVlan(@Nullable String providerVlanId) {
+        this.providerVlanId = providerVlanId;
         return this;
     }
 
