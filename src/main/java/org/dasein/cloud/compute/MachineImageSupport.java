@@ -454,6 +454,7 @@ public interface MachineImageSupport extends AccessControlledService {
      * @throws InternalException a local error occurred in the Dasein Cloud implementation
      * @deprecated Use {@link #searchImages(String, String, Platform, Architecture, ImageClass...)} and/or {@link #searchPublicImages(String, Platform, Architecture, ImageClass...)}
      */
+    @Deprecated
     public @Nonnull Iterable<MachineImage> searchMachineImages(@Nullable String keyword, @Nullable Platform platform, @Nullable Architecture architecture) throws CloudException, InternalException;
 
     /**
