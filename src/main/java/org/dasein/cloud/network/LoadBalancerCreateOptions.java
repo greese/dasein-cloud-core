@@ -317,7 +317,7 @@ public class LoadBalancerCreateOptions {
      * @param providerVlanId the Id of the vlan into which the load balancer will be created
      * @return this
      */
-    public @Nonnull LoadBalancerCreateOptions withVlanId(@Nonnull String providerVlanId){
+    public @Nonnull LoadBalancerCreateOptions withVlanId(@Nullable String providerVlanId){
         this.providerVlanId = providerVlanId;
         return this;
     }
