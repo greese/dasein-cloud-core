@@ -106,6 +106,7 @@ public interface RelationalDatabaseCapabilities extends Capabilities{
 
     /**
      * Indicates whether the provider supports HA RDS support
+     * @deprecated
      * @return true if HA support is available
      * @see RelationalDatabaseCapabilities#supportsHighAvailability()
      * @throws CloudException
