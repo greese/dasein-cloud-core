@@ -123,20 +123,21 @@ public class LoadBalancer implements Networkable, Taggable {
     private LoadBalancerState       currentState;
     private String                  description;
     private LbType                  type;
-    private ArrayList<LbListener>   listeners;
+    private List<LbListener>        listeners;
     private String                  name;
     private String[]                providerDataCenterIds;
     private String                  providerLoadBalancerId;
     private String                  providerOwnerId;
     private String                  providerRegionId;
     private String[]                providerServerIds;
-    private ArrayList<String>       providerSubnetIds;
+    private List<String>            providerSubnetIds;
     private int[]                   publicPorts;
     private IPVersion[]             supportedTraffic;
     private Map<String,String>      tags;
     private String                  providerLBHealthCheckId;
     private String[]                providerFirewallIds;
     private VisibleScope            visibleScope;
+    private String                  providerVlanId;
 
     /**
      * Constructs a load balancer object with no data.
@@ -151,7 +152,6 @@ public class LoadBalancer implements Networkable, Taggable {
         this.currentState = state;
         this.name = name;
         this.description = description;
-        this.type = type;
         this.address = address;
         this.addressType = addressType;
         this.publicPorts = publicPorts;
@@ -166,7 +166,6 @@ public class LoadBalancer implements Networkable, Taggable {
         this.currentState = state;
         this.name = name;
         this.description = description;
-        this.type = type;
         this.address = address;
         this.addressType = addressType;
         this.publicPorts = publicPorts;
@@ -305,7 +304,7 @@ public class LoadBalancer implements Networkable, Taggable {
     }
 
     /**
-     * @return the ID of a Health Check is one is attached. Othwise null.
+     * @return the ID of a Health Check if one is attached.
      */
     public @Nullable String getProviderLBHealthCheckId(){
         return providerLBHealthCheckId;
@@ -313,6 +312,13 @@ public class LoadBalancer implements Networkable, Taggable {
 
     public @Nullable VisibleScope getVisibleScope(){
         return visibleScope;
+    }
+
+    /**
+     * @return the VLAN ID this load balancer was created for.
+     */
+    public @Nullable String getProviderVlanId() {
+        return providerVlanId;
     }
 
     @Override
@@ -335,7 +341,7 @@ public class LoadBalancer implements Networkable, Taggable {
     /**
      * @return the provider subnet ids
      */
-    public ArrayList<String> getProviderSubnetIds() {
+    public Iterable<String> getProviderSubnetIds() {
       return providerSubnetIds;
     }
 
@@ -426,6 +432,16 @@ public class LoadBalancer implements Networkable, Taggable {
             this.listeners = new ArrayList<LbListener>();
         }
         Collections.addAll(this.listeners, listeners);
+        return this;
+    }
+
+    /**
+     * Indicates the VLAN this load balancer should be created for.
+     * @param providerVlanId the VLAN id
+     * @return this
+     */
+    public @Nonnull LoadBalancer forVlan(@Nullable String providerVlanId) {
+        this.providerVlanId = providerVlanId;
         return this;
     }
 
