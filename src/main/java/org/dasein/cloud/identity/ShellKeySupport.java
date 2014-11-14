@@ -79,7 +79,7 @@ public interface ShellKeySupport extends AccessControlledService {
      * @return the requirement state of importing key pairs
      * @throws CloudException an error occurred with the cloud provider in determining support
      * @throws InternalException a local error occurred while determining support
-     * @deprecated use {@link ShellKeyCapabilities#supportsKeypairImport()}
+     * @deprecated use {@link org.dasein.cloud.identity.ShellKeyCapabilities#identifyKeyImportRequirement()}}
      */
     @Deprecated
     public Requirement getKeyImportSupport() throws CloudException, InternalException;
