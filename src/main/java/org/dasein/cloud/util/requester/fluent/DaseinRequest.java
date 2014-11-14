@@ -5,10 +5,8 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.util.requester.*;
-import org.dasein.cloud.util.requester.streamprocessors.JsonStreamToObjectProcessor;
-import org.dasein.cloud.util.requester.streamprocessors.StreamToDocumentProcessor;
-import org.dasein.cloud.util.requester.streamprocessors.StreamToStringProcessor;
-import org.dasein.cloud.util.requester.streamprocessors.XmlStreamToObjectProcessor;
+import org.dasein.cloud.util.requester.streamprocessors.*;
+import org.json.JSONObject;
 import org.w3c.dom.Document;
 
 /**
@@ -141,6 +139,20 @@ public class DaseinRequest implements CompositeRequester {
     public <T> DaseinRequestExecutor<Document> withDocumentProcessor() {
         return new DaseinRequestExecutor<Document>(this.provider, this.httpClientBuilder, this.httpUriRequestBuilder,
                 new DaseinResponseHandler<Document>(new StreamToDocumentProcessor(), Document.class));
+    }
+
+    /**
+     * Constructs a instance of a DaseinRequestExecutor with a stream processor that, once the HTTP request has been
+     * finished, will try to parse the response stream into a valid JSONObject object.
+     *
+     * <code>
+     *     JSONObject jsonResult = new DaseinRequest(cloudProvider, httpClientBuilder, httpUriRequestBuilder).withJSONObjectProcessor().execute();
+     * </code>
+     **/
+    @Override
+    public <T> DaseinRequestExecutor<JSONObject> withJSONObjectProcessor() {
+        return new DaseinRequestExecutor<JSONObject>(this.provider, this.httpClientBuilder, this.httpUriRequestBuilder,
+                new DaseinResponseHandler<JSONObject>(new StreamToJSONObjectProcessor(), JSONObject.class));
     }
 
     /**
