@@ -20,6 +20,7 @@
 package org.dasein.cloud.platform;
 
 import org.dasein.cloud.platform.bigdata.DataWarehouseSupport;
+import org.dasein.cloud.platform.support.TicketService;
 
 import javax.annotation.Nullable;
 
@@ -67,6 +68,12 @@ public abstract class AbstractPlatformServices implements PlatformServices {
     }
 
     @Override
+    public @Nullable
+    TicketService getSupportService() {
+        return null;
+    }
+
+    @Override
     public boolean hasCDNSupport() {
         return (getCDNSupport() != null);
     }
@@ -101,4 +108,8 @@ public abstract class AbstractPlatformServices implements PlatformServices {
        return getMonitoringSupport()!= null;
     }
 
+    @Override
+    public boolean hasSupportService() {
+        return getSupportService() != null;
+    }
 }

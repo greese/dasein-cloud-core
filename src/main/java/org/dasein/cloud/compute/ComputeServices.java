@@ -31,6 +31,11 @@ import javax.annotation.Nullable;
  */
 public interface ComputeServices {
     /**
+     * @return access to support for affinity groups in the cloud provider
+     */
+    public @Nullable AffinityGroupSupport getAffinityGroupSupport();
+
+    /**
      * @return access to support for auto-scaling capabilities native to the cloud provider
      */
     public @Nullable AutoScalingSupport getAutoScalingSupport();
@@ -54,6 +59,11 @@ public interface ComputeServices {
      * @return access to support for volumes in the cloud provider
      */
     public @Nullable VolumeSupport getVolumeSupport();
+
+    /**
+     * @return indicates whether or not the cloud provider supports affinity groups
+     */
+    public boolean hasAffinityGroupSupport();
 
     /**
      * @return indicates whether or not the cloud provider supports native auto-scaling capabilities

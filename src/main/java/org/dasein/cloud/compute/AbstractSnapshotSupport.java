@@ -285,13 +285,6 @@ public abstract class AbstractSnapshotSupport implements SnapshotSupport {
     }
 
     @Override
-    public void updateTags(@Nonnull String[] snapshotIds, boolean asynchronous, @Nonnull Tag... tags) throws CloudException, InternalException {
-        for (String snapshotId : snapshotIds) {
-            updateTags(snapshotId, asynchronous, tags);
-        }
-    }
-
-    @Override
     public void setTags(@Nonnull String snapshotId, @Nonnull Tag... tags) throws CloudException, InternalException {
         setTags(new String[]{snapshotId}, tags);
     }
@@ -302,7 +295,7 @@ public abstract class AbstractSnapshotSupport implements SnapshotSupport {
 
             Collection<Tag> collectionForDelete = TagUtils.getTagsForDelete(getSnapshot(id).getTags(), tags);
 
-            if (collectionForDelete != null) {
+            if (collectionForDelete != null && collectionForDelete.size() != 0) {
                 removeTags(id, collectionForDelete.toArray(new Tag[collectionForDelete.size()]));
             }
 

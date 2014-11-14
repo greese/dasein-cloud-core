@@ -33,7 +33,7 @@ public abstract class AbstractAutoScalingSupport implements AutoScalingSupport {
 
             Collection<AutoScalingTag> collectionForDelete = getTagsForDelete(getScalingGroup(id).getTags(), tags);
 
-            if (collectionForDelete != null) {
+            if (collectionForDelete != null && collectionForDelete.size() != 0) {
                 removeTags(new String[]{id}, collectionForDelete.toArray(new AutoScalingTag[collectionForDelete.size()]));
             }
 

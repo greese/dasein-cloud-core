@@ -593,13 +593,6 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
     }
 
     @Override
-    public void updateTags(@Nonnull String[] imageIds, boolean asynchronous, @Nonnull Tag ... tags) throws CloudException, InternalException {
-        for( String id : imageIds ) {
-            updateTags(id, asynchronous, tags);
-        }
-    }
-
-    @Override
     public void removeTags(@Nonnull String imageId, @Nonnull Tag ... tags) throws CloudException, InternalException {
         // NO-OP
     }
@@ -622,7 +615,7 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
 
             Collection<Tag> collectionForDelete = TagUtils.getTagsForDelete(getImage(id).getTags(), tags);
 
-            if (collectionForDelete != null) {
+            if (collectionForDelete != null && collectionForDelete.size() != 0) {
                 removeTags(id, collectionForDelete.toArray(new Tag[collectionForDelete.size()]));
             }
 

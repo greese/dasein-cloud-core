@@ -75,19 +75,19 @@ public abstract class AbstractCloud extends CloudProvider {
         
         return (compute == null ? null : compute.getIdentityServices());
     }
-    
+
     @Override
     public @Nullable NetworkServices getNetworkServices() {
         CloudProvider compute = getComputeCloud();
-        
+
         return (compute == null ? null : compute.getNetworkServices());
     }
-    
+
     @Override
     public @Nullable PlatformServices getPlatformServices() {
         CloudProvider compute = getComputeCloud();
-        
-        return (compute == null ? null : compute.getPlatformServices());
+
+        return ( compute == null ? null : compute.getPlatformServices() );
     }
 
     @Override

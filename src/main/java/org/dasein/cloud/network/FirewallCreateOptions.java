@@ -32,19 +32,20 @@ import java.util.*;
  * Encapsulates values to be used in the creation of {@link Firewall} instances either for virtual machine or
  * network firewalls.
  * <p>Created by George Reese: 2/4/13 8:43 AM</p>
+ *
  * @author George Reese
- * @since 2013.04
- * @version 2013.04 initial version (issue greese/dasein-cloud-aws/#8)
  * @version 2014.04 support for rules on create and constraints
+ * @since 2013.04
  */
 public class FirewallCreateOptions {
     /**
      * Constructs options for creating a firewall having the specified name and description.
-     * @param name the name of the firewall to be created
+     *
+     * @param name        the name of the firewall to be created
      * @param description a description of the purpose of the firewall to be created
      * @return options for creating the firewall based on the specified parameters
      */
-    static public FirewallCreateOptions getInstance(@Nonnull String name, @Nonnull String description) {
+    static public FirewallCreateOptions getInstance( @Nonnull String name, @Nonnull String description ) {
         FirewallCreateOptions options = new FirewallCreateOptions();
 
         options.name = name;
@@ -54,12 +55,13 @@ public class FirewallCreateOptions {
 
     /**
      * Constructs options for creating a firewall having the specified name and description with a defined set of initial rules.
-     * @param name the name of the firewall to be created
+     *
+     * @param name        the name of the firewall to be created
      * @param description a description of the purpose of the firewall to be created
      * @param ruleOptions a list of one or more options to be created as the same time as the firewall
      * @return options for creating the firewall based on the specified parameters
      */
-    static public FirewallCreateOptions getInstance(@Nonnull String name, @Nonnull String description, @Nonnull FirewallRuleCreateOptions ... ruleOptions) {
+    static public FirewallCreateOptions getInstance( @Nonnull String name, @Nonnull String description, @Nonnull FirewallRuleCreateOptions... ruleOptions ) {
         FirewallCreateOptions options = new FirewallCreateOptions();
 
         options.name = name;
@@ -71,12 +73,13 @@ public class FirewallCreateOptions {
 
     /**
      * Constructs options for creating a firewall tied to a specific VLAN having the specified name and description.
-     * @param inVlanId the VLAN ID with which the firewall is associated
-     * @param name the name of the firewall to be created
+     *
+     * @param inVlanId    the VLAN ID with which the firewall is associated
+     * @param name        the name of the firewall to be created
      * @param description a description of the purpose of the firewall to be created
      * @return options for creating the firewall based on the specified parameters
      */
-    static public FirewallCreateOptions getInstance(@Nonnull String inVlanId, @Nonnull String name, @Nonnull String description ) {
+    static public FirewallCreateOptions getInstance( @Nonnull String inVlanId, @Nonnull String name, @Nonnull String description ) {
         FirewallCreateOptions options = new FirewallCreateOptions();
 
         options.name = name;
@@ -88,13 +91,14 @@ public class FirewallCreateOptions {
 
     /**
      * Constructs options for creating a firewall in the specified VLAN having the specified name and description with a defined set of initial rules.
-     * @param inVlanId the VLAN ID with which the firewall is associated
-     * @param name the name of the firewall to be created
+     *
+     * @param inVlanId    the VLAN ID with which the firewall is associated
+     * @param name        the name of the firewall to be created
      * @param description a description of the purpose of the firewall to be created
      * @param ruleOptions a list of one or more options to be created as the same time as the firewall
      * @return options for creating the firewall based on the specified parameters
      */
-    static public FirewallCreateOptions getInstance(@Nonnull String inVlanId, @Nonnull String name, @Nonnull String description, @Nonnull FirewallRuleCreateOptions ... ruleOptions) {
+    static public FirewallCreateOptions getInstance( @Nonnull String inVlanId, @Nonnull String name, @Nonnull String description, @Nonnull FirewallRuleCreateOptions... ruleOptions ) {
         FirewallCreateOptions options = new FirewallCreateOptions();
 
         options.name = name;
@@ -105,30 +109,32 @@ public class FirewallCreateOptions {
         return options;
     }
 
-    private Map<FirewallConstraints.Constraint,Object>  constraints;
+    private Map<FirewallConstraints.Constraint, Object> constraints;
     private String                                      description;
     private ArrayList<FirewallRuleCreateOptions>        initialRules;
-    private Map<String,String>                          metaData;
+    private Map<String, String>                         metaData;
     private Collection<String>                          sourceLabels;
     private Collection<String>                          targetLabels;
     private String                                      name;
     private String                                      providerVlanId;
     private Collection<FirewallRule>                    authorizeRules;
 
-    private FirewallCreateOptions() { }
+    private FirewallCreateOptions() {
+    }
 
     /**
      * Provisions a firewall in the specified cloud based on the options described in this object. Note that a
      * {@link Firewall} object may represents many different kinds of firewalls, and this class can be used to create
      * many of them as well. This build method, however, is limited to building firewalls for compute resources.
-     * @param provider the cloud provider in which the firewall will be created
+     *
+     * @param provider          the cloud provider in which the firewall will be created
      * @param asNetworkFirewall if the provisioned firewall should be provisioned as a network firewall
      * @return the unique ID of the firewall that is provisioned
-     * @throws CloudException an error occurred with the cloud provider while provisioning the firewall
-     * @throws InternalException an internal error occurred within Dasein Cloud while preparing or handling the API call
+     * @throws CloudException                 an error occurred with the cloud provider while provisioning the firewall
+     * @throws InternalException              an internal error occurred within Dasein Cloud while preparing or handling the API call
      * @throws OperationNotSupportedException this cloud does not support firewalls
      */
-    public @Nonnull String build(@Nonnull CloudProvider provider, boolean asNetworkFirewall) throws CloudException, InternalException {
+    public @Nonnull String build( @Nonnull CloudProvider provider, boolean asNetworkFirewall ) throws CloudException, InternalException {
         NetworkServices services = provider.getNetworkServices();
 
         if( services == null ) {
@@ -156,15 +162,15 @@ public class FirewallCreateOptions {
      * @param constraint the constraint being checked
      * @return the value to which rules in this firewall will be constrained for the specified constraint
      */
-    public @Nullable Object getConstraintValue(@Nonnull FirewallConstraints.Constraint constraint) {
-        return (constraints == null ? null : constraints.get(constraint));
+    public @Nullable Object getConstraintValue( @Nonnull FirewallConstraints.Constraint constraint ) {
+        return ( constraints == null ? null : constraints.get(constraint) );
     }
 
     /**
      * @return a list of all constraints
      */
     public Iterable<FirewallConstraints.Constraint> getConstraints() {
-        return (constraints == null ? new ArrayList<FirewallConstraints.Constraint>() : constraints.keySet());
+        return ( constraints == null ? new ArrayList<FirewallConstraints.Constraint>() : constraints.keySet() );
     }
 
     /**
@@ -193,8 +199,8 @@ public class FirewallCreateOptions {
     /**
      * @return any extra meta-data to assign to the firewall
      */
-    public @Nonnull Map<String,String> getMetaData() {
-        return (metaData == null ? new HashMap<String, String>() : metaData);
+    public @Nonnull Map<String, String> getMetaData() {
+        return ( metaData == null ? new HashMap<String, String>() : metaData );
     }
 
     /**
@@ -212,14 +218,14 @@ public class FirewallCreateOptions {
     }
 
     /**
-     * @return  source labels to assign to firewall
+     * @return source labels to assign to firewall
      */
     public Collection<String> getSourceLabels() {
         return sourceLabels;
     }
 
     /**
-     * @return  target labels to assign to firewall
+     * @return target labels to assign to firewall
      */
     public @Nonnull Collection<String> getTargetLabels() {
         return targetLabels;
@@ -227,30 +233,33 @@ public class FirewallCreateOptions {
 
     /**
      * Identifies which source labels will be attached to this firewall
-   	 * @param sourceLabelsToAdd source labels to assign to the firewall
-   	 */
-   	public @Nonnull FirewallCreateOptions withSourceLabels(@Nonnull Collection<String> sourceLabelsToAdd) {
-        if (sourceLabels == null) {
+     *
+     * @param sourceLabelsToAdd source labels to assign to the firewall
+     */
+    public @Nonnull FirewallCreateOptions withSourceLabels( @Nonnull Collection<String> sourceLabelsToAdd ) {
+        if( sourceLabels == null ) {
             sourceLabels = new ArrayList<String>();
         }
         sourceLabels.addAll(sourceLabelsToAdd);
         return this;
-   	}
+    }
 
-   	/**
-   	 * Identifies which target labels will be attached to this firewall
-   	 * @param targetLabelsToAdd labels to assign to the firewall
-   	 */
-   	public @Nonnull FirewallCreateOptions withTargetLabels(@Nonnull Collection<String> targetLabelsToAdd) {
-        if (targetLabels == null) {
+    /**
+     * Identifies which target labels will be attached to this firewall
+     *
+     * @param targetLabelsToAdd labels to assign to the firewall
+     */
+    public @Nonnull FirewallCreateOptions withTargetLabels( @Nonnull Collection<String> targetLabelsToAdd ) {
+        if( targetLabels == null ) {
             targetLabels = new ArrayList<String>();
         }
         targetLabels.addAll(targetLabelsToAdd);
         return this;
-   	}
+    }
 
     /**
      * Provides a Collection of initial authorize FirewallRules
+     *
      * @return a Collection of FirewallRule
      */
     public @Nonnull Collection<FirewallRule> getAuthorizeRules() {
@@ -259,10 +268,11 @@ public class FirewallCreateOptions {
 
     /**
      * Defines the initial authorize firewall rules.
+     *
      * @param rulesToAdd a Collection of type FirewallRule
      */
-    public @Nonnull FirewallCreateOptions withAuthorizeRules(@Nonnull Collection<FirewallRule> rulesToAdd) {
-        if (authorizeRules == null) {
+    public @Nonnull FirewallCreateOptions withAuthorizeRules( @Nonnull Collection<FirewallRule> rulesToAdd ) {
+        if( authorizeRules == null ) {
             authorizeRules = new ArrayList<FirewallRule>();
         }
         authorizeRules.addAll(rulesToAdd);
@@ -273,10 +283,11 @@ public class FirewallCreateOptions {
      * Adds one or more firewall rule creation options to the list of rules that should be created at the
      * same time as the firewall. This method is additive, meaning it will add to any rule options set in
      * prior calls.
+     *
      * @param options one or more firewall rule options to be used in authorizing rules during the firewall create process
      * @return this
      */
-    public @Nonnull FirewallCreateOptions havingInitialRules(@Nonnull FirewallRuleCreateOptions ... options) {
+    public @Nonnull FirewallCreateOptions havingInitialRules( @Nonnull FirewallRuleCreateOptions... options ) {
         if( initialRules == null ) {
             initialRules = new ArrayList<FirewallRuleCreateOptions>();
         }
@@ -286,21 +297,23 @@ public class FirewallCreateOptions {
 
     /**
      * Adds a VLAN onto the set of parameters with which the firewall will be created.
+     *
      * @param vlanId the unique ID of the VLAN with which the firewall will be associated on creation
      * @return this
      */
-    public @Nonnull FirewallCreateOptions inVlanId(@Nonnull String vlanId) {
+    public @Nonnull FirewallCreateOptions inVlanId( @Nonnull String vlanId ) {
         providerVlanId = vlanId;
         return this;
     }
 
     /**
      * Adds a constraint value to a constrained firewall. All rules must match the specified value when added.
+     *
      * @param constraint the rule field being constrained
-     * @param value the value to which it is constrained
+     * @param value      the value to which it is constrained
      * @return this
      */
-    public @Nonnull FirewallCreateOptions withConstraint(@Nonnull FirewallConstraints.Constraint constraint, @Nonnull Object value) {
+    public @Nonnull FirewallCreateOptions withConstraint( @Nonnull FirewallConstraints.Constraint constraint, @Nonnull Object value ) {
         if( constraints == null ) {
             constraints = new HashMap<FirewallConstraints.Constraint, Object>();
         }
@@ -311,11 +324,12 @@ public class FirewallCreateOptions {
     /**
      * Specifies any meta-data to be associated with the firewall when created. This method is
      * accretive, meaning that it adds to any existing meta-data (or replaces an existing key).
-     * @param key the key of the meta-data entry
+     *
+     * @param key   the key of the meta-data entry
      * @param value the value for the meta-data entry
      * @return this
      */
-    public @Nonnull FirewallCreateOptions withMetaData(@Nonnull String key, @Nonnull String value) {
+    public @Nonnull FirewallCreateOptions withMetaData( @Nonnull String key, @Nonnull String value ) {
         if( metaData == null ) {
             metaData = new HashMap<String, String>();
         }
@@ -326,10 +340,11 @@ public class FirewallCreateOptions {
     /**
      * Specifies meta-data to add onto any existing meta-data being associated with this firewall when created.
      * This method is accretive, meaning that it adds to any existing meta-data (or replaces an existing keys).
+     *
      * @param metaData the meta-data to be set for the new firewall
      * @return this
      */
-    public @Nonnull FirewallCreateOptions withMetaData(@Nonnull Map<String,String> metaData) {
+    public @Nonnull FirewallCreateOptions withMetaData( @Nonnull Map<String, String> metaData ) {
         if( this.metaData == null ) {
             this.metaData = new HashMap<String, String>();
         }

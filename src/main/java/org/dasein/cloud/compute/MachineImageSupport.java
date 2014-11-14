@@ -578,29 +578,6 @@ public interface MachineImageSupport extends AccessControlledService {
     public void updateTags(@Nonnull String[] imageIds, @Nonnull Tag... tags) throws CloudException, InternalException;
 
     /**
-     * Updates meta-data for a image with the new values. It will not overwrite any value that currently
-     * exists unless it appears in the tags you submit.
-     *
-     * @param imageId the image to update
-     * @param asynchronous the type of update, if true - will update asynchronously
-     * @param tags    the meta-data tags to set
-     * @throws CloudException    an error occurred within the cloud provider
-     * @throws InternalException an error occurred within the Dasein Cloud API implementation
-     */
-    public void updateTags(@Nonnull String imageId, boolean asynchronous, @Nonnull Tag ... tags) throws CloudException, InternalException;
-
-    /**
-     * Updates meta-data for multiple images with the new values. It will not overwrite any value that currently
-     * exists unless it appears in the tags you submit.
-     *
-     * @param imageIds the images to update
-     * @param asynchronous the type of update, if true - will update asynchronously
-     * @param tags     the meta-data tags to set
-     * @throws CloudException    an error occurred within the cloud provider
-     * @throws InternalException an error occurred within the Dasein Cloud API implementation
-     */
-    public void updateTags(@Nonnull String[] imageIds, boolean asynchronous, @Nonnull Tag ... tags) throws CloudException, InternalException;
-    /**
      * Removes meta-data from an image. If tag values are set, their removal is dependent on underlying cloud
      * provider behavior. They may be removed only if the tag value matches or they may be removed regardless of the
      * value.

@@ -20,9 +20,7 @@
 package org.dasein.cloud.test;
 
 import org.dasein.cloud.*;
-import org.dasein.cloud.dc.DataCenter;
-import org.dasein.cloud.dc.DataCenterServices;
-import org.dasein.cloud.dc.Region;
+import org.dasein.cloud.dc.*;
 import org.dasein.cloud.storage.AbstractStorageServices;
 import org.dasein.cloud.storage.OfflineStoreSupport;
 import org.dasein.cloud.storage.StorageServices;
@@ -63,6 +61,12 @@ public class TestNewStorageCloudProvider extends AbstractCloud {
     @Override
     public @Nonnull DataCenterServices getDataCenterServices() {
         return new DataCenterServices() {
+            @Nonnull
+            @Override
+            public DataCenterCapabilities getCapabilities() throws InternalException, CloudException {
+                return null;  //To change body of implemented methods use File | Settings | File Templates.
+            }
+
             @Override
             public DataCenter getDataCenter(String providerDataCenterId) throws InternalException, CloudException {
                 return null;
@@ -91,6 +95,40 @@ public class TestNewStorageCloudProvider extends AbstractCloud {
             @Override
             public Collection<Region> listRegions() throws InternalException, CloudException {
                 return Collections.emptyList();
+            }
+
+
+            @Override
+            public Collection<ResourcePool> listResourcePools(String providerDataCenterId) throws InternalException, CloudException {
+                return Collections.emptyList();
+            }
+
+            @Override
+            public ResourcePool getResourcePool(String providerResourcePoolId) throws InternalException, CloudException {
+                return null;
+            }
+
+            @Override
+            public Collection<StoragePool> listStoragePools() throws InternalException, CloudException{
+                return Collections.emptyList();
+            }
+
+            @Nonnull
+            @Override
+            public StoragePool getStoragePool(String providerStoragePoolId) throws InternalException, CloudException {
+                return null;
+            }
+
+            @Nonnull
+            @Override
+            public Collection<Folder> listVMFolders() throws InternalException, CloudException {
+                return Collections.emptyList();
+            }
+
+            @Nonnull
+            @Override
+            public Folder getVMFolder(String providerVMFolderId) throws InternalException, CloudException {
+                return null;
             }
         };
     }

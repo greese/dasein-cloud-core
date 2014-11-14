@@ -290,7 +290,7 @@ public abstract class AbstractVolumeSupport implements VolumeSupport {
 
             Collection<Tag> collectionForDelete = TagUtils.getTagsForDelete(getVolume(id).getTags(), tags);
 
-            if (collectionForDelete != null) {
+            if (collectionForDelete != null && collectionForDelete.size() != 0) {
                 removeTags(id, collectionForDelete.toArray(new Tag[collectionForDelete.size()]));
             }
 
