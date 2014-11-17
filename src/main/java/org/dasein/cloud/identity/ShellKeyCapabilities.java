@@ -1,3 +1,21 @@
+/**
+ * Copyright (C) 2009-2014 Dell, Inc.
+ * See annotations for authorship information
+ *
+ * ====================================================================
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ====================================================================
+ */
 package org.dasein.cloud.identity;
 
 import org.dasein.cloud.Capabilities;
@@ -26,7 +44,7 @@ public interface ShellKeyCapabilities extends Capabilities{
      * @throws org.dasein.cloud.CloudException an error occurred with the cloud provider in determining support
      * @throws org.dasein.cloud.InternalException a local error occurred while determining support
      */
-    public Requirement getKeyImportSupport() throws CloudException, InternalException;
+    public @Nonnull Requirement identifyKeyImportRequirement() throws CloudException, InternalException;
 
     /**
      * Provides the provider term for an SSH keypair.
@@ -34,12 +52,4 @@ public interface ShellKeyCapabilities extends Capabilities{
      * @return the provider term for the SSH keypair, ideally translated for the specified locale
      */
     public @Nonnull String getProviderTermForKeypair(@Nonnull Locale locale);
-
-    /**
-     * Indicates whether the underlying cloud supports the creation of shell key pairs or whether it expects it to already be done and the keys simply provided
-     * @return true is cloud does support generation
-     * @throws org.dasein.cloud.CloudException an error occurred with the cloud provider in determining support
-     * @throws org.dasein.cloud.InternalException a local error occurred while determining support
-     */
-    public boolean supportsKeyPairGeneration() throws CloudException, InternalException;
 }
