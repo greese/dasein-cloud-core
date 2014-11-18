@@ -13,7 +13,7 @@ import java.util.Collections;
 public abstract class AbstractQuotaSupport implements QuotaSupport {
 
     @Override
-    public Collection<QuotaDescriptor> getQuotas() throws CloudException, InternalException{
+    public Collection<QuotaDescriptor> getQuotas(String regionId) throws CloudException, InternalException{
         return Collections.emptyList();
     }
 }

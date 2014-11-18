@@ -11,6 +11,6 @@ import java.util.Collection;
  */
 public interface QuotaSupport {
 
-    public Collection<QuotaDescriptor> getQuotas() throws CloudException, InternalException;
+    public Collection<QuotaDescriptor> getQuotas(String regionId) throws CloudException, InternalException;
 
 }

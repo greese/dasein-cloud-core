@@ -9,7 +9,7 @@ import javax.annotation.Nullable;
 public class AbstractQuotaServices implements QuotaServices {
 
     @Override
-    public @Nullable QuotaSupport getQuotaSupport() {
+    public @Nullable QuotaSupport getQuotaSupport(String regionId) {
         return null;
     }
 }

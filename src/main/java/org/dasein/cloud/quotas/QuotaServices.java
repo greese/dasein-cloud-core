@@ -8,6 +8,6 @@ import javax.annotation.Nullable;
  */
 public interface QuotaServices {
 
-    @Nullable QuotaSupport getQuotaSupport();
+    @Nullable QuotaSupport getQuotaSupport(String regionId);
 
 }
