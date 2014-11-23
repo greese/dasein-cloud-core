@@ -1,6 +1,7 @@
 package org.dasein.cloud.util.requester;
 
 import org.apache.http.HttpHost;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -45,6 +46,8 @@ public class DaseinRequestExecutor<T> implements Requester<T> {
             finally{
                 httpClient.close();
             }
+        } catch (CloudResponseException e){
+            throw new CloudException(e.getErrorType(), e.getHttpCode(), e.getProviderCode(), e.getMessage());
         } catch (Exception e) {
             throw new CloudException(e.getMessage());
         }
