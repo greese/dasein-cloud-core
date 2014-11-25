@@ -28,14 +28,12 @@ import org.dasein.cloud.Requirement;
 import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.Tag;
 import org.dasein.cloud.identity.ServiceAction;
+import org.dasein.cloud.util.TagUtils;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Bare-bones implementation of network firewall support with nothing enabled.
@@ -45,10 +43,10 @@ import java.util.Map;
  * @version 2013.04 (issue greese/dasein-cloud-aws/#8)
  * @version 2014.03 (issue #99)
  */
-public abstract class AbstractNetworkFirewallSupport implements NetworkFirewallSupport {
-    private CloudProvider provider;
+public abstract class AbstractNetworkFirewallSupport<T extends CloudProvider> implements NetworkFirewallSupport {
+    private T provider;
 
-    public AbstractNetworkFirewallSupport(@Nonnull CloudProvider provider)  {
+    public AbstractNetworkFirewallSupport(@Nonnull T provider)  {
         this.provider = provider;
     }
 
@@ -130,7 +128,7 @@ public abstract class AbstractNetworkFirewallSupport implements NetworkFirewallS
         return FirewallConstraints.getInstance();
     }
 
-    protected @Nonnull CloudProvider getProvider() {
+    protected final @Nonnull T getProvider() {
         return provider;
     }
 
@@ -228,4 +226,24 @@ public abstract class AbstractNetworkFirewallSupport implements NetworkFirewallS
             updateTags(id, tags);
         }
     }
+
+    @Override
+    public void setTags( @Nonnull String[] firewallIds, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        for( String id : firewallIds ) {
+
+            Tag[] collectionForDelete = TagUtils.getTagsForDelete(getFirewall(id).getTags(), tags);
+
+            if( collectionForDelete.length != 0 ) {
+                removeTags(id, collectionForDelete);
+            }
+
+            updateTags(id, tags);
+        }
+    }
+
+    @Override
+    public void setTags( @Nonnull String firewallId, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        setTags(new String[]{firewallId}, tags);
+    }
+
 }

@@ -198,7 +198,7 @@ public class VirtualMachineProductFilterOptions{
                 return true;
             }
         }
-        else if(datacenterId != null){
+        else if(datacenterId != null && product.getDataCenterId() != null){
             boolean matches = product.getDataCenterId().equals(datacenterId);
             if( !matches && !matchesAny ) {
                 return false;

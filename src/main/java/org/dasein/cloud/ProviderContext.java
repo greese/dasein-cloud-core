@@ -21,7 +21,9 @@ package org.dasein.cloud;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
@@ -118,6 +120,7 @@ public class ProviderContext extends ProviderContextCompat implements Serializab
                     bytes[1] = fromStrings[1].getBytes("utf-8");
                     return new Value<byte[][]>(field.name, bytes);
                 case TEXT:
+                case TOKEN:
                     return new Value<String>(field.name, fromStrings[0]);
                 case INTEGER:
                     return new Value<Integer>(field.name, Integer.parseInt(fromStrings[0]));
@@ -178,11 +181,12 @@ public class ProviderContext extends ProviderContextCompat implements Serializab
         return random;
     }
 
-    private String             accountNumber;
-    private Cloud              cloud;
-    private Map<String,Object> configurationValues;
-    private String             effectiveAccountNumber;
-    private String             regionId; 
+    private String                  accountNumber;
+    private Cloud                   cloud;
+    private Map<String,Object>      configurationValues;
+    private String                  effectiveAccountNumber;
+    private String                  regionId;
+    private RequestTrackingStrategy strategy;
     /**
      * Constructs a provider context from the provided values
      * @param cloud the cloud configuration object to build against
@@ -285,6 +289,33 @@ public class ProviderContext extends ProviderContextCompat implements Serializab
     }
 
     /**
+     * Creates a copy of this context with some parameters replaced by new values.
+     *
+     * @param havingRegionId the region to set into copied context.
+     * @return a new provider context.
+     * @throws InternalException an error occurred loading the {@link org.dasein.cloud.CloudProvider} implementation
+     */
+    public @Nonnull ProviderContext copy( @Nonnull String havingRegionId ) throws InternalException {
+        try {
+            CloudProvider provider = this.getCloud().buildProvider();
+            List<ContextRequirements.Field> fields = provider.getContextRequirements().getConfigurableValues();
+            List<Value<Object>> values = new ArrayList<Value<Object>>();
+            for( ContextRequirements.Field f : fields ) {
+                Object value = this.getConfigurationValue(f);
+                if( value != null ) {
+                    values.add(new Value<Object>(f.name, value));
+                }
+            }
+            return this.getCloud().createContext(getAccountNumber(), havingRegionId, values.toArray(new Value[values.size()]));
+        } catch( IllegalAccessException e ) {
+            throw new InternalException(e);
+        } catch( InstantiationException e ) {
+            throw new InternalException(e);
+        }
+
+    }
+
+    /**
      * @return the cloud for which this context is configured
      */
     public @Nonnull Cloud getCloud() {
@@ -333,6 +364,24 @@ public class ProviderContext extends ProviderContextCompat implements Serializab
      */
     public @Nullable String getRegionId() {
         return regionId;
+    }
+
+    /**
+     * Sets a strategy for tracking client requests to Dasein. Management of the request ID occurs outside of Dasein so that
+     * the client can determine the scope of exactly what it is tracking.
+     * @param strategy an object that describes the way in which the ID should be used (sent as a header, logged to file etc).
+     * @return the ProviderContext with the tracking strategy set
+     */
+    public @Nonnull ProviderContext withRequestTracking(@Nonnull RequestTrackingStrategy strategy){
+        this.strategy = strategy;
+        return this;
+    }
+
+    /**
+     * @return the strategy object currently being used for tracking requests
+     */
+    public @Nullable RequestTrackingStrategy getRequestTrackingStrategy(){
+        return this.strategy;
     }
 
     /******************************** DEPRECATED METHODS ********************************/

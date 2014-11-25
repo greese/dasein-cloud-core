@@ -24,12 +24,14 @@ import org.dasein.cloud.compute.ComputeServices;
 import org.dasein.cloud.compute.VirtualMachine;
 import org.dasein.cloud.compute.VirtualMachineSupport;
 import org.dasein.cloud.identity.ServiceAction;
+import org.dasein.cloud.util.TagUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Provides baseline support for functionality that is common among implementations, in particular for deprecated methods.
@@ -38,10 +40,10 @@ import java.util.Collections;
  * @version 2013.04
  * @since 2013.04
  */
-public abstract class AbstractVLANSupport implements VLANSupport {
-    private CloudProvider provider;
+public abstract class AbstractVLANSupport<T extends CloudProvider> implements VLANSupport {
+    private T provider;
 
-    public AbstractVLANSupport(@Nonnull CloudProvider provider) {
+    public AbstractVLANSupport(@Nonnull T provider) {
         this.provider = provider;
     }
 
@@ -249,7 +251,7 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     /**
      * @return the provider object governing this support object
      */
-    protected final @Nonnull CloudProvider getProvider() {
+    protected final @Nonnull T getProvider() {
         return provider;
     }
 
@@ -294,7 +296,7 @@ public abstract class AbstractVLANSupport implements VLANSupport {
 
     @Override
     public @Nonnull Iterable<ResourceStatus> listNetworkInterfaceStatus() throws CloudException, InternalException {
-        ArrayList<ResourceStatus> status = new ArrayList<ResourceStatus>();
+        List<ResourceStatus> status = new ArrayList<ResourceStatus>();
 
         for( NetworkInterface nic : listNetworkInterfaces() ) {
             status.add(new ResourceStatus(nic.getProviderNetworkInterfaceId(), nic.getCurrentState()));
@@ -309,7 +311,7 @@ public abstract class AbstractVLANSupport implements VLANSupport {
 
     @Override
     public @Nonnull Iterable<NetworkInterface> listNetworkInterfacesForVM(@Nonnull String forVmId) throws CloudException, InternalException {
-        ArrayList<NetworkInterface> nics = new ArrayList<NetworkInterface>();
+        List<NetworkInterface> nics = new ArrayList<NetworkInterface>();
 
         for( NetworkInterface nic : listNetworkInterfaces() ) {
             if( forVmId.equals(nic.getProviderVirtualMachineId()) ) {
@@ -321,7 +323,7 @@ public abstract class AbstractVLANSupport implements VLANSupport {
 
     @Override
     public @Nonnull Iterable<NetworkInterface> listNetworkInterfacesInSubnet(@Nonnull String subnetId) throws CloudException, InternalException {
-        ArrayList<NetworkInterface> nics = new ArrayList<NetworkInterface>();
+        List<NetworkInterface> nics = new ArrayList<NetworkInterface>();
 
         for( NetworkInterface nic : listNetworkInterfaces() ) {
             if( subnetId.equals(nic.getProviderSubnetId()) ) {
@@ -333,7 +335,7 @@ public abstract class AbstractVLANSupport implements VLANSupport {
 
     @Override
     public @Nonnull Iterable<NetworkInterface> listNetworkInterfacesInVLAN(@Nonnull String vlanId) throws CloudException, InternalException {
-        ArrayList<NetworkInterface> nics = new ArrayList<NetworkInterface>();
+        List<NetworkInterface> nics = new ArrayList<NetworkInterface>();
 
         for( NetworkInterface nic : listNetworkInterfaces() ) {
             if( vlanId.equals(nic.getProviderVlanId()) ) {
@@ -345,7 +347,7 @@ public abstract class AbstractVLANSupport implements VLANSupport {
 
     @Override
     public @Nonnull Iterable<Networkable> listResources(@Nonnull String inVlanId) throws CloudException, InternalException {
-        ArrayList<Networkable> resources = new ArrayList<Networkable>();
+        List<Networkable> resources = new ArrayList<Networkable>();
         NetworkServices network = provider.getNetworkServices();
 
         if( network != null ) {
@@ -371,7 +373,7 @@ public abstract class AbstractVLANSupport implements VLANSupport {
 
                 }
             }
-            for( RoutingTable table : listRoutingTables(inVlanId) ) {
+            for( RoutingTable table : listRoutingTablesForVlan(inVlanId) ) {
                 resources.add(table);
             }
             ComputeServices compute = provider.getComputeServices();
@@ -402,8 +404,9 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     }
 
     @Override
+    @Deprecated
     public @Nonnull Iterable<RoutingTable> listRoutingTables(@Nonnull String vlanId) throws CloudException, InternalException {
-        return Collections.emptyList();
+        return listRoutingTablesForVlan(vlanId);
     }
 
     @Override
@@ -424,8 +427,7 @@ public abstract class AbstractVLANSupport implements VLANSupport {
 
     @Override
     public @Nonnull Iterable<ResourceStatus> listVlanStatus() throws CloudException, InternalException {
-        ArrayList<ResourceStatus> status = new ArrayList<ResourceStatus>();
-
+        List<ResourceStatus> status = new ArrayList<ResourceStatus>();
         for( VLAN vlan : listVlans() ) {
             status.add(new ResourceStatus(vlan.getProviderVlanId(), vlan.getCurrentState()));
         }
@@ -538,8 +540,8 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     }
 
     @Override
-    public void updateInternetGatewayTags(@Nonnull String internetGatewayId, @Nonnull Tag... tags) throws CloudException, InternalException{
-        throw new OperationNotSupportedException("Internet Gateway tags are not supported in " + provider.getCloudName());
+    public void updateInternetGatewayTags( @Nonnull String internetGatewayId, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Internet gateway tags are not supported in " + provider.getCloudName());
     }
 
     @Override
@@ -576,7 +578,81 @@ public abstract class AbstractVLANSupport implements VLANSupport {
     }
 
     @Override
+    public void setSubnetTags( @Nonnull String[] subnetIds, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        for( String id : subnetIds ) {
+
+            Tag[] collectionForDelete = TagUtils.getTagsForDelete(getSubnet(id).getTags(), tags);
+
+            if( collectionForDelete.length != 0 ) {
+                removeSubnetTags(id, collectionForDelete);
+            }
+
+            updateSubnetTags(id, tags);
+        }
+    }
+
+    @Override
+    public void setRoutingTableTags( @Nonnull String[] routingTableIds, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        for( String id : routingTableIds ) {
+            Tag[] collectionForDelete = TagUtils.getTagsForDelete(getRoutingTable(id).getTags(), tags);
+
+            if( collectionForDelete.length != 0 ) {
+                removeRoutingTableTags(id, collectionForDelete);
+            }
+
+            updateRoutingTableTags(id, tags);
+        }
+    }
+
+    @Override
+    public void setInternetGatewayTags( @Nonnull String[] internetGatewayIds, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        for( String id : internetGatewayIds ) {
+            Tag[] collectionForDelete = TagUtils.getTagsForDelete(getInternetGatewayById(id).getTags(), tags);
+
+            if( collectionForDelete.length != 0 ) {
+                removeInternetGatewayTags(id, collectionForDelete);
+            }
+
+            updateInternetGatewayTags(id, tags);
+        }
+    }
+
+    @Override
+    public void setSubnetTags( @Nonnull String subnetId, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        setSubnetTags(new String[]{subnetId}, tags);
+    }
+
+    @Override
+    public void setRoutingTableTags( @Nonnull String routingTableId, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        setRoutingTableTags(new String[]{routingTableId}, tags);
+    }
+
+    @Override
+    public void setInternetGatewayTags( @Nonnull String internetGatewayId, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        setInternetGatewayTags(new String[]{internetGatewayId}, tags);
+    }
+
     public void removeRoutingTableTags(@Nonnull String routingTableId, @Nonnull Tag... tags) throws CloudException, InternalException{
         throw new OperationNotSupportedException("Routing table tags are not supported in " + provider.getCloudName());
+    }
+
+    @Override
+    public void removeInternetGatewayById( @Nonnull String id ) throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Internet gateways are not currently implemented for " + getProvider().getCloudName());
+    }
+
+    @Override
+    public @Nonnull Collection<InternetGateway> listInternetGateways( @Nullable String vlanId ) throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Internet gateways are not currently implemented for " + getProvider().getCloudName());
+    }
+
+    @Override
+    public @Nullable InternetGateway getInternetGatewayById( @Nonnull String gatewayId ) throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Internet gateways are not currently implemented for " + getProvider().getCloudName());
+    }
+
+    @Override
+    public @Nullable String getAttachedInternetGatewayId( @Nonnull String vlanId ) throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Internet gateways are not currently implemented for " + getProvider().getCloudName());
     }
 }

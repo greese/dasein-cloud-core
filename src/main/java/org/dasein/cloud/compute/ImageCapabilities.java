@@ -58,7 +58,7 @@ public interface ImageCapabilities extends Capabilities{
      * @param cls the image class for the desired type
      * @return the term used by the provider to describe a public image
      */
-    public abstract @Nonnull String getProviderTermForImage(@Nonnull Locale locale, @Nonnull ImageClass cls);
+    public @Nonnull String getProviderTermForImage(@Nonnull Locale locale, @Nonnull ImageClass cls);
 
     /**
      * Provides the cloud provider specific term for a custom image of the specified image class.
@@ -66,7 +66,7 @@ public interface ImageCapabilities extends Capabilities{
      * @param cls the image class for the desired type
      * @return the term used by the provider to describe a custom image
      */
-    public abstract @Nonnull String getProviderTermForCustomImage(@Nonnull Locale locale, @Nonnull ImageClass cls);
+    public @Nonnull String getProviderTermForCustomImage(@Nonnull Locale locale, @Nonnull ImageClass cls);
 
     /**
      * Returns the visible scope of the Image or null if not applicable for the specific cloud
@@ -92,7 +92,7 @@ public interface ImageCapabilities extends Capabilities{
      * @throws CloudException an error occurred with the cloud provider
      * @throws InternalException a local error occurred in the Dasein Cloud implementation
      */
-    public abstract @Nonnull Iterable<MachineImageFormat> listSupportedFormats() throws CloudException, InternalException;
+    public @Nonnull Iterable<MachineImageFormat> listSupportedFormats() throws CloudException, InternalException;
 
     /**
      * Lists all machine image formats that can be used in bundling a virtual machine. This should be a sub-set
@@ -102,7 +102,7 @@ public interface ImageCapabilities extends Capabilities{
      * @throws CloudException an error occurred with the cloud provider
      * @throws InternalException a local error occurred in the Dasein Cloud implementation
      */
-    public abstract @Nonnull Iterable<MachineImageFormat> listSupportedFormatsForBundling() throws CloudException, InternalException;
+    public @Nonnull Iterable<MachineImageFormat> listSupportedFormatsForBundling() throws CloudException, InternalException;
 
     /**
      * Lists the image classes supported in this cloud.
@@ -110,7 +110,7 @@ public interface ImageCapabilities extends Capabilities{
      * @throws CloudException an error occurred with the cloud provider
      * @throws InternalException a local error occurred in the Dasein Cloud implementation
      */
-    public abstract @Nonnull Iterable<ImageClass> listSupportedImageClasses() throws CloudException, InternalException;
+    public @Nonnull Iterable<ImageClass> listSupportedImageClasses() throws CloudException, InternalException;
 
     /**
      * Enumerates the types of images supported in this cloud.
@@ -118,7 +118,7 @@ public interface ImageCapabilities extends Capabilities{
      * @throws CloudException an error occurred with the cloud provider
      * @throws InternalException a local error occurred in the Dasein Cloud implementation
      */
-    public abstract @Nonnull Iterable<MachineImageType> listSupportedImageTypes() throws CloudException, InternalException;
+    public @Nonnull Iterable<MachineImageType> listSupportedImageTypes() throws CloudException, InternalException;
 
     /**
      * Supports the ability to directly upload an image into the cloud and have it registered as a new image. When
@@ -127,7 +127,7 @@ public interface ImageCapabilities extends Capabilities{
      * @throws CloudException an error occurred with the cloud provider when checking this capability
      * @throws InternalException an error occurred within the Dasein cloud implementation while check this capability
      */
-    public abstract boolean supportsDirectImageUpload() throws CloudException, InternalException;
+    public boolean supportsDirectImageUpload() throws CloudException, InternalException;
 
     /**
      * Indicates whether capturing a virtual machine as a custom image of type {@link ImageClass#MACHINE} is supported in
@@ -137,7 +137,16 @@ public interface ImageCapabilities extends Capabilities{
      * @throws CloudException an error occurred with the cloud provider when checking this capability
      * @throws InternalException an error occurred within the Dasein cloud implementation while check this capability
      */
-    public abstract boolean supportsImageCapture(@Nonnull MachineImageType type) throws CloudException, InternalException;
+    public boolean supportsImageCapture(@Nonnull MachineImageType type) throws CloudException, InternalException;
+
+    /**
+     * Indicates whether copying of an image to another region is supported by this cloud.
+     *
+     * @return true if you can copy images in this cloud to other regions
+     * @throws CloudException    an error occurred with the cloud provider when checking this capability
+     * @throws InternalException an error occurred within the Dasein cloud implementation while check this capability
+     */
+    public boolean supportsImageCopy() throws CloudException, InternalException;
 
     /**
      * Indicates whether or not this cloud supports sharing images with specific accounts.
@@ -145,7 +154,7 @@ public interface ImageCapabilities extends Capabilities{
      * @throws CloudException an error occurred with the cloud provider when checking this capability
      * @throws InternalException an error occurred within the Dasein cloud implementation while check this capability
      */
-    public abstract boolean supportsImageSharing() throws CloudException, InternalException;
+    public boolean supportsImageSharing() throws CloudException, InternalException;
 
     /**
      * Indicates whether or not this cloud supports making images publicly available to all other accounts.
@@ -153,7 +162,15 @@ public interface ImageCapabilities extends Capabilities{
      * @throws CloudException an error occurred with the cloud provider when checking this capability
      * @throws InternalException an error occurred within the Dasein cloud implementation while check this capability
      */
-    public abstract boolean supportsImageSharingWithPublic() throws CloudException, InternalException;
+    public boolean supportsImageSharingWithPublic() throws CloudException, InternalException;
+
+    /**
+     * Indicates whether the driver will return a list of machine images across every cloud region in a single call.
+     * @return true if you can list images for every region
+     * @throws CloudException an error occurred with the cloud provider when checking this capability
+     * @throws InternalException an error occurred within the Dasein cloud implementation while check this capability
+     */
+    public boolean supportsListingAllRegions() throws CloudException, InternalException;
 
     /**
      * Indicates whether a library of public images of the specified class should be expected. If true,
@@ -163,5 +180,5 @@ public interface ImageCapabilities extends Capabilities{
      * @throws CloudException an error occurred with the cloud provider
      * @throws InternalException an error occurred within the Dasein cloud implementation
      */
-    public abstract boolean supportsPublicLibrary(@Nonnull ImageClass cls) throws CloudException, InternalException;
+    public boolean supportsPublicLibrary(@Nonnull ImageClass cls) throws CloudException, InternalException;
 }

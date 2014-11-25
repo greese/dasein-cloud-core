@@ -30,6 +30,7 @@ import org.dasein.cloud.TimeWindow;
 import org.dasein.cloud.identity.ServiceAction;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Relational Database Support methods
@@ -55,11 +56,11 @@ public interface RelationalDatabaseSupport extends AccessControlledService {
     static public final ServiceAction UPDATE_RDBMS_FIREWALL  = new ServiceAction("RDBMS:UPDATE_FIREWALL");
 
     public void addAccess(String providerDatabaseId, String sourceCidr) throws CloudException, InternalException;
-    
+
     public void alterDatabase(String providerDatabaseId, boolean applyImmediately, String productSize, int storageInGigabytes, String configurationId, String newAdminUser, String newAdminPassword, int newPort, int snapshotRetentionInDays, TimeWindow preferredMaintenanceWindow, TimeWindow preferredBackupWindow) throws CloudException, InternalException;
-    
+
     public String createFromScratch(String dataSourceName, DatabaseProduct product, String databaseVersion, String withAdminUser, String withAdminPassword, int hostPort) throws CloudException, InternalException;
-    
+
     public String createFromLatest(String dataSourceName, String providerDatabaseId, String productSize, String providerDataCenterId, int hostPort) throws InternalException, CloudException;
 
     public String createFromSnapshot(String dataSourceName, String providerDatabaseId, String providerDbSnapshotId, String productSize, String providerDataCenterId, int hostPort) throws CloudException, InternalException;
@@ -80,10 +81,10 @@ public interface RelationalDatabaseSupport extends AccessControlledService {
     public Database getDatabase(String providerDatabaseId) throws CloudException, InternalException;
 
     public Iterable<DatabaseEngine> getDatabaseEngines() throws CloudException, InternalException;
-    
-    public String getDefaultVersion(DatabaseEngine forEngine) throws CloudException, InternalException;
-    
-    public Iterable<String> getSupportedVersions(DatabaseEngine forEngine) throws CloudException, InternalException;
+
+    public String getDefaultVersion(@Nonnull DatabaseEngine forEngine) throws CloudException, InternalException;
+
+    public @Nonnull Iterable<String> getSupportedVersions(@Nonnull DatabaseEngine forEngine) throws CloudException, InternalException;
 
     /**
      * List supported database products
@@ -106,7 +107,7 @@ public interface RelationalDatabaseSupport extends AccessControlledService {
      * @throws InternalException
      * @since 2014.08 for consistency
      */
-    public Iterable<DatabaseProduct> listDatabaseProducts(DatabaseEngine forEngine) throws CloudException, InternalException;
+    public @Nonnull Iterable<DatabaseProduct> listDatabaseProducts(@Nonnull DatabaseEngine forEngine) throws CloudException, InternalException;
 
     @Deprecated
     public String getProviderTermForDatabase(Locale locale);
@@ -160,4 +161,44 @@ public interface RelationalDatabaseSupport extends AccessControlledService {
     public void updateConfiguration(String providerConfigurationId, ConfigurationParameter ... parameters) throws CloudException, InternalException;
     
     public DatabaseSnapshot snapshot(String providerDatabaseId, String name) throws CloudException, InternalException;
+    
+    //
+    // New Backup section
+    //
+
+    /*
+     * Obtain a valid DatabaseBackup object for the given database instance where the backup was taken prior to the given time.
+     *
+     * Throws CloudException on failure
+     */
+    public DatabaseBackup getUsableBackup(String providerDbId, String beforeTimestamp) throws CloudException, InternalException;
+
+    /*
+     * Obtain a list of DatabaseBackup objects for a given database, or for all databases if null.
+     * 
+     * Throws CloudException on failure
+     */
+    public Iterable<DatabaseBackup> listBackups(String forOptionalProviderDatabaseId) throws CloudException, InternalException;
+
+    /*
+     * Create a new database from the passed in backup object
+     * 
+     * Throws CloudException on failure
+     */
+    public void createFromBackup(DatabaseBackup backup, String databaseCloneToName) throws CloudException, InternalException;
+
+    /*
+     * Remove specified database backup
+     * 
+     * Throws CloudException on failure
+     */
+    public void removeBackup(DatabaseBackup backup) throws CloudException, InternalException;
+
+    /*
+     * Restore the passed in DatabaseBackup to its current database instance.
+     * 
+     * Throws CloudException on failure
+     */
+    public void restoreBackup(DatabaseBackup backup) throws CloudException, InternalException;
+
 }

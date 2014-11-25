@@ -28,16 +28,14 @@ import org.dasein.cloud.Requirement;
 import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.Tag;
 import org.dasein.cloud.identity.ServiceAction;
+import org.dasein.cloud.util.TagUtils;
 import org.dasein.util.uom.storage.Gigabyte;
 import org.dasein.util.uom.storage.Storage;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
+import java.util.*;
 
 /**
  * Implements the basic functionality of volume support so that it is easier to rapidly craft a support class for
@@ -47,10 +45,10 @@ import java.util.Date;
  * @version 2013.04
  * @since 2013.04
  */
-public abstract class AbstractVolumeSupport implements VolumeSupport {
-    private CloudProvider provider;
+public abstract class AbstractVolumeSupport<T extends CloudProvider> implements VolumeSupport {
+    private T provider;
 
-    public AbstractVolumeSupport(@Nonnull CloudProvider provider) {
+    public AbstractVolumeSupport(@Nonnull T provider) {
         this.provider = provider;
     }
 
@@ -188,7 +186,7 @@ public abstract class AbstractVolumeSupport implements VolumeSupport {
     /**
      * @return the cloud provider under which this support instance is operating
      */
-    protected final @Nonnull CloudProvider getProvider() {
+    protected final @Nonnull T getProvider() {
         return provider;
     }
 
@@ -284,6 +282,25 @@ public abstract class AbstractVolumeSupport implements VolumeSupport {
         for( String id : volumeIds ) {
             updateTags(id, tags);
         }
+    }
+
+    @Override
+    public void setTags( @Nonnull String[] volumeIds, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        for( String id : volumeIds ) {
+
+            Tag[] collectionForDelete = TagUtils.getTagsForDelete(getVolume(id).getTags(), tags);
+
+            if( collectionForDelete.length != 0 ) {
+                removeTags(id, collectionForDelete);
+            }
+
+            updateTags(id, tags);
+        }
+    }
+
+    @Override
+    public void setTags( @Nonnull String volumeId, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        setTags(new String[]{volumeId}, tags);
     }
 
     @Override

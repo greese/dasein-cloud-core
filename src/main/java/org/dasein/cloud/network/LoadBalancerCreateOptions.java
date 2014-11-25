@@ -27,11 +27,7 @@ import org.dasein.cloud.Requirement;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Options for provisioning a load balancer in the cloud. Different clouds have very different requirements on
@@ -68,7 +64,7 @@ public class LoadBalancerCreateOptions {
      * @param atIpAddressId the unique ID of the static IP address to use in creating the load balancer
      * @return a set of creation options for building a load balancer
      */
-    static public LoadBalancerCreateOptions getInstance(@Nonnull String name, @Nonnull String description, @Nonnull String atIpAddressId) {
+    static public LoadBalancerCreateOptions getInstance(@Nonnull String name, @Nonnull String description, @Nullable String atIpAddressId) {
         LoadBalancerCreateOptions options = new LoadBalancerCreateOptions();
 
         options.name = name;
@@ -77,16 +73,19 @@ public class LoadBalancerCreateOptions {
         return options;
     }
 
-    private ArrayList<LoadBalancerEndpoint> endpoints;
-    private ArrayList<String>               providerDataCenterIds;
-    private ArrayList<String>               providerSubnetIds;
+    private List<LoadBalancerEndpoint>      endpoints;
+    private List<String>                    providerDataCenterIds;
+    private List<String>                    providerSubnetIds;
+    private List<String>                    firewallIds;
     private String                          providerIpAddressId;
     private String                          description;
-    private ArrayList<LbListener>           listeners;
+    private List<LbListener>                listeners;
     private Map<String,Object>              metaData;
     private String                          name;
+    private String                          providerVlanId;
     private LbType                          type;
     private HealthCheckOptions              healthCheckOptions;
+    private LbAttributesOptions             lbAttributesOptions;
 
     private LoadBalancerCreateOptions() { }
 
@@ -99,7 +98,7 @@ public class LoadBalancerCreateOptions {
      * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
      * @throws OperationNotSupportedException this cloud does not support load balancer creation
      */
-    public @Nonnull String build(@Nonnull CloudProvider provider) throws CloudException, InternalException {
+    public @Nonnull String build( @Nonnull CloudProvider provider ) throws CloudException, InternalException {
         NetworkServices services = provider.getNetworkServices();
 
         if( services == null ) {
@@ -110,14 +109,17 @@ public class LoadBalancerCreateOptions {
         if( support == null ) {
             throw new OperationNotSupportedException("Load balancers are not supported in " + provider.getCloudName());
         }
-        if( support.getCapabilities().identifyListenersOnCreateRequirement().equals(Requirement.REQUIRED) && (listeners == null || listeners.isEmpty()) ) {
+        if( support.getCapabilities().identifyListenersOnCreateRequirement().equals(Requirement.REQUIRED) && ( listeners == null || listeners.isEmpty() ) ) {
             throw new CloudException("You must specify at least one listener when creating a load balancer in " + provider.getCloudName());
         }
-        if( support.getCapabilities().identifyEndpointsOnCreateRequirement().equals(Requirement.REQUIRED) && (endpoints == null || endpoints.isEmpty()) ) {
+        if( support.getCapabilities().identifyEndpointsOnCreateRequirement().equals(Requirement.REQUIRED) && ( endpoints == null || endpoints.isEmpty() ) ) {
             throw new CloudException("You must specify at least one endpoint when creating a load balancer in " + provider.getCloudName());
         }
-        if( support.getCapabilities().isDataCenterLimited() && (providerDataCenterIds == null || providerDataCenterIds.isEmpty()) ) {
+        if( support.getCapabilities().isDataCenterLimited() && ( providerDataCenterIds == null || providerDataCenterIds.isEmpty() ) ) {
             throw new CloudException("You must specify at least one data center when creating a load balancer in " + provider.getCloudName());
+        }
+        if( support.getCapabilities().identifyVlanOnCreateRequirement().equals(Requirement.REQUIRED) && providerVlanId == null){
+            throw new CloudException("You must specify the vlan into which the load balancer will be created in " + provider.getCloudName());
         }
         if( !support.getCapabilities().isAddressAssignedByProvider() && providerIpAddressId == null ) {
             // attempt to find an address
@@ -154,7 +156,7 @@ public class LoadBalancerCreateOptions {
     /**
      * @return the endpoints that should be established as part of the create operation
      */
-    public LoadBalancerEndpoint[] getEndpoints() {
+    public @Nonnull LoadBalancerEndpoint[] getEndpoints() {
         return (endpoints == null ? new LoadBalancerEndpoint[0] : endpoints.toArray(new LoadBalancerEndpoint[endpoints.size()]));
     }
 
@@ -179,6 +181,8 @@ public class LoadBalancerCreateOptions {
         return name;
     }
 
+    public @Nullable String getProviderVlanId() {return providerVlanId;}
+
     /**
      * @return the data centers to which this load balancer will be limited
      */
@@ -200,6 +204,16 @@ public class LoadBalancerCreateOptions {
     }
 
     /**
+     * @return the security groups to which this load balancer will be added
+     */
+    public String[] getFirewallIds() {
+        if( firewallIds == null ) {
+            return new String[0];
+        }
+        return firewallIds.toArray(new String[firewallIds.size()]);
+    }
+
+    /**
      * @return the IP address you are assigning to this load balancer if the address is required
      */
     public @Nullable String getProviderIpAddressId() {
@@ -209,12 +223,19 @@ public class LoadBalancerCreateOptions {
     /**
      * @return the load balancer type
      */
-    public LbType getType() {
+    public @Nullable LbType getType() {
       return type;
     }
 
-    public HealthCheckOptions getHealthCheckOptions(){
+    public @Nullable HealthCheckOptions getHealthCheckOptions(){
         return this.healthCheckOptions;
+    }
+
+    /**
+     * @return the load balancer attributes
+     */
+    public @Nullable LbAttributesOptions getLbAttributesOptions() {
+        return lbAttributesOptions;
     }
 
     /**
@@ -256,6 +277,20 @@ public class LoadBalancerCreateOptions {
       return this;
     }
 
+    /**
+     * Adds the specified firewalls into this list of firewalls to which this load balancer rotation will be added.
+     *
+     * @param firewallIds the IDs of the firewalls to add the load balancer to
+     * @return this
+     */
+    public @Nonnull LoadBalancerCreateOptions withFirewalls( @Nonnull String... firewallIds ) {
+        if( this.firewallIds == null ) {
+            this.firewallIds = new ArrayList<String>();
+        }
+        Collections.addAll(this.firewallIds, firewallIds);
+        return this;
+    }
+
     @Override
     public @Nonnull String toString() {
         return ("[" + name + " - " + providerIpAddressId + " - " + listeners + "-" + endpoints + "]");
@@ -274,6 +309,16 @@ public class LoadBalancerCreateOptions {
         for( String ipAddress : ipAddresses ) {
             endpoints.add(LoadBalancerEndpoint.getInstance(LbEndpointType.IP, ipAddress, LbEndpointState.ACTIVE));
         }
+        return this;
+    }
+
+    /**
+     * Specifies a vlanId into which the load balancer should be created if required by the cloud
+     * @param providerVlanId the Id of the vlan into which the load balancer will be created
+     * @return this
+     */
+    public @Nonnull LoadBalancerCreateOptions withVlanId(@Nullable String providerVlanId){
+        this.providerVlanId = providerVlanId;
         return this;
     }
 
@@ -312,7 +357,7 @@ public class LoadBalancerCreateOptions {
      * @param type the load balancer type
      * @return this
      */
-    public LoadBalancerCreateOptions asType( LbType type ) {
+    public @Nonnull LoadBalancerCreateOptions asType( @Nullable LbType type ) {
       this.type = type;
       return this;
     }
@@ -323,8 +368,18 @@ public class LoadBalancerCreateOptions {
      * @param options the Health Check Options
      * @return this
      */
-    public @Nonnull LoadBalancerCreateOptions withHealthCheckOptions(HealthCheckOptions options){
+    public @Nonnull LoadBalancerCreateOptions withHealthCheckOptions(@Nullable HealthCheckOptions options){
         this.healthCheckOptions = options;
+        return this;
+    }
+
+    /**
+     * Adds the specified health check options to be associated with the load balancer on creation.
+     * @param lbAttributesOptions the attributes
+     * @return this
+     */
+    public @Nonnull LoadBalancerCreateOptions withLbAttributeOptions(@Nullable LbAttributesOptions lbAttributesOptions ) {
+        this.lbAttributesOptions = lbAttributesOptions;
         return this;
     }
 

@@ -29,11 +29,12 @@ import org.dasein.cloud.Requirement;
 import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.Tag;
 import org.dasein.cloud.identity.ServiceAction;
+import org.dasein.cloud.util.TagUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Locale;
 
@@ -45,10 +46,10 @@ import java.util.Locale;
  * @version 2013.04
  * @since 2013.04
  */
-public abstract class AbstractImageSupport implements MachineImageSupport {
-    private CloudProvider provider;
+public abstract class AbstractImageSupport<T extends CloudProvider> implements MachineImageSupport {
+    private T provider;
 
-    public AbstractImageSupport(@Nonnull CloudProvider provider) {
+    public AbstractImageSupport(@Nonnull T provider) {
         this.provider = provider;
     }
 
@@ -146,11 +147,16 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
     }
 
     @Override
+    public @Nonnull String copyImage( @Nonnull ImageCopyOptions options ) throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Image copying is not currently implemented");
+    }
+
+    @Override
     public final @Nullable MachineImage getMachineImage(@Nonnull String providerImageId) throws CloudException, InternalException {
         return getImage(providerImageId);
     }
 
-    protected final @Nonnull CloudProvider getProvider() {
+    protected final @Nonnull T getProvider() {
         return provider;
     }
 
@@ -597,4 +603,24 @@ public abstract class AbstractImageSupport implements MachineImageSupport {
             removeTags(id, tags);
         }
     }
+
+    @Override
+    public void setTags( @Nonnull String imageId, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        setTags(new String[]{imageId}, tags);
+    }
+
+    @Override
+    public void setTags( @Nonnull String[] imageIds, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        for( String id : imageIds ) {
+
+            Tag[] collectionForDelete = TagUtils.getTagsForDelete(getImage(id).getTags(), tags);
+
+            if( collectionForDelete.length != 0 ) {
+                removeTags(id, collectionForDelete);
+            }
+
+            updateTags(id, tags);
+        }
+    }
+
 }

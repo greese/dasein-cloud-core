@@ -19,6 +19,7 @@
 
 package org.dasein.cloud.compute;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -64,7 +65,7 @@ public class MachineImage implements Taggable {
      * @param platform the platform built into the image
      * @return an image matching the specified parameters
      */
-    static public @Nonnull MachineImage getImageInstance(@Nonnull String ownerId, @Nonnull String regionId, @Nonnull String imageId, @Nonnull ImageClass imageClass, @Nonnull MachineImageState state,  @Nonnull String name, @Nonnull String description, @Nonnull Architecture architecture, @Nonnull Platform platform) {
+    static public @Nonnull MachineImage getInstance(@Nonnull String ownerId, @Nonnull String regionId, @Nonnull String imageId, @Nonnull ImageClass imageClass, @Nonnull MachineImageState state,  @Nonnull String name, @Nonnull String description, @Nonnull Architecture architecture, @Nonnull Platform platform) {
         @SuppressWarnings("deprecation") MachineImage image = new MachineImage();
 
         image.providerOwnerId = ownerId;
@@ -79,137 +80,6 @@ public class MachineImage implements Taggable {
         image.type = MachineImageType.VOLUME;
         image.creationTimestamp = 0L;
         image.software = "";
-        return image;
-    }
-
-    /**
-     * Constructs a minimally viable image object of the specified image class of the {@link MachineImageType#STORAGE} format.
-     * @param ownerId the account number for the account that owns the image
-     * @param regionId the region ID with which the image is associated
-     * @param imageId the ID for the newly constructed image
-     * @param imageClass the image class of the image
-     * @param state the current state for the image
-     * @param name the name of the image
-     * @param description a long description of the function of the image
-     * @param architecture the architecture on which this image is based
-     * @param platform the platform built into the image
-     * @param format the storage format for {@link MachineImageType#STORAGE} images
-     * @return an image matching the specified parameters
-     */
-    static public @Nonnull MachineImage getImageInstance(@Nonnull String ownerId, @Nonnull String regionId, @Nonnull String imageId, @Nonnull ImageClass imageClass, @Nonnull MachineImageState state,  @Nonnull String name, @Nonnull String description, @Nonnull Architecture architecture, @Nonnull Platform platform, @Nonnull MachineImageFormat format) {
-        @SuppressWarnings("deprecation") MachineImage image = new MachineImage();
-
-        image.providerOwnerId = ownerId;
-        image.providerRegionId = regionId;
-        image.providerMachineImageId = imageId;
-        image.name = name;
-        image.description = description;
-        image.architecture = architecture;
-        image.platform = platform;
-        image.currentState = state;
-        image.imageClass = imageClass;
-        image.type = MachineImageType.STORAGE;
-        image.storageFormat = format;
-        image.creationTimestamp = 0L;
-        image.software = "";
-        return image;
-    }
-
-    /**
-     * Constructs a minimally viable machine image object of the specified image class. Because no image format is specified,
-     * the type for this image will be {@link MachineImageType#VOLUME}.
-     * @param ownerId the account number for the account that owns the image
-     * @param regionId the region ID with which the image is associated
-     * @param imageId the ID for the newly constructed image
-     * @param state the current state for the image
-     * @param name the name of the image
-     * @param description a long description of the function of the image
-     * @param architecture the architecture on which this image is based
-     * @param platform the platform built into the image
-     * @return an image matching the specified parameters
-     */
-    static public @Nonnull MachineImage getMachineImageInstance(@Nonnull String ownerId, @Nonnull String regionId, @Nonnull String imageId,  @Nonnull MachineImageState state,  @Nonnull String name, @Nonnull String description, @Nonnull Architecture architecture, @Nonnull Platform platform) {
-        @SuppressWarnings("deprecation") MachineImage image = new MachineImage();
-
-        image.providerOwnerId = ownerId;
-        image.providerRegionId = regionId;
-        image.providerMachineImageId = imageId;
-        image.name = name;
-        image.description = description;
-        image.architecture = architecture;
-        image.platform = platform;
-        image.currentState = state;
-        image.imageClass = ImageClass.MACHINE;
-        image.type = MachineImageType.VOLUME;
-        image.creationTimestamp = 0L;
-        image.software = "";
-        return image;
-    }
-
-    /**
-     * Constructs a minimally viable machine image object of the specified image class of the {@link MachineImageType#STORAGE} format.
-     * @param ownerId the account number for the account that owns the image
-     * @param regionId the region ID with which the image is associated
-     * @param imageId the ID for the newly constructed image
-     * @param state the current state for the image
-     * @param name the name of the image
-     * @param description a long description of the function of the image
-     * @param architecture the architecture on which this image is based
-     * @param platform the platform built into the image
-     * @param format the storage format for {@link MachineImageType#STORAGE} images
-     * @return an image matching the specified parameters
-     */
-    static public @Nonnull MachineImage getMachineImageInstance(@Nonnull String ownerId, @Nonnull String regionId, @Nonnull String imageId,  @Nonnull MachineImageState state,  @Nonnull String name, @Nonnull String description, @Nonnull Architecture architecture, @Nonnull Platform platform, @Nonnull MachineImageFormat format) {
-        @SuppressWarnings("deprecation") MachineImage image = new MachineImage();
-
-        image.providerOwnerId = ownerId;
-        image.providerRegionId = regionId;
-        image.providerMachineImageId = imageId;
-        image.name = name;
-        image.description = description;
-        image.architecture = architecture;
-        image.platform = platform;
-        image.currentState = state;
-        image.imageClass = ImageClass.MACHINE;
-        image.type = MachineImageType.STORAGE;
-        image.storageFormat = format;
-        image.creationTimestamp = 0L;
-        image.software = "";
-        return image;
-    }
-
-    /**
-     * Constructs a minimally viable image object of the specified image class of the {@link MachineImageType#STORAGE} format.
-     * @param ownerId the account number for the account that owns the image
-     * @param regionId the region ID with which the image is associated
-     * @param imageId the ID for the newly constructed image
-     * @param imageClass the image class of the image
-     * @param state the current state for the image
-     * @param name the name of the image
-     * @param description a long description of the function of the image
-     * @param architecture the architecture on which this image is based
-     * @param platform the platform built into the image
-     * @param format the storage format for {@link MachineImageType#STORAGE} images
-     * @param visibleScope the scope defining how visible the image is in the cloud
-     * @return an image matching the specified parameters
-     */
-    static public @Nonnull MachineImage getImageInstance(@Nonnull String ownerId, @Nonnull String regionId, @Nonnull String imageId, @Nonnull ImageClass imageClass, @Nonnull MachineImageState state,  @Nonnull String name, @Nonnull String description, @Nonnull Architecture architecture, @Nonnull Platform platform, @Nonnull MachineImageFormat format, @Nullable VisibleScope visibleScope) {
-        @SuppressWarnings("deprecation") MachineImage image = new MachineImage();
-
-        image.providerOwnerId = ownerId;
-        image.providerRegionId = regionId;
-        image.providerMachineImageId = imageId;
-        image.name = name;
-        image.description = description;
-        image.architecture = architecture;
-        image.platform = platform;
-        image.currentState = state;
-        image.imageClass = imageClass;
-        image.type = MachineImageType.STORAGE;
-        image.storageFormat = format;
-        image.creationTimestamp = 0L;
-        image.software = "";
-        image.visibleScope = visibleScope;
         return image;
     }
 
@@ -230,6 +100,8 @@ public class MachineImage implements Taggable {
     private Map<String,String> tags;
     private MachineImageType   type;
     private VisibleScope       visibleScope;
+    private Iterable<MachineImageVolume> volumes;
+    private boolean            sharedWithPublic;
 
     /**
      * Constructs an empty machine image.
@@ -243,7 +115,7 @@ public class MachineImage implements Taggable {
      * @return this
      */
     public @Nonnull MachineImage associatedWith(@Nonnull String kernelImageId) {
-        kernelImageId = kernelImageId;
+        this.kernelImageId = kernelImageId;
         return this;
     }
 
@@ -264,7 +136,29 @@ public class MachineImage implements Taggable {
      * @return this
      */
     public @Nonnull MachineImage createdAt(@Nonnegative long timestamp) {
-        creationTimestamp = timestamp;
+        this.creationTimestamp = timestamp;
+        return this;
+    }
+
+    /**
+     * Indicates the machine image type. If not set, the value will default to MachineImageType.VOLUME.
+     * @param type
+     * @return this
+     */
+    public @Nonnull MachineImage withType(@Nonnull MachineImageType type) {
+        this.type = type;
+        return this;
+    }
+
+    /**
+     * Indicates what image format in case when type of this image is set MachineImageType.STORAGE.
+     * This field should generally be ignored for other image types.
+     * @see org.dasein.cloud.compute.MachineImageType
+     * @param format
+     * @return this
+     */
+    public @Nonnull MachineImage withStorageFormat(@Nullable MachineImageFormat format) {
+        this.storageFormat = format;
         return this;
     }
 
@@ -414,12 +308,20 @@ public class MachineImage implements Taggable {
         return type;
     }
 
-    public void setVisibleScope(VisibleScope visibleScope){
-        this.visibleScope = visibleScope;
+    /**
+     * @return visible scope of the image
+     */
+    public @Nullable VisibleScope getVisibleScope(){
+        return this.visibleScope;
     }
 
-    public VisibleScope getVisibleScope(){
-        return this.visibleScope;
+    /**
+     * Sets visible scope of the image
+     * @return image instance with visible scope modified
+     */
+    public @Nonnull MachineImage withVisibleScope(@Nullable VisibleScope visibleScope) {
+        this.visibleScope = visibleScope;
+        return this;
     }
 
     @Override
@@ -441,6 +343,22 @@ public class MachineImage implements Taggable {
         getTags().putAll(properties);
     }
 
+    /**
+     * @return volumes of the image
+     */
+    public @Nullable Iterable<MachineImageVolume> getVolumes() {
+        return volumes;
+    }
+
+    /**
+     * Sets volumes of the image
+     * @return image instance with volumes
+     */
+    public @Nonnull MachineImage withVolumes(@Nullable Iterable<MachineImageVolume> volumes ) {
+        this.volumes = volumes;
+        return this;
+    }
+
     @Override
     public String toString() {
         return (name + " [" + providerMachineImageId + "]");
@@ -454,6 +372,23 @@ public class MachineImage implements Taggable {
     public @Nonnull MachineImage withSoftware(@Nonnull String software) {
         this.software = software;
         return this;
+    }
+
+    /**
+     * Marks image as available to public
+     * @return this
+     */
+    public MachineImage sharedWithPublic() {
+        this.sharedWithPublic = true;
+        return this;
+    }
+
+    /**
+     * Indicates whether the image is available to public
+     * @return true if available to public
+     */
+    public boolean isPublic() {
+        return this.sharedWithPublic;
     }
 
     /********************************** DEPRECATED METHODS *******************************************/
@@ -517,6 +452,7 @@ public class MachineImage implements Taggable {
      * Sets the image class for this image.
      * @param imageClass the image class of the image
      * @deprecated Use the static factory methods
+     * @see MachineImage#getImageInstance(String, String, String, ImageClass, MachineImageState, String, String, Architecture, Platform, MachineImageFormat)
      */
     public void setImageClass(@Nonnull ImageClass imageClass) {
         this.imageClass = imageClass;
@@ -525,6 +461,8 @@ public class MachineImage implements Taggable {
     /**
      * Sets the kernel image associated with this machine image.
      * @param kernelImageId the kernel image associated with this image
+     * @deprecated Use the static factory methods
+     * @see MachineImage#associatedWith(String)
      */
     public void setKernelImageId(@Nonnull String kernelImageId) {
         this.kernelImageId = kernelImageId;
@@ -600,6 +538,189 @@ public class MachineImage implements Taggable {
      */
     public void setType(@Nonnull MachineImageType type) {
         this.type = type;
+    }
+
+    /**
+     * Sets visible scope of image
+     * @param visibleScope
+     * @deprecated Use the static factory methods
+     * @see MachineImage#withVisibleScope(org.dasein.cloud.VisibleScope)
+     */
+    public void setVisibleScope(VisibleScope visibleScope){
+        this.visibleScope = visibleScope;
+    }
+
+    /**
+     * Constructs a minimally viable image object of the specified image class. Because no image format is specified,
+     * the type for this image will be {@link MachineImageType#VOLUME}.
+     * @deprecated
+     * @see MachineImage#getInstance(String, String, String, ImageClass, MachineImageState, String, String, Architecture, Platform)
+     * @param ownerId the account number for the account that owns the image
+     * @param regionId the region ID with which the image is associated
+     * @param imageId the ID for the newly constructed image
+     * @param imageClass the image class of the image
+     * @param state the current state for the image
+     * @param name the name of the image
+     * @param description a long description of the function of the image
+     * @param architecture the architecture on which this image is based
+     * @param platform the platform built into the image
+     * @return an image matching the specified parameters
+     */
+    static public @Nonnull MachineImage getImageInstance(@Nonnull String ownerId, @Nonnull String regionId, @Nonnull String imageId, @Nonnull ImageClass imageClass, @Nonnull MachineImageState state,  @Nonnull String name, @Nonnull String description, @Nonnull Architecture architecture, @Nonnull Platform platform) {
+        @SuppressWarnings("deprecation") MachineImage image = new MachineImage();
+
+        image.providerOwnerId = ownerId;
+        image.providerRegionId = regionId;
+        image.providerMachineImageId = imageId;
+        image.name = name;
+        image.description = description;
+        image.architecture = architecture;
+        image.platform = platform;
+        image.currentState = state;
+        image.imageClass = imageClass;
+        image.type = MachineImageType.VOLUME;
+        image.creationTimestamp = 0L;
+        image.software = "";
+        return image;
+    }
+
+    /**
+     * Constructs a minimally viable image object of the specified image class of the {@link MachineImageType#STORAGE} format.
+     * @deprecated
+     * @see MachineImage#getInstance(String, String, String, ImageClass, MachineImageState, String, String, Architecture, Platform)
+     * @param ownerId the account number for the account that owns the image
+     * @param regionId the region ID with which the image is associated
+     * @param imageId the ID for the newly constructed image
+     * @param imageClass the image class of the image
+     * @param state the current state for the image
+     * @param name the name of the image
+     * @param description a long description of the function of the image
+     * @param architecture the architecture on which this image is based
+     * @param platform the platform built into the image
+     * @param format the storage format for {@link MachineImageType#STORAGE} images
+     * @return an image matching the specified parameters
+     */
+    static public @Nonnull MachineImage getImageInstance(@Nonnull String ownerId, @Nonnull String regionId, @Nonnull String imageId, @Nonnull ImageClass imageClass, @Nonnull MachineImageState state,  @Nonnull String name, @Nonnull String description, @Nonnull Architecture architecture, @Nonnull Platform platform, @Nonnull MachineImageFormat format) {
+        @SuppressWarnings("deprecation") MachineImage image = new MachineImage();
+
+        image.providerOwnerId = ownerId;
+        image.providerRegionId = regionId;
+        image.providerMachineImageId = imageId;
+        image.name = name;
+        image.description = description;
+        image.architecture = architecture;
+        image.platform = platform;
+        image.currentState = state;
+        image.imageClass = imageClass;
+        image.type = MachineImageType.STORAGE;
+        image.storageFormat = format;
+        image.creationTimestamp = 0L;
+        image.software = "";
+        return image;
+    }
+
+    /**
+     * Constructs a minimally viable machine image object of the specified image class. Because no image format is specified,
+     * the type for this image will be {@link MachineImageType#VOLUME}.
+     * @deprecated
+     * @see MachineImage#getInstance(String, String, String, ImageClass, MachineImageState, String, String, Architecture, Platform)
+     * @param ownerId the account number for the account that owns the image
+     * @param regionId the region ID with which the image is associated
+     * @param imageId the ID for the newly constructed image
+     * @param state the current state for the image
+     * @param name the name of the image
+     * @param description a long description of the function of the image
+     * @param architecture the architecture on which this image is based
+     * @param platform the platform built into the image
+     * @return an image matching the specified parameters
+     */
+    static public @Nonnull MachineImage getMachineImageInstance(@Nonnull String ownerId, @Nonnull String regionId, @Nonnull String imageId,  @Nonnull MachineImageState state,  @Nonnull String name, @Nonnull String description, @Nonnull Architecture architecture, @Nonnull Platform platform) {
+        @SuppressWarnings("deprecation") MachineImage image = new MachineImage();
+
+        image.providerOwnerId = ownerId;
+        image.providerRegionId = regionId;
+        image.providerMachineImageId = imageId;
+        image.name = name;
+        image.description = description;
+        image.architecture = architecture;
+        image.platform = platform;
+        image.currentState = state;
+        image.imageClass = ImageClass.MACHINE;
+        image.type = MachineImageType.VOLUME;
+        image.creationTimestamp = 0L;
+        image.software = "";
+        return image;
+    }
+
+    /**
+     * Constructs a minimally viable machine image object of the specified image class of the {@link MachineImageType#STORAGE} format.
+     * @deprecated
+     * @see MachineImage#getInstance(String, String, String, ImageClass, MachineImageState, String, String, Architecture, Platform)
+     * @param ownerId the account number for the account that owns the image
+     * @param regionId the region ID with which the image is associated
+     * @param imageId the ID for the newly constructed image
+     * @param state the current state for the image
+     * @param name the name of the image
+     * @param description a long description of the function of the image
+     * @param architecture the architecture on which this image is based
+     * @param platform the platform built into the image
+     * @param format the storage format for {@link MachineImageType#STORAGE} images
+     * @return an image matching the specified parameters
+     */
+    static public @Nonnull MachineImage getMachineImageInstance(@Nonnull String ownerId, @Nonnull String regionId, @Nonnull String imageId,  @Nonnull MachineImageState state,  @Nonnull String name, @Nonnull String description, @Nonnull Architecture architecture, @Nonnull Platform platform, @Nonnull MachineImageFormat format) {
+        @SuppressWarnings("deprecation") MachineImage image = new MachineImage();
+
+        image.providerOwnerId = ownerId;
+        image.providerRegionId = regionId;
+        image.providerMachineImageId = imageId;
+        image.name = name;
+        image.description = description;
+        image.architecture = architecture;
+        image.platform = platform;
+        image.currentState = state;
+        image.imageClass = ImageClass.MACHINE;
+        image.type = MachineImageType.STORAGE;
+        image.storageFormat = format;
+        image.creationTimestamp = 0L;
+        image.software = "";
+        return image;
+    }
+
+    /**
+     * Constructs a minimally viable image object of the specified image class of the {@link MachineImageType#STORAGE} format.
+     * @deprecated
+     * @see MachineImage#getInstance(String, String, String, ImageClass, MachineImageState, String, String, Architecture, Platform)
+     * @param ownerId the account number for the account that owns the image
+     * @param regionId the region ID with which the image is associated
+     * @param imageId the ID for the newly constructed image
+     * @param imageClass the image class of the image
+     * @param state the current state for the image
+     * @param name the name of the image
+     * @param description a long description of the function of the image
+     * @param architecture the architecture on which this image is based
+     * @param platform the platform built into the image
+     * @param format the storage format for {@link MachineImageType#STORAGE} images
+     * @param visibleScope the scope defining how visible the image is in the cloud
+     * @return an image matching the specified parameters
+     */
+    static public @Nonnull MachineImage getImageInstance(@Nonnull String ownerId, @Nonnull String regionId, @Nonnull String imageId, @Nonnull ImageClass imageClass, @Nonnull MachineImageState state,  @Nonnull String name, @Nonnull String description, @Nonnull Architecture architecture, @Nonnull Platform platform, @Nonnull MachineImageFormat format, @Nullable VisibleScope visibleScope) {
+        @SuppressWarnings("deprecation") MachineImage image = new MachineImage();
+
+        image.providerOwnerId = ownerId;
+        image.providerRegionId = regionId;
+        image.providerMachineImageId = imageId;
+        image.name = name;
+        image.description = description;
+        image.architecture = architecture;
+        image.platform = platform;
+        image.currentState = state;
+        image.imageClass = imageClass;
+        image.type = MachineImageType.STORAGE;
+        image.storageFormat = format;
+        image.creationTimestamp = 0L;
+        image.software = "";
+        image.visibleScope = visibleScope;
+        return image;
     }
 
 }

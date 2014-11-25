@@ -33,6 +33,7 @@ import java.util.Locale;
  * <p>Created by George Reese: 2/27/14 3:01 PM</p>
  * @author George Reese
  * @version 2014.03 initial version
+ * @version 2015.01 added vlan requirement for all ip addresses
  * @since 2014.03
  */
 public interface IPAddressCapabilities extends Capabilities{
@@ -48,11 +49,22 @@ public interface IPAddressCapabilities extends Capabilities{
      * Indicates whether you need to specify which VLAN you are tying a static IP address to when creating an
      * IP address for use in a VLAN. REQUIRED means you must specify the VLAN, OPTIONAL means you may, and NONE
      * means you do not specify a VLAN.
+     * @since 2015.01
      * @return the level of requirement for specifying a VLAN when creating a VLAN IP address
      * @throws org.dasein.cloud.CloudException an error occurred processing the request in the cloud
      * @throws org.dasein.cloud.InternalException an internal error occurred inside the Dasein Cloud implementation
      */
     public @Nonnull Requirement identifyVlanForVlanIPRequirement() throws CloudException, InternalException;
+
+    /**
+     * Indicates whether you need to specify which VLAN you are tying a static IP address to when creating any
+     * IP address. REQUIRED means you must specify the VLAN, OPTIONAL means you may, and NONE
+     * means you do not specify a VLAN.
+     * @return the level of requirement for specifying a VLAN when creating an IP address
+     * @throws org.dasein.cloud.CloudException an error occurred processing the request in the cloud
+     * @throws org.dasein.cloud.InternalException an internal error occurred inside the Dasein Cloud implementation
+     */
+    public @Nonnull Requirement identifyVlanForIPRequirement() throws CloudException, InternalException;
 
     /**
      * Indicates whether the underlying cloud supports the assignment of addresses of the specified version
@@ -120,4 +132,5 @@ public interface IPAddressCapabilities extends Capabilities{
      * @throws CloudException an error occurred with the cloud provider in determining support
      */
     public boolean supportsVLANAddresses(@Nonnull IPVersion ofVersion) throws InternalException, CloudException;
+
 }

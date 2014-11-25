@@ -28,10 +28,7 @@ import org.dasein.cloud.Requirement;
 import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.Tag;
 import org.dasein.cloud.identity.ServiceAction;
-import org.dasein.cloud.util.APITrace;
-import org.dasein.cloud.util.Cache;
-import org.dasein.cloud.util.CacheLevel;
-import org.dasein.cloud.util.NamingConstraints;
+import org.dasein.cloud.util.*;
 import org.dasein.util.CalendarWrapper;
 import org.dasein.util.Jiterator;
 import org.dasein.util.JiteratorPopulator;
@@ -74,15 +71,33 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
+    @Deprecated
     public VirtualMachine alterVirtualMachine( @Nonnull String vmId, @Nonnull VMScalingOptions options ) throws InternalException, CloudException {
         throw new OperationNotSupportedException("VM alternations are not currently supported for " + getProvider().getCloudName());
     }
 
     @Override
+    @Deprecated
     public VirtualMachine modifyInstance( @Nonnull String vmId, @Nonnull String[] firewalls ) throws InternalException, CloudException {
         throw new OperationNotSupportedException("Instance firewall modifications are not currently supported for " + getProvider().getCloudName());
     }
 
+    @Override
+    public VirtualMachine alterVirtualMachineProduct(@Nonnull String virtualMachineId, @Nonnull String productId) throws InternalException, CloudException{
+        throw new OperationNotSupportedException("VM alternations are not currently supported for " + getProvider().getCloudName());
+    }
+
+    @Override
+    public VirtualMachine alterVirtualMachineSize(@Nonnull String virtualMachineId, @Nullable String cpuCount, @Nullable String ramInMB) throws InternalException, CloudException{
+        throw new OperationNotSupportedException("VM alternations are not currently supported for " + getProvider().getCloudName());
+    }
+
+    @Override
+    public VirtualMachine alterVirtualMachineFirewalls(@Nonnull String virtualMachineId, @Nonnull String[] firewalls) throws InternalException, CloudException{
+        throw new OperationNotSupportedException("Instance firewall modifications are not currently supported for " + getProvider().getCloudName());
+    }
+
+    @Override
     public void cancelSpotDataFeedSubscription() throws CloudException, InternalException {
         throw new OperationNotSupportedException("Spot Instances are not supported for " + getProvider().getCloudName());
     }
@@ -171,14 +186,20 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
 
     @Override
     public @Nullable VirtualMachineProduct getProduct( @Nonnull String productId ) throws InternalException, CloudException {
-        for( Architecture architecture : Architecture.values() ) {
-            for( VirtualMachineProduct prd : listProducts(architecture) ) {
-                if( productId.equals(prd.getProviderProductId()) ) {
-                    return prd;
+        APITrace.begin(getProvider(), "VM.getProduct");
+        try {
+            for( Architecture architecture : getCapabilities().listSupportedArchitectures() ) {
+                for( VirtualMachineProduct prd : listProducts(architecture) ) {
+                    if( productId.equals(prd.getProviderProductId()) ) {
+                        return prd;
+                    }
                 }
             }
+            return null;
         }
-        return null;
+        finally {
+            APITrace.end();
+        }
     }
 
     /**
@@ -317,7 +338,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
         if( count == 1 ) {
             return Collections.singleton(launch(withLaunchOptions).getProviderVirtualMachineId());
         }
-        final ArrayList<Future<String>> results = new ArrayList<Future<String>>();
+        final List<Future<String>> results = new ArrayList<Future<String>>();
         MachineImage image = null;
 
         ComputeServices services = getProvider().getComputeServices();
@@ -346,8 +367,8 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
         PopulatorThread<String> populator = new PopulatorThread<String>(new JiteratorPopulator<String>() {
             @Override
             public void populate( @Nonnull Jiterator<String> iterator ) throws Exception {
-                ArrayList<Future<String>> original = results;
-                ArrayList<Future<String>> copy = new ArrayList<Future<String>>();
+                List<Future<String>> original = results;
+                List<Future<String>> copy = new ArrayList<Future<String>>();
                 Exception exception = null;
                 boolean loaded = false;
 
@@ -386,7 +407,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
 
         options.inDataCenter(dataCenterId);
         if( withKeypairId != null ) {
-            options.withBoostrapKey(withKeypairId);
+            options.withBootstrapKey(withKeypairId);
         }
         if( inVlanId != null ) {
             options.inVlan(null, dataCenterId, inVlanId);
@@ -407,7 +428,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
 
         options.inDataCenter(dataCenterId);
         if( withKeypairId != null ) {
-            options.withBoostrapKey(withKeypairId);
+            options.withBootstrapKey(withKeypairId);
         }
         if( inVlanId != null ) {
             options.inVlan(null, dataCenterId, inVlanId);
@@ -419,7 +440,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
             options.behindFirewalls(firewallIds);
         }
         if( tags != null ) {
-            HashMap<String, Object> metaData = new HashMap<String, Object>();
+            Map<String, Object> metaData = new HashMap<String, Object>();
 
             for( Tag tag : tags ) {
                 metaData.put(tag.getKey(), tag.getValue());
@@ -535,16 +556,57 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
-    public @Nonnull Iterable<VirtualMachineProduct> listProducts( @Nonnull Architecture architecture ) throws InternalException, CloudException {
+    final public Iterable<VirtualMachineProduct> listProducts( VirtualMachineProductFilterOptions options ) throws InternalException, CloudException {
+        List<VirtualMachineProduct> products = new ArrayList<VirtualMachineProduct>();
+        for( Architecture arch : getCapabilities().listSupportedArchitectures() ) {
+            mergeProductLists(products, this.listProducts(options, arch));
+        }
+        return products;
+    }
+
+    /**
+     * Merge product iterable into the list, using providerProductId as a unique key
+     * @param to
+     *          the target list
+     * @param from
+     *          the source iterable
+     */
+    private void mergeProductLists(List<VirtualMachineProduct> to, Iterable<VirtualMachineProduct> from) {
+        List<VirtualMachineProduct> copy = new ArrayList<VirtualMachineProduct>(to);
+        for( VirtualMachineProduct productFrom : from ) {
+            boolean found = false;
+            for( VirtualMachineProduct productTo : copy ) {
+                if( productTo.getProviderProductId().equalsIgnoreCase(productFrom.getProviderProductId()) ) {
+                    found = true;
+                    break;
+                }
+            }
+            if( !found ) {
+                to.add(productFrom);
+            }
+        }
+    }
+
+    @Override
+    final public @Nonnull Iterable<VirtualMachineProduct> listProducts( @Nonnull Architecture architecture ) throws InternalException, CloudException {
+        return this.listProducts(null, architecture);
+    }
+
+    @Override
+    public @Nonnull Iterable<VirtualMachineProduct> listProducts( @Nullable VirtualMachineProductFilterOptions options, @Nullable Architecture architecture ) throws InternalException, CloudException {
         APITrace.begin(getProvider(), "VM.listProducts");
         try {
-            Cache<VirtualMachineProduct> cache = Cache.getInstance(getProvider(), "products" + architecture.name(), VirtualMachineProduct.class, CacheLevel.REGION_ACCOUNT, new TimePeriod<Day>(1, TimePeriod.DAY));
+            String cacheName = "productsALL";
+            if( architecture != null ) {
+                cacheName = "products" + architecture.name();
+            }
+            Cache<VirtualMachineProduct> cache = Cache.getInstance(getProvider(), cacheName, VirtualMachineProduct.class, CacheLevel.REGION_ACCOUNT, new TimePeriod<Day>(1, TimePeriod.DAY));
             Iterable<VirtualMachineProduct> products = cache.get(getContext());
 
             if( products != null ) {
                 return products;
             }
-            ArrayList<VirtualMachineProduct> list = new ArrayList<VirtualMachineProduct>();
+            List<VirtualMachineProduct> list = new ArrayList<VirtualMachineProduct>();
 
             try {
                 String resource = getVMProductsResource();
@@ -603,7 +665,8 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
                     JSONObject product = plist.getJSONObject(i);
                     boolean supported = false;
 
-                    if( product.has("architectures") ) {
+                    // If architecture is specified, check if product matches
+                    if( architecture != null && product.has("architectures") ) {
                         JSONArray architectures = product.getJSONArray("architectures");
 
                         for( int j = 0; j < architectures.length(); j++ ) {
@@ -614,10 +677,15 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
                                 break;
                             }
                         }
+                        if( !supported ) {
+                            continue;
+                        }
                     }
-                    if( !supported ) {
-                        continue;
+                    else {
+                        // No architecture specified, flip the flag - all architectures allowed
+                        supported = true;
                     }
+
                     if( product.has("excludesRegions") ) {
                         JSONArray regions = product.getJSONArray("excludesRegions");
 
@@ -636,7 +704,16 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
                     VirtualMachineProduct prd = toProduct(product);
 
                     if( prd != null ) {
-                        list.add(prd);
+                        if( options != null) {
+                            // Filter supplied, add matches only.
+                            if( options.matches(prd) ) {
+                                list.add(prd);
+                            }
+                        }
+                        else {
+                            // No filter supplied, add all survived.
+                            list.add(prd);
+                        }
                     }
                 }
                 cache.put(getContext(), list);
@@ -649,16 +726,6 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
         } finally {
             APITrace.end();
         }
-    }
-
-    @Override
-    public Iterable<VirtualMachineProduct> listProducts(VirtualMachineProductFilterOptions options) throws InternalException, CloudException{
-        throw new OperationNotSupportedException("Product size filtering not implemented for " + getProvider().getCloudName());
-    }
-
-    @Override
-    public Iterable<VirtualMachineProduct> listProducts(VirtualMachineProductFilterOptions options, Architecture architecture) throws InternalException, CloudException{
-        throw new OperationNotSupportedException("Product size filtering not implemented for " + getProvider().getCloudName());
     }
 
     @Override
@@ -687,7 +754,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
 
     @Override
     public @Nonnull Iterable<ResourceStatus> listVirtualMachineStatus() throws InternalException, CloudException {
-        ArrayList<ResourceStatus> status = new ArrayList<ResourceStatus>();
+        List<ResourceStatus> status = new ArrayList<ResourceStatus>();
 
         for( VirtualMachine vm : listVirtualMachines() ) {
             status.add(new ResourceStatus(vm.getProviderVirtualMachineId(), vm.getCurrentState()));
@@ -697,7 +764,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
 
     @Override
     public @Nonnull Iterable<VirtualMachine> listVirtualMachines() throws InternalException, CloudException {
-        return Collections.emptyList();
+        return Collections.<VirtualMachine>emptyList();
     }
 
     @Override
@@ -705,7 +772,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
         if( options == null ) {
             return listVirtualMachines();
         }
-        ArrayList<VirtualMachine> vms = new ArrayList<VirtualMachine>();
+        List<VirtualMachine> vms = new ArrayList<VirtualMachine>();
 
         for( VirtualMachine vm : listVirtualMachines() ) {
             if( options.matches(vm) ) {
@@ -871,7 +938,25 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
-    public @Nonnull String[] mapServiceAction( @Nonnull ServiceAction action ) {
+    public void setTags(@Nonnull String vmId, @Nonnull Tag... tags) throws CloudException, InternalException {
+        setTags(new String[]{vmId}, tags);
+    }
+
+    @Override
+    public void setTags(@Nonnull String[] vmIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for (String id : vmIds) {
+            Tag[] collectionForDelete = TagUtils.getTagsForDelete(getVirtualMachine(id).getTags(), tags);
+
+            if (collectionForDelete.length != 0 ) {
+                removeTags(id, collectionForDelete);
+            }
+
+            updateTags(id, tags);
+        }
+    }
+
+    @Override
+    public @Nonnull String[] mapServiceAction(@Nonnull ServiceAction action) {
         return new String[0];
     }
 

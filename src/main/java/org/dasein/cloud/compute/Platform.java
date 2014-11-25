@@ -66,6 +66,10 @@ public enum Platform {
      */
     CENT_OS,
     /**
+     * CoreOS
+     */
+    COREOS,
+    /**
      * Generic Windows
      */
     WINDOWS,
@@ -90,13 +94,16 @@ public enum Platform {
         if( name.contains("centos") ) {
             return CENT_OS;
         }
+        else if( name.contains("coreos") ) {
+            return COREOS;
+        }
         else if( name.contains("ubuntu") ) {
             return UBUNTU;
         }
         else if( name.contains("fedora") ) {
             return FEDORA_CORE;
         }
-        else if( name.contains("windows") ) {
+        else if( name.contains("windows") || name.contains("win") ) {
             return WINDOWS;
         }
         else if( name.contains("red hat") || name.contains("redhat") || name.contains("red-hat") || name.contains("rhel") ) {
@@ -190,6 +197,7 @@ public enum Platform {
         case FREE_BSD: return "FreeBSD";
         case OPEN_BSD: return "OpenBSD";
         case CENT_OS: return "CentOS";
+        case COREOS: return "CoreOS";
         case WINDOWS: return "Windows";
         }
         return "Unknown";

@@ -55,9 +55,35 @@ public interface LoadBalancerSupport extends AccessControlledService {
     static public final ServiceAction CREATE_SSL_CERTIFICATE    = new ServiceAction("LB:CREATE_SSL_CERTIFICATE");
     static public final ServiceAction DELETE_SSL_CERTIFICATE    = new ServiceAction("LB:DELETE_SSL_CERTIFICATE");
     static public final ServiceAction SET_LB_SSL_CERTIFICATE    = new ServiceAction("LB:SET_SSL_CERTIFICATE");
+    static public final ServiceAction CLEATE_LOAD_BALANCER_LISTENERS    = new ServiceAction("LB:CLEATE_LOAD_BALANCER_LISTENERS");
+    static public final ServiceAction DELETE_LOAD_BALANCER_LISTENERS    = new ServiceAction("LB:DELETE_LOAD_BALANCER_LISTENERS");
     static public final ServiceAction SET_FIREWALLS        = new ServiceAction("LB:SET_FIREWALLS");
     static public final ServiceAction ATTACH_LB_TO_SUBNETS    = new ServiceAction("LB:ATTACH_LB_TO_SUBNETS");
     static public final ServiceAction DETACH_LB_FROM_SUBNETS    = new ServiceAction("LB:DETACH_LB_FROM_SUBNETS");
+    static public final ServiceAction MODIFY_LB_ATTRIBUTES    = new ServiceAction("LB:MODIFY_LB_ATTRIBUTES");
+    static public final ServiceAction DESCRIBE_LOADBALANCER_ATTRIBUTES    = new ServiceAction("LB:DESCRIBE_LOADBALANCER_ATTRIBUTES");
+
+    /**
+     * Adds one or more new listeners to your load balancer.
+     *
+     * @param toLoadBalancerId the load balancer to which data centers are being added
+     * @param listeners        the listeners to be established on create
+     * @throws CloudException                 an error occurred with the cloud provider while performing this action
+     * @throws InternalException              an error occurred within the Dasein Cloud implementation while performing this action
+     * @throws OperationNotSupportedException this load balancer is not data-center aware
+     */
+    public void addListeners( @Nonnull String toLoadBalancerId, @Nullable LbListener[] listeners ) throws CloudException, InternalException;
+
+    /**
+     * Removes one or more new listeners from load balancer.
+     *
+     * @param toLoadBalancerId the load balancer to which data centers are being added
+     * @param listeners        the listeners to be deleted
+     * @throws CloudException                 an error occurred with the cloud provider while performing this action
+     * @throws InternalException              an error occurred within the Dasein Cloud implementation while performing this action
+     * @throws OperationNotSupportedException this load balancer is not data-center aware
+     */
+    public void removeListeners( @Nonnull String toLoadBalancerId, @Nullable LbListener[] listeners ) throws CloudException, InternalException;
 
     /**
      * Adds one or more data centers to the list of data centers associated with the specified load balancer. This method
@@ -346,7 +372,26 @@ public interface LoadBalancerSupport extends AccessControlledService {
      */
     public void detachLoadBalancerFromSubnets(@Nonnull String fromLoadBalancerId, @Nonnull String ... subnetIdsToDelete) throws CloudException, InternalException;
 
-    /*
+    /**
+     * Modifies the attributes of a specified load balancer
+     *
+     * @param id      firewall id
+     * @param options attributes options
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public void modifyLoadBalancerAttributes( @Nonnull String id, @Nonnull LbAttributesOptions options ) throws CloudException, InternalException;
+
+    /**
+     * Get load balancer attributes
+     *
+     * @param id - load balancer id
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public LbAttributesOptions getLoadBalancerAttributes( @Nonnull String id ) throws CloudException, InternalException;
+
+    /**
      * Detach named healthCheck from named loadBalancer without deleting either.
      * @throws CloudException an error occurred with the cloud provider while performing this action
      * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action

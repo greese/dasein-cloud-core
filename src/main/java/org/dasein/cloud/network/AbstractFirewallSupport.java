@@ -28,6 +28,7 @@ import org.dasein.cloud.Requirement;
 import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.Tag;
 import org.dasein.cloud.identity.ServiceAction;
+import org.dasein.cloud.util.TagUtils;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -47,10 +48,10 @@ import java.util.Map;
  * @version 2014.03 added support for authorizing with rule create options
  */
 @SuppressWarnings("UnusedDeclaration")
-public abstract class AbstractFirewallSupport implements FirewallSupport {
-    private CloudProvider provider;
+public abstract class AbstractFirewallSupport<T extends CloudProvider> implements FirewallSupport {
+    private T provider;
 
-    public AbstractFirewallSupport(@Nonnull CloudProvider provider) {
+    public AbstractFirewallSupport(@Nonnull T provider) {
         this.provider = provider;
     }
 
@@ -169,7 +170,7 @@ public abstract class AbstractFirewallSupport implements FirewallSupport {
     }
 
     @Override
-    public @Nullable  Firewall getFirewall(@Nonnull String firewallId) throws InternalException, CloudException {
+    public @Nullable Firewall getFirewall(@Nonnull String firewallId) throws InternalException, CloudException {
         for( Firewall fw : list() ) {
             if( firewallId.equals(fw.getProviderFirewallId()) ) {
                 return fw;
@@ -181,13 +182,13 @@ public abstract class AbstractFirewallSupport implements FirewallSupport {
     @Override
     @Deprecated
     public @Nonnull FirewallConstraints getFirewallConstraintsForCloud() throws InternalException, CloudException {
-        return FirewallConstraints.getInstance();
+        return getCapabilities().getFirewallConstraintsForCloud();
     }
 
     /**
      * @return the provider object associated with any calls through this support object
      */
-    protected final @Nonnull CloudProvider getProvider() {
+    protected final @Nonnull T getProvider() {
         return provider;
     }
 
@@ -217,6 +218,28 @@ public abstract class AbstractFirewallSupport implements FirewallSupport {
             status.add(new ResourceStatus(fw.getProviderFirewallId(), true));
         }
         return status;
+    }
+
+    @Deprecated
+    public @Nonnull Iterable<RuleTargetType> listSupportedDestinationTypes(boolean inVlan) throws InternalException, CloudException {
+        return getCapabilities().listSupportedDestinationTypes(inVlan);
+    }
+
+    @Deprecated
+    public @Nonnull Iterable<Direction> listSupportedDirections(boolean inVlan) throws InternalException, CloudException {
+        return getCapabilities().listSupportedDirections(inVlan);
+    }
+
+    @Override
+    @Deprecated
+    public @Nonnull Iterable<Permission> listSupportedPermissions(boolean inVlan) throws InternalException, CloudException {
+        return getCapabilities().listSupportedPermissions(inVlan);
+    }
+
+    @Override
+    @Deprecated
+    public @Nonnull Iterable<RuleTargetType> listSupportedSourceTypes(boolean inVlan) throws InternalException, CloudException {
+        return getCapabilities().listSupportedSourceTypes(inVlan);
     }
 
     @Override
@@ -373,4 +396,23 @@ public abstract class AbstractFirewallSupport implements FirewallSupport {
             updateTags(id, tags);
         }
     }
+
+    @Override
+    public void setTags( @Nonnull String firewallId, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        setTags(new String[]{firewallId}, tags);
+    }
+
+    @Override
+    public void setTags( @Nonnull String[] firewallIds, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        for( String id : firewallIds ) {
+            Tag[] collectionForDelete = TagUtils.getTagsForDelete(getFirewall(id).getTags(), tags);
+
+            if( collectionForDelete.length != 0) {
+                removeTags(id, collectionForDelete);
+            }
+
+            updateTags(id, tags);
+        }
+    }
+
 }

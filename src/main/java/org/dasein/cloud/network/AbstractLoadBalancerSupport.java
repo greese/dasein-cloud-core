@@ -66,6 +66,16 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
     }
 
     @Override
+    public void addListeners( @Nonnull String toLoadBalancerId, @Nullable LbListener[] listeners ) throws CloudException, InternalException{
+        throw new OperationNotSupportedException("Adding listeners to an existing load balancer is not currently implemented for " + getContext().getRegionId() + " of " + getProvider().getCloudName());
+    }
+
+    @Override
+    public void removeListeners( @Nonnull String toLoadBalancerId, @Nullable LbListener[] listeners ) throws CloudException, InternalException{
+        throw new OperationNotSupportedException("Removing listeners from an existing load balancer is not currently implemented for " + getContext().getRegionId() + " of " + getProvider().getCloudName());
+    }
+
+    @Override
     public void addServers(@Nonnull String toLoadBalancerId, @Nonnull String ... serverIdsToAdd) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Adding VM endpoints to an existing load balancer is not currently implemented for " + getContext().getRegionId() + " of " + getProvider().getCloudName());
     }
@@ -445,6 +455,15 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
         throw new OperationNotSupportedException("Setting firewalls have not been implemented for " + getProvider().getCloudName());
     }
 
+    @Override
+    public void modifyLoadBalancerAttributes( @Nonnull String id, @Nonnull LbAttributesOptions options ) throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Modify attributes have not been implemented for " + getProvider().getCloudName());
+    }
+
+    @Override
+    public LbAttributesOptions getLoadBalancerAttributes( @Nonnull String id ) throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Get attributes have not been implemented for " + getProvider().getCloudName());
+    }
 
     @Override
     public void attachLoadBalancerToSubnets(@Nonnull String toLoadBalancerId, @Nonnull String... subnetIdsToAdd) throws CloudException, InternalException {
