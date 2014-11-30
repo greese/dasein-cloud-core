@@ -52,8 +52,9 @@ public class VMScalingCapabilities {
         return capabilities;
     }
 
-    @Deprecated private Requirement alterVmForNewVolume;
-    @Deprecated private Requirement alterVmForVolumeChange;
+    @Deprecated private Requirement alterVmForNewVolume = Requirement.NONE;
+    @Deprecated private Requirement alterVmForVolumeChange = Requirement.NONE;
+    
     private boolean     createsNewVirtualMachine;
     private boolean     supportsProductChanges;
     private boolean     supportsProductSizeChanges;
