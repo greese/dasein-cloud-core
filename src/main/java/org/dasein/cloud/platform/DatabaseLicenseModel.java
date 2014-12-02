@@ -31,4 +31,5 @@ public enum DatabaseLicenseModel {
     LICENSE_INCLUDED,
     BRING_YOUR_OWN_LICENSE,
     POSTGRESQL_LICENSE,
+    MYSQL_LICENSE,
 }
