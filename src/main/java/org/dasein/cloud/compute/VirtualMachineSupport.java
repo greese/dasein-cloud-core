@@ -82,7 +82,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @deprecated use {@link #alterVirtualMachineFirewalls(String, String[])}
      */
     @Deprecated
-    public abstract VirtualMachine modifyInstance( @Nonnull String vmId, @Nonnull String[] firewalls ) throws InternalException, CloudException;
+    public VirtualMachine modifyInstance( @Nonnull String vmId, @Nonnull String[] firewalls ) throws InternalException, CloudException;
 
     /**
      * Changes the VirtualMachineProduct for clouds that allow the operation.
@@ -93,7 +93,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws InternalException an internal error occurred processing the request
      * @throws CloudException an error occurred in the cloud processing the request
      */
-    public VirtualMachine alterVirtualMachineProduct(@Nonnull String virtualMachineId, @Nonnull String productId) throws InternalException, CloudException;
+    public @Nonnull VirtualMachine alterVirtualMachineProduct(@Nonnull String virtualMachineId, @Nonnull String productId) throws InternalException, CloudException;
 
     /**
      * Changes the VirtualMachineProduct for clouds that allow the operation.
@@ -105,7 +105,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws InternalException an internal error occurred processing the request
      * @throws CloudException an error occurred in the cloud processing the request
      */
-    public VirtualMachine alterVirtualMachineSize(@Nonnull String virtualMachineId, @Nullable String cpuCount, @Nullable String ramInMB) throws InternalException, CloudException;
+    public @Nonnull VirtualMachine alterVirtualMachineSize(@Nonnull String virtualMachineId, @Nullable String cpuCount, @Nullable String ramInMB) throws InternalException, CloudException;
 
     /**
      * Changes the firewalls currently associated with the Virtual Machine.
@@ -116,7 +116,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws InternalException an internal error occurred processing the request
      * @throws CloudException an error occurred in the cloud processing the request
      */
-    public VirtualMachine alterVirtualMachineFirewalls(@Nonnull String virtualMachineId, @Nonnull String[] firewalls) throws InternalException, CloudException;
+    public @Nonnull VirtualMachine alterVirtualMachineFirewalls(@Nonnull String virtualMachineId, @Nonnull String[] firewalls) throws InternalException, CloudException;
 
     /**
      * Cancels the data feed for Spot VMs

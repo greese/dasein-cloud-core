@@ -447,15 +447,4 @@ public abstract class CloudProvider {
             storageCloudProvider = null;
         }
     }
-
-    /**
-     * DEBUG_AWS should be specified as system properties, otherwise return false
-     *
-     * @return DEBUG_AWS properties value, or false if not specified
-     */
-    public boolean isDebug() {
-        Properties properties = System.getProperties();
-        return Boolean.valueOf(properties.getProperty("DEBUG_AWS", "false"));
-    }
-
 }
