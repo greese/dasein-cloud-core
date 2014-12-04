@@ -80,9 +80,11 @@ public class MachineImage implements Taggable {
         image.type = MachineImageType.VOLUME;
         image.creationTimestamp = 0L;
         image.software = "";
+        image.minimumDiskSizeGb = 10L;
         return image;
     }
 
+    private long               minimumDiskSizeGb;
     private Architecture       architecture;
     private long               creationTimestamp;
     private MachineImageState  currentState;
@@ -721,6 +723,14 @@ public class MachineImage implements Taggable {
         image.software = "";
         image.visibleScope = visibleScope;
         return image;
+    }
+
+    public long getMinimumDiskSizeGb() {
+        return minimumDiskSizeGb;
+    }
+
+    public void setMinimumDiskSizeGb(long minimumDiskSizeGb) {
+        this.minimumDiskSizeGb = minimumDiskSizeGb;
     }
 
 }
