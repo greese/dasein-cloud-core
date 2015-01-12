@@ -19,6 +19,7 @@
 
 package org.dasein.cloud.compute;
 
+import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.ci.ConvergedInfrastructureSupport;
 
 import javax.annotation.Nullable;
@@ -30,7 +31,13 @@ import javax.annotation.Nullable;
  * @version 2013.07 added topology support
  * @since unknown
  */
-public abstract class AbstractComputeServices implements ComputeServices {
+public abstract class AbstractComputeServices<T extends CloudProvider> implements ComputeServices {
+    private T provider;
+
+    public AbstractComputeServices( T provider ) {
+        this.provider = provider;
+    }
+    
     @Override
     public @Nullable AffinityGroupSupport getAffinityGroupSupport(){
         return null;
