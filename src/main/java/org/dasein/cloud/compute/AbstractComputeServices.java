@@ -37,6 +37,10 @@ public abstract class AbstractComputeServices<T extends CloudProvider> implement
     public AbstractComputeServices( T provider ) {
         this.provider = provider;
     }
+
+    public T getProvider() {
+        return provider;
+    }
     
     @Override
     public @Nullable AffinityGroupSupport getAffinityGroupSupport(){
