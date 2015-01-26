@@ -20,7 +20,7 @@
 package org.dasein.cloud.util;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.openssl.PEMReader;
+import org.bouncycastle.util.io.pem.PemReader;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.ProviderContext;
 
@@ -94,10 +94,10 @@ public class X509Store {
 
     private Object readPemObject(String pemString) throws IOException {
         StringReader strReader = new StringReader(pemString);
-        PEMReader pemReader = new PEMReader(strReader, null, BouncyCastleProvider.PROVIDER_NAME);
+        PemReader pemReader = new PemReader(strReader);
 
         try {
-            return pemReader.readObject();
+            return pemReader.readPemObject();
         }
         finally {
             strReader.close();
