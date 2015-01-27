@@ -86,6 +86,17 @@ public interface LoadBalancerSupport extends AccessControlledService {
     public void removeListeners( @Nonnull String toLoadBalancerId, @Nullable LbListener[] listeners ) throws CloudException, InternalException;
 
     /**
+     * Edits one or more listeners from load balancer.
+     *
+     * @param toLoadBalancerId the load balancer to which data centers are being edited
+     * @param listeners        the listeners to be edited
+     * @throws CloudException                 an error occurred with the cloud provider while performing this action
+     * @throws InternalException              an error occurred within the Dasein Cloud implementation while performing this action
+     * @throws OperationNotSupportedException this load balancer is not data-center aware
+     */
+    public void editListeners( @Nonnull String toLoadBalancerId, @Nullable LbListener[] listeners ) throws CloudException, InternalException;
+
+    /**
      * Adds one or more data centers to the list of data centers associated with the specified load balancer. This method
      * makes sense only if load balancers are not data center aware
      * @param toLoadBalancerId the load balancer to which data centers are being added
