@@ -22,5 +22,6 @@ package org.dasein.cloud.compute;
 public enum VolumeState {
     PENDING,
     AVAILABLE,
-    DELETED
+    DELETED,
+    ERROR
 }
