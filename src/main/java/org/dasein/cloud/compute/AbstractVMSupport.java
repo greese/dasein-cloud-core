@@ -83,17 +83,17 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
-    public VirtualMachine alterVirtualMachineProduct(@Nonnull String virtualMachineId, @Nonnull String productId) throws InternalException, CloudException{
+    public @Nonnull VirtualMachine alterVirtualMachineProduct(@Nonnull String virtualMachineId, @Nonnull String productId) throws InternalException, CloudException{
         throw new OperationNotSupportedException("VM alternations are not currently supported for " + getProvider().getCloudName());
     }
 
     @Override
-    public VirtualMachine alterVirtualMachineSize(@Nonnull String virtualMachineId, @Nullable String cpuCount, @Nullable String ramInMB) throws InternalException, CloudException{
+    public @Nonnull VirtualMachine alterVirtualMachineSize(@Nonnull String virtualMachineId, @Nullable String cpuCount, @Nullable String ramInMB) throws InternalException, CloudException{
         throw new OperationNotSupportedException("VM alternations are not currently supported for " + getProvider().getCloudName());
     }
 
     @Override
-    public VirtualMachine alterVirtualMachineFirewalls(@Nonnull String virtualMachineId, @Nonnull String[] firewalls) throws InternalException, CloudException{
+    public @Nonnull VirtualMachine alterVirtualMachineFirewalls(@Nonnull String virtualMachineId, @Nonnull String[] firewalls) throws InternalException, CloudException{
         throw new OperationNotSupportedException("Instance firewall modifications are not currently supported for " + getProvider().getCloudName());
     }
 
@@ -103,7 +103,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
-    public void cancelSpotVirtualMachineRequest( String providerSpotVirtualMachineRequestID ) throws CloudException, InternalException {
+    public void cancelSpotVirtualMachineRequest( @Nonnull String providerSpotVirtualMachineRequestID ) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Spot Instances are not supported for " + getProvider().getCloudName());
     }
 
@@ -113,11 +113,11 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
-    public @Nonnull SpotVirtualMachineRequest createSpotVirtualMachineRequest( SpotVirtualMachineRequestCreateOptions options ) throws CloudException, InternalException {
+    public @Nonnull SpotVirtualMachineRequest createSpotVirtualMachineRequest( @Nonnull SpotVirtualMachineRequestCreateOptions options ) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Spot Instances are not supported for " + getProvider().getCloudName());
     }
 
-    public @Nonnull Iterable<SpotVirtualMachineRequest> listSpotVirtualMachineRequests( SpotVirtualMachineRequestFilterOptions options ) throws CloudException, InternalException {
+    public @Nonnull Iterable<SpotVirtualMachineRequest> listSpotVirtualMachineRequests( @Nullable SpotVirtualMachineRequestFilterOptions options ) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Spot Instances are not supported for " + getProvider().getCloudName());
     }
 
@@ -138,7 +138,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
-    public void enableSpotDataFeedSubscription( String bucketName ) throws CloudException, InternalException {
+    public void enableSpotDataFeedSubscription( @Nonnull String bucketName ) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Spot Instances are not supported for " + getProvider().getCloudName());
     }
 

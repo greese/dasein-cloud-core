@@ -38,7 +38,7 @@ public class DaseinResponseHandler<T> implements ResponseHandler<T> {
     private Class<T> classType;
     private StreamProcessor<T> processor;
 
-    public DaseinResponseHandler(StreamProcessor processor, Class<T> classType){
+    public DaseinResponseHandler(StreamProcessor<T> processor, Class<T> classType){
         this.processor = processor;
         this.classType = classType;
     }
@@ -52,7 +52,7 @@ public class DaseinResponseHandler<T> implements ResponseHandler<T> {
                     httpResponse.getStatusLine().getReasonPhrase(), EntityUtils.toString(httpResponse.getEntity()));
         }
         else {
-            return (T) processor.read(httpResponse.getEntity().getContent(), classType);
+            return processor.read(httpResponse.getEntity().getContent(), classType);
         }
     }
  }

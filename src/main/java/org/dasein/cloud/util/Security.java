@@ -46,7 +46,6 @@ public class Security {
         int length;
 
         if( maxLength < minLength ) {
-            maxLength = minLength;
             length = minLength;
         }
         else {
