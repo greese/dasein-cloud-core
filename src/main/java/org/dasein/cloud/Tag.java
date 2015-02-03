@@ -50,7 +50,7 @@ public class Tag implements Comparable<Tag> {
     }
 
     @Override
-    public int compareTo(Tag tag) {
+    public int compareTo(@Nonnull Tag tag) {
         int x = key.compareTo(tag.key);
         
         if( x != 0 ) {

@@ -415,7 +415,7 @@ public abstract class AbstractVLANSupport<T extends CloudProvider> implements VL
     }
 
     @Override
-    public @Nonnull Iterable<Subnet> listSubnets(@Nonnull String vlanId) throws CloudException, InternalException {
+    public @Nonnull Iterable<Subnet> listSubnets(@Nullable String vlanId) throws CloudException, InternalException {
         return Collections.emptyList();
     }
 

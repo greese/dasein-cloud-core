@@ -84,7 +84,7 @@ public class AffinityGroup implements Taggable{
         return getTags().get(tag);
     }
 
-    public synchronized Map<String, String> getTags(){
+    public synchronized @Nonnull Map<String, String> getTags(){
         if(tags == null){
             tags = new HashMap<String, String>();
         }

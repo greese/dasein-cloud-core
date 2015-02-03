@@ -50,6 +50,7 @@ public class FirewallRule implements Comparable<FirewallRule> {
             }
             for( String p : parts ) {
                 try {
+                    //noinspection ResultOfMethodCallIgnored
                     Integer.parseInt(p);
                 }
                 catch( NumberFormatException ignore ) {
@@ -400,7 +401,7 @@ public class FirewallRule implements Comparable<FirewallRule> {
     private FirewallRule() { }
 
     @Override
-    public int compareTo(FirewallRule other) {
+    public int compareTo(@Nonnull FirewallRule other) {
         if( other == null ) {
             return -1;
         }

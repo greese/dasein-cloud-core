@@ -885,7 +885,7 @@ public class VMLaunchOptions {
      * @param provisionPublicIp true indicates that a public IP address should be provisioned at launch time
      * @return this
      */
-    public @Nonnull VMLaunchOptions withProvisionPublicIp(@Nonnull boolean provisionPublicIp) {
+    public @Nonnull VMLaunchOptions withProvisionPublicIp(boolean provisionPublicIp) {
         this.provisionPublicIp = provisionPublicIp;
         return this;
     }

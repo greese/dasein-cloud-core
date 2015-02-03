@@ -67,8 +67,6 @@ public class Blob implements Comparable<Blob> {
 
     @Override
     public int compareTo(@Nullable Blob other) {
-        int x;
-        
         if( other == null ) {
             return 1;
         }

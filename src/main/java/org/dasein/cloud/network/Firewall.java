@@ -221,8 +221,7 @@ public class Firewall implements Networkable, Taggable {
      * Defines the firewall rules.
      * @param ruleList a Collection of type FirewallRule
      */
-    @SuppressWarnings("unused")
-    public @Nonnull void setRules( Collection<FirewallRule> ruleList ) {
+    public void setRules( Collection<FirewallRule> ruleList ) {
       rules = ruleList;
     }
 
