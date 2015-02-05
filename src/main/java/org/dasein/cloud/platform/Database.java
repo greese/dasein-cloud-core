@@ -20,34 +20,41 @@
 package org.dasein.cloud.platform;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.dasein.cloud.Taggable;
 import org.dasein.cloud.TimeWindow;
 
-public class Database implements Serializable {
+import javax.annotation.Nonnull;
+
+public class Database implements Taggable, Serializable {
     private static final long serialVersionUID = 2965680337224730031L;
 
-    private String          adminUser;
-    private int             allocatedStorageInGb;
-    private String          configuration;
-    private long            creationTimestamp;
-    private DatabaseState   currentState;
-    private DatabaseEngine  engine;
-    private boolean         highAvailability;
-    private int             hostPort;
-    private String          hostName;
-    private TimeWindow      maintenanceWindow;
-    private TimeWindow      backupWindow;
-    private String          name;
-    private String          productSize;
-    private String          providerDataCenterId;
-    private String          providerDatabaseId;
-    private String          providerOwnerId;
-    private String          providerRegionId;
-    private long            recoveryPointTimestamp;
-    private TimeWindow      snapshotWindow;
-    private int             snapshotRetentionInDays;
+    private String              adminUser;
+    private int                 allocatedStorageInGb;
+    private String              configuration;
+    private long                creationTimestamp;
+    private DatabaseState       currentState;
+    private DatabaseEngine      engine;
+    private boolean             highAvailability;
+    private int                 hostPort;
+    private String              hostName;
+    private TimeWindow          maintenanceWindow;
+    private TimeWindow          backupWindow;
+    private String              name;
+    private String              productSize;
+    private String              providerDataCenterId;
+    private String              providerDatabaseId;
+    private String              providerOwnerId;
+    private String              providerRegionId;
+    private long                recoveryPointTimestamp;
+    private TimeWindow          snapshotWindow;
+    private int                 snapshotRetentionInDays;
+    private Map<String, String> tags;
 
-    public Database() { }
+    public Database() {
+    }
 
     public boolean equals(Object ob) {
         if( ob == null ) {
@@ -59,7 +66,7 @@ public class Database implements Serializable {
         if( !getClass().getName().equals(ob.getClass().getName()) ) {
             return false;
         }
-        Database other = (Database)ob;
+        Database other = ( Database ) ob;
 
         if( !getProviderOwnerId().equals(other.getProviderOwnerId()) ) {
             return false;
@@ -223,7 +230,7 @@ public class Database implements Serializable {
     }
     
     public String toString() {
-        return providerDatabaseId;
+        return name + "[" + providerDatabaseId + "]";
     }
 
     public void setHighAvailability(boolean highAvailability) {
@@ -232,5 +239,18 @@ public class Database implements Serializable {
 
     public boolean isHighAvailability() {
         return highAvailability;
+    }
+
+    @Override
+    public @Nonnull Map<String, String> getTags() {
+        if( tags == null ) {
+            tags = new HashMap<String, String>();
+        }
+        return tags;
+    }
+
+    @Override
+    public void setTag(@Nonnull String key, @Nonnull String value) {
+        getTags().put(key, value);
     }
 }
