@@ -26,7 +26,9 @@ import org.dasein.cloud.OperationNotSupportedException;
 import org.dasein.cloud.ProviderContext;
 import org.dasein.cloud.Requirement;
 import org.dasein.cloud.ResourceStatus;
+import org.dasein.cloud.Tag;
 import org.dasein.cloud.identity.ServiceAction;
+import org.dasein.cloud.util.TagUtils;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -473,5 +475,47 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
     @Override
     public void detachLoadBalancerFromSubnets(@Nonnull String fromLoadBalancerId, @Nonnull String... subnetIdsToDelete) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Detaching load balancer to subnets has not been implemented for " + getProvider().getCloudName());
+    }
+    
+    @Override
+    public void removeTags(@Nonnull String loadBalancerId, @Nonnull Tag... tags) throws CloudException, InternalException {
+        // NO-OP
+    }
+
+    @Override
+    public void removeTags(@Nonnull String[] loadBalancerIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for( String id : loadBalancerIds ) {
+            removeTags(id, tags);
+        }
+    }
+    
+    @Override
+    public void updateTags(@Nonnull String loadBalancerId, @Nonnull Tag... tags) throws CloudException, InternalException {
+        // NO-OP
+    }
+
+    @Override
+    public void updateTags(@Nonnull String[] loadBalancerIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for( String id : loadBalancerIds ) {
+            updateTags(id, tags);
+        }
+    }
+
+    @Override
+    public void setTags( @Nonnull String loadBalancerId, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        setTags(new String[]{loadBalancerId}, tags);
+    }
+
+    @Override
+    public void setTags( @Nonnull String[] loadBalancerIds, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        for( String id : loadBalancerIds ) {
+            Tag[] collectionForDelete = TagUtils.getTagsForDelete(getLoadBalancer(id).getTags(), tags);
+
+            if( collectionForDelete.length != 0) {
+                removeTags(id, collectionForDelete);
+            }
+
+            updateTags(id, tags);
+        }
     }
 }
