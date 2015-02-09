@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -91,7 +91,6 @@ public class VirtualMachine implements Networkable, Taggable {
     private VmStatus                providerVmStatus;
     private String                  virtualMachineGroup;
     private VisibleScope            visibleScope;
-    private String                  userData;
     private VirtualMachineLifecycle lifecycle;
     private String                  spotRequestId; // TODO - add filtering by, add setter/getter
     private String                  resourcePoolId;
@@ -710,14 +709,6 @@ public class VirtualMachine implements Networkable, Taggable {
 
     public VisibleScope getVisibleScope() {
         return this.visibleScope;
-    }
-
-    public String getUserData() {
-        return userData;
-    }
-
-    public void setUserData( String userData ) {
-        this.userData = userData;
     }
 
     public VirtualMachineLifecycle getLifecycle() {
