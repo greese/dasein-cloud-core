@@ -26,6 +26,7 @@ import org.dasein.cloud.AccessControlledService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.ResourceStatus;
+import org.dasein.cloud.Tag;
 import org.dasein.cloud.TimeWindow;
 import org.dasein.cloud.identity.ServiceAction;
 
@@ -200,5 +201,69 @@ public interface RelationalDatabaseSupport extends AccessControlledService {
      * Throws CloudException on failure
      */
     public void restoreBackup(DatabaseBackup backup) throws CloudException, InternalException;
+    
+    /**
+     * Removes meta-data from a providerDatabaseId. If tag values are set, their removal is dependent on underlying cloud
+     * provider behavior. They may be removed only if the tag value matches or they may be removed regardless of the
+     * value.
+     * @param providerDatabaseId the Database to update
+     * @param tags the meta-data tags to remove
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void removeTags(@Nonnull String providerDatabaseId, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Removes meta-data from multiple providerDatabaseIds. If tag values are set, their removal is dependent on underlying cloud
+     * provider behavior. They may be removed only if the tag value matches or they may be removed regardless of the
+     * value.
+     * @param providerDatabaseIds the Databases to update
+     * @param tags  the meta-data tags to remove
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void removeTags(@Nonnull String[] providerDatabaseIds, @Nonnull Tag ... tags) throws CloudException, InternalException;
+    
+    /**
+     * Updates meta-data for a providerDatabaseId with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     * @param providerDatabaseId the Database to update
+     * @param tags the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void updateTags(@Nonnull String providerDatabaseId, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Updates meta-data for multiple providerDatabaseIds with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     * @param providerDatabaseIds the Databases to update
+     * @param tags  the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void updateTags(@Nonnull String[] providerDatabaseIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Set meta-data for a providerDatabaseId. Remove any tags that were not provided by the incoming tags, and add or
+     * overwrite any new or pre-existing tags.
+     *
+     * @param providerDatabaseId the Database to set
+     * @param tags     the meta-data tags to set
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public void setTags( @Nonnull String providerDatabaseId, @Nonnull Tag... tags ) throws CloudException, InternalException;
+
+    /**
+     * Set meta-data for multiple providerDatabaseIds. Remove any tags that were not provided by the incoming tags, and add or
+     * overwrite any new or pre-existing tags.
+     *
+     * @param providerDatabaseIds the Databases to set
+     * @param tags      the meta-data tags to set
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public void setTags( @Nonnull String[] providerDatabaseIds, @Nonnull Tag... tags ) throws CloudException, InternalException;
 
 }

@@ -21,6 +21,7 @@ package org.dasein.cloud.network;
 
 import org.dasein.cloud.*;
 import org.dasein.cloud.identity.ServiceAction;
+import org.dasein.cloud.Tag;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -397,7 +398,71 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
      */
     public void detatchHealthCheck(String loadBalancerId, String heathcheckId) throws CloudException, InternalException;
+    
+    /**
+     * Removes meta-data from a loadBalancer. If tag values are set, their removal is dependent on underlying cloud
+     * provider behavior. They may be removed only if the tag value matches or they may be removed regardless of the
+     * value.
+     * @param loadBalancerId the loadBalancer to update
+     * @param tags the meta-data tags to remove
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void removeTags(@Nonnull String loadBalancerId, @Nonnull Tag... tags) throws CloudException, InternalException;
 
+    /**
+     * Removes meta-data from multiple loadBalancers. If tag values are set, their removal is dependent on underlying cloud
+     * provider behavior. They may be removed only if the tag value matches or they may be removed regardless of the
+     * value.
+     * @param loadBalancerIds the loadBalancers to update
+     * @param tags  the meta-data tags to remove
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void removeTags(@Nonnull String[] loadBalancerIds, @Nonnull Tag ... tags) throws CloudException, InternalException;
+    
+    /**
+     * Updates meta-data for a loadBalancer with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     * @param loadBalancerId the loadBalancer to update
+     * @param tags the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void updateTags(@Nonnull String loadBalancerId, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Updates meta-data for multiple loadBalancers with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     * @param loadBalancerIds the loadBalancers to update
+     * @param tags  the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void updateTags(@Nonnull String[] loadBalancerIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Set meta-data for a loadBalancer. Remove any tags that were not provided by the incoming tags, and add or
+     * overwrite any new or pre-existing tags.
+     *
+     * @param loadBalancerIds the loadBalancer to set
+     * @param tags     the meta-data tags to set
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public void setTags( @Nonnull String loadBalancerId, @Nonnull Tag... tags ) throws CloudException, InternalException;
+
+    /**
+     * Set meta-data for multiple loadBalancers. Remove any tags that were not provided by the incoming tags, and add or
+     * overwrite any new or pre-existing tags.
+     *
+     * @param loadBalancerIds the loadBalancers to set
+     * @param tags      the meta-data tags to set
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public void setTags( @Nonnull String[] loadBalancerIds, @Nonnull Tag... tags ) throws CloudException, InternalException;
+    
     /********************************** DEPRECATED METHODS *************************************/
 
     /**
