@@ -65,7 +65,7 @@ public interface LoadBalancerCapabilities extends Capabilities{
     public @Nullable VisibleScope getLoadBalancerVisibleScope();
 
     /**
-     * Indicates whether a health check can be created independantly of a load balancer
+     * Indicates whether a health check can be created independently of a load balancer
      * @return false if a health check can exist without having been assigned to a load balancer
      * @throws CloudException
      * @throws InternalException
@@ -102,6 +102,14 @@ public interface LoadBalancerCapabilities extends Capabilities{
      * @throws InternalException an error occurred within the Dasein Cloud implementation
      */
     public @Nonnull Requirement identifyVlanOnCreateRequirement() throws CloudException, InternalException;
+
+    /**
+     * Indicates whether a load balancer requires a health check to be specified when it is created.
+     * @return the degree to which a health check should or must be part of the creation process
+     * @throws CloudException an error occurred while communicating with the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     */
+    public @Nonnull Requirement identifyHealthCheckOnCreateRequirement() throws CloudException, InternalException;
 
     /**
      * @return whether or not you are expected to provide an address as part of the create process or one gets assigned
