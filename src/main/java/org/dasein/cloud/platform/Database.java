@@ -52,6 +52,7 @@ public class Database implements Taggable, Serializable {
     private TimeWindow          snapshotWindow;
     private int                 snapshotRetentionInDays;
     private Map<String, String> tags;
+    private String              engineVersion;
 
     public Database() {
     }
@@ -252,5 +253,13 @@ public class Database implements Taggable, Serializable {
     @Override
     public void setTag(@Nonnull String key, @Nonnull String value) {
         getTags().put(key, value);
+    }
+
+    public String getEngineVersion() {
+        return engineVersion;
+    }
+
+    public void setEngineVersion(String engineVersion) {
+        this.engineVersion = engineVersion;
     }
 }
