@@ -35,11 +35,11 @@ import javax.annotation.Nullable;
  * @since 2014.08
  */
 public class VirtualMachineProductFilterOptions{
-    private boolean           matchesAny;
-    private String            regex;
-    private int               cpuCount = 0;
+    private boolean matchesAny;
+    private String  regex;
+    private int cpuCount = 0;
     private Storage<Megabyte> ramSize;
-    private String            datacenterId;
+    private String            dataCenterId;
 
     /**
      * Constructs an empty set of filtering options that will force match against any VM Product by default.
@@ -100,8 +100,8 @@ public class VirtualMachineProductFilterOptions{
         return ramSize;
     }
 
-    public @Nullable String getDatacenterId(){
-        return datacenterId;
+    public @Nullable String getDataCenterId(){
+        return dataCenterId;
     }
 
     /**
@@ -109,7 +109,7 @@ public class VirtualMachineProductFilterOptions{
      * @return true if this filter options object has any criteria associated with it
      */
     public boolean hasCriteria() {
-        return (cpuCount > 0 || (ramSize != null && ramSize.intValue() > 0) || regex != null || datacenterId != null);
+        return (cpuCount > 0 || (ramSize != null && ramSize.intValue() > 0) || regex != null || dataCenterId != null);
     }
 
     /**
@@ -160,8 +160,8 @@ public class VirtualMachineProductFilterOptions{
         return this;
     }
 
-    public @Nonnull VirtualMachineProductFilterOptions withDatacenterId(@Nonnull String datacenterId){
-        this.datacenterId = datacenterId;
+    public @Nonnull VirtualMachineProductFilterOptions withDataCenterId(@Nonnull String dataCenterId){
+        this.dataCenterId = dataCenterId;
         return this;
     }
 
@@ -198,8 +198,8 @@ public class VirtualMachineProductFilterOptions{
                 return true;
             }
         }
-        else if(datacenterId != null && product.getDataCenterId() != null){
-            boolean matches = product.getDataCenterId().equals(datacenterId);
+        else if( dataCenterId != null && product.getDataCenterId() != null){
+            boolean matches = product.getDataCenterId().equals(dataCenterId);
             if( !matches && !matchesAny ) {
                 return false;
             }
