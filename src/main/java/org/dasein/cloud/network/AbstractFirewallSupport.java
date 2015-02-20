@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -190,6 +191,19 @@ public abstract class AbstractFirewallSupport<T extends CloudProvider> implement
      */
     protected final @Nonnull T getProvider() {
         return provider;
+    }
+
+    @Override
+    public @Nonnull String getProviderTermForFirewall(@Nonnull Locale locale) {
+        try {
+            return getCapabilities().getProviderTermForFirewall(locale);
+        }
+        catch( CloudException e ) {
+            throw new RuntimeException("Unexpected problem with capabilities", e);
+        }
+        catch( InternalException e ) {
+            throw new RuntimeException("Unexpected problem with capabilities", e);
+        }
     }
 
     @Override
