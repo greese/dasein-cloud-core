@@ -138,7 +138,7 @@ public interface FirewallCapabilities extends Capabilities{
      * @throws CloudException
      * @throws InternalException
      */
-    public abstract Requirement requiresVLAN() throws CloudException, InternalException;
+    public @Nonnull Requirement requiresVLAN() throws CloudException, InternalException;
 
     /**
      * Indicates whether firewalls of the specified type (VLAN or flat network) support rules over the direction
