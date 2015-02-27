@@ -131,4 +131,14 @@ public abstract class AbstractTopologySupport<T extends CloudProvider> implement
             removeTags(id, tags);
         }
     }
+
+    @Override
+    public boolean createTopology(@Nonnull TopologyProvisionOptions withTopologyOptions) throws CloudException, InternalException {
+        throw new InternalException("Operation not supported for this cloud");
+    }
+
+    @Override
+    public boolean removeTopologies(@Nonnull String[] topologyIds) throws CloudException, InternalException {
+        throw new InternalException("Operation not supported for this cloud");
+    }
 }

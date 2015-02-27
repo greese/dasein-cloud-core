@@ -41,14 +41,14 @@ import java.util.ArrayList;
  * @version 2013.07 initial version
  * @since 2013.07
  */
-public abstract class AbstractConveredInfrastructureSupport<T extends CloudProvider> implements ConvergedInfrastructureSupport {
+public abstract class AbstractConvergedInfrastructureSupport<T extends CloudProvider> implements ConvergedInfrastructureSupport {
     private T provider;
 
     /**
      * Constructs a new topology support instance attached to the specified operational context.
      * @param provider the provider representing the current operational context
      */
-    public AbstractConveredInfrastructureSupport(@Nonnull T provider) {
+    public AbstractConvergedInfrastructureSupport(@Nonnull T provider) {
         this.provider = provider;
     }
 
