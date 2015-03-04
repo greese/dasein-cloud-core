@@ -133,5 +133,5 @@ public interface ShellKeySupport extends AccessControlledService {
      * @throws InternalException an error occurred within Dasein Cloud listing the keypairs
      * @throws CloudException an error occurred with the cloud provider listing the keyspairs
      */
-    public @Nonnull Collection<SSHKeypair> list() throws InternalException, CloudException;
+    public @Nonnull Iterable<SSHKeypair> list() throws InternalException, CloudException;
 }
