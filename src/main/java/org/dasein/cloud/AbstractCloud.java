@@ -86,14 +86,7 @@ public abstract class AbstractCloud extends CloudProvider {
     @Override
     public @Nullable PlatformServices getPlatformServices() {
         CloudProvider compute = getComputeCloud();
-
+        
         return (compute == null ? null : compute.getPlatformServices());
     }
-
-
-    @Override
-    public void clearCaches() {
-        // hook for when ProviderContext.connect() is called
-    }
-
 }
