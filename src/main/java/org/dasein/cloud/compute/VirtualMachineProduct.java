@@ -26,6 +26,11 @@ import org.dasein.util.uom.storage.Storage;
 
 import javax.annotation.Nonnull;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 @SuppressWarnings("UnusedDeclaration")
 public class VirtualMachineProduct implements Serializable {
@@ -40,17 +45,20 @@ public class VirtualMachineProduct implements Serializable {
     private float             standardHourlyRate;
     private VisibleScope      visibleScope;
     private String            dataCenterId;
+    private Architecture[]    architectures;
 
-    public enum Status        { CURRENT, DEPRECATED; }
+    public enum Status {CURRENT, DEPRECATED;}
 
     private Status status = Status.CURRENT;
 
-    public VirtualMachineProduct() { }
-    
-    public boolean equals(Object ob) {
-        return (ob != null && (ob == this || getClass().getName().equals(ob.getClass().getName()) && getProviderProductId().equals(((VirtualMachineProduct) ob).getProviderProductId())));
+    public VirtualMachineProduct() {
     }
-    
+
+    // TODO(stas): shouldn't this also compare other attributes?
+    public boolean equals(Object ob) {
+        return ( ob != null && ( ob == this || getClass().getName().equals(ob.getClass().getName()) && getProviderProductId().equals(( ( VirtualMachineProduct ) ob ).getProviderProductId()) ) );
+    }
+
     public String getName() {
         return name;
     }
@@ -74,11 +82,11 @@ public class VirtualMachineProduct implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
-    
+
     public String getProviderProductId() {
         return providerProductId;
     }
-    
+
     public void setProviderProductId(@Nonnull String providerProductId) {
         this.providerProductId = providerProductId;
     }
@@ -88,7 +96,7 @@ public class VirtualMachineProduct implements Serializable {
     }
 
     public void setRootVolumeSize(Storage<?> rootVolumeSize) {
-        this.rootVolumeSize = (Storage<Gigabyte>)rootVolumeSize.convertTo(Storage.GIGABYTE);
+        this.rootVolumeSize = ( Storage<Gigabyte> ) rootVolumeSize.convertTo(Storage.GIGABYTE);
     }
 
     public Storage<Megabyte> getRamSize() {
@@ -129,6 +137,19 @@ public class VirtualMachineProduct implements Serializable {
 
     public void setStatusDeprecated() {
         this.status = Status.DEPRECATED;
+    }
+
+    public void setArchitectures(Architecture ... architectures) {
+        this.architectures = architectures;
+    }
+
+    /**
+     * List of supported architectures. This is of type List as opposed to Iterable as this is a model class,
+     * so all data is already pre-populated.
+     * @return
+     */
+    public @Nonnull Architecture[] getArchitectures() {
+        return architectures != null ? architectures : new Architecture[0];
     }
 
     public String toString() {
