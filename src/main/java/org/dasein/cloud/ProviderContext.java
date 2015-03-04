@@ -273,7 +273,7 @@ public class ProviderContext extends ProviderContextCompat implements Serializab
                 }
             }
             CloudProvider p = cloud.buildProvider();
-
+            p.clearCaches();
             p.connect(this, computeProvider, cloud);
             if( computeContext != null ) {
                 effectiveAccountNumber = computeContext.getAccountNumber();
