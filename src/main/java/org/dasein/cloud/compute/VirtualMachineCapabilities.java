@@ -319,6 +319,14 @@ public interface VirtualMachineCapabilities extends Capabilities {
     public boolean supportsSpotVirtualMachines() throws InternalException, CloudException;
 
     /**
+     * Indicates whether the cloud supports idempotency through the use of a client generated request token
+     * @return true if token is supported
+     * @throws CloudException an error occurred querying the cloud for this kind of support
+     * @throws InternalException an error inside the Dasein Cloud implementation occurred determining support
+     */
+    public boolean supportsClientRequestToken() throws InternalException, CloudException;
+
+    /**
      * Non VMState Defined lifecycle supported operations
      * The 'can' operations return similar values but based on a specific VM state. These return whether or not there is support at all.
      */

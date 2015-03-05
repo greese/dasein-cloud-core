@@ -87,6 +87,7 @@ public class VMLaunchOptions {
     private String             winOwnerName;
     private String             winOrgName;
     private String             winProductSerialNum;
+    private String             clientRequestToken;
     // NOTE: SEE NOTE AT TOP OF ATTRIBUTE LIST WHEN ADDING/REMOVING/CHANGING AN ATTRIBUTE
 
     static public class NICConfig {
@@ -258,6 +259,7 @@ public class VMLaunchOptions {
         options.winOwnerName = winOwnerName;
         options.winOrgName = winOrgName;
         options.winProductSerialNum = winProductSerialNum;
+        options.clientRequestToken = clientRequestToken;
         return options;
     }
 
@@ -1142,6 +1144,21 @@ public class VMLaunchOptions {
      */
     public @Nonnull VMLaunchOptions withWinProductSerialNum(@Nonnull String winProductSerialNum) {
         this.winProductSerialNum = winProductSerialNum;
+        return this;
+    }
+
+    /**
+     * @return the client generated request token
+     */
+    public @Nullable String getClientRequestToken() {return clientRequestToken;}
+
+    /**
+     * Provides a request token used by the client to provide idempotency for certain API requests
+     * @param clientRequestToken the token
+     * @return this
+     */
+    public @Nonnull VMLaunchOptions withClientRequestToken(@Nonnull String clientRequestToken){
+        this.clientRequestToken = clientRequestToken;
         return this;
     }
 }
