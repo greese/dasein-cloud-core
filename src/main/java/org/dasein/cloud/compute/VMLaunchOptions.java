@@ -72,7 +72,7 @@ public class VMLaunchOptions {
     private boolean            ioOptimized;
     private boolean            ipForwardingAllowed;
     private String             roleId;
-    private boolean            associatePublicIpAddress;
+    private Boolean            associatePublicIpAddress;
     private String             affinityGroupId;
     private String             virtualMachineGroup;
     private String             resourcePoolId;
@@ -930,20 +930,20 @@ public class VMLaunchOptions {
     }
 
     /**
-     * Associate a public IP address at launch.
+     * Associate a public IP address at launch, use cloud defaults if null
      *
      * @param publicIpAddress
      * @return this
      */
-    public VMLaunchOptions withAssociatePublicIpAddress( final boolean publicIpAddress ) {
+    public VMLaunchOptions withAssociatePublicIpAddress( final Boolean publicIpAddress ) {
       this.associatePublicIpAddress = publicIpAddress;
       return this;
     }
 
     /**
-     * @see #withAssociatePublicIpAddress(boolean)
+     * @see #withAssociatePublicIpAddress(Boolean)
      */
-    public boolean isAssociatePublicIpAddress() {
+    public Boolean isAssociatePublicIpAddress() {
       return associatePublicIpAddress;
     }
 
