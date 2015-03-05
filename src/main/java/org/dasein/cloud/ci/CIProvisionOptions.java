@@ -20,7 +20,6 @@
 package org.dasein.cloud.ci;
 
 import org.dasein.cloud.CloudException;
-import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
 
 import javax.annotation.Nonnull;
@@ -33,14 +32,13 @@ import javax.annotation.Nonnull;
  * @since 2013.07
  */
 public class CIProvisionOptions {
-    static public @Nonnull CIProvisionOptions getInstance(@Nonnull String topologyId) {
-        CIProvisionOptions options = new CIProvisionOptions();
-
-        options.topologyId = topologyId;
-        return options;
-    }
-
+    private String baseInstanceName;
+    private String instanceTemplate;
     private String topologyId;
+    private String description;
+    private String name;
+    private String zone;
+    private int size;
 
     private CIProvisionOptions() { }
 
@@ -51,6 +49,8 @@ public class CIProvisionOptions {
      * @throws CloudException an error occurred in the cloud during the provisioning operation
      * @throws InternalException an error occurred within Dasein Cloud attempting to execute the request
      */
+    /*
+     * This does not feel like it fits...
     public @Nonnull ConvergedInfrastructure build(@Nonnull CloudProvider provider) throws CloudException, InternalException {
         CIServices ci = provider.getCIServices();
 
@@ -64,6 +64,21 @@ public class CIProvisionOptions {
         }
         return support.provision(this);
     }
+    */
+
+    static public @Nonnull CIProvisionOptions getInstance(@Nonnull String topologyId, @Nonnull String name, @Nonnull String description, @Nonnull String zone, @Nonnull int size, @Nonnull String instanceTemplate) {
+        CIProvisionOptions options = new CIProvisionOptions();
+
+        options.instanceTemplate = instanceTemplate;
+        options.topologyId = topologyId;
+        options.description = description;
+        options.zone = zone;
+        options.size = size;
+
+        options.name = name;
+        options.baseInstanceName = name;
+        return options;
+    }
 
     /**
      * @return the topology from which an infrastructure is being provisioned
@@ -72,8 +87,33 @@ public class CIProvisionOptions {
         return topologyId;
     }
 
-    @Override
-    public @Nonnull String toString() {
-        return topologyId;
+    public String getZone() {
+        return zone;
     }
+
+    public Integer getSize() {
+        return size;
+    }
+
+    public @Nonnull CIProvisionOptions withBaseInstanceName(@Nonnull String baseInstanceName) {
+        this.baseInstanceName = baseInstanceName;
+        return this;
+    }
+
+    public String getBaseInstanceName() {
+        return baseInstanceName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getInstanceTemplate() {
+        return instanceTemplate;
+    }
+
+    public String getName() {
+        return name;
+    }
+
 }
