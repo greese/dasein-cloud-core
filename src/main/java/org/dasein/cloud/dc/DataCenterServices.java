@@ -145,7 +145,7 @@ public interface DataCenterServices {
      * @throws InternalException an error occurred locally in processing the request
      * @throws CloudException    an error occurred within the cloud provider or the cloud provider did not approve of the request
      */
-    public @Nonnull StoragePool getStoragePool(@Nonnull String providerStoragePoolId) throws InternalException, CloudException;
+    public @Nullable StoragePool getStoragePool(@Nonnull String providerStoragePoolId) throws InternalException, CloudException;
 
 
     /**

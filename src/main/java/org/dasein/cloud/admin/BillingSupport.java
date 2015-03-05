@@ -69,7 +69,7 @@ public interface BillingSupport extends AccessControlledService {
      * @throws CloudException
      *             an error occurred within the cloud provider
      */
-    public Collection<InvoiceHeader> listBillingHistory(String accountId) throws InternalException, CloudException;
+    public Iterable<InvoiceHeader> listBillingHistory(String accountId) throws InternalException, CloudException;
 
     /**
      * Provides a list of invoices for the specified account since the supplied
@@ -86,7 +86,7 @@ public interface BillingSupport extends AccessControlledService {
      * @throws CloudException
      *             an error occurred within the cloud provider
      */
-    public Collection<InvoiceHeader> listBillingHistory(String accountId, Date date) throws InternalException,
+    public Iterable<InvoiceHeader> listBillingHistory(String accountId, Date date) throws InternalException,
             CloudException;
 
     /**

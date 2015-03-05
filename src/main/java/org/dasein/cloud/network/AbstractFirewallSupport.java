@@ -207,7 +207,7 @@ public abstract class AbstractFirewallSupport<T extends CloudProvider> implement
     }
 
     @Override
-    public @Nonnull Collection<FirewallRule> getRules(@Nonnull String firewallId) throws InternalException, CloudException {
+    public @Nonnull Iterable<FirewallRule> getRules(@Nonnull String firewallId) throws InternalException, CloudException {
         return Collections.emptyList();
     }
 
