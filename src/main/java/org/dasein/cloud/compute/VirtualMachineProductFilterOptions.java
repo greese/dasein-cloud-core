@@ -24,6 +24,7 @@ import org.dasein.util.uom.storage.Storage;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Arrays;
 
 /**
  * Options for filtering virtual machine products when querying the cloud provider. You may optionally filter on
@@ -40,6 +41,7 @@ public class VirtualMachineProductFilterOptions{
     private int cpuCount = 0;
     private Storage<Megabyte> ramSize;
     private String            dataCenterId;
+    private Architecture      architecture;
 
     /**
      * Constructs an empty set of filtering options that will force match against any VM Product by default.
@@ -109,7 +111,7 @@ public class VirtualMachineProductFilterOptions{
      * @return true if this filter options object has any criteria associated with it
      */
     public boolean hasCriteria() {
-        return (cpuCount > 0 || (ramSize != null && ramSize.intValue() > 0) || regex != null || dataCenterId != null);
+        return (cpuCount > 0 || (ramSize != null && ramSize.intValue() > 0) || regex != null || dataCenterId != null || architecture != null);
     }
 
     /**
@@ -165,6 +167,11 @@ public class VirtualMachineProductFilterOptions{
         return this;
     }
 
+    public @Nonnull VirtualMachineProductFilterOptions withArchitecture(@Nonnull Architecture architecture) {
+        this.architecture = architecture;
+        return this;
+    }
+
     /**
      * Matches a VM Product against the criteria in this set of filter options.
      * @param product the VM Product to test
@@ -198,8 +205,17 @@ public class VirtualMachineProductFilterOptions{
                 return true;
             }
         }
-        else if( dataCenterId != null && product.getDataCenterId() != null){
+        else if(dataCenterId != null && product.getDataCenterId() != null){
             boolean matches = product.getDataCenterId().equals(dataCenterId);
+            if( !matches && !matchesAny ) {
+                return false;
+            }
+            else if( matches && matchesAny ) {
+                return true;
+            }
+        }
+        else if(architecture != null && product.getArchitectures() != null) {
+            boolean matches = Arrays.binarySearch(product.getArchitectures(), architecture) >= 0;
             if( !matches && !matchesAny ) {
                 return false;
             }

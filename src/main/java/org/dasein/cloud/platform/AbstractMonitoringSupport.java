@@ -26,7 +26,6 @@ import org.dasein.cloud.OperationNotSupportedException;
 import org.dasein.cloud.identity.ServiceAction;
 
 import javax.annotation.Nonnull;
-import java.util.Collection;
 import java.util.Collections;
 
 /**
@@ -48,20 +47,22 @@ public abstract class AbstractMonitoringSupport<T extends CloudProvider> impleme
     }
 
     @Override
-    public @Nonnull Collection<Metric> listMetrics( MetricFilterOptions options ) throws InternalException, CloudException {
+    public @Nonnull Iterable<Metric> listMetrics(MetricFilterOptions options) throws InternalException, CloudException {
         return Collections.emptyList();
     }
 
     @Override
-    public @Nonnull Collection<Alarm> listAlarms( AlarmFilterOptions options ) throws InternalException, CloudException {
+    public @Nonnull Iterable<Alarm> listAlarms(AlarmFilterOptions options) throws InternalException, CloudException {
         return Collections.emptyList();
     }
 
-    @Override public void updateAlarm( @Nonnull AlarmUpdateOptions options ) throws InternalException, CloudException {
+    @Override
+    public void updateAlarm( @Nonnull AlarmUpdateOptions options ) throws InternalException, CloudException {
         throw new OperationNotSupportedException("Creating alarms is not currently implemented");
     }
 
-    @Override public void removeAlarms( @Nonnull String[] alarmNames ) throws InternalException, CloudException {
+    @Override
+    public void removeAlarms( @Nonnull String[] alarmNames ) throws InternalException, CloudException {
         throw new OperationNotSupportedException("Removing alarms is not currently implemented");
     }
 

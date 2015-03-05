@@ -447,8 +447,4 @@ public abstract class CloudProvider {
             storageCloudProvider = null;
         }
     }
-
-    public void clearCaches() {
-        // hook for when ProviderContext.connect() is called
-    }
 }

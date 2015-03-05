@@ -400,6 +400,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @return the list of server sizes available for the specified architecture
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      * @throws CloudException    an error occurred within the cloud provider
+     * @deprecated
      */
     public @Nonnull Iterable<VirtualMachineProduct> listProducts(@Nullable Architecture architecture) throws InternalException, CloudException;
 
@@ -423,6 +424,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @return the list of server sizes available matching the filter
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      * @throws CloudException    an error occurred within the cloud provider
+     * @deprecated
      */
     public @Nonnull Iterable<VirtualMachineProduct> listProducts(@Nullable VirtualMachineProductFilterOptions options, @Nullable Architecture architecture) throws InternalException, CloudException;
 

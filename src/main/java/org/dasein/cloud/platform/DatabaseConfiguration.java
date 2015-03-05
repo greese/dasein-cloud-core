@@ -19,6 +19,7 @@
 
 package org.dasein.cloud.platform;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
@@ -171,7 +172,11 @@ public class DatabaseConfiguration implements Map<String,ConfigurationParameter>
     @Override
     public @Nonnull Collection<ConfigurationParameter> values() {
         try {
-            return services.listParameters(providerConfigurationId);
+            Collection<ConfigurationParameter> result = new ArrayList<ConfigurationParameter>();
+            for( ConfigurationParameter param : services.listParameters(providerConfigurationId) ) {
+                result.add(param);
+            }
+            return result;
         }
         catch( CloudException e ) {
             throw new RuntimeException(e);

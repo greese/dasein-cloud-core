@@ -290,7 +290,7 @@ public abstract class AbstractVLANSupport<T extends CloudProvider> implements VL
     }
 
     @Override
-    public @Nonnull Collection<String> listFirewallIdsForNIC(@Nonnull String nicId) throws CloudException, InternalException {
+    public @Nonnull Iterable<String> listFirewallIdsForNIC(@Nonnull String nicId) throws CloudException, InternalException {
         return Collections.emptyList();
     }
 
@@ -642,7 +642,7 @@ public abstract class AbstractVLANSupport<T extends CloudProvider> implements VL
     }
 
     @Override
-    public @Nonnull Collection<InternetGateway> listInternetGateways( @Nullable String vlanId ) throws CloudException, InternalException {
+    public @Nonnull Iterable<InternetGateway> listInternetGateways( @Nullable String vlanId ) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Internet gateways are not currently implemented for " + getProvider().getCloudName());
     }
 

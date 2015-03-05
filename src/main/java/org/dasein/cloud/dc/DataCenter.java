@@ -36,6 +36,8 @@ public class DataCenter implements Serializable {
     private String  name;
     private String  providerDataCenterId;
     private String  regionId;
+    private boolean isCompute;
+    private boolean isStorage;
     
     /**
      * Constructs an empty data center object, only useful in marshalling and unmarshalling.
@@ -55,6 +57,8 @@ public class DataCenter implements Serializable {
         this.name = name;
         this.active = active;
         this.available = available;
+        this.isCompute = true;
+        this.isStorage = true;
     }
 
     public boolean equals(Object ob) {
@@ -156,4 +160,28 @@ public class DataCenter implements Serializable {
     public String toString() {
         return name;
     }
+
+    /**
+     * Indicates whether the datacenter supports compute operations
+     * @return true if the datacenter supports compute
+     */
+    public boolean getIsCompute() {return isCompute;}
+
+    /**
+     * Indicates whether the datacenter supports compute operations
+     * @param isCompute true if the datacenter supports compute
+     */
+    public void setIsCompute(boolean isCompute) {this.isCompute = isCompute;}
+
+    /**
+     * Indicates whether the datacenter supports storage operations
+     * @return true if the datacenter supports storage
+     */
+    public boolean getIsStorage() {return isStorage;}
+
+    /**
+     * Indicates whether the datacenter supports storage operations
+     * @param isStorage true if the datacenter supports storage
+     */
+    public void setIsStorage(boolean isStorage){this.isStorage = isStorage;}
 }
