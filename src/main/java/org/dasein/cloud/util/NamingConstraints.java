@@ -184,6 +184,8 @@ public class NamingConstraints {
     private boolean spaces;
     private char[]  symbolConstraints;
     private boolean symbols;
+    private String  regularExpression;
+    private boolean lastCharacterSymbolAllowed;
 
     private NamingConstraints() { }
 
@@ -487,6 +489,11 @@ public class NamingConstraints {
     }
 
     /**
+     * @return true if the last character in a name is allowed to be a symbol
+     */
+    public boolean isLastCharacterSymbolAllowed() { return lastCharacterSymbolAllowed; }
+
+    /**
      * @return true if these naming conventions support only Latin 1 characters
      */
     public boolean isLatin1Constrained() {
@@ -625,6 +632,20 @@ public class NamingConstraints {
     public @Nonnull
     NamingConstraints withNoSymbols() {
         symbols = false;
+        return this;
+    }
+
+    public @Nonnull NamingConstraints withRegularExpression(String regularExpression){
+        this.regularExpression = regularExpression;
+        return this;
+    }
+
+    public @Nullable String getRegularExpression(){
+        return regularExpression;
+    }
+
+    public @Nonnull NamingConstraints withLastCharacterSymbolAllowed(boolean lastCharacterSymbolAllowed){
+        this.lastCharacterSymbolAllowed = lastCharacterSymbolAllowed;
         return this;
     }
 }
