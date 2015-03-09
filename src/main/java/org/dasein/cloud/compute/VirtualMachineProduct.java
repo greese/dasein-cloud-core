@@ -25,27 +25,32 @@ import org.dasein.util.uom.storage.Megabyte;
 import org.dasein.util.uom.storage.Storage;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @SuppressWarnings("UnusedDeclaration")
 public class VirtualMachineProduct implements Serializable {
     private static final long serialVersionUID = -6761551014614219494L;
 
-    private int               cpuCount;
-    private String            description;
-    private Storage<Gigabyte> rootVolumeSize;
-    private String            name;
-    private String            providerProductId;
-    private Storage<Megabyte> ramSize;
-    private float             standardHourlyRate;
-    private VisibleScope      visibleScope;
-    private String            dataCenterId;
-    private Architecture[]    architectures;
+    private int                 cpuCount;
+    private String              description;
+    private Storage<Gigabyte>   rootVolumeSize;
+    private String              name;
+    private String              providerProductId;
+    private Storage<Megabyte>   ramSize;
+    private float               standardHourlyRate;
+    private VisibleScope        visibleScope;
+    private String              dataCenterId;
+    private Architecture[]      architectures;
+
+    private Map<String, String> providerMetadata;
 
     public enum Status {CURRENT, DEPRECATED;}
 
@@ -104,7 +109,7 @@ public class VirtualMachineProduct implements Serializable {
     }
 
     public void setRamSize(Storage<?> ramSize) {
-        this.ramSize = (Storage<Megabyte>)ramSize.convertTo(Storage.MEGABYTE);
+        this.ramSize = ( Storage<Megabyte> ) ramSize.convertTo(Storage.MEGABYTE);
     }
 
     public float getStandardHourlyRate() {
@@ -115,15 +120,15 @@ public class VirtualMachineProduct implements Serializable {
         this.standardHourlyRate = standardHourlyRate;
     }
 
-    public void setVisibleScope(VisibleScope visibleScope){
+    public void setVisibleScope(VisibleScope visibleScope) {
         this.visibleScope = visibleScope;
     }
 
-    public VisibleScope getVisibleScope(){
+    public VisibleScope getVisibleScope() {
         return this.visibleScope;
     }
 
-    public String getDataCenterId(){
+    public String getDataCenterId() {
         return this.dataCenterId;
     }
 
@@ -150,6 +155,21 @@ public class VirtualMachineProduct implements Serializable {
      */
     public @Nonnull Architecture[] getArchitectures() {
         return architectures != null ? architectures : new Architecture[0];
+    }
+
+    /**
+     * Cloud-specific metadata that drivers may or may not use for matching products with machine images. This is considered driver-internal.
+     * @return product metadata
+     */
+    public @Nonnull Map<String, String> getProviderMetadata() {
+        if( providerMetadata == null ) {
+            providerMetadata = new HashMap<String, String>();
+        }
+        return providerMetadata;
+    }
+
+    public void setProviderMetadata(@Nonnull Map<String, String> providerMetadata) {
+        getProviderMetadata().putAll(providerMetadata);
     }
 
     public String toString() {
