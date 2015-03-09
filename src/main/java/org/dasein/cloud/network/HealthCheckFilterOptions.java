@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -95,7 +95,7 @@ public class HealthCheckFilterOptions {
      * matched in order for the Health Check to pass the filter (<code>false</code>).
      * @return whether matching any single criterion is sufficient to consider a Health Check a match
      */
-    public @Nullable boolean isMatchAny(){
+    public boolean isMatchAny(){
         return this.matchesAny;
     }
 
@@ -133,7 +133,7 @@ public class HealthCheckFilterOptions {
         return this;
     }
 
-    public @Nonnull HealthCheckFilterOptions matchingPort(@Nonnull int port){
+    public @Nonnull HealthCheckFilterOptions matchingPort(int port){
         this.port = port;
         return this;
     }

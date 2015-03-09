@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -91,10 +91,10 @@ public class VirtualMachine implements Networkable, Taggable {
     private VmStatus                providerVmStatus;
     private String                  virtualMachineGroup;
     private VisibleScope            visibleScope;
-    private String                  userData;
     private VirtualMachineLifecycle lifecycle;
     private String                  spotRequestId; // TODO - add filtering by, add setter/getter
     private String                  resourcePoolId;
+    private String                  clientRequestToken;
 
     public VirtualMachine() {
     }
@@ -545,7 +545,7 @@ public class VirtualMachine implements Networkable, Taggable {
         return getTags().get(tag);
     }
 
-    public synchronized Map<String, String> getTags() {
+    public synchronized @Nonnull Map<String, String> getTags() {
         if( tags == null ) {
             tags = new HashMap<String, String>();
         }
@@ -712,14 +712,6 @@ public class VirtualMachine implements Networkable, Taggable {
         return this.visibleScope;
     }
 
-    public String getUserData() {
-        return userData;
-    }
-
-    public void setUserData( String userData ) {
-        this.userData = userData;
-    }
-
     public VirtualMachineLifecycle getLifecycle() {
         if( lifecycle == null ) {
             lifecycle = VirtualMachineLifecycle.NORMAL;
@@ -746,4 +738,8 @@ public class VirtualMachine implements Networkable, Taggable {
     public void setResourcePoolId(String resourcePoolId) {
         this.resourcePoolId = resourcePoolId;
     }
+
+    public String getClientRequestToken() {return clientRequestToken;}
+
+    public void setClientRequestToken(String clientRequestToken) {this.clientRequestToken = clientRequestToken;}
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -30,18 +30,24 @@ import java.io.Serializable;
  */
 public class DataCenter implements Serializable {
     private static final long serialVersionUID = -9043785446229477796L;
-    
+
     private boolean active;
     private boolean available;
     private String  name;
     private String  providerDataCenterId;
     private String  regionId;
-    
+    private boolean compute = true;
+    private boolean storage = true;
+
     /**
      * Constructs an empty data center object, only useful in marshalling and unmarshalling.
+     * @deprecated
      */
-    public DataCenter() { }
-    
+    // FIXME(stas): Get rid of this ASAP. It was meant for marshalling which has never happened and was not meant to be
+    // used programmatically, but instead *every* cloud driver is using only this constructor and not the correct one!
+    public DataCenter() {
+    }
+
     /**
      * Constructs a new data center object from the specified state values.
      * @param dataCenterId the provider identifier for the data center 
@@ -55,6 +61,8 @@ public class DataCenter implements Serializable {
         this.name = name;
         this.active = active;
         this.available = available;
+        this.compute = true;
+        this.storage = true;
     }
 
     public boolean equals(Object ob) {
@@ -114,7 +122,7 @@ public class DataCenter implements Serializable {
     }
  
     /**
-     * Used only for marshalling and not to be used programatically.
+     * Used only for marshalling and not to be used programmatically.
      * @param active whether or not the marshalled data center is active
      */
     public void setActive(boolean active) {
@@ -155,5 +163,31 @@ public class DataCenter implements Serializable {
     
     public String toString() {
         return name;
+    }
+
+    /**
+     * Indicates whether the data center supports compute operations
+     * @return true if the data center supports compute
+     */
+    public boolean isCompute() {return compute;}
+
+    /**
+     * Indicates whether the data center supports compute operations
+     * @param compute true if the data center supports compute
+     */
+    public void setCompute(boolean compute) {this.compute = compute;}
+
+    /**
+     * Indicates whether the data center supports storage operations
+     * @return true if the data center supports storage
+     */
+    public boolean isStorage() {return storage;}
+
+    /**
+     * Indicates whether the data center supports storage operations
+     * @param storage true if the data center supports storage
+     */
+    public void setStorage(boolean storage){
+        this.storage = storage;
     }
 }

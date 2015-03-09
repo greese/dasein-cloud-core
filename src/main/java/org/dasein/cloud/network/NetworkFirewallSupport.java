@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -202,7 +202,7 @@ public interface NetworkFirewallSupport extends AccessControlledService {
      * @throws InternalException an error occurred locally independent of any events in the cloud
      * @throws CloudException an error occurred with the cloud provider while performing the operation
      */
-    public @Nonnull Collection<Firewall> listFirewalls() throws InternalException, CloudException;
+    public @Nonnull Iterable<Firewall> listFirewalls() throws InternalException, CloudException;
 
     /**
      * Provides the rules supported by the named firewall ordered in order of precedence with the most

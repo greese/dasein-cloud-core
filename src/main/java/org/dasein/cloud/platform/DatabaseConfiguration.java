@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -19,6 +19,7 @@
 
 package org.dasein.cloud.platform;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
@@ -26,6 +27,8 @@ import java.util.Set;
 
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
+
+import javax.annotation.Nonnull;
 
 public class DatabaseConfiguration implements Map<String,ConfigurationParameter> {
     private String description;
@@ -74,7 +77,7 @@ public class DatabaseConfiguration implements Map<String,ConfigurationParameter>
     }
     
     @Override
-    public Set<java.util.Map.Entry<String,ConfigurationParameter>> entrySet() {
+    public @Nonnull Set<java.util.Map.Entry<String,ConfigurationParameter>> entrySet() {
         HashSet<java.util.Map.Entry<String,ConfigurationParameter>> set = new HashSet<java.util.Map.Entry<String,ConfigurationParameter>>();
         
         for( ConfigurationParameter cfg : values() ) {
@@ -108,7 +111,7 @@ public class DatabaseConfiguration implements Map<String,ConfigurationParameter>
     }
     
     @Override
-    public Set<String> keySet() {
+    public @Nonnull Set<String> keySet() {
         HashSet<String> set = new HashSet<String>();
         
         for( ConfigurationParameter cfg : values() ) {
@@ -132,7 +135,7 @@ public class DatabaseConfiguration implements Map<String,ConfigurationParameter>
     }
     
     @Override
-    public void putAll(Map<? extends String,? extends ConfigurationParameter> items) {
+    public void putAll(@Nonnull Map<? extends String,? extends ConfigurationParameter> items) {
         Collection<? extends ConfigurationParameter> values = items.values();
         ConfigurationParameter[] parameters = values.toArray(new ConfigurationParameter[values.size()]);
 
@@ -167,9 +170,13 @@ public class DatabaseConfiguration implements Map<String,ConfigurationParameter>
     }
     
     @Override
-    public Collection<ConfigurationParameter> values() {
+    public @Nonnull Collection<ConfigurationParameter> values() {
         try {
-            return services.listParameters(providerConfigurationId);
+            Collection<ConfigurationParameter> result = new ArrayList<ConfigurationParameter>();
+            for( ConfigurationParameter param : services.listParameters(providerConfigurationId) ) {
+                result.add(param);
+            }
+            return result;
         }
         catch( CloudException e ) {
             throw new RuntimeException(e);

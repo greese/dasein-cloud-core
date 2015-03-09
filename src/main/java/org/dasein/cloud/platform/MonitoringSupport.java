@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -52,7 +52,7 @@ public interface MonitoringSupport extends AccessControlledService {
    * @throws InternalException
    * @throws CloudException
    */
-  public @Nonnull Collection<Metric> listMetrics( MetricFilterOptions options ) throws InternalException, CloudException;
+  public @Nonnull Iterable<Metric> listMetrics(MetricFilterOptions options) throws InternalException, CloudException;
 
   /**
    * List all alarms.
@@ -62,7 +62,7 @@ public interface MonitoringSupport extends AccessControlledService {
    * @throws InternalException
    * @throws CloudException
    */
-  public @Nonnull Collection<Alarm> listAlarms( AlarmFilterOptions options ) throws InternalException, CloudException;
+  public @Nonnull Iterable<Alarm> listAlarms(AlarmFilterOptions options) throws InternalException, CloudException;
 
   /**
    * Adds or updates an existing alarm.

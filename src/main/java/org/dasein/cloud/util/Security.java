@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -46,7 +46,6 @@ public class Security {
         int length;
 
         if( maxLength < minLength ) {
-            maxLength = minLength;
             length = minLength;
         }
         else {

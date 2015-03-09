@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -72,11 +72,11 @@ public interface PushNotificationSupport extends AccessControlledService {
     
     public boolean isSubscribed() throws CloudException, InternalException;
     
-    public Collection<Subscription> listSubscriptions(String optionalTopicId) throws CloudException, InternalException;
+    public @Nonnull Iterable<Subscription> listSubscriptions(String optionalTopicId) throws CloudException, InternalException;
 
     public @Nonnull Iterable<ResourceStatus> listTopicStatus() throws CloudException, InternalException;
 
-    public Collection<Topic> listTopics() throws CloudException, InternalException;
+    public @Nonnull Iterable<Topic> listTopics() throws CloudException, InternalException;
 
     public String publish(String providerTopicId, String subject, String message) throws CloudException, InternalException;
     

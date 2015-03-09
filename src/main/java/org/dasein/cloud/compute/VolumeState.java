@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -22,5 +22,6 @@ package org.dasein.cloud.compute;
 public enum VolumeState {
     PENDING,
     AVAILABLE,
-    DELETED
+    DELETED,
+    ERROR
 }

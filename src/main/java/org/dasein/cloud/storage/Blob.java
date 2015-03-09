@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -19,6 +19,9 @@
 
 package org.dasein.cloud.storage;
 
+import java.util.HashMap;
+import java.util.Map;
+import org.dasein.cloud.Taggable;
 import org.dasein.util.uom.storage.*;
 
 import javax.annotation.Nonnegative;
@@ -31,7 +34,7 @@ import javax.annotation.Nullable;
  * </p>
  * @author George Reese @ enstratius (http://www.enstratius.com)
  */
-public class Blob implements Comparable<Blob> {
+public class Blob implements Comparable<Blob> , Taggable {
     static public @Nonnull Blob getInstance(@Nonnull String providerRegionId, @Nonnull String location, @Nonnull String bucketName, @Nonnegative long creationTimestamp) {
         Blob blob = new Blob();
 
@@ -62,13 +65,12 @@ public class Blob implements Comparable<Blob> {
     private String                                    objectName;
     private String                                    providerRegionId;
     private Storage<org.dasein.util.uom.storage.Byte> size;
+    private Map<String, String>                       tags;
     
     private Blob() { }
 
     @Override
     public int compareTo(@Nullable Blob other) {
-        int x;
-        
         if( other == null ) {
             return 1;
         }
@@ -139,5 +141,18 @@ public class Blob implements Comparable<Blob> {
     @Override
     public @Nonnull String toString() {
         return ((bucketName == null ? "/" : (bucketName.startsWith("/") ? bucketName : "/" + bucketName)) + (objectName == null ? "" : ("/" + objectName)));
+    }
+
+    @Override
+    public @Nonnull Map<String, String> getTags() {
+        if( tags == null ) {
+            tags = new HashMap<String, String>();
+        }
+        return tags;
+    }
+
+    @Override
+    public void setTag(@Nonnull String key, @Nonnull String value) {
+        getTags().put(key, value);
     }
 }

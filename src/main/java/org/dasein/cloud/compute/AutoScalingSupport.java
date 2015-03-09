@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -102,19 +102,19 @@ public interface AutoScalingSupport extends AccessControlledService {
 
     public void deleteScalingPolicy( String policyName, String autoScalingGroupName ) throws CloudException, InternalException;
 
-    public Collection<ScalingPolicy> listScalingPolicies( @Nullable String autoScalingGroupName ) throws CloudException, InternalException;
+    public Iterable<ScalingPolicy> listScalingPolicies( @Nullable String autoScalingGroupName ) throws CloudException, InternalException;
 
     public ScalingPolicy getScalingPolicy( @Nonnull String policyName ) throws CloudException, InternalException;
 
     public Iterable<ResourceStatus> listScalingGroupStatus() throws CloudException, InternalException;
 
-    public Collection<ScalingGroup> listScalingGroups( AutoScalingGroupFilterOptions options ) throws CloudException, InternalException;
+    public Iterable<ScalingGroup> listScalingGroups( AutoScalingGroupFilterOptions options ) throws CloudException, InternalException;
 
-    public Collection<ScalingGroup> listScalingGroups() throws CloudException, InternalException;
+    public Iterable<ScalingGroup> listScalingGroups() throws CloudException, InternalException;
 
     public Iterable<ResourceStatus> listLaunchConfigurationStatus() throws CloudException, InternalException;
 
-    public Collection<LaunchConfiguration> listLaunchConfigurations() throws CloudException, InternalException;
+    public Iterable<LaunchConfiguration> listLaunchConfigurations() throws CloudException, InternalException;
 
     public void setDesiredCapacity( String scalingGroupId, int capacity ) throws CloudException, InternalException;
 

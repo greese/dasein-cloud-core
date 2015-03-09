@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -39,7 +39,7 @@ public class DaseinResponseHandlerWithMapper<T, V> implements ResponseHandler<V>
     private StreamProcessor<T> processor;
     private DriverToCoreMapper<T,V> mapper;
 
-    public DaseinResponseHandlerWithMapper(StreamProcessor processor, DriverToCoreMapper<T, V> mapper, Class<T> classType) {
+    public DaseinResponseHandlerWithMapper(StreamProcessor<T> processor, DriverToCoreMapper<T, V> mapper, Class<T> classType) {
         this.processor = processor;
         this.mapper = mapper;
         this.classType = classType;
@@ -54,7 +54,7 @@ public class DaseinResponseHandlerWithMapper<T, V> implements ResponseHandler<V>
                     httpResponse.getStatusLine().getReasonPhrase(), EntityUtils.toString(httpResponse.getEntity()));
         }
         else {
-            T responseObject = (T) processor.read(httpResponse.getEntity().getContent(), classType);
+            T responseObject = processor.read(httpResponse.getEntity().getContent(), classType);
             if (responseObject == null)
                 return null;
 

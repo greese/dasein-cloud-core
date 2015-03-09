@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -421,7 +421,7 @@ public interface VLANSupport extends AccessControlledService {
      * @throws CloudException an error occurred with the cloud providing fetching the firewall IDs
      * @throws InternalException a local error occurred while attempting to communicate with the cloud
      */
-    public Collection<String> listFirewallIdsForNIC(@Nonnull String nicId) throws CloudException, InternalException;
+    public @Nonnull Iterable<String> listFirewallIdsForNIC(@Nonnull String nicId) throws CloudException, InternalException;
 
     /**
      * Lists all Internet Gateways for an account or optionally all Internet Gateways for a VLAN.
@@ -430,7 +430,7 @@ public interface VLANSupport extends AccessControlledService {
      * @throws CloudException an error occurred fetching the internet gatewayss from the cloud provider
      * @throws InternalException a local error occurred processing the internet gateways
      */
-    public @Nonnull Collection<InternetGateway> listInternetGateways(@Nullable String vlanId) throws CloudException, InternalException;
+    public @Nonnull Iterable<InternetGateway> listInternetGateways(@Nullable String vlanId) throws CloudException, InternalException;
 
     /**
      * Lists the status of all network interfaces currently provisioned in the current region.

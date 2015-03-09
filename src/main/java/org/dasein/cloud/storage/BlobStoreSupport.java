@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -22,6 +22,7 @@ package org.dasein.cloud.storage;
 import org.dasein.cloud.AccessControlledService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
+import org.dasein.cloud.Tag;
 import org.dasein.cloud.identity.ServiceAction;
 import org.dasein.cloud.util.NamingConstraints;
 import org.dasein.util.uom.storage.Storage;
@@ -108,4 +109,73 @@ public interface BlobStoreSupport extends AccessControlledService {
     public void renameObject(@Nullable String bucket, @Nonnull String oldName, @Nonnull String newName) throws CloudException, InternalException;
         
     public @Nonnull Blob upload(@Nonnull File sourceFile, @Nullable String bucket, @Nonnull String objectName) throws CloudException, InternalException;
+    
+    /**
+     * Updates meta-data for a bucket with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     *
+     * @param bucket  the bucket to update
+     * @param tags    the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void updateTags(@Nonnull String bucket, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Updates meta-data for multiple buckets with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     *
+     * @param buckets  the buckets to update
+     * @param tags     the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void updateTags(@Nonnull String[] buckets, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Removes meta-data from an bucket. If tag values are set, their removal is dependent on underlying cloud
+     * provider behavior. They may be removed only if the tag value matches or they may be removed regardless of the
+     * value.
+     *
+     * @param bucket  the bucket to update
+     * @param tags    the meta-data tags to remove
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void removeTags(@Nonnull String bucket, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Removes meta-data from multiple buckets. If tag values are set, their removal is dependent on underlying cloud
+     * provider behavior. They may be removed only if the tag value matches or they may be removed regardless of the
+     * value.
+     *
+     * @param buckets  the bucket to update
+     * @param tags     the meta-data tags to remove
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void removeTags(@Nonnull String[] buckets, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Set meta-data for an bucket. Remove any tags that were not provided by the incoming tags, and add or
+     * overwrite any new or pre-existing tags.
+     *
+     * @param bucket  the bucket to update
+     * @param tags    the meta-data tags to remove
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void setTags( @Nonnull String bucket, @Nonnull Tag... tags ) throws CloudException, InternalException;
+
+    /**
+     * Set meta-data for multiple buckets. Remove any tags that were not provided by the incoming tags, and add or
+     * overwrite any new or pre-existing tags.
+     *
+     * @param buckets  the buckets to update
+     * @param tags     the meta-data tags to remove
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void setTags( @Nonnull String[] buckets, @Nonnull Tag... tags ) throws CloudException, InternalException;
+
 }

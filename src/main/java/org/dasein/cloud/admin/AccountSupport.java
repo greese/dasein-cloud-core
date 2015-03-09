@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -85,7 +85,7 @@ public interface AccountSupport extends AccessControlledService {
      * @throws CloudException
      *             an error occurred within the cloud provider
      */
-    public Collection<String> listTimeZones() throws InternalException, CloudException;
+    public Iterable<String> listTimeZones() throws InternalException, CloudException;
 
     /**
      * DELETES the specified account. Any and all resources associated with the
@@ -111,7 +111,7 @@ public interface AccountSupport extends AccessControlledService {
      * @throws CloudException
      *             an error occurred within the cloud provider
      */
-    public Collection<Account> listAccounts() throws InternalException, CloudException;
+    public Iterable<Account> listAccounts() throws InternalException, CloudException;
 
     /**
      * Provides the data for a specific account.

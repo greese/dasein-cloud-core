@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -317,6 +317,30 @@ public interface VirtualMachineCapabilities extends Capabilities {
      * @throws CloudException
      */
     public boolean supportsSpotVirtualMachines() throws InternalException, CloudException;
+
+    /**
+     * Indicates whether the cloud supports idempotency through the use of a client generated request token
+     * @return true if token is supported
+     * @throws CloudException an error occurred querying the cloud for this kind of support
+     * @throws InternalException an error inside the Dasein Cloud implementation occurred determining support
+     */
+    public boolean supportsClientRequestToken() throws InternalException, CloudException;
+
+    /**
+     * Indicates whether the shell keys for VM access are stored in the cloud or need to be passed in during VM launch each time
+     * @return true if cloud stores shell keys
+     * @throws CloudException an error occurred querying the cloud for this kind of support
+     * @throws InternalException an error inside the Dasein Cloud implementation occurred determining support
+     */
+    public boolean supportsCloudStoredShellKey() throws InternalException, CloudException;
+
+    /**
+     * Indicates whether a virtual machine product is constrained by datacenters in the cloud
+     * @return true if the virtual machine product is constrained by a datacenter
+     * @throws CloudException an error occurred querying the cloud for this kind of support
+     * @throws InternalException an error inside the Dasein Cloud implementation occurred determining support
+     */
+    public boolean isVMProductDCConstrained() throws InternalException, CloudException;
 
     /**
      * Non VMState Defined lifecycle supported operations

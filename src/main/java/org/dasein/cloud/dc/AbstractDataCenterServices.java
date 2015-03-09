@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -38,7 +38,7 @@ import java.util.Locale;
  * @since 2015.01
  */
 public abstract class AbstractDataCenterServices<T extends CloudProvider> implements DataCenterServices {
-    private T provider;
+    private final T provider;
 
     public AbstractDataCenterServices(T provider) {
         this.provider = provider;
@@ -52,18 +52,18 @@ public abstract class AbstractDataCenterServices<T extends CloudProvider> implem
     }
 
     @Override
-    public DataCenter getDataCenter( String providerDataCenterId ) throws InternalException, CloudException {
+    public @Nullable DataCenter getDataCenter(@Nonnull String providerDataCenterId) throws InternalException, CloudException {
         throw new OperationNotSupportedException("Getting a data center by id is not currently implemented for " + getProvider().getCloudName());
     }
 
     @Override
-    public Region getRegion( String providerRegionId ) throws InternalException, CloudException {
+    public @Nullable Region getRegion(@Nonnull String providerRegionId) throws InternalException, CloudException {
         throw new OperationNotSupportedException("Getting a region by id is not currently implemented for " + getProvider().getCloudName());
     }
 
     @Override
     @Deprecated
-    public String getProviderTermForDataCenter( Locale locale ) {
+    public String getProviderTermForDataCenter(Locale locale) {
         try {
             return getCapabilities().getProviderTermForDataCenter(locale);
         }
@@ -74,7 +74,7 @@ public abstract class AbstractDataCenterServices<T extends CloudProvider> implem
 
     @Override
     @Deprecated
-    public String getProviderTermForRegion( Locale locale ) {
+    public String getProviderTermForRegion(Locale locale) {
         try {
             return getCapabilities().getProviderTermForRegion(locale);
         }
@@ -84,42 +84,42 @@ public abstract class AbstractDataCenterServices<T extends CloudProvider> implem
     }
 
     @Override
-    public Collection<DataCenter> listDataCenters( String providerRegionId ) throws InternalException, CloudException {
+    public @Nonnull Iterable<DataCenter> listDataCenters(@Nonnull String providerRegionId) throws InternalException, CloudException {
         throw new OperationNotSupportedException("Listing data centers by region is not currently implemented for " + getProvider().getCloudName());
     }
 
     @Override
-    public Collection<Region> listRegions() throws InternalException, CloudException {
+    public @Nonnull Iterable<Region> listRegions() throws InternalException, CloudException {
         throw new OperationNotSupportedException("Listing regions is not currently implemented for " + getProvider().getCloudName());
     }
 
     @Override
-    public @Nonnull Collection<ResourcePool> listResourcePools( String providerDataCenterId ) throws InternalException, CloudException {
+    public @Nonnull Iterable<ResourcePool> listResourcePools(@Nonnull String providerDataCenterId) throws InternalException, CloudException {
         throw new OperationNotSupportedException("Listing resource pools by data center id is not currently implemented for " + getProvider().getCloudName());
     }
 
     @Override
-    public @Nullable ResourcePool getResourcePool( String providerResourcePoolId ) throws InternalException, CloudException {
+    public @Nullable ResourcePool getResourcePool(@Nonnull String providerResourcePoolId) throws InternalException, CloudException {
         throw new OperationNotSupportedException("Getting a resource pool by id is not currently implemented for " + getProvider().getCloudName());
     }
 
     @Override
-    public @Nonnull Collection<StoragePool> listStoragePools() throws InternalException, CloudException {
+    public @Nonnull Iterable<StoragePool> listStoragePools() throws InternalException, CloudException {
         throw new OperationNotSupportedException("Listing storage pools is not currently implemented for " + getProvider().getCloudName());
     }
 
     @Override
-    public @Nonnull StoragePool getStoragePool( String providerStoragePoolId ) throws InternalException, CloudException {
+    public @Nullable StoragePool getStoragePool(@Nonnull String providerStoragePoolId) throws InternalException, CloudException {
         throw new OperationNotSupportedException("Getting a storage pool by id is not currently implemented for " + getProvider().getCloudName());
     }
 
     @Override
-    public @Nonnull Collection<Folder> listVMFolders() throws InternalException, CloudException {
+    public @Nonnull Iterable<Folder> listVMFolders() throws InternalException, CloudException {
         throw new OperationNotSupportedException("Listing VM folders is not currently implemented for " + getProvider().getCloudName());
     }
 
     @Override
-    public @Nonnull Folder getVMFolder( String providerVMFolderId ) throws InternalException, CloudException {
+    public @Nullable Folder getVMFolder(@Nonnull String providerVMFolderId) throws InternalException, CloudException {
         throw new OperationNotSupportedException("Getting a VM folder by id is not currently implemented for " + getProvider().getCloudName());
     }
 }

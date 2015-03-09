@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -26,6 +26,8 @@ import org.dasein.cloud.AccessControlledService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.identity.ServiceAction;
+
+import javax.annotation.Nonnull;
 
 /**
  *  Provides interaction with the pricing and billing mechanics for the cloud. An application
@@ -54,9 +56,9 @@ public interface PrepaymentSupport extends AccessControlledService {
     
     public boolean isSubscribed() throws CloudException, InternalException;
 
-    public Collection<Offering> listOfferings() throws InternalException, CloudException;
+    public @Nonnull Iterable<Offering> listOfferings() throws InternalException, CloudException;
 
-    public Collection<Prepayment> listPrepayments() throws InternalException, CloudException;
+    public @Nonnull Iterable<Prepayment> listPrepayments() throws InternalException, CloudException;
 
     public String prepay(String offeringId, int count) throws InternalException, CloudException;
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -24,6 +24,7 @@ import org.dasein.util.uom.storage.Storage;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Arrays;
 
 /**
  * Options for filtering virtual machine products when querying the cloud provider. You may optionally filter on
@@ -35,11 +36,12 @@ import javax.annotation.Nullable;
  * @since 2014.08
  */
 public class VirtualMachineProductFilterOptions{
-    private boolean           matchesAny;
-    private String            regex;
-    private int               cpuCount = 0;
+    private boolean matchesAny;
+    private String  regex;
+    private int cpuCount = 0;
     private Storage<Megabyte> ramSize;
-    private String            datacenterId;
+    private String            dataCenterId;
+    private Architecture      architecture;
 
     /**
      * Constructs an empty set of filtering options that will force match against any VM Product by default.
@@ -100,8 +102,8 @@ public class VirtualMachineProductFilterOptions{
         return ramSize;
     }
 
-    public @Nullable String getDatacenterId(){
-        return datacenterId;
+    public @Nullable String getDataCenterId(){
+        return dataCenterId;
     }
 
     /**
@@ -109,7 +111,7 @@ public class VirtualMachineProductFilterOptions{
      * @return true if this filter options object has any criteria associated with it
      */
     public boolean hasCriteria() {
-        return (cpuCount > 0 || (ramSize != null && ramSize.intValue() > 0) || regex != null || datacenterId != null);
+        return (cpuCount > 0 || (ramSize != null && ramSize.intValue() > 0) || regex != null || dataCenterId != null || architecture != null);
     }
 
     /**
@@ -160,8 +162,13 @@ public class VirtualMachineProductFilterOptions{
         return this;
     }
 
-    public @Nonnull VirtualMachineProductFilterOptions withDatacenterId(@Nonnull String datacenterId){
-        this.datacenterId = datacenterId;
+    public @Nonnull VirtualMachineProductFilterOptions withDataCenterId(@Nonnull String dataCenterId){
+        this.dataCenterId = dataCenterId;
+        return this;
+    }
+
+    public @Nonnull VirtualMachineProductFilterOptions withArchitecture(@Nonnull Architecture architecture) {
+        this.architecture = architecture;
         return this;
     }
 
@@ -198,8 +205,17 @@ public class VirtualMachineProductFilterOptions{
                 return true;
             }
         }
-        else if(datacenterId != null && product.getDataCenterId() != null){
-            boolean matches = product.getDataCenterId().equals(datacenterId);
+        else if(dataCenterId != null && product.getDataCenterId() != null){
+            boolean matches = product.getDataCenterId().equals(dataCenterId);
+            if( !matches && !matchesAny ) {
+                return false;
+            }
+            else if( matches && matchesAny ) {
+                return true;
+            }
+        }
+        else if(architecture != null && product.getArchitectures() != null) {
+            boolean matches = Arrays.binarySearch(product.getArchitectures(), architecture) >= 0;
             if( !matches && !matchesAny ) {
                 return false;
             }

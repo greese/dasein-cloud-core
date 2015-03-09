@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -276,7 +276,7 @@ public interface FirewallSupport extends AccessControlledService {
      * @throws InternalException an error occurred locally independent of any events in the cloud
      * @throws CloudException an error occurred with the cloud provider while performing the operation
      */
-    public @Nonnull Collection<FirewallRule> getRules(@Nonnull String firewallId) throws InternalException, CloudException;
+    public @Nonnull Iterable<FirewallRule> getRules(@Nonnull String firewallId) throws InternalException, CloudException;
 
     /**
      * Indicates the degree to which authorizations expect precedence of rules to be established.
@@ -314,7 +314,7 @@ public interface FirewallSupport extends AccessControlledService {
      * @throws InternalException an error occurred locally independent of any events in the cloud
      * @throws CloudException an error occurred with the cloud provider while performing the operation
      */
-    public @Nonnull Collection<Firewall> list() throws InternalException, CloudException;
+    public @Nonnull Iterable<Firewall> list() throws InternalException, CloudException;
 
     /**
      * Lists the status for all firewalls in the current provider context.

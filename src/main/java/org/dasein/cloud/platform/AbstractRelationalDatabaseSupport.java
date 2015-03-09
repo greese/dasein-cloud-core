@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -20,6 +20,7 @@
 package org.dasein.cloud.platform;
 
 import org.dasein.cloud.*;
+import org.dasein.cloud.util.TagUtils;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
@@ -296,6 +297,48 @@ public abstract class AbstractRelationalDatabaseSupport<T extends CloudProvider>
      */
     public void restoreBackup(DatabaseBackup backup) throws CloudException, InternalException{
         throw new OperationNotSupportedException("Snapshot functionality is not currently implemented in "+getProvider().getCloudName());
+    }
+    
+    @Override
+    public void removeTags(@Nonnull String providerDatabaseId, @Nonnull Tag... tags) throws CloudException, InternalException {
+        // NO-OP
+    }
+
+    @Override
+    public void removeTags(@Nonnull String[] providerDatabaseIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for( String id : providerDatabaseIds ) {
+            removeTags(id, tags);
+        }
+    }
+    
+    @Override
+    public void updateTags(@Nonnull String providerDatabaseId, @Nonnull Tag... tags) throws CloudException, InternalException {
+        // NO-OP
+    }
+
+    @Override
+    public void updateTags(@Nonnull String[] providerDatabaseIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for( String id : providerDatabaseIds ) {
+            updateTags(id, tags);
+        }
+    }
+
+    @Override
+    public void setTags( @Nonnull String providerDatabaseId, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        setTags(new String[]{providerDatabaseId}, tags);
+    }
+
+    @Override
+    public void setTags( @Nonnull String[] providerDatabaseIds, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        for( String id : providerDatabaseIds ) {
+            Tag[] collectionForDelete = TagUtils.getTagsForDelete(getDatabase(id).getTags(), tags);
+
+            if( collectionForDelete.length != 0) {
+                removeTags(id, collectionForDelete);
+            }
+
+            updateTags(id, tags);
+        }
     }
 
 }

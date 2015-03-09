@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -334,7 +334,7 @@ public class NamingConstraintsTest {
     public void findUniqueName() throws CloudException, InternalException {
         Cloud cloud = Cloud.register("Some Provider", "Some Cloud", "https://example.com", TestNewCloudProvider.class);
         ProviderContext ctx = cloud.createContext("12345", "antarctica", CloudConnectTestCase.KEYS, CloudConnectTestCase.X509, CloudConnectTestCase.VERSION);
-        NamingConstraints constraints = NamingConstraints.getStrictInstance(2, 20).constrainedBy(new char[] { '_', '-', '=' });
+        NamingConstraints constraints = NamingConstraints.getStrictInstance(2, 20).constrainedBy('_', '-', '=');
         final String[] names = { "friend", "friendship", "beta", "softdrink" };
         CloudProvider p = ctx.connect();
 

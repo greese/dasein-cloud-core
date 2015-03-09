@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -19,7 +19,6 @@
 
 package org.dasein.cloud.dc;
 
-import java.util.Collection;
 import java.util.Locale;
 
 import org.dasein.cloud.CloudException;
@@ -57,8 +56,7 @@ public interface DataCenterServices {
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      * @throws CloudException    an error occurred within the cloud provider
      */
-    public @Nonnull
-    DataCenterCapabilities getCapabilities() throws InternalException, CloudException;
+    public @Nonnull DataCenterCapabilities getCapabilities() throws InternalException, CloudException;
 
     /**
      * Provides access to the full data center information for the specified data center.
@@ -67,7 +65,7 @@ public interface DataCenterServices {
      * @throws InternalException an error occurred locally in processing the request
      * @throws CloudException an error occurred within the cloud provider or the cloud provider did not approve of the request
      */
-    public DataCenter getDataCenter(String providerDataCenterId) throws InternalException, CloudException;
+    public @Nullable DataCenter getDataCenter(@Nonnull String providerDataCenterId) throws InternalException, CloudException;
 
     /**
      * Provides the cloud-specific term for a data center (e.g. "availability zone").
@@ -92,7 +90,7 @@ public interface DataCenterServices {
      * @throws InternalException an error occurred locally in processing the request
      * @throws CloudException an error occurred within the cloud provider or the cloud provider did not approve of the request
      */
-    public Region getRegion(String providerRegionId) throws InternalException, CloudException;
+    public @Nullable Region getRegion(@Nonnull String providerRegionId) throws InternalException, CloudException;
 
     /**
      * Lists all data centers, active and inactive, available and unavailable, for the specified region.
@@ -101,7 +99,7 @@ public interface DataCenterServices {
      * @throws InternalException an error occurred locally in processing the request
      * @throws CloudException an error occurred within the cloud provider or the cloud provider did not approve of the request
      */
-    public Collection<DataCenter> listDataCenters(String providerRegionId) throws InternalException, CloudException;
+    public @Nonnull Iterable<DataCenter> listDataCenters(@Nonnull String providerRegionId) throws InternalException, CloudException;
     
     /**
      * Lists all regions, active and inactive, available and unavailable.
@@ -109,7 +107,7 @@ public interface DataCenterServices {
      * @throws InternalException an error occurred locally in processing the request
      * @throws CloudException an error occurred within the cloud provider or the cloud provider did not approve of the request
      */
-    public Collection<Region> listRegions() throws InternalException, CloudException;
+    public @Nonnull Iterable<Region> listRegions() throws InternalException, CloudException;
 
     /**
      * Lists all resource pools
@@ -119,8 +117,7 @@ public interface DataCenterServices {
      * @throws InternalException an error occurred locally in processing the request
      * @throws CloudException    an error occurred within the cloud provider or the cloud provider did not approve of the request
      */
-    @Nonnull
-    public Collection<ResourcePool> listResourcePools(String providerDataCenterId) throws InternalException, CloudException;
+    public @Nonnull Iterable<ResourcePool> listResourcePools(@Nonnull String providerDataCenterId) throws InternalException, CloudException;
 
     /**
      * Provides access to the full resource pool information for the specified resource pool.
@@ -129,8 +126,7 @@ public interface DataCenterServices {
      * @throws InternalException an error occurred locally in processing the request
      * @throws CloudException an error occurred within the cloud provider or the cloud provider did not approve of the request
      */
-    @Nullable
-    public ResourcePool getResourcePool(String providerResourcePoolId) throws InternalException, CloudException;
+    public @Nullable ResourcePool getResourcePool(@Nonnull String providerResourcePoolId) throws InternalException, CloudException;
 
     /**
      * Lists all storage pools
@@ -139,8 +135,7 @@ public interface DataCenterServices {
      * @throws InternalException an error occurred locally in processing the request
      * @throws CloudException    an error occurred within the cloud provider or the cloud provider did not approve of the request
      */
-    @Nonnull
-    public Collection<StoragePool> listStoragePools() throws InternalException, CloudException;
+    public @Nonnull Iterable<StoragePool> listStoragePools() throws InternalException, CloudException;
 
     /**
      * Provides access to the full storage pool information for the specified storage pool
@@ -150,8 +145,7 @@ public interface DataCenterServices {
      * @throws InternalException an error occurred locally in processing the request
      * @throws CloudException    an error occurred within the cloud provider or the cloud provider did not approve of the request
      */
-    @Nonnull
-    public StoragePool getStoragePool(String providerStoragePoolId) throws InternalException, CloudException;
+    public @Nullable StoragePool getStoragePool(@Nonnull String providerStoragePoolId) throws InternalException, CloudException;
 
 
     /**
@@ -161,8 +155,7 @@ public interface DataCenterServices {
      * @throws InternalException an error occurred locally in processing the request
      * @throws CloudException    an error occurred within the cloud provider or the cloud provider did not approve of the request
      */
-    @Nonnull
-    public Collection<Folder> listVMFolders() throws InternalException, CloudException;
+    public @Nonnull Iterable<Folder> listVMFolders() throws InternalException, CloudException;
 
     /**
      * Provides access to the full vm folder information for the specified vm folder
@@ -172,7 +165,5 @@ public interface DataCenterServices {
      * @throws InternalException an error occurred locally in processing the request
      * @throws CloudException    an error occurred within the cloud provider or the cloud provider did not approve of the request
      */
-    @Nonnull
-    public Folder getVMFolder(String providerVMFolderId) throws InternalException, CloudException;
-
+    public @Nullable Folder getVMFolder(@Nonnull String providerVMFolderId) throws InternalException, CloudException;
 }

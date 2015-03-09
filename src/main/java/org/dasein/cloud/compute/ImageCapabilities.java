@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -181,4 +181,12 @@ public interface ImageCapabilities extends Capabilities{
      * @throws InternalException an error occurred within the Dasein cloud implementation
      */
     public boolean supportsPublicLibrary(@Nonnull ImageClass cls) throws CloudException, InternalException;
+
+    /**
+     * Indicates whether the image capture process destroys the source VM
+     * @return true if the capture process destroys the source VM
+     * @throws CloudException an error occurred with the cloud provider
+     * @throws InternalException an error occurred within the Dasein cloud implementation
+     */
+    public boolean imageCaptureDestroysVM() throws CloudException, InternalException;
 }

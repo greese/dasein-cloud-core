@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -50,7 +50,7 @@ public class Tag implements Comparable<Tag> {
     }
 
     @Override
-    public int compareTo(Tag tag) {
+    public int compareTo(@Nonnull Tag tag) {
         int x = key.compareTo(tag.key);
         
         if( x != 0 ) {

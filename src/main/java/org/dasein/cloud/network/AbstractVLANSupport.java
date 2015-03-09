@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -290,7 +290,7 @@ public abstract class AbstractVLANSupport<T extends CloudProvider> implements VL
     }
 
     @Override
-    public @Nonnull Collection<String> listFirewallIdsForNIC(@Nonnull String nicId) throws CloudException, InternalException {
+    public @Nonnull Iterable<String> listFirewallIdsForNIC(@Nonnull String nicId) throws CloudException, InternalException {
         return Collections.emptyList();
     }
 
@@ -415,7 +415,7 @@ public abstract class AbstractVLANSupport<T extends CloudProvider> implements VL
     }
 
     @Override
-    public @Nonnull Iterable<Subnet> listSubnets(@Nonnull String vlanId) throws CloudException, InternalException {
+    public @Nonnull Iterable<Subnet> listSubnets(@Nullable String vlanId) throws CloudException, InternalException {
         return Collections.emptyList();
     }
 
@@ -642,7 +642,7 @@ public abstract class AbstractVLANSupport<T extends CloudProvider> implements VL
     }
 
     @Override
-    public @Nonnull Collection<InternetGateway> listInternetGateways( @Nullable String vlanId ) throws CloudException, InternalException {
+    public @Nonnull Iterable<InternetGateway> listInternetGateways( @Nullable String vlanId ) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Internet gateways are not currently implemented for " + getProvider().getCloudName());
     }
 

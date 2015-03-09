@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -32,6 +32,8 @@ import org.apache.commons.codec.binary.Base64;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
+import org.dasein.cloud.Tag;
+import org.dasein.cloud.util.TagUtils;
 import org.dasein.util.Retry;
 import org.dasein.util.uom.storage.*;
 
@@ -217,6 +219,49 @@ public abstract class AbstractBlobStoreSupport<T extends CloudProvider> implemen
         t.setDaemon(true);
         t.start();
         return transfer;
+    }
+    
+    @Override
+    public void updateTags(@Nonnull String bucketName, @Nonnull Tag ... tags) throws CloudException, InternalException {
+        // NO-OP
+    }
+
+    @Override
+    public void updateTags(@Nonnull String[] bucketNames, @Nonnull Tag ... tags) throws CloudException, InternalException {
+        for( String id : bucketNames ) {
+            updateTags(id, tags);
+        }
+    }
+
+    @Override
+    public void removeTags(@Nonnull String bucketName, @Nonnull Tag ... tags) throws CloudException, InternalException {
+        // NO-OP
+    }
+
+    @Override
+    public void removeTags(@Nonnull String[] bucketNames, @Nonnull Tag ... tags) throws CloudException, InternalException {
+        for( String id : bucketNames ) {
+            removeTags(id, tags);
+        }
+    }
+
+    @Override
+    public void setTags( @Nonnull String bucketNames, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        setTags(new String[]{bucketNames}, tags);
+    }
+
+    @Override
+    public void setTags( @Nonnull String[] bucketNames, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        for( String id : bucketNames ) {
+
+            Tag[] collectionForDelete = TagUtils.getTagsForDelete(getBucket(id).getTags(), tags);
+
+            if( collectionForDelete.length != 0 ) {
+                removeTags(id, collectionForDelete);
+            }
+
+            updateTags(id, tags);
+        }
     }
 
     protected abstract void get(@Nullable String bucket, @Nonnull String object, @Nonnull File toFile, @Nullable FileTransfer transfer) throws InternalException, CloudException;

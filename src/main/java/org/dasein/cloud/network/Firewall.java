@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -221,8 +221,7 @@ public class Firewall implements Networkable, Taggable {
      * Defines the firewall rules.
      * @param ruleList a Collection of type FirewallRule
      */
-    @SuppressWarnings("unused")
-    public @Nonnull void setRules( Collection<FirewallRule> ruleList ) {
+    public void setRules( Collection<FirewallRule> ruleList ) {
       rules = ruleList;
     }
 

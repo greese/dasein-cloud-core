@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -26,6 +26,7 @@ import org.dasein.cloud.AccessControlledService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.ResourceStatus;
+import org.dasein.cloud.Tag;
 import org.dasein.cloud.TimeWindow;
 import org.dasein.cloud.identity.ServiceAction;
 
@@ -59,13 +60,13 @@ public interface RelationalDatabaseSupport extends AccessControlledService {
 
     public void alterDatabase(String providerDatabaseId, boolean applyImmediately, String productSize, int storageInGigabytes, String configurationId, String newAdminUser, String newAdminPassword, int newPort, int snapshotRetentionInDays, TimeWindow preferredMaintenanceWindow, TimeWindow preferredBackupWindow) throws CloudException, InternalException;
 
-    public String createFromScratch(String dataSourceName, DatabaseProduct product, String databaseVersion, String withAdminUser, String withAdminPassword, int hostPort) throws CloudException, InternalException;
+    public @Nonnull String createFromScratch(String dataSourceName, DatabaseProduct product, String databaseVersion, String withAdminUser, String withAdminPassword, int hostPort) throws CloudException, InternalException;
 
-    public String createFromLatest(String dataSourceName, String providerDatabaseId, String productSize, String providerDataCenterId, int hostPort) throws InternalException, CloudException;
+    public @Nonnull String createFromLatest(String dataSourceName, String providerDatabaseId, String productSize, String providerDataCenterId, int hostPort) throws InternalException, CloudException;
 
-    public String createFromSnapshot(String dataSourceName, String providerDatabaseId, String providerDbSnapshotId, String productSize, String providerDataCenterId, int hostPort) throws CloudException, InternalException;
+    public @Nonnull String createFromSnapshot(String dataSourceName, String providerDatabaseId, String providerDbSnapshotId, String productSize, String providerDataCenterId, int hostPort) throws CloudException, InternalException;
 
-    public String createFromTimestamp(String dataSourceName, String providerDatabaseId, long beforeTimestamp, String productSize, String providerDataCenterId, int hostPort) throws InternalException, CloudException;
+    public @Nonnull String createFromTimestamp(String dataSourceName, String providerDatabaseId, long beforeTimestamp, String productSize, String providerDataCenterId, int hostPort) throws InternalException, CloudException;
 
     /**
      * Provides access to meta-data about RDS capabilities in the current region of this cloud.
@@ -76,13 +77,13 @@ public interface RelationalDatabaseSupport extends AccessControlledService {
      */
     public @Nonnull RelationalDatabaseCapabilities getCapabilities() throws InternalException, CloudException;
 
-    public DatabaseConfiguration getConfiguration(String providerConfigurationId) throws CloudException, InternalException;
+    public @Nullable DatabaseConfiguration getConfiguration(String providerConfigurationId) throws CloudException, InternalException;
 
-    public Database getDatabase(String providerDatabaseId) throws CloudException, InternalException;
+    public @Nullable Database getDatabase(String providerDatabaseId) throws CloudException, InternalException;
 
-    public Iterable<DatabaseEngine> getDatabaseEngines() throws CloudException, InternalException;
+    public @Nonnull Iterable<DatabaseEngine> getDatabaseEngines() throws CloudException, InternalException;
 
-    public String getDefaultVersion(@Nonnull DatabaseEngine forEngine) throws CloudException, InternalException;
+    public @Nullable String getDefaultVersion(@Nonnull DatabaseEngine forEngine) throws CloudException, InternalException;
 
     public @Nonnull Iterable<String> getSupportedVersions(@Nonnull DatabaseEngine forEngine) throws CloudException, InternalException;
 
@@ -98,7 +99,7 @@ public interface RelationalDatabaseSupport extends AccessControlledService {
      */
 
     @Deprecated
-    public Iterable<DatabaseProduct> getDatabaseProducts(DatabaseEngine forEngine) throws CloudException, InternalException;
+    public @Nonnull Iterable<DatabaseProduct> getDatabaseProducts(DatabaseEngine forEngine) throws CloudException, InternalException;
     /**
      * List supported database products
      * @param forEngine database engine, e.g. MySQL, SQL Server EE, etc.
@@ -115,7 +116,7 @@ public interface RelationalDatabaseSupport extends AccessControlledService {
     @Deprecated
     public String getProviderTermForSnapshot(Locale locale);
 
-    public DatabaseSnapshot getSnapshot(String providerDbSnapshotId) throws CloudException, InternalException;
+    public @Nullable DatabaseSnapshot getSnapshot(String providerDbSnapshotId) throws CloudException, InternalException;
     
     public boolean isSubscribed() throws CloudException, InternalException;
 
@@ -134,17 +135,17 @@ public interface RelationalDatabaseSupport extends AccessControlledService {
     @Deprecated
     public boolean isSupportsSnapshots();
     
-    public Iterable<String> listAccess(String toProviderDatabaseId) throws CloudException, InternalException;
+    public @Nonnull Iterable<String> listAccess(String toProviderDatabaseId) throws CloudException, InternalException;
     
-    public Iterable<DatabaseConfiguration> listConfigurations() throws CloudException, InternalException;
+    public @Nonnull Iterable<DatabaseConfiguration> listConfigurations() throws CloudException, InternalException;
 
     public @Nonnull Iterable<ResourceStatus> listDatabaseStatus() throws CloudException, InternalException;
 
-    public Iterable<Database> listDatabases() throws CloudException, InternalException;
+    public @Nonnull Iterable<Database> listDatabases() throws CloudException, InternalException;
     
-    public Collection<ConfigurationParameter> listParameters(String forProviderConfigurationId) throws CloudException, InternalException;
+    public @Nonnull Iterable<ConfigurationParameter> listParameters(String forProviderConfigurationId) throws CloudException, InternalException;
     
-    public Iterable<DatabaseSnapshot> listSnapshots(String forOptionalProviderDatabaseId) throws CloudException, InternalException;
+    public @Nonnull Iterable<DatabaseSnapshot> listSnapshots(String forOptionalProviderDatabaseId) throws CloudException, InternalException;
 
     public void removeConfiguration(String providerConfigurationId) throws CloudException, InternalException;
     
@@ -160,7 +161,7 @@ public interface RelationalDatabaseSupport extends AccessControlledService {
     
     public void updateConfiguration(String providerConfigurationId, ConfigurationParameter ... parameters) throws CloudException, InternalException;
     
-    public DatabaseSnapshot snapshot(String providerDatabaseId, String name) throws CloudException, InternalException;
+    public @Nonnull DatabaseSnapshot snapshot(String providerDatabaseId, String name) throws CloudException, InternalException;
     
     //
     // New Backup section
@@ -171,14 +172,14 @@ public interface RelationalDatabaseSupport extends AccessControlledService {
      *
      * Throws CloudException on failure
      */
-    public DatabaseBackup getUsableBackup(String providerDbId, String beforeTimestamp) throws CloudException, InternalException;
+    public @Nullable DatabaseBackup getUsableBackup(String providerDbId, String beforeTimestamp) throws CloudException, InternalException;
 
     /*
      * Obtain a list of DatabaseBackup objects for a given database, or for all databases if null.
      * 
      * Throws CloudException on failure
      */
-    public Iterable<DatabaseBackup> listBackups(String forOptionalProviderDatabaseId) throws CloudException, InternalException;
+    public @Nonnull Iterable<DatabaseBackup> listBackups(String forOptionalProviderDatabaseId) throws CloudException, InternalException;
 
     /*
      * Create a new database from the passed in backup object
@@ -200,5 +201,69 @@ public interface RelationalDatabaseSupport extends AccessControlledService {
      * Throws CloudException on failure
      */
     public void restoreBackup(DatabaseBackup backup) throws CloudException, InternalException;
+    
+    /**
+     * Removes meta-data from a providerDatabaseId. If tag values are set, their removal is dependent on underlying cloud
+     * provider behavior. They may be removed only if the tag value matches or they may be removed regardless of the
+     * value.
+     * @param providerDatabaseId the Database to update
+     * @param tags the meta-data tags to remove
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void removeTags(@Nonnull String providerDatabaseId, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Removes meta-data from multiple providerDatabaseIds. If tag values are set, their removal is dependent on underlying cloud
+     * provider behavior. They may be removed only if the tag value matches or they may be removed regardless of the
+     * value.
+     * @param providerDatabaseIds the Databases to update
+     * @param tags  the meta-data tags to remove
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void removeTags(@Nonnull String[] providerDatabaseIds, @Nonnull Tag ... tags) throws CloudException, InternalException;
+    
+    /**
+     * Updates meta-data for a providerDatabaseId with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     * @param providerDatabaseId the Database to update
+     * @param tags the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void updateTags(@Nonnull String providerDatabaseId, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Updates meta-data for multiple providerDatabaseIds with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     * @param providerDatabaseIds the Databases to update
+     * @param tags  the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void updateTags(@Nonnull String[] providerDatabaseIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Set meta-data for a providerDatabaseId. Remove any tags that were not provided by the incoming tags, and add or
+     * overwrite any new or pre-existing tags.
+     *
+     * @param providerDatabaseId the Database to set
+     * @param tags     the meta-data tags to set
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public void setTags( @Nonnull String providerDatabaseId, @Nonnull Tag... tags ) throws CloudException, InternalException;
+
+    /**
+     * Set meta-data for multiple providerDatabaseIds. Remove any tags that were not provided by the incoming tags, and add or
+     * overwrite any new or pre-existing tags.
+     *
+     * @param providerDatabaseIds the Databases to set
+     * @param tags      the meta-data tags to set
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public void setTags( @Nonnull String[] providerDatabaseIds, @Nonnull Tag... tags ) throws CloudException, InternalException;
 
 }

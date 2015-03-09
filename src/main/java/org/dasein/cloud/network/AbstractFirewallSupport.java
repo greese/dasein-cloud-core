@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -193,7 +194,20 @@ public abstract class AbstractFirewallSupport<T extends CloudProvider> implement
     }
 
     @Override
-    public @Nonnull Collection<FirewallRule> getRules(@Nonnull String firewallId) throws InternalException, CloudException {
+    public @Nonnull String getProviderTermForFirewall(@Nonnull Locale locale) {
+        try {
+            return getCapabilities().getProviderTermForFirewall(locale);
+        }
+        catch( CloudException e ) {
+            throw new RuntimeException("Unexpected problem with capabilities", e);
+        }
+        catch( InternalException e ) {
+            throw new RuntimeException("Unexpected problem with capabilities", e);
+        }
+    }
+
+    @Override
+    public @Nonnull Iterable<FirewallRule> getRules(@Nonnull String firewallId) throws InternalException, CloudException {
         return Collections.emptyList();
     }
 

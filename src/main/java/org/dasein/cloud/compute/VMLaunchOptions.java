@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -42,36 +42,6 @@ import java.util.*;
  */
 @SuppressWarnings("UnusedDeclaration")
 public class VMLaunchOptions {
-    static public class NICConfig {
-        public String nicId;
-        public NICCreateOptions nicToCreate;
-    }
-
-    /**
-     * Constructs a new set of launch options from a minimum required configuration.
-     * @param withStandardProductId the flavor/size/product ID to be used in the launching the VM
-     * @param usingMachineImageId the machine image/template from which the VM will be created
-     * @param havingFriendlyName a friendly name for the VM (this may be altered to fit cloud provider rules or entirely disregarded)
-     * @param withDescription a long description identifying the function of the virtual machine 
-     * @return a set of VM launch options to be used in launching a VM
-     */
-    static public @Nonnull VMLaunchOptions getInstance(@Nonnull String withStandardProductId, @Nonnull String usingMachineImageId, @Nonnull String havingFriendlyName, @Nonnull String withDescription) {
-        return new VMLaunchOptions(withStandardProductId, usingMachineImageId, havingFriendlyName, havingFriendlyName, withDescription);
-    }
-
-    /**
-     * Constructs a new set of launch options from a minimum required configuration.
-     * @param withStandardProductId the flavor/size/product ID to be used in the launching the VM
-     * @param usingMachineImageId the machine image/template from which the VM will be created
-     * @param withHostName a DNS-friendly name that can be used on the local host, local network, or even in DNS to reference the new VM 
-     * @param havingFriendlyName a friendly name for the VM (this may be altered to fit cloud provider rules or entirely disregarded)
-     * @param withDescription a long description identifying the function of the virtual machine 
-     * @return a set of VM launch options to be used in launching a VM
-     */
-    static public @Nonnull VMLaunchOptions getInstance(@Nonnull String withStandardProductId, @Nonnull String usingMachineImageId, @Nonnull String withHostName, @Nonnull String havingFriendlyName, @Nonnull String withDescription) {
-        return new VMLaunchOptions(withStandardProductId, usingMachineImageId,withHostName, havingFriendlyName, withDescription);
-    }
-
     // NOTE: ADDING/REMOVING/CHANGING AN ATTRIBUTE? MAKE SURE YOU REFLECT THE CHANGE IN THE copy() METHOD
     private String             bootstrapKey;
     private String             bootstrapPassword;
@@ -102,7 +72,7 @@ public class VMLaunchOptions {
     private boolean            ioOptimized;
     private boolean            ipForwardingAllowed;
     private String             roleId;
-    private boolean            associatePublicIpAddress;
+    private Boolean            associatePublicIpAddress;
     private String             affinityGroupId;
     private String             virtualMachineGroup;
     private String             resourcePoolId;
@@ -112,11 +82,44 @@ public class VMLaunchOptions {
     private String[]           dnsServerList;
     private String[]           dnsSuffixList;
     private String[]           gatewayList;
+    private String             netMask;
     private String             winWorkgroupName;
     private String             winOwnerName;
     private String             winOrgName;
     private String             winProductSerialNum;
+    private String             clientRequestToken;
     // NOTE: SEE NOTE AT TOP OF ATTRIBUTE LIST WHEN ADDING/REMOVING/CHANGING AN ATTRIBUTE
+
+    static public class NICConfig {
+        public String           nicId;
+        public NICCreateOptions nicToCreate;
+    }
+
+    /**
+     * Constructs a new set of launch options from a minimum required configuration.
+     * @param withStandardProductId the flavor/size/product ID to be used in the launching the VM
+     * @param usingMachineImageId the machine image/template from which the VM will be created
+     * @param havingFriendlyName a friendly name for the VM (this may be altered to fit cloud provider rules or entirely disregarded)
+     * @param withDescription a long description identifying the function of the virtual machine 
+     * @return a set of VM launch options to be used in launching a VM
+     */
+    static public @Nonnull VMLaunchOptions getInstance(@Nonnull String withStandardProductId, @Nonnull String usingMachineImageId, @Nonnull String havingFriendlyName, @Nonnull String withDescription) {
+        return new VMLaunchOptions(withStandardProductId, usingMachineImageId, havingFriendlyName, havingFriendlyName, withDescription);
+    }
+
+    /**
+     * Constructs a new set of launch options from a minimum required configuration.
+     * @param withStandardProductId the flavor/size/product ID to be used in the launching the VM
+     * @param usingMachineImageId the machine image/template from which the VM will be created
+     * @param withHostName a DNS-friendly name that can be used on the local host, local network, or even in DNS to reference the new VM 
+     * @param havingFriendlyName a friendly name for the VM (this may be altered to fit cloud provider rules or entirely disregarded)
+     * @param withDescription a long description identifying the function of the virtual machine 
+     * @return a set of VM launch options to be used in launching a VM
+     */
+    static public @Nonnull VMLaunchOptions getInstance(@Nonnull String withStandardProductId, @Nonnull String usingMachineImageId, @Nonnull String withHostName, @Nonnull String havingFriendlyName, @Nonnull String withDescription) {
+        return new VMLaunchOptions(withStandardProductId, usingMachineImageId,withHostName, havingFriendlyName, withDescription);
+    }
+
 
     private VMLaunchOptions() { }
     
@@ -250,11 +253,13 @@ public class VMLaunchOptions {
         options.dnsDomain = dnsDomain;
         options.dnsServerList = (dnsServerList == null ? new String[0] : Arrays.copyOf(options.dnsServerList, options.dnsServerList.length));
         options.dnsSuffixList = (dnsSuffixList == null ? new String[0] : Arrays.copyOf(options.dnsSuffixList, options.dnsSuffixList.length));
-        options.gatewayList = (gatewayList == null ? new String[0] : Arrays.copyOf(options.gatewayList, options.gatewayList.length));;
+        options.gatewayList = (gatewayList == null ? new String[0] : Arrays.copyOf(options.gatewayList, options.gatewayList.length));
+        options.netMask = netMask;
         options.winWorkgroupName = winWorkgroupName;
         options.winOwnerName = winOwnerName;
         options.winOrgName = winOrgName;
         options.winProductSerialNum = winProductSerialNum;
+        options.clientRequestToken = clientRequestToken;
         return options;
     }
 
@@ -885,7 +890,7 @@ public class VMLaunchOptions {
      * @param provisionPublicIp true indicates that a public IP address should be provisioned at launch time
      * @return this
      */
-    public @Nonnull VMLaunchOptions withProvisionPublicIp(@Nonnull boolean provisionPublicIp) {
+    public @Nonnull VMLaunchOptions withProvisionPublicIp(boolean provisionPublicIp) {
         this.provisionPublicIp = provisionPublicIp;
         return this;
     }
@@ -927,20 +932,20 @@ public class VMLaunchOptions {
     }
 
     /**
-     * Associate a public IP address at launch.
+     * Associate a public IP address at launch, use cloud defaults if null
      *
      * @param publicIpAddress
      * @return this
      */
-    public VMLaunchOptions withAssociatePublicIpAddress( final boolean publicIpAddress ) {
+    public VMLaunchOptions withAssociatePublicIpAddress( final Boolean publicIpAddress ) {
       this.associatePublicIpAddress = publicIpAddress;
       return this;
     }
 
     /**
-     * @see #withAssociatePublicIpAddress(boolean)
+     * @see #withAssociatePublicIpAddress(Boolean)
      */
-    public boolean isAssociatePublicIpAddress() {
+    public Boolean isAssociatePublicIpAddress() {
       return associatePublicIpAddress;
     }
 
@@ -1040,6 +1045,24 @@ public class VMLaunchOptions {
     }
 
     /**
+     * @return a network mask for configuring the VM's virtual network adapter
+     */
+    public @Nullable String getNetMask() {
+        return netMask;
+    }
+
+    /**
+     * Specifies the network mask to be used for the virtual machine at launch time. This may be necessary
+     * when launching with a fixed IP address.
+     * @param netMask
+     * @return this
+     */
+    public @Nonnull VMLaunchOptions withNetMask(@Nullable String netMask) {
+        this.netMask = netMask;
+        return this;
+    }
+
+    /**
      * @return a DNS domain suffix of this virtual machine
      */
     public @Nullable String getDnsDomain() {
@@ -1121,6 +1144,21 @@ public class VMLaunchOptions {
      */
     public @Nonnull VMLaunchOptions withWinProductSerialNum(@Nonnull String winProductSerialNum) {
         this.winProductSerialNum = winProductSerialNum;
+        return this;
+    }
+
+    /**
+     * @return the client generated request token
+     */
+    public @Nullable String getClientRequestToken() {return clientRequestToken;}
+
+    /**
+     * Provides a request token used by the client to provide idempotency for certain API requests
+     * @param clientRequestToken the token
+     * @return this
+     */
+    public @Nonnull VMLaunchOptions withClientRequestToken(@Nonnull String clientRequestToken){
+        this.clientRequestToken = clientRequestToken;
         return this;
     }
 }

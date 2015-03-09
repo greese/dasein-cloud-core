@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -20,5 +20,9 @@
 package org.dasein.cloud.network;
 
 public enum LbProtocol {
-    RAW_TCP, HTTP, HTTPS, AJP
+    RAW_TCP,    // TCP
+    HTTP,       // HTTP
+    HTTPS,      // HTTPS
+    AJP,        // Apache JServ
+    WS          // WebSockets
 }

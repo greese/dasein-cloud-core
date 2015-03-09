@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -19,6 +19,7 @@
 
 package org.dasein.cloud.platform;
 
+import javax.annotation.Nonnull;
 import java.io.Serializable;
 
 public class KeyValuePair implements Serializable, Comparable<KeyValuePair> {
@@ -34,7 +35,7 @@ public class KeyValuePair implements Serializable, Comparable<KeyValuePair> {
         this.setValue(value);
     }
 
-    public int compareTo(KeyValuePair other) {
+    public int compareTo(@Nonnull KeyValuePair other) {
         int x = getKey().compareTo(other.getKey());
         
         if( x != 0 ) {

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -138,7 +138,7 @@ public interface FirewallCapabilities extends Capabilities{
      * @throws CloudException
      * @throws InternalException
      */
-    public abstract Requirement requiresVLAN() throws CloudException, InternalException;
+    public @Nonnull Requirement requiresVLAN() throws CloudException, InternalException;
 
     /**
      * Indicates whether firewalls of the specified type (VLAN or flat network) support rules over the direction

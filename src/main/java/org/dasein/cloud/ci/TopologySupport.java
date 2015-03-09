@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -137,4 +137,23 @@ public interface TopologySupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
     public void removeTags(@Nonnull String[] topologyIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Creates a private topology matching the specified options.
+     * @param TBD
+     * @return true on success, false on failure
+     * @throws CloudException an error occurred in the cloud provider while processing the request
+     * @throws InternalException an error occurred within Dasein Cloud while processing the request
+     */
+    public boolean createTopology(@Nonnull TopologyProvisionOptions withTopologyOptions) throws CloudException, InternalException;
+
+    /**
+     * Removes a private topology(s) matching the specified id's.
+     * @param topologyIds the list of topologies to be removed.
+     * @return true on success, false on failure
+     * @throws CloudException an error occurred in the cloud provider while processing the request
+     * @throws InternalException an error occurred within Dasein Cloud while processing the request
+     */
+    public boolean removeTopologies(@Nonnull String[] topologyIds) throws CloudException, InternalException;
+
 }

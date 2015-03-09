@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -52,8 +52,9 @@ public class VMScalingCapabilities {
         return capabilities;
     }
 
-    @Deprecated private Requirement alterVmForNewVolume;
-    @Deprecated private Requirement alterVmForVolumeChange;
+    @Deprecated private Requirement alterVmForNewVolume = Requirement.NONE;
+    @Deprecated private Requirement alterVmForVolumeChange = Requirement.NONE;
+    
     private boolean     createsNewVirtualMachine;
     private boolean     supportsProductChanges;
     private boolean     supportsProductSizeChanges;
