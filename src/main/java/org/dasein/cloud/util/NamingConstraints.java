@@ -186,6 +186,7 @@ public class NamingConstraints {
     private boolean symbols;
     private String  regularExpression;
     private boolean lastCharacterSymbolAllowed;
+    private String  description;
 
     private NamingConstraints() { }
 
@@ -647,5 +648,14 @@ public class NamingConstraints {
     public @Nonnull NamingConstraints withLastCharacterSymbolAllowed(boolean lastCharacterSymbolAllowed){
         this.lastCharacterSymbolAllowed = lastCharacterSymbolAllowed;
         return this;
+    }
+
+    public @Nonnull NamingConstraints withDescription(String description){
+        this.description = description;
+        return this;
+    }
+
+    public String getDescription(){
+        return description;
     }
 }
