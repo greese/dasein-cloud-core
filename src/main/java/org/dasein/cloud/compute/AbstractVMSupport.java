@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -556,7 +556,12 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
-    final public Iterable<VirtualMachineProduct> listProducts( VirtualMachineProductFilterOptions options ) throws InternalException, CloudException {
+    public @Nonnull Iterable<VirtualMachineProduct> listProducts(@Nonnull String machineImageId) throws InternalException, CloudException {
+        return listProducts(VirtualMachineProductFilterOptions.getInstance());
+    }
+
+    @Override
+    final public Iterable<VirtualMachineProduct> listProducts(@Nonnull VirtualMachineProductFilterOptions options) throws InternalException, CloudException {
         List<VirtualMachineProduct> products = new ArrayList<VirtualMachineProduct>();
         for( Architecture arch : getCapabilities().listSupportedArchitectures() ) {
             mergeProductLists(products, this.listProducts(options, arch));
@@ -593,7 +598,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
-    public @Nonnull Iterable<VirtualMachineProduct> listProducts( @Nullable VirtualMachineProductFilterOptions options, @Nullable Architecture architecture ) throws InternalException, CloudException {
+    public @Nonnull Iterable<VirtualMachineProduct> listProducts( @Nonnull VirtualMachineProductFilterOptions options, @Nullable Architecture architecture ) throws InternalException, CloudException {
         APITrace.begin(getProvider(), "VM.listProducts");
         try {
             String cacheName = "productsALL";

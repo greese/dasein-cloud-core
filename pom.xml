@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <!--
-        Copyright (C) 2009-2014 Dell, Inc.(http://www.enstratius.com)
+        Copyright (C) 2009-2015 Dell, Inc.(http://www.enstratius.com)
 
         ====================================================================
         Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,7 +22,7 @@
 
     <groupId>org.dasein</groupId>
     <artifactId>dasein-cloud-core</artifactId>
-    <version>2015.03.1-SNAPSHOT</version>
+    <version>2015.05.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>dasein-cloud-core</name>
@@ -180,7 +180,7 @@
                         <exclude>**/LICENSE-APACHE.txt</exclude>
                     </excludes>
                     <properties>
-                        <year>2009-2014</year>
+                        <year>2009-2015</year>
                         <copyrightHolder>Dell, Inc.</copyrightHolder>
                     </properties>
                 </configuration>

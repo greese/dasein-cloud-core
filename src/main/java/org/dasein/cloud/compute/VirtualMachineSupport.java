@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -393,6 +393,17 @@ public interface VirtualMachineSupport extends AccessControlledService {
     public @Nonnull Iterable<String> listFirewalls(@Nonnull String vmId) throws InternalException, CloudException;
 
     /**
+     * Providers a list of instance types, service offerings, or server sizes (however the underlying cloud
+     * might describe it) compatible with particular machine image
+     *
+     * @param machineImageId the desire machine image to match with
+     * @return the list of server sizes available for the specified machine image
+     * @throws InternalException
+     * @throws CloudException
+     */
+    public @Nonnull Iterable<VirtualMachineProduct> listProducts(@Nonnull String machineImageId) throws InternalException, CloudException;
+
+    /**
      * Provides a list of instance types, service offerings, or server sizes (however the underlying cloud
      * might describe it) for a particular architecture
      *
@@ -402,7 +413,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws CloudException    an error occurred within the cloud provider
      * @deprecated
      */
-    public @Nonnull Iterable<VirtualMachineProduct> listProducts(@Nullable Architecture architecture) throws InternalException, CloudException;
+    public @Nonnull Iterable<VirtualMachineProduct> listProducts(@Nonnull Architecture architecture) throws InternalException, CloudException;
 
     /**
      * Lists all virtual machine products matching the given VirtualMachineProductFilterOptions belonging to the account owner currently in
@@ -413,7 +424,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      * @throws CloudException    an error occurred within the cloud provider
      */
-    public @Nonnull Iterable<VirtualMachineProduct> listProducts(@Nullable VirtualMachineProductFilterOptions options) throws InternalException, CloudException;
+    public @Nonnull Iterable<VirtualMachineProduct> listProducts(@Nonnull VirtualMachineProductFilterOptions options) throws InternalException, CloudException;
 
     /**
      * Lists all virtual machine products matching the given VirtualMachineProductFilterOptions and specified architecture belonging to the account owner currently in
@@ -426,7 +437,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws CloudException    an error occurred within the cloud provider
      * @deprecated
      */
-    public @Nonnull Iterable<VirtualMachineProduct> listProducts(@Nullable VirtualMachineProductFilterOptions options, @Nullable Architecture architecture) throws InternalException, CloudException;
+    public @Nonnull Iterable<VirtualMachineProduct> listProducts(@Nonnull VirtualMachineProductFilterOptions options, @Nullable Architecture architecture) throws InternalException, CloudException;
 
     /**
      * Provides a list of price history records for Spot VMs

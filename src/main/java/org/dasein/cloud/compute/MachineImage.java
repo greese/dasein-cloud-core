@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2014 Dell, Inc.
+ * Copyright (C) 2009-2015 Dell, Inc.
  * See annotations for authorship information
  *
  * ====================================================================
@@ -104,6 +104,7 @@ public class MachineImage implements Taggable {
     private VisibleScope       visibleScope;
     private Iterable<MachineImageVolume> volumes;
     private boolean            sharedWithPublic;
+    private Map<String,String> providerMetadata;
 
     /**
      * Constructs an empty machine image.
@@ -391,6 +392,22 @@ public class MachineImage implements Taggable {
      */
     public boolean isPublic() {
         return this.sharedWithPublic;
+    }
+
+    /**
+     * Cloud-specific metadata that drivers may or may not use for matching products with machine images. This is considered driver-internal.
+     * @return product metadata
+     */
+    public @Nonnull Map<String, String> getProviderMetadata() {
+        if( providerMetadata == null ) {
+            providerMetadata = new HashMap<String, String>();
+        }
+        return providerMetadata;
+    }
+
+    public MachineImage withProviderMetadata(@Nonnull Map<String, String> providerMetadata) {
+        getProviderMetadata().putAll(providerMetadata);
+        return this;
     }
 
     /********************************** DEPRECATED METHODS *******************************************/
