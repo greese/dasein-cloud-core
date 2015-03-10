@@ -39,7 +39,7 @@ import java.util.Map;
 public class ConvergedInfrastructure implements Taggable {
 
     static public @Nonnull
-    ConvergedInfrastructure getInstance(@Nonnull String ownerId, @Nonnull String regionId, @Nonnull String dataCenterId, @Nonnull String ciId, @Nonnull ConvergedInfrastructureState state, @Nonnull String name, @Nonnull String description, String selfUrl) {
+    ConvergedInfrastructure getInstance(@Nonnull String ownerId, @Nonnull String regionId, @Nonnull String dataCenterId, @Nonnull String ciId, @Nonnull ConvergedInfrastructureState state, @Nonnull String name, @Nonnull String description, String providerTopologyId) {
         ConvergedInfrastructure ci = new ConvergedInfrastructure();
 
         ci.providerOwnerId = ownerId;
@@ -50,7 +50,7 @@ public class ConvergedInfrastructure implements Taggable {
         ci.name = name;
         ci.description = description;
         ci.provisioningTimestamp = System.currentTimeMillis();
-        ci.selfUrl = selfUrl;
+        ci.providerTopologyId = providerTopologyId;
         return ci;
     }
 
@@ -64,7 +64,7 @@ public class ConvergedInfrastructure implements Taggable {
     private String                       providerTopologyId;
     private long                         provisioningTimestamp;
     private Map<String,String>           tags;
-    private String                       selfUrl;
+    //private String                       selfUrl;
 
     private ConvergedInfrastructure() { }
 
@@ -105,9 +105,9 @@ public class ConvergedInfrastructure implements Taggable {
         return provisioningTimestamp;
     }
 
-    public String getSelfUrl() {
-        return selfUrl;
-    }
+//    public String getSelfUrl() {
+//        return selfUrl;
+//    }
     /**
      * Fetches the value of the specified tag key.
      * @param tag the key of the tag to be fetched
