@@ -34,7 +34,6 @@ import javax.annotation.Nonnull;
 public class CIProvisionOptions {
     private String baseInstanceName;
     private String instanceTemplate;
-    private String topologyId;
     private String description;
     private String name;
     private String zone;
@@ -66,11 +65,10 @@ public class CIProvisionOptions {
     }
     */
 
-    static public @Nonnull CIProvisionOptions getInstance(@Nonnull String topologyId, @Nonnull String name, @Nonnull String description, @Nonnull String zone, @Nonnull int size, @Nonnull String instanceTemplate) {
+    static public @Nonnull CIProvisionOptions getInstance(@Nonnull String name, @Nonnull String description, @Nonnull String zone, @Nonnull int size, @Nonnull String instanceTemplate) {
         CIProvisionOptions options = new CIProvisionOptions();
 
         options.instanceTemplate = instanceTemplate;
-        options.topologyId = topologyId;
         options.description = description;
         options.zone = zone;
         options.size = size;
@@ -78,13 +76,6 @@ public class CIProvisionOptions {
         options.name = name;
         options.baseInstanceName = name;
         return options;
-    }
-
-    /**
-     * @return the topology from which an infrastructure is being provisioned
-     */
-    public @Nonnull String getTopologyId() {
-        return topologyId;
     }
 
     public String getZone() {
