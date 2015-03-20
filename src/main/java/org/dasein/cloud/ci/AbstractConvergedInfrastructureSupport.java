@@ -87,7 +87,7 @@ public abstract class AbstractConvergedInfrastructureSupport<T extends CloudProv
         ArrayList<ResourceStatus> status = new ArrayList<ResourceStatus>();
 
         for( ConvergedInfrastructure ci : listConvergedInfrastructures(null) ) {
-            status.add(new ResourceStatus(ci.getProviderConvergedInfrastructureId(), ci.getCurrentState()));
+            status.add(new ResourceStatus(ci.getName(), ci.getCurrentState()));
         }
         return status;
     }
