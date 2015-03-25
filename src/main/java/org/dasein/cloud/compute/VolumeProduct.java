@@ -106,6 +106,7 @@ public class VolumeProduct {
     private String                  providerProductId;
     private Storage<Gigabyte>       volumeSize;
     private VolumeType              type;
+    private Float                   maxIopsRatio;
     
     private VolumeProduct() { }
 
@@ -179,6 +180,17 @@ public class VolumeProduct {
         return (getProviderProductId().equals(prd.getProviderProductId()));
     }
 
+    /**
+     * Set the volume product with the maximum IOPS to storage size ratio,
+     * e.g. 30:1 will result in a ratio value of 30.0.
+     * @param ratio
+     * @return this
+     */
+    public @Nonnull VolumeProduct withMaxIopsRatio(@Nonnegative float ratio) {
+        maxIopsRatio = ratio;
+        return this;
+    }
+
     public @Nullable String getCurrency() {
         return currency;
     }
@@ -218,7 +230,11 @@ public class VolumeProduct {
     public @Nullable Storage<Gigabyte> getVolumeSize() {
         return volumeSize;
     }
-    
+
+    public @Nullable Float getMaxIopsRatio() {
+        return maxIopsRatio;
+    }
+
     public String toString() {
         return (name + " [#" + providerProductId + "]");
     }
