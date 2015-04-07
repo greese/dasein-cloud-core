@@ -11,7 +11,7 @@ import org.dasein.cloud.InternalException;
 import org.dasein.cloud.ProviderContext;
 import org.dasein.cloud.ResourceStatus;
 
-public abstract class AbstractConvergedHttpLoadBalancer<T extends CloudProvider> implements ConvergedHttpLoadBalancer {
+public abstract class AbstractConvergedHttpLoadBalancer<T extends CloudProvider> implements ConvergedHttpLoadBalancerSupport {
     private T provider;
 
     public AbstractConvergedHttpLoadBalancer(@Nonnull T provider) {
@@ -32,10 +32,10 @@ public abstract class AbstractConvergedHttpLoadBalancer<T extends CloudProvider>
     }
 
     @Override
-    public @Nullable ConvergedHttpLoadBalancer getConvergedHttpLoadBalancer(@Nonnull String convergedHttpLoadBalancerId) throws CloudException, InternalException {
-        for( ConvergedHttpLoadBalancer c : listConvergedHttpLoadBalancers(null) ) {
-            if( c.getConvergedHttpLoadBalancerId().equals(convergedHttpLoadBalancerId) ) {
-                return c;
+    public @Nullable ConvergedHttpLoadBalancer getConvergedHttpLoadBalancer(@Nonnull String convergedHttpLoadBalancerName) throws CloudException, InternalException {
+        for (ConvergedHttpLoadBalancer convergedHttpLoadBalancer : listConvergedHttpLoadBalancers(null) ) {
+            if (convergedHttpLoadBalancer.getName().equals(convergedHttpLoadBalancerName) ) {
+                return convergedHttpLoadBalancer;
             }
         }
         return null;
@@ -45,19 +45,19 @@ public abstract class AbstractConvergedHttpLoadBalancer<T extends CloudProvider>
     public @Nonnull Iterable<ResourceStatus> listConvergedHttpLoadBalancerStatus() throws InternalException, CloudException {
         ArrayList<ResourceStatus> status = new ArrayList<ResourceStatus>();
 
-        for( ConvergedHttpLoadBalancer c : listConvergedHttpLoadBalancers(null) ) {
-            status.add(new ResourceStatus(c.getConvergedHttpLoadBalancerId(), c.getCurrentState()));
+        for( ConvergedHttpLoadBalancer convergedHttpLoadBalancer : listConvergedHttpLoadBalancers(null) ) {
+            status.add(new ResourceStatus(convergedHttpLoadBalancer.getName(), convergedHttpLoadBalancer.getCurrentState()));
         }
         return status;
     }
 
     @Override
-    public boolean createConvergedHttpLoadBalancer(@Nonnull ConvergedHttpLoadbalancerOptions withConvergedHttpLoadBalancerOptions) throws CloudException, InternalException {
+    public String createConvergedHttpLoadBalancer(@Nonnull ConvergedHttpLoadbalancerOptions withConvergedHttpLoadBalancerOptions) throws CloudException, InternalException {
         throw new InternalException("Operation not supported for this cloud");
     }
 
     @Override
-    public boolean removeConvergedHttpLoadBalancers(@Nonnull String[] convergedHttpLoadBalancerIds) throws CloudException, InternalException {
+    public void removeConvergedHttpLoadBalancers(@Nonnull String[] convergedHttpLoadBalancerIds) throws CloudException, InternalException {
         throw new InternalException("Operation not supported for this cloud");
     }
 

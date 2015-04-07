@@ -1,43 +1,74 @@
 package org.dasein.cloud.ci;
 
-import java.util.Locale;
-
+import java.math.BigInteger;
+import java.util.Map;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.dasein.cloud.Taggable;
 
-import org.dasein.cloud.AccessControlledService;
-import org.dasein.cloud.CloudException;
-import org.dasein.cloud.InternalException;
-import org.dasein.cloud.ResourceStatus;
-import org.dasein.cloud.Tag;
+public class ConvergedHttpLoadBalancer implements Taggable {
+    private String selfLink = null;
+    private BigInteger id;
+    private String name = null;
+    private String description = null;
+    private String creationTimestamp = null;
+    private String urlMap = null;
 
-public interface ConvergedHttpLoadBalancer extends AccessControlledService {
+    private ConvergedHttpLoadBalancer() { }
 
-    public @Nonnull String getProviderTermForConvergedHttpLoadBalancer(@Nonnull Locale locale);
+    static public @Nonnull ConvergedHttpLoadBalancer getInstance(@Nonnull BigInteger id, @Nonnull String name, @Nonnull String description, @Nonnull String creationTimestamp, @Nonnull String urlMap) {
+        ConvergedHttpLoadBalancer convergedHttpLoadBalancer = new ConvergedHttpLoadBalancer();
+        convergedHttpLoadBalancer.id = id;
+        convergedHttpLoadBalancer.name = name;
+        convergedHttpLoadBalancer.description = description;
+        convergedHttpLoadBalancer.creationTimestamp = creationTimestamp;
+        convergedHttpLoadBalancer.urlMap = urlMap;
 
-    public @Nullable ConvergedHttpLoadBalancer getConvergedHttpLoadBalancer(@Nonnull String convergedHttpLoadbalancerId) throws CloudException, InternalException;
+        return convergedHttpLoadBalancer;
+    }
 
-    public boolean isSubscribed() throws CloudException, InternalException;
+    public ConvergedHttpLoadBalancer withSelfLink(@Nonnull String selfLink) {
+        this.selfLink = selfLink;
+        return this;
+    }
 
-    public @Nonnull Iterable<ConvergedHttpLoadBalancer> listConvergedHttpLoadBalancers(@Nullable ConvergedHttpLoadBalancerFilterOptions options) throws CloudException, InternalException;
+    @Override
+    public Map<String, String> getTags() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-    public @Nonnull Iterable<ResourceStatus> listConvergedHttpLoadBalancerStatus() throws InternalException, CloudException;
+    @Override
+    public void setTag(String key, String value) {
+        // TODO Auto-generated method stub
 
-    public void updateTags(@Nonnull String convergedHttpLoadbalancerId, @Nonnull Tag... tags) throws CloudException, InternalException;
+    }
 
-    public void updateTags(@Nonnull String[] convergedHttpLoadbalancerIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+    public Object getCurrentState() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-    public void removeTags(@Nonnull String convergedHttpLoadbalancerId, @Nonnull Tag... tags) throws CloudException, InternalException;
+    public String getId() {
+        return id.toString();
+    }
 
-    public void removeTags(@Nonnull String[] convergedHttpLoadbalancerIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+    public String getName() {
+        return name;
+    }
 
-    public boolean createConvergedHttpLoadBalancer(@Nonnull ConvergedHttpLoadbalancerOptions withConvergedHttpLoadbalancerOptions) throws CloudException, InternalException;
+    public String getDescription() {
+        return description;
+    }
 
-    public boolean removeConvergedHttpLoadBalancers(String[] convergedHttpLoadBalancerIds) throws CloudException, InternalException;
+    public String getCreationTimestamp() {
+        return creationTimestamp;
+    }
 
-    public String getConvergedHttpLoadBalancerId();
+    public String getUrlMap() {
+        return urlMap;
+    }
 
-    public ResourceStatus getCurrentState();
-
-
+    public String getSelfLink() {
+        return selfLink;
+    }
 }

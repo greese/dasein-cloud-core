@@ -32,8 +32,11 @@ public interface CIServices {
 
     public @Nullable TopologySupport getTopologySupport();
 
-    public boolean hasConvergedInfrastructureSupport();
+    public @Nullable ConvergedHttpLoadBalancerSupport getConvergedHttpLoadBalancerSupport();
 
+    public boolean hasConvergedHttpLoadBalancerSupport();
+
+    public boolean hasConvergedInfrastructureSupport();
 
     /**
      * @return indicates whether or not the cloud provider supports complex resource topologies
