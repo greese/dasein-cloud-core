@@ -57,7 +57,7 @@ public abstract class AbstractConvergedHttpLoadBalancer<T extends CloudProvider>
     }
 
     @Override
-    public void removeConvergedHttpLoadBalancers(@Nonnull String[] convergedHttpLoadBalancerIds) throws CloudException, InternalException {
+    public void removeConvergedHttpLoadBalancers(@Nonnull String globalForwardingRuleName) throws CloudException, InternalException {
         throw new InternalException("Operation not supported for this cloud");
     }
 
