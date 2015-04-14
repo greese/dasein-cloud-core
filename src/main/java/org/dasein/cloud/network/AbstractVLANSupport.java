@@ -616,6 +616,25 @@ public abstract class AbstractVLANSupport<T extends CloudProvider> implements VL
             updateInternetGatewayTags(id, tags);
         }
     }
+    
+    @Override
+    public void setVLANTags( @Nonnull String[] vlanIds, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        for( String id : vlanIds ) {
+
+            Tag[] collectionForDelete = TagUtils.getTagsForDelete(getVlan(id).getTags(), tags);
+
+            if( collectionForDelete.length != 0 ) {
+                removeSubnetTags(id, collectionForDelete);
+            }
+
+            updateSubnetTags(id, tags);
+        }
+    }
+    
+    @Override
+    public void setVLANTags( @Nonnull String vlanId, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        setSubnetTags(new String[]{vlanId}, tags);
+    }
 
     @Override
     public void setSubnetTags( @Nonnull String subnetId, @Nonnull Tag... tags ) throws CloudException, InternalException {

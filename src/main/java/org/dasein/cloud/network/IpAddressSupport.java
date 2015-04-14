@@ -402,6 +402,70 @@ public interface IpAddressSupport extends AccessControlledService {
     public void stopForward(@Nonnull String ruleId) throws InternalException, CloudException;
 
     /**
+     * Removes meta-data from a IP address. If tag values are set, their removal is dependent on underlying cloud
+     * provider behavior. They may be removed only if the tag value matches or they may be removed regardless of the
+     * value.
+     * @param addressId the IP address to update
+     * @param tags the meta-data tags to remove
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void removeTags(@Nonnull String addressId, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Removes meta-data from multiple IP addresses. If tag values are set, their removal is dependent on underlying cloud
+     * provider behavior. They may be removed only if the tag value matches or they may be removed regardless of the
+     * value.
+     * @param addressIds the IP addresses to update
+     * @param tags  the meta-data tags to remove
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void removeTags(@Nonnull String[] addressIds, @Nonnull Tag ... tags) throws CloudException, InternalException;
+    
+    /**
+     * Updates meta-data for a IP address with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     * @param addressId the IP address to update
+     * @param tags the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void updateTags(@Nonnull String addressId, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Updates meta-data for multiple IP addresses with the new values. It will not overwrite any value that currently
+     * exists unless it appears in the tags you submit.
+     * @param addressIds the IP addresses to update
+     * @param tags  the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void updateTags(@Nonnull String[] addressIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+    /**
+     * Set meta-data for a IP address. Remove any tags that were not provided by the incoming tags, and add or
+     * overwrite any new or pre-existing tags.
+     *
+     * @param addressId the IP address to update
+     * @param tags     the meta-data tags to set
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public void setTags( @Nonnull String addressId, @Nonnull Tag... tags ) throws CloudException, InternalException;
+
+    /**
+     * Set meta-data for multiple IP addresses. Remove any tags that were not provided by the incoming tags, and add or
+     * overwrite any new or pre-existing tags.
+     *
+     * @param addressIds the IP addresses to update
+     * @param tags      the meta-data tags to set
+     * @throws CloudException
+     * @throws InternalException
+     */
+    public void setTags( @Nonnull String[] addressIds, @Nonnull Tag... tags ) throws CloudException, InternalException;
+    
+    /**
      * Indicates whether or not IP addresses can be allocated for VLAN use. Only makes sense when the cloud
      * actually supports VLANS.
      * @param ofVersion the version of public IP address that might be routed to a VLAN resource
