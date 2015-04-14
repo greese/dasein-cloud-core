@@ -313,7 +313,10 @@ public interface IpAddressSupport extends AccessControlledService {
      * @throws InternalException an internal error occurred inside the Dasein Cloud implementation
      * @throws CloudException an error occurred processing the request in the cloud
      */
+    @Deprecated
     public @Nonnull Iterable<IpForwardingRule> listRules(@Nonnull String addressId) throws InternalException, CloudException;
+
+    public @Nonnull Iterable<IpForwardingRule> listRules(@Nullable String addressId, @Nullable String serverId) throws InternalException, CloudException;
 
     /**
      * Lists all IP protocol versions supported for static IP addresses in this cloud.
@@ -399,7 +402,10 @@ public interface IpAddressSupport extends AccessControlledService {
      * @throws CloudException an error occurred processing the request in the cloud
      * @throws org.dasein.cloud.OperationNotSupportedException this cloud provider does not support address forwarding
      */
+    @Deprecated
     public void stopForward(@Nonnull String ruleId) throws InternalException, CloudException;
+
+    public void stopForward(@Nullable String ruleId, @Nullable String serverId) throws InternalException, CloudException;
 
     /**
      * Indicates whether or not IP addresses can be allocated for VLAN use. Only makes sense when the cloud
