@@ -19,14 +19,11 @@
 
 package org.dasein.cloud.network;
 
-import org.dasein.cloud.CloudException;
-import org.dasein.cloud.CloudProvider;
-import org.dasein.cloud.InternalException;
-import org.dasein.cloud.ProviderContext;
-import org.dasein.cloud.Requirement;
+import org.dasein.cloud.*;
 import org.dasein.cloud.identity.ServiceAction;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Locale;
 
@@ -156,4 +153,27 @@ public abstract class AbstractIpAddressSupport<T extends CloudProvider> implemen
     public @Nonnull String[] mapServiceAction(@Nonnull ServiceAction action) {
         return new String[0];
     }
+
+    @Override
+    @Deprecated
+    public @Nonnull Iterable<IpForwardingRule> listRules(@Nonnull String addressId) throws InternalException, CloudException{
+        return listRules(addressId, null);
+    }
+
+    @Override
+    public @Nonnull Iterable<IpForwardingRule> listRules(@Nullable String addressId, @Nullable String serverId) throws InternalException, CloudException{
+        return Collections.emptyList();
+    }
+
+    @Override
+    @Deprecated
+    public void stopForward(@Nonnull String ruleId) throws InternalException, CloudException{
+        stopForward(ruleId, null);
+    }
+
+    @Override
+    public void stopForward(@Nullable String ruleId, @Nullable String serverId) throws InternalException, CloudException{
+        throw new OperationNotSupportedException("Removing forwarding rules is not currently implemented for " + getContext().getRegionId() + " of " + getProvider().getCloudName());
+    }
+
 }
