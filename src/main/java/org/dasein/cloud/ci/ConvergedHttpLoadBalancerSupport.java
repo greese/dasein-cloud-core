@@ -19,7 +19,7 @@ public interface ConvergedHttpLoadBalancerSupport extends AccessControlledServic
 
     public boolean isSubscribed() throws CloudException, InternalException;
 
-    public @Nonnull Iterable<ConvergedHttpLoadBalancer> listConvergedHttpLoadBalancers(@Nullable ConvergedHttpLoadBalancerFilterOptions options) throws CloudException, InternalException;
+    public @Nonnull Iterable<String> listConvergedHttpLoadBalancers() throws CloudException, InternalException;
 
     public @Nonnull Iterable<ResourceStatus> listConvergedHttpLoadBalancerStatus() throws InternalException, CloudException;
 

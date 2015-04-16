@@ -33,22 +33,12 @@ public abstract class AbstractConvergedHttpLoadBalancer<T extends CloudProvider>
 
     @Override
     public @Nullable ConvergedHttpLoadBalancer getConvergedHttpLoadBalancer(@Nonnull String convergedHttpLoadBalancerName) throws CloudException, InternalException {
-        for (ConvergedHttpLoadBalancer convergedHttpLoadBalancer : listConvergedHttpLoadBalancers(null) ) {
-            if (convergedHttpLoadBalancer.getName().equals(convergedHttpLoadBalancerName) ) {
-                return convergedHttpLoadBalancer;
-            }
-        }
-        return null;
+        throw new InternalException("Operation not supported for this cloud");
     }
 
     @Override
     public @Nonnull Iterable<ResourceStatus> listConvergedHttpLoadBalancerStatus() throws InternalException, CloudException {
-        ArrayList<ResourceStatus> status = new ArrayList<ResourceStatus>();
-
-        for( ConvergedHttpLoadBalancer convergedHttpLoadBalancer : listConvergedHttpLoadBalancers(null) ) {
-            status.add(new ResourceStatus(convergedHttpLoadBalancer.getName(), convergedHttpLoadBalancer.getCurrentState()));
-        }
-        return status;
+        throw new InternalException("Operation not supported for this cloud");
     }
 
     @Override
