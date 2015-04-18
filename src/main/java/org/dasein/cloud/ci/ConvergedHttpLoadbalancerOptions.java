@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import org.dasein.cloud.ci.ConvergedHttpLoadBalancer.BackendService;
+
 
 //import com.google.api.services.compute.model.HostRule;
 
@@ -151,6 +153,8 @@ public class ConvergedHttpLoadbalancerOptions {
         return httpHealthCheckSelfUrl.toArray(new String[httpHealthCheckSelfUrl.size()]);
     }
 
+    private List<BackendService> backendServices = new ArrayList<BackendService>();
+    
     public ConvergedHttpLoadbalancerOptions withBackendService(@Nonnull String name, String description, int portNumber, String portName) {
         this.backendServiceName = name;
         this.backendServiceDescription = description;

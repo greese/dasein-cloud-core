@@ -42,7 +42,7 @@ public abstract class AbstractConvergedHttpLoadBalancer<T extends CloudProvider>
     }
 
     @Override
-    public String createConvergedHttpLoadBalancer(@Nonnull ConvergedHttpLoadbalancerOptions withConvergedHttpLoadBalancerOptions) throws CloudException, InternalException {
+    public String createConvergedHttpLoadBalancer(@Nonnull ConvergedHttpLoadBalancer withConvergedHttpLoadBalancerOptions) throws CloudException, InternalException {
         throw new InternalException("Operation not supported for this cloud");
     }
 

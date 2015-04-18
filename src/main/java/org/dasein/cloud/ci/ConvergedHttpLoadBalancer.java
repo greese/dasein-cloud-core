@@ -31,6 +31,30 @@ public class ConvergedHttpLoadBalancer implements Taggable {
 
     private List<BackendServiceBackend> backendServiceBackends = new ArrayList<BackendServiceBackend>();
 
+    public List<BackendServiceBackend> getBackendServiceBackends() {
+        return backendServiceBackends;
+    }
+
+    public List<HealthCheck> getHealthChecks() {
+        return healthChecks;
+    }
+
+    public List<BackendService> getBackendServices() {
+        return backendServices;
+    }
+
+    public List<ForwardingRule> getForwardingRules() {
+        return forwardingRules;
+    }
+
+    public List<TargetHttpProxy> getTargetHttpProxies() {
+        return targetHttpProxies;
+    }
+
+    public List<UrlSet> getUrlSets() {
+        return urlSets;
+    }
+
     private ConvergedHttpLoadBalancer(String name, String description, String selfLink, String creationTimestamp, String defaultBackendService) { 
         this.name = name;
         this.description = description;
@@ -39,8 +63,14 @@ public class ConvergedHttpLoadBalancer implements Taggable {
         this.defaultBackendService = defaultBackendService;
     }
 
+    // For cataloging existing 
     static public @Nonnull ConvergedHttpLoadBalancer getInstance(String name, String description, String selfLink, String creationTimestamp, String defaultBackendService) {
         return new ConvergedHttpLoadBalancer(name, description, selfLink, creationTimestamp, defaultBackendService);
+    }
+
+    // For creating new
+    static public @Nonnull ConvergedHttpLoadBalancer getInstance(String name, String description, String defaultBackendService) {
+        return new ConvergedHttpLoadBalancer(name, description, null, null, defaultBackendService);
     }
 
     public class UrlSet {
@@ -107,13 +137,25 @@ public class ConvergedHttpLoadBalancer implements Taggable {
         public String getSelfLink() {
             return selfLink;
         }
+
+        public void setTargetProxySelfUrl(String selfLink) {
+            this.selfLink = selfLink;
+        }
     }
 
+    // For cataloging existing
     public ConvergedHttpLoadBalancer withTargetHttpProxy(String name, String description, String creationTimestamp, String selfLink) {
         targetHttpProxies.add(new TargetHttpProxy(name, description, creationTimestamp, selfLink));
         return this;
     }
 
+    // For creating new
+    public ConvergedHttpLoadBalancer withTargetHttpProxy(String name, String description) {
+        targetHttpProxies.add(new TargetHttpProxy(name, description, null, null));
+        return this;
+    }
+
+    
     public class ForwardingRule {
         private String name;
         private String description;
@@ -151,9 +193,14 @@ public class ConvergedHttpLoadBalancer implements Taggable {
             return selfLink;
         }
 
+        public void setGlobalForwardingRuleSelfUrl(String selfLink) {
+            this.selfLink = selfLink;
+        }
+
         public String getIpAddress() {
             return ipAddress;
         }
+
         public String getIpProtocol() {
             return ipProtocol;
         }
@@ -165,9 +212,18 @@ public class ConvergedHttpLoadBalancer implements Taggable {
         public String getTarget() {
             return target;
         }
+
     }
+
+    // For cataloging existing
     public ConvergedHttpLoadBalancer withForwardingRule(String name, String description, String creationTimestamp, String ipAddress, String ipProtocol, String portRange, String selfLink, String target) {
         forwardingRules.add(new ForwardingRule(name, description, creationTimestamp, ipAddress, ipProtocol, portRange, selfLink, target));
+        return this;
+    }
+
+    // For creating new
+    public ConvergedHttpLoadBalancer withForwardingRule(String name, String description, String ipAddress, String ipProtocol, String portRange, String target) {
+        forwardingRules.add(new ForwardingRule(name, description, null, ipAddress, ipProtocol, portRange, null, target));
         return this;
     }
 
@@ -222,6 +278,10 @@ public class ConvergedHttpLoadBalancer implements Taggable {
             return healthChecks;
         }
 
+        public void setServiceUrl(String serviceUrl) {
+            selfLink = serviceUrl;
+        }
+
         public String getSelfLink() {
             return selfLink;
         }
@@ -229,10 +289,18 @@ public class ConvergedHttpLoadBalancer implements Taggable {
         public Integer getTimeoutSec() {
             return timeoutSec;
         }
+
     }
 
+    // For cataloging existing
     public ConvergedHttpLoadBalancer withBackendService(String name, String description, String creationTimestamp, Integer port, String portName, String protocol, String[] healthChecks, String selfLink, Integer timeoutSec) {
         backendServices.add(new BackendService(name, description, creationTimestamp, port, portName, protocol, healthChecks, selfLink, timeoutSec));
+        return this;
+    }
+
+    // For cataloging existing
+    public ConvergedHttpLoadBalancer withBackendService(String name, String description, Integer port, String portName, String protocol, String[] healthChecks, Integer timeoutSec) {
+        backendServices.add(new BackendService(name, description, null, port, portName, protocol, healthChecks, null, timeoutSec));
         return this;
     }
 
@@ -293,6 +361,7 @@ public class ConvergedHttpLoadBalancer implements Taggable {
             return maxUtilization;
         }
     }
+
     public ConvergedHttpLoadBalancer withBackendServiceBackend(String name, String description, String balancingMode, Float capacityScaler, String group, Integer maxRate, Float maxRatePerInstance, Float maxUtilization) {
         backendServiceBackends.add(new BackendServiceBackend(name, description, balancingMode, capacityScaler, group, maxRate, maxRatePerInstance, maxUtilization));
         return this;
@@ -345,7 +414,7 @@ public class ConvergedHttpLoadBalancer implements Taggable {
             return port;
         }
 
-        public String requestPath() {
+        public String getRequestPath() {
             return requestPath;
         }
 
@@ -368,15 +437,30 @@ public class ConvergedHttpLoadBalancer implements Taggable {
         public String getSelfLink() {
             return selfLink;
         }
+
+        public void setSelfLink(String selfLink) {
+            this.selfLink = selfLink;
+        }
     }
 
+    // For cataloging existing 
     public ConvergedHttpLoadBalancer withHealthCheck(String name, String description, String creationTimestamp, String host, Integer port, String requestPath, Integer checkIntervalSec, Integer timeoutSec, Integer healthyThreshold, Integer unhealthyThreshold, String selfLink) {
         healthChecks.add(new HealthCheck(name, description, creationTimestamp, host, port, requestPath, checkIntervalSec, timeoutSec, healthyThreshold, unhealthyThreshold, selfLink));
         return this;
     }
 
+    // For creating new 
+    public ConvergedHttpLoadBalancer withHealthCheck(String name, String description, String host, Integer port, String requestPath, Integer checkIntervalSec, Integer timeoutSec, Integer healthyThreshold, Integer unhealthyThreshold) {
+        healthChecks.add(new HealthCheck(name, description, null, host, port, requestPath, checkIntervalSec, timeoutSec, healthyThreshold, unhealthyThreshold, null));
+        return this;
+    }
+
     public String getDescription() {
         return description;
+    }
+
+    public void setUrlMapSelfUrl(String selfLink) {
+        this.selfLink = selfLink;
     }
 
     public String getSelfLink() {
