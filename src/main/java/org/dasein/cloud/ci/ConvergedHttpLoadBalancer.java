@@ -8,8 +8,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 
 import org.dasein.cloud.Taggable;
-import org.dasein.cloud.ci.ConvergedHttpLoadbalancerOptions.HttpHealthCheck;
-import org.dasein.cloud.ci.ConvergedHttpLoadbalancerOptions.UrlMapPathRule;
+
 
 public class ConvergedHttpLoadBalancer implements Taggable {
 
