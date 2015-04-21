@@ -359,6 +359,11 @@ public class ConvergedHttpLoadBalancer implements Taggable {
         public Float getMaxUtilization() {
             return maxUtilization;
         }
+
+        public String getSelfLink() {
+            System.out.println("getSelfLink not implemented for BackendServiceBackend");
+            return null;
+        }
     }
 
     public ConvergedHttpLoadBalancer withBackendServiceBackend(String name, String description, String balancingMode, Float capacityScaler, String group, Integer maxRate, Float maxRatePerInstance, Float maxUtilization) {
@@ -486,13 +491,49 @@ public class ConvergedHttpLoadBalancer implements Taggable {
     }
 
     public Object getCurrentState() {
-        // TODO Auto-generated method stub
-        return null;
+        System.out.println("getCurrentState not implemented");
+        return "getCurrentState not implemented";
     }
 
     public String getName() {
-        // TODO Auto-generated method stub
+        return name;
+    }
+
+
+    
+    public String getbackendServiceBackendSelfUrl(@Nonnull String name) {
+        for (BackendServiceBackend backendServiceBackend : backendServiceBackends) {
+            if (backendServiceBackend.getName().equals(name)) {
+                return backendServiceBackend.getSelfLink();
+            }
+        }
         return null;
     }
 
+    public String getBackendServiceSelfUrl(@Nonnull String name) {
+        for (BackendService backendService : backendServices) {
+            if (backendService.getName().equals(name)) {
+                return backendService.getSelfLink();
+            }
+        }
+        return null;
+    }
+
+    public String getTargetProxySelfUrl(@Nonnull String name) {
+        for (TargetHttpProxy targetHttpProxy : targetHttpProxies) {
+            if (targetHttpProxy.getName().equals(name)) {
+                return targetHttpProxy.getSelfLink();
+            }
+        }
+        return null;
+    }
+
+    public String getHealthCheckSelfUrl(String healthCheckName) {
+        for (HealthCheck healthCheck : healthChecks) {
+            if (healthCheck.getName().equals(healthCheckName)) {
+                return healthCheck.getSelfLink();
+            }
+        }
+        return null;
+    }
 }
