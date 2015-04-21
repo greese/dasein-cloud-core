@@ -499,8 +499,6 @@ public class ConvergedHttpLoadBalancer implements Taggable {
         return name;
     }
 
-
-    
     public String getbackendServiceBackendSelfUrl(@Nonnull String name) {
         for (BackendServiceBackend backendServiceBackend : backendServiceBackends) {
             if (backendServiceBackend.getName().equals(name)) {
