@@ -236,8 +236,9 @@ public class ConvergedHttpLoadBalancer implements Taggable {
         private String[] healthChecks;
         private String selfLink;
         private Integer timeoutSec;
+        private String[] backendServiceBackends;
 
-        BackendService(String name, String description, String creationTimestamp, Integer port, String portName, String protocol, String[] healthChecks, String selfLink, Integer timeoutSec) {
+        BackendService(String name, String description, String creationTimestamp, Integer port, String portName, String protocol, String[] healthChecks, String[] backendServiceBackends, String selfLink, Integer timeoutSec) {
             this.name = name;
             this.description = description;
             this.creationTimestamp = creationTimestamp;
@@ -245,6 +246,7 @@ public class ConvergedHttpLoadBalancer implements Taggable {
             this.portName = portName;
             this.protocol = protocol;
             this.healthChecks = healthChecks;
+            this.backendServiceBackends = backendServiceBackends;
             this.selfLink = selfLink;
             this.timeoutSec = timeoutSec;
         }
@@ -277,6 +279,10 @@ public class ConvergedHttpLoadBalancer implements Taggable {
             return healthChecks;
         }
 
+        public String[] getBackendServiceBackends() {
+            return backendServiceBackends;
+        }
+
         public void setServiceUrl(String serviceUrl) {
             selfLink = serviceUrl;
         }
@@ -292,14 +298,14 @@ public class ConvergedHttpLoadBalancer implements Taggable {
     }
 
     // For cataloging existing
-    public ConvergedHttpLoadBalancer withBackendService(String name, String description, String creationTimestamp, Integer port, String portName, String protocol, String[] healthChecks, String selfLink, Integer timeoutSec) {
-        backendServices.add(new BackendService(name, description, creationTimestamp, port, portName, protocol, healthChecks, selfLink, timeoutSec));
+    public ConvergedHttpLoadBalancer withBackendService(String name, String description, String creationTimestamp, Integer port, String portName, String protocol, String[] healthChecks, String backendServiceBackends[], String selfLink, Integer timeoutSec) {
+        backendServices.add(new BackendService(name, description, creationTimestamp, port, portName, protocol, healthChecks, backendServiceBackends, selfLink, timeoutSec));
         return this;
     }
 
-    // For cataloging existing
-    public ConvergedHttpLoadBalancer withBackendService(String name, String description, Integer port, String portName, String protocol, String[] healthChecks, Integer timeoutSec) {
-        backendServices.add(new BackendService(name, description, null, port, portName, protocol, healthChecks, null, timeoutSec));
+    // For creating new 
+    public ConvergedHttpLoadBalancer withBackendService(String name, String description, Integer port, String portName, String protocol, String[] healthChecks, String[] backendServiceBackends, Integer timeoutSec) {
+        backendServices.add(new BackendService(name, description, null, port, portName, protocol, healthChecks, backendServiceBackends, null, timeoutSec));
         return this;
     }
 
