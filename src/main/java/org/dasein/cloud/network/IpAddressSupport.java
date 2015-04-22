@@ -402,10 +402,17 @@ public interface IpAddressSupport extends AccessControlledService {
      * @throws CloudException an error occurred processing the request in the cloud
      * @throws org.dasein.cloud.OperationNotSupportedException this cloud provider does not support address forwarding
      */
-    @Deprecated
     public void stopForward(@Nonnull String ruleId) throws InternalException, CloudException;
 
-    public void stopForward(@Nullable String ruleId, @Nullable String serverId) throws InternalException, CloudException;
+    /**
+     * Removes the forwarding rule directed to the specified virtual machine
+     * @param ruleId the rule to be removed
+     * @param serverId the server to which the forwarding rule currently directs
+     * @throws InternalException an internal error occurred inside the Dasein Cloud implementation
+     * @throws CloudException an error occurred processing the request in the cloud
+     * @throws org.dasein.cloud.OperationNotSupportedException this cloud provider does not support address forwarding
+     */
+    public void stopForwardToServer(@Nonnull String ruleId, @Nonnull String serverId) throws InternalException, CloudException;
 
     /**
      * Removes meta-data from a IP address. If tag values are set, their removal is dependent on underlying cloud

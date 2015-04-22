@@ -217,11 +217,11 @@ public abstract class AbstractIpAddressSupport<T extends CloudProvider> implemen
     @Override
     @Deprecated
     public void stopForward(@Nonnull String ruleId) throws InternalException, CloudException{
-        stopForward(ruleId, null);
+        throw new OperationNotSupportedException("Removing forwarding rules is not currently implemented for " + getContext().getRegionId() + " of " + getProvider().getCloudName());
     }
 
     @Override
-    public void stopForward(@Nullable String ruleId, @Nullable String serverId) throws InternalException, CloudException{
+    public void stopForwardToServer(@Nonnull String ruleId, @Nonnull String serverId) throws InternalException, CloudException{
         throw new OperationNotSupportedException("Removing forwarding rules is not currently implemented for " + getContext().getRegionId() + " of " + getProvider().getCloudName());
     }
 
