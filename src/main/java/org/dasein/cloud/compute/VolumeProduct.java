@@ -105,6 +105,8 @@ public class VolumeProduct {
     private String                  name;
     private String                  providerProductId;
     private Storage<Gigabyte>       volumeSize;
+    private Storage<Gigabyte>       minVolumeSize;
+    private Storage<Gigabyte>       maxVolumeSize;
     private VolumeType              type;
     private Float                   maxIopsRatio;
     
@@ -191,6 +193,16 @@ public class VolumeProduct {
         return this;
     }
 
+    public @Nonnull VolumeProduct withMinVolumeSize(@Nonnull Storage<Gigabyte> size) {
+        minVolumeSize = size;
+        return this;
+    }
+
+    public @Nonnull VolumeProduct withMaxVolumeSize(@Nonnull Storage<Gigabyte> size) {
+        maxVolumeSize = size;
+        return this;
+    }
+
     public @Nullable String getCurrency() {
         return currency;
     }
@@ -226,9 +238,22 @@ public class VolumeProduct {
     public @Nonnull VolumeType getType() {
         return type;
     }
-    
+
+    /**
+     * @deprecated use {@link VolumeProduct#getMinVolumeSize()} and {@link VolumeProduct#getMinVolumeSize()} instead.
+     * @return
+     */
+    @Deprecated
     public @Nullable Storage<Gigabyte> getVolumeSize() {
         return volumeSize;
+    }
+
+    public @Nullable Storage<Gigabyte> getMinVolumeSize() {
+        return minVolumeSize;
+    }
+
+    public @Nullable Storage<Gigabyte> getMaxVolumeSize() {
+        return maxVolumeSize;
     }
 
     public @Nullable Float getMaxIopsRatio() {
