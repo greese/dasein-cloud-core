@@ -206,11 +206,11 @@ public abstract class AbstractIpAddressSupport<T extends CloudProvider> implemen
     @Override
     @Deprecated
     public @Nonnull Iterable<IpForwardingRule> listRules(@Nonnull String addressId) throws InternalException, CloudException{
-        return listRules(addressId, null);
+        return Collections.emptyList();
     }
 
     @Override
-    public @Nonnull Iterable<IpForwardingRule> listRules(@Nullable String addressId, @Nullable String serverId) throws InternalException, CloudException{
+    public @Nonnull Iterable<IpForwardingRule> listRulesForServer(@Nonnull String serverId) throws InternalException, CloudException{
         return Collections.emptyList();
     }
 
