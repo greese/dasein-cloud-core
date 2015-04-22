@@ -85,8 +85,21 @@ public interface FirewallCapabilities extends Capabilities{
      * @return a list of supported destinations
      * @throws InternalException an error occurred locally independent of any events in the cloud
      * @throws CloudException    an error occurred with the cloud provider while performing the operation
+     * @deprecated use {@link FirewallCapabilities#listSupportedDestinationTypes(boolean, Direction)}
      */
+    @Deprecated
     public @Nonnull Iterable<RuleTargetType> listSupportedDestinationTypes(boolean inVlan) throws InternalException, CloudException;
+
+    /**
+     * Describes what kinds of destinations may be named. A cloud must support at least one, but may support more
+     * than one.
+     * @param inVlan whether or not you are testing capabilities for VLAN firewalls
+     * @param direction indicates whether the rule is ingress or egress
+     * @return a list of supported destinations
+     * @throws InternalException an error occurred locally independent of any events in the cloud
+     * @throws CloudException    an error occurred with the cloud provider while performing the operation
+     */
+    public @Nonnull Iterable<RuleTargetType> listSupportedDestinationTypes(boolean inVlan, Direction direction) throws InternalException, CloudException;
 
     /**
      * Lists the supported traffic directions for rules behind this kind of firewall.
@@ -122,8 +135,21 @@ public interface FirewallCapabilities extends Capabilities{
      * @return a list of supported source endpoints
      * @throws InternalException an error occurred locally independent of any events in the cloud
      * @throws CloudException    an error occurred with the cloud provider while performing the operation
+     * @deprecated use {@link FirewallCapabilities#listSupportedDestinationTypes(boolean, Direction)}
      */
+    @Deprecated
     public @Nonnull Iterable<RuleTargetType> listSupportedSourceTypes(boolean inVlan) throws InternalException, CloudException;
+
+    /**
+     * Describes what kinds of source endpoints may be named. A cloud must support at least one, but may support more
+     * than one.
+     * @param inVlan whether or not you are testing capabilities for VLAN firewalls
+     * @param direction indicates whether the rule is ingress or egress
+     * @return a list of supported source endpoints
+     * @throws InternalException an error occurred locally independent of any events in the cloud
+     * @throws CloudException    an error occurred with the cloud provider while performing the operation
+     */
+    public @Nonnull Iterable<RuleTargetType> listSupportedSourceTypes(boolean inVlan, Direction direction) throws InternalException, CloudException;
 
     /**
      * @return true if the cloud requires a new firewall to be created with an initial set of rules

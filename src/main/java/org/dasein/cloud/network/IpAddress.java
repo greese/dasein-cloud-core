@@ -19,9 +19,12 @@
 
 package org.dasein.cloud.network;
 
+import java.util.HashMap;
+import java.util.Map;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.dasein.cloud.Taggable;
 
 /**
  * Represents an IP address that in some way belongs to a cloud account holder.
@@ -32,7 +35,7 @@ import javax.annotation.Nullable;
  * @version 2013.02 added reserved attribute (issue #28)
  * @since unknown
  */
-public class IpAddress implements Networkable, Comparable<IpAddress> {
+public class IpAddress implements Networkable, Taggable, Comparable<IpAddress> {
     private String      address;
     private AddressType addressType;
     private boolean     forVlan;
@@ -45,6 +48,7 @@ public class IpAddress implements Networkable, Comparable<IpAddress> {
     private boolean     reserved;
     private String      serverId;
     private IPVersion   version;
+    private Map<String,String> tags;
     
     public IpAddress() { }
     
@@ -214,5 +218,38 @@ public class IpAddress implements Networkable, Comparable<IpAddress> {
 
     public void setReserved(boolean reserved) {
         this.reserved = reserved;
+    }
+
+    /**
+     * Fetches a single tag value.
+     * @param key the key of the desired tag
+     * @return the value for the desired tag if it exists
+     */
+    public @Nullable String getTag(@Nonnull String key) {
+        return getTags().get(key);
+    }
+
+    @Override
+    public @Nonnull Map<String,String> getTags() {
+        if( tags == null ) {
+            tags = new HashMap<String, String>();
+        }
+        return tags;
+    }
+
+    @Override
+    public void setTag(@Nonnull String key, @Nonnull String value) {
+        if( tags == null ) {
+            tags = new HashMap<String,String>();
+        }
+        tags.put(key, value);
+    }
+
+    /**
+     * Sets the tag set to the specified values.
+     * @param tags the new tag set
+     */
+    public void setTags(@Nonnull Map<String,String> tags) {
+        this.tags = tags;
     }
 }

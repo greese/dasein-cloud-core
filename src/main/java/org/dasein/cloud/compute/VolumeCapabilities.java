@@ -71,7 +71,9 @@ public interface VolumeCapabilities extends Capabilities{
      * @return the maximum IOPS value
      * @throws org.dasein.cloud.InternalException an error occurred within the Dasein Cloud implementation determining the limit
      * @throws org.dasein.cloud.CloudException an error occurred retrieving the limit from the cloud
+     * @deprecated use {@link VolumeProduct#getMaxIops()} instead.
      */
+    @Deprecated
     public int getMaximumVolumeProductIOPS() throws InternalException, CloudException;
 
     /**
@@ -79,7 +81,9 @@ public interface VolumeCapabilities extends Capabilities{
      * @return the minimum IOPS value
      * @throws org.dasein.cloud.InternalException an error occurred within the Dasein Cloud implementation determining the limit
      * @throws org.dasein.cloud.CloudException an error occurred retrieving the limit from the cloud
+     * @deprecated use {@link VolumeProduct#getMinIops()} instead.
      */
+    @Deprecated
     public int getMinimumVolumeProductIOPS() throws InternalException, CloudException;
 
     /**
@@ -87,6 +91,7 @@ public interface VolumeCapabilities extends Capabilities{
      * @return the maximum size of an IOPS volume
      * @throws org.dasein.cloud.InternalException an error occurred within the Dasein Cloud implementation determining the limit
      * @throws org.dasein.cloud.CloudException an error occurred retrieving the limit from the cloud
+     * @deprecated use {@link org.dasein.cloud.compute.VolumeProduct#get}
      */
     public int getMaximumVolumeSizeIOPS() throws InternalException, CloudException;
 

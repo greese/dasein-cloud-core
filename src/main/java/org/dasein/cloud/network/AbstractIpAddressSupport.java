@@ -24,9 +24,13 @@ import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.ProviderContext;
 import org.dasein.cloud.Requirement;
+import org.dasein.cloud.Tag;
+import org.dasein.cloud.*;
 import org.dasein.cloud.identity.ServiceAction;
+import org.dasein.cloud.util.TagUtils;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Locale;
 
@@ -156,4 +160,69 @@ public abstract class AbstractIpAddressSupport<T extends CloudProvider> implemen
     public @Nonnull String[] mapServiceAction(@Nonnull ServiceAction action) {
         return new String[0];
     }
+    
+    @Override
+    public void removeTags(@Nonnull String addressId, @Nonnull Tag... tags) throws CloudException, InternalException {
+        // NO-OP
+    }
+
+    @Override
+    public void removeTags(@Nonnull String[] addressIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for( String id : addressIds ) {
+            removeTags(id, tags);
+        }
+    }
+    
+    @Override
+    public void updateTags(@Nonnull String addressId, @Nonnull Tag... tags) throws CloudException, InternalException {
+        // NO-OP
+    }
+
+    @Override
+    public void updateTags(@Nonnull String[] addressIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for( String id : addressIds ) {
+            updateTags(id, tags);
+        }
+    }
+
+    @Override
+    public void setTags( @Nonnull String addressId, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        setTags(new String[]{addressId}, tags);
+    }
+
+    @Override
+    public void setTags( @Nonnull String[] addressIds, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        for( String id : addressIds ) {
+            Tag[] collectionForDelete = TagUtils.getTagsForDelete(getIpAddress(id).getTags(), tags);
+
+            if( collectionForDelete.length != 0) {
+                removeTags(id, collectionForDelete);
+            }
+
+            updateTags(id, tags);
+        }
+    }
+
+    @Override
+    @Deprecated
+    public @Nonnull Iterable<IpForwardingRule> listRules(@Nonnull String addressId) throws InternalException, CloudException{
+        return listRules(addressId, null);
+    }
+
+    @Override
+    public @Nonnull Iterable<IpForwardingRule> listRules(@Nullable String addressId, @Nullable String serverId) throws InternalException, CloudException{
+        return Collections.emptyList();
+    }
+
+    @Override
+    @Deprecated
+    public void stopForward(@Nonnull String ruleId) throws InternalException, CloudException{
+        throw new OperationNotSupportedException("Removing forwarding rules is not currently implemented for " + getContext().getRegionId() + " of " + getProvider().getCloudName());
+    }
+
+    @Override
+    public void stopForwardToServer(@Nonnull String ruleId, @Nonnull String serverId) throws InternalException, CloudException{
+        throw new OperationNotSupportedException("Removing forwarding rules is not currently implemented for " + getContext().getRegionId() + " of " + getProvider().getCloudName());
+    }
+
 }
