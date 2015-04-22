@@ -807,6 +807,28 @@ public interface VLANSupport extends AccessControlledService {
     public void setRoutingTableTags( @Nonnull String[] routingTableIds, @Nonnull Tag... tags ) throws CloudException, InternalException;
 
     /**
+     * Set meta-data for a VLAN. Remove any tags that were not provided by the incoming tags, and add or
+     * overwrite any new or pre-existing tags.
+     *
+     * @param vlanId the VLAN to update
+     * @param tags     the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void setVLANTags( @Nonnull String vlanId, @Nonnull Tag... tags ) throws CloudException, InternalException;
+
+    /**
+     * Set meta-data for multiple VLAN. Remove any tags that were not provided by the incoming tags, and add or
+     * overwrite any new or pre-existing tags.
+     *
+     * @param vlanIds the VLAN to update
+     * @param tags      the meta-data tags to set
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     */
+    public void setVLANTags( @Nonnull String[] vlanIds, @Nonnull Tag... tags ) throws CloudException, InternalException;
+    
+    /**
      * Updates meta-data for a VLAN with the new values. It will not overwrite any value that currently
      * exists unless it appears in the tags you submit.
      * @param vlanId the VLAN to update

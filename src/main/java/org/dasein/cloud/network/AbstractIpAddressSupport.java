@@ -19,8 +19,15 @@
 
 package org.dasein.cloud.network;
 
+import org.dasein.cloud.CloudException;
+import org.dasein.cloud.CloudProvider;
+import org.dasein.cloud.InternalException;
+import org.dasein.cloud.ProviderContext;
+import org.dasein.cloud.Requirement;
+import org.dasein.cloud.Tag;
 import org.dasein.cloud.*;
 import org.dasein.cloud.identity.ServiceAction;
+import org.dasein.cloud.util.TagUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -152,6 +159,48 @@ public abstract class AbstractIpAddressSupport<T extends CloudProvider> implemen
     @Override
     public @Nonnull String[] mapServiceAction(@Nonnull ServiceAction action) {
         return new String[0];
+    }
+    
+    @Override
+    public void removeTags(@Nonnull String addressId, @Nonnull Tag... tags) throws CloudException, InternalException {
+        // NO-OP
+    }
+
+    @Override
+    public void removeTags(@Nonnull String[] addressIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for( String id : addressIds ) {
+            removeTags(id, tags);
+        }
+    }
+    
+    @Override
+    public void updateTags(@Nonnull String addressId, @Nonnull Tag... tags) throws CloudException, InternalException {
+        // NO-OP
+    }
+
+    @Override
+    public void updateTags(@Nonnull String[] addressIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for( String id : addressIds ) {
+            updateTags(id, tags);
+        }
+    }
+
+    @Override
+    public void setTags( @Nonnull String addressId, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        setTags(new String[]{addressId}, tags);
+    }
+
+    @Override
+    public void setTags( @Nonnull String[] addressIds, @Nonnull Tag... tags ) throws CloudException, InternalException {
+        for( String id : addressIds ) {
+            Tag[] collectionForDelete = TagUtils.getTagsForDelete(getIpAddress(id).getTags(), tags);
+
+            if( collectionForDelete.length != 0) {
+                removeTags(id, collectionForDelete);
+            }
+
+            updateTags(id, tags);
+        }
     }
 
     @Override
