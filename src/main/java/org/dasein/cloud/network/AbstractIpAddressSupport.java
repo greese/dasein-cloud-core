@@ -204,7 +204,6 @@ public abstract class AbstractIpAddressSupport<T extends CloudProvider> implemen
     }
 
     @Override
-    @Deprecated
     public @Nonnull Iterable<IpForwardingRule> listRules(@Nonnull String addressId) throws InternalException, CloudException{
         return Collections.emptyList();
     }
@@ -215,7 +214,6 @@ public abstract class AbstractIpAddressSupport<T extends CloudProvider> implemen
     }
 
     @Override
-    @Deprecated
     public void stopForward(@Nonnull String ruleId) throws InternalException, CloudException{
         throw new OperationNotSupportedException("Removing forwarding rules is not currently implemented for " + getContext().getRegionId() + " of " + getProvider().getCloudName());
     }
