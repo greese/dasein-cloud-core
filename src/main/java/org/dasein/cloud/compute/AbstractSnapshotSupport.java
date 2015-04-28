@@ -36,6 +36,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Locale;
 
 /**
  * Basic non-functional functionality for any implementation of snapshot support in any cloud.
@@ -52,6 +53,20 @@ public abstract class AbstractSnapshotSupport<T extends CloudProvider> extends A
     @Override
     public void addSnapshotShare(@Nonnull String providerSnapshotId, @Nonnull String accountNumber) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Snapshot sharing is not currently implemented for " + getProvider().getCloudName());
+    }
+
+    @Override
+    @Deprecated
+    public @Nonnull String getProviderTermForSnapshot(@Nonnull Locale locale) {
+        try {
+            return getCapabilities().getProviderTermForSnapshot(locale);
+        }
+        catch( CloudException e ) {
+            throw new RuntimeException("Unable to get capabilities for "+getProvider().getCloudName(), e);
+        }
+        catch( InternalException e ) {
+            throw new RuntimeException("Unable to get capabilities for "+getProvider().getCloudName(), e);
+        }
     }
 
     @Override
