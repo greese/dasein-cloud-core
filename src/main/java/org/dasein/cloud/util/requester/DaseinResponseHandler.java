@@ -46,12 +46,16 @@ public class DaseinResponseHandler<T> implements ResponseHandler<T> {
     @Override
     public T handleResponse(HttpResponse httpResponse) throws ClientProtocolException, IOException {
         if( httpResponse.getStatusLine().getStatusCode() != HttpStatus.SC_OK
+                && httpResponse.getStatusLine().getStatusCode() != HttpStatus.SC_NO_CONTENT
                 && httpResponse.getStatusLine().getStatusCode() != HttpStatus.SC_CREATED
                 && httpResponse.getStatusLine().getStatusCode() != HttpStatus.SC_ACCEPTED ) {
             throw new CloudResponseException(CloudErrorType.GENERAL, httpResponse.getStatusLine().getStatusCode(),
                     httpResponse.getStatusLine().getReasonPhrase(), EntityUtils.toString(httpResponse.getEntity()));
         }
         else {
+            if(httpResponse.getEntity() == null)
+                return null;
+
             return processor.read(httpResponse.getEntity().getContent(), classType);
         }
     }
