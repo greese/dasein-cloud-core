@@ -19,6 +19,7 @@
 
 package org.dasein.cloud.compute;
 
+import org.dasein.cloud.AbstractProviderService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
@@ -34,40 +35,34 @@ import javax.annotation.Nonnull;
  * @version 2014.08
  * @since 2014.08
  */
-public class AbstractAffinityGroupSupport<T extends CloudProvider> implements AffinityGroupSupport{
-    private T provider;
-
-    protected final @Nonnull T getProvider() {
-        return provider;
-    }
-
-    public AbstractAffinityGroupSupport(@Nonnull T provider) {
-        this.provider = provider;
+public class AbstractAffinityGroupSupport<T extends CloudProvider> extends AbstractProviderService<T> implements AffinityGroupSupport{
+    protected AbstractAffinityGroupSupport(T provider) {
+        super(provider);
     }
 
     @Override
     public @Nonnull AffinityGroup create(@Nonnull AffinityGroupCreateOptions options) throws InternalException, CloudException{
-        throw new OperationNotSupportedException("Affinity Groups cannot be created in " + provider.getCloudName());
+        throw new OperationNotSupportedException("Affinity Groups cannot be created in " + getProvider().getCloudName());
     }
 
     @Override
     public void delete(@Nonnull String affinityGroupId) throws InternalException, CloudException{
-        throw new OperationNotSupportedException("Affinity Groups cannot be deleted in " + provider.getCloudName());
+        throw new OperationNotSupportedException("Affinity Groups cannot be deleted in " + getProvider().getCloudName());
     }
 
     @Override
     public @Nonnull AffinityGroup get(@Nonnull String affinityGroupId) throws InternalException, CloudException{
-        throw new OperationNotSupportedException("Affinity Groups are not supported in " + provider.getCloudName());
+        throw new OperationNotSupportedException("Affinity Groups are not supported in " + getProvider().getCloudName());
     }
 
     @Override
     public @Nonnull Iterable<AffinityGroup> list(@Nonnull AffinityGroupFilterOptions options) throws InternalException, CloudException{
-        throw new OperationNotSupportedException("Affinity Groups are not supported in " + provider.getCloudName());
+        throw new OperationNotSupportedException("Affinity Groups are not supported in " + getProvider().getCloudName());
     }
 
     @Override
     public AffinityGroup modify(@Nonnull String affinityGroupId, @Nonnull AffinityGroupCreateOptions options) throws InternalException, CloudException{
-        throw new OperationNotSupportedException("Affinity Groups cannot be modified in " + provider.getCloudName());
+        throw new OperationNotSupportedException("Affinity Groups cannot be modified in " + getProvider().getCloudName());
     }
 
     @Override

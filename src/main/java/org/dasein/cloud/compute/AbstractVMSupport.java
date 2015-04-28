@@ -19,6 +19,7 @@
 
 package org.dasein.cloud.compute;
 
+import org.dasein.cloud.AbstractProviderService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
@@ -63,11 +64,9 @@ import java.util.concurrent.Future;
  * @version 2013.04
  * @since 2013.04
  */
-public abstract class AbstractVMSupport<T extends CloudProvider> implements VirtualMachineSupport {
-    private T provider;
-
-    public AbstractVMSupport( T provider ) {
-        this.provider = provider;
+public abstract class AbstractVMSupport<T extends CloudProvider> extends AbstractProviderService<T> implements VirtualMachineSupport {
+    protected AbstractVMSupport(T provider) {
+        super(provider);
     }
 
     @Override
@@ -142,21 +141,6 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
         throw new OperationNotSupportedException("Spot Instances are not supported for " + getProvider().getCloudName());
     }
 
-    /**
-     * Provides the current provider context for the request in progress.
-     *
-     * @return the current provider context
-     * @throws CloudException no context was defined before making this call
-     */
-    protected final @Nonnull ProviderContext getContext() throws CloudException {
-        ProviderContext ctx = getProvider().getContext();
-
-        if( ctx == null ) {
-            throw new CloudException("No context was defined for this request");
-        }
-        return ctx;
-    }
-
     @Override
     @Deprecated
     public @Nonnegative int getCostFactor( @Nonnull VmState state ) throws CloudException, InternalException {
@@ -200,13 +184,6 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
         finally {
             APITrace.end();
         }
-    }
-
-    /**
-     * @return the current provider governing any operations against this cloud in this support instance
-     */
-    protected final @Nonnull T getProvider() {
-        return provider;
     }
 
     @Override
@@ -530,7 +507,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
      * @return a resource file location with a vmproducts JSON definition
      * @throws CloudException no context has been set for loading the products
      */
-    protected @Nonnull String getVMProductsResource() throws CloudException {
+    protected @Nonnull String getVMProductsResource() throws InternalException {
         Properties p = getContext().getCustomProperties();
         String value = null;
 

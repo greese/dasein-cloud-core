@@ -19,6 +19,7 @@
 
 package org.dasein.cloud.compute;
 
+import org.dasein.cloud.AbstractProviderService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
@@ -43,11 +44,9 @@ import java.util.Collections;
  * @since 2013.04
  * @version 2013.04
  */
-public abstract class AbstractSnapshotSupport<T extends CloudProvider> implements SnapshotSupport {
-    private T provider;
-
-    public AbstractSnapshotSupport(@Nonnull T provider) {
-        this.provider = provider;
+public abstract class AbstractSnapshotSupport<T extends CloudProvider> extends AbstractProviderService<T> implements SnapshotSupport {
+    protected AbstractSnapshotSupport(T provider) {
+        super(provider);
     }
 
     @Override
@@ -69,26 +68,6 @@ public abstract class AbstractSnapshotSupport<T extends CloudProvider> implement
     @Deprecated
     public final @Nullable String create(@Nonnull String ofVolume, @Nonnull String description) throws InternalException, CloudException {
         return createSnapshot(SnapshotCreateOptions.getInstanceForCreate(ofVolume, description, description));
-    }
-
-    /**
-     * @return the current authentication context for any calls through this support object
-     * @throws CloudException no context was set
-     */
-    protected @Nonnull ProviderContext getContext() throws CloudException {
-        ProviderContext ctx = getProvider().getContext();
-
-        if( ctx == null ) {
-            throw new CloudException("No context was specified for this request");
-        }
-        return ctx;
-    }
-
-    /**
-     * @return the provider object associated with any calls through this support object
-     */
-    protected final @Nonnull T getProvider() {
-        return provider;
     }
 
     @Override

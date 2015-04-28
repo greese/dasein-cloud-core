@@ -19,12 +19,17 @@
 
 package org.dasein.cloud.network;
 
+import org.dasein.cloud.AbstractProviderService;
+import org.dasein.cloud.CloudProvider;
+
 import javax.annotation.Nullable;
 
-public abstract class AbstractNetworkServices implements NetworkServices {
-    public AbstractNetworkServices() { }
-    
-    @Override 
+public abstract class AbstractNetworkServices<T extends CloudProvider> extends AbstractProviderService<T> implements NetworkServices {
+    protected AbstractNetworkServices(T provider) {
+        super(provider);
+    }
+
+    @Override
     public @Nullable DNSSupport getDnsSupport() {
         return null;
     }
