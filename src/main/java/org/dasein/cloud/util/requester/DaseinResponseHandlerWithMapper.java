@@ -48,12 +48,16 @@ public class DaseinResponseHandlerWithMapper<T, V> implements ResponseHandler<V>
     @Override
     public V handleResponse(HttpResponse httpResponse) throws ClientProtocolException, IOException {
         if( httpResponse.getStatusLine().getStatusCode() != HttpStatus.SC_OK
+                && httpResponse.getStatusLine().getStatusCode() != HttpStatus.SC_NO_CONTENT
                 && httpResponse.getStatusLine().getStatusCode() != HttpStatus.SC_CREATED
                 && httpResponse.getStatusLine().getStatusCode() != HttpStatus.SC_ACCEPTED ) {
             throw new CloudResponseException(CloudErrorType.GENERAL, httpResponse.getStatusLine().getStatusCode(),
                     httpResponse.getStatusLine().getReasonPhrase(), EntityUtils.toString(httpResponse.getEntity()));
         }
         else {
+            if(httpResponse.getEntity() == null)
+                return null;
+
             T responseObject = processor.read(httpResponse.getEntity().getContent(), classType);
             if (responseObject == null)
                 return null;
