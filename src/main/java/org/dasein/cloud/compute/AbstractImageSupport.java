@@ -19,6 +19,7 @@
 
 package org.dasein.cloud.compute;
 
+import org.dasein.cloud.AbstractProviderService;
 import org.dasein.cloud.AsynchronousTask;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
@@ -46,31 +47,29 @@ import java.util.Locale;
  * @version 2013.04
  * @since 2013.04
  */
-public abstract class AbstractImageSupport<T extends CloudProvider> implements MachineImageSupport {
-    private T provider;
-
-    public AbstractImageSupport(@Nonnull T provider) {
-        this.provider = provider;
+public abstract class AbstractImageSupport<T extends CloudProvider> extends AbstractProviderService<T> implements MachineImageSupport {
+    protected AbstractImageSupport(T provider) {
+        super(provider);
     }
 
     @Override
     public void addImageShare(@Nonnull String providerImageId, @Nonnull String accountNumber) throws CloudException, InternalException {
-        throw new OperationNotSupportedException("Support for image sharing is not currently implemented");
+        throw new OperationNotSupportedException("Support for image sharing is not currently implemented in " + getProvider().getCloudName());
     }
 
     @Override
     public void addPublicShare(@Nonnull String providerImageId) throws CloudException, InternalException {
-        throw new OperationNotSupportedException("Support for image sharing is not currently implemented");
+        throw new OperationNotSupportedException("Support for image sharing is not currently implemented in " + getProvider().getCloudName());
     }
 
     @Override
     public @Nonnull String bundleVirtualMachine(@Nonnull String virtualMachineId, @Nonnull MachineImageFormat format, @Nonnull String bucket, @Nonnull String name) throws CloudException, InternalException {
-        throw new OperationNotSupportedException("Image bundling is not currently implemented");
+        throw new OperationNotSupportedException("Image bundling is not currently implemented in " + getProvider().getCloudName());
     }
 
     @Override
     public void bundleVirtualMachineAsync(@Nonnull String virtualMachineId, @Nonnull MachineImageFormat format, @Nonnull String bucket, @Nonnull String name, @Nonnull AsynchronousTask<String> trackingTask) throws CloudException, InternalException {
-        throw new OperationNotSupportedException("Image bundling is not currently implemented");
+        throw new OperationNotSupportedException("Image bundling is not currently implemented in " + getProvider().getCloudName());
     }
 
     /**
@@ -83,7 +82,7 @@ public abstract class AbstractImageSupport<T extends CloudProvider> implements M
      * @throws InternalException an error occurred locally while attempting to capture the virtual machine as an image
      */
     protected MachineImage capture(@Nonnull ImageCreateOptions options, @Nullable AsynchronousTask<MachineImage> task) throws CloudException, InternalException {
-        throw new OperationNotSupportedException("Image capture is not currently implemented");
+        throw new OperationNotSupportedException("Image capture is not currently implemented in " + getProvider().getCloudName());
     }
 
     @Override
@@ -137,27 +136,14 @@ public abstract class AbstractImageSupport<T extends CloudProvider> implements M
         t.start();
     }
 
-    protected @Nonnull ProviderContext getContext() throws CloudException {
-        ProviderContext ctx = getProvider().getContext();
-
-        if( ctx == null ) {
-            throw new CloudException("No context has been set for this request");
-        }
-        return ctx;
-    }
-
     @Override
     public @Nonnull String copyImage( @Nonnull ImageCopyOptions options ) throws CloudException, InternalException {
-        throw new OperationNotSupportedException("Image copying is not currently implemented");
+        throw new OperationNotSupportedException("Image copying is not currently implemented in " + getProvider().getCloudName());
     }
 
     @Override
     public final @Nullable MachineImage getMachineImage(@Nonnull String providerImageId) throws CloudException, InternalException {
         return getImage(providerImageId);
-    }
-
-    protected final @Nonnull T getProvider() {
-        return provider;
     }
 
     @Override
@@ -393,7 +379,7 @@ public abstract class AbstractImageSupport<T extends CloudProvider> implements M
 
     @Override
     public @Nonnull MachineImage registerImageBundle(@Nonnull ImageCreateOptions options) throws CloudException, InternalException {
-        throw new OperationNotSupportedException("Image bundling is not currently implemented");
+        throw new OperationNotSupportedException("Image bundling is not currently implemented in " + getProvider().getCloudName());
     }
 
     @Override
@@ -408,12 +394,12 @@ public abstract class AbstractImageSupport<T extends CloudProvider> implements M
 
     @Override
     public void removeImageShare(@Nonnull String providerImageId, @Nonnull String accountNumber) throws CloudException, InternalException {
-        throw new OperationNotSupportedException("Image sharing is not currently implemented");
+        throw new OperationNotSupportedException("Image sharing is not currently implemented in " + getProvider().getCloudName());
     }
 
     @Override
     public void removePublicShare(@Nonnull String providerImageId) throws CloudException, InternalException {
-        throw new OperationNotSupportedException("Image sharing is not currently supported");
+        throw new OperationNotSupportedException("Image sharing is not currently supported in " + getProvider().getCloudName());
     }
 
     @Override

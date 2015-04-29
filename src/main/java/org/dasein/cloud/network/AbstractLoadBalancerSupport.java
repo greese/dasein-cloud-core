@@ -19,6 +19,7 @@
 
 package org.dasein.cloud.network;
 
+import org.dasein.cloud.AbstractProviderService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
@@ -45,11 +46,11 @@ import java.util.Locale;
  * @version 2013.04 initial version
  * @since 2013.04
  */
-public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> implements LoadBalancerSupport {
-    private T provider;
+public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> extends AbstractProviderService<T> implements
+        LoadBalancerSupport {
 
-    public AbstractLoadBalancerSupport(@Nonnull T provider) {
-        this.provider = provider;
+    protected AbstractLoadBalancerSupport(T provider) {
+        super(provider);
     }
 
     @Override
@@ -111,19 +112,6 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
         return LoadBalancerAddressType.DNS;
     }
 
-    /**
-     * @return the current authentication context for any calls through this support object
-     * @throws CloudException no context was set
-     */
-    protected @Nonnull ProviderContext getContext() throws CloudException {
-        ProviderContext ctx = getProvider().getContext();
-
-        if( ctx == null ) {
-            throw new CloudException("No context was specified for this request");
-        }
-        return ctx;
-    }
-
     @Override
     public LoadBalancer getLoadBalancer(@Nonnull String loadBalancerId) throws CloudException, InternalException {
         for( LoadBalancer lb : listLoadBalancers() ) {
@@ -183,13 +171,6 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
     @Override
     public @Nonnegative int getMaxPublicPorts() throws CloudException, InternalException {
         return 1;
-    }
-
-    /**
-     * @return the provider object associated with any calls through this support object
-     */
-    protected final @Nonnull T getProvider() {
-        return provider;
     }
 
     @Override

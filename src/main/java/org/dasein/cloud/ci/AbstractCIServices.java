@@ -19,6 +19,9 @@
 
 package org.dasein.cloud.ci;
 
+import org.dasein.cloud.AbstractProviderService;
+import org.dasein.cloud.CloudProvider;
+
 import javax.annotation.Nullable;
 
 /**
@@ -27,7 +30,11 @@ import javax.annotation.Nullable;
  *
  * @author George Reese
  */
-public abstract class AbstractCIServices implements CIServices {
+public abstract class AbstractCIServices<T extends CloudProvider> extends AbstractProviderService<T> implements CIServices {
+    protected AbstractCIServices(T provider) {
+        super(provider);
+    }
+
     @Override
     public @Nullable ConvergedInfrastructureSupport getConvergedInfrastructureSupport() {
         return null;

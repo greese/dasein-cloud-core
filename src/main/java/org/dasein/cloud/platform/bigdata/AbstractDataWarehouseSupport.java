@@ -19,6 +19,7 @@
 
 package org.dasein.cloud.platform.bigdata;
 
+import org.dasein.cloud.AbstractProviderService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
@@ -43,27 +44,11 @@ import java.util.Map;
  * @since 2014.03
  * @version 2014.03 initial version (issue #100)
  */
-public abstract class AbstractDataWarehouseSupport<T extends CloudProvider> implements DataWarehouseSupport {
-    private T provider;
+public abstract class AbstractDataWarehouseSupport<T extends CloudProvider> extends AbstractProviderService<T> implements
+        DataWarehouseSupport {
 
-    public AbstractDataWarehouseSupport(@Nonnull T provider) { this.provider = provider; }
-
-    /**
-     * Provides the current provider context for the request in progress.
-     * @return the current provider context
-     * @throws CloudException no context was defined before making this call
-     */
-    protected final @Nonnull ProviderContext getContext() throws CloudException {
-        ProviderContext ctx = getProvider().getContext();
-
-        if( ctx == null ) {
-            throw new CloudException("No context was defined for this request");
-        }
-        return ctx;
-    }
-
-    protected final @Nonnull T getProvider() {
-        return provider;
+    protected AbstractDataWarehouseSupport(T provider) {
+        super(provider);
     }
 
     @Override

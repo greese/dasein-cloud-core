@@ -127,7 +127,7 @@ public class TestOldStorageCloudProvider extends AbstractCloud {
 
     @Override
     public @Nonnull StorageServices getStorageServices() {
-        return new AbstractStorageServices() {
+        return new AbstractStorageServices(this) {
             @Override
             public @Nullable OfflineStoreSupport getOfflineStorageSupport() {
                 return null;

@@ -19,6 +19,7 @@
 
 package org.dasein.cloud.dc;
 
+import org.dasein.cloud.AbstractProviderService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
@@ -37,18 +38,10 @@ import java.util.Locale;
  * @version 2015.01 initial version
  * @since 2015.01
  */
-public abstract class AbstractDataCenterServices<T extends CloudProvider> implements DataCenterServices {
-    private final T provider;
+public abstract class AbstractDataCenterServices<T extends CloudProvider> extends AbstractProviderService<T> implements DataCenterServices {
 
-    public AbstractDataCenterServices(T provider) {
-        this.provider = provider;
-    }
-
-    /**
-     * @return the provider object associated with any calls through this support object
-     */
-    protected final @Nonnull T getProvider() {
-        return provider;
+    protected AbstractDataCenterServices(T provider) {
+        super(provider);
     }
 
     @Override
@@ -68,7 +61,7 @@ public abstract class AbstractDataCenterServices<T extends CloudProvider> implem
             return getCapabilities().getProviderTermForDataCenter(locale);
         }
         catch( Exception e ) {
-            throw new RuntimeException("Unable to access data center capabilities of " + provider.getCloudName(), e);
+            throw new RuntimeException("Unable to access data center capabilities of " + getProvider().getCloudName(), e);
         }
     }
 
@@ -79,7 +72,7 @@ public abstract class AbstractDataCenterServices<T extends CloudProvider> implem
             return getCapabilities().getProviderTermForRegion(locale);
         }
         catch( Exception e ) {
-            throw new RuntimeException("Unable to access data center capabilities of " + provider.getCloudName(), e);
+            throw new RuntimeException("Unable to access data center capabilities of " + getProvider().getCloudName(), e);
         }
     }
 
