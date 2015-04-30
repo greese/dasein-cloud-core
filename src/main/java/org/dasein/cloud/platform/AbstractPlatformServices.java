@@ -19,6 +19,8 @@
 
 package org.dasein.cloud.platform;
 
+import org.dasein.cloud.AbstractProviderService;
+import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.platform.bigdata.DataWarehouseSupport;
 
 import javax.annotation.Nullable;
@@ -29,7 +31,11 @@ import javax.annotation.Nullable;
  * @since unknown
  * @version 2014.03 added support for data warehouse functionality (issue #100)
  */
-public abstract class AbstractPlatformServices implements PlatformServices {
+public abstract class AbstractPlatformServices<T extends CloudProvider> extends AbstractProviderService<T> implements PlatformServices {
+
+    protected AbstractPlatformServices(T provider) {
+        super(provider);
+    }
 
     @Override
     public @Nullable CDNSupport getCDNSupport() {

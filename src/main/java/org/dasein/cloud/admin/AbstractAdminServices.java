@@ -19,9 +19,14 @@
 
 package org.dasein.cloud.admin;
 
-public abstract class AbstractAdminServices implements AdminServices {
-    public AbstractAdminServices() { }
-    
+import org.dasein.cloud.AbstractProviderService;
+import org.dasein.cloud.CloudProvider;
+
+public abstract class AbstractAdminServices<T extends CloudProvider> extends AbstractProviderService<T> implements AdminServices {
+    protected AbstractAdminServices(T provider) {
+        super(provider);
+    }
+
     @Override
     public PrepaymentSupport getPrepaymentSupport() {
         return null;

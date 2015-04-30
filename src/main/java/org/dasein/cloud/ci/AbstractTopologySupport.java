@@ -19,6 +19,7 @@
 
 package org.dasein.cloud.ci;
 
+import org.dasein.cloud.AbstractProviderService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
@@ -42,35 +43,10 @@ import java.util.Collections;
  * @version 2013.07 initial version
  * @since 2013.07
  */
-public abstract class AbstractTopologySupport<T extends CloudProvider> implements TopologySupport {
-    private T provider;
+public abstract class AbstractTopologySupport<T extends CloudProvider> extends AbstractProviderService<T> implements TopologySupport {
 
-    /**
-     * Constructs a new topology support instance attached to the specified operational context.
-     * @param provider the provider representing the current operational context
-     */
-    public AbstractTopologySupport(@Nonnull T provider) {
-        this.provider = provider;
-    }
-
-    /**
-     * @return the current authentication context for any calls through this support object
-     * @throws CloudException no context was set
-     */
-    protected final @Nonnull ProviderContext getContext() throws CloudException {
-        ProviderContext ctx = getProvider().getContext();
-
-        if( ctx == null ) {
-            throw new CloudException("No context was specified for this request");
-        }
-        return ctx;
-    }
-
-    /**
-     * @return the provider object associated with any calls through this support object
-     */
-    protected final @Nonnull T getProvider() {
-        return provider;
+    protected AbstractTopologySupport(T provider) {
+        super(provider);
     }
 
     @Override

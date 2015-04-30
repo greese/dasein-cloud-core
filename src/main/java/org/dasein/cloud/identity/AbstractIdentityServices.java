@@ -19,6 +19,9 @@
 
 package org.dasein.cloud.identity;
 
+import org.dasein.cloud.AbstractProviderService;
+import org.dasein.cloud.CloudProvider;
+
 import javax.annotation.Nullable;
 
 /**
@@ -28,7 +31,11 @@ import javax.annotation.Nullable;
  * @since 2010.11
  * @version 2012.02 - added support for identity and access management
  */
-public abstract class AbstractIdentityServices implements IdentityServices {
+public abstract class AbstractIdentityServices<T extends CloudProvider> extends AbstractProviderService<T> implements IdentityServices {
+    protected AbstractIdentityServices(T provider) {
+        super(provider);
+    }
+
     @Override
     public @Nullable IdentityAndAccessSupport getIdentityAndAccessSupport() {
         return null;

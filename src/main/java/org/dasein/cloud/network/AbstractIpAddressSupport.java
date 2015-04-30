@@ -37,31 +37,10 @@ import java.util.Locale;
 /**
  * Created by stas on 19/02/2015.
  */
-public abstract class AbstractIpAddressSupport<T extends CloudProvider> implements IpAddressSupport {
-    private T provider;
+public abstract class AbstractIpAddressSupport<T extends CloudProvider> extends AbstractProviderService<T> implements IpAddressSupport {
 
-    public AbstractIpAddressSupport(@Nonnull T provider) {
-        this.provider = provider;
-    }
-
-    /**
-     * @return the current authentication context for any calls through this support object
-     * @throws org.dasein.cloud.CloudException no context was set
-     */
-    protected @Nonnull ProviderContext getContext() throws CloudException {
-        ProviderContext ctx = getProvider().getContext();
-
-        if( ctx == null ) {
-            throw new CloudException("No context was specified for this request");
-        }
-        return ctx;
-    }
-
-    /**
-     * @return the provider object associated with any calls through this support object
-     */
-    protected final @Nonnull T getProvider() {
-        return provider;
+    protected AbstractIpAddressSupport(T provider) {
+        super(provider);
     }
 
     @Override
