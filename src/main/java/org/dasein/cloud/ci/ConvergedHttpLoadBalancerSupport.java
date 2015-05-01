@@ -34,4 +34,6 @@ public interface ConvergedHttpLoadBalancerSupport extends AccessControlledServic
     public String createConvergedHttpLoadBalancer(@Nonnull ConvergedHttpLoadBalancer withConvergedHttpLoadbalancerOptions) throws CloudException, InternalException;
 
     public void removeConvergedHttpLoadBalancers(@Nonnull String globalForwardingRuleName) throws CloudException, InternalException;
+
+    public HttpLoadBalancerCapabilities getCapabilities();
 }

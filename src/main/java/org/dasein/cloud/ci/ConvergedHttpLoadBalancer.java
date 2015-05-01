@@ -1,6 +1,5 @@
 package org.dasein.cloud.ci;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -154,7 +153,12 @@ public class ConvergedHttpLoadBalancer implements Taggable {
         return this;
     }
 
-    
+    // For using existing has to be created after the urlmap...
+    //public ConvergedHttpLoadBalancer withExistingTargetHttpProxy(String selfLink) {
+    //    targetHttpProxies.add(new TargetHttpProxy(selfLink.replaceAll(".*/", ""), null, null, selfLink));
+    //    return this;
+    //}
+
     public class ForwardingRule {
         private String name;
         private String description;
@@ -211,7 +215,6 @@ public class ConvergedHttpLoadBalancer implements Taggable {
         public String getTarget() {
             return target;
         }
-
     }
 
     // For cataloging existing
@@ -225,6 +228,12 @@ public class ConvergedHttpLoadBalancer implements Taggable {
         forwardingRules.add(new ForwardingRule(name, description, null, ipAddress, ipProtocol, portRange, null, target));
         return this;
     }
+
+    // For using existing, has to be created after urlMap, so cannot reuse...
+    //public ConvergedHttpLoadBalancer withExistingForwardingRule(String selfLink) {
+    //    forwardingRules.add(new ForwardingRule(selfLink.replaceAll(".*/", ""), null, null, null, null, null, selfLink, null));
+    //    return this;
+    //}
 
     public class BackendService {
         private String name;
@@ -306,6 +315,12 @@ public class ConvergedHttpLoadBalancer implements Taggable {
     // For creating new 
     public ConvergedHttpLoadBalancer withBackendService(String name, String description, Integer port, String portName, String protocol, String[] healthChecks, String[] backendServiceBackends, Integer timeoutSec) {
         backendServices.add(new BackendService(name, description, null, port, portName, protocol, healthChecks, backendServiceBackends, null, timeoutSec));
+        return this;
+    }
+
+    // For using existing
+    public ConvergedHttpLoadBalancer withExistingBackendService(String selfLink) {
+        backendServices.add(new BackendService(selfLink.replaceAll(".*/", ""), null, null, null, null, null, null, null, selfLink, null));
         return this;
     }
 
@@ -462,6 +477,12 @@ public class ConvergedHttpLoadBalancer implements Taggable {
     // For creating new 
     public ConvergedHttpLoadBalancer withHealthCheck(String name, String description, String host, Integer port, String requestPath, Integer checkIntervalSec, Integer timeoutSec, Integer healthyThreshold, Integer unhealthyThreshold) {
         healthChecks.add(new HealthCheck(name, description, null, host, port, requestPath, checkIntervalSec, timeoutSec, healthyThreshold, unhealthyThreshold, null));
+        return this;
+    }
+
+    // For using existing
+    public ConvergedHttpLoadBalancer withExistingHealthCheck(String selfLink) {
+        healthChecks.add(new HealthCheck(selfLink.replaceAll(".*/", ""), null, null, null, null, null, null, null, null, null, selfLink));
         return this;
     }
 
