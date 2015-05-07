@@ -19,10 +19,36 @@
 
 package org.dasein.cloud.ci;
 
-import javax.annotation.Nonnull;
-
 import org.dasein.cloud.Capabilities;
 
-public interface AbstractReplicapoolSupportCapabilities extends Capabilities {
+public interface ReplicaPoolCapabilities extends Capabilities {
+    public boolean supportsHttpTraffic();
 
+    public boolean supportsHttpsTraffic();
+
+    public boolean supportsMetadata();
+
+    public boolean supportsSshKeys();
+
+    public boolean supportsTags();
+
+    public boolean supportsSsdDisk();
+
+    public boolean supportsStandardDisk();
+
+    public boolean supportsDeleteDiskOnTerminate();
+
+    public boolean supportsReadOnlySharedDisks();
+
+    public boolean supportsVmAutomaticRestart();
+
+    public boolean supportsMigrateVmOnMaintence();
+
+    public boolean supportsTemplates();
+
+    public boolean supportsRegions();
+
+    public boolean supportsCreateFromInstance();
+
+    public boolean supportsAutoScaling();
 }

@@ -37,30 +37,34 @@ import java.util.Map;
  * @since 2013.07
  */
 public class ConvergedInfrastructure implements Taggable {
+
     static public @Nonnull
-    ConvergedInfrastructure getInstance(@Nonnull String ownerId, @Nonnull String regionId, @Nonnull String ciId, @Nonnull ConvergedInfrastructureState state, @Nonnull String name, @Nonnull String description) {
+    ConvergedInfrastructure getInstance(@Nonnull String ownerId, @Nonnull String regionId, @Nonnull String dataCenterId, @Nonnull String ciId, @Nonnull ConvergedInfrastructureState state, @Nonnull String name, @Nonnull String description, String providerTopologyId) {
         ConvergedInfrastructure ci = new ConvergedInfrastructure();
 
         ci.providerOwnerId = ownerId;
         ci.providerRegionId = regionId;
+        ci.providerDataCenterId = dataCenterId;
         ci.providerConvergedInfrastructureId = ciId;
         ci.currentState = state;
         ci.name = name;
         ci.description = description;
         ci.provisioningTimestamp = System.currentTimeMillis();
+        ci.providerTopologyId = providerTopologyId;
         return ci;
     }
 
     private ConvergedInfrastructureState currentState;
     private String                       description;
     private String                       name;
-    private String providerConvergedInfrastructureId;
+    private String                       providerConvergedInfrastructureId;
     private String                       providerDataCenterId;
     private String                       providerOwnerId;
     private String                       providerRegionId;
     private String                       providerTopologyId;
     private long                         provisioningTimestamp;
     private Map<String,String>           tags;
+    //private String                       selfUrl;
 
     private ConvergedInfrastructure() { }
 
@@ -101,6 +105,9 @@ public class ConvergedInfrastructure implements Taggable {
         return provisioningTimestamp;
     }
 
+//    public String getSelfUrl() {
+//        return selfUrl;
+//    }
     /**
      * Fetches the value of the specified tag key.
      * @param tag the key of the tag to be fetched
