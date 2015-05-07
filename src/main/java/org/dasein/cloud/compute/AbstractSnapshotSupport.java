@@ -19,6 +19,7 @@
 
 package org.dasein.cloud.compute;
 
+import org.dasein.cloud.AbstractProviderService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
@@ -35,6 +36,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Locale;
 
 /**
  * Basic non-functional functionality for any implementation of snapshot support in any cloud.
@@ -43,16 +45,28 @@ import java.util.Collections;
  * @since 2013.04
  * @version 2013.04
  */
-public abstract class AbstractSnapshotSupport<T extends CloudProvider> implements SnapshotSupport {
-    private T provider;
-
-    public AbstractSnapshotSupport(@Nonnull T provider) {
-        this.provider = provider;
+public abstract class AbstractSnapshotSupport<T extends CloudProvider> extends AbstractProviderService<T> implements SnapshotSupport {
+    protected AbstractSnapshotSupport(T provider) {
+        super(provider);
     }
 
     @Override
     public void addSnapshotShare(@Nonnull String providerSnapshotId, @Nonnull String accountNumber) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Snapshot sharing is not currently implemented for " + getProvider().getCloudName());
+    }
+
+    @Override
+    @Deprecated
+    public @Nonnull String getProviderTermForSnapshot(@Nonnull Locale locale) {
+        try {
+            return getCapabilities().getProviderTermForSnapshot(locale);
+        }
+        catch( CloudException e ) {
+            throw new RuntimeException("Unable to get capabilities for "+getProvider().getCloudName(), e);
+        }
+        catch( InternalException e ) {
+            throw new RuntimeException("Unable to get capabilities for "+getProvider().getCloudName(), e);
+        }
     }
 
     @Override
@@ -69,26 +83,6 @@ public abstract class AbstractSnapshotSupport<T extends CloudProvider> implement
     @Deprecated
     public final @Nullable String create(@Nonnull String ofVolume, @Nonnull String description) throws InternalException, CloudException {
         return createSnapshot(SnapshotCreateOptions.getInstanceForCreate(ofVolume, description, description));
-    }
-
-    /**
-     * @return the current authentication context for any calls through this support object
-     * @throws CloudException no context was set
-     */
-    protected @Nonnull ProviderContext getContext() throws CloudException {
-        ProviderContext ctx = getProvider().getContext();
-
-        if( ctx == null ) {
-            throw new CloudException("No context was specified for this request");
-        }
-        return ctx;
-    }
-
-    /**
-     * @return the provider object associated with any calls through this support object
-     */
-    protected final @Nonnull T getProvider() {
-        return provider;
     }
 
     @Override

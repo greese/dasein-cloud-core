@@ -19,6 +19,7 @@
 
 package org.dasein.cloud.compute;
 
+import org.dasein.cloud.AbstractProviderService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
@@ -45,11 +46,10 @@ import java.util.*;
  * @version 2013.04
  * @since 2013.04
  */
-public abstract class AbstractVolumeSupport<T extends CloudProvider> implements VolumeSupport {
-    private T provider;
+public abstract class AbstractVolumeSupport<T extends CloudProvider> extends AbstractProviderService<T> implements VolumeSupport {
 
-    public AbstractVolumeSupport(@Nonnull T provider) {
-        this.provider = provider;
+    protected AbstractVolumeSupport(T provider) {
+        super(provider);
     }
 
     @Override
@@ -168,26 +168,6 @@ public abstract class AbstractVolumeSupport<T extends CloudProvider> implements 
     @Override
     public void detach(@Nonnull String volumeId, boolean force) throws InternalException, CloudException {
         throw new OperationNotSupportedException("Detaching volumes is not currently implemented for " + getProvider().getCloudName());
-    }
-
-    /**
-     * @return the provider context under which the instance is operating
-     * @throws CloudException no context was set for this request
-     */
-    protected @Nonnull ProviderContext getContext() throws CloudException {
-        ProviderContext ctx = getProvider().getContext();
-
-        if( ctx == null ) {
-            throw new CloudException("No context was specified for this request");
-        }
-        return ctx;
-    }
-
-    /**
-     * @return the cloud provider under which this support instance is operating
-     */
-    protected final @Nonnull T getProvider() {
-        return provider;
     }
 
     @Override

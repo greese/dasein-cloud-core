@@ -40,11 +40,10 @@ import java.util.List;
  * @version 2013.04
  * @since 2013.04
  */
-public abstract class AbstractVLANSupport<T extends CloudProvider> implements VLANSupport {
-    private T provider;
+public abstract class AbstractVLANSupport<T extends CloudProvider> extends AbstractProviderService<T> implements VLANSupport {
 
-    public AbstractVLANSupport(@Nonnull T provider) {
-        this.provider = provider;
+    protected AbstractVLANSupport(T provider) {
+        super(provider);
     }
 
     @Override
@@ -235,26 +234,6 @@ public abstract class AbstractVLANSupport<T extends CloudProvider> implements VL
         return null;
     }
 
-    /**
-     * @return the current operational context for this support object
-     * @throws CloudException
-     */
-    protected @Nonnull ProviderContext getContext() throws CloudException {
-        ProviderContext ctx = getProvider().getContext();
-
-        if( ctx == null ) {
-            throw new CloudException("No context was set for this request");
-        }
-        return ctx;
-    }
-
-    /**
-     * @return the provider object governing this support object
-     */
-    protected final @Nonnull T getProvider() {
-        return provider;
-    }
-
     @Override
     @Deprecated
     public @Nonnull Requirement identifySubnetDCRequirement() {
@@ -348,7 +327,7 @@ public abstract class AbstractVLANSupport<T extends CloudProvider> implements VL
     @Override
     public @Nonnull Iterable<Networkable> listResources(@Nonnull String inVlanId) throws CloudException, InternalException {
         List<Networkable> resources = new ArrayList<Networkable>();
-        NetworkServices network = provider.getNetworkServices();
+        NetworkServices network = getProvider().getNetworkServices();
 
         if( network != null ) {
             FirewallSupport fwSupport = network.getFirewallSupport();
@@ -376,7 +355,7 @@ public abstract class AbstractVLANSupport<T extends CloudProvider> implements VL
             for( RoutingTable table : listRoutingTablesForVlan(inVlanId) ) {
                 resources.add(table);
             }
-            ComputeServices compute = provider.getComputeServices();
+            ComputeServices compute = getProvider().getComputeServices();
             VirtualMachineSupport vmSupport = compute == null ? null : compute.getVirtualMachineSupport();
             Iterable<VirtualMachine> vms;
 
@@ -512,7 +491,7 @@ public abstract class AbstractVLANSupport<T extends CloudProvider> implements VL
 
     @Override
     public void updateRoutingTableTags(@Nonnull String routingTableId, @Nonnull Tag... tags) throws CloudException, InternalException{
-        throw new OperationNotSupportedException("Routing table tags are not supported in " + provider.getCloudName());
+        throw new OperationNotSupportedException("Routing table tags are not supported in " + getProvider().getCloudName());
     }
 
     @Override
@@ -541,7 +520,7 @@ public abstract class AbstractVLANSupport<T extends CloudProvider> implements VL
 
     @Override
     public void updateInternetGatewayTags( @Nonnull String internetGatewayId, @Nonnull Tag... tags ) throws CloudException, InternalException {
-        throw new OperationNotSupportedException("Internet gateway tags are not supported in " + provider.getCloudName());
+        throw new OperationNotSupportedException("Internet gateway tags are not supported in " + getProvider().getCloudName());
     }
 
     @Override
@@ -567,7 +546,7 @@ public abstract class AbstractVLANSupport<T extends CloudProvider> implements VL
 
     @Override
     public void removeInternetGatewayTags(@Nonnull String internetGatewayId, @Nonnull Tag... tags) throws CloudException, InternalException{
-        throw new OperationNotSupportedException("Internet Gateway tags are not supported in " + provider.getCloudName());
+        throw new OperationNotSupportedException("Internet Gateway tags are not supported in " + getProvider().getCloudName());
     }
 
     @Override
@@ -652,7 +631,7 @@ public abstract class AbstractVLANSupport<T extends CloudProvider> implements VL
     }
 
     public void removeRoutingTableTags(@Nonnull String routingTableId, @Nonnull Tag... tags) throws CloudException, InternalException{
-        throw new OperationNotSupportedException("Routing table tags are not supported in " + provider.getCloudName());
+        throw new OperationNotSupportedException("Routing table tags are not supported in " + getProvider().getCloudName());
     }
 
     @Override

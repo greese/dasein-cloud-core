@@ -313,10 +313,18 @@ public interface IpAddressSupport extends AccessControlledService {
      * @throws InternalException an internal error occurred inside the Dasein Cloud implementation
      * @throws CloudException an error occurred processing the request in the cloud
      */
-    @Deprecated
     public @Nonnull Iterable<IpForwardingRule> listRules(@Nonnull String addressId) throws InternalException, CloudException;
 
-    public @Nonnull Iterable<IpForwardingRule> listRules(@Nullable String addressId, @Nullable String serverId) throws InternalException, CloudException;
+    /**
+     * Lists the IP forwarding rules associated with the specified virtual machine. This method
+     * is safe to call even when IP forwarding is not supported.
+     * In those situations, {@link java.util.Collections#emptyList()} will be returned.
+     * @param serverId the unique ID of the virtual machine whose forwarding rules will be sought
+     * @return all IP forwarding rules for the specified IP address
+     * @throws InternalException an internal error occurred inside the Dasein Cloud implementation
+     * @throws CloudException an error occurred processing the request in the cloud
+     */
+    public @Nonnull Iterable<IpForwardingRule> listRulesForServer(@Nonnull String serverId) throws InternalException, CloudException;
 
     /**
      * Lists all IP protocol versions supported for static IP addresses in this cloud.

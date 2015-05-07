@@ -19,6 +19,9 @@
 
 package org.dasein.cloud.storage;
 
+import org.dasein.cloud.AbstractProviderService;
+import org.dasein.cloud.CloudProvider;
+
 import javax.annotation.Nullable;
 
 /**
@@ -28,7 +31,12 @@ import javax.annotation.Nullable;
  * @version 2013.07 added support for online and offline storage (issue #66)
  * @since unknown
  */
-public abstract class AbstractStorageServices implements StorageServices {
+public abstract class AbstractStorageServices<T extends CloudProvider> extends AbstractProviderService<T> implements StorageServices {
+
+    protected AbstractStorageServices(T provider) {
+        super(provider);
+    }
+
     @Override
     @Deprecated
     public final @Nullable BlobStoreSupport getBlobStoreSupport() {

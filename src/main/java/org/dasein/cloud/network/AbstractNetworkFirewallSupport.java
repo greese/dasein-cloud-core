@@ -19,6 +19,7 @@
 
 package org.dasein.cloud.network;
 
+import org.dasein.cloud.AbstractProviderService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
@@ -43,11 +44,9 @@ import java.util.*;
  * @version 2013.04 (issue greese/dasein-cloud-aws/#8)
  * @version 2014.03 (issue #99)
  */
-public abstract class AbstractNetworkFirewallSupport<T extends CloudProvider> implements NetworkFirewallSupport {
-    private T provider;
-
-    public AbstractNetworkFirewallSupport(@Nonnull T provider)  {
-        this.provider = provider;
+public abstract class AbstractNetworkFirewallSupport<T extends CloudProvider> extends AbstractProviderService<T> implements NetworkFirewallSupport {
+    protected AbstractNetworkFirewallSupport(T provider) {
+        super(provider);
     }
 
     @Override
@@ -104,15 +103,6 @@ public abstract class AbstractNetworkFirewallSupport<T extends CloudProvider> im
         return active;
     }
 
-    protected @Nonnull ProviderContext getContext() throws CloudException {
-        ProviderContext ctx = getProvider().getContext();
-
-        if( ctx == null ) {
-            throw new CloudException("No context was provided for this request");
-        }
-        return ctx;
-    }
-
     @Override
     public Firewall getFirewall(@Nonnull String firewallId) throws InternalException, CloudException {
         for( Firewall firewall : listFirewalls() ) {
@@ -126,10 +116,6 @@ public abstract class AbstractNetworkFirewallSupport<T extends CloudProvider> im
     @Override
     public @Nonnull FirewallConstraints getFirewallConstraintsForCloud() throws InternalException, CloudException {
         return FirewallConstraints.getInstance();
-    }
-
-    protected final @Nonnull T getProvider() {
-        return provider;
     }
 
     @Override
