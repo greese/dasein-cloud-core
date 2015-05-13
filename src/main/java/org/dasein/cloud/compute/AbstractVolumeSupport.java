@@ -172,6 +172,18 @@ public abstract class AbstractVolumeSupport<T extends CloudProvider> extends Abs
 
     @Override
     @Deprecated
+    public @Nonnull String getProviderTermForVolume(@Nonnull Locale locale) {
+        try {
+            return getCapabilities().getProviderTermForVolume(locale);
+        } catch (CloudException e) {
+            throw new RuntimeException(e);
+        } catch (InternalException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    @Deprecated
     public int getMaximumVolumeCount() throws InternalException, CloudException {
         return getCapabilities().getMaximumVolumeCount();
     }
