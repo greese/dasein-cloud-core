@@ -183,6 +183,12 @@ public abstract class AbstractVolumeSupport<T extends CloudProvider> extends Abs
     }
 
     @Override
+    @Deprecated
+    public @Nonnull Storage<Gigabyte> getMinimumVolumeSize() throws InternalException, CloudException {
+        return getCapabilities().getMinimumVolumeSize();
+    }
+
+    @Override
     public Volume getVolume(@Nonnull String volumeId) throws InternalException, CloudException {
         for( Volume volume : listVolumes() ) {
             if( volume.getProviderVolumeId().equals(volumeId) ) {
