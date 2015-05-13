@@ -171,13 +171,40 @@ public abstract class AbstractVolumeSupport<T extends CloudProvider> extends Abs
     }
 
     @Override
-    public int getMaximumVolumeCount() throws InternalException, CloudException {
-        return -2;
+    @Deprecated
+    public @Nonnull String getProviderTermForVolume(@Nonnull Locale locale) {
+        try {
+            return getCapabilities().getProviderTermForVolume(locale);
+        } catch (CloudException e) {
+            throw new RuntimeException(e);
+        } catch (InternalException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
+    @Deprecated
+    public @Nonnull Iterable<String> listPossibleDeviceIds(@Nonnull Platform platform)
+            throws InternalException, CloudException {
+        return getCapabilities().listPossibleDeviceIds(platform);
+    }
+
+    @Override
+    @Deprecated
+    public int getMaximumVolumeCount() throws InternalException, CloudException {
+        return getCapabilities().getMaximumVolumeCount();
+    }
+
+    @Override
+    @Deprecated
     public @Nullable Storage<Gigabyte> getMaximumVolumeSize() throws InternalException, CloudException {
-        return null;
+        return getCapabilities().getMaximumVolumeSize();
+    }
+
+    @Override
+    @Deprecated
+    public @Nonnull Storage<Gigabyte> getMinimumVolumeSize() throws InternalException, CloudException {
+        return getCapabilities().getMinimumVolumeSize();
     }
 
     @Override
@@ -191,18 +218,21 @@ public abstract class AbstractVolumeSupport<T extends CloudProvider> extends Abs
     }
 
     @Override
+    @Deprecated
     public @Nonnull Requirement getVolumeProductRequirement() throws InternalException, CloudException {
-        return Requirement.NONE;
+        return getCapabilities().getVolumeProductRequirement();
     }
 
     @Override
+    @Deprecated
     public boolean isVolumeSizeDeterminedByProduct() throws InternalException, CloudException {
-        return false;
+        return getCapabilities().isVolumeSizeDeterminedByProduct();
     }
 
     @Override
+    @Deprecated
     public @Nonnull Iterable<VolumeFormat> listSupportedFormats() throws InternalException, CloudException {
-        return Collections.singletonList(VolumeFormat.BLOCK);
+        return getCapabilities().listSupportedFormats();
     }
 
     @Override
