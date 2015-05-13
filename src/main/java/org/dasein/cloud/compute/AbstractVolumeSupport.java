@@ -184,6 +184,13 @@ public abstract class AbstractVolumeSupport<T extends CloudProvider> extends Abs
 
     @Override
     @Deprecated
+    public @Nonnull Iterable<String> listPossibleDeviceIds(@Nonnull Platform platform)
+            throws InternalException, CloudException {
+        return getCapabilities().listPossibleDeviceIds(platform);
+    }
+
+    @Override
+    @Deprecated
     public int getMaximumVolumeCount() throws InternalException, CloudException {
         return getCapabilities().getMaximumVolumeCount();
     }
