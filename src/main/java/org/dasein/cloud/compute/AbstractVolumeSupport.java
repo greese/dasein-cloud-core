@@ -171,13 +171,15 @@ public abstract class AbstractVolumeSupport<T extends CloudProvider> extends Abs
     }
 
     @Override
+    @Deprecated
     public int getMaximumVolumeCount() throws InternalException, CloudException {
-        return -2;
+        return getCapabilities().getMaximumVolumeCount();
     }
 
     @Override
+    @Deprecated
     public @Nullable Storage<Gigabyte> getMaximumVolumeSize() throws InternalException, CloudException {
-        return null;
+        return getCapabilities().getMaximumVolumeSize();
     }
 
     @Override
@@ -191,18 +193,21 @@ public abstract class AbstractVolumeSupport<T extends CloudProvider> extends Abs
     }
 
     @Override
+    @Deprecated
     public @Nonnull Requirement getVolumeProductRequirement() throws InternalException, CloudException {
-        return Requirement.NONE;
+        return getCapabilities().getVolumeProductRequirement();
     }
 
     @Override
+    @Deprecated
     public boolean isVolumeSizeDeterminedByProduct() throws InternalException, CloudException {
-        return false;
+        return getCapabilities().isVolumeSizeDeterminedByProduct();
     }
 
     @Override
+    @Deprecated
     public @Nonnull Iterable<VolumeFormat> listSupportedFormats() throws InternalException, CloudException {
-        return Collections.singletonList(VolumeFormat.BLOCK);
+        return getCapabilities().listSupportedFormats();
     }
 
     @Override
