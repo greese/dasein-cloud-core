@@ -21,7 +21,7 @@ package org.dasein.cloud.ci;
 
 import org.dasein.cloud.Capabilities;
 
-public interface ReplicaPoolCapabilities extends Capabilities {
+public interface ConvergedInfrastructureCapabilities extends Capabilities {
     public boolean supportsHttpTraffic();
 
     public boolean supportsHttpsTraffic();
@@ -42,7 +42,7 @@ public interface ReplicaPoolCapabilities extends Capabilities {
 
     public boolean supportsVmAutomaticRestart();
 
-    public boolean supportsMigrateVmOnMaintence();
+    public boolean supportsMigrateVmOnMaintenance();
 
     public boolean supportsTemplates();
 
