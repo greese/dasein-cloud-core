@@ -63,8 +63,10 @@ public interface VolumeSupport extends AccessControlledService {
      * @param deviceId the operating system device ID that will identify the volume to the guest operating system
      * @throws InternalException an error occurred in the Dasein Cloud implementation while performing the attachment
      * @throws CloudException the attachment failed with the cloud provider
+     * @see VolumeCapabilities#getDeviceIdOnAttachRequirement() 
      */
-    public void attach(@Nonnull String volumeId, @Nonnull String toServer, @Nonnull String deviceId) throws InternalException, CloudException;
+    public void attach(@Nonnull String volumeId, @Nonnull String toServer, @Nullable String deviceId) throws InternalException,
+            CloudException;
 
     /**
      * Creates a snapshot with the specified bare-bones options.
