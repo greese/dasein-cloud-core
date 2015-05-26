@@ -241,13 +241,13 @@ public abstract class AbstractFirewallSupport<T extends CloudProvider> extends A
     }
 
     @Override
-    public void removeTags(@Nonnull String volumeId, @Nonnull Tag... tags) throws CloudException, InternalException {
+    public void removeTags(@Nonnull String firewallId, @Nonnull Tag... tags) throws CloudException, InternalException {
         // NO-OP
     }
 
     @Override
-    public void removeTags(@Nonnull String[] vmIds, @Nonnull Tag... tags) throws CloudException, InternalException {
-        for( String id : vmIds ) {
+    public void removeTags(@Nonnull String[] firewallIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for( String id : firewallIds ) {
             removeTags(id, tags);
         }
     }
@@ -379,13 +379,13 @@ public abstract class AbstractFirewallSupport<T extends CloudProvider> extends A
     }
 
     @Override
-    public void updateTags(@Nonnull String volumeId, @Nonnull Tag... tags) throws CloudException, InternalException {
+    public void updateTags(@Nonnull String firewallId, @Nonnull Tag... tags) throws CloudException, InternalException {
         // NO-OP
     }
 
     @Override
-    public void updateTags(@Nonnull String[] vmIds, @Nonnull Tag... tags) throws CloudException, InternalException {
-        for( String id : vmIds ) {
+    public void updateTags(@Nonnull String[] firewallIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for( String id : firewallIds ) {
             updateTags(id, tags);
         }
     }
