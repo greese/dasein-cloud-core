@@ -65,10 +65,17 @@ public class DaseinRequestExecutor<T> implements Requester<T> {
             finally{
                 httpClient.close();
             }
-        } catch (CloudResponseException e){
-            throw new CloudException(e.getErrorType(), e.getHttpCode(), e.getProviderCode(), e.getMessage());
         } catch (Exception e) {
-            throw new CloudException(e.getMessage());
+            throw translateException(e);
+        }
+    }
+
+    protected CloudException translateException(Exception exception) {
+        if(exception instanceof  CloudResponseException) {
+            CloudResponseException e = (CloudResponseException) exception;
+            return new CloudException(e.getErrorType(), e.getHttpCode(), e.getProviderCode(), e.getMessage());
+        } else {
+            return new CloudException(exception.getMessage());
         }
     }
 
