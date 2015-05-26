@@ -33,6 +33,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Locale;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * Created by stas on 19/02/2015.
@@ -115,6 +119,19 @@ public abstract class AbstractIpAddressSupport<T extends CloudProvider> extends 
     @Deprecated
     public Iterable<IpAddress> listPublicIpPool(boolean unassignedOnly) throws InternalException, CloudException {
         return listIpPool(IPVersion.IPV4, unassignedOnly);
+    }
+
+    private static final ExecutorService taskPool = Executors.newCachedThreadPool();
+
+    @Nonnull
+    @Override
+    public Future<Iterable<IpAddress>> listIpPoolConcurrently(final @Nonnull IPVersion version, final boolean unassignedOnly) throws InternalException, CloudException {
+        return taskPool.submit(new Callable<Iterable<IpAddress>>() {
+            @Override
+            public Iterable<IpAddress> call() throws Exception {
+                return listIpPool(version, unassignedOnly);
+            }
+        });
     }
 
     @Override
