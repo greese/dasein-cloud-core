@@ -200,5 +200,11 @@ public interface LoadBalancerCapabilities extends Capabilities{
      */
     public boolean supportsMultipleTrafficTypes() throws CloudException, InternalException;
 
-    public NamingConstraints getLoadBalancerNamingConstraints();
+    /**
+     * Identifies the naming conventions that constrain how load balancers may be named (friendly name) in this cloud.
+     * @return naming conventions that constrain load balancer naming
+     * @throws CloudException an error occurred querying the cloud for naming constraints
+     * @throws InternalException an error occurred assembling the naming constraints object
+     */
+    public @Nonnull NamingConstraints getLoadBalancerNamingConstraints() throws CloudException, InternalException;
 }

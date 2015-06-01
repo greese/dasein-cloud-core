@@ -89,5 +89,11 @@ public interface SnapshotCapabilities extends Capabilities{
      */
     public boolean supportsSnapshotSharingWithPublic() throws InternalException, CloudException;
 
-    public NamingConstraints getSnapshotNamingConstraints() throws CloudException, InternalException;
+    /**
+     * Identifies the naming conventions that constrain how snapshots may be named (friendly name) in this cloud.
+     * @return naming conventions that constrain snapshot naming
+     * @throws CloudException an error occurred querying the cloud for naming constraints
+     * @throws InternalException an error occurred assembling the naming constraints object
+     */
+    public @Nonnull NamingConstraints getSnapshotNamingConstraints() throws CloudException, InternalException;
 }
