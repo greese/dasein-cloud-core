@@ -144,6 +144,4 @@ public interface IPAddressCapabilities extends Capabilities{
      */
     public boolean supportsVLANAddresses(@Nonnull IPVersion ofVersion) throws InternalException, CloudException;
 
-    public NamingConstraints getIpAddressNamingConstraints();
-
 }

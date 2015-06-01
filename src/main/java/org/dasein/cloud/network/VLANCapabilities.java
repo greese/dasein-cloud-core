@@ -206,5 +206,11 @@ public interface VLANCapabilities extends Capabilities{
      */
     public boolean supportsRawAddressRouting() throws CloudException, InternalException;
 
-    public NamingConstraints getVLANNamingConstraints();
+    /**
+     * Identifies the naming conventions that constrain how VLANs may be named (friendly name) in this cloud.
+     * @return naming conventions that constrain VLAN naming
+     * @throws CloudException an error occurred querying the cloud for naming constraints
+     * @throws InternalException an error occurred assembling the naming constraints object
+     */
+    public @Nonnull NamingConstraints getVlanNamingConstraints();
 }
