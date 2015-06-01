@@ -23,7 +23,6 @@ import org.dasein.cloud.AbstractProviderService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
-import org.dasein.cloud.ProviderContext;
 import org.dasein.cloud.ResourceStatus;
 import org.dasein.cloud.Tag;
 import org.dasein.cloud.identity.ServiceAction;
@@ -117,4 +116,9 @@ public abstract class AbstractTopologySupport<T extends CloudProvider> extends A
     public boolean removeTopologies(@Nonnull String[] topologyIds) throws CloudException, InternalException {
         throw new InternalException("Operation not supported for this cloud");
     }
+
+    public @Nonnull TopologyCapabilities getCapabilities() throws CloudException, InternalException{
+        return null;
+    }
+
 }

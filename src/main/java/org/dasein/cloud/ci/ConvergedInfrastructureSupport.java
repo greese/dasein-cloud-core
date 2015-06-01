@@ -154,4 +154,9 @@ public interface ConvergedInfrastructureSupport extends AccessControlledService 
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
     public void removeTags(@Nonnull String[] ciIds, @Nonnull Tag... tags) throws CloudException, InternalException;
+
+
+    public boolean hasConvergedHttpLoadBalancerSupport();
+
+    public @Nullable ConvergedInfrastructureCapabilities getCapabilities();
 }

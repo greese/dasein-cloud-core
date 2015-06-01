@@ -20,6 +20,7 @@
 package org.dasein.cloud.ci;
 
 import org.dasein.cloud.Capabilities;
+import org.dasein.cloud.util.NamingConstraints;
 
 public interface ConvergedInfrastructureCapabilities extends Capabilities {
     public boolean supportsHttpTraffic();
@@ -51,4 +52,6 @@ public interface ConvergedInfrastructureCapabilities extends Capabilities {
     public boolean supportsCreateFromInstance();
 
     public boolean supportsAutoScaling();
+
+    public NamingConstraints getConvergedInfrastructureNamingConstraints();
 }

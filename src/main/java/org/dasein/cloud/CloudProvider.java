@@ -28,6 +28,7 @@ import org.dasein.cloud.network.NetworkServices;
 import org.dasein.cloud.platform.PlatformServices;
 import org.dasein.cloud.storage.StorageServices;
 import org.dasein.cloud.util.NamingConstraints;
+import org.dasein.cloud.util.NamingRules;
 import org.dasein.cloud.util.ResourceNamespace;
 import org.dasein.util.CalendarWrapper;
 
@@ -309,6 +310,9 @@ public abstract class CloudProvider {
 
     public abstract @Nullable PlatformServices getPlatformServices();
 
+    public abstract void setNamingRules(NamingRules namingRules);
+
+    public abstract NamingRules getNamingRules();
     /**
      * @return the name of this cloud provider
      */
