@@ -62,9 +62,6 @@ public interface ComputeServices {
      */
     public @Nullable VolumeSupport getVolumeSupport();
 
-
-    public @Nullable HttpLoadBalancerSupport getCIHttpLoadBalancerSupport();
-
     /**
      * @return indicates whether or not the cloud provider supports affinity groups
      */
@@ -94,10 +91,4 @@ public interface ComputeServices {
      * @return indicates whether or not the cloud provider supports block or network volumes
      */
     public boolean hasVolumeSupport();
-
-    /**
-     * @return indicates whether or not the cloud provider supports converged infrastructure HttpLoadBalancers
-     */
-    public boolean hasCIHttpLoadBalancerSupport();
-    
 }

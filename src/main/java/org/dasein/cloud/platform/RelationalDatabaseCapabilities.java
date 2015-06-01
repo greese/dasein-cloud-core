@@ -22,6 +22,7 @@ package org.dasein.cloud.platform;
 import org.dasein.cloud.Capabilities;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
+import org.dasein.cloud.util.NamingConstraints;
 
 import javax.annotation.Nonnull;
 import java.util.Locale;
@@ -167,4 +168,5 @@ public interface RelationalDatabaseCapabilities extends Capabilities{
      */
     public boolean isSupportsSnapshots() throws CloudException, InternalException;
 
+    public NamingConstraints getRelationalDatabaseNamingConstraints();
 }

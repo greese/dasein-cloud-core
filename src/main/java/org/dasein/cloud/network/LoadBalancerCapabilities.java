@@ -20,6 +20,7 @@
 package org.dasein.cloud.network;
 
 import org.dasein.cloud.*;
+import org.dasein.cloud.util.NamingConstraints;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -198,4 +199,6 @@ public interface LoadBalancerCapabilities extends Capabilities{
      * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
      */
     public boolean supportsMultipleTrafficTypes() throws CloudException, InternalException;
+
+    public NamingConstraints getLoadBalancerNamingConstraints();
 }

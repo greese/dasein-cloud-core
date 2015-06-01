@@ -67,11 +67,6 @@ public abstract class AbstractComputeServices<T extends CloudProvider> extends A
     }
 
     @Override
-    public @Nullable HttpLoadBalancerSupport getCIHttpLoadBalancerSupport() {
-        return null;
-    }
-
-    @Override
     public boolean hasAffinityGroupSupport(){
         return (getAffinityGroupSupport() != null);
     }
@@ -99,10 +94,5 @@ public abstract class AbstractComputeServices<T extends CloudProvider> extends A
     @Override
     public boolean hasVolumeSupport() {
         return (getVolumeSupport() != null);
-    }
-
-    @Override
-    public boolean hasCIHttpLoadBalancerSupport() {
-        return (getCIHttpLoadBalancerSupport() != null);
     }
 }

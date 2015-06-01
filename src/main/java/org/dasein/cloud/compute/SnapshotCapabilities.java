@@ -20,6 +20,7 @@
 package org.dasein.cloud.compute;
 
 import org.dasein.cloud.*;
+import org.dasein.cloud.util.NamingConstraints;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -87,4 +88,6 @@ public interface SnapshotCapabilities extends Capabilities{
      * @throws CloudException an error occurred with the cloud provider
      */
     public boolean supportsSnapshotSharingWithPublic() throws InternalException, CloudException;
+
+    public NamingConstraints getSnapshotNamingConstraints() throws CloudException, InternalException;
 }

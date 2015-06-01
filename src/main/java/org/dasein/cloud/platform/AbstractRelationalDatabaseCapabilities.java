@@ -23,6 +23,7 @@ import org.dasein.cloud.AbstractCapabilities;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
+import org.dasein.cloud.util.NamingConstraints;
 
 import javax.annotation.Nonnull;
 
@@ -64,5 +65,10 @@ public abstract class AbstractRelationalDatabaseCapabilities<T extends CloudProv
     @Override
     public boolean isSupportsSnapshots() throws CloudException, InternalException {
         return supportsSnapshots();
+    }
+
+    @Override
+    public NamingConstraints getRelationalDatabaseNamingConstraints() {
+        return this.getProvider().getNamingRules().getRelationalDatabaseNameRules();
     }
 }
