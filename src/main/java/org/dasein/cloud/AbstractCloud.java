@@ -28,8 +28,6 @@ import org.dasein.cloud.compute.ComputeServices;
 import org.dasein.cloud.identity.IdentityServices;
 import org.dasein.cloud.network.NetworkServices;
 import org.dasein.cloud.platform.PlatformServices;
-import org.dasein.cloud.util.NamingRules;
-
 /**
  * Simple base implementation of a cloud provider bootstrap object that defaults all services to <code>null</code>.
  * @author George Reese
@@ -88,15 +86,5 @@ public abstract class AbstractCloud extends CloudProvider {
         CloudProvider compute = getComputeCloud();
         
         return (compute == null ? null : compute.getPlatformServices());
-    }
-
-    private NamingRules namingRules = null;
-
-    public void setNamingRules(NamingRules namingRules) {
-        this.namingRules = namingRules;
-    }
-
-    public NamingRules getNamingRules() {
-        return namingRules;
     }
 }
