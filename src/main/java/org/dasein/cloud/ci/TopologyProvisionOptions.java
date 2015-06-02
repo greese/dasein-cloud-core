@@ -28,7 +28,7 @@ import javax.annotation.Nonnull;
 
 public class TopologyProvisionOptions {
 
-    public enum MaintenenceOption {
+    public enum MaintenanceOption {
         MIGRATE_VM_INSTANCE,
         TERMINATE_VM_INSTANCE;
 
@@ -149,7 +149,7 @@ public class TopologyProvisionOptions {
     private Map<String, String> metadata = new HashMap<String, String>();
     private String[] roDisks = new String[0];
     private boolean automaticRestart;
-    private MaintenenceOption maintenenceAction;
+    private MaintenanceOption maintenanceAction;
     private DiskType bootDiskType; 
 
     private TopologyProvisionOptions() { }
@@ -209,8 +209,8 @@ public class TopologyProvisionOptions {
         return this;
     }
 
-    public TopologyProvisionOptions withMaintenceOption(@Nonnull MaintenenceOption maintenenceAction) {
-        this.maintenenceAction = maintenenceAction;
+    public TopologyProvisionOptions withMaintenanceOption(@Nonnull MaintenanceOption maintenanceAction) {
+        this.maintenanceAction = maintenanceAction;
         return this;
     }
 
@@ -269,8 +269,8 @@ public class TopologyProvisionOptions {
         return automaticRestart;
     }
 
-    public MaintenenceOption getMaintenenceAction() {
-        return maintenenceAction;
+    public MaintenanceOption getMaintenenceAction() {
+        return maintenanceAction;
     }
 
     public DiskType getBootDiskType() {
