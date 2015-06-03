@@ -22,7 +22,7 @@
 
     <groupId>org.dasein</groupId>
     <artifactId>dasein-cloud-core</artifactId>
-    <version>2015.06.1-SNAPSHOT</version>
+    <version>2015.09.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>dasein-cloud-core</name>
@@ -160,7 +160,7 @@
                             </links>
                             <stylesheetfile>dasein-javadoc.css</stylesheetfile>
                             <footer />
-                            <!--<additionalparam>-Xdoclint:none</additionalparam>-->
+                            <additionalparam>-Xdoclint:none</additionalparam>
                         </configuration>
                     </execution>
                 </executions>
