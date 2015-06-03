@@ -112,5 +112,9 @@ public interface HttpLoadBalancerCapabilities extends Capabilities {
      */
     public boolean supportsMoreThanOneForwardingRule();
 
-    public NamingConstraints getConvergedHttpLoadBalancerNamingConstraints();
+    /**
+     * Identifies the naming conventions that constrain how http load balancers may be named (friendly name) in this cloud.
+     * @return naming conventions that constrain http load balancers naming
+     */
+    public @Nonnull NamingConstraints getConvergedHttpLoadBalancerNamingConstraints();
 }

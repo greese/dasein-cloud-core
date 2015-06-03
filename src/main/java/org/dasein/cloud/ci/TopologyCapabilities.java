@@ -8,6 +8,9 @@ import org.dasein.cloud.util.NamingConstraints;
 
 public interface TopologyCapabilities {
 
-    public NamingConstraints getTopologyNamingConstraints() throws CloudException, InternalException;
-    public @Nonnull TopologyCapabilities getCapabilities() throws CloudException, InternalException;
+    /**
+     * Identifies the naming conventions that constrain how topologies(replica pool templates) may be named (friendly name) in this cloud.
+     * @return naming conventions that constrain topologies(replica pool templates) naming
+     */
+    public @Nonnull NamingConstraints getTopologyNamingConstraints() throws CloudException, InternalException;
 }
