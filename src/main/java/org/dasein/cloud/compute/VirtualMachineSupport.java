@@ -393,7 +393,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
     public @Nonnull Iterable<String> listFirewalls(@Nonnull String vmId) throws InternalException, CloudException;
 
     /**
-     * Providers a list of instance types, service offerings, or server sizes (however the underlying cloud
+     * Provides a list of instance types, service offerings, or server sizes (however the underlying cloud
      * might describe it) compatible with particular machine image
      *
      * @param machineImageId the desire machine image to match with
@@ -402,6 +402,17 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @throws CloudException
      */
     public @Nonnull Iterable<VirtualMachineProduct> listProducts(@Nonnull String machineImageId) throws InternalException, CloudException;
+
+    /**
+     * Provides a list of instance types, service offerings, or server sizes (however the underlying cloud
+     * might describe it) compatible with particular machine image
+     * @param machineImageId the desire machine image to match with
+     * @param options the filter options
+     * @return
+     * @throws InternalException
+     * @throws CloudException
+     */
+    public @Nonnull Iterable<VirtualMachineProduct> listProducts(@Nonnull String machineImageId, @Nonnull VirtualMachineProductFilterOptions options) throws InternalException, CloudException;
 
     /**
      * Provides a list of instance types, service offerings, or server sizes (however the underlying cloud
