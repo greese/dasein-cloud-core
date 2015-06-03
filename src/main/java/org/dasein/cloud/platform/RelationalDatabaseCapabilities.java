@@ -22,6 +22,7 @@ package org.dasein.cloud.platform;
 import org.dasein.cloud.Capabilities;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
+import org.dasein.cloud.util.NamingConstraints;
 
 import javax.annotation.Nonnull;
 import java.util.Locale;
@@ -110,61 +111,11 @@ public interface RelationalDatabaseCapabilities extends Capabilities{
 
     public boolean supportsBackupConfigurations() throws CloudException, InternalException;
 
-
-    /*******************************************************************************
-     * isSupportsXXX methods are deprecated for naming consistency with other APIs *
-     *******************************************************************************/
-
     /**
-     * Indicates whether the RDS Support includes firewall rules
-     * @deprecated
-     * @see org.dasein.cloud.platform.RelationalDatabaseCapabilities#supportsFirewallRules()
-     * @return true if support includes firewall rules
+     * Identifies the naming conventions that constrain how databases may be named (friendly name) in this cloud.
+     * @return naming conventions that constrain database naming
+     * @throws CloudException an error occurred querying the cloud for naming constraints
+     * @throws InternalException an error occurred assembling the naming constraints object
      */
-    public boolean isSupportsFirewallRules() throws CloudException, InternalException;
-
-    /**
-     * Indicates whether the provider supports HA RDS support
-     * @deprecated
-     * @return true if HA support is available
-     * @see RelationalDatabaseCapabilities#supportsHighAvailability()
-     * @throws CloudException
-     * @throws InternalException
-     */
-    public boolean isSupportsHighAvailability() throws CloudException, InternalException;
-
-    /**
-     * Indicates whether the provider supports Low Availability RDS support
-     * @deprecated
-     * @see RelationalDatabaseCapabilities#supportsLowAvailability()
-     * @return true if Low Availability support is available
-     * @throws CloudException
-     * @throws InternalException
-     */
-    public boolean isSupportsLowAvailability() throws CloudException, InternalException;
-
-    /**
-     * Indicates whether the cloud provides support for RDS maintenance windows
-     * @deprecated
-     * @see RelationalDatabaseCapabilities#supportsMaintenanceWindows()
-     * @return true if maintenance windows are supported
-     */
-    public boolean isSupportsMaintenanceWindows() throws CloudException, InternalException;
-
-    /**
-     * Indicates whether the provider allows the modification of running databases
-     * @deprecated
-     * @see RelationalDatabaseCapabilities#supportsAlterDatabase()
-     * @return true if modification is allowed
-     */
-    public boolean isSupportsAlterDatabase() throws CloudException, InternalException;
-
-    /**
-     * Indicates whether the provider supports the snapshot-ing of databases
-     * @deprecated
-     * @see RelationalDatabaseCapabilities#supportsSnapshots()
-     * @return true if snapshots are supported
-     */
-    public boolean isSupportsSnapshots() throws CloudException, InternalException;
-
+    public @Nonnull NamingConstraints getRelationalDatabaseNamingConstraints();
 }

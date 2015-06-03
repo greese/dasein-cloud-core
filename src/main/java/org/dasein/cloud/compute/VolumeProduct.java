@@ -105,7 +105,10 @@ public class VolumeProduct {
     private String                  name;
     private String                  providerProductId;
     private Storage<Gigabyte>       volumeSize;
+    private Storage<Gigabyte>       minVolumeSize;
+    private Storage<Gigabyte>       maxVolumeSize;
     private VolumeType              type;
+    private Float                   maxIopsRatio;
     
     private VolumeProduct() { }
 
@@ -179,6 +182,27 @@ public class VolumeProduct {
         return (getProviderProductId().equals(prd.getProviderProductId()));
     }
 
+    /**
+     * Set the volume product with the maximum IOPS to storage size ratio,
+     * e.g. 30:1 will result in a ratio value of 30.0.
+     * @param ratio
+     * @return this
+     */
+    public @Nonnull VolumeProduct withMaxIopsRatio(@Nonnegative float ratio) {
+        maxIopsRatio = ratio;
+        return this;
+    }
+
+    public @Nonnull VolumeProduct withMinVolumeSize(@Nonnull Storage<Gigabyte> size) {
+        minVolumeSize = size;
+        return this;
+    }
+
+    public @Nonnull VolumeProduct withMaxVolumeSize(@Nonnull Storage<Gigabyte> size) {
+        maxVolumeSize = size;
+        return this;
+    }
+
     public @Nullable String getCurrency() {
         return currency;
     }
@@ -214,11 +238,28 @@ public class VolumeProduct {
     public @Nonnull VolumeType getType() {
         return type;
     }
-    
+
+    /**
+     * @deprecated use {@link VolumeProduct#getMinVolumeSize()} and {@link VolumeProduct#getMinVolumeSize()} instead.
+     * @return
+     */
+    @Deprecated
     public @Nullable Storage<Gigabyte> getVolumeSize() {
         return volumeSize;
     }
-    
+
+    public @Nullable Storage<Gigabyte> getMinVolumeSize() {
+        return minVolumeSize;
+    }
+
+    public @Nullable Storage<Gigabyte> getMaxVolumeSize() {
+        return maxVolumeSize;
+    }
+
+    public @Nullable Float getMaxIopsRatio() {
+        return maxIopsRatio;
+    }
+
     public String toString() {
         return (name + " [#" + providerProductId + "]");
     }

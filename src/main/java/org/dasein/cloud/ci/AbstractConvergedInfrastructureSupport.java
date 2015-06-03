@@ -19,6 +19,7 @@
 
 package org.dasein.cloud.ci;
 
+import org.dasein.cloud.AbstractProviderService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
@@ -41,15 +42,10 @@ import java.util.ArrayList;
  * @version 2013.07 initial version
  * @since 2013.07
  */
-public abstract class AbstractConvergedInfrastructureSupport<T extends CloudProvider> implements ConvergedInfrastructureSupport {
-    private T provider;
+public abstract class AbstractConvergedInfrastructureSupport<T extends CloudProvider> extends AbstractProviderService<T> implements ConvergedInfrastructureSupport {
 
-    /**
-     * Constructs a new topology support instance attached to the specified operational context.
-     * @param provider the provider representing the current operational context
-     */
-    public AbstractConvergedInfrastructureSupport(@Nonnull T provider) {
-        this.provider = provider;
+    protected AbstractConvergedInfrastructureSupport(T provider) {
+        super(provider);
     }
 
     @Override
@@ -62,32 +58,12 @@ public abstract class AbstractConvergedInfrastructureSupport<T extends CloudProv
         return null;
     }
 
-    /**
-     * @return the current authentication context for any calls through this support object
-     * @throws CloudException no context was set
-     */
-    protected final @Nonnull ProviderContext getContext() throws CloudException {
-        ProviderContext ctx = getProvider().getContext();
-
-        if( ctx == null ) {
-            throw new CloudException("No context was specified for this request");
-        }
-        return ctx;
-    }
-
-    /**
-     * @return the provider object associated with any calls through this support object
-     */
-    protected final @Nonnull T getProvider() {
-        return provider;
-    }
-
     @Override
     public @Nonnull Iterable<ResourceStatus> listConvergedInfrastructureStatus() throws CloudException, InternalException {
         ArrayList<ResourceStatus> status = new ArrayList<ResourceStatus>();
 
         for( ConvergedInfrastructure ci : listConvergedInfrastructures(null) ) {
-            status.add(new ResourceStatus(ci.getProviderConvergedInfrastructureId(), ci.getCurrentState()));
+            status.add(new ResourceStatus(ci.getName(), ci.getCurrentState()));
         }
         return status;
     }

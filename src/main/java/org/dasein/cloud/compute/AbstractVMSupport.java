@@ -19,6 +19,7 @@
 
 package org.dasein.cloud.compute;
 
+import org.dasein.cloud.AbstractProviderService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
@@ -63,11 +64,9 @@ import java.util.concurrent.Future;
  * @version 2013.04
  * @since 2013.04
  */
-public abstract class AbstractVMSupport<T extends CloudProvider> implements VirtualMachineSupport {
-    private T provider;
-
-    public AbstractVMSupport( T provider ) {
-        this.provider = provider;
+public abstract class AbstractVMSupport<T extends CloudProvider> extends AbstractProviderService<T> implements VirtualMachineSupport {
+    protected AbstractVMSupport(T provider) {
+        super(provider);
     }
 
     @Override
@@ -142,21 +141,6 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
         throw new OperationNotSupportedException("Spot Instances are not supported for " + getProvider().getCloudName());
     }
 
-    /**
-     * Provides the current provider context for the request in progress.
-     *
-     * @return the current provider context
-     * @throws CloudException no context was defined before making this call
-     */
-    protected final @Nonnull ProviderContext getContext() throws CloudException {
-        ProviderContext ctx = getProvider().getContext();
-
-        if( ctx == null ) {
-            throw new CloudException("No context was defined for this request");
-        }
-        return ctx;
-    }
-
     @Override
     @Deprecated
     public @Nonnegative int getCostFactor( @Nonnull VmState state ) throws CloudException, InternalException {
@@ -200,13 +184,6 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
         finally {
             APITrace.end();
         }
-    }
-
-    /**
-     * @return the current provider governing any operations against this cloud in this support instance
-     */
-    protected final @Nonnull T getProvider() {
-        return provider;
     }
 
     @Override
@@ -530,7 +507,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
      * @return a resource file location with a vmproducts JSON definition
      * @throws CloudException no context has been set for loading the products
      */
-    protected @Nonnull String getVMProductsResource() throws CloudException {
+    protected @Nonnull String getVMProductsResource() throws InternalException {
         Properties p = getContext().getCustomProperties();
         String value = null;
 
@@ -557,7 +534,120 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
 
     @Override
     public @Nonnull Iterable<VirtualMachineProduct> listProducts(@Nonnull String machineImageId) throws InternalException, CloudException {
-        return listProducts(VirtualMachineProductFilterOptions.getInstance());
+        return listProducts(machineImageId, VirtualMachineProductFilterOptions.getInstance());
+    }
+
+    @Override
+    public @Nonnull Iterable<VirtualMachineProduct> listProducts(@Nonnull String machineImageId, @Nonnull VirtualMachineProductFilterOptions options) throws InternalException, CloudException{
+        APITrace.begin(getProvider(), "VM.listProducts");
+        try{
+            String cacheName = "productsWithImage";
+            Cache<VirtualMachineProduct> cache = Cache.getInstance(getProvider(), cacheName, VirtualMachineProduct.class, CacheLevel.REGION_ACCOUNT, new TimePeriod<Day>(1, TimePeriod.DAY));
+            Iterable<VirtualMachineProduct> products = cache.get(getContext());
+
+            if( products != null ) {
+                return products;
+            }
+            List<VirtualMachineProduct> list = new ArrayList<VirtualMachineProduct>();
+
+            try {
+                String resource = getVMProductsResource();
+                InputStream input = AbstractVMSupport.class.getResourceAsStream(resource);
+
+                if( input == null ) {
+                    input = AbstractVMSupport.class.getResourceAsStream("/org/dasein/cloud/std/vmproducts.json");
+                }
+                if( input == null ) {
+                    return Collections.emptyList();
+                }
+                BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+                StringBuilder json = new StringBuilder();
+                String line;
+
+                while( ( line = reader.readLine() ) != null ) {
+                    json.append(line);
+                    json.append("\n");
+                }
+                JSONArray arr = new JSONArray(json.toString());
+                JSONObject toCache = null;
+
+                for( int i = 0; i < arr.length(); i++ ) {
+                    JSONObject productSet = arr.getJSONObject(i);
+                    String cloud, provider;
+
+                    if( productSet.has("cloud") ) {
+                        cloud = productSet.getString("cloud");
+                    }
+                    else {
+                        continue;
+                    }
+                    if( productSet.has("provider") ) {
+                        provider = productSet.getString("provider");
+                    }
+                    else {
+                        continue;
+                    }
+                    if( !productSet.has("products") ) {
+                        continue;
+                    }
+                    if( toCache == null || ( provider.equals("default") && cloud.equals("default") ) ) {
+                        toCache = productSet;
+                    }
+                    if( provider.equalsIgnoreCase(getProvider().getProviderName()) && cloud.equalsIgnoreCase(getProvider().getCloudName()) ) {
+                        toCache = productSet;
+                        break;
+                    }
+                }
+                if( toCache == null ) {
+                    return Collections.emptyList();
+                }
+                JSONArray plist = toCache.getJSONArray("products");
+
+                for( int i = 0; i < plist.length(); i++ ) {
+                    JSONObject product = plist.getJSONObject(i);
+                    boolean supported = false;
+
+                    if( product.has("excludesRegions") ) {
+                        JSONArray regions = product.getJSONArray("excludesRegions");
+
+                        for( int j = 0; j < regions.length(); j++ ) {
+                            String r = regions.getString(j);
+
+                            if( r.equals(getContext().getRegionId()) ) {
+                                supported = false;
+                                break;
+                            }
+                        }
+                    }
+                    if( !supported ) {
+                        continue;
+                    }
+                    VirtualMachineProduct prd = toProduct(product);
+
+                    if( prd != null ) {
+                        if( options != null) {
+                            // Filter supplied, add matches only.
+                            if( options.matches(prd) ) {
+                                list.add(prd);
+                            }
+                        }
+                        else {
+                            // No filter supplied, add all survived.
+                            list.add(prd);
+                        }
+                    }
+                }
+                cache.put(getContext(), list);
+            } catch( IOException e ) {
+                throw new InternalException(e);
+            } catch( JSONException e ) {
+                throw new InternalException(e);
+            }
+            return list;
+        }
+        finally {
+            APITrace.end();
+        }
     }
 
     @Override
@@ -593,11 +683,13 @@ public abstract class AbstractVMSupport<T extends CloudProvider> implements Virt
     }
 
     @Override
+    @Deprecated
     final public @Nonnull Iterable<VirtualMachineProduct> listProducts( @Nonnull Architecture architecture ) throws InternalException, CloudException {
         return this.listProducts(null, architecture);
     }
 
     @Override
+    @Deprecated
     public @Nonnull Iterable<VirtualMachineProduct> listProducts( @Nonnull VirtualMachineProductFilterOptions options, @Nullable Architecture architecture ) throws InternalException, CloudException {
         APITrace.begin(getProvider(), "VM.listProducts");
         try {

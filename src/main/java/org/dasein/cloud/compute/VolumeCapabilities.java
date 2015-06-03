@@ -71,7 +71,9 @@ public interface VolumeCapabilities extends Capabilities{
      * @return the maximum IOPS value
      * @throws org.dasein.cloud.InternalException an error occurred within the Dasein Cloud implementation determining the limit
      * @throws org.dasein.cloud.CloudException an error occurred retrieving the limit from the cloud
+     * @deprecated use {@link VolumeProduct#getMaxIops()} instead.
      */
+    @Deprecated
     public int getMaximumVolumeProductIOPS() throws InternalException, CloudException;
 
     /**
@@ -79,7 +81,9 @@ public interface VolumeCapabilities extends Capabilities{
      * @return the minimum IOPS value
      * @throws org.dasein.cloud.InternalException an error occurred within the Dasein Cloud implementation determining the limit
      * @throws org.dasein.cloud.CloudException an error occurred retrieving the limit from the cloud
+     * @deprecated use {@link VolumeProduct#getMinIops()} instead.
      */
+    @Deprecated
     public int getMinimumVolumeProductIOPS() throws InternalException, CloudException;
 
     /**
@@ -87,6 +91,7 @@ public interface VolumeCapabilities extends Capabilities{
      * @return the maximum size of an IOPS volume
      * @throws org.dasein.cloud.InternalException an error occurred within the Dasein Cloud implementation determining the limit
      * @throws org.dasein.cloud.CloudException an error occurred retrieving the limit from the cloud
+     * @deprecated use {@link org.dasein.cloud.compute.VolumeProduct#get}
      */
     public int getMaximumVolumeSizeIOPS() throws InternalException, CloudException;
 
@@ -137,6 +142,17 @@ public interface VolumeCapabilities extends Capabilities{
      * @throws CloudException an error occurred with the cloud provider determining the support level
      */
     public @Nonnull Requirement getVolumeProductRequirement() throws InternalException, CloudException;
+
+    /**
+     * Identifies whether the device ID is required to be provided upon attach() call or else if the cloud will auto-assign one
+     * auto-assignment of device ID is
+     * supported/required in this cloud.
+     * @return whether device ID auto-assignment is required/optional/non-required by this cloud.
+     * @throws InternalException an error occurred in the Dasein Cloud implementation determining the support level
+     * @throws CloudException an error occurred with the cloud provider determining the support level
+     * @see org.dasein.cloud.compute.VolumeSupport#attach(String, String, String)
+     */
+    public @Nonnull Requirement getDeviceIdOnAttachRequirement() throws InternalException, CloudException;
 
     /**
      * Indicates that a volume size is not necessary (and ultimately ignored) during the volume creation process

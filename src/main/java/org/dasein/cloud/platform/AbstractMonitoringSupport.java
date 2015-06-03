@@ -19,6 +19,7 @@
 
 package org.dasein.cloud.platform;
 
+import org.dasein.cloud.AbstractProviderService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
@@ -34,16 +35,10 @@ import java.util.Collections;
  * @author Cameron Stokes (http://github.com/clstokes)
  * @since 2013-02-18
  */
-public abstract class AbstractMonitoringSupport<T extends CloudProvider> implements MonitoringSupport {
+public abstract class AbstractMonitoringSupport<T extends CloudProvider> extends AbstractProviderService<T> implements MonitoringSupport {
 
-    private T provider;
-
-    public AbstractMonitoringSupport( @Nonnull T provider ) {
-        this.provider = provider;
-    }
-
-    public final @Nonnull T getProvider() {
-        return provider;
+    protected AbstractMonitoringSupport(T provider) {
+        super(provider);
     }
 
     @Override

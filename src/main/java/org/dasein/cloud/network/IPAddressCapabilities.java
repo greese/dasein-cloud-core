@@ -67,6 +67,16 @@ public interface IPAddressCapabilities extends Capabilities{
     public @Nonnull Requirement identifyVlanForIPRequirement() throws CloudException, InternalException;
 
     /**
+     * Indicates whether you need to specify which VM you are tying a port forwarding to when creating a port
+     * forwarding rule. REQUIRED means you must specify the VM id,  and NONE
+     * means you do not specify a VM id.
+     * @return the level of requirement for specifying a VLAN when creating an IP address
+     * @throws org.dasein.cloud.CloudException an error occurred processing the request in the cloud
+     * @throws org.dasein.cloud.InternalException an internal error occurred inside the Dasein Cloud implementation
+     */
+    public @Nonnull Requirement identifyVMForPortForwarding() throws CloudException, InternalException;
+
+    /**
      * Indicates whether the underlying cloud supports the assignment of addresses of the specified version
      * @param version the IP version being checked
      * @return true if the addresses of the specified version are assignable to cloud resources for public routing

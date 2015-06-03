@@ -28,15 +28,18 @@ import javax.annotation.Nullable;
  * @author George Reese
  */
 public interface CIServices {
+    public boolean hasConvergedInfrastructureSupport(); // replica pools
+
     public @Nullable ConvergedInfrastructureSupport getConvergedInfrastructureSupport();
 
-    public @Nullable TopologySupport getTopologySupport();
+    public boolean hasConvergedHttpLoadBalancerSupport();
 
-    public boolean hasConvergedInfrastructureSupport();
-
+    public @Nullable ConvergedHttpLoadBalancerSupport getConvergedHttpLoadBalancerSupport();
 
     /**
      * @return indicates whether or not the cloud provider supports complex resource topologies
      */
-    public boolean hasTopologySupport();
+    public boolean hasTopologySupport(); // templates
+
+    public @Nullable TopologySupport getTopologySupport();
 }

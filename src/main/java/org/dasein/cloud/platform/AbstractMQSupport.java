@@ -19,6 +19,7 @@
 
 package org.dasein.cloud.platform;
 
+import org.dasein.cloud.AbstractProviderService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
@@ -39,31 +40,10 @@ import java.util.Iterator;
  * @version 2013.07 initial version
  * @since 2013.07
  */
-public abstract class AbstractMQSupport<T extends CloudProvider> implements MQSupport {
-    private T provider;
-
-    public AbstractMQSupport(@Nonnull T provider) { this.provider = provider; }
-    /**
-     * Provides the current provider context for the request in progress.
-     * @return the current provider context
-     * @throws CloudException no context was defined before making this call
-     */
-    protected final @Nonnull ProviderContext getContext() throws CloudException {
-        ProviderContext ctx = getProvider().getContext();
-
-        if( ctx == null ) {
-            throw new CloudException("No context was defined for this request");
-        }
-        return ctx;
+public abstract class AbstractMQSupport<T extends CloudProvider> extends AbstractProviderService<T> implements MQSupport {
+    protected AbstractMQSupport(T provider) {
+        super(provider);
     }
-
-    /**
-     * @return the current provider governing any operations against this cloud in this support instance
-     */
-    protected final @Nonnull T getProvider() {
-        return provider;
-    }
-
 
     @Override
     public @Nonnull String[] mapServiceAction( @Nonnull ServiceAction action ) {

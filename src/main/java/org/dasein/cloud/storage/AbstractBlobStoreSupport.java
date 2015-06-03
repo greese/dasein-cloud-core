@@ -26,29 +26,28 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Locale;
 import java.util.concurrent.Callable;
 
 import org.apache.commons.codec.binary.Base64;
+import org.dasein.cloud.AbstractProviderService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.Tag;
+import org.dasein.cloud.util.NamingConstraints;
 import org.dasein.cloud.util.TagUtils;
 import org.dasein.util.Retry;
 import org.dasein.util.uom.storage.*;
+import org.dasein.util.uom.storage.Byte;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public abstract class AbstractBlobStoreSupport<T extends CloudProvider> implements BlobStoreSupport {
-    private T provider;
+public abstract class AbstractBlobStoreSupport<T extends CloudProvider> extends AbstractProviderService<T> implements BlobStoreSupport {
 
-    public AbstractBlobStoreSupport(T provider) {
-        this.provider = provider;
-    }
-
-    protected final @Nonnull T getProvider() {
-        return provider;
+    protected AbstractBlobStoreSupport(T provider) {
+        super(provider);
     }
 
     private byte[] computeMD5Hash(InputStream is) throws NoSuchAlgorithmException, IOException {
@@ -279,5 +278,75 @@ public abstract class AbstractBlobStoreSupport<T extends CloudProvider> implemen
         byte[] b64 = Base64.encodeBase64(data);
         
         return new String(b64);
+    }
+
+    @Override
+    @Deprecated
+    public boolean allowsNestedBuckets() throws CloudException, InternalException {
+        return getCapabilities().allowsNestedBuckets();
+    }
+
+    @Override
+    @Deprecated
+    public boolean allowsRootObjects() throws CloudException, InternalException {
+        return getCapabilities().allowsRootObjects();
+    }
+
+    @Override
+    @Deprecated
+    public boolean allowsPublicSharing() throws CloudException, InternalException {
+        return getCapabilities().allowsPublicSharing();
+    }
+
+    @Override
+    @Deprecated
+    public int getMaxBuckets() throws CloudException, InternalException {
+        return getCapabilities().getMaxBuckets();
+    }
+
+    @Override
+    @Deprecated
+    public Storage<Byte> getMaxObjectSize() throws InternalException, CloudException {
+        return getCapabilities().getMaxObjectSize();
+    }
+
+    @Override
+    @Deprecated
+    public int getMaxObjectsPerBucket() throws CloudException, InternalException {
+        return getCapabilities().getMaxObjectsPerBucket();
+    }
+
+    @Override
+    @Deprecated
+    public @Nonnull NamingConstraints getBucketNameRules() throws CloudException, InternalException {
+        return getCapabilities().getBucketNamingConstraints();
+    }
+
+    @Override
+    @Deprecated
+    public @Nonnull NamingConstraints getObjectNameRules() throws CloudException, InternalException {
+        return getCapabilities().getObjectNamingConstraints();
+    }
+
+    @Override
+    @Deprecated
+    public @Nonnull String getProviderTermForBucket(@Nonnull Locale locale) {
+        try {
+            return getCapabilities().getProviderTermForBucket(locale);
+        }
+        catch( Throwable e ) {
+            throw new RuntimeException("Unable to get a provider term for bucket", e);
+        }
+    }
+
+    @Override
+    @Deprecated
+    public @Nonnull String getProviderTermForObject(@Nonnull Locale locale) {
+        try {
+            return getCapabilities().getProviderTermForObject(locale);
+        }
+        catch( Throwable e ) {
+            throw new RuntimeException("Unable to get a provider term for object", e);
+        }
     }
 }

@@ -19,6 +19,7 @@
 
 package org.dasein.cloud.network;
 
+import org.dasein.cloud.AbstractProviderService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
@@ -49,11 +50,9 @@ import java.util.Map;
  * @version 2014.03 added support for authorizing with rule create options
  */
 @SuppressWarnings("UnusedDeclaration")
-public abstract class AbstractFirewallSupport<T extends CloudProvider> implements FirewallSupport {
-    private T provider;
-
-    public AbstractFirewallSupport(@Nonnull T provider) {
-        this.provider = provider;
+public abstract class AbstractFirewallSupport<T extends CloudProvider> extends AbstractProviderService<T> implements FirewallSupport {
+    protected AbstractFirewallSupport(T provider) {
+        super(provider);
     }
 
     @Override
@@ -133,19 +132,6 @@ public abstract class AbstractFirewallSupport<T extends CloudProvider> implement
         return create(FirewallCreateOptions.getInstance(providerVlanId, name, description));
     }
 
-    /**
-     * @return the current authentication context for any calls through this support object
-     * @throws CloudException no context was set
-     */
-    protected @Nonnull ProviderContext getContext() throws CloudException {
-        ProviderContext ctx = getProvider().getContext();
-
-        if( ctx == null ) {
-            throw new CloudException("No context was specified for this request");
-        }
-        return ctx;
-    }
-
     @Override
     public @Nullable Map<FirewallConstraints.Constraint, Object> getActiveConstraintsForFirewall(@Nonnull String firewallId) throws CloudException, InternalException {
         HashMap<FirewallConstraints.Constraint, Object> active = new HashMap<FirewallConstraints.Constraint, Object>();
@@ -184,13 +170,6 @@ public abstract class AbstractFirewallSupport<T extends CloudProvider> implement
     @Deprecated
     public @Nonnull FirewallConstraints getFirewallConstraintsForCloud() throws InternalException, CloudException {
         return getCapabilities().getFirewallConstraintsForCloud();
-    }
-
-    /**
-     * @return the provider object associated with any calls through this support object
-     */
-    protected final @Nonnull T getProvider() {
-        return provider;
     }
 
     @Override
@@ -262,13 +241,13 @@ public abstract class AbstractFirewallSupport<T extends CloudProvider> implement
     }
 
     @Override
-    public void removeTags(@Nonnull String volumeId, @Nonnull Tag... tags) throws CloudException, InternalException {
+    public void removeTags(@Nonnull String firewallId, @Nonnull Tag... tags) throws CloudException, InternalException {
         // NO-OP
     }
 
     @Override
-    public void removeTags(@Nonnull String[] vmIds, @Nonnull Tag... tags) throws CloudException, InternalException {
-        for( String id : vmIds ) {
+    public void removeTags(@Nonnull String[] firewallIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for( String id : firewallIds ) {
             removeTags(id, tags);
         }
     }
@@ -400,13 +379,13 @@ public abstract class AbstractFirewallSupport<T extends CloudProvider> implement
     }
 
     @Override
-    public void updateTags(@Nonnull String volumeId, @Nonnull Tag... tags) throws CloudException, InternalException {
+    public void updateTags(@Nonnull String firewallId, @Nonnull Tag... tags) throws CloudException, InternalException {
         // NO-OP
     }
 
     @Override
-    public void updateTags(@Nonnull String[] vmIds, @Nonnull Tag... tags) throws CloudException, InternalException {
-        for( String id : vmIds ) {
+    public void updateTags(@Nonnull String[] firewallIds, @Nonnull Tag... tags) throws CloudException, InternalException {
+        for( String id : firewallIds ) {
             updateTags(id, tags);
         }
     }

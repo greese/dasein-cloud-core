@@ -19,6 +19,7 @@
 
 package org.dasein.cloud.compute;
 
+import org.dasein.cloud.AbstractProviderService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
@@ -45,11 +46,10 @@ import java.util.*;
  * @version 2013.04
  * @since 2013.04
  */
-public abstract class AbstractVolumeSupport<T extends CloudProvider> implements VolumeSupport {
-    private T provider;
+public abstract class AbstractVolumeSupport<T extends CloudProvider> extends AbstractProviderService<T> implements VolumeSupport {
 
-    public AbstractVolumeSupport(@Nonnull T provider) {
-        this.provider = provider;
+    protected AbstractVolumeSupport(T provider) {
+        super(provider);
     }
 
     @Override
@@ -170,34 +170,41 @@ public abstract class AbstractVolumeSupport<T extends CloudProvider> implements 
         throw new OperationNotSupportedException("Detaching volumes is not currently implemented for " + getProvider().getCloudName());
     }
 
-    /**
-     * @return the provider context under which the instance is operating
-     * @throws CloudException no context was set for this request
-     */
-    protected @Nonnull ProviderContext getContext() throws CloudException {
-        ProviderContext ctx = getProvider().getContext();
-
-        if( ctx == null ) {
-            throw new CloudException("No context was specified for this request");
+    @Override
+    @Deprecated
+    public @Nonnull String getProviderTermForVolume(@Nonnull Locale locale) {
+        try {
+            return getCapabilities().getProviderTermForVolume(locale);
+        } catch (CloudException e) {
+            throw new RuntimeException(e);
+        } catch (InternalException e) {
+            throw new RuntimeException(e);
         }
-        return ctx;
-    }
-
-    /**
-     * @return the cloud provider under which this support instance is operating
-     */
-    protected final @Nonnull T getProvider() {
-        return provider;
     }
 
     @Override
+    @Deprecated
+    public @Nonnull Iterable<String> listPossibleDeviceIds(@Nonnull Platform platform)
+            throws InternalException, CloudException {
+        return getCapabilities().listPossibleDeviceIds(platform);
+    }
+
+    @Override
+    @Deprecated
     public int getMaximumVolumeCount() throws InternalException, CloudException {
-        return -2;
+        return getCapabilities().getMaximumVolumeCount();
     }
 
     @Override
+    @Deprecated
     public @Nullable Storage<Gigabyte> getMaximumVolumeSize() throws InternalException, CloudException {
-        return null;
+        return getCapabilities().getMaximumVolumeSize();
+    }
+
+    @Override
+    @Deprecated
+    public @Nonnull Storage<Gigabyte> getMinimumVolumeSize() throws InternalException, CloudException {
+        return getCapabilities().getMinimumVolumeSize();
     }
 
     @Override
@@ -211,18 +218,21 @@ public abstract class AbstractVolumeSupport<T extends CloudProvider> implements 
     }
 
     @Override
+    @Deprecated
     public @Nonnull Requirement getVolumeProductRequirement() throws InternalException, CloudException {
-        return Requirement.NONE;
+        return getCapabilities().getVolumeProductRequirement();
     }
 
     @Override
+    @Deprecated
     public boolean isVolumeSizeDeterminedByProduct() throws InternalException, CloudException {
-        return false;
+        return getCapabilities().isVolumeSizeDeterminedByProduct();
     }
 
     @Override
+    @Deprecated
     public @Nonnull Iterable<VolumeFormat> listSupportedFormats() throws InternalException, CloudException {
-        return Collections.singletonList(VolumeFormat.BLOCK);
+        return getCapabilities().listSupportedFormats();
     }
 
     @Override

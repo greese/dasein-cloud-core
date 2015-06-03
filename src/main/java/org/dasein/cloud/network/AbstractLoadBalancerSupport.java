@@ -19,6 +19,7 @@
 
 package org.dasein.cloud.network;
 
+import org.dasein.cloud.AbstractProviderService;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
@@ -45,11 +46,11 @@ import java.util.Locale;
  * @version 2013.04 initial version
  * @since 2013.04
  */
-public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> implements LoadBalancerSupport {
-    private T provider;
+public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> extends AbstractProviderService<T> implements
+        LoadBalancerSupport {
 
-    public AbstractLoadBalancerSupport(@Nonnull T provider) {
-        this.provider = provider;
+    protected AbstractLoadBalancerSupport(T provider) {
+        super(provider);
     }
 
     @Override
@@ -83,45 +84,13 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
     }
 
     @Override
-    @Deprecated
-    public @Nonnull String create(@Nonnull String name, @Nonnull String description, @Nullable String addressId, @Nullable String[] dataCenterIds, @Nullable LbListener[] listeners, @Nullable String[] serverIds, @Nullable String[] subnetIds, @Nullable LbType type) throws CloudException, InternalException {
-        throw new OperationNotSupportedException("Load balancer creation is not implemented in " + getContext().getRegionId() + " of " + getProvider().getCloudName());
-    }
-
-    @Override
     public @Nonnull String createLoadBalancer(@Nonnull LoadBalancerCreateOptions options) throws CloudException, InternalException {
-        ArrayList<String> serverIds = new ArrayList<String>();
-
-        for( LoadBalancerEndpoint endpoint : options.getEndpoints() ) {
-            if( endpoint.getEndpointType().equals(LbEndpointType.VM) ) {
-                serverIds.add(endpoint.getEndpointValue());
-            }
-        }
-        //noinspection deprecation
-        return create(options.getName(), options.getDescription(), options.getProviderIpAddressId(), options.getProviderDataCenterIds(), options.getListeners(), serverIds.toArray(new String[serverIds.size()]), options.getProviderSubnetIds(), options.getType());
+        throw new OperationNotSupportedException("Load balancer creation is not implemented in " + getContext().getRegionId() + " of " + getProvider().getCloudName());
     }
 
     @Override
     public SSLCertificate createSSLCertificate(@Nonnull SSLCertificateCreateOptions options) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Creating a server certificate is not implemented in " + getContext().getRegionId() + " of " + getProvider().getCloudName());
-    }
-
-    @Override
-    public @Nonnull LoadBalancerAddressType getAddressType() throws CloudException, InternalException {
-        return LoadBalancerAddressType.DNS;
-    }
-
-    /**
-     * @return the current authentication context for any calls through this support object
-     * @throws CloudException no context was set
-     */
-    protected @Nonnull ProviderContext getContext() throws CloudException {
-        ProviderContext ctx = getProvider().getContext();
-
-        if( ctx == null ) {
-            throw new CloudException("No context was specified for this request");
-        }
-        return ctx;
     }
 
     @Override
@@ -135,89 +104,8 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
     }
 
     @Override
-    @Deprecated
-    public @Nonnull Iterable<LoadBalancerServer> getLoadBalancerServerHealth(@Nonnull String loadBalancerId) throws CloudException, InternalException {
-        ArrayList<LoadBalancerServer> servers = new ArrayList<LoadBalancerServer>();
-
-        for( LoadBalancerEndpoint endpoint : listEndpoints(loadBalancerId) ) {
-            if( endpoint.getEndpointType().equals(LbEndpointType.VM) ) {
-                LoadBalancerServer server = new LoadBalancerServer();
-
-                server.setCurrentState(LoadBalancerServerState.valueOf(endpoint.getCurrentState().name()));
-                server.setCurrentStateDescription(endpoint.getStateDescription());
-                server.setCurrentStateReason(endpoint.getStateReason());
-                servers.add(server);
-            }
-        }
-        return servers;
-    }
-
-    @Override
-    @Deprecated
-    public @Nonnull Iterable<LoadBalancerServer> getLoadBalancerServerHealth(@Nonnull String loadBalancerId, @Nonnull String... serverIdsToCheck) throws CloudException, InternalException {
-        ArrayList<LoadBalancerServer> servers = new ArrayList<LoadBalancerServer>();
-
-        for( LoadBalancerEndpoint endpoint : listEndpoints(loadBalancerId) ) {
-            if( endpoint.getEndpointType().equals(LbEndpointType.VM) ) {
-                boolean included = false;
-
-                for( String id : serverIdsToCheck ) {
-                    if( id.equals(endpoint.getEndpointValue()) ) {
-                        included = true;
-                        break;
-                    }
-                }
-                if( included ) {
-                    LoadBalancerServer server = new LoadBalancerServer();
-
-                    server.setCurrentState(LoadBalancerServerState.valueOf(endpoint.getCurrentState().name()));
-                    server.setCurrentStateDescription(endpoint.getStateDescription());
-                    server.setCurrentStateReason(endpoint.getStateReason());
-                    servers.add(server);
-                }
-            }
-        }
-        return servers;
-    }
-
-    @Override
-    public @Nonnegative int getMaxPublicPorts() throws CloudException, InternalException {
-        return 1;
-    }
-
-    /**
-     * @return the provider object associated with any calls through this support object
-     */
-    protected final @Nonnull T getProvider() {
-        return provider;
-    }
-
-    @Override
     public @Nullable SSLCertificate getSSLCertificate(@Nonnull String certificateName) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Getting server certificates is not implemented in " + getContext().getRegionId() + " of " + getProvider().getCloudName());
-    }
-
-    @Deprecated
-    public @Nonnull Requirement identifyEndpointsOnCreateRequirement() throws CloudException, InternalException {
-        return getCapabilities().identifyEndpointsOnCreateRequirement();
-    }
-
-    @Override
-    @Deprecated
-    public @Nonnull Requirement identifyListenersOnCreateRequirement() throws CloudException, InternalException {
-        return getCapabilities().identifyListenersOnCreateRequirement();
-    }
-
-    @Override
-    @Deprecated
-    public boolean isAddressAssignedByProvider() throws CloudException, InternalException {
-        return getCapabilities().isAddressAssignedByProvider();
-    }
-
-    @Override
-    @Deprecated
-    public boolean isDataCenterLimited() throws CloudException, InternalException {
-        return getCapabilities().isDataCenterLimited();
     }
 
     @Override
@@ -282,44 +170,8 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
     }
 
     @Override
-    @Deprecated
-    public @Nonnull Iterable<LbAlgorithm> listSupportedAlgorithms() throws CloudException, InternalException {
-        return getCapabilities().listSupportedAlgorithms();
-    }
-
-    @Override
-    @Deprecated
-    public @Nonnull Iterable<LbEndpointType> listSupportedEndpointTypes() throws CloudException, InternalException {
-        return getCapabilities().listSupportedEndpointTypes();
-    }
-
-    @Override
-    @Deprecated
-    public @Nonnull Iterable<LbPersistence> listSupportedPersistenceOptions() throws CloudException, InternalException {
-        return getCapabilities().listSupportedPersistenceOptions();
-    }
-
-    @Override
-    @Deprecated
-    public @Nonnull Iterable<LbProtocol> listSupportedProtocols() throws CloudException, InternalException {
-        return getCapabilities().listSupportedProtocols();
-    }
-
-    @Override
-    @Deprecated
-    public @Nonnull Iterable<IPVersion> listSupportedIPVersions() throws CloudException, InternalException {
-        return getCapabilities().listSupportedIPVersions();
-    }
-
-    @Override
     public @Nonnull String[] mapServiceAction(@Nonnull ServiceAction action) {
         return new String[0];
-    }
-
-    @Override
-    @Deprecated
-    public void remove(@Nonnull String loadBalancerId) throws CloudException, InternalException {
-        throw new OperationNotSupportedException("Load balancer removal is not implemented in " + getContext().getRegionId() + " of " + getProvider().getCloudName());
     }
 
     @Override
@@ -339,8 +191,8 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
 
     @Override
     public void removeLoadBalancer(@Nonnull String loadBalancerId) throws CloudException, InternalException {
-        //noinspection deprecation
-        remove(loadBalancerId);
+        throw new OperationNotSupportedException("Removing a load balancer is not implemented in " +
+                getContext().getRegionId() + " of " + getProvider().getCloudName());
     }
 
     @Override
@@ -355,38 +207,8 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
     }
 
     @Override
-    @Deprecated
-    public final boolean requiresListenerOnCreate() throws CloudException, InternalException {
-        return getCapabilities().identifyListenersOnCreateRequirement().equals(Requirement.REQUIRED);
-    }
-
-    @Override
-    @Deprecated
-    public final boolean requiresServerOnCreate() throws CloudException, InternalException {
-        return getCapabilities().identifyEndpointsOnCreateRequirement().equals(Requirement.REQUIRED);
-    }
-
-    @Override
     public void setSSLCertificate( @Nonnull SetLoadBalancerSSLCertificateOptions options ) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Setting SSL certificate is not implemented in " + getContext().getRegionId() + " of " + getProvider().getCloudName());
-    }
-
-    @Override
-    @Deprecated
-    public boolean supportsAddingEndpoints() throws CloudException, InternalException {
-        return getCapabilities().supportsAddingEndpoints();
-    }
-
-    @Override
-    @Deprecated
-    public boolean supportsMonitoring() throws CloudException, InternalException {
-        return getCapabilities().supportsMonitoring();
-    }
-
-    @Override
-    @Deprecated
-    public boolean supportsMultipleTrafficTypes() throws CloudException, InternalException {
-        return getCapabilities().supportsMultipleTrafficTypes();
     }
 
     @Override
@@ -405,18 +227,17 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
     }
 
     @Override
+    public void detachHealthCheckFromLoadBalancer(@Nonnull String providerLoadBalancerId, @Nonnull String providerLBHealthCheckId) throws CloudException, InternalException{
+        throw new OperationNotSupportedException("Health Checks have not been implemented for " + getProvider().getCloudName());
+    }
+
+    @Override
     public Iterable<LoadBalancerHealthCheck> listLBHealthChecks(@Nullable HealthCheckFilterOptions opts) throws CloudException, InternalException{
         throw new OperationNotSupportedException("Health Checks have not been implemented for " + getProvider().getCloudName());
     }
 
     @Override
     public LoadBalancerHealthCheck getLoadBalancerHealthCheck(@Nonnull String providerLBHealthCheckId, @Nullable String providerLoadBalancerId)throws CloudException, InternalException{
-        throw new OperationNotSupportedException("Health Checks have not been implemented for " + getProvider().getCloudName());
-    }
-
-    @Override
-    @Deprecated
-    public HashMap<String, String> getInstanceHealth(@Nonnull String providerLoadBalancerId, @Nullable String providerVirtualMachineId) throws CloudException, InternalException{
         throw new OperationNotSupportedException("Health Checks have not been implemented for " + getProvider().getCloudName());
     }
 
@@ -428,28 +249,6 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> imple
     @Override
     public void removeLoadBalancerHealthCheck(@Nonnull String providerLoadBalancerId) throws CloudException, InternalException{
         throw new OperationNotSupportedException("Health Checks have not been implemented for " + getProvider().getCloudName());
-    }
-
-    @Override
-    public void detatchHealthCheck(String loadBalancerId, String heathcheckId) throws CloudException, InternalException{
-        throw new OperationNotSupportedException("Health Checks have not been implemented for " + getProvider().getCloudName());
-    }
-
-    @Override
-    @Deprecated
-    public boolean healthCheckRequiresLoadBalancer() throws CloudException, InternalException{
-        return getCapabilities().healthCheckRequiresLoadBalancer();
-    }
-
-    @Override
-    @Deprecated
-    public @Nonnull String getProviderTermForLoadBalancer( @Nonnull Locale locale ) {
-        try {
-            return getCapabilities().getProviderTermForLoadBalancer(locale);
-        } catch( CloudException e ) {
-        } catch( InternalException e ) {
-        }
-        throw new RuntimeException("Unable to get a provider term for load balancer.");
     }
 
     @Override

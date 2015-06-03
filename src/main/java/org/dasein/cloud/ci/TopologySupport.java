@@ -156,4 +156,6 @@ public interface TopologySupport extends AccessControlledService {
      */
     public boolean removeTopologies(@Nonnull String[] topologyIds) throws CloudException, InternalException;
 
+    public TopologyCapabilities getCapabilities() throws CloudException, InternalException;
+
 }
