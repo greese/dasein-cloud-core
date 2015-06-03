@@ -24,6 +24,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Locale;
 import java.util.Random;
+import java.util.logging.Logger;
 
 /**
  * Implements naming conventions for a type of resource within a given cloud. This method enables a client
@@ -252,6 +253,23 @@ public class NamingConstraints {
         if( str.length() > maximumLength ) {
             return str.toString().substring(0, maximumLength);
         }
+
+        char[] nameArray = str.toString().toCharArray();
+
+
+        if (lastCharacterSymbolAllowed == false) {
+            while (!Character.isLetterOrDigit(nameArray[str.length() - 1])) {
+                str.deleteCharAt(str.length() - 1);
+            }
+        }
+
+        if (null != regularExpression) {
+            if (!str.toString().matches(regularExpression)) {
+                Logger logger = Logger.getLogger("" + NamingConstraints.class) ;
+                logger.warning("WARNING: regularExpression fails to validate cleaned name. NAME=" + str.toString() + " regularExpression=" + regularExpression);
+            }
+        }
+
         return str.toString();
     }
 

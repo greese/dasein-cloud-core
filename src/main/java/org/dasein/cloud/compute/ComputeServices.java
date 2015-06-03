@@ -21,6 +21,8 @@ package org.dasein.cloud.compute;
 
 import javax.annotation.Nullable;
 
+import org.dasein.cloud.compute.HttpLoadBalancerSupport;
+
 /**
  * Compute services define how a consuming application interacts with cloud compute as a service resources like
  * virtual machines, volumes, and images/templates. To use this (or any other services class), you call one of

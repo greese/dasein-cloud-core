@@ -21,7 +21,6 @@ package org.dasein.cloud.compute;
 
 import org.dasein.cloud.AbstractProviderService;
 import org.dasein.cloud.CloudProvider;
-import org.dasein.cloud.ci.ConvergedInfrastructureSupport;
 
 import javax.annotation.Nullable;
 
@@ -91,10 +90,9 @@ public abstract class AbstractComputeServices<T extends CloudProvider> extends A
     public boolean hasVirtualMachineSupport() {
         return (getVirtualMachineSupport() != null);
     }
-    
+
     @Override
     public boolean hasVolumeSupport() {
         return (getVolumeSupport() != null);
     }
-
 }

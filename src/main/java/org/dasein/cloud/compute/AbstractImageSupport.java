@@ -35,7 +35,7 @@ import org.dasein.cloud.util.TagUtils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Collection;
+
 import java.util.Collections;
 import java.util.Locale;
 
@@ -608,5 +608,4 @@ public abstract class AbstractImageSupport<T extends CloudProvider> extends Abst
             updateTags(id, tags);
         }
     }
-
 }

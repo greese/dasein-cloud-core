@@ -603,16 +603,16 @@ public abstract class AbstractVLANSupport<T extends CloudProvider> extends Abstr
             Tag[] collectionForDelete = TagUtils.getTagsForDelete(getVlan(id).getTags(), tags);
 
             if( collectionForDelete.length != 0 ) {
-                removeSubnetTags(id, collectionForDelete);
+                removeVLANTags(id, collectionForDelete);
             }
 
-            updateSubnetTags(id, tags);
+            updateVLANTags(id, tags);
         }
     }
     
     @Override
     public void setVLANTags( @Nonnull String vlanId, @Nonnull Tag... tags ) throws CloudException, InternalException {
-        setSubnetTags(new String[]{vlanId}, tags);
+        setVLANTags(new String[]{vlanId}, tags);
     }
 
     @Override

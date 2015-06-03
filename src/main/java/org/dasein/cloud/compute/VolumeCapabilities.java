@@ -144,6 +144,17 @@ public interface VolumeCapabilities extends Capabilities{
     public @Nonnull Requirement getVolumeProductRequirement() throws InternalException, CloudException;
 
     /**
+     * Identifies whether the device ID is required to be provided upon attach() call or else if the cloud will auto-assign one
+     * auto-assignment of device ID is
+     * supported/required in this cloud.
+     * @return whether device ID auto-assignment is required/optional/non-required by this cloud.
+     * @throws InternalException an error occurred in the Dasein Cloud implementation determining the support level
+     * @throws CloudException an error occurred with the cloud provider determining the support level
+     * @see org.dasein.cloud.compute.VolumeSupport#attach(String, String, String)
+     */
+    public @Nonnull Requirement getDeviceIdOnAttachRequirement() throws InternalException, CloudException;
+
+    /**
      * Indicates that a volume size is not necessary (and ultimately ignored) during the volume creation process
      * because the volume size is determined by the selected volume product.
      * @return true if the volume size is determined by the product choice
