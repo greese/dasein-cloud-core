@@ -198,4 +198,14 @@ public interface ImageCapabilities extends Capabilities{
      * @throws InternalException an error occurred assembling the naming constraints object
      */
     public @Nonnull NamingConstraints getImageNamingConstraints() throws CloudException, InternalException;
+
+    /**
+     * Indicates whether the driver will require or not a virtual machine product id when launching virtual
+     * machines using the specified machine image id.
+     * @params providerImageId the image id of the image to be checked
+     * @return true if a product id is require
+     * @throws CloudException an error occurred with the cloud provider when checking this capability
+     * @throws InternalException an error occurred within the Dasein cloud implementation while check this capability
+     */
+    public boolean requiresVMProductForLaunch(@Nonnull String providerImageId) throws CloudException, InternalException;
 }
