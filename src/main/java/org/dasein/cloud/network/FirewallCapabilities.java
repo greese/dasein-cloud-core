@@ -20,6 +20,7 @@
 package org.dasein.cloud.network;
 
 import org.dasein.cloud.*;
+import org.dasein.cloud.util.NamingConstraints;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -197,4 +198,12 @@ public interface FirewallCapabilities extends Capabilities{
      * @throws InternalException a local error occurred while checking for support
      */
     public boolean supportsFirewallDeletion() throws CloudException, InternalException;
+
+    /**
+     * Identifies the naming conventions that constrain how firewalls may be named (friendly name) in this cloud.
+     * @return naming conventions that constrain firewall naming
+     * @throws CloudException an error occurred querying the cloud for naming constraints
+     * @throws InternalException an error occurred assembling the naming constraints object
+     */
+    public @Nonnull NamingConstraints getFirewallNamingConstraints() throws CloudException, InternalException;
 }

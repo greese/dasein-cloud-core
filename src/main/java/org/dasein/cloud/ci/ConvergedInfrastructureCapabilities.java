@@ -19,9 +19,11 @@
 
 package org.dasein.cloud.ci;
 
+import javax.annotation.Nonnull;
 import org.dasein.cloud.Capabilities;
+import org.dasein.cloud.util.NamingConstraints;
 
-public interface ReplicaPoolCapabilities extends Capabilities {
+public interface ConvergedInfrastructureCapabilities extends Capabilities {
     public boolean supportsHttpTraffic();
 
     public boolean supportsHttpsTraffic();
@@ -42,7 +44,7 @@ public interface ReplicaPoolCapabilities extends Capabilities {
 
     public boolean supportsVmAutomaticRestart();
 
-    public boolean supportsMigrateVmOnMaintence();
+    public boolean supportsMigrateVmOnMaintenance();
 
     public boolean supportsTemplates();
 
@@ -51,4 +53,10 @@ public interface ReplicaPoolCapabilities extends Capabilities {
     public boolean supportsCreateFromInstance();
 
     public boolean supportsAutoScaling();
+
+    /**
+     * Identifies the naming conventions that constrain how converged infrastructure (replica pools) may be named (friendly name) in this cloud.
+     * @return naming conventions that constrain converged infrastructure naming
+     */
+    public @Nonnull NamingConstraints getConvergedInfrastructureNamingConstraints();
 }

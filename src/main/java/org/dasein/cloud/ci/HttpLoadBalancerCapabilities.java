@@ -5,11 +5,7 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 
 import org.dasein.cloud.Capabilities;
-import org.dasein.cloud.CloudException;
-import org.dasein.cloud.InternalException;
-import org.dasein.cloud.network.Direction;
-import org.dasein.cloud.network.FirewallSupport;
-import org.dasein.cloud.network.RuleTargetType;
+import org.dasein.cloud.util.NamingConstraints;
 /**
  * Describes the capabilities of a HttpLoadBalancer within a cloud for a specific account.
  * <p>Created by Roger Unwin: 4/27/15</p>
@@ -115,4 +111,10 @@ public interface HttpLoadBalancerCapabilities extends Capabilities {
      * @return <code>true</code> if creating more than one ForwardingRule per HttpLoadBalancer is supported
      */
     public boolean supportsMoreThanOneForwardingRule();
+
+    /**
+     * Identifies the naming conventions that constrain how http load balancers may be named (friendly name) in this cloud.
+     * @return naming conventions that constrain http load balancers naming
+     */
+    public @Nonnull NamingConstraints getConvergedHttpLoadBalancerNamingConstraints();
 }

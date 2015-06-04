@@ -54,4 +54,10 @@ public abstract class AbstractCIServices<T extends CloudProvider> extends Abstra
     public boolean hasTopologySupport() {
         return (getTopologySupport() == null);
     }
+
+    @Override
+    public boolean hasConvergedHttpLoadBalancerSupport() {
+        return (getConvergedHttpLoadBalancerSupport() != null);
+    }
+
 }

@@ -96,83 +96,13 @@ public abstract class AbstractRelationalDatabaseSupport<T extends CloudProvider>
     }
 
     @Override
-    public Iterable<DatabaseProduct> getDatabaseProducts( DatabaseEngine forEngine ) throws CloudException, InternalException {
-        throw new OperationNotSupportedException("Database products retrieval is not currently implemented for "+getProvider().getCloudName());
-    }
-
-    @Override
     public @Nonnull Iterable<DatabaseProduct> listDatabaseProducts( @Nonnull DatabaseEngine forEngine ) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Listing of database products is not currently implemented for "+getProvider().getCloudName());
     }
 
     @Override
-    public String getProviderTermForDatabase( Locale locale ) {
-        try {
-            return getCapabilities().getProviderTermForDatabase(locale);
-        }
-        catch( Exception e ) {
-            throw new RuntimeException("Unable to access RDS capabilities of " + getProvider().getCloudName(), e);
-        }
-    }
-
-    @Override
-    public String getProviderTermForSnapshot( Locale locale ) {
-        try {
-            return getCapabilities().getProviderTermForSnapshot(locale);
-        }
-        catch( Exception e ) {
-            throw new RuntimeException("Unable to access RDS capabilities of " + getProvider().getCloudName(), e);
-        }
-    }
-
-    @Override
     public DatabaseSnapshot getSnapshot( String providerDbSnapshotId ) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Snapshot retrieval is not currently implemented for "+getProvider().getCloudName());
-    }
-
-    @Override
-    @Deprecated
-    public boolean isSupportsFirewallRules() {
-        try {
-            return getCapabilities().isSupportsFirewallRules();
-        }
-        catch( Exception e ) {
-            throw new RuntimeException("Unable to access RDS capabilities of " + getProvider().getCloudName(), e);
-        }
-    }
-
-    @Override
-    @Deprecated
-    public boolean isSupportsHighAvailability() throws CloudException, InternalException {
-        return getCapabilities().isSupportsHighAvailability();
-    }
-
-    @Override
-    @Deprecated
-    public boolean isSupportsLowAvailability() throws CloudException, InternalException {
-        return getCapabilities().isSupportsLowAvailability();
-    }
-
-    @Override
-    @Deprecated
-    public boolean isSupportsMaintenanceWindows() {
-        try {
-            return getCapabilities().isSupportsMaintenanceWindows();
-        }
-        catch( Exception e ) {
-            throw new RuntimeException("Unable to access RDS capabilities of " + getProvider().getCloudName(), e);
-        }
-    }
-
-    @Override
-    @Deprecated
-    public boolean isSupportsSnapshots() {
-        try {
-            return getCapabilities().isSupportsSnapshots();
-        }
-        catch( Exception e ) {
-            throw new RuntimeException("Unable to access RDS capabilities of " + getProvider().getCloudName(), e);
-        }
     }
 
     @Override

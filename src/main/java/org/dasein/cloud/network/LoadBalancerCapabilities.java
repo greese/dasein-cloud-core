@@ -20,6 +20,7 @@
 package org.dasein.cloud.network;
 
 import org.dasein.cloud.*;
+import org.dasein.cloud.util.NamingConstraints;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -42,27 +43,27 @@ public interface LoadBalancerCapabilities extends Capabilities{
      * @throws org.dasein.cloud.InternalException
      *          an error occurred within the Dasein Cloud implementation while performing this action
      */
-    public @Nonnull LoadBalancerAddressType getAddressType() throws CloudException, InternalException;
+    @Nonnull LoadBalancerAddressType getAddressType() throws CloudException, InternalException;
 
     /**
      * @return the maximum number of public ports on which the load balancer can listen
      * @throws CloudException    an error occurred while communicating with the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud implementation
      */
-    public @Nonnegative int getMaxPublicPorts() throws CloudException, InternalException;
+    @Nonnegative int getMaxPublicPorts() throws CloudException, InternalException;
 
     /**
      * Gives the cloud provider's term for a load balancer (for example, "ELB" in AWS).
      * @param locale the locale for which the term should be translated
      * @return the provider term for a load balancer
      */
-    public @Nonnull String getProviderTermForLoadBalancer(@Nonnull Locale locale);
+    @Nonnull String getProviderTermForLoadBalancer(@Nonnull Locale locale);
 
     /**
      * Returns the visible scope of the load balancer or null if not applicable for the specific cloud
      * @return The Visible Scope for the load balancer
      */
-    public @Nullable VisibleScope getLoadBalancerVisibleScope();
+    @Nullable VisibleScope getLoadBalancerVisibleScope();
 
     /**
      * Indicates whether a health check can be created independently of a load balancer
@@ -70,7 +71,7 @@ public interface LoadBalancerCapabilities extends Capabilities{
      * @throws CloudException
      * @throws InternalException
      */
-    public boolean healthCheckRequiresLoadBalancer() throws CloudException, InternalException;
+    boolean healthCheckRequiresLoadBalancer() throws CloudException, InternalException;
 
     /**
      * Indicates whether a name is required when creating a health check
@@ -78,14 +79,14 @@ public interface LoadBalancerCapabilities extends Capabilities{
      * @throws CloudException
      * @throws InternalException
      */
-    public Requirement healthCheckRequiresName() throws CloudException, InternalException;
+    Requirement healthCheckRequiresName() throws CloudException, InternalException;
 
     /**
      * @return the degree to which endpoints should or must be part of the load balancer creation process
      * @throws CloudException    an error occurred while communicating with the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud implementation
      */
-    public @Nonnull Requirement identifyEndpointsOnCreateRequirement() throws CloudException, InternalException;
+    @Nonnull Requirement identifyEndpointsOnCreateRequirement() throws CloudException, InternalException;
 
     /**
      * Indicates the degree to which listeners should or must be specified when creating a load balancer.
@@ -93,7 +94,7 @@ public interface LoadBalancerCapabilities extends Capabilities{
      * @throws CloudException    an error occurred while communicating with the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud implementation
      */
-    public @Nonnull Requirement identifyListenersOnCreateRequirement() throws CloudException, InternalException;
+    @Nonnull Requirement identifyListenersOnCreateRequirement() throws CloudException, InternalException;
 
     /**
      * Indicates whether a load balancer requires a vlan to be specified when it is created.
@@ -101,7 +102,7 @@ public interface LoadBalancerCapabilities extends Capabilities{
      * @throws CloudException an error occurred while communicating with the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud implementation
      */
-    public @Nonnull Requirement identifyVlanOnCreateRequirement() throws CloudException, InternalException;
+    @Nonnull Requirement identifyVlanOnCreateRequirement() throws CloudException, InternalException;
 
     /**
      * Indicates whether a load balancer requires a health check to be specified when it is created.
@@ -109,7 +110,7 @@ public interface LoadBalancerCapabilities extends Capabilities{
      * @throws CloudException an error occurred while communicating with the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud implementation
      */
-    public @Nonnull Requirement identifyHealthCheckOnCreateRequirement() throws CloudException, InternalException;
+    @Nonnull Requirement identifyHealthCheckOnCreateRequirement() throws CloudException, InternalException;
 
     /**
      * @return whether or not you are expected to provide an address as part of the create process or one gets assigned
@@ -117,7 +118,7 @@ public interface LoadBalancerCapabilities extends Capabilities{
      * @throws CloudException    an error occurred while communicating with the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud implementation
      */
-    public boolean isAddressAssignedByProvider() throws CloudException, InternalException;
+    boolean isAddressAssignedByProvider() throws CloudException, InternalException;
 
     /**
      * Indicates whether or not VM endpoints for this load balancer should be constrained to specific data centers in
@@ -130,7 +131,7 @@ public interface LoadBalancerCapabilities extends Capabilities{
      * @throws CloudException    an error occurred with the cloud provider while performing this action
      * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
      */
-    public boolean isDataCenterLimited() throws CloudException, InternalException;
+    boolean isDataCenterLimited() throws CloudException, InternalException;
 
     /**
      * Lists the load balancing algorithms from which you can choose when setting up a load balancer listener.
@@ -138,7 +139,7 @@ public interface LoadBalancerCapabilities extends Capabilities{
      * @throws CloudException    an error occurred while communicating with the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud implementation
      */
-    public @Nonnull Iterable<LbAlgorithm> listSupportedAlgorithms() throws CloudException, InternalException;
+    @Nonnull Iterable<LbAlgorithm> listSupportedAlgorithms() throws CloudException, InternalException;
 
     /**
      * Describes what kind of endpoints may be added to a load balancer.
@@ -146,7 +147,7 @@ public interface LoadBalancerCapabilities extends Capabilities{
      * @throws CloudException    an error occurred while communicating with the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud implementation
      */
-    public @Nonnull Iterable<LbEndpointType> listSupportedEndpointTypes() throws CloudException, InternalException;
+    @Nonnull Iterable<LbEndpointType> listSupportedEndpointTypes() throws CloudException, InternalException;
 
     /**
      * Lists all IP protocol versions supported for load balancers in this cloud.
@@ -154,7 +155,7 @@ public interface LoadBalancerCapabilities extends Capabilities{
      * @throws CloudException    an error occurred checking support for IP versions with the cloud provider
      * @throws InternalException a local error occurred preparing the supported version
      */
-    public @Nonnull Iterable<IPVersion> listSupportedIPVersions() throws CloudException, InternalException;
+    @Nonnull Iterable<IPVersion> listSupportedIPVersions() throws CloudException, InternalException;
 
     /**
      * Lists the various options for session stickiness with load balancers in this cloud.
@@ -162,7 +163,7 @@ public interface LoadBalancerCapabilities extends Capabilities{
      * @throws CloudException    an error occurred checking support for IP versions with the cloud provider
      * @throws InternalException a local error occurred preparing the supported version
      */
-    public @Nonnull Iterable<LbPersistence> listSupportedPersistenceOptions() throws CloudException, InternalException;
+    @Nonnull Iterable<LbPersistence> listSupportedPersistenceOptions() throws CloudException, InternalException;
 
     /**
      * Lists the network protocols supported for load balancer listeners.
@@ -170,7 +171,7 @@ public interface LoadBalancerCapabilities extends Capabilities{
      * @throws CloudException    an error occurred while communicating with the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud implementation
      */
-    public @Nonnull Iterable<LbProtocol> listSupportedProtocols() throws CloudException, InternalException;
+    @Nonnull Iterable<LbProtocol> listSupportedProtocols() throws CloudException, InternalException;
 
     /**
      * Indicates whether or not endpoints may be added to or removed from a load balancer once the load balancer has
@@ -179,7 +180,7 @@ public interface LoadBalancerCapabilities extends Capabilities{
      * @throws CloudException    an error occurred with the cloud provider while performing this action
      * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
      */
-    public boolean supportsAddingEndpoints() throws CloudException, InternalException;
+    boolean supportsAddingEndpoints() throws CloudException, InternalException;
 
     /**
      * Indicates whether or not the underlying cloud monitors the balanced endpoints and provides health status
@@ -188,7 +189,7 @@ public interface LoadBalancerCapabilities extends Capabilities{
      * @throws CloudException    an error occurred with the cloud provider while performing this action
      * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
      */
-    public boolean supportsMonitoring() throws CloudException, InternalException;
+    boolean supportsMonitoring() throws CloudException, InternalException;
 
     /**
      * Indicates whether a single load balancer is limited to either IPv4 or IPv6 (false) or can support both IPv4 and
@@ -197,5 +198,24 @@ public interface LoadBalancerCapabilities extends Capabilities{
      * @throws CloudException    an error occurred with the cloud provider while performing this action
      * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
      */
-    public boolean supportsMultipleTrafficTypes() throws CloudException, InternalException;
+    boolean supportsMultipleTrafficTypes() throws CloudException, InternalException;
+
+    /**
+     * Indicates whether certificates may be uploaded to and managed by this cloud. Consulting this method will only
+     * make sense if {@link #listSupportedProtocols()} returns {@link LbProtocol#HTTPS} as part of the response.
+     * @return <code>true</code> if cloud will manage the certificates;
+     * <code>false</code> if certificate needs to be uploaded upon load balancer creation, SSL management API will
+     * likely throw exceptions in this case (e.g. {@link LoadBalancerSupport#createSSLCertificate(org.dasein.cloud.network.SSLCertificateCreateOptions)}).
+     * @throws CloudException
+     * @throws InternalException
+     */
+    boolean supportsSslCertificateStore() throws CloudException, InternalException;
+
+    /**
+     * Identifies the naming conventions that constrain how load balancers may be named (friendly name) in this cloud.
+     * @return naming conventions that constrain load balancer naming
+     * @throws CloudException an error occurred querying the cloud for naming constraints
+     * @throws InternalException an error occurred assembling the naming constraints object
+     */
+    @Nonnull NamingConstraints getLoadBalancerNamingConstraints() throws CloudException, InternalException;
 }
