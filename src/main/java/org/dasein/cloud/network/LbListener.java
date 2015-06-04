@@ -64,9 +64,9 @@ public class LbListener {
      * @return a newly constructed listener
      */
     static public LbListener getInstance(@Nonnull LbProtocol protocol, int publicPort, int privatePort,
-                                         String sslCertificateName) {
+            String sslCertificateName) {
         return new LbListener(LbAlgorithm.ROUND_ROBIN, LbPersistence.NONE, protocol, publicPort, privatePort,
-                              sslCertificateName);
+                sslCertificateName);
     }
 
     /**
@@ -102,6 +102,13 @@ public class LbListener {
         return new LbListener(algorithm, persistence, protocol, publicPort, privatePort);
     }
 
+    static public LbListener getInstance(@Nonnull LbAlgorithm algorithm, @Nonnull LbPersistence persistence, @Nullable String cookie, @Nonnull LbProtocol protocol, int publicPort, int privatePort, @Nullable String sslCertificateName, @Nullable String providerLBHealthCheckId) {
+        LbListener lbListener = new LbListener(algorithm, persistence, protocol, publicPort, privatePort, sslCertificateName);
+        lbListener.cookie = cookie;
+        lbListener.providerLBHealthCheckId = providerLBHealthCheckId;
+        return lbListener;
+    }
+
     private LbAlgorithm   algorithm;
     private String        cookie;
     private LbProtocol    networkProtocol;
@@ -109,6 +116,7 @@ public class LbListener {
     private int           privatePort;
     private int           publicPort;
     private String        sslCertificateName;
+    private String        providerLBHealthCheckId;
 
     /**
      * Constructs an empty listener object.
@@ -121,7 +129,7 @@ public class LbListener {
     }
 
     public LbListener(@Nonnull LbAlgorithm algorithm, @Nonnull LbPersistence persistence, @Nonnull LbProtocol protocol,
-                      int publicPort, int privatePort, @Nullable String sslCertificateName) {
+            int publicPort, int privatePort, @Nullable String sslCertificateName) {
         this.algorithm = algorithm;
         this.persistence = persistence;
         this.networkProtocol = protocol;
@@ -187,6 +195,13 @@ public class LbListener {
      */
     public String getSslCertificateName() {
         return sslCertificateName;
+    }
+
+    /**
+     * @return the ID of a Health Check if one is attached.
+     */
+    public @Nullable String getProviderLBHealthCheckId(){
+        return providerLBHealthCheckId;
     }
 
     @Override

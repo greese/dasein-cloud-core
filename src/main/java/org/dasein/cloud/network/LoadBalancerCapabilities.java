@@ -113,6 +113,14 @@ public interface LoadBalancerCapabilities extends Capabilities{
     @Nonnull Requirement identifyHealthCheckOnCreateRequirement() throws CloudException, InternalException;
 
     /**
+     * Indicates whether a health check requires a listener to be specified when it is created/updated.
+     * @return the degree to which a listener should or must be part of health check creation process
+     * @throws CloudException an error occurred while communicating with the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     */
+    public @Nonnull Requirement identityListenerOnHealthCheckRequirement() throws CloudException, InternalException;
+
+    /**
      * @return whether or not you are expected to provide an address as part of the create process or one gets assigned
      *         by the provider
      * @throws CloudException    an error occurred while communicating with the cloud provider

@@ -38,6 +38,7 @@ public class LoadBalancerHealthCheck implements Networkable{
     private String            name;
     private String            description;
     private List<String>      providerLoadBalancerIds = new ArrayList<String>();
+    private List<LbListener>  listeners = new ArrayList<LbListener>();
     private String            host;
     private HCProtocol        protocol;
     private int               port;
@@ -108,6 +109,18 @@ public class LoadBalancerHealthCheck implements Networkable{
 
     public void removeProviderLoadBalancerId(String providerLoadBalancerId){
         this.providerLoadBalancerIds.remove(providerLoadBalancerId);
+    }
+
+    public List<LbListener> getListeners() {
+        return listeners;
+    }
+
+    public void addListener(LbListener listener) {
+        this.listeners.add(listener);
+    }
+
+    public void removeListener(LbListener listener) {
+        this.listeners.remove(listener);
     }
 
     public String getHost() {
