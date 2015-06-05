@@ -226,23 +226,23 @@ public class TopologyProvisionOptions {
         return machineType;
     }
 
-    public @Nullable List<Network> getNetworkArray() {
+    public @Nonnull List<Network> getNetworkArray() {
         return networkArray;
     }
 
-    public @Nullable List<Disk> getDiskArray() {
+    public @Nonnull List<Disk> getDiskArray() {
         return diskArray;
     }
 
-    public @Nullable String[] getSshKeys() {
+    public @Nonnull String[] getSshKeys() {
         return sshKeys;
     }
 
-    public @Nullable List<String> getTags() {
+    public @Nonnull List<String> getTags() {
         return tags;
     }
 
-    public @Nullable String[] getRoDisks() {
+    public @Nonnull String[] getRoDisks() {
         return roDisks;
     }
 
@@ -258,7 +258,7 @@ public class TopologyProvisionOptions {
         return bootDiskType;
     }
 
-    public @Nullable Map<String, String> getMetadata() {
+    public @Nonnull Map<String, String> getMetadata() {
         return metadata;
     }
 }
