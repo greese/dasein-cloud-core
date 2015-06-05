@@ -32,27 +32,11 @@ public class TopologyProvisionOptions {
     public enum MaintenanceOption {
         MIGRATE_VM_INSTANCE,
         TERMINATE_VM_INSTANCE;
-
-        public String toString() {
-            switch( this ) {
-                case MIGRATE_VM_INSTANCE: return "MIGRATE";
-                case TERMINATE_VM_INSTANCE: return "TERMINATE";
-            }
-            return null;
-        }
     }
 
     public enum DiskType {
         STANDARD_PERSISTENT_DISK,
         SSD_PERSISTENT_DISK;
-
-        public String toString() {
-            switch( this ) {
-                case STANDARD_PERSISTENT_DISK: return "pd-standard";
-                case SSD_PERSISTENT_DISK: return "pd-ssd";
-            }
-            return null;
-        }
     }
 
     public class Disk {
