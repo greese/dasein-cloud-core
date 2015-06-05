@@ -92,21 +92,15 @@ public class TopologyProvisionOptions {
 
     public class Network {
         private String networkName;
-        private String networkSelfUrl;
         private List<AccessConfig> accessConfig;
 
-        private Network(@Nonnull String networkName, @Nonnull String networkSelfUrl, @Nonnull List<AccessConfig> accessConfig) {
+        private Network(@Nonnull String networkName, @Nonnull List<AccessConfig> accessConfig) {
             this.networkName = networkName;
-            this.networkSelfUrl = networkSelfUrl;
             this.accessConfig = accessConfig;
         }
 
         public String getNetworkName() {
             return networkName;
-        }
-
-        public String getNetworkSelfUrl() {
-            return networkSelfUrl;
         }
 
         public List<AccessConfig> getAccessConfig() {
@@ -116,21 +110,15 @@ public class TopologyProvisionOptions {
 
     public class AccessConfig {
         private String name;
-        private String kind;
         private String type;
 
-        public AccessConfig(@Nonnull String kind, @Nonnull String type, @Nonnull String name) {
+        public AccessConfig(@Nonnull String type, @Nonnull String name) {
             this.name = name;
-            this.kind = kind;
             this.type = type;
         }
 
         public String getName() {
             return name;
-        }
-
-        public String getKind() {
-            return kind;
         }
 
         public String getType() {
@@ -172,22 +160,15 @@ public class TopologyProvisionOptions {
 
     public @Nonnull TopologyProvisionOptions withNetworkInterface(@Nonnull String networkName, @Nonnull String networkSelfUrl, @Nonnull boolean assignEphemeralIp) {
         if (false == assignEphemeralIp) {
-            this.networkArray.add(new Network(networkName, networkSelfUrl, new ArrayList<AccessConfig>()));
+            this.networkArray.add(new Network(networkName, new ArrayList<AccessConfig>()));
         } else {
             List<AccessConfig> accessConfig = new ArrayList<AccessConfig>();
-            accessConfig.add(new AccessConfig("compute#accessConfig", "ONE_TO_ONE_NAT", "External NAT"));
-            this.networkArray.add(new Network(networkName, networkSelfUrl, accessConfig));
+            accessConfig.add(new AccessConfig("ONE_TO_ONE_NAT", "External NAT"));
+            this.networkArray.add(new Network(networkName, accessConfig));
         }
 
         return this;
     }
-
-/*
-    public TopologyProvisionOptions withNetworkInterface(@Nonnull String networkName, @Nonnull String networkSelfUrl) {
-        this.networkArray.add(new Network(networkName, networkSelfUrl, new ArrayList<AccessConfig>()));
-        return this;
-    }
-*/
 
     public TopologyProvisionOptions withSshKeys(@Nonnull String[] sshKeys) {
         this.sshKeys  = sshKeys;
@@ -224,9 +205,8 @@ public class TopologyProvisionOptions {
         return this;
     }
 
-
-    public AccessConfig getAccessConfigInstance(@Nonnull String name, @Nonnull String natIP, @Nonnull String type) {
-        return new AccessConfig(name, natIP, type);
+    public AccessConfig getAccessConfigInstance(@Nonnull String natIP, @Nonnull String type) {
+        return new AccessConfig(natIP, type);
     }
 
     public String getProductName() {
