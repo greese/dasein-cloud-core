@@ -171,42 +171,42 @@ public class TopologyProvisionOptions {
         return this;
     }
 
-    public TopologyProvisionOptions withSshKeys(@Nonnull String[] sshKeys) {
+    public @Nonnull TopologyProvisionOptions withSshKeys(@Nonnull String[] sshKeys) {
         this.sshKeys  = sshKeys;
         return this;
     }
 
-    public TopologyProvisionOptions withTags(@Nonnull List<String> tags) {
+    public @Nonnull TopologyProvisionOptions withTags(@Nonnull List<String> tags) {
         this.tags = tags;
         return this;
     }
 
-    public TopologyProvisionOptions withReadOnlyDisks(@Nonnull String[] roDisks) {
+    public @Nonnull TopologyProvisionOptions withReadOnlyDisks(@Nonnull String[] roDisks) {
         this.roDisks = roDisks;
         return this;
     }
 
-    public TopologyProvisionOptions withAutomaticRestart(@Nonnull boolean automaticRestart) {
+    public @Nonnull TopologyProvisionOptions withAutomaticRestart(@Nonnull boolean automaticRestart) {
         this.automaticRestart = automaticRestart;
         return this;
     }
 
-    public TopologyProvisionOptions withMaintenanceOption(@Nonnull MaintenanceOption maintenanceAction) {
+    public @Nonnull TopologyProvisionOptions withMaintenanceOption(@Nonnull MaintenanceOption maintenanceAction) {
         this.maintenanceAction = maintenanceAction;
         return this;
     }
 
-    public TopologyProvisionOptions withBootDiskType(@Nonnull DiskType bootDiskType) {
+    public @Nonnull TopologyProvisionOptions withBootDiskType(@Nonnull DiskType bootDiskType) {
         this.bootDiskType = bootDiskType;
         return this;
     }
 
-    public TopologyProvisionOptions withMetadata(@Nonnull Map<String, String> metadata) {
+    public @Nonnull TopologyProvisionOptions withMetadata(@Nonnull Map<String, String> metadata) {
         this.metadata = metadata;
         return this;
     }
 
-    public AccessConfig getAccessConfigInstance(@Nonnull String natIP, @Nonnull String type) {
+    public @Nullable AccessConfig getAccessConfigInstance(@Nonnull String natIP, @Nonnull String type) {
         return new AccessConfig(natIP, type);
     }
 
