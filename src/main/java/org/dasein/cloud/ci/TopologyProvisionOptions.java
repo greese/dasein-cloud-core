@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class TopologyProvisionOptions {
 
@@ -209,11 +210,11 @@ public class TopologyProvisionOptions {
         return new AccessConfig(natIP, type);
     }
 
-    public String getProductName() {
+    public @Nonnull String getProductName() {
         return productName;
     }
 
-    public String getProductDescription() {
+    public @Nonnull String getProductDescription() {
         return productDescription;
     }
 
@@ -221,27 +222,27 @@ public class TopologyProvisionOptions {
         return canIpForward;
     }
 
-    public String getMachineType() {
+    public @Nonnull String getMachineType() {
         return machineType;
     }
 
-    public List<Network> getNetworkArray() {
+    public @Nullable List<Network> getNetworkArray() {
         return networkArray;
     }
 
-    public List<Disk> getDiskArray() {
+    public @Nullable List<Disk> getDiskArray() {
         return diskArray;
     }
 
-    public String[] getSshKeys() {
+    public @Nullable String[] getSshKeys() {
         return sshKeys;
     }
 
-    public List<String> getTags() {
+    public @Nullable List<String> getTags() {
         return tags;
     }
 
-    public String[] getRoDisks() {
+    public @Nullable String[] getRoDisks() {
         return roDisks;
     }
 
@@ -249,15 +250,15 @@ public class TopologyProvisionOptions {
         return automaticRestart;
     }
 
-    public MaintenanceOption getMaintenenceAction() {
+    public @Nullable MaintenanceOption getMaintenenceAction() {
         return maintenanceAction;
     }
 
-    public DiskType getBootDiskType() {
+    public @Nullable DiskType getBootDiskType() {
         return bootDiskType;
     }
 
-    public Map<String, String> getMetadata() {
+    public @Nullable Map<String, String> getMetadata() {
         return metadata;
     }
 }
