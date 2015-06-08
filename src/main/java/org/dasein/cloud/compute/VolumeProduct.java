@@ -167,6 +167,7 @@ public class VolumeProduct {
         this.iopsCost = iopsCost;
     }
 
+    @Override
     public boolean equals(Object other) {
         if( other == null ) {
             return false;
@@ -185,7 +186,7 @@ public class VolumeProduct {
     /**
      * Set the volume product with the maximum IOPS to storage size ratio,
      * e.g. 30:1 will result in a ratio value of 30.0.
-     * @param ratio
+     * @param ratio maximum IOPS to storage size ratio
      * @return this
      */
     public @Nonnull VolumeProduct withMaxIopsRatio(@Nonnegative float ratio) {
@@ -240,8 +241,8 @@ public class VolumeProduct {
     }
 
     /**
+     * @return minimum size of volume
      * @deprecated use {@link VolumeProduct#getMinVolumeSize()} and {@link VolumeProduct#getMinVolumeSize()} instead.
-     * @return
      */
     @Deprecated
     public @Nullable Storage<Gigabyte> getVolumeSize() {

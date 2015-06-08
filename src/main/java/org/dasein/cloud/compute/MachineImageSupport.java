@@ -183,6 +183,7 @@ public interface MachineImageSupport extends AccessControlledService {
 
     /**
      * Provides the cloud provider specific term for a public image of the specified image class.
+     * @param locale the language in which the term should be presented
      * @param cls the image class for the desired type
      * @return the term used by the provider to describe a public image
      * @deprecated use {@link ImageCapabilities#getProviderTermForImage(java.util.Locale, ImageClass)}
@@ -461,6 +462,7 @@ public interface MachineImageSupport extends AccessControlledService {
      * Searches all snapshots visible to the current account owner (whether owned by the account owner or someone else)
      * for all images matching the specified image filter options. This differs from the {@link #listImages(ImageFilterOptions)}
      * method in that it covers all images, not just ones belonging to a specific account.
+     * @param options filter criteria
      * @return all images in the current region matching the specified filter options
      * @throws InternalException an error occurred within the Dasein Cloud implementation
      * @throws CloudException an error occurred with the cloud provider

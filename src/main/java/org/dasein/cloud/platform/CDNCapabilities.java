@@ -36,18 +36,24 @@ public interface CDNCapabilities extends Capabilities{
     /**
      * Indicates whether the cloud supports the creation of a new CDN distribution
      * @return true if creation is allowed
+     * @throws CloudException an error occurred in the cloud identifying this capability
+     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this capability
      */
     public boolean canCreateCDN() throws CloudException, InternalException;
 
     /**
      * Indicates whether the cloud supports the deletion of an existing CDN
      * @return true if deletion allowed
+     * @throws CloudException an error occurred in the cloud identifying this capability
+     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this capability
      */
     public boolean canDeleteCDN() throws CloudException, InternalException;
 
     /**
      * Indicates whether an existing CDN can be modified
      * @return true if modification is allowed
+     * @throws CloudException an error occurred in the cloud identifying this capability
+     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this capability
      */
     public boolean canModifyCDN() throws CloudException, InternalException;
 

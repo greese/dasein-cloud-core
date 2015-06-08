@@ -145,7 +145,7 @@ public class MachineImage implements Taggable {
 
     /**
      * Indicates the machine image type. If not set, the value will default to MachineImageType.VOLUME.
-     * @param type
+     * @param type machine image type
      * @return this
      */
     public @Nonnull MachineImage withType(@Nonnull MachineImageType type) {
@@ -157,7 +157,7 @@ public class MachineImage implements Taggable {
      * Indicates what image format in case when type of this image is set MachineImageType.STORAGE.
      * This field should generally be ignored for other image types.
      * @see org.dasein.cloud.compute.MachineImageType
-     * @param format
+     * @param format machine image format
      * @return this
      */
     public @Nonnull MachineImage withStorageFormat(@Nullable MachineImageFormat format) {
@@ -320,6 +320,7 @@ public class MachineImage implements Taggable {
 
     /**
      * Sets visible scope of the image
+     * @param visibleScope visible scope
      * @return image instance with visible scope modified
      */
     public @Nonnull MachineImage withVisibleScope(@Nullable VisibleScope visibleScope) {
@@ -355,6 +356,7 @@ public class MachineImage implements Taggable {
 
     /**
      * Sets volumes of the image
+     * @param volumes volumes
      * @return image instance with volumes
      */
     public @Nonnull MachineImage withVolumes(@Nullable Iterable<MachineImageVolume> volumes ) {
@@ -561,7 +563,7 @@ public class MachineImage implements Taggable {
 
     /**
      * Sets visible scope of image
-     * @param visibleScope
+     * @param visibleScope visible scope
      * @deprecated Use the static factory methods
      * @see MachineImage#withVisibleScope(org.dasein.cloud.VisibleScope)
      */

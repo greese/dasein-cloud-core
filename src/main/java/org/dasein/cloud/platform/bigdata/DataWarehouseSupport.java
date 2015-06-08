@@ -235,6 +235,7 @@ public interface DataWarehouseSupport {
     /**
      * Lists data cluster snapshots matching the filter criteria specified. If no filter criteria are specified, this
      * method acts as if it were filtering solely on this user's snapshots (e.g. equal to {@link #listClusterSnapshots()}).
+     * @param options filter criteria
      * @return a list of data cluster snapshots matching the specified criteria
      * @throws CloudException an error occurred processing the request in the cloud provider
      * @throws InternalException an error occurred in the Dasein Cloud implementation while processing the request

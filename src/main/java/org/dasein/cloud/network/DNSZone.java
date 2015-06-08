@@ -87,7 +87,7 @@ public class DNSZone implements Serializable {
 
     /**
      * Sets the user-friendly name of the DNS zone.
-     * @param name
+     * @param name DNS zone name to set
      */
     public void setName(String name) {
         this.name = name;

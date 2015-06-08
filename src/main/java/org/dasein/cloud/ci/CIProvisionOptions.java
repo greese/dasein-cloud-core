@@ -41,30 +41,6 @@ public class CIProvisionOptions {
 
     private CIProvisionOptions() { }
 
-    /**
-     * Triggers a call to provision from the topology based on the current state of the topology provisioning options.
-     * @param provider the cloud provider in which to provision
-     * @return the result of the attempt to provision from the topology
-     * @throws CloudException an error occurred in the cloud during the provisioning operation
-     * @throws InternalException an error occurred within Dasein Cloud attempting to execute the request
-     */
-    /*
-     * This does not feel like it fits...
-    public @Nonnull ConvergedInfrastructure build(@Nonnull CloudProvider provider) throws CloudException, InternalException {
-        CIServices ci = provider.getCIServices();
-
-        if( ci == null ) {
-            throw new CloudException("CI services are not supported in " + provider.getCloudName());
-        }
-        ConvergedInfrastructureSupport support = ci.getConvergedInfrastructureSupport();
-
-        if( support == null ) {
-            throw new CloudException("Converged infrastructures are not supported in " + provider.getCloudName());
-        }
-        return support.provision(this);
-    }
-    */
-
     static public @Nonnull CIProvisionOptions getInstance(@Nonnull String name, @Nonnull String description, @Nonnull String zone, @Nonnull int size, @Nonnull String instanceTemplate) {
         CIProvisionOptions options = new CIProvisionOptions();
 

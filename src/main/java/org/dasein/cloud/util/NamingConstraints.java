@@ -357,7 +357,7 @@ public class NamingConstraints {
      *
      *         String test = conventions.incrementName(name, Locale.getDefault(), i++);
      *
-     *         while( test != null && !isUnique(test) ) {
+     *         while( test != null &amp;&amp; !isUnique(test) ) {
      *             test = conventions.increment(name, Locale.getDefault(), i++);
      *         }
      *         if( test == null ) {

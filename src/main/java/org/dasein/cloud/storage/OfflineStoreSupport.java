@@ -43,8 +43,8 @@ public interface OfflineStoreSupport extends BlobStoreSupport {
      * for a provider-specific amount of time.
      * @param bucket name of bucket to list requests for
      * @return iterable of current known requests
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException an error occurred in the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
      */
     public @Nonnull Iterable<OfflineStoreRequest> listRequests(@Nonnull String bucket) throws CloudException, InternalException;
 
@@ -53,8 +53,8 @@ public interface OfflineStoreSupport extends BlobStoreSupport {
      * @param bucket name of bucket for request
      * @param requestId provider-specific identifier of request
      * @return a representation of the request, or null if it is not found
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException an error occurred in the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
      */
     public @Nullable OfflineStoreRequest getRequest(@Nonnull String bucket, @Nonnull String requestId) throws CloudException, InternalException;
 
@@ -62,8 +62,8 @@ public interface OfflineStoreSupport extends BlobStoreSupport {
      * Create a new bucket list request
      * @param bucket name of bucket to list
      * @return representation of the request
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException an error occurred in the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
      */
     public @Nonnull OfflineStoreRequest createListRequest(@Nonnull String bucket) throws CloudException, InternalException;
 
@@ -72,8 +72,8 @@ public interface OfflineStoreSupport extends BlobStoreSupport {
      * @param bucket name of bucket containing object
      * @param object name of object to download
      * @return representation of the request
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException an error occurred in the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
      */
     public @Nonnull OfflineStoreRequest createDownloadRequest(@Nonnull String bucket, @Nonnull String object) throws CloudException, InternalException;
 
@@ -82,8 +82,8 @@ public interface OfflineStoreSupport extends BlobStoreSupport {
      * @param bucket name of bucket for request
      * @param requestId provider-specific identifier of request
      * @return iterable of found objects
-     * @throws InternalException
-     * @throws CloudException
+     * @throws CloudException an error occurred in the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
      */
     public @Nonnull Iterable<Blob> getListRequestResult(@Nonnull String bucket, @Nonnull String requestId) throws InternalException, CloudException;
 
@@ -93,8 +93,8 @@ public interface OfflineStoreSupport extends BlobStoreSupport {
      * @param requestId provider-specific identifier of request
      * @param toFile destination file for download results
      * @return FileTransfer asynchronous object to track the progress of the download
-     * @throws InternalException
-     * @throws CloudException
+     * @throws CloudException an error occurred in the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
      */
     public @Nonnull FileTransfer getDownloadRequestResult(@Nonnull String bucket, @Nonnull String requestId, @Nonnull File toFile) throws InternalException, CloudException;
 

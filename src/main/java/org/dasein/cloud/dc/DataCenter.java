@@ -52,6 +52,7 @@ public class DataCenter implements Serializable {
      * Constructs a new data center object from the specified state values.
      * @param dataCenterId the provider identifier for the data center 
      * @param name the name of the data center
+     * @param regionId the provider identifier for the region
      * @param active whether or not the data center is currently in use with the provider
      * @param available whether or not the data center is currently up and operating normally
      */
@@ -65,6 +66,7 @@ public class DataCenter implements Serializable {
         this.storage = true;
     }
 
+    @Override
     public boolean equals(Object ob) {
         if( ob == null ) {
             return false;

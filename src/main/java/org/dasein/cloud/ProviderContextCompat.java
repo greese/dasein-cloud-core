@@ -73,6 +73,10 @@ public abstract class ProviderContextCompat implements Serializable {
     }
 
     /************************************** HELPER METHODS ************************************/
+    /**
+     * Get account number associated with the context
+     * @return account number
+     */
     public abstract String getAccountNumber();
 
     public abstract Cloud getCloud();

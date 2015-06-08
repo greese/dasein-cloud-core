@@ -341,6 +341,7 @@ public class VirtualMachine implements Networkable, Taggable {
     }
 
     /**
+     * @param privateIpAddresses array of private ip addresses associated with this VM
      * @deprecated Use {@link #setPrivateAddresses(RawAddress...)}
      */
     @Deprecated
@@ -414,6 +415,7 @@ public class VirtualMachine implements Networkable, Taggable {
     }
 
     /**
+     * @return array of public ip addresses associated with this VM
      * @deprecated Use {@link #getPublicAddresses()}
      */
     @Deprecated
@@ -477,6 +479,7 @@ public class VirtualMachine implements Networkable, Taggable {
     }
 
     /**
+     * @param publicIpAddresses array of public IP addresses associated with this VM
      * @deprecated Use {@link #setPublicAddresses(RawAddress...)}
      */
     @Deprecated

@@ -38,9 +38,9 @@ public interface LoadBalancerCapabilities extends Capabilities{
     /**
      * Indicates the type of load balancer supported by this cloud.
      * @return the load balancer type
-     * @throws org.dasein.cloud.CloudException
+     * @throws CloudException
      *          an error occurred with the cloud provider while performing this action
-     * @throws org.dasein.cloud.InternalException
+     * @throws InternalException
      *          an error occurred within the Dasein Cloud implementation while performing this action
      */
     @Nonnull LoadBalancerAddressType getAddressType() throws CloudException, InternalException;
@@ -68,16 +68,20 @@ public interface LoadBalancerCapabilities extends Capabilities{
     /**
      * Indicates whether a health check can be created independently of a load balancer
      * @return false if a health check can exist without having been assigned to a load balancer
-     * @throws CloudException
      * @throws InternalException
+     *             an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException
+     *             an error occurred within the cloud provider
      */
     boolean healthCheckRequiresLoadBalancer() throws CloudException, InternalException;
 
     /**
      * Indicates whether a name is required when creating a health check
      * @return Requirement for health check name
-     * @throws CloudException
      * @throws InternalException
+     *             an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException
+     *             an error occurred within the cloud provider
      */
     Requirement healthCheckRequiresName() throws CloudException, InternalException;
 
@@ -206,8 +210,10 @@ public interface LoadBalancerCapabilities extends Capabilities{
      * @return <code>true</code> if cloud will manage the certificates;
      * <code>false</code> if certificate needs to be uploaded upon load balancer creation, SSL management API will
      * likely throw exceptions in this case (e.g. {@link LoadBalancerSupport#createSSLCertificate(org.dasein.cloud.network.SSLCertificateCreateOptions)}).
-     * @throws CloudException
      * @throws InternalException
+     *             an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException
+     *             an error occurred within the cloud provider
      */
     boolean supportsSslCertificateStore() throws CloudException, InternalException;
 
