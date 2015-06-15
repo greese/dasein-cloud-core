@@ -198,6 +198,16 @@ public class LbListener {
     }
 
     /**
+     * Sets the SSL Certificate Name assoicated with this listener
+     * @param sslCertificateName the SSL Certificate name
+     * @return this
+     */
+    public @Nonnull LbListener withSslCertificateName(@Nullable String sslCertificateName) {
+        this.sslCertificateName = sslCertificateName;
+        return this;
+    }
+
+    /**
      * Sets the Health Check ID associated with this listener
      * @param providerLBHealthCheckId the Health Check ID
      * @return this
