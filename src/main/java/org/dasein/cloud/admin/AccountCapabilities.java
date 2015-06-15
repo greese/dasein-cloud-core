@@ -38,7 +38,7 @@ public interface AccountCapabilities extends Capabilities {
 
     /**
      * Indicates whether or not sub accounts can be created for this cloud using
-     * a {@link AccountSupport#create(String)} call.
+     * a {@link AccountSupport#create(Account)} call.
      * 
      * @return true if sub accounts can be created, false if otherwise
      * @throws CloudException
@@ -83,7 +83,7 @@ public interface AccountCapabilities extends Capabilities {
 
     /**
      * Indicates whether or not details on an account can be updated for this
-     * cloud using an {@link AccountSupport#update(String)} call.
+     * cloud using an {@link AccountSupport#update(Account)} call.
      * 
      * @return true if account details can be updated, false if otherwise
      * @throws InternalException

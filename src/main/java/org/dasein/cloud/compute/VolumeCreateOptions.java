@@ -261,6 +261,7 @@ public class VolumeCreateOptions {
 
     /**
      * Makes a copy of these creation options so that individual values may be altered as needed.
+     * @param withName the name of the volume to be created
      * @return a copy of these creation options
      */
     public @Nonnull VolumeCreateOptions copy(@Nonnull String withName) {

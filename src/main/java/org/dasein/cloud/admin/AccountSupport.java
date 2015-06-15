@@ -115,7 +115,8 @@ public interface AccountSupport extends AccessControlledService {
 
     /**
      * Provides the data for a specific account.
-     * 
+     *
+     * @param accountId the requested account identifier
      * @return details for the given account
      * @throws InternalException
      *             an error occurred within the Dasein Cloud API implementation
@@ -126,7 +127,7 @@ public interface AccountSupport extends AccessControlledService {
 
     /**
      * 
-     * @param accountId
+     * @param accountId the account to be enabled
      * @throws InternalException
      *             an error occurred within the Dasein Cloud API implementation
      * @throws CloudException
@@ -135,7 +136,7 @@ public interface AccountSupport extends AccessControlledService {
     public void enable(String accountId) throws InternalException, CloudException;
 
     /**
-     * @param accountId
+     * @param accountId the account to be suspended
      * @throws InternalException
      *             an error occurred within the Dasein Cloud API implementation
      * @throws CloudException
@@ -147,7 +148,7 @@ public interface AccountSupport extends AccessControlledService {
      * Updates the given account with the provided data. Few clouds will support
      * all possible changes.
      * 
-     * @param account
+     * @param account the account to be updated
      *            the data to update the account with
      * @throws InternalException
      *             an error occurred within the Dasein Cloud API implementation

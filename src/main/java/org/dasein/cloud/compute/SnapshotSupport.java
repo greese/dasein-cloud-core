@@ -250,6 +250,7 @@ public interface SnapshotSupport extends AccessControlledService {
      * Searches all snapshots visible to the current account owner (whether owned by the account owner or someone else)
      * for all snapshots matching the specified snapshot filter options. This differs from the {@link #listSnapshots(SnapshotFilterOptions)}
      * method in that it covers all snapshots, not just ones belonging to a specific account.
+     * @param options filter criteria
      * @return all snapshots in the current region matching the specified filter options
      * @throws InternalException an error occurred within the Dasein Cloud implementation
      * @throws CloudException an error occurred with the cloud provider

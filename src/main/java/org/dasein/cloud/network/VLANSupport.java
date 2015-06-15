@@ -68,6 +68,7 @@ public interface VLANSupport extends AccessControlledService {
      * @param version ipv4 or ipv6
      * @param destinationCidr the destination IP address or CIDR, or null if setting the default route
      * @param address the IP address to which the traffic is being routed
+     * @return route object
      * @throws CloudException an error occurred in the cloud while adding the route to the routing table
      * @throws InternalException a local error occurred processing the request to add the route
      */
@@ -79,6 +80,7 @@ public interface VLANSupport extends AccessControlledService {
      * @param version ipv4 or ipv6
      * @param destinationCidr the destination IP address or CIDR, or null if setting the default route
      * @param gatewayId the ID of a known gateway
+     * @return route object
      * @throws CloudException an error occurred in the cloud while adding the route to the routing table
      * @throws InternalException a local error occurred processing the request to add the route
      */
@@ -90,6 +92,7 @@ public interface VLANSupport extends AccessControlledService {
      * @param version ipv4 or ipv6
      * @param destinationCidr the destination IP address or CIDR, or null if setting the default route
      * @param nicId the ID of a known network interface
+     * @return route object
      * @throws CloudException an error occurred in the cloud while adding the route to the routing table
      * @throws InternalException a local error occurred processing the request to add the route
      */
@@ -101,6 +104,7 @@ public interface VLANSupport extends AccessControlledService {
      * @param version ipv4 or ipv6
      * @param destinationCidr the destination IP address or CIDR, or null if setting the default route
      * @param vmId the unique ID of the virtual machine to which traffic is being routed
+     * @return route object
      * @throws CloudException an error occurred in the cloud while adding the route to the routing table
      * @throws InternalException a local error occurred processing the request to add the route
      */

@@ -51,9 +51,12 @@ public class LoadBalancerEndpoint {
      * Constructs an endpoint matching the specified type and value.
      * @param type the type of the newly constructed endpoint
      * @param value the ID or other value that indicates what the endpoint is
+     * @param state the state of the endpoint
+     * @param stateReason the reason for the current state if any
+     * @param stateDescription the description of the current state if any
      * @return the new load balancer endpoint
      */
-    static public LoadBalancerEndpoint getInstance(@Nonnull LbEndpointType type, @Nonnull String value, @Nonnull LbEndpointState state, @Nonnull String stateReason, @Nonnull String stateDescription) {
+    static public LoadBalancerEndpoint getInstance(@Nonnull LbEndpointType type, @Nonnull String value, @Nonnull LbEndpointState state, @Nullable String stateReason, @Nullable String stateDescription) {
         LoadBalancerEndpoint endpoint = new LoadBalancerEndpoint();
 
         endpoint.endpointType = type;

@@ -67,6 +67,7 @@ public class Volume implements Networkable, Taggable {
     public Volume() {
     }
 
+    @Override
     public boolean equals( Object ob ) {
         if( ob == null ) {
             return false;
@@ -86,6 +87,7 @@ public class Volume implements Networkable, Taggable {
     }
 
     /**
+     * @return provider snapshot identifier
      * @deprecated Use {@link #getProviderSnapshotId()}
      */
     public String getSnapshotId() {
@@ -97,6 +99,7 @@ public class Volume implements Networkable, Taggable {
     }
 
     /**
+     * @param snapshotId provider snapshot identifier
      * @deprecated use {@link #setProviderSnapshotId(String)}
      */
     public void setSnapshotId( String snapshotId ) {
@@ -112,6 +115,7 @@ public class Volume implements Networkable, Taggable {
     }
 
     /**
+     * @return provider data center identifier
      * @deprecated use {@link #getProviderDataCenterId()}
      */
     public String getDataCenterId() {
@@ -135,6 +139,7 @@ public class Volume implements Networkable, Taggable {
     }
 
     /**
+     * @return provider region identifier
      * @deprecated use {@link #getProviderRegionId()}
      */
     public String getRegionId() {
@@ -146,6 +151,7 @@ public class Volume implements Networkable, Taggable {
     }
 
     /**
+     * @return provider virtual machine identifier
      * @deprecated use {@link #getProviderVirtualMachineId()}
      */
     public String getServerId() {
@@ -173,6 +179,7 @@ public class Volume implements Networkable, Taggable {
     }
 
     /**
+     * @param dataCenterId provider data center identifier
      * @deprecated use {@link #setProviderDataCenterId(String)}
      */
     public void setDataCenterId( String dataCenterId ) {
@@ -196,6 +203,7 @@ public class Volume implements Networkable, Taggable {
     }
 
     /**
+     * @param regionId provider region identifier
      * @deprecated use {@link #setProviderRegionId(String)}
      */
     public void setRegionId( String regionId ) {
@@ -207,6 +215,7 @@ public class Volume implements Networkable, Taggable {
     }
 
     /**
+     * @param serverId provider virtual machine identifier
      * @deprecated use {@link #setProviderVirtualMachineId(String)}
      */
     public void setServerId( String serverId ) {
@@ -327,11 +336,11 @@ public class Volume implements Networkable, Taggable {
         getTags().put(key, value);
     }
 
-    public Boolean isDeleteOnVirtualMachineTermination() {
+    public @Nullable Boolean isDeleteOnVirtualMachineTermination() {
         return deleteOnVirtualMachineTermination;
     }
 
-    public void setDeleteOnVirtualMachineTermination( Boolean deleteOnVirtualMachineTermination ) {
+    public void setDeleteOnVirtualMachineTermination( @Nullable Boolean deleteOnVirtualMachineTermination ) {
         this.deleteOnVirtualMachineTermination = deleteOnVirtualMachineTermination;
     }
 

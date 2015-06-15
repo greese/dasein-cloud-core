@@ -239,8 +239,8 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @param healthyCount the number of consecutive successful requests before an unhealthy instance is marked as healthy
      * @param unhealthyCount the number of consecutive failed requests before a healthy instance is marked as unhealthy
      * @return the unique ID of the health check
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException an error occurred in the cloud provider while processing the request
+     * @throws InternalException an error occurred within Dasein Cloud while processing the request
      */
     public LoadBalancerHealthCheck createLoadBalancerHealthCheck(@Nullable String name, @Nullable String description, @Nullable String host, @Nullable LoadBalancerHealthCheck.HCProtocol protocol, int port, @Nullable String path, int interval, int timeout, int healthyCount, int unhealthyCount) throws CloudException, InternalException;
 
@@ -250,6 +250,8 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * In those cases the HealthCheckOptions dialog must have a valid providerLoadBalancerId
      * @param options the options for creating the health check
      * @return the unique ID of the health check
+     * @throws CloudException an error occurred in the cloud provider while processing the request
+     * @throws InternalException an error occurred within Dasein Cloud while processing the request
      */
     public LoadBalancerHealthCheck createLoadBalancerHealthCheck(@Nonnull HealthCheckOptions options) throws CloudException, InternalException;
 
@@ -258,8 +260,8 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @param providerLBHealthCheckId the unique ID of the LB Health Check
      * @param providerLoadBalancerId optionally can provide the ID of a load balancer to with the Health Check is attached
      * @return the specified LoadBalancerHealthCheck
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException an error occurred in the cloud provider while processing the request
+     * @throws InternalException an error occurred within Dasein Cloud while processing the request
      */
     public LoadBalancerHealthCheck getLoadBalancerHealthCheck(@Nonnull String providerLBHealthCheckId, @Nullable String providerLoadBalancerId) throws CloudException, InternalException;
 
@@ -268,8 +270,8 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * the cloud. The filtering functionality is delegated to the cloud provider.
      * @param options the filter options
      * @return all health checks belonging to the account owner
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException an error occurred in the cloud provider while processing the request
+     * @throws InternalException an error occurred within Dasein Cloud while processing the request
      */
     public Iterable<LoadBalancerHealthCheck> listLBHealthChecks(@Nullable HealthCheckFilterOptions options) throws CloudException, InternalException;
 
@@ -277,13 +279,15 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * Attaches an existing Health Check to an existing Load Balancer
      * @param providerLoadBalancerId the load balancer ID
      * @param providerLBHealthCheckId the health check ID
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException an error occurred in the cloud provider while processing the request
+     * @throws InternalException an error occurred within Dasein Cloud while processing the request
      */
     public void attachHealthCheckToLoadBalancer(@Nonnull String providerLoadBalancerId, @Nonnull String providerLBHealthCheckId)throws CloudException, InternalException;
 
     /**
      * Detach named healthCheck from named loadBalancer without deleting either.
+     * @param providerLoadBalancerId the load balancer id
+     * @param providerLBHeathCheckId the health check id
      * @throws CloudException an error occurred with the cloud provider while performing this action
      * @throws InternalException an error occurred within the Dasein Cloud implementation while performing this action
      */
@@ -295,16 +299,16 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * @param providerLBHealthCheckId the ID of the Health Check being adjusted
      * @param options the new options to which the Health Check will be modified to meet
      * @return the modified LoadBalancerHealthCheck object
-     * @throws InternalException
-     * @throws CloudException
+     * @throws CloudException an error occurred in the cloud provider while processing the request
+     * @throws InternalException an error occurred within Dasein Cloud while processing the request
      */
     public LoadBalancerHealthCheck modifyHealthCheck(@Nonnull String providerLBHealthCheckId, @Nonnull HealthCheckOptions options) throws InternalException, CloudException;
 
     /**
      * Removes a health check associated with a particular Load Balancer. Only certain clouds allow this operation
      * @param providerLoadBalancerId the ID of the Load Balancer that has the health check being removed
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException an error occurred in the cloud provider while processing the request
+     * @throws InternalException an error occurred within Dasein Cloud while processing the request
      */
     public void removeLoadBalancerHealthCheck(@Nonnull String providerLoadBalancerId) throws CloudException, InternalException;
 
@@ -356,8 +360,8 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * Attaches an existing Load Balancer to an existing firewalls
      * @param providerLoadBalancerId the load balancer ID
      * @param firewallIds the firewalls
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException an error occurred in the cloud provider while processing the request
+     * @throws InternalException an error occurred within Dasein Cloud while processing the request
      */
     public void setFirewalls(@Nonnull String providerLoadBalancerId, @Nonnull String... firewallIds) throws CloudException, InternalException;
 
@@ -366,8 +370,8 @@ public interface LoadBalancerSupport extends AccessControlledService {
      *
      * @param toLoadBalancerId the ID of the loadbalancer the subnets need to be attached
      * @param subnetIdsToAdd subnets IDs to be attached to the specified loadbalancer
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException an error occurred in the cloud provider while processing the request
+     * @throws InternalException an error occurred within Dasein Cloud while processing the request
      */
     public void attachLoadBalancerToSubnets(@Nonnull String toLoadBalancerId, @Nonnull String ... subnetIdsToAdd) throws CloudException, InternalException;
 
@@ -376,8 +380,8 @@ public interface LoadBalancerSupport extends AccessControlledService {
      *
      * @param fromLoadBalancerId the ID of loadbalancer the subnets need to be detached
      * @param subnetIdsToDelete subnets IDs to be detached from the specified loadbalancer
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException an error occurred in the cloud provider while processing the request
+     * @throws InternalException an error occurred within Dasein Cloud while processing the request
      */
     public void detachLoadBalancerFromSubnets(@Nonnull String fromLoadBalancerId, @Nonnull String ... subnetIdsToDelete) throws CloudException, InternalException;
 
@@ -386,8 +390,8 @@ public interface LoadBalancerSupport extends AccessControlledService {
      *
      * @param id      firewall id
      * @param options attributes options
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException an error occurred in the cloud provider while processing the request
+     * @throws InternalException an error occurred within Dasein Cloud while processing the request
      */
     public void modifyLoadBalancerAttributes( @Nonnull String id, @Nonnull LbAttributesOptions options ) throws CloudException, InternalException;
 
@@ -395,8 +399,9 @@ public interface LoadBalancerSupport extends AccessControlledService {
      * Get load balancer attributes
      *
      * @param id - load balancer id
-     * @throws CloudException
-     * @throws InternalException
+     * @return load balancer attributes
+     * @throws CloudException an error occurred in the cloud provider while processing the request
+     * @throws InternalException an error occurred within Dasein Cloud while processing the request
      */
     public LbAttributesOptions getLoadBalancerAttributes( @Nonnull String id ) throws CloudException, InternalException;
 
@@ -448,8 +453,8 @@ public interface LoadBalancerSupport extends AccessControlledService {
      *
      * @param loadBalancerId the loadBalancer to set
      * @param tags     the meta-data tags to set
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
     public void setTags( @Nonnull String loadBalancerId, @Nonnull Tag... tags ) throws CloudException, InternalException;
 
@@ -459,8 +464,8 @@ public interface LoadBalancerSupport extends AccessControlledService {
      *
      * @param loadBalancerIds the loadBalancers to set
      * @param tags      the meta-data tags to set
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
     public void setTags( @Nonnull String[] loadBalancerIds, @Nonnull Tag... tags ) throws CloudException, InternalException;
 

@@ -56,48 +56,56 @@ public interface RelationalDatabaseCapabilities extends Capabilities{
     /**
      * Indicates whether the RDS Support includes firewall rules
      * @return true if support includes firewall rules
+     * @throws CloudException an error occurred in the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
      */
     public boolean supportsFirewallRules() throws CloudException, InternalException;
 
     /**
      * Indicates whether the provider supports HA RDS support
      * @return true if HA support is available
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException an error occurred in the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
      */
     public boolean supportsHighAvailability() throws CloudException, InternalException;
 
     /**
      * Indicates whether the provider supports Low Availability RDS support
      * @return true if Low Availability support is available
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException an error occurred in the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
      */
     public boolean supportsLowAvailability() throws CloudException, InternalException;
 
     /**
      * Indicates whether the cloud provides support for RDS maintenance windows
      * @return true if maintenance windows are supported
+     * @throws CloudException an error occurred in the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
      */
     public boolean supportsMaintenanceWindows() throws CloudException, InternalException;
 
     /**
      * Indicates whether the provider allows the modification of running databases
      * @return true if modification is allowed
+     * @throws CloudException an error occurred in the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
      */
     public boolean supportsAlterDatabase() throws CloudException, InternalException;
 
     /**
      * Indicates whether the provider supports the snapshotting of databases
      * @return true if snapshots are supported
+     * @throws CloudException an error occurred in the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
      */
     public boolean supportsSnapshots() throws CloudException, InternalException;
 
     /**
      * Indicates whether the cloud provides support for RDS backups
      * @return boolean
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException an error occurred in the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
      */
     public boolean supportsDatabaseBackups() throws CloudException, InternalException;
 
@@ -117,5 +125,5 @@ public interface RelationalDatabaseCapabilities extends Capabilities{
      * @throws CloudException an error occurred querying the cloud for naming constraints
      * @throws InternalException an error occurred assembling the naming constraints object
      */
-    public @Nonnull NamingConstraints getRelationalDatabaseNamingConstraints();
+    public @Nonnull NamingConstraints getRelationalDatabaseNamingConstraints() throws CloudException, InternalException;
 }

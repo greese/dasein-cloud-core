@@ -448,8 +448,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> extends Abstrac
      * </p>
      * <p>
      * The format of the resource file is as follows:
-     * <p/>
-     * </p>
+     *
      * <pre>
      * [
      *     {
@@ -505,7 +504,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> extends Abstrac
      * </p>
      *
      * @return a resource file location with a vmproducts JSON definition
-     * @throws CloudException no context has been set for loading the products
+     * @throws InternalException if no context has been set for loading the products
      */
     protected @Nonnull String getVMProductsResource() throws InternalException {
         Properties p = getContext().getCustomProperties();
@@ -651,6 +650,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> extends Abstrac
     }
 
     @Override
+    @Deprecated
     final public Iterable<VirtualMachineProduct> listProducts(@Nonnull VirtualMachineProductFilterOptions options) throws InternalException, CloudException {
         List<VirtualMachineProduct> products = new ArrayList<VirtualMachineProduct>();
         for( Architecture arch : getCapabilities().listSupportedArchitectures() ) {

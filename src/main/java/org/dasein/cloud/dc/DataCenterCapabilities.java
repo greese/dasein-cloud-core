@@ -47,22 +47,25 @@ public interface DataCenterCapabilities extends Capabilities {
 
     /**
      * Inficates whether the underlying cloud supports affinity groups
-     * @return true indicating support for affinity groups
+     * @return {@code true} indicating support for affinity groups
      */
     public boolean supportsAffinityGroups();
 
     /**
      * Specifies whether the given cloud supports the concept of resource pools
+     * @return {@code true} indicating support for resource pools
      */
     public boolean supportsResourcePools();
 
     /**
      * Specifies whether the given cloud supports the concept of storage pools
+     * @return {@code true} indicating support for storage pools
      */
     public boolean supportsStoragePools();
 
     /**
      * Specifies whether the given cloud supports the concept of folders
+     * @return {@code true} indicating support for folders
      */
     public boolean supportsFolders();
 }

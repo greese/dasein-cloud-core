@@ -51,8 +51,8 @@ public interface PushNotificationSupport extends AccessControlledService {
      * Gets the details of a single Topic.
      * @param providerTopicId the provider topic id
      * @return the topic
-     * @throws CloudException
-     * @throws InternalException
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException    an error occurred within the cloud provider
      */
     public @Nullable Topic getTopic( @Nonnull String providerTopicId ) throws CloudException, InternalException;
 

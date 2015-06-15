@@ -34,7 +34,7 @@ public class SpotPriceHistory {
      * @param providerDataCenterId the datacenter being queried
      * @param productId the product type being queried
      * @param priceHistory an array showing price history records of timestamp against price
-     * @return
+     * @return a constructed history instance
      */
     public static SpotPriceHistory getInstance(@Nonnull String providerDataCenterId, @Nonnull String productId, @Nonnull SpotPrice[] priceHistory){
         SpotPriceHistory sph = new SpotPriceHistory();

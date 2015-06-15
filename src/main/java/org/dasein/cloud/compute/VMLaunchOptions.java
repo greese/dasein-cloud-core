@@ -907,6 +907,7 @@ public class VMLaunchOptions {
 
     /**
      * See {@link #isIpForwardingAllowed()}
+     * @param ipForwardingAllowed {@code true} to allow IP forwarding
      * @return this
      */
     public @Nonnull VMLaunchOptions withIpForwardingAllowed( boolean ipForwardingAllowed ) {
@@ -934,22 +935,24 @@ public class VMLaunchOptions {
     /**
      * Associate a public IP address at launch, use cloud defaults if null
      *
-     * @param publicIpAddress
+     * @param publicIpAddress associate with public IP address if {@code true}
      * @return this
      */
-    public VMLaunchOptions withAssociatePublicIpAddress( final Boolean publicIpAddress ) {
+    public @Nonnull VMLaunchOptions withAssociatePublicIpAddress( final @Nullable Boolean publicIpAddress ) {
       this.associatePublicIpAddress = publicIpAddress;
       return this;
     }
 
     /**
+     * @return {@code true} if VM should be associated with a public IP address, use cloud provider defaults if {@code null}
      * @see #withAssociatePublicIpAddress(Boolean)
      */
-    public Boolean isAssociatePublicIpAddress() {
+    public @Nullable Boolean isAssociatePublicIpAddress() {
       return associatePublicIpAddress;
     }
 
     /**
+     * @return provider affinity group id
      * @see #withAffinityGroupId(String)
      */
     public String getAffinityGroupId() {
@@ -962,12 +965,13 @@ public class VMLaunchOptions {
      * @param affinityGroupId the affinity group id
      * @return this
      */
-    public VMLaunchOptions withAffinityGroupId( @Nonnull String affinityGroupId ) {
+    public @Nonnull VMLaunchOptions withAffinityGroupId( @Nonnull String affinityGroupId ) {
         this.affinityGroupId = affinityGroupId;
         return this;
     }
 
     /**
+     * @return provider storage pool id
      * @see #withStoragePoolId(String)
      */
     public @Nullable String getStoragePoolId() {
@@ -980,7 +984,7 @@ public class VMLaunchOptions {
      * @param storagePoolId the storage pool id
      * @return this
      */
-    public VMLaunchOptions withStoragePoolId( @Nonnull String storagePoolId ) {
+    public @Nonnull VMLaunchOptions withStoragePoolId( @Nonnull String storagePoolId ) {
         this.storagePoolId = storagePoolId;
         return this;
     }
@@ -1018,7 +1022,7 @@ public class VMLaunchOptions {
      * @param dnsSuffix one or more dns suffixes to be used for the new VM
      * @return this
      */
-    public @Nonnull VMLaunchOptions withDnsSuffixList(String... dnsSuffix) {
+    public @Nonnull VMLaunchOptions withDnsSuffixList(@Nullable String... dnsSuffix) {
         if (dnsSuffix != null) {
             this.dnsSuffixList = Arrays.copyOf(dnsSuffix, dnsSuffix.length);
         }
@@ -1037,7 +1041,7 @@ public class VMLaunchOptions {
      * @param gateway one or more gateways to be used for the new VM
      * @return this
      */
-    public @Nonnull VMLaunchOptions withGatewayList(String... gateway) {
+    public @Nonnull VMLaunchOptions withGatewayList(@Nullable String... gateway) {
         if (gateway != null) {
             this.gatewayList = Arrays.copyOf(gateway, gateway.length);
         }
@@ -1054,7 +1058,7 @@ public class VMLaunchOptions {
     /**
      * Specifies the network mask to be used for the virtual machine at launch time. This may be necessary
      * when launching with a fixed IP address.
-     * @param netMask
+     * @param netMask network mask to be used
      * @return this
      */
     public @Nonnull VMLaunchOptions withNetMask(@Nullable String netMask) {
@@ -1125,7 +1129,7 @@ public class VMLaunchOptions {
      * @param winWorkgroupName the windows workgroup into which the VM should be launched
      * @return this
      */
-    public @Nonnull VMLaunchOptions withWinWorkgroupName(@Nonnull String winWorkgroupName) {
+    public @Nonnull VMLaunchOptions withWinWorkgroupName(@Nullable String winWorkgroupName) {
         this.winWorkgroupName = winWorkgroupName;
         return this;
     }
@@ -1142,7 +1146,7 @@ public class VMLaunchOptions {
      * @param winProductSerialNum the windows serial number of the VM to be launched
      * @return this
      */
-    public @Nonnull VMLaunchOptions withWinProductSerialNum(@Nonnull String winProductSerialNum) {
+    public @Nonnull VMLaunchOptions withWinProductSerialNum(@Nullable String winProductSerialNum) {
         this.winProductSerialNum = winProductSerialNum;
         return this;
     }
@@ -1157,7 +1161,7 @@ public class VMLaunchOptions {
      * @param clientRequestToken the token
      * @return this
      */
-    public @Nonnull VMLaunchOptions withClientRequestToken(@Nonnull String clientRequestToken){
+    public @Nonnull VMLaunchOptions withClientRequestToken(@Nullable String clientRequestToken){
         this.clientRequestToken = clientRequestToken;
         return this;
     }

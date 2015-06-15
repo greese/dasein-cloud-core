@@ -52,7 +52,7 @@ public class SpotVirtualMachineRequest {
      * @param fulfillmentTimestamp when the request has been fulfilled
      * @param fulfillmentDataCenterId which data center the request has been fulfilled in
      * @param launchGroup launch group used to launch instances together
-     * @return
+     * @return a constructed request instance
      */
     public static @Nonnull SpotVirtualMachineRequest getInstance( @Nonnull String providerSpotVmRequestId, @Nonnegative float spotPrice, @Nonnull SpotVirtualMachineRequestType type, @Nonnull String providerMachineImageId, @Nonnull String productId, @Nonnegative long createdTimestamp, @Nonnegative long validFromTimestamp, @Nonnegative long validUntilTimestamp, long fulfillmentTimestamp, @Nullable String fulfillmentDataCenterId, @Nullable String launchGroup ) {
         SpotVirtualMachineRequest sir = new SpotVirtualMachineRequest();

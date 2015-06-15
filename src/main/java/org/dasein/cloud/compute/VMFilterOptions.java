@@ -290,7 +290,7 @@ public class VMFilterOptions {
     /**
      * Builds filtering options that will force filtering on the specified VM lifecycles.
      *
-     * @param lifecycles
+     * @param lifecycles the VM lifecycles on which to filter
      * @return this
      */
     public @Nonnull VMFilterOptions withLifecycles( @Nonnull VirtualMachineLifecycle... lifecycles ) {
@@ -300,7 +300,7 @@ public class VMFilterOptions {
 
     /**
      * Builds filtering options that will force filtering on the specified Spot VM request Id only
-     * @param spotRequestId
+     * @param spotRequestId spot request identifier on which to filter
      * @return this
      */
     public @Nonnull VMFilterOptions withSpotRequestId( @Nonnull String spotRequestId ) {

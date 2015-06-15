@@ -151,7 +151,7 @@ public class VirtualMachineProduct implements Serializable {
     /**
      * List of supported architectures. This is of type List as opposed to Iterable as this is a model class,
      * so all data is already pre-populated.
-     * @return
+     * @return list of architectures supported by this product
      */
     public @Nonnull Architecture[] getArchitectures() {
         return architectures != null ? architectures : new Architecture[0];
