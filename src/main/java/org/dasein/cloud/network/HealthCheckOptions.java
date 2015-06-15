@@ -91,18 +91,6 @@ public class HealthCheckOptions {
         return options;
     }
 
-    /**
-     * Create HealthCheckOptions instance
-     * @see HealthCheckOptions#getInstance(String, String, String, String, LoadBalancerHealthCheck.HCProtocol, int, String, int, int, int, int);
-     * @param lbListener
-     *          The specified load balancer listener that this health check will be associated to..
-     */
-    public static HealthCheckOptions getInstance(@Nullable String name, @Nullable String description, @Nullable String providerLoadBalancerId, @Nullable LbListener lbListener, @Nullable String host, @Nullable LoadBalancerHealthCheck.HCProtocol protocol, int port, @Nullable String path, int interval, int timeout, int healthyCount, int unhealthyCount){
-        HealthCheckOptions options = getInstance(name, description, providerLoadBalancerId, host, protocol, port, path, interval, timeout, healthyCount, unhealthyCount);
-        options.listener = lbListener;
-        return options;
-    }
-
     public @Nonnull LoadBalancerHealthCheck build(@Nonnull CloudProvider provider) throws CloudException, InternalException {
         NetworkServices services = provider.getNetworkServices();
 
@@ -222,6 +210,16 @@ public class HealthCheckOptions {
      */
     public @Nonnull HealthCheckOptions withProviderLoadBalancerId(@Nonnull String providerLoadBalancerId){
         this.providerLoadBalancerId = providerLoadBalancerId;
+        return this;
+    }
+
+    /**
+     * For listener level health check, sets the listener which the health check is attached
+     * @param lbListener the LbListener to which the Health Check is attached
+     * @return this
+     */
+    public @Nonnull HealthCheckOptions withListener(@Nullable LbListener lbListener) {
+        this.listener = lbListener;
         return this;
     }
 

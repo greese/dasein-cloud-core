@@ -102,13 +102,6 @@ public class LbListener {
         return new LbListener(algorithm, persistence, protocol, publicPort, privatePort);
     }
 
-    static public LbListener getInstance(@Nonnull LbAlgorithm algorithm, @Nonnull LbPersistence persistence, @Nullable String cookie, @Nonnull LbProtocol protocol, int publicPort, int privatePort, @Nullable String sslCertificateName, @Nullable String providerLBHealthCheckId) {
-        LbListener lbListener = new LbListener(algorithm, persistence, protocol, publicPort, privatePort, sslCertificateName);
-        lbListener.cookie = cookie;
-        lbListener.providerLBHealthCheckId = providerLBHealthCheckId;
-        return lbListener;
-    }
-
     private LbAlgorithm   algorithm;
     private String        cookie;
     private LbProtocol    networkProtocol;
@@ -203,6 +196,17 @@ public class LbListener {
     public @Nullable String getProviderLBHealthCheckId(){
         return providerLBHealthCheckId;
     }
+
+    /**
+     * Sets the Health Check ID associated with this listener
+     * @param providerLBHealthCheckId the Health Check ID
+     * @return this
+     */
+    public @Nonnull LbListener withProviderLBHealthCheckId(@Nullable String providerLBHealthCheckId) {
+        this.providerLBHealthCheckId = providerLBHealthCheckId;
+        return this;
+    }
+
 
     @Override
     public @Nonnull String toString() {
