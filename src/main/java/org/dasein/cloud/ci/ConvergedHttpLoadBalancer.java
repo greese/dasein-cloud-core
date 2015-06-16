@@ -8,10 +8,10 @@ import javax.annotation.Nonnull;
 
 import org.dasein.cloud.Taggable;
 
-
+/**
+ * Options for creating a new ConvergedHttpLoadBalancer.
+ */
 public class ConvergedHttpLoadBalancer implements Taggable {
-
-    // urlMap
     private String name;
     private String description;
     private String selfLink;
@@ -29,30 +29,53 @@ public class ConvergedHttpLoadBalancer implements Taggable {
 
     private List<BackendServiceBackend> backendServiceBackends = new ArrayList<BackendServiceBackend>();
 
+    /**
+     * return a list of backend service backends, these should be the instance pools behind the backend services.
+     */
     public List<BackendServiceBackend> getBackendServiceBackends() {
         return backendServiceBackends;
     }
 
+    /**
+     * return a list of healthchecks in use by this http load balancer.
+     */
     public List<HealthCheck> getHealthChecks() {
         return healthChecks;
     }
 
+    /**
+     * return a list of backend services in use by this http load balancer.
+     */
     public List<BackendService> getBackendServices() {
         return backendServices;
     }
 
+    /**
+     * return a list of forwarding rules in use by this http load balancer.
+     */
     public List<ForwardingRule> getForwardingRules() {
         return forwardingRules;
     }
 
+    /**
+     * Return a list of target proxies in use by this http load balancer.
+     * target proxies bind a http/https port with a urlMap
+     */
     public List<TargetHttpProxy> getTargetHttpProxies() {
         return targetHttpProxies;
     }
-
+    /**
+     * Return a list of url sets in use by this http load balancer.
+     * Url sets govern which backend service will service the request
+     * based on the url path or hostname being requested from
+     */
     public List<UrlSet> getUrlSets() {
         return urlSets;
     }
 
+    /**
+     * Constructor for converged http load balancer
+     */
     private ConvergedHttpLoadBalancer(String name, String description, String selfLink, String creationTimestamp, String defaultBackendService) { 
         this.name = name;
         this.description = description;
@@ -61,12 +84,28 @@ public class ConvergedHttpLoadBalancer implements Taggable {
         this.defaultBackendService = defaultBackendService;
     }
 
-    // For cataloging existing 
+    /**
+     * Factory method for returning a new converged http load balancer.
+     * This version is used when cataloging existing http load balancers.
+     * @param name the name for the converged http load balancer
+     * @param description the description for the converged http load balancer
+     * @param selfLink a server-defined fully-qualified URL for this resource.
+     * @param creationTimestamp the timestamp for when the http load balancer was created
+     * @param defaultBackendService the default backend service to direct to when there are no rules specifically overriding
+     * @return a new new ConvergedHttpLoadBalancer
+     */
     static public @Nonnull ConvergedHttpLoadBalancer getInstance(String name, String description, String selfLink, String creationTimestamp, String defaultBackendService) {
         return new ConvergedHttpLoadBalancer(name, description, selfLink, creationTimestamp, defaultBackendService);
     }
 
-    // For creating new
+    /**
+     * Factory method for returning a new converged http load balancer.
+     * This version is used when creating a new http load balancer.
+     * @param name the name for the converged http load balancer
+     * @param description the description for the converged http load balancer
+     * @param defaultBackendService the default backend service to direct to when there are no rules specifically overriding
+     * @return a new new ConvergedHttpLoadBalancer
+     */
     static public @Nonnull ConvergedHttpLoadBalancer getInstance(String name, String description, String defaultBackendService) {
         return new ConvergedHttpLoadBalancer(name, description, null, null, defaultBackendService);
     }
@@ -102,6 +141,14 @@ public class ConvergedHttpLoadBalancer implements Taggable {
         }
     }
 
+    /**
+     * Factory method for attaching a new url set to a converged http load balancer.
+     * @param name the name for the url set
+     * @param description the description for the url set
+     * @param hostMatchPatterns the host match pattern. * is a wild card.
+     * @param pathMap a map of path roots to backend services
+     * @return this
+     */
     public ConvergedHttpLoadBalancer withUrlSet(String name, String description, String hostMatchPatterns, Map<String, String> pathMap) {
         urlSets.add(new UrlSet(name, description, hostMatchPatterns, pathMap));
         return this;
@@ -141,23 +188,31 @@ public class ConvergedHttpLoadBalancer implements Taggable {
         }
     }
 
-    // For cataloging existing
+    /**
+     * Factory method for attaching a existing target http proxy to a converged http load balancer.
+     * This version is used when cataloging existing http load balancers.
+     * @param name the name for the target http proxy
+     * @param description the description for the target http proxy
+     * @param creationTimestamp the timestamp for when the target proxy was created
+     * @param selfLink a server-defined fully-qualified URL for this resource.
+     * @return this
+     */
     public ConvergedHttpLoadBalancer withTargetHttpProxy(String name, String description, String creationTimestamp, String selfLink) {
         targetHttpProxies.add(new TargetHttpProxy(name, description, creationTimestamp, selfLink));
         return this;
     }
 
-    // For creating new
+    /**
+     * Factory method for attaching a new target http proxy to a converged http load balancer.
+     * This version is used when creating a new http load balancer.
+     * @param name the name for the target http proxy
+     * @param description the description for the target http proxy
+     * @return this
+     */
     public ConvergedHttpLoadBalancer withTargetHttpProxy(String name, String description) {
         targetHttpProxies.add(new TargetHttpProxy(name, description, null, null));
         return this;
     }
-
-    // For using existing has to be created after the urlmap...
-    //public ConvergedHttpLoadBalancer withExistingTargetHttpProxy(String selfLink) {
-    //    targetHttpProxies.add(new TargetHttpProxy(selfLink.replaceAll(".*/", ""), null, null, selfLink));
-    //    return this;
-    //}
 
     public class ForwardingRule {
         private String name;
@@ -217,23 +272,39 @@ public class ConvergedHttpLoadBalancer implements Taggable {
         }
     }
 
-    // For cataloging existing
+    /**
+     * Factory method for attaching a existing forwarding rule to a converged http load balancer.
+     * This version is used when cataloging existing http load balancers.
+     * @param name the name for the forwarding rule
+     * @param description the description for the forwarding rule
+     * @param creationTimestamp the timestamp for when the forwarding rule was created
+     * @param ipAddress the ip address allocated to the forwarding rule
+     * @param ipProtocol the protocol used by the forwarding rule
+     * @param portRange this can be either 80 or 8080
+     * @param selfLink a server-defined fully-qualified URL for this resource
+     * @param target the target proxy this rule forwards to
+     * @return this
+     */
     public ConvergedHttpLoadBalancer withForwardingRule(String name, String description, String creationTimestamp, String ipAddress, String ipProtocol, String portRange, String selfLink, String target) {
         forwardingRules.add(new ForwardingRule(name, description, creationTimestamp, ipAddress, ipProtocol, portRange, selfLink, target));
         return this;
     }
 
-    // For creating new
+    /**
+     * Factory method for attaching a new forwarding rule to a converged http load balancer.
+     * This version is used when creating a new http load balancer.
+     * @param name the name for the forwarding rule
+     * @param description the description for the forwarding rule
+     * @param ipAddress the ip address allocated to the forwarding rule
+     * @param ipProtocol this is either HTTP or HTTPS
+     * @param portRange this can be either 80 or 8080
+     * @param target the target proxy this rule forwards to
+     * @return this
+     */
     public ConvergedHttpLoadBalancer withForwardingRule(String name, String description, String ipAddress, String ipProtocol, String portRange, String target) {
         forwardingRules.add(new ForwardingRule(name, description, null, ipAddress, ipProtocol, portRange, null, target));
         return this;
     }
-
-    // For using existing, has to be created after urlMap, so cannot reuse...
-    //public ConvergedHttpLoadBalancer withExistingForwardingRule(String selfLink) {
-    //    forwardingRules.add(new ForwardingRule(selfLink.replaceAll(".*/", ""), null, null, null, null, null, selfLink, null));
-    //    return this;
-    //}
 
     public class BackendService {
         private String name;
@@ -306,19 +377,50 @@ public class ConvergedHttpLoadBalancer implements Taggable {
 
     }
 
-    // For cataloging existing
-    public ConvergedHttpLoadBalancer withBackendService(String name, String description, String creationTimestamp, Integer port, String portName, String protocol, String[] healthChecks, String backendServiceBackends[], String selfLink, Integer timeoutSec) {
+    /**
+     * Factory method for attaching a existing backend service to a converged http load balancer.
+     * This version is used when cataloging existing http load balancers.
+     * @param name the name of the backend service
+     * @param description the description of the backend service
+     * @param creationTimestamp the timestamp for when the backend service was created
+     * @param port the port for the exchange
+     * @param portName the name assigned to the port
+     * @param protocol the protocol used by the backend service
+     * @param healthChecks the names of health checks associated with the backend service
+     * @param backendServiceBackends the names of the backend service's backends
+     * @param selfLink a server-defined fully-qualified URL for this resource.
+     * @param timeoutSec how long to wait for the backend service to respond before considering the request failed
+     * @return this
+     */
+    public ConvergedHttpLoadBalancer withBackendService(String name, String description, String creationTimestamp, Integer port, String portName, String protocol, String[] healthChecks, String[] backendServiceBackends, String selfLink, Integer timeoutSec) {
         backendServices.add(new BackendService(name, description, creationTimestamp, port, portName, protocol, healthChecks, backendServiceBackends, selfLink, timeoutSec));
         return this;
     }
 
-    // For creating new 
+    /**
+     * Factory method for attaching a new backend service to a converged http load balancer.
+     * This version is used when creating a new http load balancer.
+     * @param name the name for the backend service
+     * @param description the description for the backend service
+     * @param port the port for the exchange
+     * @param portName the name assigned to the port
+     * @param protocol the protocol the backend service will use
+     * @param healthChecks the names of health checks associated with the backend service
+     * @param backendServiceBackends  the names of the backend service's backends
+     * @param timeoutSec how long to wait for the backend service to respond before considering the request failed
+     * @return this
+     */
     public ConvergedHttpLoadBalancer withBackendService(String name, String description, Integer port, String portName, String protocol, String[] healthChecks, String[] backendServiceBackends, Integer timeoutSec) {
         backendServices.add(new BackendService(name, description, null, port, portName, protocol, healthChecks, backendServiceBackends, null, timeoutSec));
         return this;
     }
 
-    // For using existing
+    /**
+     * Factory method for attaching a existing backend service to a converged http load balancer using only its selfLink.
+     * This version is used when cataloging existing http load balancers.
+     * @param selfLink a server-defined fully-qualified URL for this resource.
+     * @return this
+     */
     public ConvergedHttpLoadBalancer withExistingBackendService(String selfLink) {
         backendServices.add(new BackendService(selfLink.replaceAll(".*/", ""), null, null, null, null, null, null, null, selfLink, null));
         return this;
@@ -386,7 +488,20 @@ public class ConvergedHttpLoadBalancer implements Taggable {
             return null;
         }
     }
-
+    
+    /**
+     * Factory method for attaching backend service backend to a backend of a converged http load balancer.
+     * This version is used when cataloging existing http load balancers.
+     * @param name the name for the backend service backend
+     * @param description the description for the backend service backend
+     * @param balancingMode cpu utilization or requests per second
+     * @param capacityScaler 
+     * @param group the name of the backend group
+     * @param maxRate the target requests per second for the instance group average. When this rate is exceeded, requests are directed to another backend
+     * @param maxRatePerInstance he target requests per second for individual instances. When this rate is exceeded, requests are directed to another backend
+     * @param maxUtilization when the average utilization of the group exceeds this percentage, traffic is routed to another group
+     * @return this
+     */
     public ConvergedHttpLoadBalancer withBackendServiceBackend(String name, String description, String balancingMode, Float capacityScaler, String group, Integer maxRate, Float maxRatePerInstance, Float maxUtilization) {
         backendServiceBackends.add(new BackendServiceBackend(name, description, balancingMode, capacityScaler, group, maxRate, maxRatePerInstance, maxUtilization));
         return this;
@@ -468,19 +583,52 @@ public class ConvergedHttpLoadBalancer implements Taggable {
         }
     }
 
-    // For cataloging existing 
+    /**
+     * Factory method for attaching a existing health check to a converged http load balancer.
+     * This version is used when cataloging existing http load balancers.
+     * @param name the name of the health check
+     * @param description the description of the health check
+     * @param creationTimestamp the timestamp for when the health check was created
+     * @param host the value set in the host http header 
+     * @param port the TCP port number and path for the HTTP health check request
+     * @param requestPath the path for the health check to poll
+     * @param checkIntervalSec send a health check every interval seconds
+     * @param timeoutSec how many seconds to wait before considering no response a timeout
+     * @param healthyThreshold the number of consecutive successes required to declare a vm instance healthy
+     * @param unhealthyThreshold the number of consecutive failures required to declare a vm instance unhealthy
+     * @param selfLink a server-defined fully-qualified URL for this resource.
+     * @return this
+     */
     public ConvergedHttpLoadBalancer withHealthCheck(String name, String description, String creationTimestamp, String host, Integer port, String requestPath, Integer checkIntervalSec, Integer timeoutSec, Integer healthyThreshold, Integer unhealthyThreshold, String selfLink) {
         healthChecks.add(new HealthCheck(name, description, creationTimestamp, host, port, requestPath, checkIntervalSec, timeoutSec, healthyThreshold, unhealthyThreshold, selfLink));
         return this;
     }
 
-    // For creating new 
+    /**
+     * Factory method for attaching a new health check to a converged http load balancer.
+     * This version is used when creating a new http load balancer.
+     * @param name the name for the health check
+     * @param description the description for the health check
+     * @param host the value set in the host http header 
+     * @param port the TCP port number and path for the HTTP health check request
+     * @param requestPath the path for the health check to poll
+     * @param checkIntervalSec send a health check every interval seconds
+     * @param timeoutSec how many seconds to wait before considering no response a timeout
+     * @param healthyThreshold the number of consecutive successes required to declare a vm instance healthy
+     * @param unhealthyThreshold the number of consecutive failures required to declare a vm instance unhealthy
+     * @return this
+     */
     public ConvergedHttpLoadBalancer withHealthCheck(String name, String description, String host, Integer port, String requestPath, Integer checkIntervalSec, Integer timeoutSec, Integer healthyThreshold, Integer unhealthyThreshold) {
         healthChecks.add(new HealthCheck(name, description, null, host, port, requestPath, checkIntervalSec, timeoutSec, healthyThreshold, unhealthyThreshold, null));
         return this;
     }
 
-    // For using existing
+    /**
+     * Factory method for attaching a existing health check to a converged http load balancer using only its selfLink.
+     * This version is used when cataloging existing http load balancers.
+     * @param selfLink a server-defined fully-qualified URL for this resource.
+     * @return this
+     */
     public ConvergedHttpLoadBalancer withExistingHealthCheck(String selfLink) {
         healthChecks.add(new HealthCheck(selfLink.replaceAll(".*/", ""), null, null, null, null, null, null, null, null, null, selfLink));
         return this;
