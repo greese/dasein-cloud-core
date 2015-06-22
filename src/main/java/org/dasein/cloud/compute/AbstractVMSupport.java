@@ -537,116 +537,16 @@ public abstract class AbstractVMSupport<T extends CloudProvider> extends Abstrac
     }
 
     @Override
-    public @Nonnull Iterable<VirtualMachineProduct> listProducts(@Nonnull String machineImageId, @Nonnull VirtualMachineProductFilterOptions options) throws InternalException, CloudException{
-        APITrace.begin(getProvider(), "VM.listProducts");
-        try{
-            String cacheName = "productsWithImage";
-            Cache<VirtualMachineProduct> cache = Cache.getInstance(getProvider(), cacheName, VirtualMachineProduct.class, CacheLevel.REGION_ACCOUNT, new TimePeriod<Day>(1, TimePeriod.DAY));
-            Iterable<VirtualMachineProduct> products = cache.get(getContext());
-
-            if( products != null ) {
-                return products;
-            }
-            List<VirtualMachineProduct> list = new ArrayList<VirtualMachineProduct>();
-
-            try {
-                String resource = getVMProductsResource();
-                InputStream input = AbstractVMSupport.class.getResourceAsStream(resource);
-
-                if( input == null ) {
-                    input = AbstractVMSupport.class.getResourceAsStream("/org/dasein/cloud/std/vmproducts.json");
-                }
-                if( input == null ) {
-                    return Collections.emptyList();
-                }
-                BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-                StringBuilder json = new StringBuilder();
-                String line;
-
-                while( ( line = reader.readLine() ) != null ) {
-                    json.append(line);
-                    json.append("\n");
-                }
-                JSONArray arr = new JSONArray(json.toString());
-                JSONObject toCache = null;
-
-                for( int i = 0; i < arr.length(); i++ ) {
-                    JSONObject productSet = arr.getJSONObject(i);
-                    String cloud, provider;
-
-                    if( productSet.has("cloud") ) {
-                        cloud = productSet.getString("cloud");
-                    }
-                    else {
-                        continue;
-                    }
-                    if( productSet.has("provider") ) {
-                        provider = productSet.getString("provider");
-                    }
-                    else {
-                        continue;
-                    }
-                    if( !productSet.has("products") ) {
-                        continue;
-                    }
-                    if( toCache == null || ( provider.equals("default") && cloud.equals("default") ) ) {
-                        toCache = productSet;
-                    }
-                    if( provider.equalsIgnoreCase(getProvider().getProviderName()) && cloud.equalsIgnoreCase(getProvider().getCloudName()) ) {
-                        toCache = productSet;
-                        break;
-                    }
-                }
-                if( toCache == null ) {
-                    return Collections.emptyList();
-                }
-                JSONArray plist = toCache.getJSONArray("products");
-
-                for( int i = 0; i < plist.length(); i++ ) {
-                    JSONObject product = plist.getJSONObject(i);
-                    boolean supported = false;
-
-                    if( product.has("excludesRegions") ) {
-                        JSONArray regions = product.getJSONArray("excludesRegions");
-
-                        for( int j = 0; j < regions.length(); j++ ) {
-                            String r = regions.getString(j);
-
-                            if( r.equals(getContext().getRegionId()) ) {
-                                supported = false;
-                                break;
-                            }
-                        }
-                    }
-                    if( !supported ) {
-                        continue;
-                    }
-                    VirtualMachineProduct prd = toProduct(product);
-
-                    if( prd != null ) {
-                        if( options != null) {
-                            // Filter supplied, add matches only.
-                            if( options.matches(prd) ) {
-                                list.add(prd);
-                            }
-                        }
-                        else {
-                            // No filter supplied, add all survived.
-                            list.add(prd);
-                        }
-                    }
-                }
-                cache.put(getContext(), list);
-            } catch( IOException e ) {
-                throw new InternalException(e);
-            } catch( JSONException e ) {
-                throw new InternalException(e);
-            }
-            return list;
+    public @Nonnull Iterable<VirtualMachineProduct> listProducts(@Nonnull String machineImageId, @Nonnull VirtualMachineProductFilterOptions options) throws InternalException, CloudException {
+        MachineImageSupport support = getProvider().getComputeServices().getImageSupport();
+        if( support == null ) {
+            throw new CloudException(getProvider().getCloudName() + " does not implement machine image services");
         }
-        finally {
-            APITrace.end();
+        MachineImage image = support.getImage(machineImageId);
+        if( image == null ) {
+            throw new CloudException("Machine image " + machineImageId + " does not exist");
         }
+        return listProducts(options, image.getArchitecture());
     }
 
     @Override
