@@ -397,60 +397,12 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * might describe it) compatible with particular machine image
      *
      * @param machineImageId the desire machine image to match with
-     * @return the list of server sizes available for the specified machine image
-     * @throws InternalException an error occurred within the Dasein Cloud API implementation
-     * @throws CloudException    an error occurred within the cloud provider
-     */
-    public @Nonnull Iterable<VirtualMachineProduct> listProducts(@Nonnull String machineImageId) throws InternalException, CloudException;
-
-    /**
-     * Provides a list of instance types, service offerings, or server sizes (however the underlying cloud
-     * might describe it) compatible with particular machine image
-     *
-     * @param machineImageId the desire machine image to match with
      * @param options the filter options
      * @return list of products available for the specified machine image and matching the criteria
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      * @throws CloudException    an error occurred within the cloud provider
      */
     public @Nonnull Iterable<VirtualMachineProduct> listProducts(@Nonnull String machineImageId, @Nonnull VirtualMachineProductFilterOptions options) throws InternalException, CloudException;
-
-    /**
-     * Provides a list of instance types, service offerings, or server sizes (however the underlying cloud
-     * might describe it) for a particular architecture
-     *
-     * @param architecture the desired architecture size offerings
-     * @return the list of server sizes available for the specified architecture
-     * @throws InternalException an error occurred within the Dasein Cloud API implementation
-     * @throws CloudException    an error occurred within the cloud provider
-     * @deprecated please use {@link #listProducts(String, VirtualMachineProductFilterOptions)}
-     */
-    public @Nonnull Iterable<VirtualMachineProduct> listProducts(@Nonnull Architecture architecture) throws InternalException, CloudException;
-
-    /**
-     * Lists all virtual machine products matching the given VirtualMachineProductFilterOptions belonging to the account owner currently in
-     * the cloud. The filtering functionality is delegated to the cloud provider.
-     *
-     * @param options the filter options
-     * @return the list of server sizes available matching the filter
-     * @throws InternalException an error occurred within the Dasein Cloud API implementation
-     * @throws CloudException    an error occurred within the cloud provider
-     * @deprecated please use {@link #listProducts(String, VirtualMachineProductFilterOptions)}
-     */
-    public @Nonnull Iterable<VirtualMachineProduct> listProducts(@Nonnull VirtualMachineProductFilterOptions options) throws InternalException, CloudException;
-
-    /**
-     * Lists all virtual machine products matching the given VirtualMachineProductFilterOptions and specified architecture belonging to the account owner currently in
-     * the cloud. The filtering functionality is delegated to the cloud provider.
-     *
-     * @param architecture the desired architecture size offerings
-     * @param options      the filter options
-     * @return the list of server sizes available matching the filter
-     * @throws InternalException an error occurred within the Dasein Cloud API implementation
-     * @throws CloudException    an error occurred within the cloud provider
-     * @deprecated please use {@link #listProducts(String, VirtualMachineProductFilterOptions)}
-     */
-    public @Nonnull Iterable<VirtualMachineProduct> listProducts(@Nonnull VirtualMachineProductFilterOptions options, @Nullable Architecture architecture) throws InternalException, CloudException;
 
     /**
      * Provides a list of price history records for Spot VMs
