@@ -90,6 +90,13 @@ public class VirtualMachineProductFilterOptions{
         this.matchesAny = matchesAny;
     }
 
+    /**
+     * @return the architecture on which filtering should be done, or <code>null</code> to not filter on architecture
+     */
+    public @Nullable Architecture getArchitecture() {
+        return architecture;
+    }
+
     public @Nullable String getRegex(){
         return regex;
     }
