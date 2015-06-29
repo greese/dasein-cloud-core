@@ -91,8 +91,10 @@ public interface RelationalDatabaseSupport extends AccessControlledService {
      * List supported database products
      * @param forEngine database engine, e.g. MySQL, SQL Server EE, etc.
      * @return iteration of the database products supported by the engine
-     * @throws CloudException
      * @throws InternalException
+     *             an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException
+     *             an error occurred within the cloud provider
      * @since 2014.08 for consistency
      */
     public @Nonnull Iterable<DatabaseProduct> listDatabaseProducts(@Nonnull DatabaseEngine forEngine) throws CloudException, InternalException;
@@ -134,20 +136,32 @@ public interface RelationalDatabaseSupport extends AccessControlledService {
     //
 
     /*
+    FIXME: enable javadoc, provide parameter annotations
      * Obtain a valid DatabaseBackup object for the given database instance where the backup was taken prior to the given time.
      *
-     * Throws CloudException on failure
+     * @return requested backup information or {@code null} if backup is not found
+     * @throws InternalException
+     *             an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException
+     *             an error occurred within the cloud provider
      */
     public @Nullable DatabaseBackup getUsableBackup(String providerDbId, String beforeTimestamp) throws CloudException, InternalException;
 
-    /*
+    /**
      * Obtain a list of DatabaseBackup objects for a given database, or for all databases if null.
-     * 
-     * Throws CloudException on failure
+     *
+     * @param forOptionalProviderDatabaseId optionally request backups only for the specific database
+     * @return a list of backups
+     * @throws InternalException
+     *             an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException
+     *             an error occurred within the cloud provider
      */
-    public @Nonnull Iterable<DatabaseBackup> listBackups(String forOptionalProviderDatabaseId) throws CloudException, InternalException;
+    public @Nonnull Iterable<DatabaseBackup> listBackups(@Nullable String forOptionalProviderDatabaseId) throws CloudException, InternalException;
 
     /*
+    FIXME: enable javadoc, provide parameter annotations, replace DatabaseBackup with providerDbBackupId
+
      * Create a new database from the passed in backup object
      * 
      * Throws CloudException on failure
@@ -155,6 +169,8 @@ public interface RelationalDatabaseSupport extends AccessControlledService {
     public void createFromBackup(DatabaseBackup backup, String databaseCloneToName) throws CloudException, InternalException;
 
     /*
+    FIXME: enable javadoc, provide parameter annotations, replace DatabaseBackup with providerDbBackupId
+
      * Remove specified database backup
      * 
      * Throws CloudException on failure
@@ -162,6 +178,8 @@ public interface RelationalDatabaseSupport extends AccessControlledService {
     public void removeBackup(DatabaseBackup backup) throws CloudException, InternalException;
 
     /*
+    FIXME: enable javadoc, provide parameter annotations, replace DatabaseBackup with providerDbBackupId
+
      * Restore the passed in DatabaseBackup to its current database instance.
      * 
      * Throws CloudException on failure
@@ -216,8 +234,8 @@ public interface RelationalDatabaseSupport extends AccessControlledService {
      *
      * @param providerDatabaseId the Database to set
      * @param tags     the meta-data tags to set
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
     public void setTags( @Nonnull String providerDatabaseId, @Nonnull Tag... tags ) throws CloudException, InternalException;
 
@@ -227,8 +245,8 @@ public interface RelationalDatabaseSupport extends AccessControlledService {
      *
      * @param providerDatabaseIds the Databases to set
      * @param tags      the meta-data tags to set
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
     public void setTags( @Nonnull String[] providerDatabaseIds, @Nonnull Tag... tags ) throws CloudException, InternalException;
 

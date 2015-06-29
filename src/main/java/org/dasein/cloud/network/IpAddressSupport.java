@@ -470,8 +470,8 @@ public interface IpAddressSupport extends AccessControlledService {
      *
      * @param addressId the IP address to update
      * @param tags     the meta-data tags to set
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
     public void setTags( @Nonnull String addressId, @Nonnull Tag... tags ) throws CloudException, InternalException;
 
@@ -481,8 +481,8 @@ public interface IpAddressSupport extends AccessControlledService {
      *
      * @param addressIds the IP addresses to update
      * @param tags      the meta-data tags to set
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException    an error occurred within the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
     public void setTags( @Nonnull String[] addressIds, @Nonnull Tag... tags ) throws CloudException, InternalException;
     

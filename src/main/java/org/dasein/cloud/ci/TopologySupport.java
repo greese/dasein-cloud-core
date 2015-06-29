@@ -140,7 +140,7 @@ public interface TopologySupport extends AccessControlledService {
 
     /**
      * Creates a private topology matching the specified options.
-     * @param TBD
+     * @param withTopologyOptions the definition of the topology being created
      * @return true on success, false on failure
      * @throws CloudException an error occurred in the cloud provider while processing the request
      * @throws InternalException an error occurred within Dasein Cloud while processing the request

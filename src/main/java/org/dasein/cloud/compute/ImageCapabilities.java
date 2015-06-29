@@ -56,6 +56,7 @@ public interface ImageCapabilities extends Capabilities{
 
     /**
      * Provides the cloud provider specific term for a public image of the specified image class.
+     * @param locale the locale for which the term should be translated
      * @param cls the image class for the desired type
      * @return the term used by the provider to describe a public image
      */

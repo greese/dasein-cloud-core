@@ -64,6 +64,7 @@ public class LoadBalancer implements Networkable, Taggable {
      * @param name the name of the load balancer
      * @param description a user-friendly description of the load balancer
      * @param addressType what kind of address is represented by the load balancer address
+     * @param type the kind of load balancer
      * @param address the load balancer CNAME, IPv4, or IPv6 address
      * @param publicPorts one or more public ports on which the load balancer is listening
      * @return a load balancer instance representing the specified state
@@ -82,6 +83,7 @@ public class LoadBalancer implements Networkable, Taggable {
      * @param state the current operational state for the load balancer
      * @param name the name of the load balancer
      * @param description a user-friendly description of the load balancer
+     * @param type the kind of load balancer
      * @param addressType what kind of address is represented by the load balancer address
      * @param address the load balancer CNAME, IPv4, or IPv6 address
      * @param providerLBHealthCheckId the ID of the Health Check if one is attached
@@ -103,6 +105,7 @@ public class LoadBalancer implements Networkable, Taggable {
      * @param state the current operational state for the load balancer
      * @param name the name of the load balancer
      * @param description a user-friendly description of the load balancer
+     * @param type the kind of load balancer
      * @param addressType what kind of address is represented by the load balancer address
      * @param address the load balancer CNAME, IPv4, or IPv6 address
      * @param providerLBHealthCheckId the ID of the Health Check if one is attached
@@ -512,7 +515,7 @@ public class LoadBalancer implements Networkable, Taggable {
 
     /**
      * Sets a load balancer Health Check ID if one is attached
-     * @param providerLBHealthCheckId
+     * @param providerLBHealthCheckId provider load balancer health check identifier
      */
     public void setProviderLBHealthCheckId(@Nonnull String providerLBHealthCheckId){
         this.providerLBHealthCheckId = providerLBHealthCheckId;

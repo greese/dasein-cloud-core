@@ -96,10 +96,11 @@ public class Alarm {
   /**
    * Some providers, such as Rackspace, use a custom DSL for evaluating metrics to determine alarm state. For these providers,
    * {@link #function} should be true with and {@link #metric} should contain the DSL or function value.
-   * <p/>
+   * <p>
    * Other providers, such as Amazon Web Services, use distinct values to specify how metrics are evaluated to determine alarm state.
    * For these providers, {@link #function} should be false and {@link #metric} should contain the metric name that's evaluated, with
    * {@link #statistic}, {@link #comparisonOperator}, {@link #threshold}, {@link #period}, and {@link #evaluationPeriods} should be set.
+   * </p>
    *
    * @return if the alarm is actually a function that is executed
    */
@@ -399,7 +400,7 @@ public class Alarm {
   /**
    * Sets the timestamp when the alarm state changed.
    *
-   * @param stateUpdatedTimestamp
+   * @param stateUpdatedTimestamp timestamp
    */
   public void setStateUpdatedTimestamp( long stateUpdatedTimestamp ) {
     this.stateUpdatedTimestamp = stateUpdatedTimestamp;

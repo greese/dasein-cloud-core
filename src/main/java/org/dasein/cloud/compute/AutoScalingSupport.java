@@ -51,12 +51,26 @@ public interface AutoScalingSupport extends AccessControlledService {
      *
      * @param options the auto scaling group options
      * @return the provider's auto scaling group id
-     * @throws InternalException
-     * @throws CloudException
+     * @throws CloudException an error occurred in the cloud identifying this capability
+     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this capability
      */
     public String createAutoScalingGroup( @Nonnull AutoScalingGroupOptions options ) throws InternalException, CloudException;
 
     /**
+     * @param name name of the group
+     * @param launchConfigurationId launch configuration identifier
+     * @param minServers minimum number of virtual machines in the group
+     * @param maxServers maximum number of virtual machines in the group
+     * @param cooldown the amount of time, in seconds, after a scaling activity completes before another scaling activity can start
+     * @param loadBalancerIds load balancers to be associated with the group
+     * @param desiredCapacity the number of the virtual machines that should be running in this group
+     * @param healthCheckGracePeriod delay, in seconds, after the VM start when its health will be monitored
+     * @param healthCheckType type of healthcheck service - FIXME: too AWS specific, needs to be generalised
+     * @param vpcZones list of VPC subnets - FIXME: too AWS specific
+     * @param dataCenterIds list of datacenter identifiers this group should be created in
+     * @return the provider's auto scaling group id
+     * @throws CloudException an error occurred in the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
      * @deprecated use {@link #createAutoScalingGroup(AutoScalingGroupOptions)}
      */
     @Deprecated
@@ -70,6 +84,7 @@ public interface AutoScalingSupport extends AccessControlledService {
      * Created an Auto Scaling Launch Configuration based on passed options
      *
      * @param options the auto scaling launch configuration options
+     * @return the provider's launch configuration id
      * @throws CloudException    an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
@@ -135,6 +150,7 @@ public interface AutoScalingSupport extends AccessControlledService {
      * Get list of notification configs for multiple auto scaling groups.
      *
      * @param scalingGroupIds the auto scaling group ids
+     * @return list of notification configs
      * @throws CloudException    an error occurred within the cloud provider
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      */
@@ -169,8 +185,8 @@ public interface AutoScalingSupport extends AccessControlledService {
      *
      * @param providerScalingGroupId the auto scaling group to set
      * @param tags                   the meta-data tags to set
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException an error occurred in the cloud identifying this capability
+     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this capability
      */
     public void setTags( @Nonnull String providerScalingGroupId, @Nonnull AutoScalingTag... tags ) throws CloudException, InternalException;
 
@@ -180,8 +196,8 @@ public interface AutoScalingSupport extends AccessControlledService {
      *
      * @param providerScalingGroupIds the auto scaling groups to set
      * @param tags                    the meta-data tags to set
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException an error occurred in the cloud identifying this capability
+     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this capability
      */
     public void setTags( @Nonnull String[] providerScalingGroupIds, @Nonnull AutoScalingTag... tags ) throws CloudException, InternalException;
 

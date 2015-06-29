@@ -160,7 +160,6 @@
                             </links>
                             <stylesheetfile>dasein-javadoc.css</stylesheetfile>
                             <footer />
-                            <additionalparam>-Xdoclint:none</additionalparam>
                         </configuration>
                     </execution>
                 </executions>

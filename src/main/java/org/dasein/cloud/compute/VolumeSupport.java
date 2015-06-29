@@ -307,8 +307,8 @@ public interface VolumeSupport extends AccessControlledService {
      *
      * @param volumeId the volume to set
      * @param tags     the meta-data tags to set
-     * @throws CloudException
-     * @throws InternalException
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException an error occurred within the cloud provider
      */
     public void setTags( @Nonnull String volumeId, @Nonnull Tag... tags ) throws CloudException, InternalException;
 
@@ -318,8 +318,8 @@ public interface VolumeSupport extends AccessControlledService {
      *
      * @param volumeIds the volumes to set
      * @param tags      the meta-data tags to set
-     * @throws CloudException
-     * @throws InternalException
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException an error occurred within the cloud provider
      */
     public void setTags( @Nonnull String[] volumeIds, @Nonnull Tag... tags ) throws CloudException, InternalException;
 

@@ -36,12 +36,16 @@ public interface PushNotificationCapabilities extends Capabilities{
     /**
      * Indicates whether the cloud supports topic creation
      * @return true if topics can be created
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException    an error occurred within the cloud provider
      */
     public boolean canCreateTopic() throws CloudException, InternalException;
 
     /**
      * Indicates whether the cloud allows the removal of topics
      * @return true if topics can be removed
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException    an error occurred within the cloud provider
      */
     public boolean canRemoveTopic() throws CloudException, InternalException;
 

@@ -37,16 +37,16 @@ public interface VPNCapabilities extends Capabilities{
     /**
      * Indicates whether a VPN is tied to a specific Data Center
      * @return the requirement level for VPN Data Centers
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException an error occurred in the cloud identifying this requirement
+     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this requirement
      */
-    public Requirement getVPNDataCenterConstraint() throws CloudException, InternalException;
+    public @Nonnull Requirement getVPNDataCenterConstraint() throws CloudException, InternalException;
 
     /**
      * Lists the protocols supported for VPNs in the cloud
      * @return list of Protocol types
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException an error occurred in the cloud identifying this requirement
+     * @throws InternalException an error occurred within the Dasein Cloud implementation identifying this requirement
      */
     public @Nonnull Iterable<VPNProtocol> listSupportedVPNProtocols() throws CloudException, InternalException;
 }

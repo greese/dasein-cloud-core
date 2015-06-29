@@ -235,6 +235,7 @@ public class FirewallCreateOptions {
      * Identifies which source labels will be attached to this firewall
      *
      * @param sourceLabelsToAdd source labels to assign to the firewall
+     * @return this
      */
     public @Nonnull FirewallCreateOptions withSourceLabels( @Nonnull Collection<String> sourceLabelsToAdd ) {
         if( sourceLabels == null ) {
@@ -248,6 +249,7 @@ public class FirewallCreateOptions {
      * Identifies which target labels will be attached to this firewall
      *
      * @param targetLabelsToAdd labels to assign to the firewall
+     * @return this
      */
     public @Nonnull FirewallCreateOptions withTargetLabels( @Nonnull Collection<String> targetLabelsToAdd ) {
         if( targetLabels == null ) {
@@ -270,6 +272,7 @@ public class FirewallCreateOptions {
      * Defines the initial authorize firewall rules.
      *
      * @param rulesToAdd a Collection of type FirewallRule
+     * @return this
      */
     public @Nonnull FirewallCreateOptions withAuthorizeRules( @Nonnull Collection<FirewallRule> rulesToAdd ) {
         if( authorizeRules == null ) {

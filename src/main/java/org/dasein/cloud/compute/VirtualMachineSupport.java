@@ -289,7 +289,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
     public @Nullable Iterable<VirtualMachineStatus> getVMStatus(@Nullable String... vmIds) throws InternalException, CloudException;
 
     /**
-     * Lists all virtual machines status(es) matching the given {@link VmStatusFilterOptions) belonging to the account owner
+     * Lists all virtual machines status(es) matching the given {@link VmStatusFilterOptions} belonging to the account owner
      * currently in the cloud. The filtering functionality is delegated to the cloud provider.
      *
      * @param filterOptions filter options
@@ -398,19 +398,20 @@ public interface VirtualMachineSupport extends AccessControlledService {
      *
      * @param machineImageId the desire machine image to match with
      * @return the list of server sizes available for the specified machine image
-     * @throws InternalException
-     * @throws CloudException
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException    an error occurred within the cloud provider
      */
     public @Nonnull Iterable<VirtualMachineProduct> listProducts(@Nonnull String machineImageId) throws InternalException, CloudException;
 
     /**
      * Provides a list of instance types, service offerings, or server sizes (however the underlying cloud
      * might describe it) compatible with particular machine image
+     *
      * @param machineImageId the desire machine image to match with
      * @param options the filter options
-     * @return
-     * @throws InternalException
-     * @throws CloudException
+     * @return list of products available for the specified machine image and matching the criteria
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException    an error occurred within the cloud provider
      */
     public @Nonnull Iterable<VirtualMachineProduct> listProducts(@Nonnull String machineImageId, @Nonnull VirtualMachineProductFilterOptions options) throws InternalException, CloudException;
 
@@ -422,7 +423,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @return the list of server sizes available for the specified architecture
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      * @throws CloudException    an error occurred within the cloud provider
-     * @deprecated
+     * @deprecated please use {@link #listProducts(String, VirtualMachineProductFilterOptions)}
      */
     public @Nonnull Iterable<VirtualMachineProduct> listProducts(@Nonnull Architecture architecture) throws InternalException, CloudException;
 
@@ -434,6 +435,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @return the list of server sizes available matching the filter
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      * @throws CloudException    an error occurred within the cloud provider
+     * @deprecated please use {@link #listProducts(String, VirtualMachineProductFilterOptions)}
      */
     public @Nonnull Iterable<VirtualMachineProduct> listProducts(@Nonnull VirtualMachineProductFilterOptions options) throws InternalException, CloudException;
 
@@ -446,7 +448,7 @@ public interface VirtualMachineSupport extends AccessControlledService {
      * @return the list of server sizes available matching the filter
      * @throws InternalException an error occurred within the Dasein Cloud API implementation
      * @throws CloudException    an error occurred within the cloud provider
-     * @deprecated
+     * @deprecated please use {@link #listProducts(String, VirtualMachineProductFilterOptions)}
      */
     public @Nonnull Iterable<VirtualMachineProduct> listProducts(@Nonnull VirtualMachineProductFilterOptions options, @Nullable Architecture architecture) throws InternalException, CloudException;
 
@@ -455,17 +457,18 @@ public interface VirtualMachineSupport extends AccessControlledService {
      *
      * @param options filter options
      * @return all price history entries that match the specified filter
-     * @throws CloudException
-     * @throws InternalException
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException    an error occurred within the cloud provider
      */
     public @Nonnull Iterable<SpotPriceHistory> listSpotPriceHistories(@Nullable SpotPriceHistoryFilterOptions options) throws CloudException, InternalException;
 
     /**
      * Providers a list of spot VM requests
      *
+     * @param options filter criteria
      * @return all spot VM requests that match the specified filter
-     * @throws CloudException
-     * @throws InternalException
+     * @throws InternalException an error occurred within the Dasein Cloud API implementation
+     * @throws CloudException    an error occurred within the cloud provider
      */
     public @Nonnull Iterable<SpotVirtualMachineRequest> listSpotVirtualMachineRequests(@Nullable SpotVirtualMachineRequestFilterOptions options) throws CloudException, InternalException;
 

@@ -25,33 +25,18 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class TopologyProvisionOptions {
 
     public enum MaintenanceOption {
         MIGRATE_VM_INSTANCE,
         TERMINATE_VM_INSTANCE;
-
-        public String toString() {
-            switch( this ) {
-                case MIGRATE_VM_INSTANCE: return "MIGRATE";
-                case TERMINATE_VM_INSTANCE: return "TERMINATE";
-            }
-            return null;
-        }
     }
 
     public enum DiskType {
         STANDARD_PERSISTENT_DISK,
         SSD_PERSISTENT_DISK;
-
-        public String toString() {
-            switch( this ) {
-                case STANDARD_PERSISTENT_DISK: return "pd-standard";
-                case SSD_PERSISTENT_DISK: return "pd-ssd";
-            }
-            return null;
-        }
     }
 
     public class Disk {
@@ -92,21 +77,15 @@ public class TopologyProvisionOptions {
 
     public class Network {
         private String networkName;
-        private String networkSelfUrl;
         private List<AccessConfig> accessConfig;
 
-        private Network(@Nonnull String networkName, @Nonnull String networkSelfUrl, @Nonnull List<AccessConfig> accessConfig) {
+        private Network(@Nonnull String networkName, @Nonnull List<AccessConfig> accessConfig) {
             this.networkName = networkName;
-            this.networkSelfUrl = networkSelfUrl;
             this.accessConfig = accessConfig;
         }
 
         public String getNetworkName() {
             return networkName;
-        }
-
-        public String getNetworkSelfUrl() {
-            return networkSelfUrl;
         }
 
         public List<AccessConfig> getAccessConfig() {
@@ -116,21 +95,15 @@ public class TopologyProvisionOptions {
 
     public class AccessConfig {
         private String name;
-        private String kind;
         private String type;
 
-        public AccessConfig(@Nonnull String kind, @Nonnull String type, @Nonnull String name) {
+        public AccessConfig(@Nonnull String type, @Nonnull String name) {
             this.name = name;
-            this.kind = kind;
             this.type = type;
         }
 
         public String getName() {
             return name;
-        }
-
-        public String getKind() {
-            return kind;
         }
 
         public String getType() {
@@ -172,68 +145,60 @@ public class TopologyProvisionOptions {
 
     public @Nonnull TopologyProvisionOptions withNetworkInterface(@Nonnull String networkName, @Nonnull String networkSelfUrl, @Nonnull boolean assignEphemeralIp) {
         if (false == assignEphemeralIp) {
-            this.networkArray.add(new Network(networkName, networkSelfUrl, new ArrayList<AccessConfig>()));
+            this.networkArray.add(new Network(networkName, new ArrayList<AccessConfig>()));
         } else {
             List<AccessConfig> accessConfig = new ArrayList<AccessConfig>();
-            accessConfig.add(new AccessConfig("compute#accessConfig", "ONE_TO_ONE_NAT", "External NAT"));
-            this.networkArray.add(new Network(networkName, networkSelfUrl, accessConfig));
+            accessConfig.add(new AccessConfig("ONE_TO_ONE_NAT", "External NAT"));
+            this.networkArray.add(new Network(networkName, accessConfig));
         }
 
         return this;
     }
 
-/*
-    public TopologyProvisionOptions withNetworkInterface(@Nonnull String networkName, @Nonnull String networkSelfUrl) {
-        this.networkArray.add(new Network(networkName, networkSelfUrl, new ArrayList<AccessConfig>()));
-        return this;
-    }
-*/
-
-    public TopologyProvisionOptions withSshKeys(@Nonnull String[] sshKeys) {
+    public @Nonnull TopologyProvisionOptions withSshKeys(@Nonnull String[] sshKeys) {
         this.sshKeys  = sshKeys;
         return this;
     }
 
-    public TopologyProvisionOptions withTags(@Nonnull List<String> tags) {
+    public @Nonnull TopologyProvisionOptions withTags(@Nonnull List<String> tags) {
         this.tags = tags;
         return this;
     }
 
-    public TopologyProvisionOptions withReadOnlyDisks(@Nonnull String[] roDisks) {
+    public @Nonnull TopologyProvisionOptions withReadOnlyDisks(@Nonnull String[] roDisks) {
         this.roDisks = roDisks;
         return this;
     }
 
-    public TopologyProvisionOptions withAutomaticRestart(@Nonnull boolean automaticRestart) {
+    public @Nonnull TopologyProvisionOptions withAutomaticRestart(@Nonnull boolean automaticRestart) {
         this.automaticRestart = automaticRestart;
         return this;
     }
 
-    public TopologyProvisionOptions withMaintenanceOption(@Nonnull MaintenanceOption maintenanceAction) {
+    public @Nonnull TopologyProvisionOptions withMaintenanceOption(@Nonnull MaintenanceOption maintenanceAction) {
         this.maintenanceAction = maintenanceAction;
         return this;
     }
 
-    public TopologyProvisionOptions withBootDiskType(@Nonnull DiskType bootDiskType) {
+    public @Nonnull TopologyProvisionOptions withBootDiskType(@Nonnull DiskType bootDiskType) {
         this.bootDiskType = bootDiskType;
         return this;
     }
 
-    public TopologyProvisionOptions withMetadata(@Nonnull Map<String, String> metadata) {
+    public @Nonnull TopologyProvisionOptions withMetadata(@Nonnull Map<String, String> metadata) {
         this.metadata = metadata;
         return this;
     }
 
-
-    public AccessConfig getAccessConfigInstance(@Nonnull String name, @Nonnull String natIP, @Nonnull String type) {
-        return new AccessConfig(name, natIP, type);
+    public @Nullable AccessConfig getAccessConfigInstance(@Nonnull String natIP, @Nonnull String type) {
+        return new AccessConfig(natIP, type);
     }
 
-    public String getProductName() {
+    public @Nonnull String getProductName() {
         return productName;
     }
 
-    public String getProductDescription() {
+    public @Nonnull String getProductDescription() {
         return productDescription;
     }
 
@@ -241,27 +206,27 @@ public class TopologyProvisionOptions {
         return canIpForward;
     }
 
-    public String getMachineType() {
+    public @Nonnull String getMachineType() {
         return machineType;
     }
 
-    public List<Network> getNetworkArray() {
+    public @Nonnull List<Network> getNetworkArray() {
         return networkArray;
     }
 
-    public List<Disk> getDiskArray() {
+    public @Nonnull List<Disk> getDiskArray() {
         return diskArray;
     }
 
-    public String[] getSshKeys() {
+    public @Nonnull String[] getSshKeys() {
         return sshKeys;
     }
 
-    public List<String> getTags() {
+    public @Nonnull List<String> getTags() {
         return tags;
     }
 
-    public String[] getRoDisks() {
+    public @Nonnull String[] getRoDisks() {
         return roDisks;
     }
 
@@ -269,15 +234,15 @@ public class TopologyProvisionOptions {
         return automaticRestart;
     }
 
-    public MaintenanceOption getMaintenenceAction() {
+    public @Nullable MaintenanceOption getMaintenenceAction() {
         return maintenanceAction;
     }
 
-    public DiskType getBootDiskType() {
+    public @Nullable DiskType getBootDiskType() {
         return bootDiskType;
     }
 
-    public Map<String, String> getMetadata() {
+    public @Nonnull Map<String, String> getMetadata() {
         return metadata;
     }
 }

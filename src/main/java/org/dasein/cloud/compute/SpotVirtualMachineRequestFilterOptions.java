@@ -23,7 +23,6 @@ package org.dasein.cloud.compute;
  * Options for filtering spot vm requests when querying the cloud provider. You may optionally filter on
  * any or all set criteria. If a value has not been set for a specific criterion, it is not included in the filtering
  * process.
- * <p/>
  * <p>Created by Stas Maksimov: 21/06/2014 18:37</p>
  *
  * @author Stas Maksimov

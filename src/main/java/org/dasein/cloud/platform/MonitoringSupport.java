@@ -50,7 +50,9 @@ public interface MonitoringSupport extends AccessControlledService {
    * @param options filter options
    * @return all metrics or filtered metrics
    * @throws InternalException
+   *             an error occurred within the Dasein Cloud API implementation
    * @throws CloudException
+   *             an error occurred within the cloud provider
    */
   public @Nonnull Iterable<Metric> listMetrics(MetricFilterOptions options) throws InternalException, CloudException;
 
@@ -60,7 +62,9 @@ public interface MonitoringSupport extends AccessControlledService {
    * @param options filter options
    * @return all metrics or filtered alarms
    * @throws InternalException
+   *             an error occurred within the Dasein Cloud API implementation
    * @throws CloudException
+   *             an error occurred within the cloud provider
    */
   public @Nonnull Iterable<Alarm> listAlarms(AlarmFilterOptions options) throws InternalException, CloudException;
 
@@ -69,7 +73,9 @@ public interface MonitoringSupport extends AccessControlledService {
    *
    * @param options options for the alarm
    * @throws InternalException
+   *             an error occurred within the Dasein Cloud API implementation
    * @throws CloudException
+   *             an error occurred within the cloud provider
    */
   public void updateAlarm( @Nonnull AlarmUpdateOptions options ) throws InternalException, CloudException;
 
@@ -78,7 +84,9 @@ public interface MonitoringSupport extends AccessControlledService {
    *
    * @param alarmNames the alarm names to remove
    * @throws InternalException
+   *             an error occurred within the Dasein Cloud API implementation
    * @throws CloudException
+   *             an error occurred within the cloud provider
    */
   public void removeAlarms( @Nonnull String[] alarmNames ) throws InternalException, CloudException;
 
@@ -87,7 +95,9 @@ public interface MonitoringSupport extends AccessControlledService {
    *
    * @param alarmNames the names of the alarms to enable actions for
    * @throws InternalException
+   *             an error occurred within the Dasein Cloud API implementation
    * @throws CloudException
+   *             an error occurred within the cloud provider
    */
   public void enableAlarmActions( @Nonnull String[] alarmNames ) throws InternalException, CloudException;
 
@@ -96,7 +106,9 @@ public interface MonitoringSupport extends AccessControlledService {
    *
    * @param alarmNames the names of the alarms to disable actions for
    * @throws InternalException
+   *             an error occurred within the Dasein Cloud API implementation
    * @throws CloudException
+   *             an error occurred within the cloud provider
    */
   public void disableAlarmActions( @Nonnull String[] alarmNames ) throws InternalException, CloudException;
 

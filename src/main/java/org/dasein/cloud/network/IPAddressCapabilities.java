@@ -51,8 +51,8 @@ public interface IPAddressCapabilities extends Capabilities{
      * means you do not specify a VLAN.
      * @since 2015.01
      * @return the level of requirement for specifying a VLAN when creating a VLAN IP address
-     * @throws org.dasein.cloud.CloudException an error occurred processing the request in the cloud
-     * @throws org.dasein.cloud.InternalException an internal error occurred inside the Dasein Cloud implementation
+     * @throws CloudException an error occurred processing the request in the cloud
+     * @throws InternalException an internal error occurred inside the Dasein Cloud implementation
      */
     public @Nonnull Requirement identifyVlanForVlanIPRequirement() throws CloudException, InternalException;
 
@@ -61,8 +61,8 @@ public interface IPAddressCapabilities extends Capabilities{
      * IP address. REQUIRED means you must specify the VLAN, OPTIONAL means you may, and NONE
      * means you do not specify a VLAN.
      * @return the level of requirement for specifying a VLAN when creating an IP address
-     * @throws org.dasein.cloud.CloudException an error occurred processing the request in the cloud
-     * @throws org.dasein.cloud.InternalException an internal error occurred inside the Dasein Cloud implementation
+     * @throws CloudException an error occurred processing the request in the cloud
+     * @throws InternalException an internal error occurred inside the Dasein Cloud implementation
      */
     public @Nonnull Requirement identifyVlanForIPRequirement() throws CloudException, InternalException;
 
@@ -71,8 +71,8 @@ public interface IPAddressCapabilities extends Capabilities{
      * forwarding rule. REQUIRED means you must specify the VM id,  and NONE
      * means you do not specify a VM id.
      * @return the level of requirement for specifying a VLAN when creating an IP address
-     * @throws org.dasein.cloud.CloudException an error occurred processing the request in the cloud
-     * @throws org.dasein.cloud.InternalException an internal error occurred inside the Dasein Cloud implementation
+     * @throws CloudException an error occurred processing the request in the cloud
+     * @throws InternalException an internal error occurred inside the Dasein Cloud implementation
      */
     public @Nonnull Requirement identifyVMForPortForwarding() throws CloudException, InternalException;
 
@@ -89,8 +89,8 @@ public interface IPAddressCapabilities extends Capabilities{
      * Indicates whether the IPAddress can be assigned to a VM in the given state
      * @param vmState the queried state of the VM
      * @return true if the IPAddress can be assigned when a VM is in the specified state
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException an error occurred processing the request in the cloud
+     * @throws InternalException an internal error occurred inside the Dasein Cloud implementation
      */
     public boolean canBeAssigned(@Nonnull VmState vmState) throws CloudException, InternalException;
 

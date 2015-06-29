@@ -40,9 +40,9 @@ public interface FirewallCapabilities extends Capabilities{
      * {@link FirewallConstraints.Constraint#PROTOCOL} requires all rules associated with it to share
      * the same protocol.
      * @return the firewall constraints for this cloud
-     * @throws org.dasein.cloud.InternalException
+     * @throws InternalException
      *          an internal error occurred assembling the cloud firewall constraints
-     * @throws org.dasein.cloud.CloudException
+     * @throws CloudException
      *          an error occurred fetching constraint data from the cloud
      */
     public @Nonnull FirewallConstraints getFirewallConstraintsForCloud() throws InternalException, CloudException;
@@ -162,8 +162,8 @@ public interface FirewallCapabilities extends Capabilities{
     /**
      * Indicates whether a firewall can exist independantly of a vlan or whether a vlan is required for it to exist
      * @return Requirement.REQUIRED if the firewall is dependant upon a vlan, Requirement.NONE if it is independant
-     * @throws CloudException
-     * @throws InternalException
+     * @throws CloudException an error occurred processing the request in the cloud
+     * @throws InternalException an internal error occurred inside the Dasein Cloud implementation
      */
     public @Nonnull Requirement requiresVLAN() throws CloudException, InternalException;
 

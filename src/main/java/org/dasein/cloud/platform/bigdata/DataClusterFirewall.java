@@ -78,7 +78,7 @@ public class DataClusterFirewall {
     /**
      * Alters the content of this data cluster firewall object to reflect the fact that the named compute firewalls are
      * included in the list of authorized compute firewalls. This method does not trigger any action in the cloud itself.
-     * @param fws a list of compute firewall {@link Firewall} references in the form of { owner ID, firewallId } pairs
+     * @param firewalls a list of compute firewall {@link Firewall} references in the form of { owner ID, firewallId } pairs
      * @return this
      */
     public @Nonnull DataClusterFirewall authorizingComputeFirewalls(@Nonnull FirewallReference ... firewalls) {
