@@ -170,20 +170,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> extends Abstrac
 
     @Override
     public @Nullable VirtualMachineProduct getProduct( @Nonnull String productId ) throws InternalException, CloudException {
-        APITrace.begin(getProvider(), "VM.getProduct");
-        try {
-            for( Architecture architecture : getCapabilities().listSupportedArchitectures() ) {
-                for( VirtualMachineProduct prd : listProducts(architecture) ) {
-                    if( productId.equals(prd.getProviderProductId()) ) {
-                        return prd;
-                    }
-                }
-            }
-            return null;
-        }
-        finally {
-            APITrace.end();
-        }
+        return null;
     }
 
     @Override
@@ -438,7 +425,7 @@ public abstract class AbstractVMSupport<T extends CloudProvider> extends Abstrac
      * a default set of products. This helps this abstract base class implement some default configuration file
      * based behaviors for clouds that do not provide mechanisms for looking up VM products such as AWS or clouds
      * that don't have a concept of products like vCloud. If your cloud provides product lookups (like OpenStack),
-     * then you can happily ignore this method and override {@link #listProducts(Architecture)} to do the proper
+     * then you can happily ignore this method and override {@link #listProducts(String, VirtualMachineProductFilterOptions)} to do the proper
      * lookup.
      * </p>
      * <p>
@@ -471,25 +458,25 @@ public abstract class AbstractVMSupport<T extends CloudProvider> extends Abstrac
      * The core element is a list of cloud/product definitions. Each cloud has a &quot;provider&quot;, &quot;cloud&quot;,
      * and &quot;products&quot; attribute. The provider is either &quot;default&quot; or a match to the value for
      * {@link ProviderContext#getProviderName()}. The cloud is similarly either &quot;default&quot; or a match to the
-     * value for {@link ProviderContext#getCloudName()}. The implementation of {@link #listProducts(Architecture)}
+     * value for {@link ProviderContext#getCloudName()}. The implementation of {@link #listProducts(String, VirtualMachineProductFilterOptions)}
      * in this base class will attempt to match the cloud name and provider name or look for a default.
      * </p>
      * <p>
      * Here's what happens in practice:
      * </p>
      * <p>
-     * If your implementation has over-ridden {@link #listProducts(Architecture)}, then that logic prevails and
+     * If your implementation has over-ridden {@link #listProducts(String, VirtualMachineProductFilterOptions)}, then that logic prevails and
      * all of this is ignored (for that cloud implementation).
      * </p>
      * <p>
      * If your implementation is under the package something.whatever.<b>cloudname</b> (the important part is the last part
-     * of the package name) and you have not specified ANY kind of properties, the default {@link #listProducts(Architecture)}
+     * of the package name) and you have not specified ANY kind of properties, the default {@link #listProducts(String, VirtualMachineProductFilterOptions)}
      * will look for a vmproducts.json file as the resource org.dasein.cloud.<b>cloudname</b>.vmproducts.json. If it exists,
      * it will be used.
      * </p>
      * <p>
      * If you specify a custom property with your connection called &quot;vmproducts&quot;, then the
-     * default {@link #listProducts(Architecture)} method will look for a resource matching the value specified
+     * default {@link #listProducts(String, VirtualMachineProductFilterOptions)} method will look for a resource matching the value specified
      * in that property.
      * </p>
      * <p>
@@ -532,197 +519,8 @@ public abstract class AbstractVMSupport<T extends CloudProvider> extends Abstrac
     }
 
     @Override
-    public @Nonnull Iterable<VirtualMachineProduct> listProducts(@Nonnull String machineImageId) throws InternalException, CloudException {
-        return listProducts(machineImageId, VirtualMachineProductFilterOptions.getInstance());
-    }
-
-    @Override
     public @Nonnull Iterable<VirtualMachineProduct> listProducts(@Nonnull String machineImageId, @Nonnull VirtualMachineProductFilterOptions options) throws InternalException, CloudException {
-        MachineImageSupport support = getProvider().getComputeServices().getImageSupport();
-        if( support == null ) {
-            throw new CloudException(getProvider().getCloudName() + " does not implement machine image services");
-        }
-        MachineImage image = support.getImage(machineImageId);
-        if( image == null ) {
-            throw new CloudException("Machine image " + machineImageId + " does not exist");
-        }
-        return listProducts(options, image.getArchitecture());
-    }
-
-    @Override
-    @Deprecated
-    final public Iterable<VirtualMachineProduct> listProducts(@Nonnull VirtualMachineProductFilterOptions options) throws InternalException, CloudException {
-        List<VirtualMachineProduct> products = new ArrayList<VirtualMachineProduct>();
-        for( Architecture arch : getCapabilities().listSupportedArchitectures() ) {
-            mergeProductLists(products, this.listProducts(options, arch));
-        }
-        return products;
-    }
-
-    /**
-     * Merge product iterable into the list, using providerProductId as a unique key
-     * @param to
-     *          the target list
-     * @param from
-     *          the source iterable
-     */
-    private void mergeProductLists(List<VirtualMachineProduct> to, Iterable<VirtualMachineProduct> from) {
-        List<VirtualMachineProduct> copy = new ArrayList<VirtualMachineProduct>(to);
-        for( VirtualMachineProduct productFrom : from ) {
-            boolean found = false;
-            for( VirtualMachineProduct productTo : copy ) {
-                if( productTo.getProviderProductId().equalsIgnoreCase(productFrom.getProviderProductId()) ) {
-                    found = true;
-                    break;
-                }
-            }
-            if( !found ) {
-                to.add(productFrom);
-            }
-        }
-    }
-
-    @Override
-    @Deprecated
-    final public @Nonnull Iterable<VirtualMachineProduct> listProducts( @Nonnull Architecture architecture ) throws InternalException, CloudException {
-        return this.listProducts(null, architecture);
-    }
-
-    @Override
-    @Deprecated
-    public @Nonnull Iterable<VirtualMachineProduct> listProducts( @Nonnull VirtualMachineProductFilterOptions options, @Nullable Architecture architecture ) throws InternalException, CloudException {
-        APITrace.begin(getProvider(), "VM.listProducts");
-        try {
-            String cacheName = "productsALL";
-            if( architecture != null ) {
-                cacheName = "products" + architecture.name();
-            }
-            Cache<VirtualMachineProduct> cache = Cache.getInstance(getProvider(), cacheName, VirtualMachineProduct.class, CacheLevel.REGION_ACCOUNT, new TimePeriod<Day>(1, TimePeriod.DAY));
-            Iterable<VirtualMachineProduct> products = cache.get(getContext());
-
-            if( products != null ) {
-                return products;
-            }
-            List<VirtualMachineProduct> list = new ArrayList<VirtualMachineProduct>();
-
-            try {
-                String resource = getVMProductsResource();
-                InputStream input = AbstractVMSupport.class.getResourceAsStream(resource);
-
-                if( input == null ) {
-                    input = AbstractVMSupport.class.getResourceAsStream("/org/dasein/cloud/std/vmproducts.json");
-                }
-                if( input == null ) {
-                    return Collections.emptyList();
-                }
-                BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-                StringBuilder json = new StringBuilder();
-                String line;
-
-                while( ( line = reader.readLine() ) != null ) {
-                    json.append(line);
-                    json.append("\n");
-                }
-                JSONArray arr = new JSONArray(json.toString());
-                JSONObject toCache = null;
-
-                for( int i = 0; i < arr.length(); i++ ) {
-                    JSONObject productSet = arr.getJSONObject(i);
-                    String cloud, provider;
-
-                    if( productSet.has("cloud") ) {
-                        cloud = productSet.getString("cloud");
-                    }
-                    else {
-                        continue;
-                    }
-                    if( productSet.has("provider") ) {
-                        provider = productSet.getString("provider");
-                    }
-                    else {
-                        continue;
-                    }
-                    if( !productSet.has("products") ) {
-                        continue;
-                    }
-                    if( toCache == null || ( provider.equals("default") && cloud.equals("default") ) ) {
-                        toCache = productSet;
-                    }
-                    if( provider.equalsIgnoreCase(getProvider().getProviderName()) && cloud.equalsIgnoreCase(getProvider().getCloudName()) ) {
-                        toCache = productSet;
-                        break;
-                    }
-                }
-                if( toCache == null ) {
-                    return Collections.emptyList();
-                }
-                JSONArray plist = toCache.getJSONArray("products");
-
-                for( int i = 0; i < plist.length(); i++ ) {
-                    JSONObject product = plist.getJSONObject(i);
-                    boolean supported = false;
-
-                    // If architecture is specified, check if product matches
-                    if( architecture != null && product.has("architectures") ) {
-                        JSONArray architectures = product.getJSONArray("architectures");
-
-                        for( int j = 0; j < architectures.length(); j++ ) {
-                            String a = architectures.getString(j);
-
-                            if( architecture.name().equals(a) ) {
-                                supported = true;
-                                break;
-                            }
-                        }
-                        if( !supported ) {
-                            continue;
-                        }
-                    }
-                    else {
-                        // No architecture specified, flip the flag - all architectures allowed
-                        supported = true;
-                    }
-
-                    if( product.has("excludesRegions") ) {
-                        JSONArray regions = product.getJSONArray("excludesRegions");
-
-                        for( int j = 0; j < regions.length(); j++ ) {
-                            String r = regions.getString(j);
-
-                            if( r.equals(getContext().getRegionId()) ) {
-                                supported = false;
-                                break;
-                            }
-                        }
-                    }
-                    if( !supported ) {
-                        continue;
-                    }
-                    VirtualMachineProduct prd = toProduct(product);
-
-                    if( prd != null ) {
-                        if( options != null) {
-                            // Filter supplied, add matches only.
-                            if( options.matches(prd) ) {
-                                list.add(prd);
-                            }
-                        }
-                        else {
-                            // No filter supplied, add all survived.
-                            list.add(prd);
-                        }
-                    }
-                }
-                cache.put(getContext(), list);
-            } catch( IOException e ) {
-                throw new InternalException(e);
-            } catch( JSONException e ) {
-                throw new InternalException(e);
-            }
-            return list;
-        } finally {
-            APITrace.end();
-        }
+        return Collections.emptyList();
     }
 
     @Override
