@@ -76,6 +76,14 @@ public interface LoadBalancerCapabilities extends Capabilities{
     boolean healthCheckRequiresLoadBalancer() throws CloudException, InternalException;
 
     /**
+     * Indicates whether a health check can be created independently of a listener.
+     * @return false if health check can exist without having been assigned to a listener
+     * @throws CloudException an error occurred while communicating with the cloud provider
+     * @throws InternalException an error occurred within the Dasein Cloud implementation
+     */
+    boolean healthCheckRequiresListener() throws CloudException, InternalException;
+
+    /**
      * Indicates whether a name is required when creating a health check
      * @return Requirement for health check name
      * @throws InternalException

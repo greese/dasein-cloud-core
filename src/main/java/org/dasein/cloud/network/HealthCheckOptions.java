@@ -36,6 +36,7 @@ public class HealthCheckOptions {
     private String                             name;
     private String                             description;
     private String                             providerLoadBalancerId;
+    private LbListener                         listener;
     private String                             host;
     private LoadBalancerHealthCheck.HCProtocol protocol;
     private int                                port;
@@ -129,6 +130,14 @@ public class HealthCheckOptions {
         this.providerLoadBalancerId = providerLoadBalancerId;
     }
 
+    public @Nullable LbListener getListener() {
+        return listener;
+    }
+
+    public void setListener(@Nullable LbListener lbListener) {
+        this.listener = lbListener;
+    }
+
     public @Nullable String getHost() {
         return host;
     }
@@ -203,4 +212,15 @@ public class HealthCheckOptions {
         this.providerLoadBalancerId = providerLoadBalancerId;
         return this;
     }
+
+    /**
+     * For listener level health check, sets the listener which the health check is attached
+     * @param lbListener the LbListener to which the Health Check is attached
+     * @return this
+     */
+    public @Nonnull HealthCheckOptions withListener(@Nullable LbListener lbListener) {
+        this.listener = lbListener;
+        return this;
+    }
+
 }

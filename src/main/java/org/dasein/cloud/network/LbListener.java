@@ -64,9 +64,9 @@ public class LbListener {
      * @return a newly constructed listener
      */
     static public LbListener getInstance(@Nonnull LbProtocol protocol, int publicPort, int privatePort,
-                                         String sslCertificateName) {
+            String sslCertificateName) {
         return new LbListener(LbAlgorithm.ROUND_ROBIN, LbPersistence.NONE, protocol, publicPort, privatePort,
-                              sslCertificateName);
+                sslCertificateName);
     }
 
     /**
@@ -109,6 +109,7 @@ public class LbListener {
     private int           privatePort;
     private int           publicPort;
     private String        sslCertificateName;
+    private String        providerLBHealthCheckId;
 
     /**
      * Constructs an empty listener object.
@@ -121,7 +122,7 @@ public class LbListener {
     }
 
     public LbListener(@Nonnull LbAlgorithm algorithm, @Nonnull LbPersistence persistence, @Nonnull LbProtocol protocol,
-                      int publicPort, int privatePort, @Nullable String sslCertificateName) {
+            int publicPort, int privatePort, @Nullable String sslCertificateName) {
         this.algorithm = algorithm;
         this.persistence = persistence;
         this.networkProtocol = protocol;
@@ -188,6 +189,34 @@ public class LbListener {
     public String getSslCertificateName() {
         return sslCertificateName;
     }
+
+    /**
+     * @return the ID of a Health Check if one is attached.
+     */
+    public @Nullable String getProviderLBHealthCheckId(){
+        return providerLBHealthCheckId;
+    }
+
+    /**
+     * Sets the SSL Certificate Name assoicated with this listener
+     * @param sslCertificateName the SSL Certificate name
+     * @return this
+     */
+    public @Nonnull LbListener withSslCertificateName(@Nullable String sslCertificateName) {
+        this.sslCertificateName = sslCertificateName;
+        return this;
+    }
+
+    /**
+     * Sets the Health Check ID associated with this listener
+     * @param providerLBHealthCheckId the Health Check ID
+     * @return this
+     */
+    public @Nonnull LbListener withProviderLBHealthCheckId(@Nullable String providerLBHealthCheckId) {
+        this.providerLBHealthCheckId = providerLBHealthCheckId;
+        return this;
+    }
+
 
     @Override
     public @Nonnull String toString() {
