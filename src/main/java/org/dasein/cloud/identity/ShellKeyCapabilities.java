@@ -45,12 +45,12 @@ public interface ShellKeyCapabilities extends Capabilities{
      * @throws org.dasein.cloud.CloudException an error occurred with the cloud provider in determining support
      * @throws org.dasein.cloud.InternalException a local error occurred while determining support
      */
-    public @Nonnull Requirement identifyKeyImportRequirement() throws CloudException, InternalException;
+    @Nonnull Requirement identifyKeyImportRequirement() throws CloudException, InternalException;
 
     /**
      * Provides the provider term for an SSH keypair.
      * @param locale the locale into which the term should be translated
      * @return the provider term for the SSH keypair, ideally translated for the specified locale
      */
-    public @Nonnull String getProviderTermForKeypair(@Nonnull Locale locale);
+    @Nonnull String getProviderTermForKeypair(@Nonnull Locale locale);
 }
