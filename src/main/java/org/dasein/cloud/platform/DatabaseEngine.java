@@ -39,7 +39,8 @@ public enum DatabaseEngine {
     ORACLE_SE, // oracle standard edition
     ORACLE_SE1, // oracle standard edition one
 
-    POSTGRES; // postgres
+    POSTGRES,
+    POSTGRES_PPAS; // postgres
 
 //    public String getVersion() {
 //        switch( this ) {
@@ -74,6 +75,8 @@ public enum DatabaseEngine {
                 return "Oracle Enterprise";
             case POSTGRES:
                 return "PostgreSQL";
+            case POSTGRES_PPAS:
+            	return "Postgres Plus Advanced Server";
         }
         return super.toString();
     }
