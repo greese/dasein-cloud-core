@@ -79,6 +79,11 @@ public abstract class AbstractLoadBalancerSupport<T extends CloudProvider> exten
     }
 
     @Override
+    public void editListeners( @Nonnull String toLoadBalancerId, @Nullable LbListener[] listeners ) throws CloudException, InternalException {
+        throw new OperationNotSupportedException("Editing listeners from an existing load balancer is not currently implemented for " + getContext().getRegionId() + " of " + getProvider().getCloudName());
+    }
+
+    @Override
     public void addServers(@Nonnull String toLoadBalancerId, @Nonnull String ... serverIdsToAdd) throws CloudException, InternalException {
         throw new OperationNotSupportedException("Adding VM endpoints to an existing load balancer is not currently implemented for " + getContext().getRegionId() + " of " + getProvider().getCloudName());
     }
